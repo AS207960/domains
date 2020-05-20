@@ -27,11 +27,12 @@ class SimplePrice:
 
 
 class LengthPrice:
-    def __init__(self, standard_price: int, lengths, periods=None, restore=0, renewal=None):
+    def __init__(self, standard_price: int, lengths, periods=None, restore=0, renewal=None, transfer=0):
         self.standard_price = standard_price
         self.lengths = lengths
         self._renewal = renewal if renewal else standard_price
         self._restore = restore
+        self._transfer = transfer
         self.periods = periods if periods else list(map(lambda i: apps.epp_api.DomainPeriod(
             unit=0,
             value=i
@@ -45,6 +46,9 @@ class LengthPrice:
 
     def restore(self, _sld: str):
         return self._restore
+
+    def transfer(self, _sld: str):
+        return self._transfer
 
 
 class DomainInfo:

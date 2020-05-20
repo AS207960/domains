@@ -151,3 +151,5 @@ OIDC_SCOPES = keycloak_conf["scopes"]
 REGISTRATION_ENABLED = True
 EPP_PROXY_ADDR = "localhost:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
+
+BILLING_URL = "http://localhost:8001"
