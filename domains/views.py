@@ -1031,9 +1031,18 @@ def host_delete(request, host_id):
 
 
 @login_required
-def host_create(request, registry_name, host):
+def host_create(request, registry_name, host: str):
     error = None
     form = None
+
+    valid = False
+    for domain_obj in models.DomainRegistration.objects.filter(user=request.user):
+        if host.endswith(domain_obj.domain):
+            valid = True
+            break
+
+    if not valid:
+        raise PermissionDenied
 
     try:
         available, _ = apps.epp_client.check_host(host, registry_name)
