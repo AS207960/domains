@@ -301,10 +301,11 @@ class Domain:
     def get_contact(self, contact_type: str):
         return next(filter(lambda c: c.contact_type == contact_type, self.contacts), None)
 
-    def set_contact(self, contact_type: str, contact_id: str) -> bool:
+    def set_contact(self, contact_type: str, contact_id: typing.Union[str, None]) -> bool:
         old_contact = next(filter(lambda c: c.contact_type == contact_type, self.contacts), None)
 
         rem = []
+        add = []
         if old_contact:
             rem.append(domain_pb2.DomainUpdateRequest.Param(
                     contact=domain_pb2.Contact(
@@ -312,16 +313,18 @@ class Domain:
                         id=old_contact.contact_id
                     )
                 ))
-
-        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
-            name=self.name,
-            remove=rem,
-            add=[domain_pb2.DomainUpdateRequest.Param(
+        if contact_id:
+            add.append(domain_pb2.DomainUpdateRequest.Param(
                 contact=domain_pb2.Contact(
                     type=contact_type,
                     id=contact_id
                 )
-            )]
+            ))
+
+        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
+            name=self.name,
+            remove=rem,
+            add=add
         )).pending
 
     def set_registrant(self, contact_id: str) -> bool:
@@ -330,13 +333,13 @@ class Domain:
             new_registrant=StringValue(value=contact_id)
         )).pending
 
-    def set_admin(self, contact_id: str) -> bool:
+    def set_admin(self, contact_id: typing.Union[str, None]) -> bool:
         return self.set_contact("admin", contact_id)
 
-    def set_billing(self, contact_id: str) -> bool:
+    def set_billing(self, contact_id: typing.Union[str, None]) -> bool:
         return self.set_contact("billing", contact_id)
 
-    def set_tech(self, contact_id: str) -> bool:
+    def set_tech(self, contact_id: typing.Union[str, None]) -> bool:
         return self.set_contact("tech", contact_id)
 
     def add_host_objs(self, hosts: [str]) -> bool:
