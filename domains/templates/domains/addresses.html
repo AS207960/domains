@@ -1,0 +1,50 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">My addresses</h1>
+            <p>These addresses can be used for the localised and internationalised addresses on contacts</p>
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'new_address' %}" role="button">Create a new address</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Description</th>
+                    <th>Name</th>
+                    <th>Organisation</th>
+                    <th>Country</th>
+                    <th>Creation date</th>
+                    <th>Last updated</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if addresses %}
+                    {% for address in addresses %}
+                        <tr>
+                            <th scope="row">{{ address.description }}</th>
+                            <td>{{ address.name }}</td>
+                            <td>{% if address.organisation %}{{ address.organisation }}{% else %}N/A{% endif %}</td>
+                            <td>{{ address.country_code.unicode_flag }}</td>
+                            <td>{% if address.created_date %}{{ address.createh_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td>{% if address.updated_date %}{{ address.updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'edit_address' address.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="{% url 'delete_address' address.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No addresses</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">My host objects</h1>
+            <p>These can be used for DNS servers on domains</p>
+            <hr class="my-4">
+            <p>Hosts can be created from the respective domain's page</p>
+        </div>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error!</h4>
+                <p>There was an error processing your request</p>
+                <hr>
+                <p class="mb-0">{{ error }}</p>
+            </div>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Host</th>
+                    <th>Creation date</th>
+                    <th>Last updated</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if hosts %}
+                    {% for host in hosts %}
+                        <tr>
+                            <th scope="row">{{ host.1.name }}</th>
+                            <td>{% if host.1.creation_date %}{{ host.1.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td>{% if host.1.last_updated_date %}{{ host.1.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td><a href="{% url 'host' host.0 %}" class="btn btn-primary btn-sm">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No hosts</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}

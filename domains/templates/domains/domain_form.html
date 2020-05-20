@@ -1,0 +1,27 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Register a domain</h1>
+        <div class="row">
+            <div class="col">
+                <b>Domain name: </b> {{ domain_name }}
+            </div>
+            <div class="col">
+                <b>Price per period: </b> {{ price_decimal|floatformat:2|intcomma }} GBP
+            </div>
+        </div>
+        <hr>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error!</h4>
+                <p>There was an error processing your request</p>
+                <hr>
+                <p class="mb-0">{{ error }}</p>
+            </div>
+        {% else %}
+            {% crispy domain_form domain_form.helper %}
+        {% endif %}
+    </div>
+{% endblock %}

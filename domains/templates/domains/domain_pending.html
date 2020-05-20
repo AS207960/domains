@@ -1,0 +1,16 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Domain pending</h1>
+        <div class="row">
+            <div class="col">
+                <b>Domain name: </b> {{ domain_name }}
+            </div>
+        </div>
+        <hr>
+        <p>
+            Your domain registration is pending approval by the registry. We'll be in touch when we hear back from them.
+        </p>
+        <a href="{% url 'domains' %}" class="btn btn-primary">Continue</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'domains/base.html' %}
+{% load humanize %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">Domain prices</h1>
+            <hr class="my-4">
+            <p>
+                These are standard prices, premium domains will be charged differently.
+            </p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Extension</th>
+                    <th>Registration (per year)</th>
+                    <th>Renewal (per year)</th>
+                    <th>Restore</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for domain in domains %}
+                        <tr>
+                            <th scope="row">{{ domain.zone }}</th>
+                            <td>{{ domain.registration|floatformat:2|intcomma }} GBP</td>
+                            <td>{{ domain.renewal|floatformat:2|intcomma }} GBP</td>
+                            <td>{% if domain.restore %}{{ domain.restore|floatformat:2|intcomma }} GBP{% else %}N/A{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}

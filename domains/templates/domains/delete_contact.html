@@ -1,0 +1,28 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">Delete contact</h1>
+            <b>Description: </b> {{ contact.description }}
+            <hr class="my-4">
+            {% if can_delete %}
+            <p>Are you sure you want to delete this contact?</p>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <a class="btn btn-primary btn-md" href="{% url 'contacts' %}" role="button">Cancel</a>
+                    <button type="submit" name="delete" value="true" class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Deletion prohibited</h4>
+                    <p>This contact is linked to other objects, deletion prohibited</p>
+                    <hr>
+                    <a class="btn btn-primary btn-md" href="{% url 'contacts' %}" role="button">Go back</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

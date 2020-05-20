@@ -1,0 +1,135 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: domains-django-static
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: domains-django-media
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: domains-django-conf
+data:
+  HOST: domains.as207960.net
+  DJANGO_SETTINGS_MODULE: as207960_domains.settings
+  EXTERNAL_URL: "https://domains.as207960.net"
+  SENTRY_ENVIRONMENT: "prod"
+  KEYCLOAK_SERVER_URL: "https://sso.as207960.net/"
+  KEYCLOAK_REALM: master
+  KEYCLOAK_SCOPES: "openid email profile"
+  KEYCLOAK_CLIENT_ID: "domains"
+  DB_HOST: "postgres"
+  DB_NAME: "domains"
+  BILLING_URL: "https://billing.as207960.net"
+  EPP_PROXY_ADDR: "epp-proxy:50051"
+  EPP_PROXY_CA: "/ca-cert/ca.pem"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domains-django
+  labels:
+    app: domains
+    part: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domains
+      part: django
+  template:
+    metadata:
+      labels:
+        app: domains
+        part: django
+    spec:
+      volumes:
+        - name: static
+          persistentVolumeClaim:
+            claimName: domains-django-static
+        - name: media
+          persistentVolumeClaim:
+            claimName: domains-django-media
+        - name: ca-cert
+          configMap:
+            name: epp-ca
+      initContainers:
+        - name: django
+          image: as207960/domains-django:(version)
+          imagePullPolicy: Always
+          command: ["sh", "-c", "python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
+          volumeMounts:
+            - mountPath: "/app/static/"
+              name: static
+            - mountPath: "/app/media/"
+              name: media
+            - mountPath: "/ca-cert/"
+              name: ca-cert
+          envFrom:
+            - configMapRef:
+                name: domains-django-conf
+            - secretRef:
+                name: domains-db-creds
+              prefix: "DB_"
+            - secretRef:
+                name: domains-django-secret
+            - secretRef:
+                name: domains-keycloak
+              prefix: "KEYCLOAK_"
+      containers:
+        - name: gunicorn
+          image: as207960/domains.django:(version)
+          imagePullPolicy: Always
+          command: ["gunicorn", "-w", "8", "-b", "[::]:8000", "--forwarded-allow-ips", "*", "--access-logfile", "-", "domains_django.wsgi:application"]
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - mountPath: "/app/static/"
+              name: static
+            - mountPath: "/app/media/"
+              name: media
+            - mountPath: "/ca-cert/"
+              name: ca-cert
+          envFrom:
+            - configMapRef:
+                name: domains-django-conf
+            - secretRef:
+                name: domains-db-creds
+              prefix: "DB_"
+            - secretRef:
+                name: domains-django-secret
+            - secretRef:
+                name: domains-keycloak
+              prefix: "KEYCLOAK_"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: domains-django
+  labels:
+    app: domains
+    part: django
+spec:
+  selector:
+    app: domains
+    part: django
+  ports:
+    - port: 8000
+      targetPort: 8000

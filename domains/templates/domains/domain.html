@@ -1,0 +1,370 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1 class="display-4">
+            {{ domain.name }}
+        </h1>
+        <h2>
+            {% if domain.expired %}
+                <span class="badge badge-danger">Expired</span>
+            {% endif %}
+            {% if domain.rgp_state %}
+                <span class="badge badge-info">{{ domain.rgp_state }}</span>
+            {% endif %}
+        </h2>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error!</h4>
+                <p>There was an error processing your request</p>
+                <hr>
+                <p class="mb-0">{{ error }}</p>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <b>Creation date:</b><br/>
+                {% if domain.creation_date %}{{ domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+            </div>
+            <div class="col">
+                <b>Expiry date:</b><br/>
+                {% if domain.expiry_date %}{{ domain.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+            </div>
+            <div class="col">
+                <b>Last updated date:</b><br/>
+                {% if domain.last_updated_date %}{{ domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+            </div>
+            <div class="col">
+                <b>Last transfer date:</b><br/>
+                {% if domain.last_transfer_date %}{{ domain.last_transfer_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                {% if registrant %}
+                <p>
+                    <b>Registered to: </b> {{ registrant }}
+                    <a href="{% url 'edit_contact' registrant.id %}" class="btn btn-primary btn-sm">View registrant</a>
+                </p>
+                {% endif %}
+                {% if domain.registry_name != "traficom" %}
+                    {% crispy registrant_form registrant_form.helper %}
+                {% else %}
+                    <p>
+                        The .fi domain has a weird procedure for changing the registrant contact.
+                        Please contact us to go through the change procedure.
+                    </p>
+                {% endif %}
+            </div>
+            <div class="col">
+                <p>
+                {% if domain.rgp_state == 5 %}
+                    <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
+                {% else %}
+                    {% if domain.registry_name == "traficom" and 8 in domain.statuses %}
+                        <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
+                    {% else %}
+                        {% if domain_info.registry != domain_info.REGISTRY_SWITCH and domain_info.registry != domain_info.REGISTRY_DENIC %}
+                            <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
+                        {% endif %}
+                        <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                {% endif %}
+                </p>
+                <p>
+                    <style>
+                        .auth-hide {
+                            color: transparent;
+                            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+                        }
+                        .auth-hide:hover {
+                            color: initial;
+                            text-shadow: none;
+                        }
+                    </style>
+                    <b>Transfer auth code:</b> <span class="auth-hide">{{ domain_obj.auth_info }}</span>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <h2>Statuses</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Status name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if domain.statuses %}
+                    {% for status in domain.statuses %}
+                        <tr>
+                            <td>
+                                {{ status }}
+                                {% if 3 == status %}
+                                    <form action="{% url 'domain_del_block_transfer' domain_id %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger btn-sm">Remove</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No statuses</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% if 3 not in domain.statuses and domain.registry_name != "nominet" and domain.registry_name != "switch" and domain.registry_name != "traficom" %}
+            <form action="{% url 'domain_block_transfer' domain_id %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-info">Block transfer</button>
+            </form>
+        {% endif %}
+        {% if domain.registry_name != "nominet" and domain.registry_name != "traficom" %}
+            <hr>
+            <h2>Contacts</h2>
+            <div class="row">
+                {% if domain.registry_name != "switch" %}
+                    <div class="col">
+                        <h3>Admin</h3>
+                        <p>
+                            {% if admin %}
+                                {{ admin }}
+                                <a href="{% url 'edit_contact' admin.id %}" class="btn btn-primary btn-sm">View contact</a>
+                            {% else %}
+                                No admin contact defined
+                            {% endif %}
+                        </p>
+                        {% crispy admin_contact_form admin_contact_form.helper %}
+                    </div>
+                    <div class="col">
+                        <h3>Billing</h3>
+                        <p>
+                            {% if billing %}
+                                {{ billing }}
+                                <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
+                            {% else %}
+                                No blling contact defined
+                            {% endif %}
+                        </p>
+                        {% crispy billing_contact_form billing_contact_form.helper %}
+                    </div>
+                {% endif %}
+                <div class="col">
+                    <h3>Technical</h3>
+                    <p>
+                        {% if tech %}
+                            {{ tech }}
+                            <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
+                        {% else %}
+                            No technical contact defined
+                        {% endif %}
+                    </p>
+                    {% crispy tech_contact_form tech_contact_form.helper %}
+                </div>
+            </div>
+        {% endif %}
+        <hr>
+        <h2>DNS Servers</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Host</th>
+                    <th>Address</th>
+                    <th>Address type</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if domain.name_servers %}
+                    {% for ns in domain.name_servers %}
+                        {% if ns.host_obj %}
+                            <tr>
+                                <th>{{ ns.host_obj }}</th>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td><a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                        {% elif ns.host_name %}
+                            {% for addr in ns.addresses %}
+                                <tr>
+                                    <th>{{ ns.host_name }}</th>
+                                    <td>{{ addr.address }}</td>
+                                    <td>{{ addr.ip_type }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No DNS servers</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>Add DNS server</h2>
+                {% crispy host_object_form host_object_form.helper %}
+            </div>
+{#            <div class="col">#}
+{#                <h2>Add server directly</h2>#}
+{#                {% crispy host_addr_form host_addr_form.helper %}#}
+{#            </div>#}
+        </div>
+        <hr>
+        <h2>Associated host objects</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Host</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if hosts %}
+                    {% for host in hosts %}
+                        <tr>
+                            <th>{{ host.name_server }}</th>
+                            <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2">No hosts</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <h3>Create a new host object</h3>
+        {% crispy new_host_form new_host_form.helper %}
+        <hr>
+        <h2>DNSSEC data</h2>
+        {% if domain.sec_dns %}
+            <div class="row">
+                <div class="col">
+                    <p>
+                        <b>Max signature life:</b>
+                        {% if domain.sec_dns.max_sig_life %}
+                            {{ domain.sec_dns.max_sig_life }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">Disable DNSSEC</a>
+                    </p>
+                </div>
+            </div>
+            {% if domain.sec_dns.ds_data != None %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Key tag</th>
+                            <th>Algorithm</th>
+                            <th>Digest type</th>
+                            <th>Digest</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if domain.sec_dns.ds_data %}
+                            {% for ds_data in domain.sec_dns.ds_data %}
+                                <tr>
+                                    <th>{{ ds_data.key_tag }}</th>
+                                    <td>{{ ds_data.algorithm }}</td>
+                                    <td>{{ ds_data.digest_type }}</td>
+                                    <td>{{ ds_data.digest }}</td>
+                                    <td>
+                                        <form action="{% url 'delete_domain_ds_data' domain_id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="key_tag" value="{{ ds_data.key_tag }}">
+                                            <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
+                                            <input type="hidden" name="digest_type" value="{{ ds_data.digest_type }}">
+                                            <input type="hidden" name="digest" value="{{ ds_data.digest }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">No DS records</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% crispy ds_form ds_form.helper %}
+            {% elif domain.sec_dns.key_data != None %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Flags</th>
+                            <th>Protocol</th>
+                            <th>Algorithm</th>
+                            <th>Public key</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if domain.sec_dns.key_data %}
+                            {% for ds_data in domain.sec_dns.key_data %}
+                                <tr>
+                                    <th>{{ ds_data.flags }}</th>
+                                    <td>{{ ds_data.protocol }}</td>
+                                    <td>{{ ds_data.algorithm }}</td>
+                                    <td>{{ ds_data.public_key }}</td>
+                                    <td>
+                                        <form action="{% url 'delete_domain_dnskey_data' domain_id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="flags" value="{{ ds_data.flags }}">
+                                            <input type="hidden" name="protocol" value="{{ ds_data.protocol }}">
+                                            <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
+                                            <input type="hidden" name="public_key" value="{{ ds_data.public_key }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">No DNSKEY records</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% crispy dnskey_form dnskey_form.helper %}
+            {% endif %}
+        {% else %}
+            <p>
+                No DNSSEC data exists for this domain.
+            </p>
+            <h3>Enable DNSSEC</h3>
+            {% if domain_info.registry == domain_info.REGISTRY_DENIC %}
+                {% crispy dnskey_form dnskey_form.helper %}
+            {% else %}
+                {% crispy ds_form ds_form.helper %}
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">My contacts</h1>
+            <p>These contacts can be used for the registrant, admin, technical and billing contacts of a domain</p>
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="{% url 'new_contact' %}" role="button">Create a new contact</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Description</th>
+                    <th>Email</th>
+                    <th>Creation date</th>
+                    <th>Last updated</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if contacts %}
+                    {% for contact in contacts %}
+                        <tr>
+                            <th scope="row">{{ contact.description }}</th>
+                            <td>{{ contact.email }}</td>
+                            <td>{% if contact.created_date %}{{ contact.created_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td>{% if contact.updated_date %}{{ contact.updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'edit_contact' contact.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="{% url 'delete_contact' contact.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No contacts</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

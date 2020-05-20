@@ -1,0 +1,62 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">Register a domain</h1>
+            <hr class="my-4">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Error!</h4>
+                    <p>There was an error processing your request</p>
+                    <hr>
+                    <p class="mb-0">{{ error }}</p>
+                </div>
+            {% endif %}
+            {% crispy domain_form domain_form.helper %}
+            <a href="{% url 'domain_prices' %}" class="btn btn-info">Prices</a>
+        </div>
+        <h2>Want to register a domain we don't support yet?</h2>
+        <p>
+            Drop us an email at <a href="mailto:info@as207960.net">info@as207960.net</a>, and we'll see what we can sort
+            out for you.
+        </p>
+        <h2>Domains under the .uk TLD</h2>
+        <h3>.co.uk and .org.uk and .uk</h3>
+        <p>
+            These are open extensions and can be registered by anyone
+        </p>
+        <h3>.me.uk</h3>
+        <p>
+            This SLD is restricted to natural persons, i.e. no companies, agents or proxies.
+            (certain specific exclusions do apply)
+        </p>
+        <h3>.ltd.uk and .plc.uk</h3>
+        <p>
+            These SLDs are reserved for companies registered under the Companies Act 1985 (or later equivalents).
+            A specific algorithm is used to determine what domains a company is eligible for, as defined in Nominet's
+            terms.
+        </p>
+        <h3>.net.uk</h3>
+        <p>
+            This SLD is reserved for internet service providers or other entities managing their own autonomous system.
+        </p>
+        <h3>.mod.uk, .mil.uk, .nhs.uk, .police.uk, .nic.uk, .sch.uk</h3>
+        <p>
+            These are reserved SLDs and we cannot register anything under them.
+        </p>
+        <a href="https://nominet.org.uk/go/terms" target="_blank">
+            <img src="{% static 'domains/img/Nominet_Terms_Online_RGB_Teal.png' %}" alt="">
+        </a>
+        <h2>.ac.uk, .gov.uk, .gov.scot, .gov.wales, .llyw.cymru</h2>
+        <p>
+            These domains cannot be registered or managed through our online systems, however we are a JISC registrar
+            so please contact us to put in an application for registration under these extensions.
+        </p>
+        <h2>.ax</h2>
+        <p>
+            The .ax registry does not support automatic registration, please contact us to regiser under this zone.
+        </p>
+    </div>
+{% endblock %}
