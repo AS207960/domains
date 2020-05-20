@@ -242,7 +242,7 @@ def update_domain_contact(request, domain_id):
             elif domain_info.registry not in (domain_info.REGISTRY_TRAFICOM,):
                 contact = form.cleaned_data['contact'].get_registry_id(domain_data.registry_name)
                 domain_data.set_registrant(contact.registry_contact_id)
-                if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name):
+                if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name)[0]:
                     models.ContactRegistry.objects.filter(
                         registry_contact_id=domain_data.registrant,
                         registry_id=domain_data.registry_name
@@ -826,7 +826,7 @@ def delete_domain(request, domain_id):
                 })
 
             if domain_info.registry in (domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_AFILIAS, domain_info.REGISTRY_DENIC):
-                if apps.epp_client.check_contact(domain_data.registrant, registry_id):
+                if apps.epp_client.check_contact(domain_data.registrant, registry_id)[0]:
                     models.ContactRegistry.objects.filter(
                         registry_contact_id=domain_data.registrant,
                         registry_id=registry_id
