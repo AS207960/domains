@@ -7,3 +7,4 @@ django-crispy-forms
 django-countries
 django-phonenumber-field[phonenumbers]
 django-xff
+grpcio
