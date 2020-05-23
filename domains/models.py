@@ -54,6 +54,9 @@ class ContactAddress(models.Model):
     postal_code = models.CharField(max_length=255)
     country_code = CountryField(verbose_name="Country")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    disclose_name = models.BooleanField(default=False, blank=True)
+    disclose_organisation = models.BooleanField(default=False, blank=True)
+    disclose_address = models.BooleanField(default=False, blank=True)
 
     class Meta:
         ordering = ['description', 'name']
@@ -142,10 +145,12 @@ class Contact(models.Model):
     entity_type = models.PositiveSmallIntegerField(choices=ENTITY_TYPES)
     trading_name = models.CharField(max_length=255, blank=True, null=True)
     company_number = models.CharField(max_length=255, blank=True, null=True)
-    # Disclosure disclosure = 10;
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    disclose_phone = models.BooleanField(default=False, blank=True)
+    disclose_fax = models.BooleanField(default=False, blank=True)
+    disclose_email = models.BooleanField(default=False, blank=True)
 
     class Meta:
         ordering = ['description']

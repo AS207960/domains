@@ -50,6 +50,12 @@ class ContactForm(forms.ModelForm):
                 'entity_type',
                 'trading_name',
                 'company_number'
+            ),
+            crispy_forms.layout.Fieldset(
+                'WHOIS Disclosure',
+                'disclose_phone',
+                'disclose_fax',
+                'disclose_email'
             )
         )
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
@@ -99,6 +105,12 @@ class AddressForm(forms.ModelForm):
                 'postal_code',
                 'country_code'
             ),
+            crispy_forms.layout.Fieldset(
+                'WHOIS Disclosure',
+                'disclose_name',
+                'disclose_organisation',
+                'disclose_address'
+            )
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))

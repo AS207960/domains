@@ -15,26 +15,32 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
     def insert_contact(self, contact_type, contact, elements):
         elements.append(whois_pb2.WHOISReply.Element(
             key=f"{contact_type} Name",
-            value=contact.local_address.name,
+            value=contact.local_address.name if contact.local_address.disclose_name else "REDACTED",
         ))
         if contact.local_address.organisation:
             elements.append(whois_pb2.WHOISReply.Element(
                 key=f"{contact_type} Organisation",
-                value=contact.local_address.organisation,
+                value=contact.local_address.organisation if contact.local_address.disclose_organisation else "REDACTED",
             ))
-        elements.append(whois_pb2.WHOISReply.Element(
-            key=f"{contact_type} Street",
-            value=contact.local_address.street_1,
-        ))
-        if contact.local_address.street_2:
+        if contact.local_address.disclose_address:
             elements.append(whois_pb2.WHOISReply.Element(
                 key=f"{contact_type} Street",
-                value=contact.local_address.street_2,
+                value=contact.local_address.street_1,
             ))
-        if contact.local_address.street_3:
+            if contact.local_address.street_2:
+                elements.append(whois_pb2.WHOISReply.Element(
+                    key=f"{contact_type} Street",
+                    value=contact.local_address.street_2,
+                ))
+            if contact.local_address.street_3:
+                elements.append(whois_pb2.WHOISReply.Element(
+                    key=f"{contact_type} Street",
+                    value=contact.local_address.street_3,
+                ))
+        else:
             elements.append(whois_pb2.WHOISReply.Element(
                 key=f"{contact_type} Street",
-                value=contact.local_address.street_3,
+                value="REDACTED",
             ))
         elements.append(whois_pb2.WHOISReply.Element(
             key=f"{contact_type} City",
@@ -51,9 +57,9 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
         ))
         elements.append(whois_pb2.WHOISReply.Element(
             key=f"{contact_type} Phone",
-            value=f"+{contact.phone.country_code}.{contact.phone.national_number}",
+            value=f"+{contact.phone.country_code}.{contact.phone.national_number}" if contact.disclose_phone else "REDACTED",
         ))
-        if contact.phone_ext:
+        if contact.phone_ext and contact.disclose_phone:
             elements.append(whois_pb2.WHOISReply.Element(
                 key=f"{contact_type} Phone Ext",
                 value=contact.phone_ext,
@@ -61,16 +67,16 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
         if contact.fax:
             elements.append(whois_pb2.WHOISReply.Element(
                 key=f"{contact_type} Fax",
-                value=f"+{contact.fax.country_code}.{contact.fax.national_number}",
+                value=f"+{contact.fax.country_code}.{contact.fax.national_number}" if contact.disclose_phone else "REDACTED",
             ))
-            if contact.fax_ext:
+            if contact.fax_ext and contact.disclose_fax:
                 elements.append(whois_pb2.WHOISReply.Element(
                     key=f"{contact_type} Fax Ext",
                     value=contact.fax_ext,
                 ))
         elements.append(whois_pb2.WHOISReply.Element(
             key=f"{contact_type} Email",
-            value=contact.email,
+            value=contact.email if contact.disclose_email else "abuse@as207960.net",
         ))
         elements.append(whois_pb2.WHOISReply.Element(
             key=f"{contact_type} Entity Type",
