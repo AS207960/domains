@@ -1,6 +1,7 @@
 from django import forms
 from django.urls import reverse
 from . import models, apps
+import datetime
 from django_countries.widgets import CountrySelectWidget
 import crispy_forms.helper
 import crispy_forms.layout
@@ -62,6 +63,8 @@ class ContactForm(forms.ModelForm):
 class AddressForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        this_year = datetime.date.today().year
+        self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'

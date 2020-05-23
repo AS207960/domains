@@ -15,8 +15,6 @@
                     <th>Name</th>
                     <th>Organisation</th>
                     <th>Country</th>
-                    <th>Creation date</th>
-                    <th>Last updated</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -28,8 +26,6 @@
                             <td>{{ address.name }}</td>
                             <td>{% if address.organisation %}{{ address.organisation }}{% else %}N/A{% endif %}</td>
                             <td>{{ address.country_code.unicode_flag }}</td>
-                            <td>{% if address.created_date %}{{ address.createh_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                            <td>{% if address.updated_date %}{{ address.updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                             <td>
                                 <div class="btn-group">
                                     <a href="{% url 'edit_address' address.id %}" class="btn btn-primary btn-sm">Edit</a>

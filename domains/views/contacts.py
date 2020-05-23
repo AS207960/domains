@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 import grpc
+from django.utils import timezone
 from .. import models, apps, forms
 
 
@@ -20,6 +21,7 @@ def new_contact(request):
         form = forms.ContactForm(request.POST, user=request.user)
         if form.is_valid():
             form.instance.user = request.user
+            form.instance.created_date = timezone.now()
             form.save()
             return redirect('contacts')
     else:
@@ -42,6 +44,7 @@ def edit_contact(request, contact_id):
         form = forms.ContactForm(request.POST, user=request.user, instance=user_contact)
         if form.is_valid():
             form.instance.user = request.user
+            form.instance.updated_date = timezone.now()
             form.save()
             return redirect('contacts')
     else:
