@@ -9,4 +9,4 @@ django-phonenumber-field[phonenumbers]
 django-xff
 grpcio
 protobuf
-django-gprc
+django-grpc
