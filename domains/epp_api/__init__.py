@@ -241,7 +241,7 @@ class Domain:
     _app = None  # type: EPPClient
     name: str
     registry_id: str
-    statuses: [int]
+    statuses: [DomainStatus]
     registrant: str
     contacts: [DomainContact]
     name_servers: [DomainNameServer]

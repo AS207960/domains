@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/as207960_domains.iml" filepath="$PROJECT_DIR$/.idea/as207960_domains.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../whois-server/.idea/whois-server.iml" filepath="$PROJECT_DIR$/../whois-server/.idea/whois-server.iml" />
     </modules>
   </component>
 </project>

@@ -129,50 +129,46 @@
                 <button class="btn btn-info">Block transfer</button>
             </form>
         {% endif %}
-        {% if domain.registry_name != "nominet" and domain.registry_name != "traficom" %}
-            <hr>
-            <h2>Contacts</h2>
-            <div class="row">
-                {% if domain.registry_name != "switch" %}
-                    <div class="col">
-                        <h3>Admin</h3>
-                        <p>
-                            {% if admin %}
-                                {{ admin }}
-                                <a href="{% url 'edit_contact' admin.id %}" class="btn btn-primary btn-sm">View contact</a>
-                            {% else %}
-                                No admin contact defined
-                            {% endif %}
-                        </p>
-                        {% crispy admin_contact_form admin_contact_form.helper %}
-                    </div>
-                    <div class="col">
-                        <h3>Billing</h3>
-                        <p>
-                            {% if billing %}
-                                {{ billing }}
-                                <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
-                            {% else %}
-                                No blling contact defined
-                            {% endif %}
-                        </p>
-                        {% crispy billing_contact_form billing_contact_form.helper %}
-                    </div>
-                {% endif %}
-                <div class="col">
-                    <h3>Technical</h3>
-                    <p>
-                        {% if tech %}
-                            {{ tech }}
-                            <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
-                        {% else %}
-                            No technical contact defined
-                        {% endif %}
-                    </p>
-                    {% crispy tech_contact_form tech_contact_form.helper %}
-                </div>
+        <hr>
+        <h2>Contacts</h2>
+        <div class="row">
+            <div class="col">
+                <h3>Admin</h3>
+                <p>
+                    {% if admin %}
+                        {{ admin }}
+                        <a href="{% url 'edit_contact' admin.id %}" class="btn btn-primary btn-sm">View contact</a>
+                    {% else %}
+                        No admin contact defined
+                    {% endif %}
+                </p>
+                {% crispy admin_contact_form admin_contact_form.helper %}
             </div>
-        {% endif %}
+            <div class="col">
+                <h3>Billing</h3>
+                <p>
+                    {% if billing %}
+                        {{ billing }}
+                        <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
+                    {% else %}
+                        No blling contact defined
+                    {% endif %}
+                </p>
+                {% crispy billing_contact_form billing_contact_form.helper %}
+            </div>
+            <div class="col">
+                <h3>Technical</h3>
+                <p>
+                    {% if tech %}
+                        {{ tech }}
+                        <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
+                    {% else %}
+                        No technical contact defined
+                    {% endif %}
+                </p>
+                {% crispy tech_contact_form tech_contact_form.helper %}
+            </div>
+        </div>
         <hr>
         <h2>DNS Servers</h2>
         <div class="table-responsive">

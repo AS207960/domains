@@ -39,19 +39,6 @@ def make_id():
     return secrets.token_urlsafe(12)[:16].upper()
 
 
-class DomainRegistration(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    domain = models.CharField(max_length=255)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    auth_info = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        ordering = ['domain']
-
-    def __str__(self):
-        return self.domain
-
-
 class ContactAddress(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     description = models.CharField(max_length=255)
@@ -327,3 +314,25 @@ class NameServer(models.Model):
         )
         name_server_obj.save()
         return name_server_obj
+
+
+class DomainRegistration(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    domain = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    auth_info = models.CharField(max_length=255, blank=True, null=True)
+    pending = models.BooleanField(default=False, blank=True)
+    registrant_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_registrant')
+    admin_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_admin')
+    billing_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_billing')
+    tech_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_tech')
+
+    class Meta:
+        ordering = ['domain']
+
+    def __str__(self):
+        return self.domain

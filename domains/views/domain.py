@@ -28,7 +28,7 @@ def domain_prices(request):
 
 @login_required
 def domains(request):
-    user_domains = models.DomainRegistration.objects.filter(user=request.user)
+    user_domains = models.DomainRegistration.objects.filter(user=request.user, pending=False)
     domains_data = []
     error = None
     try:
@@ -46,7 +46,7 @@ def domains(request):
 
 @login_required
 def domain(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     if user_domain.user != request.user:
@@ -136,6 +136,9 @@ def domain(request, domain_id):
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
             admin_contact_form.set_cur_id(cur_id=domain_data.admin.contact_id, registry_id=domain_data.registry_name)
+        elif user_domain.admin_contact:
+            admin = user_domain.admin_contact
+            admin_contact_form.fields['contact'].value = user_domain.admin_contact.id
 
         if domain_data.billing:
             try:
@@ -143,6 +146,9 @@ def domain(request, domain_id):
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
             billing_contact_form.set_cur_id(cur_id=domain_data.billing.contact_id, registry_id=domain_data.registry_name)
+        elif user_domain.billing_contact:
+            billing = user_domain.billing_contact
+            billing_contact_form.fields['contact'].value = user_domain.billing_contact.id
 
         if domain_data.tech:
             try:
@@ -150,6 +156,9 @@ def domain(request, domain_id):
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
             tech_contact_form.set_cur_id(cur_id=domain_data.tech.contact_id, registry_id=domain_data.registry_name)
+        elif user_domain.admin_contact:
+            tech = user_domain.tech_contact
+            tech_contact_form.fields['contact'].value = user_domain.tech_contact.id
 
         if domain_info.registry == domain_info.REGISTRY_AFILIAS:
             admin_contact_form.fields['contact'].required = True
@@ -224,32 +233,49 @@ def update_domain_contact(request, domain_id):
     if form.is_valid():
         contact_type = form.cleaned_data['type']
         try:
+            contact = form.cleaned_data['contact']
             if contact_type != "registrant":
                 if not (
-                        domain_info.registry in (domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_TRAFICOM)
-                        or (domain_info.registry in (domain_info.REGISTRY_SWITCH,) and contact_type == "tech")
+                    domain_info.registry in (
+                        domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_TRAFICOM, domain_info.REGISTRY_VERISIGN
+                    ) or (
+                        domain_info.registry in (domain_info.REGISTRY_SWITCH,) and contact_type != "tech"
+                    )
                 ):
-                    if form.cleaned_data['contact']:
-                        contact = form.cleaned_data['contact'].get_registry_id(domain_data.registry_name)
-                        domain_data.set_contact(contact_type, contact.registry_contact_id)
+                    if contact:
+                        contact_id = contact.get_registry_id(domain_data.registry_name)
+                        domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                     else:
                         domain_data.set_contact(contact_type, None)
 
-                old_contact = domain_data.get_contact(contact_type)
-                if old_contact:
-                    if apps.epp_client.check_contact(old_contact.contact_id, domain_data.registry_name)[0]:
+                if contact_type == 'admin':
+                    user_domain.admin_contact = contact
+                elif contact_type == 'tech':
+                    user_domain.tech_contact = contact
+                elif contact_type == 'billing':
+                    user_domain.billing_contact = contact
+                user_domain.save()
+
+                if domain_info.registry not in (domain_info.REGISTRY_VERISIGN,):
+                    old_contact = domain_data.get_contact(contact_type)
+                    if old_contact:
+                        if apps.epp_client.check_contact(old_contact.contact_id, domain_data.registry_name)[0]:
+                            models.ContactRegistry.objects.filter(
+                                registry_contact_id=old_contact.contact_id,
+                                registry_id=domain_data.registry_name
+                            ).delete()
+            elif domain_info.registry not in (domain_info.REGISTRY_TRAFICOM,):
+                if domain_info.registry not in (domain_info.REGISTRY_VERISIGN,):
+                    contact_id = contact.get_registry_id(domain_data.registry_name)
+                    domain_data.set_registrant(contact_id.registry_contact_id)
+                    if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name)[0]:
                         models.ContactRegistry.objects.filter(
-                            registry_contact_id=old_contact.contact_id,
+                            registry_contact_id=domain_data.registrant,
                             registry_id=domain_data.registry_name
                         ).delete()
-            elif domain_info.registry not in (domain_info.REGISTRY_TRAFICOM,):
-                contact = form.cleaned_data['contact'].get_registry_id(domain_data.registry_name)
-                domain_data.set_registrant(contact.registry_contact_id)
-                if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name)[0]:
-                    models.ContactRegistry.objects.filter(
-                        registry_contact_id=domain_data.registrant,
-                        registry_id=domain_data.registry_name
-                    ).delete()
+
+                user_domain.registrant_contact = contact
+                user_domain.save()
         except grpc.RpcError as rpc_error:
             error = rpc_error.details()
             return render(request, "domains/error.html", {
@@ -735,6 +761,7 @@ def domain_register(request, domain_name):
             )
             if form.is_valid():
                 auth_info = models.make_secret()
+                registrant = form.cleaned_data['registrant']
                 admin_contact = form.cleaned_data['admin']
                 billing_contact = form.cleaned_data['billing']
                 tech_contact = form.cleaned_data['tech']
@@ -759,17 +786,23 @@ def domain_register(request, domain_name):
                 if billing_error:
                     error = billing_error
                 else:
-                    if admin_contact and registry_name not in (zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM):
+                    if admin_contact and registry_name not in (
+                            zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
+                    ):
                         contact_objs.append(apps.epp_api.DomainContact(
                             contact_type="admin",
                             contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
                         ))
-                    if billing_contact and registry_name not in (zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM):
+                    if billing_contact and registry_name not in (
+                            zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
+                    ):
                         contact_objs.append(apps.epp_api.DomainContact(
                             contact_type="billing",
                             contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
                         ))
-                    if tech_contact and registry_name not in (zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM):
+                    if tech_contact and registry_name not in (
+                            zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
+                    ):
                         contact_objs.append(apps.epp_api.DomainContact(
                             contact_type="tech",
                             contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id
@@ -779,7 +812,7 @@ def domain_register(request, domain_name):
                         pending, _, _, _ = apps.epp_client.create_domain(
                             domain=domain_name,
                             period=period,
-                            registrant=form.cleaned_data['registrant'].get_registry_id(registry_name).registry_contact_id,
+                            registrant=registrant.get_registry_id(registry_name).registry_contact_id,
                             contacts=contact_objs,
                             name_servers=[],
                             auth_info=auth_info,
@@ -793,17 +826,23 @@ def domain_register(request, domain_name):
                         )
                         error = rpc_error.details()
                     else:
+                        domain_obj = models.DomainRegistration(
+                            id=domain_id,
+                            domain=domain_name,
+                            user=request.user,
+                            auth_info=auth_info,
+                            registrant_contact=registrant,
+                            admin_contact=admin_contact,
+                            tech_contact=tech_contact,
+                            billing_contact=billing_contact
+                        )
                         if pending:
+                            domain_obj.pending = True
+                            domain_obj.save()
                             return render(request, "domains/domain_pending.html", {
                                 "domain_name": domain_name
                             })
                         else:
-                            domain_obj = models.DomainRegistration(
-                                id=domain_id,
-                                domain=domain_name,
-                                user=request.user,
-                                auth_info=auth_info
-                            )
                             domain_obj.save()
                             return redirect('domain', domain_obj.id)
         else:

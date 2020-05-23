@@ -57,6 +57,7 @@ class DomainInfo:
     REGISTRY_TRAFICOM = "traficom"
     REGISTRY_AFILIAS = "afilias"
     REGISTRY_DENIC = "denic"
+    REGISTRY_VERISIGN = "verisign"
 
     def __init__(self, registry, pricing):
         self.registry = registry
@@ -132,11 +133,13 @@ if settings.DEBUG:
             value=i
         ), range(1, 6))))),
         # ('me', SimplePrice(1400)),
-        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150))),
+        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150, restore=3200))),
+        ('tv', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(2566, restore=4000))),
+        ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),
     )
 else:
     ZONES = (
-        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150))),
+        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150, restore=3200))),
     )
 
 
