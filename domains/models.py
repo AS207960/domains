@@ -137,7 +137,7 @@ class Contact(models.Model):
         related_name='int_contacts',
         verbose_name="Internationalised address"
     )
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(blank=False, null=True)
     phone_ext = models.CharField(max_length=64, blank=True, null=True, verbose_name="Phone extension")
     fax = PhoneNumberField(blank=True, null=True)
     fax_ext = models.CharField(max_length=64, blank=True, null=True, verbose_name="Fax extension")
