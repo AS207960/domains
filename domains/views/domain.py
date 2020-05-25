@@ -847,8 +847,7 @@ def domain_register(request, domain_name):
                             return redirect('domain', domain_obj.id)
         else:
             form = forms.DomainRegisterForm(
-                zone_info=zone_price,
-                registry_name=registry_name,
+                zone=zone,
                 user=request.user
             )
 
