@@ -1047,7 +1047,7 @@ def domain_transfer_query(request):
         if form.is_valid():
             zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
             if zone:
-                if zone.registry != zone.REGISTRY_SWITCH:
+                if zone.registry not in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
                     form.add_error('domain', "Extension not yet supported for transfers")
                 else:
                     try:
@@ -1090,7 +1090,7 @@ def domain_transfer(request, domain_name):
     if not zone:
         raise Http404
 
-    if zone.registry != zone.REGISTRY_SWITCH:
+    if zone.registry not in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
         raise PermissionDenied
 
     zone_price, registry_name = zone.pricing, zone.registry
@@ -1133,9 +1133,15 @@ def domain_transfer(request, domain_name):
                         domain_data = apps.epp_client.get_domain(domain_name)
                         registrant_id = registrant.get_registry_id(transfer_data.registry_name)
                         domain_data.set_registrant(registrant_id.registry_contact_id)
-                        if tech_contact and zone.registry in (zone.REGISTRY_SWITCH,):
+                        if tech_contact and zone.registry in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
                             tech_contact_id = tech_contact.get_registry_id(transfer_data.registry_name)
                             domain_data.set_tech(tech_contact_id.registry_contact_id)
+                        if admin_contact and zone.registry in (zone.REGISTRY_DENIC,):
+                            admin_contact_id = admin_contact.get_registry_id(transfer_data.registry_name)
+                            domain_data.set_admin(admin_contact_id.registry_contact_id)
+                        if billing_contact and zone.registry in (zone.REGISTRY_DENIC,):
+                            billing_contact_id = billing_contact.get_registry_id(transfer_data.registry_name)
+                            domain_data.set_billing(billing_contact_id.registry_contact_id)
 
                         domain_obj = models.DomainRegistration(
                             id=domain_id,
