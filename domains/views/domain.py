@@ -19,6 +19,7 @@ def domain_prices(request):
         "registration": decimal.Decimal(z[1].pricing.registration("")) / decimal.Decimal(100),
         "renewal": decimal.Decimal(z[1].pricing.renewal("")) / decimal.Decimal(100),
         "restore": decimal.Decimal(z[1].pricing.restore("")) / decimal.Decimal(100),
+        "transfer": decimal.Decimal(z[1].pricing.transfer("")) / decimal.Decimal(100),
     }, zone_info.ZONES))
 
     return render(request, "domains/domain_prices.html", {
