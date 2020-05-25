@@ -129,7 +129,7 @@ if settings.DEBUG:
         # ('us.org', SimplePrice(1900)),
         # ('vg', SimplePrice(2500, restore=4500)),
         # ('za.com', SimplePrice(4700)),
-        ('fi', DomainInfo(DomainInfo.REGISTRY_AFILIAS, SimplePrice(2500, periods=map(lambda i: apps.epp_api.DomainPeriod(
+        ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(2500, periods=map(lambda i: apps.epp_api.DomainPeriod(
             unit=0,
             value=i
         ), range(1, 6))))),
@@ -144,6 +144,10 @@ else:
         ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
         ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
         ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=9230))),
+        ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1400, periods=map(lambda i: apps.epp_api.DomainPeriod(
+            unit=0,
+            value=i
+        ), range(1, 6))))),
     )
 
 

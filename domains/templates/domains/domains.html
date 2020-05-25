@@ -5,7 +5,10 @@
             <h1 class="display-4">My domains</h1>
             <hr class="my-4">
             {% if registration_enabled %}
-                <a class="btn btn-primary btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>
+                <div class="btn-group">
+                    <a class="btn btn-primary btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>
+                    <a class="btn btn-secondary btn-lg" href="{% url 'domain_transfer_query' %}" role="button">Transfer a domain</a>
+                </div>
             {% endif %}
         </div>
         {% if error %}

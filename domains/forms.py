@@ -332,19 +332,6 @@ class DomainRegisterForm(forms.Form):
         self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
         self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
 
-        args = [
-            'Domain contacts',
-            crispy_forms.layout.HTML("""
-                    <div class="alert alert-info" role="alert">
-                        Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
-                    </div>
-                """),
-            'registrant',
-            'admin',
-            'billing',
-            'tech'
-        ]
-
         if zone.registry == zone.REGISTRY_AFILIAS:
             self.fields['admin'].required = True
             self.fields['billing'].required = True
@@ -354,9 +341,59 @@ class DomainRegisterForm(forms.Form):
         self.helper.layout = crispy_forms.layout.Layout(
             'period',
             crispy_forms.layout.HTML("<hr/>"),
-            crispy_forms.layout.Fieldset(*args)
+            crispy_forms.layout.Fieldset(
+                'Domain contacts',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
+                    </div>
+                """),
+                'registrant',
+                'admin',
+                'billing',
+                'tech'
+            )
         )
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Register'))
+
+
+class DomainTransferForm(forms.Form):
+    auth_code = forms.CharField(max_length=64, label="Auth code / EPP code / Transfer code")
+    registrant = forms.ModelChoiceField(queryset=None, required=True)
+    admin = forms.ModelChoiceField(queryset=None, label="Admin contact", required=False)
+    billing = forms.ModelChoiceField(queryset=None, label="Billing contact", required=False)
+    tech = forms.ModelChoiceField(queryset=None, label="Technical contact", required=False)
+
+    def __init__(self, *args, zone: zone_info.DomainInfo, user, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['registrant'].queryset = models.Contact.objects.filter(user=user)
+        self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
+        self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
+        self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
+
+        if zone.registry == zone.REGISTRY_AFILIAS:
+            self.fields['admin'].required = True
+            self.fields['billing'].required = True
+            self.fields['tech'].required = True
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.layout = crispy_forms.layout.Layout(
+            'auth_code',
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Domain contacts',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
+                    </div>
+                """),
+                'registrant',
+                'admin',
+                'billing',
+                'tech'
+            )
+        )
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Start transfer'))
 
 
 class DomainRenewForm(forms.Form):

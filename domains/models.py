@@ -353,3 +353,24 @@ class DomainRegistration(models.Model):
 
     def __str__(self):
         return self.domain
+
+
+class PendingDomainTransfer(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    domain = models.CharField(max_length=255)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    auth_info = models.CharField(max_length=255, blank=True, null=True)
+    registrant_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_registrant')
+    admin_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_admin')
+    billing_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_billing')
+    tech_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_tech')
+
+    class Meta:
+        ordering = ['domain']
+
+    def __str__(self):
+        return self.domain

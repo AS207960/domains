@@ -46,6 +46,35 @@ class IPAddress:
 
 
 @dataclasses.dataclass
+class TransferStatus:
+    status: int
+
+    def __str__(self):
+        if self.status == 0:
+            return "Unknown status"
+        elif self.status == 1:
+            return "Client approved"
+        elif self.status == 2:
+            return "Client cancelled"
+        elif self.status == 3:
+            return "Client rejected"
+        elif self.status == 4:
+            return "Pending"
+        elif self.status == 5:
+            return "Server approved"
+        elif self.status == 6:
+            return "Server cancelled"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.status == other
+        elif type(other) == self.__class__:
+            return other.status == self.status
+        else:
+            return False
+
+
+@dataclasses.dataclass
 class DomainContact:
     contact_id: str
     contact_type: str
@@ -446,6 +475,31 @@ class DomainPeriod:
 
 
 @dataclasses.dataclass
+class DomainTransfer:
+    pending: bool
+    status: TransferStatus
+    requested_client_id: str
+    requested_date: datetime.datetime
+    act_client_id: str
+    act_date: datetime.datetime
+    expiry_date: typing.Optional[datetime.datetime]
+    registry_name: str
+
+    @classmethod
+    def from_pb(cls, resp: domain_pb2.DomainTransferReply):
+        return cls(
+            pending=resp.pending,
+            status=TransferStatus(status=resp.status),
+            requested_client_id=resp.requested_client_id,
+            requested_date=resp.requested_date.ToDatetime(),
+            act_client_id=resp.act_client_id,
+            act_date=resp.act_date.ToDatetime(),
+            expiry_date=resp.expiry_date.ToDatetime() if resp.HasField("expiry_date") else None,
+            registry_name=resp.registry_name
+        )
+
+
+@dataclasses.dataclass
 class HostStatus:
     status: int
 
@@ -738,6 +792,39 @@ class EPPClient:
             current_expiry_date=exp
         ))
         return resp.pending, resp.expiry_date.ToDatetime(), resp.registry_name
+
+    def transfer_query_domain(self, domain: str, auth_info: typing.Optional[str] = None) -> \
+            DomainTransfer:
+        resp = self.stub.DomainTransferQuery(domain_pb2.DomainTransferQueryRequest(
+            name=domain,
+            auth_info=auth_info
+        ))
+        return DomainTransfer.from_pb(resp)
+
+    def transfer_request_domain(self, domain: str, auth_info: str, period: typing.Optional[DomainPeriod] = None) -> \
+            DomainTransfer:
+        resp = self.stub.DomainTransferRequest(domain_pb2.DomainTransferRequestRequest(
+            name=domain,
+            period=period.to_pb() if period else None,
+            auth_info=auth_info
+        ))
+        return DomainTransfer.from_pb(resp)
+
+    def transfer_accept_domain(self, domain: str, auth_info: str) -> \
+            DomainTransfer:
+        resp = self.stub.DomainTransferAccept(domain_pb2.DomainTransferAcceptRejectRequest(
+            name=domain,
+            auth_info=auth_info
+        ))
+        return DomainTransfer.from_pb(resp)
+
+    def transfer_reject_domain(self, domain: str, auth_info: str) -> \
+            DomainTransfer:
+        resp = self.stub.DomainTransferReject(domain_pb2.DomainTransferAcceptRejectRequest(
+            name=domain,
+            auth_info=auth_info
+        ))
+        return DomainTransfer.from_pb(resp)
 
     def check_host(self, host_name: str, registry_name: str) -> (bool, typing.Optional[str]):
         resp = self.stub.HostCheck(host_pb2.HostCheckRequest(
