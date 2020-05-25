@@ -246,15 +246,27 @@ class Contact(models.Model):
         else:
             int_address = None
 
+        if registry_contact.phone:
+            phone = phonenumbers.parse(registry_contact.phone.number, settings.PHONENUMBER_DEFAULT_REGION)
+            if not phonenumbers.is_possible_number(phone):
+                phone = None
+        else:
+            phone = None
+
+        if registry_contact.fax:
+            fax = phonenumbers.parse(registry_contact.fax.number, settings.PHONENUMBER_DEFAULT_REGION)
+            if not phonenumbers.is_possible_number(fax):
+                fax = None
+        else:
+            fax = None
+
         contact = cls(
             description=registry_contact.local_address.name,
             local_address=local_address,
             int_address=int_address,
-            phone=phonenumbers.parse(registry_contact.phone.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if registry_contact.phone else None,
+            phone=phone,
             phone_ext=registry_contact.phone.ext if registry_contact.phone else None,
-            fax=phonenumbers.parse(registry_contact.fax.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if registry_contact.fax else None,
+            fax=fax,
             fax_ext=registry_contact.fax.ext if registry_contact.fax else None,
             email=registry_contact.email,
             entity_type=registry_contact.entity_type,
