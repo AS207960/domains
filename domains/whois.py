@@ -114,7 +114,13 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
             domain__search=query_str
         )
         for domain_obj in domain_objs:
-            domain_data = apps.epp_client.get_domain(domain_obj.domain)
+            try:
+                domain_data = apps.epp_client.get_domain(domain_obj.domain)
+            except grpc.RpcError as e:
+                context.set_code(e.code())
+                context.set_details(e.details())
+                return
+
             elements = [whois_pb2.WHOISReply.Element(
                 key="Domain Name",
                 value=domain_obj.domain
@@ -193,10 +199,12 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
             objects.append(whois_pb2.WHOISReply.Object(elements=elements))
 
         contact_objs = models.Contact.objects.filter(
-            Q(local_address__name__search=query_str) | Q(int_address__name__search=query_str) |
-            Q(local_address__organisation__search=query_str) | Q(int_address__name__search=query_str) |
+            Q(local_address__name__search=query_str, local_address__disclose_name=True) |
+            Q(int_address__name__search=query_str, int_address__disclose_name=True) |
+            Q(local_address__organisation__search=query_str, local_address__disclose_organisation=True) |
+            Q(int_address__name__search=query_str, int_address__disclose_organisation=True) |
             Q(trading_name__search=query_str) |
-            Q(email__iexact=query_str)
+            Q(email__iexact=query_str, disclose_email=True)
         )
         for contact_obj in contact_objs:
             elements = [whois_pb2.WHOISReply.Element(
@@ -227,7 +235,13 @@ class WHOISServicer(whois_pb2_grpc.WHOISServicer):
             name_server__search=query_str
         )
         for name_server in name_server_objs:
-            name_server_data = apps.epp_client.get_host(name_server.name_server, name_server.registry_id)
+            try:
+                name_server_data = apps.epp_client.get_host(name_server.name_server, name_server.registry_id)
+            except grpc.RpcError as e:
+                context.set_code(e.code())
+                context.set_details(e.details())
+                return
+
             elements = [whois_pb2.WHOISReply.Element(
                 key="Server Name",
                 value=name_server_data.name
