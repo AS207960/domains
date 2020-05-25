@@ -143,7 +143,7 @@ else:
         ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150, restore=3200))),
         ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
         ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
-        ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=8030))),
+        ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=9230))),
     )
 
 
