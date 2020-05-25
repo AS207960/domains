@@ -148,7 +148,10 @@ else:
 
 
 def get_domain_info(domain: str):
-    sld, tld = domain.rstrip(".").split(".", maxsplit=1)
+    parts = domain.rstrip(".").split(".", maxsplit=1)
+    if len(parts) != 2:
+        return None, domain
+    sld, tld = parts
     for zone in ZONES:
         if zone[0] == tld:
             return zone[1], sld
