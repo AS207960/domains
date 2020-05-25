@@ -1,6 +1,6 @@
 from django import forms
 from django.urls import reverse
-from . import models, apps
+from . import models, apps, zone_info
 import datetime
 from django_countries.widgets import CountrySelectWidget
 import crispy_forms.helper
@@ -324,9 +324,9 @@ class DomainRegisterForm(forms.Form):
     billing = forms.ModelChoiceField(queryset=None, label="Billing contact", required=False)
     tech = forms.ModelChoiceField(queryset=None, label="Technical contact", required=False)
 
-    def __init__(self, *args, zone_info, registry_name, user,  **kwargs):
+    def __init__(self, *args, zone: zone_info.DomainInfo, user, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['period'].choices = map(map_period, zone_info.periods)
+        self.fields['period'].choices = map(map_period, zone.pricing.periods)
         self.fields['registrant'].queryset = models.Contact.objects.filter(user=user)
         self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
         self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
@@ -339,17 +339,13 @@ class DomainRegisterForm(forms.Form):
                         Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
                     </div>
                 """),
-            'registrant'
+            'registrant',
+            'admin',
+            'billing',
+            'tech'
         ]
 
-        if registry_name in ("nominet", "traficom"):
-            pass
-        elif registry_name == "switch":
-            args.append('tech')
-        else:
-            args.extend(['admin', 'billing', 'tech'])
-
-        if registry_name == "afilias":
+        if zone.registry == zone.REGISTRY_AFILIAS:
             self.fields['admin'].required = True
             self.fields['billing'].required = True
             self.fields['tech'].required = True

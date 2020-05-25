@@ -756,8 +756,7 @@ def domain_register(request, domain_name):
         if request.method == "POST":
             form = forms.DomainRegisterForm(
                 request.POST,
-                zone_info=zone_price,
-                registry_name=registry_name,
+                zone=zone,
                 user=request.user
             )
             if form.is_valid():
