@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -752,7 +752,7 @@ def domain_register(request, domain_name):
         error = rpc_error.details()
     else:
         if not available:
-            raise Http404
+            return HttpResponse(status=409)
         if request.method == "POST":
             form = forms.DomainRegisterForm(
                 request.POST,
