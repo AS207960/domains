@@ -248,14 +248,14 @@ class Contact(models.Model):
 
         if registry_contact.phone:
             phone = phonenumbers.parse(registry_contact.phone.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if not phonenumbers.is_possible_number(phone):
+            if not phonenumbers.is_valid_number(phone):
                 phone = None
         else:
             phone = None
 
         if registry_contact.fax:
             fax = phonenumbers.parse(registry_contact.fax.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if not phonenumbers.is_possible_number(fax):
+            if not phonenumbers.is_valid_number(fax):
                 fax = None
         else:
             fax = None
