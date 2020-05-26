@@ -262,24 +262,24 @@ if settings.DEBUG:
     )
 else:
     ZONES = (
-        ('com', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(1519, transfer=1519, restore=9115))),
-        ('net', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(2039, transfer=2039, restore=9115))),
-        ('org', DomainInfo(DomainInfo.REGISTRY_PIR, SimplePrice(1869, transfer=1869, restore=9115))),
-        ('gay', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(4379, transfer=4379, restore=25400))),
-        ('site', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(3219, transfer=3219, restore=11200))),
-        ('website', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(2639, transfer=2639, restore=9119))),
-        ('tech', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(6299, transfer=6299, restore=11200))),
-        ('xyz', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(1449, transfer=1449, restore=11200))),
-        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, transfer=1150, renewal=1150, restore=3200))),
+        ('com', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(1810, transfer=1810, restore=10940))),
+        ('net', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(2438, transfer=2438, restore=10940))),
+        ('org', DomainInfo(DomainInfo.REGISTRY_PIR, SimplePrice(2235, transfer=2235, restore=10940))),
+        ('gay', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(5250, transfer=5250, restore=30389))),
+        ('site', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(4219, transfer=4219, restore=13369))),
+        ('website', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(3169, transfer=3169, restore=10939))),
+        ('tech', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(7559, transfer=7559, restore=13369))),
+        ('xyz', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(1739, transfer=1739, restore=12159))),
+        ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, transfer=1150, renewal=1150, restore=3739))),
         ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
         ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
-        ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=9230))),
+        ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=10940))),
         ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1400, periods=map(lambda i: apps.epp_api.DomainPeriod(
             unit=0,
             value=i
         ), range(1, 6))))),
-        ('cymru', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1569, transfer=1569, restore=1949))),
-        ('wales', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1569, transfer=1569, restore=1949))),
+        ('cymru', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1889, transfer=1889, restore=2339))),
+        ('wales', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1889, transfer=1889, restore=2339))),
     )
 
 
