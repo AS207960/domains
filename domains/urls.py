@@ -23,6 +23,7 @@ urlpatterns = [
     path('domains/<uuid:domain_id>/del_host_obj/<str:host_name>/', domain.delete_domain_host_obj, name='delete_domain_host_obj'),
     path('domains/<uuid:domain_id>/block_transfer/', domain.domain_block_transfer, name='domain_block_transfer'),
     path('domains/<uuid:domain_id>/del_block_transfer/', domain.domain_del_block_transfer, name='domain_del_block_transfer'),
+    path('domains/<uuid:domain_id>/regen_transfer_code/', domain.domain_regen_transfer_code, name='domain_regen_transfer_code'),
     path('hosts/', hosts.hosts, name='hosts'),
     path('hosts/<uuid:host_id>/', hosts.host, name='host'),
     path('hosts/<uuid:host_id>/delete/', hosts.host_delete, name='host_delete'),

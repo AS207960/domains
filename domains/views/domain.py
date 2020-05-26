@@ -356,6 +356,42 @@ def domain_del_block_transfer(request, domain_id):
 
 
 @login_required
+def domain_regen_transfer_code(request, domain_id):
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+
+    if user_domain.user != request.user:
+        raise PermissionDenied
+
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    try:
+        domain_data = apps.epp_client.get_domain(user_domain.domain)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    new_auth_info = models.make_secret()
+
+    try:
+        domain_data.set_auth_info(new_auth_info)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    user_domain.auth_info = new_auth_info
+    user_domain.save()
+
+    return redirect(referrer)
+
+
+@login_required
 @require_POST
 def add_domain_host_obj(request, domain_id):
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)

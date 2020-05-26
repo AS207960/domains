@@ -59,22 +59,25 @@
             </div>
             <div class="col">
                 <p>
-                {% if domain.rgp_state == 5 %}
-                    {% if registration_enabled %}
-                        <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
-                    {% endif %}
-                {% else %}
-                    {% if domain.registry_name == "traficom" and 8 in domain.statuses %}
-                        <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
-                    {% else %}
-                        {% if registration_enabled %}
-                            {% if domain_info.registry != domain_info.REGISTRY_SWITCH and domain_info.registry != domain_info.REGISTRY_DENIC %}
-                                <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
+                    <div class="btn-group">
+                        {% if domain.rgp_state == 5 %}
+                            {% if registration_enabled %}
+                                <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
+                            {% endif %}
+                        {% else %}
+                            {% if domain.registry_name == "traficom" and 8 in domain.statuses %}
+                                <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
+                            {% else %}
+                                {% if registration_enabled %}
+                                    {% if domain_info.registry != domain_info.REGISTRY_SWITCH and domain_info.registry != domain_info.REGISTRY_DENIC %}
+                                        <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">Delete</a>
+                                <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">Regenerate transfer code</a>
                             {% endif %}
                         {% endif %}
-                        <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">Delete</a>
-                    {% endif %}
-                {% endif %}
+                    </div>
                 </p>
                 <p>
                     <style>

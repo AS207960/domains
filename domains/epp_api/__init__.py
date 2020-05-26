@@ -327,6 +327,12 @@ class Domain:
     def tech(self):
         return self.get_contact("tech")
 
+    def set_auth_info(self, auth_info: str) -> bool:
+        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
+            name=self.name,
+            new_auth_info=StringValue(value=auth_info)
+        )).pending
+
     def get_contact(self, contact_type: str):
         return next(filter(lambda c: c.contact_type == contact_type, self.contacts), None)
 
