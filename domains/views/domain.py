@@ -1168,7 +1168,7 @@ def domain_transfer(request, domain_name):
     if not zone:
         raise Http404
 
-    if zone.transfer_supported:
+    if not zone.transfer_supported:
         raise PermissionDenied
 
     zone_price, registry_name = zone.pricing, zone.registry
