@@ -1134,15 +1134,18 @@ def domain_transfer_query(request):
                         error = rpc_error.details()
                     else:
                         if not available:
-                            try:
-                                domain_data = apps.epp_client.get_domain(form.cleaned_data['domain'])
-                            except grpc.RpcError as rpc_error:
-                                error = rpc_error.details()
-                            else:
-                                if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
-                                    form.add_error('domain', "Domain not eligible for transfer")
+                            if zone.pre_transfer_query_supported:
+                                try:
+                                    domain_data = apps.epp_client.get_domain(form.cleaned_data['domain'])
+                                except grpc.RpcError as rpc_error:
+                                    error = rpc_error.details()
                                 else:
-                                    return redirect('domain_transfer', form.cleaned_data['domain'])
+                                    if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
+                                        form.add_error('domain', "Domain not eligible for transfer")
+                                    else:
+                                        return redirect('domain_transfer', form.cleaned_data['domain'])
+                            else:
+                                return redirect('domain_transfer', form.cleaned_data['domain'])
                         else:
                             form.add_error('domain', "Domain does not exist")
             else:

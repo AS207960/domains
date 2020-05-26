@@ -77,6 +77,16 @@ class DomainInfo:
         )
 
     @property
+    def pre_transfer_query_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_VERISIGN
+        )
+
+    @property
     def renew_supported(self):
         return self.registry not in (
             self.REGISTRY_SWITCH,
