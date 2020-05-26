@@ -803,85 +803,119 @@ def domain_register(request, domain_name):
             user=request.user
         )
         if form.is_valid():
-            auth_info = models.make_secret()
-            registrant = form.cleaned_data['registrant']
-            admin_contact = form.cleaned_data['admin']
-            billing_contact = form.cleaned_data['billing']
-            tech_contact = form.cleaned_data['tech']
-            period = form.cleaned_data['period']
-            domain_id = uuid.uuid4()
-            contact_objs = []
-
-            if period.unit == 0:
-                billing_mul = decimal.Decimal(period.value)
-            elif period.unit == 1:
-                billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
+            try:
+                available, _, registry_id = apps.epp_client.check_domain(form.cleaned_data['domain'])
+            except grpc.RpcError as rpc_error:
+                error = rpc_error.details()
             else:
-                raise PermissionDenied
+                if not available:
+                    raise Http404
 
-            billing_value = price_decimal * billing_mul
-            billing_error = billing.charge_account(
-                request.user.username,
-                billing_value,
-                f"{domain_name} domain registration",
-                f"dm_{domain_id}"
-            )
-            if billing_error:
-                error = billing_error
-            else:
-                if zone.admin_supported:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="admin",
-                        contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
-                    ))
-                if zone.billing_supported:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="billing",
-                        contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
-                    ))
-                if zone.tech_supported:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="tech",
-                        contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id
-                    ))
+                auth_info = models.make_secret()
+                registrant = form.cleaned_data['registrant']
+                admin_contact = form.cleaned_data['admin']
+                billing_contact = form.cleaned_data['billing']
+                tech_contact = form.cleaned_data['tech']
+                period = form.cleaned_data['period']
+                domain_id = uuid.uuid4()
+                contact_objs = []
 
-                try:
-                    pending, _, _, _ = apps.epp_client.create_domain(
-                        domain=domain_name,
-                        period=period,
-                        registrant=registrant.get_registry_id(registry_name).registry_contact_id,
-                        contacts=contact_objs,
-                        name_servers=[],
-                        auth_info=auth_info,
-                    )
-                except grpc.RpcError as rpc_error:
-                    billing.charge_account(
-                        request.user.username,
-                        -billing_value,
-                        f"{domain_name} domain registration",
-                        f"dm_{domain_id}"
-                    )
-                    error = rpc_error.details()
+                if period.unit == 0:
+                    billing_mul = decimal.Decimal(period.value)
+                elif period.unit == 1:
+                    billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
                 else:
-                    domain_obj = models.DomainRegistration(
-                        id=domain_id,
-                        domain=domain_name,
-                        user=request.user,
-                        auth_info=auth_info,
-                        registrant_contact=registrant,
-                        admin_contact=admin_contact,
-                        tech_contact=tech_contact,
-                        billing_contact=billing_contact
-                    )
-                    if pending:
-                        domain_obj.pending = True
-                        domain_obj.save()
-                        return render(request, "domains/domain_pending.html", {
-                            "domain_name": domain_name
-                        })
+                    raise PermissionDenied
+
+                for host in ('ns1.as207960.net', 'ns2.as207960.net'):
+                    try:
+                        host_available, _ = apps.epp_client.check_host(host, registry_id)
+                    except grpc.RpcError as rpc_error:
+                        error = rpc_error.details()
                     else:
-                        domain_obj.save()
-                        return redirect('domain', domain_obj.id)
+                        success = False
+                        if host_available:
+                            try:
+                                apps.epp_client.create_host(host, [], registry_id)
+                            except grpc.RpcError as rpc_error:
+                                error = rpc_error.details()
+                            else:
+                                success = True
+                        else:
+                            success = True
+
+                        if success:
+                            billing_value = price_decimal * billing_mul
+                            billing_error = billing.charge_account(
+                                request.user.username,
+                                billing_value,
+                                f"{domain_name} domain registration",
+                                f"dm_{domain_id}"
+                            )
+                            if billing_error:
+                                error = billing_error
+                            else:
+                                if zone.admin_supported:
+                                    contact_objs.append(apps.epp_api.DomainContact(
+                                        contact_type="admin",
+                                        contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
+                                    ))
+                                if zone.billing_supported:
+                                    contact_objs.append(apps.epp_api.DomainContact(
+                                        contact_type="billing",
+                                        contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
+                                    ))
+                                if zone.tech_supported:
+                                    contact_objs.append(apps.epp_api.DomainContact(
+                                        contact_type="tech",
+                                        contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id
+                                    ))
+
+                                try:
+                                    pending, _, _, _ = apps.epp_client.create_domain(
+                                        domain=domain_name,
+                                        period=period,
+                                        registrant=registrant.get_registry_id(registry_name).registry_contact_id,
+                                        contacts=contact_objs,
+                                        name_servers=[apps.epp_api.DomainNameServer(
+                                            host_obj='ns1.as207960.net',
+                                            host_name=None,
+                                            address=[]
+                                        ), apps.epp_api.DomainNameServer(
+                                            host_obj='ns2.as207960.net',
+                                            host_name=None,
+                                            address=[]
+                                        )],
+                                        auth_info=auth_info,
+                                    )
+                                except grpc.RpcError as rpc_error:
+                                    billing.charge_account(
+                                        request.user.username,
+                                        -billing_value,
+                                        f"{domain_name} domain registration",
+                                        f"dm_{domain_id}"
+                                    )
+                                    error = rpc_error.details()
+                                else:
+                                    domain_obj = models.DomainRegistration(
+                                        id=domain_id,
+                                        domain=domain_name,
+                                        user=request.user,
+                                        auth_info=auth_info,
+                                        registrant_contact=registrant,
+                                        admin_contact=admin_contact,
+                                        tech_contact=tech_contact,
+                                        billing_contact=billing_contact
+                                    )
+                                    if pending:
+                                        domain_obj.pending = True
+                                        domain_obj.save()
+                                        return render(request, "domains/domain_pending.html", {
+                                            "domain_name": domain_name
+                                        })
+                                    else:
+                                        domain_obj.save()
+                                        return redirect('domain', domain_obj.id)
     else:
         form = forms.DomainRegisterForm(
             zone=zone,
@@ -1091,7 +1125,7 @@ def domain_transfer_query(request):
         if form.is_valid():
             zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
             if zone:
-                if zone.transfer_supported:
+                if not zone.transfer_supported:
                     form.add_error('domain', "Extension not yet supported for transfers")
                 else:
                     try:

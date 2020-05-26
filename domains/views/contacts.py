@@ -67,19 +67,26 @@ def delete_contact(request, contact_id):
 
     referrer = reverse('contacts')
 
-    for i in user_contact.contactregistry_set.all():
-        try:
-            contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
-        except grpc.RpcError as rpc_error:
-            error = rpc_error.details()
-            return render(request, "domains/error.html", {
-                "error": error,
-                "back_url": referrer
-            })
+    if user_contact.domains_registrant.count() or user_contact.domains_admin.count() or\
+            user_contact.domains_tech.count() or user_contact.domains_billing.count() or\
+            user_contact.pending_domains_registrant.count() or user_contact.pending_domains_admin.count() or\
+            user_contact.pending_domains_tech.count() or user_contact.pending_domains_billing.count():
+        can_delete = False
 
-        if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
-            can_delete = False
-            break
+    if can_delete:
+        for i in user_contact.contactregistry_set.all():
+            try:
+                contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
+            except grpc.RpcError as rpc_error:
+                error = rpc_error.details()
+                return render(request, "domains/error.html", {
+                    "error": error,
+                    "back_url": referrer
+                })
+
+            if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
+                can_delete = False
+                break
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":

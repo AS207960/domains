@@ -340,13 +340,13 @@ class DomainRegistration(models.Model):
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     pending = models.BooleanField(default=False, blank=True)
     registrant_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_registrant')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_registrant')
     admin_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_admin')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_admin')
     billing_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_billing')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_billing')
     tech_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='domains_tech')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_tech')
 
     class Meta:
         ordering = ['domain']
@@ -361,13 +361,13 @@ class PendingDomainTransfer(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     registrant_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_registrant')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_registrant')
     admin_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_admin')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_admin')
     billing_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_billing')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_billing')
     tech_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL, related_name='pending_domains_tech')
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_tech')
 
     class Meta:
         ordering = ['domain']
