@@ -161,10 +161,9 @@ def domain(request, domain_id):
             tech = user_domain.tech_contact
             tech_contact_form.fields['contact'].value = user_domain.tech_contact.id
 
-        if domain_info.registry == domain_info.REGISTRY_AFILIAS:
-            admin_contact_form.fields['contact'].required = True
-            billing_contact_form.fields['contact'].required = True
-            tech_contact_form.fields['contact'].required = True
+        admin_contact_form.fields['contact'].required = domain_info.admin_required
+        billing_contact_form.fields['contact'].required = domain_info.billing_required
+        tech_contact_form.fields['contact'].required = domain_info.tech_required
 
         host_objs = list(map(lambda h: models.NameServer.get_name_server(
             h,
@@ -229,35 +228,50 @@ def update_domain_contact(request, domain_id):
         contact_type=None,
         domain_id=user_domain.id,
     )
-    if domain_info.registry == domain_info.REGISTRY_AFILIAS:
-        form.fields['contact'].required = True
+
+
+    contact_type = request.POST.get("type")
+
+    if contact_type == 'admin':
+        form.fields['contact'].required = domain_info.admin_required
+    elif contact_type == 'billing':
+        form.fields['contact'].required = domain_info.billing_required
+    elif contact_type == 'tech':
+        form.fields['contact'].required = domain_info.tech_required
+
     if form.is_valid():
         contact_type = form.cleaned_data['type']
         try:
             contact = form.cleaned_data['contact']
             if contact_type != "registrant":
-                if not (
-                    domain_info.registry in (
-                        domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_TRAFICOM, domain_info.REGISTRY_VERISIGN
-                    ) or (
-                        domain_info.registry in (domain_info.REGISTRY_SWITCH,) and contact_type != "tech"
-                    )
-                ):
-                    if contact:
-                        contact_id = contact.get_registry_id(domain_data.registry_name)
-                        domain_data.set_contact(contact_type, contact_id.registry_contact_id)
-                    else:
-                        domain_data.set_contact(contact_type, None)
-
                 if contact_type == 'admin':
                     user_domain.admin_contact = contact
+                    if domain_info.admin_supported:
+                        if contact:
+                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            domain_data.set_contact(contact_type, contact_id.registry_contact_id)
+                        else:
+                            domain_data.set_contact(contact_type, None)
                 elif contact_type == 'tech':
                     user_domain.tech_contact = contact
+                    if domain_info.tech_supported:
+                        if contact:
+                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            domain_data.set_contact(contact_type, contact_id.registry_contact_id)
+                        else:
+                            domain_data.set_contact(contact_type, None)
                 elif contact_type == 'billing':
                     user_domain.billing_contact = contact
+                    if domain_info.biilling_supported:
+                        if contact:
+                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            domain_data.set_contact(contact_type, contact_id.registry_contact_id)
+                        else:
+                            domain_data.set_contact(contact_type, None)
+
                 user_domain.save()
 
-                if domain_info.registry not in (domain_info.REGISTRY_VERISIGN,):
+                if domain_info.registrant_supported:
                     old_contact = domain_data.get_contact(contact_type)
                     if old_contact:
                         if apps.epp_client.check_contact(old_contact.contact_id, domain_data.registry_name)[0]:
@@ -265,8 +279,8 @@ def update_domain_contact(request, domain_id):
                                 registry_contact_id=old_contact.contact_id,
                                 registry_id=domain_data.registry_name
                             ).delete()
-            elif domain_info.registry not in (domain_info.REGISTRY_TRAFICOM,):
-                if domain_info.registry not in (domain_info.REGISTRY_VERISIGN,):
+            elif domain_info.registrant_change_supported:
+                if domain_info.registrant_supported:
                     contact_id = contact.get_registry_id(domain_data.registry_name)
                     domain_data.set_registrant(contact_id.registry_contact_id)
                     if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name)[0]:
@@ -308,7 +322,7 @@ def domain_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
-    if domain_info.registry not in (domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_SWITCH, domain_info.REGISTRY_TRAFICOM):
+    if domain_info.transfer_lock_supported:
         try:
             domain_data.add_states([apps.epp_api.DomainStatus(status=3)])
         except grpc.RpcError as rpc_error:
@@ -342,7 +356,7 @@ def domain_del_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
-    if domain_info.registry not in (domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_SWITCH, domain_info.REGISTRY_TRAFICOM):
+    if domain_info.transfer_lock_supported:
         try:
             domain_data.del_states([apps.epp_api.DomainStatus(status=3)])
         except grpc.RpcError as rpc_error:
@@ -815,23 +829,17 @@ def domain_register(request, domain_name):
             if billing_error:
                 error = billing_error
             else:
-                if admin_contact and registry_name not in (
-                        zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
-                ):
+                if zone.admin_supported:
                     contact_objs.append(apps.epp_api.DomainContact(
                         contact_type="admin",
                         contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
                     ))
-                if billing_contact and registry_name not in (
-                        zone.REGISTRY_SWITCH, zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
-                ):
+                if zone.billing_supported:
                     contact_objs.append(apps.epp_api.DomainContact(
                         contact_type="billing",
                         contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
                     ))
-                if tech_contact and registry_name not in (
-                        zone.REGISTRY_NOMINET, zone.REGISTRY_TRAFICOM, zone.REGISTRY_VERISIGN
-                ):
+                if zone.tech_supported:
                     contact_objs.append(apps.epp_api.DomainContact(
                         contact_type="tech",
                         contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id
@@ -922,7 +930,7 @@ def delete_domain(request, domain_id):
                     "back_url": referrer
                 })
 
-            if domain_info.registry in (domain_info.REGISTRY_NOMINET, domain_info.REGISTRY_AFILIAS, domain_info.REGISTRY_DENIC):
+            if not domain_info.restore_supported:
                 if apps.epp_client.check_contact(domain_data.registrant, registry_id)[0]:
                     models.ContactRegistry.objects.filter(
                         registry_contact_id=domain_data.registrant,
@@ -1083,7 +1091,7 @@ def domain_transfer_query(request):
         if form.is_valid():
             zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
             if zone:
-                if zone.registry not in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
+                if zone.transfer_supported:
                     form.add_error('domain', "Extension not yet supported for transfers")
                 else:
                     try:
@@ -1126,7 +1134,7 @@ def domain_transfer(request, domain_name):
     if not zone:
         raise Http404
 
-    if zone.registry not in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
+    if zone.transfer_supported:
         raise PermissionDenied
 
     zone_price, registry_name = zone.pricing, zone.registry
@@ -1169,13 +1177,13 @@ def domain_transfer(request, domain_name):
                         domain_data = apps.epp_client.get_domain(domain_name)
                         registrant_id = registrant.get_registry_id(transfer_data.registry_name)
                         domain_data.set_registrant(registrant_id.registry_contact_id)
-                        if tech_contact and zone.registry in (zone.REGISTRY_SWITCH, zone.REGISTRY_DENIC):
+                        if tech_contact and zone.tech_supported:
                             tech_contact_id = tech_contact.get_registry_id(transfer_data.registry_name)
                             domain_data.set_tech(tech_contact_id.registry_contact_id)
-                        if admin_contact and zone.registry in (zone.REGISTRY_DENIC,):
+                        if admin_contact and zone.admin_supported:
                             admin_contact_id = admin_contact.get_registry_id(transfer_data.registry_name)
                             domain_data.set_admin(admin_contact_id.registry_contact_id)
-                        if billing_contact and zone.registry in (zone.REGISTRY_DENIC,):
+                        if billing_contact and zone.billing_supported:
                             billing_contact_id = billing_contact.get_registry_id(transfer_data.registry_name)
                             domain_data.set_billing(billing_contact_id.registry_contact_id)
 

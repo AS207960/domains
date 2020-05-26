@@ -59,10 +59,122 @@ class DomainInfo:
     REGISTRY_DENIC = "denic"
     REGISTRY_VERISIGN = "verisign"
     REGISTRY_DONUTS = "donuts"
+    REGISTRY_VERISIGN_COMNET = "verisign-comnet"
+    REGISTRY_PIR = "pir"
+    REGISTRY_CENTRALNIC = "centralnic"
+    REGISTRY_NOMINET_GTLD = "nominet-gtld"
+    REGISTRY_DNSBELGIUM = "dnsbelgium"
 
     def __init__(self, registry, pricing):
         self.registry = registry
         self.pricing = pricing
+
+    @property
+    def transfer_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_DENIC
+        )
+
+    @property
+    def renew_supported(self):
+        return self.registry not in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_DENIC
+        )
+
+    @property
+    def restore_supported(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+        )
+
+    @property
+    def transfer_lock_supported(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_TRAFICOM
+        )
+
+    @property
+    def registrant_supported(self):
+        return self.registry not in (
+            self.REGISTRY_VERISIGN
+        )
+
+    @property
+    def registrant_change_supported(self):
+        return self.registry not in (
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_DNSBELGIUM,
+        )
+
+    @property
+    def ds_data_supported(self):
+        return self.registry not in (
+            self.REGISTRY_DENIC
+        )
+
+    @property
+    def admin_supported(self):
+        return self.registry not in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_DNSBELGIUM,
+        )
+
+    @property
+    def admin_required(self):
+        return self.registry in (
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_DONUTS,
+            self.REGISTRY_VERISIGN_COMNET,
+            self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC,
+            self.REGISTRY_NOMINET_GTLD,
+        )
+
+    @property
+    def tech_supported(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_VERISIGN,
+        )
+
+    @property
+    def tech_required(self):
+        return self.registry in (
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_DONUTS,
+            self.REGISTRY_VERISIGN_COMNET,
+            self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC,
+            self.REGISTRY_NOMINET_GTLD,
+        )
+
+    @property
+    def billing_supported(self):
+        return self.registry not in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_VERISIGN,
+        )
+
+    @property
+    def billing_required(self):
+        return self.registry in (
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_DONUTS,
+            self.REGISTRY_VERISIGN_COMNET,
+            self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC,
+            self.REGISTRY_NOMINET_GTLD,
+        )
 
 
 if settings.DEBUG:
@@ -140,6 +252,14 @@ if settings.DEBUG:
     )
 else:
     ZONES = (
+        ('com', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(1519, restore=9115))),
+        ('net', DomainInfo(DomainInfo.REGISTRY_VERISIGN_COMNET, SimplePrice(2039, restore=9115))),
+        ('org', DomainInfo(DomainInfo.REGISTRY_PIR, SimplePrice(1869, restore=9115))),
+        ('gay', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(1869, restore=9115))),
+        ('site', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(3219, restore=11200))),
+        ('website', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(2639, restore=9119))),
+        ('tech', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(6299, restore=11200))),
+        ('xyz', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(1449, restore=11200))),
         ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150, restore=3200))),
         ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
         ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
@@ -148,6 +268,8 @@ else:
             unit=0,
             value=i
         ), range(1, 6))))),
+        ('cymru', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1569, restore=1949))),
+        ('wales', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1569, restore=1949))),
     )
 
 

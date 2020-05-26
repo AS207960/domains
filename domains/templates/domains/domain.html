@@ -48,11 +48,11 @@
                     <a href="{% url 'edit_contact' registrant.id %}" class="btn btn-primary btn-sm">View registrant</a>
                 </p>
                 {% endif %}
-                {% if domain.registry_name != "traficom" %}
+                {% if domain_info.registrant_change_supported %}
                     {% crispy registrant_form registrant_form.helper %}
                 {% else %}
                     <p>
-                        The .fi domain has a weird procedure for changing the registrant contact.
+                        This TLD has a weird procedure for changing the registrant contact.
                         Please contact us to go through the change procedure.
                     </p>
                 {% endif %}
@@ -65,11 +65,11 @@
                                 <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
                             {% endif %}
                         {% else %}
-                            {% if domain.registry_name == "traficom" and 8 in domain.statuses %}
+                            {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
                                 <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
                             {% else %}
                                 {% if registration_enabled %}
-                                    {% if domain_info.registry != domain_info.REGISTRY_SWITCH and domain_info.registry != domain_info.REGISTRY_DENIC %}
+                                    {% if domain_info.renew_supported %}
                                         <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
                                     {% endif %}
                                 {% endif %}
@@ -126,7 +126,7 @@
                 </tbody>
             </table>
         </div>
-        {% if 3 not in domain.statuses and domain.registry_name != "nominet" and domain.registry_name != "switch" and domain.registry_name != "traficom" %}
+        {% if 3 not in domain.statuses and domain_info.transfer_lock_supported %}
             <form action="{% url 'domain_block_transfer' domain_id %}" method="post">
                 {% csrf_token %}
                 <button class="btn btn-info">Block transfer</button>
@@ -363,7 +363,7 @@
                 No DNSSEC data exists for this domain.
             </p>
             <h3>Enable DNSSEC</h3>
-            {% if domain_info.registry == domain_info.REGISTRY_DENIC %}
+            {% if not domain_info.ds_data_supported %}
                 {% crispy dnskey_form dnskey_form.helper %}
             {% else %}
                 {% crispy ds_form ds_form.helper %}

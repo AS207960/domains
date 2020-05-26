@@ -331,11 +331,9 @@ class DomainRegisterForm(forms.Form):
         self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
         self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
         self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
-
-        if zone.registry == zone.REGISTRY_AFILIAS:
-            self.fields['admin'].required = True
-            self.fields['billing'].required = True
-            self.fields['tech'].required = True
+        self.fields['admin'].required = zone.admin_required
+        self.fields['billing'].required = zone.billing_required
+        self.fields['tech'].required = zone.tech_required
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.layout = crispy_forms.layout.Layout(
@@ -370,11 +368,9 @@ class DomainTransferForm(forms.Form):
         self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
         self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
         self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
-
-        if zone.registry == zone.REGISTRY_AFILIAS:
-            self.fields['admin'].required = True
-            self.fields['billing'].required = True
-            self.fields['tech'].required = True
+        self.fields['admin'].required = zone.admin_required
+        self.fields['billing'].required = zone.billing_required
+        self.fields['tech'].required = zone.tech_required
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.layout = crispy_forms.layout.Layout(
