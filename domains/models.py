@@ -40,7 +40,7 @@ def make_id():
 
 
 class ContactAddress(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=255)
     name = models.CharField(max_length=255, validators=[validators.MinLengthValidator(4)])
     birthday = models.DateField(blank=True, null=True)
@@ -121,7 +121,7 @@ class Contact(models.Model):
         (30, "Other Public Community"),
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=255)
     local_address = models.ForeignKey(
         ContactAddress,
@@ -307,7 +307,7 @@ class ContactRegistry(models.Model):
 
 
 class NameServer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name_server = models.CharField(max_length=255)
     registry_id = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
@@ -334,7 +334,7 @@ class NameServer(models.Model):
 
 
 class DomainRegistration(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
@@ -356,7 +356,7 @@ class DomainRegistration(models.Model):
 
 
 class PendingDomainTransfer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     auth_info = models.CharField(max_length=255, blank=True, null=True)

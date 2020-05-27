@@ -453,13 +453,6 @@ def add_domain_host_obj(request, domain_id):
                     "back_url": referrer
                 })
 
-            host_model = models.NameServer(
-                name_server=host_obj,
-                registry_id=domain_data.registry_name,
-                user=request.user
-            )
-            host_model.save()
-
         try:
             domain_data.add_host_objs([host_obj])
         except grpc.RpcError as rpc_error:
@@ -804,7 +797,7 @@ def domain_register(request, domain_name):
         )
         if form.is_valid():
             try:
-                available, _, registry_id = apps.epp_client.check_domain(form.cleaned_data['domain'])
+                available, _, registry_id = apps.epp_client.check_domain(domain_name)
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
             else:

@@ -1,4 +1,5 @@
-from django.urls import path
+from django.conf import settings
+from django.urls import path, include
 from .views import domain, hosts, contacts
 
 urlpatterns = [
@@ -37,3 +38,6 @@ urlpatterns = [
     path('addresses/<uuid:address_id>/delete/', contacts.delete_address, name='delete_address'),
     path('addresses/<uuid:address_id>/', contacts.edit_address, name='edit_address'),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path('api/', include('domains.api.urls')))

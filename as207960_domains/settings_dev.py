@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_countries',
     'django_grpc',
+    'rest_framework',
     'domains'
 ]
 
@@ -159,3 +160,23 @@ EPP_PROXY_ADDR = "localhost:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
