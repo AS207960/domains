@@ -111,7 +111,7 @@ class DomainNameServer:
         return domain_pb2.NameServer(
             host_obj=self.host_obj,
             host_name=self.host_name,
-            address=list(map(lambda a: a.to_pb(), self.address))
+            addresses=list(map(lambda a: a.to_pb(), self.address))
         )
 
 
