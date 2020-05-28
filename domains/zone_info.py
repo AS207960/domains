@@ -278,8 +278,8 @@ else:
             unit=0,
             value=i
         ), range(1, 6))))),
-        ('cymru', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1889, transfer=1889, restore=2339))),
-        ('wales', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(1889, transfer=1889, restore=2339))),
+        ('cymru', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(2169, transfer=2169, restore=2699))),
+        ('wales', DomainInfo(DomainInfo.REGISTRY_NOMINET_GTLD, SimplePrice(2169, transfer=2169, restore=2699))),
     )
 
 
