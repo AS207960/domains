@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.safestring import mark_safe
 import django_keycloak_auth.clients
 import decimal
 import requests
@@ -17,7 +18,15 @@ def charge_account(username: str, amount: decimal.Decimal, descriptor: str, char
         }
     )
     if r.status_code == 402:
-        return 'Unable to charge your account. Please to go to billing.as207960.net to top-up.'
+        return mark_safe(
+            'Unable to charge your account. '
+            'Please <a href="https://billing.as207960.net" class="alert-link" target="_blank">top-up</a> your account.'
+        )
+    elif r.status_code == 404:
+        return mark_safe(
+            'Unable to charge your account. '
+            'Please <a href="https://billing.as207960.net" class="alert-link" target="_blank">set-up</a> your account.'
+        )
     elif r.status_code == 200:
         return None
     else:
