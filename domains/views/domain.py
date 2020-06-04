@@ -263,7 +263,7 @@ def update_domain_contact(request, domain_id):
                             domain_data.set_contact(contact_type, None)
                 elif contact_type == 'billing':
                     user_domain.billing_contact = contact
-                    if domain_info.biilling_supported:
+                    if domain_info.billing_supported:
                         if contact:
                             contact_id = contact.get_registry_id(domain_data.registry_name)
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
