@@ -152,9 +152,9 @@
                 <p>
                     {% if billing %}
                         {{ billing }}
-                        <a href="{% url 'edit_contact' tech.id %}" class="btn btn-primary btn-sm">View contact</a>
+                        <a href="{% url 'edit_contact' billing.id %}" class="btn btn-primary btn-sm">View contact</a>
                     {% else %}
-                        No blling contact defined
+                        No billing contact defined
                     {% endif %}
                 </p>
                 {% crispy billing_contact_form billing_contact_form.helper %}
