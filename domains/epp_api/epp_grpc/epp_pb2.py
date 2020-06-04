@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='epp',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\tepp.proto\x12\x03\x65pp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\rcontact.proto\x1a\x0c\x64omain.proto\x1a\nhost.proto\x1a\trgp.proto\"%\n\x0cRegistryInfo\x12\x15\n\rregistry_name\x18\x01 \x01(\t\"^\n\tPollReply\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12\x30\n\x0c\x65nqueue_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x03 \x01(\t\"\xaa\x01\n\x13NominetTagListReply\x12*\n\x04tags\x18\x01 \x03(\x0b\x32\x1c.epp.NominetTagListReply.Tag\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\x32\xb9\x11\n\x08\x45PPProxy\x12K\n\x0b\x44omainCheck\x12\x1e.epp.domain.DomainCheckRequest\x1a\x1c.epp.domain.DomainCheckReply\x12H\n\nDomainInfo\x12\x1d.epp.domain.DomainInfoRequest\x1a\x1b.epp.domain.DomainInfoReply\x12N\n\x0c\x44omainCreate\x12\x1f.epp.domain.DomainCreateRequest\x1a\x1d.epp.domain.DomainCreateReply\x12N\n\x0c\x44omainDelete\x12\x1f.epp.domain.DomainDeleteRequest\x1a\x1d.epp.domain.DomainDeleteReply\x12N\n\x0c\x44omainUpdate\x12\x1f.epp.domain.DomainUpdateRequest\x1a\x1d.epp.domain.DomainUpdateReply\x12K\n\x0b\x44omainRenew\x12\x1e.epp.domain.DomainRenewRequest\x1a\x1c.epp.domain.DomainRenewReply\x12^\n\x13\x44omainTransferQuery\x12&.epp.domain.DomainTransferQueryRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x62\n\x15\x44omainTransferRequest\x12(.epp.domain.DomainTransferRequestRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferAccept\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferReject\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x46\n\x14\x44omainRestoreRequest\x12\x17.epp.rgp.RequestRequest\x1a\x15.epp.rgp.RestoreReply\x12\x41\n\tHostCheck\x12\x1a.epp.host.HostCheckRequest\x1a\x18.epp.host.HostCheckReply\x12>\n\x08HostInfo\x12\x19.epp.host.HostInfoRequest\x1a\x17.epp.host.HostInfoReply\x12\x44\n\nHostCreate\x12\x1b.epp.host.HostCreateRequest\x1a\x19.epp.host.HostCreateReply\x12\x44\n\nHostDelete\x12\x1b.epp.host.HostDeleteRequest\x1a\x19.epp.host.HostDeleteReply\x12\x44\n\nHostUpdate\x12\x1b.epp.host.HostUpdateRequest\x1a\x19.epp.host.HostUpdateReply\x12P\n\x0c\x43ontactCheck\x12 .epp.contact.ContactCheckRequest\x1a\x1e.epp.contact.ContactCheckReply\x12M\n\x0b\x43ontactInfo\x12\x1f.epp.contact.ContactInfoRequest\x1a\x1d.epp.contact.ContactInfoReply\x12S\n\rContactCreate\x12!.epp.contact.ContactCreateRequest\x1a\x1f.epp.contact.ContactCreateReply\x12S\n\rContactDelete\x12!.epp.contact.ContactDeleteRequest\x1a\x1f.epp.contact.ContactDeleteReply\x12S\n\rContactUpdate\x12!.epp.contact.ContactUpdateRequest\x1a\x1f.epp.contact.ContactUpdateReply\x12\x63\n\x14\x43ontactTransferQuery\x12(.epp.contact.ContactTransferQueryRequest\x1a!.epp.contact.ContactTransferReply\x12g\n\x16\x43ontactTransferRequest\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferAccept\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferReject\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12+\n\x04Poll\x12\x11.epp.RegistryInfo\x1a\x0e.epp.PollReply0\x01\x12=\n\x0eNominetTagList\x12\x11.epp.RegistryInfo\x1a\x18.epp.NominetTagListReplyb\x06proto3'
+  serialized_pb=b'\n\tepp.proto\x12\x03\x65pp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\rcontact.proto\x1a\x0c\x64omain.proto\x1a\nhost.proto\x1a\trgp.proto\"%\n\x0cRegistryInfo\x12\x15\n\rregistry_name\x18\x01 \x01(\t\"^\n\tPollReply\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12\x30\n\x0c\x65nqueue_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x03 \x01(\t\"\xaa\x01\n\x13NominetTagListReply\x12*\n\x04tags\x18\x01 \x03(\x0b\x32\x1c.epp.NominetTagListReply.Tag\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"\xb6\x02\n\x0c\x42\x61lanceReply\x12\x0f\n\x07\x62\x61lance\x18\x01 \x01(\t\x12\x10\n\x08\x63urrency\x18\x02 \x01(\t\x12\x32\n\x0c\x63redit_limit\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x36\n\x10\x61vailable_credit\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12>\n\x16\x66ixed_credit_threshold\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValueH\x00\x12\x43\n\x1bpercentage_credit_threshold\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueH\x00\x42\x12\n\x10\x63redit_threshold2\xee\x11\n\x08\x45PPProxy\x12K\n\x0b\x44omainCheck\x12\x1e.epp.domain.DomainCheckRequest\x1a\x1c.epp.domain.DomainCheckReply\x12H\n\nDomainInfo\x12\x1d.epp.domain.DomainInfoRequest\x1a\x1b.epp.domain.DomainInfoReply\x12N\n\x0c\x44omainCreate\x12\x1f.epp.domain.DomainCreateRequest\x1a\x1d.epp.domain.DomainCreateReply\x12N\n\x0c\x44omainDelete\x12\x1f.epp.domain.DomainDeleteRequest\x1a\x1d.epp.domain.DomainDeleteReply\x12N\n\x0c\x44omainUpdate\x12\x1f.epp.domain.DomainUpdateRequest\x1a\x1d.epp.domain.DomainUpdateReply\x12K\n\x0b\x44omainRenew\x12\x1e.epp.domain.DomainRenewRequest\x1a\x1c.epp.domain.DomainRenewReply\x12^\n\x13\x44omainTransferQuery\x12&.epp.domain.DomainTransferQueryRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x62\n\x15\x44omainTransferRequest\x12(.epp.domain.DomainTransferRequestRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferAccept\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferReject\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x46\n\x14\x44omainRestoreRequest\x12\x17.epp.rgp.RequestRequest\x1a\x15.epp.rgp.RestoreReply\x12\x41\n\tHostCheck\x12\x1a.epp.host.HostCheckRequest\x1a\x18.epp.host.HostCheckReply\x12>\n\x08HostInfo\x12\x19.epp.host.HostInfoRequest\x1a\x17.epp.host.HostInfoReply\x12\x44\n\nHostCreate\x12\x1b.epp.host.HostCreateRequest\x1a\x19.epp.host.HostCreateReply\x12\x44\n\nHostDelete\x12\x1b.epp.host.HostDeleteRequest\x1a\x19.epp.host.HostDeleteReply\x12\x44\n\nHostUpdate\x12\x1b.epp.host.HostUpdateRequest\x1a\x19.epp.host.HostUpdateReply\x12P\n\x0c\x43ontactCheck\x12 .epp.contact.ContactCheckRequest\x1a\x1e.epp.contact.ContactCheckReply\x12M\n\x0b\x43ontactInfo\x12\x1f.epp.contact.ContactInfoRequest\x1a\x1d.epp.contact.ContactInfoReply\x12S\n\rContactCreate\x12!.epp.contact.ContactCreateRequest\x1a\x1f.epp.contact.ContactCreateReply\x12S\n\rContactDelete\x12!.epp.contact.ContactDeleteRequest\x1a\x1f.epp.contact.ContactDeleteReply\x12S\n\rContactUpdate\x12!.epp.contact.ContactUpdateRequest\x1a\x1f.epp.contact.ContactUpdateReply\x12\x63\n\x14\x43ontactTransferQuery\x12(.epp.contact.ContactTransferQueryRequest\x1a!.epp.contact.ContactTransferReply\x12g\n\x16\x43ontactTransferRequest\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferAccept\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferReject\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12+\n\x04Poll\x12\x11.epp.RegistryInfo\x1a\x0e.epp.PollReply0\x01\x12=\n\x0eNominetTagList\x12\x11.epp.RegistryInfo\x1a\x18.epp.NominetTagListReply\x12\x33\n\x0b\x42\x61lanceInfo\x12\x11.epp.RegistryInfo\x1a\x11.epp.BalanceReplyb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,host__pb2.DESCRIPTOR,rgp__pb2.DESCRIPTOR,])
 
@@ -188,13 +188,93 @@ _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
   serialized_end=441,
 )
 
+
+_BALANCEREPLY = _descriptor.Descriptor(
+  name='BalanceReply',
+  full_name='epp.BalanceReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='balance', full_name='epp.BalanceReply.balance', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='currency', full_name='epp.BalanceReply.currency', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='credit_limit', full_name='epp.BalanceReply.credit_limit', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='available_credit', full_name='epp.BalanceReply.available_credit', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fixed_credit_threshold', full_name='epp.BalanceReply.fixed_credit_threshold', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='percentage_credit_threshold', full_name='epp.BalanceReply.percentage_credit_threshold', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='credit_threshold', full_name='epp.BalanceReply.credit_threshold',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=444,
+  serialized_end=754,
+)
+
 _POLLREPLY.fields_by_name['enqueue_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _NOMINETTAGLISTREPLY_TAG.fields_by_name['trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _NOMINETTAGLISTREPLY_TAG.containing_type = _NOMINETTAGLISTREPLY
 _NOMINETTAGLISTREPLY.fields_by_name['tags'].message_type = _NOMINETTAGLISTREPLY_TAG
+_BALANCEREPLY.fields_by_name['credit_limit'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_BALANCEREPLY.fields_by_name['available_credit'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_BALANCEREPLY.fields_by_name['fixed_credit_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_BALANCEREPLY.fields_by_name['percentage_credit_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_BALANCEREPLY.oneofs_by_name['credit_threshold'].fields.append(
+  _BALANCEREPLY.fields_by_name['fixed_credit_threshold'])
+_BALANCEREPLY.fields_by_name['fixed_credit_threshold'].containing_oneof = _BALANCEREPLY.oneofs_by_name['credit_threshold']
+_BALANCEREPLY.oneofs_by_name['credit_threshold'].fields.append(
+  _BALANCEREPLY.fields_by_name['percentage_credit_threshold'])
+_BALANCEREPLY.fields_by_name['percentage_credit_threshold'].containing_oneof = _BALANCEREPLY.oneofs_by_name['credit_threshold']
 DESCRIPTOR.message_types_by_name['RegistryInfo'] = _REGISTRYINFO
 DESCRIPTOR.message_types_by_name['PollReply'] = _POLLREPLY
 DESCRIPTOR.message_types_by_name['NominetTagListReply'] = _NOMINETTAGLISTREPLY
+DESCRIPTOR.message_types_by_name['BalanceReply'] = _BALANCEREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 RegistryInfo = _reflection.GeneratedProtocolMessageType('RegistryInfo', (_message.Message,), {
@@ -226,6 +306,13 @@ NominetTagListReply = _reflection.GeneratedProtocolMessageType('NominetTagListRe
 _sym_db.RegisterMessage(NominetTagListReply)
 _sym_db.RegisterMessage(NominetTagListReply.Tag)
 
+BalanceReply = _reflection.GeneratedProtocolMessageType('BalanceReply', (_message.Message,), {
+  'DESCRIPTOR' : _BALANCEREPLY,
+  '__module__' : 'epp_pb2'
+  # @@protoc_insertion_point(class_scope:epp.BalanceReply)
+  })
+_sym_db.RegisterMessage(BalanceReply)
+
 
 
 _EPPPROXY = _descriptor.ServiceDescriptor(
@@ -234,8 +321,8 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=444,
-  serialized_end=2677,
+  serialized_start=757,
+  serialized_end=3043,
   methods=[
   _descriptor.MethodDescriptor(
     name='DomainCheck',
@@ -478,6 +565,15 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_REGISTRYINFO,
     output_type=_NOMINETTAGLISTREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='BalanceInfo',
+    full_name='epp.EPPProxy.BalanceInfo',
+    index=27,
+    containing_service=None,
+    input_type=_REGISTRYINFO,
+    output_type=_BALANCEREPLY,
     serialized_options=None,
   ),
 ])

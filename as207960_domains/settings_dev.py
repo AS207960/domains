@@ -26,7 +26,7 @@ SECRET_KEY = '2!ma5g##@c@p!erb#bi25i*ic1-iqr&hwxh0(w7%lgfqb^i5ye'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 
 # Application definition
@@ -70,7 +70,7 @@ LOGOUT_REDIRECT_URL = "oidc_login"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -178,5 +178,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'EXCEPTION_HANDLER': 'domains.api.exceptions.exception_handler',
     'PAGE_SIZE': 100
 }

@@ -32,8 +32,13 @@ class IPAddress:
         )
 
     @property
-    def address_obj(self) -> ipaddress:
-        return ipaddress.ip_address(self.address)
+    def address_obj(self) -> typing.Union[ipaddress.IPv4Address, ipaddress.IPv6Address]:
+        if self.ip_type == 1:
+            return ipaddress.IPv4Address(self.address)
+        elif self.ip_type == 2:
+            return ipaddress.IPv6Address(self.address)
+        else:
+            raise Exception("Unknown IP address type")
 
     @property
     def ip_type_str(self) -> str:
@@ -97,7 +102,7 @@ class DomainContact:
 class DomainNameServer:
     host_obj: typing.Optional[str]
     host_name: typing.Optional[str]
-    address: [IPAddress]
+    address: typing.List[IPAddress]
 
     @classmethod
     def from_pb(cls, resp: domain_pb2.NameServer):
@@ -118,6 +123,25 @@ class DomainNameServer:
 @dataclasses.dataclass
 class RGPState:
     state: int
+
+    @property
+    def name(self):
+        if self.state == 0:
+            return "unknown"
+        elif self.state == 1:
+            return "add_grace_period"
+        elif self.state == 2:
+            return "auto_renew_grace_period"
+        elif self.state == 3:
+            return "renew_grace_period"
+        elif self.state == 4:
+            return "transfer_grace_period"
+        elif self.state == 5:
+            return "redemption_grace_period"
+        elif self.state == 6:
+            return "pending_restore_grace_period"
+        elif self.state == 7:
+            return "pending_delete_grace_period"
 
     def __str__(self):
         if self.state == 0:
@@ -152,6 +176,43 @@ class RGPState:
 @dataclasses.dataclass
 class DomainStatus:
     status: int
+
+    @property
+    def name(self):
+        if self.status == 0:
+            return "client_delete_prohibited"
+        elif self.status == 1:
+            return "client_hold"
+        elif self.status == 2:
+            return "client_renew_prohibited"
+        elif self.status == 3:
+            return "client_transfer_prohibited"
+        elif self.status == 4:
+            return "client_update_prohibited"
+        elif self.status == 5:
+            return "inactive"
+        elif self.status == 6:
+            return "ok"
+        elif self.status == 7:
+            return "pending_create"
+        elif self.status == 8:
+            return "pending_delete"
+        elif self.status == 9:
+            return "pending_transfer"
+        elif self.status == 10:
+            return "pending_transfer"
+        elif self.status == 11:
+            return "pending_update"
+        elif self.status == 12:
+            return "server_delete_prohibited"
+        elif self.status == 13:
+            return "server_hold"
+        elif self.status == 14:
+            return "server_renew_prohibited"
+        elif self.status == 15:
+            return "server_transfer_prohibited"
+        elif self.status == 16:
+            return "server_update_prohibited"
 
     def __str__(self):
         if self.status == 0:
@@ -228,7 +289,7 @@ class SecDNSDSData:
     key_tag: int
     algorithm: int
     digest_type: int
-    digest: int
+    digest: str
     key_data: typing.Optional[SecDNSKeyData]
 
     @classmethod
@@ -270,11 +331,11 @@ class Domain:
     _app = None  # type: EPPClient
     name: str
     registry_id: str
-    statuses: [DomainStatus]
+    statuses: typing.List[DomainStatus]
     registrant: str
-    contacts: [DomainContact]
-    name_servers: [DomainNameServer]
-    hosts: [str]
+    contacts: typing.List[DomainContact]
+    name_servers: typing.List[DomainNameServer]
+    hosts: typing.List[str]
     client_id: str
     client_created_id: typing.Optional[str]
     creation_date: typing.Optional[datetime.datetime]
@@ -377,7 +438,7 @@ class Domain:
     def set_tech(self, contact_id: typing.Union[str, None]) -> bool:
         return self.set_contact("tech", contact_id)
 
-    def add_host_objs(self, hosts: [str]) -> bool:
+    def add_host_objs(self, hosts: typing.List[str]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             remove=[],
@@ -388,7 +449,7 @@ class Domain:
             ), hosts))
         )).pending
 
-    def add_host_addrs(self, hosts: [(str, [IPAddress])]) -> bool:
+    def add_host_addrs(self, hosts: typing.List[typing.Tuple[str, typing.List[IPAddress]]]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             remove=[],
@@ -400,7 +461,7 @@ class Domain:
             ), hosts))
         )).pending
 
-    def add_ds_data(self, data: [SecDNSDSData]) -> bool:
+    def add_ds_data(self, data: typing.List[SecDNSDSData]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
@@ -408,7 +469,7 @@ class Domain:
             )
         )).pending
 
-    def add_dnskey_data(self, data: [SecDNSKeyData]) -> bool:
+    def add_dnskey_data(self, data: typing.List[SecDNSKeyData]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
@@ -416,7 +477,7 @@ class Domain:
             )
         )).pending
 
-    def del_host_objs(self, hosts: [str]) -> bool:
+    def del_host_objs(self, hosts: typing.List[str]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             add=[],
@@ -435,7 +496,7 @@ class Domain:
             )
         )).pending
 
-    def del_ds_data(self, data: [SecDNSDSData]) -> bool:
+    def del_ds_data(self, data: typing.List[SecDNSDSData]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
@@ -443,7 +504,7 @@ class Domain:
             )
         )).pending
 
-    def del_dnskey_data(self, data: [SecDNSKeyData]) -> bool:
+    def del_dnskey_data(self, data: typing.List[SecDNSKeyData]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
@@ -451,7 +512,7 @@ class Domain:
             )
         )).pending
 
-    def add_states(self, data: [DomainStatus]) -> bool:
+    def add_states(self, data: typing.List[DomainStatus]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             add=list(map(lambda s: domain_pb2.DomainUpdateRequest.Param(
@@ -459,7 +520,7 @@ class Domain:
             ), data))
         )).pending
 
-    def del_states(self, data: [DomainStatus]) -> bool:
+    def del_states(self, data: typing.List[DomainStatus]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             remove=list(map(lambda s: domain_pb2.DomainUpdateRequest.Param(
@@ -509,6 +570,29 @@ class DomainTransfer:
 class HostStatus:
     status: int
 
+    @property
+    def name(self):
+        if self.status == 0:
+            return "client_delete_prohibited"
+        elif self.status == 1:
+            return "client_update_prohibited"
+        elif self.status == 2:
+            return "linked"
+        elif self.status == 3:
+            return "ok"
+        elif self.status == 4:
+            return "pending_create"
+        elif self.status == 5:
+            return "pending_delete"
+        elif self.status == 6:
+            return "pending_transfer"
+        elif self.status == 7:
+            return "pending_update"
+        elif self.status == 8:
+            return "server_delete_prohibited"
+        elif self.status == 9:
+            return "server_update_prohibited"
+
     def __str__(self):
         if self.status == 0:
             return "Client delete prohibited"
@@ -544,8 +628,8 @@ class Host:
     _app = None  # type: EPPClient
     name: str
     registry_id: str
-    statuses: [HostStatus]
-    addresses: [IPAddress]
+    statuses: typing.List[HostStatus]
+    addresses: typing.List[IPAddress]
     client_id: str
     client_created_id: typing.Optional[str]
     creation_date: typing.Optional[datetime.datetime]
@@ -571,7 +655,28 @@ class Host:
         self.registry_name = registry_name
         return self
 
-    def add_addresses(self, addresses: [IPAddress]) -> bool:
+    def set_addresses(self, addresses: typing.List[IPAddress]) -> bool:
+        rem_addrs = list(filter(lambda a: a not in addresses, self.addresses))
+        add_addrs = list(filter(lambda a: a not in self.addresses, addresses))
+        print(add_addrs, rem_addrs)
+
+        if not rem_addrs and not add_addrs:
+            return False
+
+        resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
+            name=self.name,
+            add=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
+                address=a.to_pb()
+            ), add_addrs)),
+            remove=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
+                address=a.to_pb()
+            ), rem_addrs)),
+            new_name=None,
+            registry_name=self.registry_name
+        ))
+        return resp.pending
+
+    def add_addresses(self, addresses: typing.List[IPAddress]) -> bool:
         resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
             name=self.name,
             add=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
@@ -583,7 +688,7 @@ class Host:
         ))
         return resp.pending
 
-    def remove_addresses(self, addresses: [IPAddress]) -> bool:
+    def remove_addresses(self, addresses: typing.List[IPAddress]) -> bool:
         resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
             name=self.name,
             remove=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
@@ -600,7 +705,7 @@ class Host:
 class Address:
     name: str
     organisation: typing.Optional[str]
-    streets: [str]
+    streets: typing.List[str]
     city: str
     province: typing.Optional[str]
     postal_code: typing.Optional[str]
@@ -650,7 +755,7 @@ class Phone:
     def from_pb(cls, resp: contact_pb2.Phone):
         return cls(
             number=resp.number,
-            ext=resp.extension
+            ext=resp.extension.value if resp.HasField("extension") else None
         )
 
     def to_pb(self) -> contact_pb2.Phone:
@@ -664,7 +769,7 @@ class Contact:
     _app = None  # type: EPPClient
     id: str
     registry_id: str
-    statuses: [int]
+    statuses: typing.List[int]
     local_address: Address
     int_address: typing.Optional[Address]
     phone: typing.Optional[Phone]
@@ -750,7 +855,7 @@ class EPPClient:
             
         self.stub = epp_pb2_grpc.EPPProxyStub(channel)
 
-    def check_domain(self, domain: str) -> (bool, typing.Optional[str], str):
+    def check_domain(self, domain: str) -> typing.Tuple[bool, typing.Optional[str], str]:
         resp = self.stub.DomainCheck(domain_pb2.DomainCheckRequest(
             name=domain
         ))
@@ -766,10 +871,10 @@ class EPPClient:
         domain: str,
         period: DomainPeriod,
         registrant: str,
-        contacts: [DomainContact],
-        name_servers: [DomainNameServer],
+        contacts: typing.List[DomainContact],
+        name_servers: typing.List[DomainNameServer],
         auth_info: str
-    ) -> (bool, datetime.datetime, datetime.datetime, str):
+    ) -> typing.Tuple[bool, datetime.datetime, datetime.datetime, str]:
         resp = self.stub.DomainCreate(domain_pb2.DomainCreateRequest(
             name=domain,
             period=period.to_pb(),
@@ -780,16 +885,16 @@ class EPPClient:
         ))
         return resp.pending, resp.creation_date.ToDatetime(), resp.expiry_date.ToDatetime(), resp.registry_name
 
-    def delete_domain(self, domain: str) -> (bool, str):
+    def delete_domain(self, domain: str) -> typing.Tuple[bool, str]:
         resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(name=domain))
         return resp.pending, resp.registry_name
 
-    def restore_domain(self, domain: str) -> (bool, str):
+    def restore_domain(self, domain: str) -> typing.Tuple[bool, str]:
         resp = self.stub.DomainRestoreRequest(rgp_pb2.RequestRequest(name=domain))
         return resp.pending, resp.registry_name
 
-    def renew_domain(self, domain: str, period: DomainPeriod, cur_expiry: datetime.datetime) ->\
-            (bool, datetime.datetime, str):
+    def renew_domain(self, domain: str, period: DomainPeriod, cur_expiry: datetime.datetime) -> \
+            typing.Tuple[bool, datetime.datetime, str]:
         exp = Timestamp()
         exp.FromDatetime(cur_expiry)
         resp = self.stub.DomainRenew(domain_pb2.DomainRenewRequest(
@@ -803,7 +908,7 @@ class EPPClient:
             DomainTransfer:
         resp = self.stub.DomainTransferQuery(domain_pb2.DomainTransferQueryRequest(
             name=domain,
-            auth_info=auth_info
+            auth_info=StringValue(value=auth_info) if auth_info else None
         ))
         return DomainTransfer.from_pb(resp)
 
@@ -832,7 +937,7 @@ class EPPClient:
         ))
         return DomainTransfer.from_pb(resp)
 
-    def check_host(self, host_name: str, registry_name: str) -> (bool, typing.Optional[str]):
+    def check_host(self, host_name: str, registry_name: str) -> typing.Tuple[bool, typing.Optional[str]]:
         resp = self.stub.HostCheck(host_pb2.HostCheckRequest(
             name=host_name,
             registry_name=registry_name
@@ -844,7 +949,7 @@ class EPPClient:
         resp = self.stub.HostInfo(host_pb2.HostInfoRequest(name=host_name, registry_name=registry_name))
         return Host.from_pb(resp, self, registry_name)
 
-    def create_host(self, host_name: str, addresses: [IPAddress], registry_name: str) -> (bool, datetime.datetime):
+    def create_host(self, host_name: str, addresses: typing.List[IPAddress], registry_name: str) -> typing.Tuple[bool, datetime.datetime]:
         resp = self.stub.HostCreate(host_pb2.HostCreateRequest(
             name=host_name,
             addresses=list(map(lambda a: a.to_pb(), addresses)),
@@ -856,7 +961,7 @@ class EPPClient:
         resp = self.stub.HostDelete(host_pb2.HostDeleteRequest(name=host_name, registry_name=registry_name))
         return resp.pending
 
-    def check_contact(self, contact_id: str, registry_name: str) -> (bool, typing.Optional[str]):
+    def check_contact(self, contact_id: str, registry_name: str) -> typing.Tuple[bool, typing.Optional[str]]:
         resp = self.stub.ContactCheck(contact_pb2.ContactCheckRequest(
             id=contact_id,
             registry_name=registry_name
@@ -888,7 +993,7 @@ class EPPClient:
         company_number: typing.Optional[str],
         auth_info: str,
         registry_name: str,
-    ) -> (str, bool, datetime.datetime):
+    ) -> typing.Tuple[str, bool, datetime.datetime]:
         resp = self.stub.ContactCreate(contact_pb2.ContactCreateRequest(
             id=contact_id,
             local_address=local_address.to_pb() if local_address else None,

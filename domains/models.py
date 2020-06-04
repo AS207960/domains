@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, InternalError
 from django.core import validators
 from django.conf import settings
 from django.utils import timezone
@@ -7,9 +7,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
 from . import apps
 import uuid
+import grpc
 import secrets
 import string
 import typing
+import threading
+
+CONTACT_SEARCH = threading.Lock()
 
 
 def make_secret():
@@ -51,7 +55,7 @@ class ContactAddress(models.Model):
     street_3 = models.CharField(max_length=255, blank=True, null=True, verbose_name="Address line 3")
     city = models.CharField(max_length=255)
     province = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=255, null=True)
     country_code = CountryField(verbose_name="Country")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     disclose_name = models.BooleanField(default=False, blank=True)
@@ -64,6 +68,9 @@ class ContactAddress(models.Model):
 
     def __str__(self):
         return self.description
+
+    def can_delete(self):
+        return self.local_contacts.count() + self.int_contacts.count() == 0
 
     def as_api_obj(self):
         streets = [self.street_1]
@@ -131,7 +138,7 @@ class Contact(models.Model):
     )
     int_address = models.ForeignKey(
         ContactAddress,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True,
         blank=True,
         related_name='int_contacts',
@@ -164,10 +171,41 @@ class Contact(models.Model):
     def __str__(self):
         return self.description
 
+    def can_delete(self):
+        if self.domains_registrant.count() or self.domains_admin.count() or \
+                self.domains_tech.count() or self.domains_billing.count() or \
+                self.pending_domains_registrant.count() or self.pending_domains_admin.count() or \
+                self.pending_domains_tech.count() or self.pending_domains_billing.count():
+            return False
+        else:
+            for i in self.contactregistry_set.all():
+                try:
+                    contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
+                except grpc.RpcError as rpc_error:
+                    error = rpc_error.details()
+                    raise InternalError(error)
+
+                if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
+                    return False
+
+    def delete(self, *args, **kwargs):
+        for i in self.contactregistry_set.all():
+            try:
+                apps.epp_client.delete_contact(i.registry_contact_id, i.registry_id)
+            except grpc.RpcError as rpc_error:
+                error = rpc_error.details()
+                raise InternalError(error)
+            i.delete()
+        super().delete(*args, **kwargs)
+
     def get_registry_id(self, registry_id: str):
-        contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id).first()
+        CONTACT_SEARCH.acquire()
+        contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
+            .first()   # type: ContactRegistry
         if contact_registry:
-            return contact_registry
+            if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
+                CONTACT_SEARCH.release()
+                return contact_registry
 
         contact_id = make_id()
         auth_info = make_secret()
@@ -201,13 +239,16 @@ class Contact(models.Model):
             auth_info=auth_info
         )
         contact_registry.save()
+        CONTACT_SEARCH.release()
         return contact_registry
 
     @classmethod
     def get_contact(cls, registry_contact_id: str, registry_id: str, user):
+        CONTACT_SEARCH.acquire()
         contact_registry = ContactRegistry.objects\
             .filter(registry_contact_id=registry_contact_id, registry_id=registry_id).first()
         if contact_registry:
+            CONTACT_SEARCH.release()
             return contact_registry.contact
 
         registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
@@ -283,6 +324,7 @@ class Contact(models.Model):
             registry_id=registry_id,
             auth_info=registry_contact.auth_info
         ).save()
+        CONTACT_SEARCH.release()
         return contact
 
     def get_local_address(self) -> apps.epp_api.Address:

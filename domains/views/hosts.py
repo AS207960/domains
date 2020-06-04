@@ -15,10 +15,10 @@ def hosts(request):
     error = None
     try:
         with ThreadPoolExecutor() as executor:
-            hosts_data = executor.map(
+            hosts_data = list(executor.map(
                 lambda h: (h.id, apps.epp_client.get_host(h.name_server, h.registry_id)),
                 user_hosts
-            )
+            ))
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
 

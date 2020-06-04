@@ -152,6 +152,11 @@ class EPPProxyStub(object):
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
                 response_deserializer=epp__pb2.NominetTagListReply.FromString,
                 )
+        self.BalanceInfo = channel.unary_unary(
+                '/epp.EPPProxy/BalanceInfo',
+                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                response_deserializer=epp__pb2.BalanceReply.FromString,
+                )
 
 
 class EPPProxyServicer(object):
@@ -319,6 +324,12 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def BalanceInfo(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EPPProxyServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -456,6 +467,11 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     servicer.NominetTagList,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
                     response_serializer=epp__pb2.NominetTagListReply.SerializeToString,
+            ),
+            'BalanceInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.BalanceInfo,
+                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    response_serializer=epp__pb2.BalanceReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -896,5 +912,21 @@ class EPPProxy(object):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetTagList',
             epp__pb2.RegistryInfo.SerializeToString,
             epp__pb2.NominetTagListReply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def BalanceInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/BalanceInfo',
+            epp__pb2.RegistryInfo.SerializeToString,
+            epp__pb2.BalanceReply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

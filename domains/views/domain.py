@@ -849,17 +849,17 @@ def domain_register(request, domain_name):
                             if billing_error:
                                 error = billing_error
                             else:
-                                if zone.admin_supported:
+                                if zone.admin_supported and admin_contact:
                                     contact_objs.append(apps.epp_api.DomainContact(
                                         contact_type="admin",
                                         contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
                                     ))
-                                if zone.billing_supported:
+                                if zone.billing_supported and billing_contact:
                                     contact_objs.append(apps.epp_api.DomainContact(
                                         contact_type="billing",
                                         contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
                                     ))
-                                if zone.tech_supported:
+                                if zone.tech_supported and tech_contact:
                                     contact_objs.append(apps.epp_api.DomainContact(
                                         contact_type="tech",
                                         contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id

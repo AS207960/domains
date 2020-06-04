@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-import grpc
+import django.db
 from django.utils import timezone
-from .. import models, apps, forms
+from .. import models, forms
 
 
 @login_required
@@ -43,8 +43,6 @@ def edit_contact(request, contact_id):
     if request.method == "POST":
         form = forms.ContactForm(request.POST, user=request.user, instance=user_contact)
         if form.is_valid():
-            form.instance.user = request.user
-            form.instance.updated_date = timezone.now()
             form.save()
             return redirect('contacts')
     else:
@@ -63,44 +61,25 @@ def delete_contact(request, contact_id):
     if user_contact.user != request.user:
         raise PermissionDenied
 
-    can_delete = True
-
     referrer = reverse('contacts')
 
-    if user_contact.domains_registrant.count() or user_contact.domains_admin.count() or\
-            user_contact.domains_tech.count() or user_contact.domains_billing.count() or\
-            user_contact.pending_domains_registrant.count() or user_contact.pending_domains_admin.count() or\
-            user_contact.pending_domains_tech.count() or user_contact.pending_domains_billing.count():
-        can_delete = False
-
-    if can_delete:
-        for i in user_contact.contactregistry_set.all():
-            try:
-                contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
-                return render(request, "domains/error.html", {
-                    "error": error,
-                    "back_url": referrer
-                })
-
-            if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
-                can_delete = False
-                break
+    try:
+        can_delete = user_contact.can_delete()
+    except django.db.Error as e:
+        return render(request, "domains/error.html", {
+            "error": str(e),
+            "back_url": referrer
+        })
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
-            for i in user_contact.contactregistry_set.all():
-                try:
-                    apps.epp_client.delete_contact(i.registry_contact_id, i.registry_id)
-                except grpc.RpcError as rpc_error:
-                    error = rpc_error.details()
-                    return render(request, "domains/error.html", {
-                        "error": error,
-                        "back_url": referrer
-                    })
-                i.delete()
-            user_contact.delete()
+            try:
+                user_contact.delete()
+            except django.db.Error as e:
+                return render(request, "domains/error.html", {
+                    "error": str(e),
+                    "back_url": referrer
+                })
             return redirect('contacts')
 
     return render(request, "domains/delete_contact.html", {
@@ -120,12 +99,21 @@ def addresses(request):
 
 @login_required
 def new_address(request):
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('addresses')
+
     if request.method == "POST":
         form = forms.AddressForm(request.POST)
         if form.is_valid():
             form.instance.user = request.user
-            form.save()
-            return redirect('addresses')
+            try:
+                form.save()
+            except django.db.Error as e:
+                return render(request, "domains/error.html", {
+                    "error": str(e),
+                    "back_url": referrer
+                })
+            return redirect(referrer)
     else:
         form = forms.AddressForm()
 
@@ -142,12 +130,21 @@ def edit_address(request, address_id):
     if user_address.user != request.user:
         raise PermissionDenied
 
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('addresses')
+
     if request.method == "POST":
         form = forms.AddressForm(request.POST, instance=user_address)
         if form.is_valid():
             form.instance.user = request.user
-            form.save()
-            return redirect('addresses')
+            try:
+                form.save()
+            except django.db.Error as e:
+                return render(request, "domains/error.html", {
+                    "error": str(e),
+                    "back_url": referrer
+                })
+            return redirect(referrer)
     else:
         form = forms.AddressForm(instance=user_address)
 
@@ -164,14 +161,20 @@ def delete_address(request, address_id):
     if user_address.user != request.user:
         raise PermissionDenied
 
-    can_delete = user_address.local_contacts.count() + user_address.int_contacts.count() == 0
+    can_delete = user_address.can_delete()
     referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('hosts')
+    referrer = referrer if referrer else reverse('addresses')
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
-            user_address.delete()
-            return redirect('addresses')
+            try:
+                user_address.delete()
+            except django.db.Error as e:
+                return render(request, "domains/error.html", {
+                    "error": str(e),
+                    "back_url": referrer
+                })
+            return redirect(referrer)
 
     return render(request, "domains/delete_address.html", {
         "address": user_address,
