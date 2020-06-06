@@ -10,3 +10,4 @@ django-xff
 grpcio
 protobuf
 django-grpc
+djangorestframework
