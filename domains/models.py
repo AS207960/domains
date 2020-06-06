@@ -14,6 +14,7 @@ import typing
 import threading
 
 CONTACT_SEARCH = threading.Lock()
+NAME_SERVER_SEARCH = threading.Lock()
 
 
 def make_secret():
@@ -206,6 +207,8 @@ class Contact(models.Model):
             if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
                 CONTACT_SEARCH.release()
                 return contact_registry
+            else:
+                contact_registry.delete()
 
         contact_id = make_id()
         auth_info = make_secret()
@@ -362,8 +365,10 @@ class NameServer(models.Model):
 
     @classmethod
     def get_name_server(cls, name_server: str, registry_id: str, user):
+        NAME_SERVER_SEARCH.acquire()
         name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
         if name_server_obj:
+            NAME_SERVER_SEARCH.release()
             return name_server_obj
 
         name_server_obj = cls(
@@ -372,6 +377,7 @@ class NameServer(models.Model):
             user=user
         )
         name_server_obj.save()
+        NAME_SERVER_SEARCH.release()
         return name_server_obj
 
 
