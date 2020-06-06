@@ -5,16 +5,20 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from concurrent.futures import ThreadPoolExecutor
 
-from . import serializers, permissions
+from . import serializers, permissions, auth
 from .. import models, apps
+
 
 class ContactAddressViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ContactAddressSerializer
     queryset = models.ContactAddress.objects.all()
-    permission_classes = [permissions.IsOwner]
+    permission_classes = [permissions.keycloak(models.ContactAddress)]
 
     def filter_queryset(self, queryset):
-        return queryset.filter(user=self.request.user)
+        if not isinstance(self.request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        return models.ContactAddress.get_object_list(self.request.auth.token)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -29,10 +33,13 @@ class ContactAddressViewSet(viewsets.ModelViewSet):
 class ContactViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ContactSerializer
     queryset = models.Contact.objects.all()
-    permission_classes = [permissions.IsOwner]
+    permission_classes = [permissions.keycloak(models.Contact)]
 
     def filter_queryset(self, queryset):
-        return queryset.filter(user=self.request.user)
+        if not isinstance(self.request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        return models.Contact.get_object_list(self.request.auth.token)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, created_date=timezone.now())
@@ -47,12 +54,20 @@ class ContactViewSet(viewsets.ModelViewSet):
             raise exceptions.PermissionDenied("Object status prohibits deletion")
 
 
-class DomainSet(viewsets.ViewSet):
+class Domain(viewsets.ViewSet):
+    def get_serializer(self, *args, **kwargs):
+        kwargs.setdefault('context', {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        })
+        return serializers.DomainSerializer(*args, **kwargs)
+
     def list(self, request):
-        if not request.user.is_authenticated:
+        if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domains = models.DomainRegistration.objects.filter(user=request.user, pending=False)
+        domains = models.DomainRegistration.get_object_list(request.auth.token).filter(pending=False)
 
         with ThreadPoolExecutor() as executor:
             domains_data = list(executor.map(
@@ -64,13 +79,55 @@ class DomainSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if domain.user != request.user:
+        if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
         domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
 
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        if not domain.has_scope(request.auth.token, 'edit'):
+            raise PermissionDenied
+
+        serializer = serializers.DomainSerializer(
+            serializers.DomainSerializer.get_domain(domain, request.user),
+            data=request.data,
+            context={
+                'request': request
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def partial_update(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        if not domain.has_scope(request.auth.token, 'edit'):
+            raise PermissionDenied
+
+        serializer = serializers.DomainSerializer(
+            serializers.DomainSerializer.get_domain(domain, request.user),
+            data=request.data,
+            context={
+                'request': request
+            },
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
 
 
@@ -84,10 +141,10 @@ class NameServer(viewsets.ViewSet):
         return serializers.NameServerSerializer(*args, **kwargs)
 
     def list(self, request):
-        if not request.user.is_authenticated:
+        if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        hosts = models.NameServer.objects.filter(user=request.user)
+        hosts = models.NameServer.get_object_list(request.auth.token)
 
         with ThreadPoolExecutor() as executor:
             hosts_data = list(executor.map(
@@ -99,8 +156,11 @@ class NameServer(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
         host = get_object_or_404(models.NameServer, id=pk)
-        if host.user != request.user:
+        if not host.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
         serializer = serializers.NameServerSerializer(
@@ -110,6 +170,12 @@ class NameServer(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        if not models.NameServer.has_class_scope(request.auth.token, 'create'):
+            raise PermissionDenied
+
         serializer = serializers.NameServerSerializer(data=request.data, context={
             'request': request
         })
@@ -118,10 +184,12 @@ class NameServer(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        host = get_object_or_404(models.NameServer, id=pk)
-        if host.user != request.user:
+        if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
+        host = get_object_or_404(models.NameServer, id=pk)
+        if not host.has_scope(request.auth.token, 'edit'):
+            raise PermissionDenied
         serializer = serializers.NameServerSerializer(
             serializers.NameServerSerializer.get_host(host),
             data=request.data,
@@ -133,9 +201,32 @@ class NameServer(viewsets.ViewSet):
         serializer.save()
         return Response(serializer.data)
 
-    def destroy(self, request, pk=None):
+    def partial_update(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
         host = get_object_or_404(models.NameServer, id=pk)
-        if host.user != request.user:
+        if not host.has_scope(request.auth.token, 'edit'):
+            raise PermissionDenied
+
+        serializer = serializers.NameServerSerializer(
+            serializers.NameServerSerializer.get_host(host),
+            data=request.data,
+            context={
+                'request': request
+            },
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        host = get_object_or_404(models.NameServer, id=pk)
+        if not host.has_scope(request.auth.token, 'delete'):
             raise PermissionDenied
 
         pending = apps.epp_client.delete_host(host.name_server, host.registry_id)

@@ -2,7 +2,9 @@ from django.db import models, InternalError
 from django.core import validators
 from django.conf import settings
 from django.utils import timezone
+from django.urls import reverse
 import phonenumbers
+import django_keycloak_auth.clients
 from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
 from . import apps
@@ -44,7 +46,56 @@ def make_id():
     return secrets.token_urlsafe(12)[:16].upper()
 
 
+def sync_resource_to_keycloak(self, display_name, resource_type, scopes, urn, view_name, super_save, args, kwargs):
+    uma_client = django_keycloak_auth.clients.get_uma_client()
+    token = django_keycloak_auth.clients.get_access_token()
+    created = False
+
+    if not self.pk:
+        created = True
+    super_save(*args, **kwargs)
+
+    create_kwargs = {
+        "name": f"{resource_type}_{self.id}",
+        "displayName": f"{display_name}: {str(self)}",
+        "ownerManagedAccess": True,
+        "scopes": scopes,
+        "type": urn,
+        "uri": reverse(view_name, args=(self.id,)),
+    }
+
+    if created or not self.resource_id:
+        if self.user:
+            create_kwargs['owner'] = self.user.username
+
+        d = uma_client.resource_set_create(
+            token,
+            **create_kwargs
+        )
+        self.resource_id = d['_id']
+        super_save(*args, **kwargs)
+    else:
+        uma_client.resource_set_update(
+            token,
+            id=self.resource_id,
+            **create_kwargs
+        )
+
+
+def get_object_ids(access_token, resource_type, action):
+    scope_name = f"{action}-{resource_type}"
+    permissions = django_keycloak_auth.clients.get_authz_client().get_permissions(access_token)
+    permissions = permissions.get("permissions", [])
+    permissions = filter(
+        lambda p: scope_name in p.get('scopes', []) and p.get('rsname', "").startswith(f"{resource_type}_"),
+        permissions
+    )
+    object_ids = list(map(lambda p: p['rsname'][len(f"{resource_type}_"):], permissions))
+    return object_ids
+
+
 class ContactAddress(models.Model):
+    user: settings.AUTH_USER_MODEL
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=255)
     name = models.CharField(max_length=255, validators=[validators.MinLengthValidator(4)])
@@ -58,10 +109,15 @@ class ContactAddress(models.Model):
     province = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=255, null=True)
     country_code = CountryField(verbose_name="Country")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     disclose_name = models.BooleanField(default=False, blank=True)
     disclose_organisation = models.BooleanField(default=False, blank=True)
     disclose_address = models.BooleanField(default=False, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    resource_id = models.UUIDField(null=True)
+
+    def __init__(self, *args, **kwargs):
+        # self.user = None
+        super().__init__(*args, **kwargs)
 
     class Meta:
         ordering = ['description', 'name']
@@ -69,6 +125,33 @@ class ContactAddress(models.Model):
 
     def __str__(self):
         return self.description
+
+    @classmethod
+    def get_object_list(cls, access_token: str, action='view'):
+        return cls.objects.filter(pk__in=get_object_ids(access_token, 'contact-address', action))
+
+    @classmethod
+    def has_class_scope(cls, access_token: str, action='view'):
+        scope_name = f"{action}-contact-address"
+        return django_keycloak_auth.clients.get_authz_client()\
+            .eval_permission(access_token, f"contact-address", scope_name)
+
+    def has_scope(self, access_token: str, action='view'):
+        scope_name = f"{action}-contact-address"
+        return django_keycloak_auth.clients.get_authz_client()\
+            .eval_permission(access_token, f"contact-address_{self.pk}", scope_name)
+
+    def save(self, *args, **kwargs):
+        sync_resource_to_keycloak(
+            self,
+            display_name="Contact address", resource_type="contact-address", scopes=[
+                'view-contact-address',
+                'edit-contact-address',
+                'delete-contact-address',
+            ],
+            urn="urn:as207960:domains:contact_address", super_save=super().save, view_name='edit_address',
+            args=args, kwargs=kwargs
+        )
 
     def can_delete(self):
         return self.local_contacts.count() + self.int_contacts.count() == 0
@@ -159,15 +242,44 @@ class Contact(models.Model):
     disclose_phone = models.BooleanField(default=False, blank=True)
     disclose_fax = models.BooleanField(default=False, blank=True)
     disclose_email = models.BooleanField(default=False, blank=True)
+    resource_id = models.UUIDField(null=True)
 
     class Meta:
         ordering = ['description']
+
+    def __init__(self, *args, **kwargs):
+        # self.user = None
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_object_list(cls, access_token: str, action='view'):
+        return cls.objects.filter(pk__in=get_object_ids(access_token, 'contact', action))
+
+    @classmethod
+    def has_class_scope(cls, access_token: str, action='view'):
+        scope_name = f"{action}-contact"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"contact", scope_name)
+
+    def has_scope(self, access_token: str, action='view'):
+        scope_name = f"{action}-contact"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"contact_{self.pk}", scope_name)
 
     def save(self, *args, **kwargs):
         if not kwargs.pop('skip_update_date', False):
             self.updated_date = timezone.now()
 
-        super().save(*args, **kwargs)
+        sync_resource_to_keycloak(
+            self,
+            display_name="Contact", resource_type="contact", scopes=[
+                'view-contact',
+                'edit-contact',
+                'delete-contact',
+            ],
+            urn="urn:as207960:domains:contact", super_save=super().save, view_name='edit_contact',
+            args=args, kwargs=kwargs
+        )
     
     def __str__(self):
         return self.description
@@ -356,9 +468,41 @@ class NameServer(models.Model):
     name_server = models.CharField(max_length=255)
     registry_id = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    resource_id = models.UUIDField(null=True)
 
     class Meta:
         ordering = ['name_server']
+
+    def __init__(self, *args, **kwargs):
+        # self.user = None
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_object_list(cls, access_token: str, action='view'):
+        return cls.objects.filter(pk__in=get_object_ids(access_token, 'name-server', action))
+
+    @classmethod
+    def has_class_scope(cls, access_token: str, action='view'):
+        scope_name = f"{action}-name-server"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"name-server", scope_name)
+
+    def has_scope(self, access_token: str, action='view'):
+        scope_name = f"{action}-name-server"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"name-server_{self.pk}", scope_name)
+
+    def save(self, *args, **kwargs):
+        sync_resource_to_keycloak(
+            self,
+            display_name="Name server", resource_type="name-server", scopes=[
+                'view-name-server',
+                'edit-name-server',
+                'delete-name-server',
+            ],
+            urn="urn:as207960:domains:name_server", super_save=super().save, view_name='host',
+            args=args, kwargs=kwargs
+        )
 
     def __str__(self):
         return self.name_server
@@ -395,9 +539,42 @@ class DomainRegistration(models.Model):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_billing')
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_tech')
+    resource_id = models.UUIDField(null=True)
 
     class Meta:
         ordering = ['domain']
+
+    def __init__(self, *args, **kwargs):
+        # self.user = None
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_object_list(cls, access_token: str, action='view'):
+        return cls.objects.filter(pk__in=get_object_ids(access_token, 'domain', action))
+
+    @classmethod
+    def has_class_scope(cls, access_token: str, action='view'):
+        scope_name = f"{action}-domain"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"domain", scope_name)
+
+    def has_scope(self, access_token: str, action='view'):
+        scope_name = f"{action}-domain"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"domain_{self.pk}", scope_name)
+
+    def save(self, *args, **kwargs):
+        sync_resource_to_keycloak(
+            self,
+            display_name="Domain", resource_type="domain", scopes=[
+                'view-domain',
+                'edit-domain',
+                'delete-domain',
+                'create-ns-domain'
+            ],
+            urn="urn:as207960:domains:domain", super_save=super().save, view_name='domain',
+            args=args, kwargs=kwargs
+        )
 
     def __str__(self):
         return self.domain

@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import logging
 import json
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -141,6 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+EXTERNAL_URL_BASE = "http://localhost:8000"
 
 PHONENUMBER_DEFAULT_REGION = "GB"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -172,7 +176,8 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        'domains.api.auth.BearerAuthentication',
+        'domains.api.auth.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',

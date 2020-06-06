@@ -658,7 +658,6 @@ class Host:
     def set_addresses(self, addresses: typing.List[IPAddress]) -> bool:
         rem_addrs = list(filter(lambda a: a not in addresses, self.addresses))
         add_addrs = list(filter(lambda a: a not in self.addresses, addresses))
-        print(add_addrs, rem_addrs)
 
         if not rem_addrs and not add_addrs:
             return False

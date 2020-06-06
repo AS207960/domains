@@ -37,7 +37,5 @@ urlpatterns = [
     path('addresses/new/', contacts.new_address, name='new_address'),
     path('addresses/<uuid:address_id>/delete/', contacts.delete_address, name='delete_address'),
     path('addresses/<uuid:address_id>/', contacts.edit_address, name='edit_address'),
+    path('api/', include('domains.api.urls'))
 ]
-
-if settings.DEBUG:
-    urlpatterns.append(path('api/', include('domains.api.urls')))

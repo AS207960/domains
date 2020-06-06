@@ -1,7 +1,8 @@
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, post_delete
 from django.db import InternalError
 from django.dispatch import receiver
 from concurrent.futures import ThreadPoolExecutor
+import django_keycloak_auth.clients
 from . import models, apps
 import grpc
 
@@ -49,3 +50,19 @@ def contact_address_save(instance: models.ContactAddress, **kwargs):
         for contact in instance.int_contacts.all():
             for i in contact.contactregistry_set.all():
                 executor.submit(update_contact, i)
+
+
+@receiver(post_delete, sender=models.Contact)
+def contact_keycloak_delete(instance: models.Contact, **kwargs):
+    uma_client = django_keycloak_auth.clients.get_uma_client()
+    token = django_keycloak_auth.clients.get_access_token()
+
+    uma_client.resource_set_delete(token, instance.resource_id)
+
+
+@receiver(post_delete, sender=models.ContactAddress)
+def contact_address_keycloak_delete(instance: models.ContactAddress, **kwargs):
+    uma_client = django_keycloak_auth.clients.get_uma_client()
+    token = django_keycloak_auth.clients.get_access_token()
+
+    uma_client.resource_set_delete(token, instance.resource_id)

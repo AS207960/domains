@@ -130,7 +130,7 @@ class AddressForm(forms.ModelForm):
             </div>
             """
         )}
-        exclude = ("id", "user")
+        exclude = ("id", "resource_id")
 
 
 class DomainContactForm(forms.Form):

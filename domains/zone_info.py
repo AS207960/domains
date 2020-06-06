@@ -255,7 +255,7 @@ if settings.DEBUG:
             unit=0,
             value=i
         ), range(1, 6))))),
-        # ('me', SimplePrice(1400)),
+        ('me', DomainInfo(DomainInfo.REGISTRY_AFILIAS, SimplePrice(1400))),
         ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, renewal=1150, restore=3200))),
         ('tv', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(2566, restore=4000))),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),

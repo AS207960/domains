@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
+import django_keycloak_auth.clients
 import django.db
 from django.utils import timezone
 from .. import models, forms
@@ -8,7 +8,8 @@ from .. import models, forms
 
 @login_required
 def contacts(request):
-    user_contacts = models.Contact.objects.filter(user=request.user)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_contacts = models.Contact.get_object_list(access_token)
 
     return render(request, "domains/contacts.html", {
         "contacts": user_contacts,
@@ -17,6 +18,16 @@ def contacts(request):
 
 @login_required
 def new_contact(request):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('contacts')
+
+    if not models.Contact.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     if request.method == "POST":
         form = forms.ContactForm(request.POST, user=request.user)
         if form.is_valid():
@@ -35,15 +46,30 @@ def new_contact(request):
 
 @login_required
 def edit_contact(request, contact_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_contact = get_object_or_404(models.Contact, id=contact_id)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('addresses')
 
-    if user_contact.user != request.user:
-        raise PermissionDenied
+    if not user_contact.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('addresses')
 
     if request.method == "POST":
         form = forms.ContactForm(request.POST, user=request.user, instance=user_contact)
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except django.db.Error as e:
+                return render(request, "domains/error.html", {
+                    "error": str(e),
+                    "back_url": referrer
+                })
             return redirect('contacts')
     else:
         form = forms.ContactForm(user=request.user, instance=user_contact)
@@ -56,10 +82,16 @@ def edit_contact(request, contact_id):
 
 @login_required
 def delete_contact(request, contact_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_contact = get_object_or_404(models.Contact, id=contact_id)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('addresses')
 
-    if user_contact.user != request.user:
-        raise PermissionDenied
+    if not user_contact.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     referrer = reverse('contacts')
 
@@ -90,7 +122,8 @@ def delete_contact(request, contact_id):
 
 @login_required
 def addresses(request):
-    user_addresses = models.ContactAddress.objects.filter(user=request.user)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_addresses = models.ContactAddress.get_object_list(access_token)
 
     return render(request, "domains/addresses.html", {
         "addresses": user_addresses,
@@ -99,8 +132,15 @@ def addresses(request):
 
 @login_required
 def new_address(request):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('addresses')
+
+    if not models.ContactAddress.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     if request.method == "POST":
         form = forms.AddressForm(request.POST)
@@ -113,7 +153,7 @@ def new_address(request):
                     "error": str(e),
                     "back_url": referrer
                 })
-            return redirect(referrer)
+            return redirect('addresses')
     else:
         form = forms.AddressForm()
 
@@ -125,18 +165,20 @@ def new_address(request):
 
 @login_required
 def edit_address(request, address_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_address = get_object_or_404(models.ContactAddress, id=address_id)
-
-    if user_address.user != request.user:
-        raise PermissionDenied
-
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('addresses')
+
+    if not user_address.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     if request.method == "POST":
         form = forms.AddressForm(request.POST, instance=user_address)
         if form.is_valid():
-            form.instance.user = request.user
             try:
                 form.save()
             except django.db.Error as e:
@@ -156,14 +198,18 @@ def edit_address(request, address_id):
 
 @login_required
 def delete_address(request, address_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_address = get_object_or_404(models.ContactAddress, id=address_id)
-
-    if user_address.user != request.user:
-        raise PermissionDenied
-
-    can_delete = user_address.can_delete()
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('addresses')
+
+    if not user_address.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    can_delete = user_address.can_delete()
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
@@ -174,7 +220,7 @@ def delete_address(request, address_id):
                     "error": str(e),
                     "back_url": referrer
                 })
-            return redirect(referrer)
+            return redirect('addresses')
 
     return render(request, "domains/delete_address.html", {
         "address": user_address,

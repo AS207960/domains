@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.utils.safestring import mark_safe
+import django_keycloak_auth.clients
 import ipaddress
 import grpc
 import decimal
@@ -30,7 +29,8 @@ def domain_prices(request):
 
 @login_required
 def domains(request):
-    user_domains = models.DomainRegistration.objects.filter(user=request.user, pending=False)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domains = models.DomainRegistration.get_object_list(access_token).filter(pending=False)
     domains_data = []
     error = None
     try:
@@ -48,11 +48,18 @@ def domains(request):
 
 @login_required
 def domain(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
 
-    if user_domain.user != request.user:
-        raise PermissionDenied
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     error = None
     domain_data = None
@@ -205,14 +212,18 @@ def domain(request, domain_id):
 @login_required
 @require_POST
 def update_domain_contact(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -229,7 +240,6 @@ def update_domain_contact(request, domain_id):
         contact_type=None,
         domain_id=user_domain.id,
     )
-
 
     contact_type = request.POST.get("type")
 
@@ -271,24 +281,10 @@ def update_domain_contact(request, domain_id):
                             domain_data.set_contact(contact_type, None)
 
                 user_domain.save()
-
-                if domain_info.registrant_supported:
-                    old_contact = domain_data.get_contact(contact_type)
-                    if old_contact:
-                        if apps.epp_client.check_contact(old_contact.contact_id, domain_data.registry_name)[0]:
-                            models.ContactRegistry.objects.filter(
-                                registry_contact_id=old_contact.contact_id,
-                                registry_id=domain_data.registry_name
-                            ).delete()
             elif domain_info.registrant_change_supported:
                 if domain_info.registrant_supported:
                     contact_id = contact.get_registry_id(domain_data.registry_name)
                     domain_data.set_registrant(contact_id.registry_contact_id)
-                    if apps.epp_client.check_contact(domain_data.registrant, domain_data.registry_name)[0]:
-                        models.ContactRegistry.objects.filter(
-                            registry_contact_id=domain_data.registrant,
-                            registry_id=domain_data.registry_name
-                        ).delete()
 
                 user_domain.registrant_contact = contact
                 user_domain.save()
@@ -305,14 +301,18 @@ def update_domain_contact(request, domain_id):
 @login_required
 @require_POST
 def domain_block_transfer(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -339,14 +339,18 @@ def domain_block_transfer(request, domain_id):
 @login_required
 @require_POST
 def domain_del_block_transfer(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -372,13 +376,16 @@ def domain_del_block_transfer(request, domain_id):
 
 @login_required
 def domain_regen_transfer_code(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -409,13 +416,16 @@ def domain_regen_transfer_code(request, domain_id):
 @login_required
 @require_POST
 def add_domain_host_obj(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -469,13 +479,16 @@ def add_domain_host_obj(request, domain_id):
 @login_required
 @require_POST
 def add_domain_host_addr(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -521,13 +534,16 @@ def add_domain_host_addr(request, domain_id):
 @login_required
 @require_POST
 def add_domain_ds_data(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -564,13 +580,16 @@ def add_domain_ds_data(request, domain_id):
 @login_required
 @require_POST
 def delete_domain_ds_data(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -602,13 +621,16 @@ def delete_domain_ds_data(request, domain_id):
 @login_required
 @require_POST
 def add_domain_dnskey_data(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -644,13 +666,16 @@ def add_domain_dnskey_data(request, domain_id):
 @login_required
 @require_POST
 def delete_domain_dnskey_data(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -680,13 +705,16 @@ def delete_domain_dnskey_data(request, domain_id):
 
 @login_required
 def delete_domain_sec_dns(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -711,13 +739,16 @@ def delete_domain_sec_dns(request, domain_id):
 
 @login_required
 def delete_domain_host_obj(request, domain_id, host_name):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -742,8 +773,15 @@ def delete_domain_host_obj(request, domain_id, host_name):
 
 @login_required
 def domain_search(request):
-    if not settings.REGISTRATION_ENABLED:
-        raise PermissionDenied
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
 
@@ -777,15 +815,24 @@ def domain_search(request):
 
 @login_required
 def domain_register(request, domain_name):
-    if not settings.REGISTRATION_ENABLED:
-        raise PermissionDenied
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
-    form = None
 
     zone, sld = zone_info.get_domain_info(domain_name)
     if not zone:
-        raise Http404
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone_price, registry_name = zone.pricing, zone.registry
     price_decimal = decimal.Decimal(zone_price.registration(sld)) / decimal.Decimal(100)
@@ -819,7 +866,10 @@ def domain_register(request, domain_name):
                 elif period.unit == 1:
                     billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
                 else:
-                    raise PermissionDenied
+                    return render(request, "domains/error.html", {
+                        "error": "You don't have permission to perform this action",
+                        "back_url": referrer
+                    })
 
                 for host in ('ns1.as207960.net', 'ns2.as207960.net'):
                     try:
@@ -927,14 +977,18 @@ def domain_register(request, domain_name):
 
 @login_required
 def delete_domain(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
-
-    if user_domain.user != request.user:
-        raise PermissionDenied
-
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -959,11 +1013,6 @@ def delete_domain(request, domain_id):
                 })
 
             if not domain_info.restore_supported:
-                if apps.epp_client.check_contact(domain_data.registrant, registry_id)[0]:
-                    models.ContactRegistry.objects.filter(
-                        registry_contact_id=domain_data.registrant,
-                        registry_id=registry_id
-                    ).delete()
                 user_domain.delete()
             return redirect('domains')
 
@@ -976,13 +1025,23 @@ def delete_domain(request, domain_id):
 
 @login_required
 def renew_domain(request, domain_id):
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
     if not settings.REGISTRATION_ENABLED:
-        raise PermissionDenied
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
 
-    if user_domain.user != request.user:
-        raise PermissionDenied
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone, sld = zone_info.get_domain_info(user_domain.domain)
     if not zone:
@@ -1017,7 +1076,10 @@ def renew_domain(request, domain_id):
             elif period.unit == 1:
                 billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
             else:
-                raise PermissionDenied
+                return render(request, "domains/error.html", {
+                    "error": "You don't have permission to perform this action",
+                    "back_url": referrer
+                })
 
             billing_value = price_decimal * billing_mul
             billing_error = billing.charge_account(
@@ -1060,10 +1122,16 @@ def renew_domain(request, domain_id):
 
 @login_required
 def restore_domain(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
 
-    if user_domain.user != request.user:
-        raise PermissionDenied
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone, _ = zone_info.get_domain_info(user_domain.domain)
     if not zone:
@@ -1108,8 +1176,15 @@ def restore_domain(request, domain_id):
 
 @login_required
 def domain_transfer_query(request):
-    if not settings.REGISTRATION_ENABLED:
-        raise PermissionDenied
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
 
@@ -1156,17 +1231,24 @@ def domain_transfer_query(request):
 
 @login_required
 def domain_transfer(request, domain_name):
-    if not settings.REGISTRATION_ENABLED:
-        raise PermissionDenied
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
 
     zone, sld = zone_info.get_domain_info(domain_name)
-    if not zone:
-        raise Http404
-
-    if not zone.transfer_supported:
-        raise PermissionDenied
+    if not zone or not zone.transfer_supported:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone_price, registry_name = zone.pricing, zone.registry
     price_decimal = decimal.Decimal(zone_price.transfer(sld)) / decimal.Decimal(100)

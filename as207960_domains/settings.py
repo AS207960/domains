@@ -174,3 +174,25 @@ EPP_PROXY_ADDR = os.getenv("EPP_PROXY_ADDR")
 EPP_PROXY_CA = os.getenv("EPP_PROXY_CA")
 
 BILLING_URL = os.getenv("BILLING_URL")
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'domains.api.auth.BearerAuthentication',
+        'domains.api.auth.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'EXCEPTION_HANDLER': 'domains.api.exceptions.exception_handler',
+    'PAGE_SIZE': 25
+}

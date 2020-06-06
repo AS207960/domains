@@ -1,16 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from concurrent.futures import ThreadPoolExecutor
 import grpc
+import django_keycloak_auth.clients
 import ipaddress
 from .. import models, apps, forms
 
 
 @login_required
 def hosts(request):
-    user_hosts = models.NameServer.objects.filter(user=request.user)
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_hosts = models.NameServer.get_object_list(access_token)
     hosts_data = []
     error = None
     try:
@@ -30,10 +31,16 @@ def hosts(request):
 
 @login_required
 def host(request, host_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_host = get_object_or_404(models.NameServer, id=host_id)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('hosts')
 
-    if user_host.user != request.user:
-        raise PermissionDenied
+    if not user_host.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
     host_data = None
@@ -91,16 +98,20 @@ def host(request, host_id):
 
 @login_required
 def host_delete(request, host_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_host = get_object_or_404(models.NameServer, id=host_id)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('hosts')
 
-    if user_host.user != request.user:
-        raise PermissionDenied
+    if not user_host.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     host_data = apps.epp_client.get_host(user_host.name_server, user_host.registry_id)
 
     can_delete = apps.epp_api.host_pb2.Linked not in host_data.statuses
-    referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('hosts')
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
@@ -126,17 +137,24 @@ def host_delete(request, host_id):
 
 @login_required
 def host_create(request, registry_name, host: str):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('hosts')
+
     error = None
     form = None
 
     valid = False
-    for domain_obj in models.DomainRegistration.objects.filter(user=request.user):
+    for domain_obj in models.DomainRegistration.get_object_list(access_token, action='create-ns'):
         if host.endswith(domain_obj.domain):
             valid = True
             break
 
     if not valid:
-        raise PermissionDenied
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     try:
         available, _ = apps.epp_client.check_host(host, registry_name)
