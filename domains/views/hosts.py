@@ -136,7 +136,7 @@ def host_delete(request, host_id):
 
 
 @login_required
-def host_create(request, registry_name, host: str):
+def host_create(request, host_name: str):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('hosts')
@@ -144,20 +144,21 @@ def host_create(request, registry_name, host: str):
     error = None
     form = None
 
-    valid = False
+    domain = None
     for domain_obj in models.DomainRegistration.get_object_list(access_token, action='create-ns'):
-        if host.endswith(domain_obj.domain):
-            valid = True
+        if host_name.endswith(domain_obj.domain):
+            domain = domain_obj
             break
 
-    if not valid:
+    if not domain:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
 
     try:
-        available, _ = apps.epp_client.check_host(host, registry_name)
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        available, _ = apps.epp_client.check_host(host_name, domain_data.registry_name)
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
     else:
@@ -174,16 +175,16 @@ def host_create(request, registry_name, host: str):
                 elif address.version == 6:
                     ip_type = apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6
                 try:
-                    apps.epp_client.create_host(host, [apps.epp_api.IPAddress(
+                    apps.epp_client.create_host(host_name, [apps.epp_api.IPAddress(
                         address=address.compressed,
                         ip_type=ip_type
-                    )], registry_name)
+                    )], domain_data.registry_name)
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                 else:
                     host_obj = models.NameServer(
-                        name_server=host,
-                        registry_id=registry_name,
+                        name_server=host_name,
+                        registry_id=domain_data.registry_name,
                         user=request.user
                     )
                     host_obj.save()
@@ -194,7 +195,7 @@ def host_create(request, registry_name, host: str):
 
     return render(request, "domains/host_form.html", {
         "title": "Create a host object",
-        "host": host,
+        "host": host_name,
         "host_form": form,
         "error": error
     })

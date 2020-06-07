@@ -93,7 +93,9 @@ class NameServerSerializer(serializers.Serializer):
         host = validated_data['name_server']
 
         domain = None  # type: typing.Optional[models.DomainRegistration]
-        for domain_obj in models.DomainRegistration.objects.filter(user=self.context['request'].user):
+        for domain_obj in models.DomainRegistration.get_object_list(
+                self.context['request'].auth.token, action='create-ns'
+        ):
             if host.endswith(domain_obj.domain):
                 domain = domain_obj
                 break

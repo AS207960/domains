@@ -173,9 +173,6 @@ class NameServer(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        if not models.NameServer.has_class_scope(request.auth.token, 'create'):
-            raise PermissionDenied
-
         serializer = serializers.NameServerSerializer(data=request.data, context={
             'request': request
         })

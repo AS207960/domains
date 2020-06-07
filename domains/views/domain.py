@@ -130,7 +130,7 @@ def domain(request, domain_id):
                         else:
                             new_host_form.add_error('host', f"Host name unavailable: {reason}")
                     else:
-                        return redirect('host_create', domain_data.registry_name, host)
+                        return redirect('host_create', host)
 
         try:
             registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user)

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_countries',
     'django_grpc',
+    'rest_framework',
     'domains'
 ]
 
