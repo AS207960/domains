@@ -31,6 +31,18 @@ class ContactSerializer(serializers.ModelSerializer):
                   'disclose_email')
         read_only_fields = ('created_date', 'updated_date')
 
+    def validate(self, data):
+        errs = {}
+
+        for k in ('local_address', 'int_address'):
+            if data.get(k):
+                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
+                    errs[k] = "you don't have permission to reference this object"
+
+        if errs:
+            raise serializers.ValidationError(errs)
+        return data
+
 
 @dataclasses.dataclass
 class NameServer:
@@ -271,6 +283,18 @@ class DomainSerializer(serializers.Serializer):
     expiry = serializers.DateTimeField(read_only=True, allow_null=True)
     last_updated = serializers.DateTimeField(read_only=True, allow_null=True)
     last_transferred = serializers.DateTimeField(read_only=True, allow_null=True)
+
+    def validate(self, data):
+        errs = {}
+
+        for k in ('registrant', 'admin_contact', 'billing_contact', 'tech_contact'):
+            if data.get(k):
+                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
+                    errs[k] = "you don't have permission to reference this object"
+
+        if errs:
+            raise serializers.ValidationError(errs)
+        return data
 
     @classmethod
     def get_domain(cls, d: models.DomainRegistration, user):

@@ -6,13 +6,15 @@ from django_countries.widgets import CountrySelectWidget
 import crispy_forms.helper
 import crispy_forms.layout
 import crispy_forms.bootstrap
+import django_keycloak_auth.clients
 
 
 class ContactForm(forms.ModelForm):
     def __init__(self, *args, user, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['local_address'].queryset = models.ContactAddress.objects.filter(user=user)
-        self.fields['int_address'].queryset = models.ContactAddress.objects.filter(user=user)
+        access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=user.oidc_profile)
+        self.fields['local_address'].queryset = models.ContactAddress.get_object_list(access_token)
+        self.fields['int_address'].queryset = models.ContactAddress.get_object_list(access_token)
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
@@ -139,7 +141,8 @@ class DomainContactForm(forms.Form):
 
     def __init__(self, *args, user, contact_type, domain_id, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['contact'].queryset = models.Contact.objects.filter(user=user)
+        access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=user.oidc_profile)
+        self.fields['contact'].queryset = models.Contact.get_object_list(access_token)
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('update_domain_contact', args=(domain_id,))
@@ -326,11 +329,12 @@ class DomainRegisterForm(forms.Form):
 
     def __init__(self, *args, zone: zone_info.DomainInfo, user, **kwargs):
         super().__init__(*args, **kwargs)
+        access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=user.oidc_profile)
         self.fields['period'].choices = map(map_period, zone.pricing.periods)
-        self.fields['registrant'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
+        self.fields['registrant'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['admin'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['billing'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['tech'].queryset = models.Contact.get_object_list(access_token)
         self.fields['admin'].required = zone.admin_required
         self.fields['billing'].required = zone.billing_required
         self.fields['tech'].required = zone.tech_required
@@ -364,10 +368,11 @@ class DomainTransferForm(forms.Form):
 
     def __init__(self, *args, zone: zone_info.DomainInfo, user, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['registrant'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['admin'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['billing'].queryset = models.Contact.objects.filter(user=user)
-        self.fields['tech'].queryset = models.Contact.objects.filter(user=user)
+        access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=user.oidc_profile)
+        self.fields['registrant'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['admin'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['billing'].queryset = models.Contact.get_object_list(access_token)
+        self.fields['tech'].queryset = models.Contact.get_object_list(access_token)
         self.fields['admin'].required = zone.admin_required
         self.fields['billing'].required = zone.billing_required
         self.fields['tech'].required = zone.tech_required

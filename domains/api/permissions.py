@@ -8,10 +8,10 @@ def keycloak(db_class):
             if not isinstance(request.auth, auth.OAuthToken):
                 return False
 
-            if request.method in ("GET", "HEAD", "OPTIONS"):
-                return True
-            elif request.method == "POST":
+            if request.method == "POST":
                 return db_class.has_class_scope(request.auth.token, 'create')
+            else:
+                return True
 
         def has_object_permission(self, request, view, obj):
             if not isinstance(request.auth, auth.OAuthToken):
