@@ -835,7 +835,7 @@ def domain_register(request, domain_name):
         })
 
     zone_price, registry_name = zone.pricing, zone.registry
-    price_decimal = decimal.Decimal(zone_price.registration(sld)) / decimal.Decimal(100)
+    price_decimal = zone_price.registration(sld)
 
     if request.method == "POST":
         form = forms.DomainRegisterForm(
@@ -861,105 +861,98 @@ def domain_register(request, domain_name):
                 domain_id = uuid.uuid4()
                 contact_objs = []
 
-                if period.unit == 0:
-                    billing_mul = decimal.Decimal(period.value)
-                elif period.unit == 1:
-                    billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
-                else:
-                    return render(request, "domains/error.html", {
-                        "error": "You don't have permission to perform this action",
-                        "back_url": referrer
-                    })
-
+                success = True
                 for host in ('ns1.as207960.net', 'ns2.as207960.net'):
                     try:
                         host_available, _ = apps.epp_client.check_host(host, registry_id)
                     except grpc.RpcError as rpc_error:
                         error = rpc_error.details()
-                    else:
                         success = False
+                    else:
                         if host_available:
                             try:
                                 apps.epp_client.create_host(host, [], registry_id)
                             except grpc.RpcError as rpc_error:
                                 error = rpc_error.details()
-                            else:
-                                success = True
-                        else:
-                            success = True
+                                success = False
 
-                        if success:
-                            billing_value = price_decimal * billing_mul
-                            billing_error = billing.charge_account(
+                if success:
+                    billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
+                    if billing_value is None:
+                        return render(request, "domains/error.html", {
+                            "error": "You don't have permission to perform this action",
+                            "back_url": referrer
+                        })
+                    billing_error = billing.charge_account(
+                        request.user.username,
+                        billing_value,
+                        f"{domain_name} domain registration",
+                        f"dm_{domain_id}"
+                    )
+                    if billing_error:
+                        error = billing_error
+                    else:
+                        try:
+                            if zone.admin_supported and admin_contact:
+                                contact_objs.append(apps.epp_api.DomainContact(
+                                    contact_type="admin",
+                                    contact_id=admin_contact.get_registry_id(registry_id).registry_contact_id
+                                ))
+                            if zone.billing_supported and billing_contact:
+                                contact_objs.append(apps.epp_api.DomainContact(
+                                    contact_type="billing",
+                                    contact_id=billing_contact.get_registry_id(registry_id).registry_contact_id
+                                ))
+                            if zone.tech_supported and tech_contact:
+                                contact_objs.append(apps.epp_api.DomainContact(
+                                    contact_type="tech",
+                                    contact_id=tech_contact.get_registry_id(registry_id).registry_contact_id
+                                ))
+
+                            pending, _, _, _ = apps.epp_client.create_domain(
+                                domain=domain_name,
+                                period=period,
+                                registrant=registrant.get_registry_id(registry_id).registry_contact_id,
+                                contacts=contact_objs,
+                                name_servers=[apps.epp_api.DomainNameServer(
+                                    host_obj='ns1.as207960.net',
+                                    host_name=None,
+                                    address=[]
+                                ), apps.epp_api.DomainNameServer(
+                                    host_obj='ns2.as207960.net',
+                                    host_name=None,
+                                    address=[]
+                                )],
+                                auth_info=auth_info,
+                            )
+                        except grpc.RpcError as rpc_error:
+                            billing.charge_account(
                                 request.user.username,
-                                billing_value,
+                                -billing_value,
                                 f"{domain_name} domain registration",
                                 f"dm_{domain_id}"
                             )
-                            if billing_error:
-                                error = billing_error
+                            error = rpc_error.details()
+                        else:
+                            domain_obj = models.DomainRegistration(
+                                id=domain_id,
+                                domain=domain_name,
+                                user=request.user,
+                                auth_info=auth_info,
+                                registrant_contact=registrant,
+                                admin_contact=admin_contact,
+                                tech_contact=tech_contact,
+                                billing_contact=billing_contact
+                            )
+                            if pending:
+                                domain_obj.pending = True
+                                domain_obj.save()
+                                return render(request, "domains/domain_pending.html", {
+                                    "domain_name": domain_name
+                                })
                             else:
-                                if zone.admin_supported and admin_contact:
-                                    contact_objs.append(apps.epp_api.DomainContact(
-                                        contact_type="admin",
-                                        contact_id=admin_contact.get_registry_id(registry_name).registry_contact_id
-                                    ))
-                                if zone.billing_supported and billing_contact:
-                                    contact_objs.append(apps.epp_api.DomainContact(
-                                        contact_type="billing",
-                                        contact_id=billing_contact.get_registry_id(registry_name).registry_contact_id
-                                    ))
-                                if zone.tech_supported and tech_contact:
-                                    contact_objs.append(apps.epp_api.DomainContact(
-                                        contact_type="tech",
-                                        contact_id=tech_contact.get_registry_id(registry_name).registry_contact_id
-                                    ))
-
-                                try:
-                                    pending, _, _, _ = apps.epp_client.create_domain(
-                                        domain=domain_name,
-                                        period=period,
-                                        registrant=registrant.get_registry_id(registry_name).registry_contact_id,
-                                        contacts=contact_objs,
-                                        name_servers=[apps.epp_api.DomainNameServer(
-                                            host_obj='ns1.as207960.net',
-                                            host_name=None,
-                                            address=[]
-                                        ), apps.epp_api.DomainNameServer(
-                                            host_obj='ns2.as207960.net',
-                                            host_name=None,
-                                            address=[]
-                                        )],
-                                        auth_info=auth_info,
-                                    )
-                                except grpc.RpcError as rpc_error:
-                                    billing.charge_account(
-                                        request.user.username,
-                                        -billing_value,
-                                        f"{domain_name} domain registration",
-                                        f"dm_{domain_id}"
-                                    )
-                                    error = rpc_error.details()
-                                else:
-                                    domain_obj = models.DomainRegistration(
-                                        id=domain_id,
-                                        domain=domain_name,
-                                        user=request.user,
-                                        auth_info=auth_info,
-                                        registrant_contact=registrant,
-                                        admin_contact=admin_contact,
-                                        tech_contact=tech_contact,
-                                        billing_contact=billing_contact
-                                    )
-                                    if pending:
-                                        domain_obj.pending = True
-                                        domain_obj.save()
-                                        return render(request, "domains/domain_pending.html", {
-                                            "domain_name": domain_name
-                                        })
-                                    else:
-                                        domain_obj.save()
-                                        return redirect('domain', domain_obj.id)
+                                domain_obj.save()
+                                return redirect('domain', domain_obj.id)
     else:
         form = forms.DomainRegisterForm(
             zone=zone,
@@ -990,21 +983,12 @@ def delete_domain(request, domain_id):
 
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
-    try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
-            "back_url": referrer
-        })
-
     can_delete = True
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
             try:
-                pending, registry_id = apps.epp_client.delete_domain(user_domain.domain)
+                pending, _ = apps.epp_client.delete_domain(user_domain.domain)
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
                 return render(request, "domains/error.html", {
@@ -1012,7 +996,7 @@ def delete_domain(request, domain_id):
                     "back_url": referrer
                 })
 
-            if not domain_info.restore_supported:
+            if not (domain_info.restore_supported or not pending):
                 user_domain.delete()
             return redirect('domains')
 
@@ -1048,7 +1032,7 @@ def renew_domain(request, domain_id):
         raise Http404
 
     zone_price, _ = zone.pricing, zone.registry
-    price_decimal = decimal.Decimal(zone_price.renewal(sld)) / decimal.Decimal(100)
+    price_decimal = zone_price.renewal(sld)
 
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
@@ -1071,17 +1055,12 @@ def renew_domain(request, domain_id):
         if form.is_valid():
             period = form.cleaned_data['period']
 
-            if period.unit == 0:
-                billing_mul = decimal.Decimal(period.value)
-            elif period.unit == 1:
-                billing_mul = decimal.Decimal(period.value) / decimal.Decimal(12)
-            else:
+            billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+            if billing_value is None:
                 return render(request, "domains/error.html", {
                     "error": "You don't have permission to perform this action",
                     "back_url": referrer
                 })
-
-            billing_value = price_decimal * billing_mul
             billing_error = billing.charge_account(
                 request.user.username,
                 billing_value,
@@ -1251,7 +1230,7 @@ def domain_transfer(request, domain_name):
         })
 
     zone_price, registry_name = zone.pricing, zone.registry
-    price_decimal = decimal.Decimal(zone_price.transfer(sld)) / decimal.Decimal(100)
+    price_decimal = zone_price.transfer(sld)
 
     if request.method == "POST":
         form = forms.DomainTransferForm(request.POST, zone=zone, user=request.user)

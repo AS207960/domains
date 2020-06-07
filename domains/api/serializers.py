@@ -1,18 +1,35 @@
-from rest_framework import serializers, exceptions
-from rest_framework.settings import api_settings
-from django.core.exceptions import PermissionDenied
 import dataclasses
-import typing
 import datetime
+import decimal
 import ipaddress
+import typing
+import uuid
 
-from .. import models, apps, zone_info
+import grpc
+from django.core.exceptions import PermissionDenied
+from rest_framework import exceptions, serializers
+from rest_framework.settings import api_settings
+
+from .. import apps, models, zone_info
+from ..views import billing
 
 
 class ObjectExists(exceptions.APIException):
     status_code = 409
     default_detail = 'Object already exists'
     default_code = 'object_exists'
+
+
+class BillingError(exceptions.APIException):
+    status_code = 402
+    default_detail = 'Error billing account'
+    default_code = 'billing_error'
+
+
+class Unsupported(exceptions.APIException):
+    status_code = 400
+    default_detail = 'Unsupported by the registry'
+    default_code = 'unsupported'
 
 
 class ContactAddressSerializer(serializers.ModelSerializer):
@@ -166,6 +183,30 @@ class Domain:
     domain_obj: apps.epp_api.Domain
 
 
+@dataclasses.dataclass
+class DomainCreate:
+    id: str
+    domain: str
+    registrant: models.Contact
+    admin_contact: typing.Optional[models.Contact]
+    billing_contact: typing.Optional[models.Contact]
+    tech_contact: typing.Optional[models.Contact]
+    name_servers: typing.List[DomainNameServer]
+    auth_info: typing.Optional[str]
+    sec_dns: typing.Optional[apps.epp_api.SecDNSData]
+    pending: bool
+    created: typing.Optional[datetime.datetime]
+    expiry: typing.Optional[datetime.datetime]
+
+
+@dataclasses.dataclass
+class DomainCheck:
+    domain: str
+    available: bool
+    reason: typing.Optional[str]
+    price: typing.Optional[decimal.Decimal]
+
+
 class DomainNameServerSerializer(serializers.Serializer):
     host_object = serializers.CharField(max_length=255, allow_null=True)
     host_name = serializers.CharField(max_length=255, allow_null=True)
@@ -243,6 +284,14 @@ class DomainSecDNSSerializer(serializers.Serializer):
         return data
 
 
+class DomainPeriodSerializer(serializers.Serializer):
+    unit = serializers.ChoiceField(choices=(
+        ("y", "Year"),
+        ("m", "Month")
+    ))
+    value = serializers.IntegerField(min_value=1)
+
+
 class DomainSerializer(serializers.Serializer):
     url = serializers.HyperlinkedIdentityField(view_name='domain-detail', lookup_field='id', lookup_url_kwarg='pk')
     id = serializers.UUIDField(read_only=True)
@@ -278,7 +327,7 @@ class DomainSerializer(serializers.Serializer):
     auth_info = serializers.CharField(max_length=255, read_only=True)
     sec_dns = DomainSecDNSSerializer(allow_null=True)
     block_transfer = serializers.BooleanField(write_only=True)
-    regen_auth_code = serializers.BooleanField(write_only=True)
+    regen_auth_code = serializers.BooleanField(write_only=True, required=False)
     created = serializers.DateTimeField(read_only=True, allow_null=True)
     expiry = serializers.DateTimeField(read_only=True, allow_null=True)
     last_updated = serializers.DateTimeField(read_only=True, allow_null=True)
@@ -375,8 +424,6 @@ class DomainSerializer(serializers.Serializer):
         if 'registrant' in validated_data and validated_data['registrant'] != instance.registrant \
                 and domain_info.registrant_change_supported:
             instance.registrant = validated_data['registrant']
-            if instance.registrant.user != instance.domain_db_obj.user:
-                raise PermissionDenied
             if domain_info.registrant_supported:
                 update_req.new_registrant.value = instance.registrant.get_registry_id(
                     instance.domain_obj.registry_name
@@ -590,3 +637,224 @@ class DomainSerializer(serializers.Serializer):
 
         instance.domain_db_obj.save()
         return instance
+
+
+class DomainCreateSerializer(serializers.Serializer):
+    url = serializers.HyperlinkedIdentityField(view_name='domain-detail', lookup_field='id', lookup_url_kwarg='pk')
+    id = serializers.UUIDField(read_only=True)
+    domain = serializers.CharField(max_length=255)
+    registrant = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all())
+    registrant_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='registrant', read_only=True,
+    )
+    admin_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    admin_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='admin_contact', allow_null=True, read_only=True
+    )
+    billing_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    billing_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='billing_contact', allow_null=True, read_only=True
+    )
+    tech_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    tech_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='tech_contact', allow_null=True, read_only=True
+    )
+    name_servers = serializers.ListField(
+        child=DomainNameServerSerializer()
+    )
+    auth_info = serializers.CharField(max_length=255, read_only=True)
+    sec_dns = DomainSecDNSSerializer(allow_null=True)
+    period = DomainPeriodSerializer(write_only=True)
+    pending = serializers.BooleanField(read_only=True)
+    created = serializers.DateTimeField(read_only=True, allow_null=True)
+    expiry = serializers.DateTimeField(read_only=True, allow_null=True)
+
+    def validate(self, data):
+        errs = {}
+
+        for k in ('registrant', 'admin_contact', 'billing_contact', 'tech_contact'):
+            if data.get(k):
+                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
+                    errs[k] = "you don't have permission to reference this object"
+
+        if errs:
+            raise serializers.ValidationError(errs)
+        return data
+
+    def create(self, validated_data):
+        domain = validated_data['domain']
+        domain_info, sld = zone_info.get_domain_info(domain)
+
+        if not domain_info:
+            raise PermissionDenied
+
+        available, _, registry_id = apps.epp_client.check_domain(domain)
+
+        if not available:
+            raise ObjectExists()
+
+        zone_price, registry_name = domain_info.pricing, domain_info.registry
+        price_decimal = decimal.Decimal(zone_price.registration(sld)) / decimal.Decimal(100)
+
+        auth_info = models.make_secret()
+        registrant = validated_data['registrant']
+        admin_contact = validated_data['admin_contact']
+        billing_contact = validated_data['billing_contact']
+        tech_contact = validated_data['tech_contact']
+        period = validated_data['period']
+        name_servers = list(map(
+            lambda n: DomainNameServer(**{"host_object": None, "host_name": None, "addresses": None, **n}),
+            validated_data['name_servers']
+        ))
+        sec_dns = validated_data['sec_dns']
+        domain_id = uuid.uuid4()
+
+        if not name_servers:
+            name_servers = [
+                DomainNameServer(host_object='ns1.as207960.net', host_name=None, addresses=None),
+                DomainNameServer(host_object='ns2.as207960.net', host_name=None, addresses=None),
+            ]
+
+        period_obj = apps.epp_api.DomainPeriod(
+            unit=apps.epp_api.domain_pb2.Period.Unit.Years if period['unit'] == "y"
+            else apps.epp_api.domain_pb2.Period.Unit.Months if period['unit'] == "m" else None,
+            value=period['value']
+        )
+
+        domain_db_obj = models.DomainRegistration(
+            id=domain_id,
+            domain=domain,
+            registrant_contact=registrant,
+            admin_contact=admin_contact,
+            tech_contact=tech_contact,
+            billing_contact=billing_contact,
+            auth_info=auth_info,
+            user=self.context['request'].user
+        )
+
+        create_req = apps.epp_api.domain_pb2.DomainCreateRequest(
+            name=domain,
+            period=period_obj.to_pb(),
+        )
+
+        for ns in name_servers:
+            if ns.host_object:
+                host_available, _ = apps.epp_client.check_host(ns.host_object, registry_id)
+                if host_available:
+                    apps.epp_client.create_host(ns.host_object, [], registry_id)
+                create_req.nameservers.append(apps.epp_api.domain_pb2.NameServer(
+                    host_obj=ns.host_object
+                ))
+            elif ns.host_name:
+                create_req.nameservers.append(apps.epp_api.domain_pb2.NameServer(
+                    host_name=ns.host_name,
+                    addresses=NameServerSerializer.map_addrs(ns.addresses)
+                ))
+
+        if sec_dns:
+            if sec_dns['max_sig_life']:
+                create_req.sec_dns.max_sig_life.value = sec_dns['max_sig_life'].total_seconds()
+            if sec_dns['ds_data']:
+                create_req.sec_dns.ds_data.data.extend(list(map(
+                    lambda k: apps.epp_api.SecDNSDSData(
+                        key_tag=k['key_tag'],
+                        algorithm=k['algorithm'],
+                        digest_type=k['digest_type'],
+                        digest=k['digest'],
+                        key_data=apps.epp_api.SecDNSKeyData(
+                            **k['key_data']
+                        ) if 'key_data' in k and k['key_data'] else None
+                    ).to_pb(),
+                    sec_dns['ds_data']
+                )))
+            if sec_dns['key_data']:
+                create_req.sec_dns.key_data.data.extend(list(map(
+                    lambda k: apps.epp_api.SecDNSKeyData(**k).to_pb(),
+                    sec_dns['key_data']
+                )))
+
+        billing_value = zone_price.registration(sld, unit=period_obj.unit, value=period_obj.value)
+        if billing_value is None:
+            raise PermissionDenied
+        billing_error = billing.charge_account(
+            self.context['request'].user.username,
+            billing_value,
+            f"{domain} domain registration",
+            f"dm_{domain_id}"
+        )
+        if billing_error:
+            raise BillingError()
+
+        try:
+            if domain_info.registrant_supported:
+                create_req.registrant = registrant.get_registry_id(registry_id).registry_contact_id
+            if domain_info.admin_supported and admin_contact:
+                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                    type="admin",
+                    id=admin_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+            if domain_info.billing_supported and billing_contact:
+                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                    type="billing",
+                    id=billing_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+            if domain_info.tech_supported and tech_contact:
+                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                    type="tech",
+                    id=tech_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+
+            resp = apps.epp_client.stub.DomainCreate(create_req)
+        except grpc.RpcError as rpc_error:
+            billing.charge_account(
+                self.context['request'].user.username,
+                -billing_value,
+                f"{domain} domain registration",
+                f"dm_{domain_id}"
+            )
+            raise rpc_error
+
+        domain_db_obj.pending = resp.pending
+        domain_db_obj.save()
+
+        return DomainCreate(
+            id=str(domain_id),
+            domain=domain,
+            registrant=domain_db_obj.registrant_contact,
+            admin_contact=domain_db_obj.admin_contact,
+            billing_contact=domain_db_obj.billing_contact,
+            tech_contact=domain_db_obj.tech_contact,
+            name_servers=name_servers,
+            auth_info=auth_info,
+            sec_dns=sec_dns,
+            pending=resp.pending,
+            created=resp.creation_date.ToDatetime() if resp.HasField("creation_date") else None,
+            expiry=resp.expiry_date.ToDatetime() if resp.HasField("expiry_date") else None,
+        )
+
+
+class DomainRenewSerializer(serializers.Serializer):
+    period = DomainPeriodSerializer(write_only=True)
+
+
+class DomainCheckSerializer(serializers.Serializer):
+    domain = serializers.CharField(max_length=255)
+    period = DomainPeriodSerializer(write_only=True)
+    available = serializers.BooleanField(read_only=True)
+    reason = serializers.CharField(read_only=True, allow_null=True)
+    price = serializers.DecimalField(max_digits=9, decimal_places=2, read_only=True, allow_null=True)
+
+
+class DomainCheckRenewSerializer(serializers.Serializer):
+    domain = serializers.CharField(max_length=255, read_only=True)
+    period = DomainPeriodSerializer(write_only=True)
+    available = serializers.BooleanField(read_only=True)
+    reason = serializers.CharField(read_only=True, allow_null=True)
+    price = serializers.DecimalField(max_digits=9, decimal_places=2, read_only=True, allow_null=True)
+
+
+class DomainCheckRestoreSerializer(serializers.Serializer):
+    domain = serializers.CharField(max_length=255, read_only=True)
+    available = serializers.BooleanField(read_only=True)
+    reason = serializers.CharField(read_only=True, allow_null=True)
+    price = serializers.DecimalField(max_digits=9, decimal_places=2, read_only=True, allow_null=True)

@@ -1,5 +1,13 @@
 from django.conf import settings
+import decimal
 from . import apps
+
+
+def _mul(value, unit):
+    if unit == 1:
+        return decimal.Decimal(value) / decimal.Decimal(12)
+    else:
+        return decimal.Decimal(value)
 
 
 class SimplePrice:
@@ -13,17 +21,32 @@ class SimplePrice:
             value=i
         ), range(1, 11)))
 
-    def registration(self, _sld: str):
-        return self.price
+    def registration(self, _sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+            unit=unit,
+            value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(self.price) / decimal.Decimal(100)) * _mul(value, unit)
 
-    def renewal(self, _sld: str):
-        return self._renewal
+    def renewal(self, _sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
 
     def restore(self, _sld: str):
-        return self._restore
+        return decimal.Decimal(self._restore) / decimal.Decimal(100)
 
-    def transfer(self, _sld: str):
-        return self._transfer
+    def transfer(self, _sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
 
 
 class LengthPrice:
@@ -38,17 +61,34 @@ class LengthPrice:
             value=i
         ), range(1, 11)))
 
-    def registration(self, sld: str):
-        return self.lengths.get(len(sld), self.standard_price)
+    def registration(self, sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(
+            self.lengths.get(len(sld), self.standard_price)
+        ) / decimal.Decimal(100)) * _mul(value, unit)
 
-    def renewal(self, _sld: str):
-        return self._renewal
+    def renewal(self, _sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
 
     def restore(self, _sld: str):
-        return self._restore
+        return decimal.Decimal(self._restore) / decimal.Decimal(100)
 
-    def transfer(self, _sld: str):
-        return self._transfer
+    def transfer(self, _sld: str, value=1, unit=0):
+        if apps.epp_api.DomainPeriod(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        return (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
 
 
 class DomainInfo:
@@ -217,8 +257,14 @@ if settings.DEBUG:
             unit=0,
             value=2
         )]))),
-        ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(1400))),
-        ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(1400))),
+        ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(1400, periods=[apps.epp_api.DomainPeriod(
+            unit=0,
+            value=1
+        )]))),
+        ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(1400, periods=[apps.epp_api.DomainPeriod(
+            unit=0,
+            value=1
+        )]))),
         # ('ae.org', LengthPrice(1600, {2: 17000})),
         # ('br.com', LengthPrice(3200, {2: 17000})),
         # ('cn.com', LengthPrice(1400, {2: 17000}, renewal=3000)),
@@ -271,8 +317,14 @@ else:
         ('tech', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(7559, transfer=7559, restore=13369))),
         ('xyz', DomainInfo(DomainInfo.REGISTRY_CENTRALNIC, SimplePrice(1739, transfer=1739, restore=12159))),
         ('de', DomainInfo(DomainInfo.REGISTRY_DENIC, SimplePrice(1300, transfer=1150, renewal=1150, restore=3739))),
-        ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
-        ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999))),
+        ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999, periods=[apps.epp_api.DomainPeriod(
+            unit=0,
+            value=1
+        )]))),
+        ('li', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999, periods=[apps.epp_api.DomainPeriod(
+            unit=0,
+            value=1
+        )]))),
         ('space', DomainInfo(DomainInfo.REGISTRY_DONUTS, SimplePrice(3199, transfer=3199, restore=10940))),
         ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1400, periods=map(lambda i: apps.epp_api.DomainPeriod(
             unit=0,

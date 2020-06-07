@@ -11,3 +11,5 @@ grpcio
 protobuf
 django-grpc
 djangorestframework
+pyyaml
+uritemplate
