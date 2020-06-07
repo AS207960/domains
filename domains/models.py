@@ -112,11 +112,10 @@ class ContactAddress(models.Model):
     disclose_name = models.BooleanField(default=False, blank=True)
     disclose_organisation = models.BooleanField(default=False, blank=True)
     disclose_address = models.BooleanField(default=False, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     resource_id = models.UUIDField(null=True)
 
-    def __init__(self, *args, **kwargs):
-        # self.user = None
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
 
     class Meta:
@@ -238,7 +237,6 @@ class Contact(models.Model):
     company_number = models.CharField(max_length=255, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     disclose_phone = models.BooleanField(default=False, blank=True)
     disclose_fax = models.BooleanField(default=False, blank=True)
     disclose_email = models.BooleanField(default=False, blank=True)
@@ -247,8 +245,8 @@ class Contact(models.Model):
     class Meta:
         ordering = ['description']
 
-    def __init__(self, *args, **kwargs):
-        # self.user = None
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
 
     @classmethod
@@ -467,14 +465,13 @@ class NameServer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name_server = models.CharField(max_length=255)
     registry_id = models.CharField(max_length=255)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     resource_id = models.UUIDField(null=True)
 
     class Meta:
         ordering = ['name_server']
 
-    def __init__(self, *args, **kwargs):
-        # self.user = None
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
 
     @classmethod
@@ -528,7 +525,6 @@ class NameServer(models.Model):
 class DomainRegistration(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     pending = models.BooleanField(default=False, blank=True)
     registrant_contact = models.ForeignKey(
@@ -544,8 +540,8 @@ class DomainRegistration(models.Model):
     class Meta:
         ordering = ['domain']
 
-    def __init__(self, *args, **kwargs):
-        # self.user = None
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
         super().__init__(*args, **kwargs)
 
     @classmethod
