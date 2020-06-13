@@ -94,6 +94,22 @@ def get_object_ids(access_token, resource_type, action):
     return object_ids
 
 
+def eval_permission(token, resource, scope, submit_request=False):
+    resource = str(resource)
+    permissions = django_keycloak_auth.clients.get_authz_client().get_permissions(
+        token=token,
+        resource_scopes_tuples=[(resource, scope)],
+        submit_request=submit_request
+    )
+
+    for permission in permissions.get('permissions', []):
+        for scope in permission.get('scopes', []):
+            if permission.get('rsid') == resource and scope == scope:
+                return True
+
+    return False
+
+
 class ContactAddress(models.Model):
     user: settings.AUTH_USER_MODEL
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -137,8 +153,7 @@ class ContactAddress(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-contact-address"
-        return django_keycloak_auth.clients.get_authz_client()\
-            .eval_permission(access_token, f"contact-address_{self.pk}", scope_name)
+        return eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         sync_resource_to_keycloak(
@@ -261,8 +276,7 @@ class Contact(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-contact"
-        return django_keycloak_auth.clients.get_authz_client() \
-            .eval_permission(access_token, f"contact_{self.pk}", scope_name)
+        return eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         if not kwargs.pop('skip_update_date', False):
@@ -486,8 +500,7 @@ class NameServer(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-name-server"
-        return django_keycloak_auth.clients.get_authz_client() \
-            .eval_permission(access_token, f"name-server_{self.pk}", scope_name)
+        return eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         sync_resource_to_keycloak(
@@ -556,8 +569,7 @@ class DomainRegistration(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-domain"
-        return django_keycloak_auth.clients.get_authz_client() \
-            .eval_permission(access_token, f"domain_{self.pk}", scope_name)
+        return eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         sync_resource_to_keycloak(
