@@ -1028,7 +1028,8 @@ def domain_register_confirm(request, domain_name):
 
     return render(request, "domains/register_domain_confirm.html", {
         "domain": domain_name,
-        "price_decimal": billing_value
+        "price_decimal": billing_value,
+        "back_url": referrer,
     })
 
 
@@ -1198,7 +1199,8 @@ def renew_domain_confirm(request, domain_id):
 
     return render(request, "domains/renew_domain_confirm.html", {
         "domain": user_domain,
-        "price_decimal": billing_value
+        "price_decimal": billing_value,
+        "back_url": referrer,
     })
 
 
