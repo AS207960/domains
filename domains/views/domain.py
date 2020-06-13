@@ -109,9 +109,6 @@ def domain(request, domain_id):
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-    else:
         if request.method == "POST" and request.POST.get("type") == "host_search":
             new_host_form = forms.HostSearchForm(
                 request.POST,
@@ -132,38 +129,29 @@ def domain(request, domain_id):
                     else:
                         return redirect('host_create', host)
 
-        try:
+        if domain_info.registrant_supported:
             registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user)
-        except grpc.RpcError as rpc_error:
-            error = rpc_error.details()
-
-        registrant_form.set_cur_id(cur_id=domain_data.registrant, registry_id=domain_data.registry_name)
+            registrant_form.set_cur_id(cur_id=domain_data.registrant, registry_id=domain_data.registry_name)
+        else:
+            registrant = user_domain.registrant_contact
+            registrant_form.fields['contact'].value = user_domain.registrant_contact.id
 
         if domain_data.admin:
-            try:
-                admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
+            admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user)
             admin_contact_form.set_cur_id(cur_id=domain_data.admin.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.admin_contact:
             admin = user_domain.admin_contact
             admin_contact_form.fields['contact'].value = user_domain.admin_contact.id
 
         if domain_data.billing:
-            try:
-                billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, request.user)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
+            billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, request.user)
             billing_contact_form.set_cur_id(cur_id=domain_data.billing.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.billing_contact:
             billing = user_domain.billing_contact
             billing_contact_form.fields['contact'].value = user_domain.billing_contact.id
 
         if domain_data.tech:
-            try:
-                tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
+            tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user)
             tech_contact_form.set_cur_id(cur_id=domain_data.tech.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.admin_contact:
             tech = user_domain.tech_contact
@@ -184,6 +172,11 @@ def domain(request, domain_id):
             domain_id=domain_id,
             registry_id=domain_data.registry_name
         )
+    except grpc.RpcError as rpc_error:
+        return render(request, "domains/error.html", {
+            "error": rpc_error.details(),
+            "back_url": referrer
+        })
 
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
