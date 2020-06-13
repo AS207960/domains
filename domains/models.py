@@ -324,135 +324,131 @@ class Contact(models.Model):
         super().delete(*args, **kwargs)
 
     def get_registry_id(self, registry_id: str):
-        CONTACT_SEARCH.acquire()
-        contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
-            .first()   # type: ContactRegistry
-        if contact_registry:
-            if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
-                CONTACT_SEARCH.release()
-                return contact_registry
-            else:
-                contact_registry.delete()
+        with CONTACT_SEARCH:
+            contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
+                .first()   # type: ContactRegistry
+            if contact_registry:
+                if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
+                    return contact_registry
+                else:
+                    contact_registry.delete()
 
-        contact_id = make_id()
-        auth_info = make_secret()
-        while not apps.epp_client.check_contact(contact_id, registry_id)[0]:
             contact_id = make_id()
+            auth_info = make_secret()
+            while not apps.epp_client.check_contact(contact_id, registry_id)[0]:
+                contact_id = make_id()
 
-        contact_id, _, _ = apps.epp_client.create_contact(
-            contact_id,
-            local_address=self.get_local_address(),
-            int_address=self.get_int_address(),
-            phone=apps.epp_api.Phone(
-                number=f"+{self.phone.country_code}.{self.phone.national_number}",
-                ext=self.phone_ext
-            ) if self.phone else None,
-            fax=apps.epp_api.Phone(
-                number=f"+{self.fax.country_code}.{self.fax.national_number}",
-                ext=self.fax_ext
-            ) if self.fax else None,
-            email=self.email,
-            entity_type=self.entity_type,
-            trading_name=self.trading_name,
-            company_number=self.company_number,
-            auth_info=auth_info,
-            registry_name=registry_id
-        )
+            contact_id, _, _ = apps.epp_client.create_contact(
+                contact_id,
+                local_address=self.get_local_address(),
+                int_address=self.get_int_address(),
+                phone=apps.epp_api.Phone(
+                    number=f"+{self.phone.country_code}.{self.phone.national_number}",
+                    ext=self.phone_ext
+                ) if self.phone else None,
+                fax=apps.epp_api.Phone(
+                    number=f"+{self.fax.country_code}.{self.fax.national_number}",
+                    ext=self.fax_ext
+                ) if self.fax else None,
+                email=self.email,
+                entity_type=self.entity_type,
+                trading_name=self.trading_name,
+                company_number=self.company_number,
+                auth_info=auth_info,
+                registry_name=registry_id
+            )
 
-        contact_registry = ContactRegistry(
-            contact=self,
-            registry_id=registry_id,
-            registry_contact_id=contact_id,
-            auth_info=auth_info
-        )
-        contact_registry.save()
-        CONTACT_SEARCH.release()
-        return contact_registry
+            contact_registry = ContactRegistry(
+                contact=self,
+                registry_id=registry_id,
+                registry_contact_id=contact_id,
+                auth_info=auth_info
+            )
+            contact_registry.save()
+            return contact_registry
 
     @classmethod
     def get_contact(cls, registry_contact_id: str, registry_id: str, user):
-        CONTACT_SEARCH.acquire()
-        contact_registry = ContactRegistry.objects\
-            .filter(registry_contact_id=registry_contact_id, registry_id=registry_id).first()
-        if contact_registry:
-            CONTACT_SEARCH.release()
-            return contact_registry.contact
+        with CONTACT_SEARCH:
+            contact_registry = ContactRegistry.objects\
+                .filter(registry_contact_id=registry_contact_id, registry_id=registry_id).first()
+            if contact_registry:
+                return contact_registry.contact
 
-        registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
+            registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
 
-        local_streets = iter(registry_contact.local_address.streets)
-        local_address = ContactAddress(
-            description=registry_contact.local_address.name,
-            name=registry_contact.local_address.name,
-            organisation=registry_contact.local_address.organisation,
-            street_1=next(local_streets, None),
-            street_2=next(local_streets, None),
-            street_3=next(local_streets, None),
-            city=registry_contact.local_address.city,
-            province=registry_contact.local_address.province,
-            postal_code=registry_contact.local_address.postal_code,
-            country_code=registry_contact.local_address.country_code,
-            user=user
-        )
-        local_address.save()
-        if registry_contact.int_address:
-            int_streets = iter(registry_contact.int_address.streets)
-            int_address = ContactAddress(
-                description=registry_contact.int_address.name,
-                name=registry_contact.int_address.name,
-                organisation=registry_contact.int_address.organisation,
-                street_1=next(int_streets, None),
-                street_2=next(int_streets, None),
-                street_3=next(int_streets, None),
-                city=registry_contact.int_address.city,
-                province=registry_contact.int_address.province,
-                postal_code=registry_contact.int_address.postal_code,
-                country_code=registry_contact.int_address.country_code,
+            local_streets = iter(registry_contact.local_address.streets)
+            local_address = ContactAddress(
+                description=registry_contact.local_address.name,
+                name=registry_contact.local_address.name,
+                organisation=registry_contact.local_address.organisation,
+                street_1=next(local_streets, None),
+                street_2=next(local_streets, None),
+                street_3=next(local_streets, None),
+                city=registry_contact.local_address.city,
+                province=registry_contact.local_address.province,
+                postal_code=registry_contact.local_address.postal_code,
+                country_code=registry_contact.local_address.country_code,
                 user=user
             )
-            int_address.save()
-        else:
-            int_address = None
+            local_address.save()
+            if registry_contact.int_address:
+                int_streets = iter(registry_contact.int_address.streets)
+                int_address = ContactAddress(
+                    description=registry_contact.int_address.name,
+                    name=registry_contact.int_address.name,
+                    organisation=registry_contact.int_address.organisation,
+                    street_1=next(int_streets, None),
+                    street_2=next(int_streets, None),
+                    street_3=next(int_streets, None),
+                    city=registry_contact.int_address.city,
+                    province=registry_contact.int_address.province,
+                    postal_code=registry_contact.int_address.postal_code,
+                    country_code=registry_contact.int_address.country_code,
+                    user=user
+                )
+                int_address.save()
+            else:
+                int_address = None
 
-        if registry_contact.phone:
-            phone = phonenumbers.parse(registry_contact.phone.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if not phonenumbers.is_valid_number(phone):
+            if registry_contact.phone:
+                phone = phonenumbers.parse(registry_contact.phone.number, settings.PHONENUMBER_DEFAULT_REGION)
+                if not phonenumbers.is_valid_number(phone):
+                    phone = None
+            else:
                 phone = None
-        else:
-            phone = None
 
-        if registry_contact.fax:
-            fax = phonenumbers.parse(registry_contact.fax.number, settings.PHONENUMBER_DEFAULT_REGION)
-            if not phonenumbers.is_valid_number(fax):
+            if registry_contact.fax:
+                fax = phonenumbers.parse(registry_contact.fax.number, settings.PHONENUMBER_DEFAULT_REGION)
+                if not phonenumbers.is_valid_number(fax):
+                    fax = None
+            else:
                 fax = None
-        else:
-            fax = None
 
-        contact = cls(
-            description=registry_contact.local_address.name,
-            local_address=local_address,
-            int_address=int_address,
-            phone=phone,
-            phone_ext=registry_contact.phone.ext if registry_contact.phone else None,
-            fax=fax,
-            fax_ext=registry_contact.fax.ext if registry_contact.fax else None,
-            email=registry_contact.email,
-            entity_type=registry_contact.entity_type,
-            trading_name=registry_contact.trading_name,
-            company_number=registry_contact.company_number,
-            created_date=registry_contact.creation_date,
-            updated_date=registry_contact.last_updated_date,
-            user=user
-        )
-        contact.save(skip_update_date=True)
-        ContactRegistry(
-            contact=contact,
-            registry_contact_id=registry_contact_id,
-            registry_id=registry_id,
-            auth_info=registry_contact.auth_info
-        ).save()
-        CONTACT_SEARCH.release()
-        return contact
+            contact = cls(
+                description=registry_contact.local_address.name,
+                local_address=local_address,
+                int_address=int_address,
+                phone=phone,
+                phone_ext=registry_contact.phone.ext if registry_contact.phone else None,
+                fax=fax,
+                fax_ext=registry_contact.fax.ext if registry_contact.fax else None,
+                email=registry_contact.email,
+                entity_type=registry_contact.entity_type,
+                trading_name=registry_contact.trading_name,
+                company_number=registry_contact.company_number,
+                created_date=registry_contact.creation_date,
+                updated_date=registry_contact.last_updated_date,
+                user=user
+            )
+            contact.save(skip_update_date=True)
+            ContactRegistry(
+                contact=contact,
+                registry_contact_id=registry_contact_id,
+                registry_id=registry_id,
+                auth_info=registry_contact.auth_info
+            ).save()
+            return contact
 
     def get_local_address(self) -> apps.epp_api.Address:
         return self.local_address.as_api_obj()
@@ -519,20 +515,18 @@ class NameServer(models.Model):
 
     @classmethod
     def get_name_server(cls, name_server: str, registry_id: str, user):
-        NAME_SERVER_SEARCH.acquire()
-        name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
-        if name_server_obj:
-            NAME_SERVER_SEARCH.release()
+        with NAME_SERVER_SEARCH:
+            name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
+            if name_server_obj:
+                return name_server_obj
+    
+            name_server_obj = cls(
+                name_server=name_server,
+                registry_id=registry_id,
+                user=user
+            )
+            name_server_obj.save()
             return name_server_obj
-
-        name_server_obj = cls(
-            name_server=name_server,
-            registry_id=registry_id,
-            user=user
-        )
-        name_server_obj.save()
-        NAME_SERVER_SEARCH.release()
-        return name_server_obj
 
 
 class DomainRegistration(models.Model):
