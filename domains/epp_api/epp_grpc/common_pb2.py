@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='epp.common',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0c\x63ommon.proto\x12\nepp.common\"y\n\tIPAddress\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\x04type\x18\x02 \x01(\x0e\x32\x1f.epp.common.IPAddress.IPVersion\",\n\tIPVersion\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04IPv4\x10\x01\x12\x08\n\x04IPv6\x10\x02*\x96\x01\n\x0eTransferStatus\x12\x11\n\rUnknownStatus\x10\x00\x12\x12\n\x0e\x43lientApproved\x10\x01\x12\x13\n\x0f\x43lientCancelled\x10\x02\x12\x12\n\x0e\x43lientRejected\x10\x03\x12\x0b\n\x07Pending\x10\x04\x12\x12\n\x0eServerApproved\x10\x05\x12\x13\n\x0fServerCancelled\x10\x06\x62\x06proto3'
+  serialized_pb=b'\n\x0c\x63ommon.proto\x12\nepp.common\"y\n\tIPAddress\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12-\n\x04type\x18\x02 \x01(\x0e\x32\x1f.epp.common.IPAddress.IPVersion\",\n\tIPVersion\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04IPv4\x10\x01\x12\x08\n\x04IPv6\x10\x02\"]\n\x06Period\x12\r\n\x05value\x18\x01 \x01(\r\x12%\n\x04unit\x18\x02 \x01(\x0e\x32\x17.epp.common.Period.Unit\"\x1d\n\x04Unit\x12\t\n\x05Years\x10\x00\x12\n\n\x06Months\x10\x01*\x96\x01\n\x0eTransferStatus\x12\x11\n\rUnknownStatus\x10\x00\x12\x12\n\x0e\x43lientApproved\x10\x01\x12\x13\n\x0f\x43lientCancelled\x10\x02\x12\x12\n\x0e\x43lientRejected\x10\x03\x12\x0b\n\x07Pending\x10\x04\x12\x12\n\x0eServerApproved\x10\x05\x12\x13\n\x0fServerCancelled\x10\x06\x62\x06proto3'
 )
 
 _TRANSFERSTATUS = _descriptor.EnumDescriptor(
@@ -59,8 +59,8 @@ _TRANSFERSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=152,
-  serialized_end=302,
+  serialized_start=247,
+  serialized_end=397,
 )
 _sym_db.RegisterEnumDescriptor(_TRANSFERSTATUS)
 
@@ -99,6 +99,28 @@ _IPADDRESS_IPVERSION = _descriptor.EnumDescriptor(
   serialized_end=149,
 )
 _sym_db.RegisterEnumDescriptor(_IPADDRESS_IPVERSION)
+
+_PERIOD_UNIT = _descriptor.EnumDescriptor(
+  name='Unit',
+  full_name='epp.common.Period.Unit',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='Years', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='Months', index=1, number=1,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=215,
+  serialized_end=244,
+)
+_sym_db.RegisterEnumDescriptor(_PERIOD_UNIT)
 
 
 _IPADDRESS = _descriptor.Descriptor(
@@ -139,9 +161,51 @@ _IPADDRESS = _descriptor.Descriptor(
   serialized_end=149,
 )
 
+
+_PERIOD = _descriptor.Descriptor(
+  name='Period',
+  full_name='epp.common.Period',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='epp.common.Period.value', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='unit', full_name='epp.common.Period.unit', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _PERIOD_UNIT,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=151,
+  serialized_end=244,
+)
+
 _IPADDRESS.fields_by_name['type'].enum_type = _IPADDRESS_IPVERSION
 _IPADDRESS_IPVERSION.containing_type = _IPADDRESS
+_PERIOD.fields_by_name['unit'].enum_type = _PERIOD_UNIT
+_PERIOD_UNIT.containing_type = _PERIOD
 DESCRIPTOR.message_types_by_name['IPAddress'] = _IPADDRESS
+DESCRIPTOR.message_types_by_name['Period'] = _PERIOD
 DESCRIPTOR.enum_types_by_name['TransferStatus'] = _TRANSFERSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -151,6 +215,13 @@ IPAddress = _reflection.GeneratedProtocolMessageType('IPAddress', (_message.Mess
   # @@protoc_insertion_point(class_scope:epp.common.IPAddress)
   })
 _sym_db.RegisterMessage(IPAddress)
+
+Period = _reflection.GeneratedProtocolMessageType('Period', (_message.Message,), {
+  'DESCRIPTOR' : _PERIOD,
+  '__module__' : 'common_pb2'
+  # @@protoc_insertion_point(class_scope:epp.common.Period)
+  })
+_sym_db.RegisterMessage(Period)
 
 
 # @@protoc_insertion_point(module_scope)

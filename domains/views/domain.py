@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 import django_keycloak_auth.clients
 import ipaddress
 import grpc
-import decimal
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info
@@ -16,10 +15,11 @@ from . import billing
 def domain_prices(request):
     zones = list(map(lambda z: {
         "zone": z[0],
-        "registration": decimal.Decimal(z[1].pricing.registration("")) / decimal.Decimal(100),
-        "renewal": decimal.Decimal(z[1].pricing.renewal("")) / decimal.Decimal(100),
-        "restore": decimal.Decimal(z[1].pricing.restore("")) / decimal.Decimal(100),
-        "transfer": decimal.Decimal(z[1].pricing.transfer("")) / decimal.Decimal(100),
+        "currency": z[1].pricing.currency,
+        "registration": z[1].pricing.representative_registration(),
+        "renewal": z[1].pricing.representative_renewal(),
+        "restore": z[1].pricing.representative_restore(),
+        "transfer": z[1].pricing.representative_transfer(),
     }, zone_info.ZONES))
 
     return render(request, "domains/domain_prices.html", {
@@ -815,15 +815,8 @@ def domain_search(request):
 
 @login_required
 def domain_register(request, domain_name):
-    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
-
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
 
     error = None
 
@@ -835,7 +828,7 @@ def domain_register(request, domain_name):
         })
 
     zone_price, registry_name = zone.pricing, zone.registry
-    price_decimal = zone_price.registration(sld)
+    price_decimal = zone_price.representative_registration()
 
     if request.method == "POST":
         form = forms.DomainRegisterForm(
@@ -852,14 +845,11 @@ def domain_register(request, domain_name):
                 if not available:
                     raise Http404
 
-                auth_info = models.make_secret()
                 registrant = form.cleaned_data['registrant']
                 admin_contact = form.cleaned_data['admin']
                 billing_contact = form.cleaned_data['billing']
                 tech_contact = form.cleaned_data['tech']
                 period = form.cleaned_data['period']
-                domain_id = uuid.uuid4()
-                contact_objs = []
 
                 success = True
                 for host in ('ns1.as207960.net', 'ns2.as207960.net'):
@@ -877,82 +867,13 @@ def domain_register(request, domain_name):
                                 success = False
 
                 if success:
-                    billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
-                    if billing_value is None:
-                        return render(request, "domains/error.html", {
-                            "error": "You don't have permission to perform this action",
-                            "back_url": referrer
-                        })
-                    billing_error = billing.charge_account(
-                        request.user.username,
-                        billing_value,
-                        f"{domain_name} domain registration",
-                        f"dm_{domain_id}"
-                    )
-                    if billing_error:
-                        error = billing_error
-                    else:
-                        try:
-                            if zone.admin_supported and admin_contact:
-                                contact_objs.append(apps.epp_api.DomainContact(
-                                    contact_type="admin",
-                                    contact_id=admin_contact.get_registry_id(registry_id).registry_contact_id
-                                ))
-                            if zone.billing_supported and billing_contact:
-                                contact_objs.append(apps.epp_api.DomainContact(
-                                    contact_type="billing",
-                                    contact_id=billing_contact.get_registry_id(registry_id).registry_contact_id
-                                ))
-                            if zone.tech_supported and tech_contact:
-                                contact_objs.append(apps.epp_api.DomainContact(
-                                    contact_type="tech",
-                                    contact_id=tech_contact.get_registry_id(registry_id).registry_contact_id
-                                ))
-
-                            pending, _, _, _ = apps.epp_client.create_domain(
-                                domain=domain_name,
-                                period=period,
-                                registrant=registrant.get_registry_id(registry_id).registry_contact_id,
-                                contacts=contact_objs,
-                                name_servers=[apps.epp_api.DomainNameServer(
-                                    host_obj='ns1.as207960.net',
-                                    host_name=None,
-                                    address=[]
-                                ), apps.epp_api.DomainNameServer(
-                                    host_obj='ns2.as207960.net',
-                                    host_name=None,
-                                    address=[]
-                                )],
-                                auth_info=auth_info,
-                            )
-                        except grpc.RpcError as rpc_error:
-                            billing.charge_account(
-                                request.user.username,
-                                -billing_value,
-                                f"{domain_name} domain registration",
-                                f"dm_{domain_id}"
-                            )
-                            error = rpc_error.details()
-                        else:
-                            domain_obj = models.DomainRegistration(
-                                id=domain_id,
-                                domain=domain_name,
-                                user=request.user,
-                                auth_info=auth_info,
-                                registrant_contact=registrant,
-                                admin_contact=admin_contact,
-                                tech_contact=tech_contact,
-                                billing_contact=billing_contact
-                            )
-                            if pending:
-                                domain_obj.pending = True
-                                domain_obj.save()
-                                return render(request, "domains/domain_pending.html", {
-                                    "domain_name": domain_name
-                                })
-                            else:
-                                domain_obj.save()
-                                return redirect('domain', domain_obj.id)
+                    request.session['period_unit'] = period.unit
+                    request.session['period_value'] = period.value
+                    request.session['registrant_id'] = str(registrant.id)
+                    request.session['admin_id'] = str(admin_contact.id) if admin_contact else None
+                    request.session['billing_id'] = str(billing_contact.id) if billing_contact else None
+                    request.session['tech_id'] = str(tech_contact.id) if tech_contact else None
+                    return redirect('domain_register_confirm', domain_name)
     else:
         form = forms.DomainRegisterForm(
             zone=zone,
@@ -963,8 +884,151 @@ def domain_register(request, domain_name):
         "domain_form": form,
         "domain_name": domain_name,
         "price_decimal": price_decimal,
+        "currency": zone_price.currency,
         "zone_info": zone,
         "error": error
+    })
+
+
+@login_required
+def domain_register_confirm(request, domain_name):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    zone, sld = zone_info.get_domain_info(domain_name)
+    if not zone:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    period = apps.epp_api.Period(
+        value=request.session['period_value'],
+        unit=request.session['period_unit']
+    )
+    zone_price, registry_name = zone.pricing, zone.registry
+    domain_id = uuid.uuid4()
+    auth_info = models.make_secret()
+    contact_objs = []
+
+    billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
+    if billing_value is None:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    if request.method == "POST" and request.POST.get("register") == "true":
+        registrant = models.Contact.objects.get(id=request.session['registrant_id'])
+        admin_id = request.session.get('admin_id')
+        billing_id = request.session.get('billing_id')
+        tech_id = request.session.get('tech_id')
+        admin_contact = models.Contact.objects.get(id=admin_id) if admin_id else None
+        billing_contact = models.Contact.objects.get(id=billing_id) if billing_id else None
+        tech_contact = models.Contact.objects.get(id=tech_id) if tech_id else None
+
+
+        try:
+            _, _, registry_id = apps.epp_client.check_domain(domain_name)
+        except grpc.RpcError as rpc_error:
+            return render(request, "domains/error.html", {
+                "error": rpc_error.details(),
+                "back_url": referrer
+            })
+
+        billing_error = billing.charge_account(
+            request.user.username,
+            billing_value,
+            f"{domain_name} domain registration",
+            f"dm_{domain_id}"
+        )
+        if billing_error:
+            return render(request, "domains/error.html", {
+                "error": billing_error,
+                "back_url": referrer
+            })
+        try:
+            if zone.admin_supported and admin_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="admin",
+                    contact_id=admin_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+            if zone.billing_supported and billing_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="billing",
+                    contact_id=billing_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+            if zone.tech_supported and tech_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="tech",
+                    contact_id=tech_contact.get_registry_id(registry_id).registry_contact_id
+                ))
+
+            pending, _, _, _ = apps.epp_client.create_domain(
+                domain=domain_name,
+                period=period,
+                registrant=registrant.get_registry_id(registry_id).registry_contact_id,
+                contacts=contact_objs,
+                name_servers=[apps.epp_api.DomainNameServer(
+                    host_obj='ns1.as207960.net',
+                    host_name=None,
+                    address=[]
+                ), apps.epp_api.DomainNameServer(
+                    host_obj='ns2.as207960.net',
+                    host_name=None,
+                    address=[]
+                )],
+                auth_info=auth_info,
+            )
+        except grpc.RpcError as rpc_error:
+            billing.charge_account(
+                request.user.username,
+                -billing_value,
+                f"{domain_name} domain registration",
+                f"dm_{domain_id}"
+            )
+            return render(request, "domains/error.html", {
+                "error": rpc_error.details(),
+                "back_url": referrer
+            })
+
+        del request.session['period_unit']
+        del request.session['period_value']
+        del request.session['registrant_id']
+        del request.session['admin_id']
+        del request.session['billing_id']
+        del request.session['tech_id']
+
+        domain_obj = models.DomainRegistration(
+            id=domain_id,
+            domain=domain_name,
+            user=request.user,
+            auth_info=auth_info,
+            registrant_contact=registrant,
+            admin_contact=admin_contact,
+            tech_contact=tech_contact,
+            billing_contact=billing_contact
+        )
+        if pending:
+            domain_obj.pending = True
+            domain_obj.save()
+            return render(request, "domains/domain_pending.html", {
+                "domain_name": domain_name
+            })
+        else:
+            domain_obj.save()
+            return redirect('domain', domain_obj.id)
+
+    return render(request, "domains/register_domain_confirm.html", {
+        "domain": domain_name,
+        "price_decimal": billing_value
     })
 
 
@@ -988,13 +1052,22 @@ def delete_domain(request, domain_id):
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
             try:
-                pending, _ = apps.epp_client.delete_domain(user_domain.domain)
+                pending, _registry_name, _transaction_id, fee_data = apps.epp_client.delete_domain(user_domain.domain)
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
                 return render(request, "domains/error.html", {
                     "error": error,
                     "back_url": referrer
                 })
+
+            if fee_data:
+                billing.charge_account(
+                    request.user.username,
+                    fee_data.total_fee,
+                    f"{user_domain.domain} domain delete",
+                    f"dm_{domain_id}",
+                    can_reject=False
+                )
 
             if not (domain_info.restore_supported or not pending):
                 user_domain.delete()
@@ -1009,6 +1082,42 @@ def delete_domain(request, domain_id):
 
 @login_required
 def renew_domain(request, domain_id):
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+
+    zone, sld = zone_info.get_domain_info(user_domain.domain)
+    if not zone:
+        raise Http404
+
+    zone_price, _ = zone.pricing, zone.registry
+    price_decimal = zone_price.representative_renewal()
+
+    if request.method == "POST":
+        form = forms.DomainRenewForm(
+            request.POST,
+            zone_info=zone
+        )
+
+        if form.is_valid():
+            period = form.cleaned_data['period']
+            request.session['period_unit'] = period.unit
+            request.session['period_value'] = period.value
+
+            return redirect('renew_domain_confirm', domain_id)
+    else:
+        form = forms.DomainRenewForm(zone_info=zone)
+
+    return render(request, "domains/renew_domain.html", {
+        "domain": user_domain,
+        "domain_name": user_domain.domain,
+        "zone_info": zone,
+        "domain_form": form,
+        "price_decimal": price_decimal,
+        "currency": zone_price.currency,
+    })
+
+
+@login_required
+def renew_domain_confirm(request, domain_id):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -1032,10 +1141,6 @@ def renew_domain(request, domain_id):
         raise Http404
 
     zone_price, _ = zone.pricing, zone.registry
-    price_decimal = zone_price.renewal(sld)
-
-    referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('domains')
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
@@ -1046,56 +1151,54 @@ def renew_domain(request, domain_id):
             "back_url": referrer
         })
 
-    if request.method == "POST":
-        form = forms.DomainRenewForm(
-            request.POST,
-            zone_info=zone
+    period = apps.epp_api.Period(
+        value=request.session['period_value'],
+        unit=request.session['period_unit']
+    )
+
+    billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+    if billing_value is None:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    if request.method == "POST" and request.POST.get("renew") == "true":
+        billing_error = billing.charge_account(
+            request.user.username,
+            billing_value,
+            f"{user_domain.domain} domain renewal",
+            f"dm_{domain_id}"
         )
+        if billing_error:
+            return render(request, "domains/error.html", {
+                "error": billing_error,
+                "back_url": referrer
+            })
 
-        if form.is_valid():
-            period = form.cleaned_data['period']
-
-            billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
-            if billing_value is None:
-                return render(request, "domains/error.html", {
-                    "error": "You don't have permission to perform this action",
-                    "back_url": referrer
-                })
-            billing_error = billing.charge_account(
+        try:
+            apps.epp_client.renew_domain(user_domain.domain, period, domain_data.expiry_date)
+        except grpc.RpcError as rpc_error:
+            billing.charge_account(
                 request.user.username,
-                billing_value,
+                -billing_value,
                 f"{user_domain.domain} domain renewal",
                 f"dm_{domain_id}"
             )
-            if billing_error:
-                return render(request, "domains/error.html", {
-                    "error": billing_error,
-                    "back_url": referrer
-                })
+            error = rpc_error.details()
+            return render(request, "domains/error.html", {
+                "error": error,
+                "back_url": referrer
+            })
 
-            try:
-                apps.epp_client.renew_domain(user_domain.domain, form.cleaned_data['period'], domain_data.expiry_date)
-            except grpc.RpcError as rpc_error:
-                billing.charge_account(
-                    request.user.username,
-                    -billing_value,
-                    f"{user_domain.domain} domain renewal",
-                    f"dm_{domain_id}"
-                )
-                error = rpc_error.details()
-                return render(request, "domains/error.html", {
-                    "error": error,
-                    "back_url": referrer
-                })
-    else:
-        form = forms.DomainRenewForm(zone_info=zone)
+        del request.session['period_unit']
+        del request.session['period_value']
 
-    return render(request, "domains/renew_domain.html", {
+        return redirect('domain', domain_id)
+
+    return render(request, "domains/renew_domain_confirm.html", {
         "domain": user_domain,
-        "domain_name": user_domain.domain,
-        "zone_info": zone,
-        "domain_form": form,
-        "price_decimal": price_decimal
+        "price_decimal": billing_value
     })
 
 
@@ -1112,45 +1215,47 @@ def restore_domain(request, domain_id):
             "back_url": referrer
         })
 
-    zone, _ = zone_info.get_domain_info(user_domain.domain)
+    zone, sld = zone_info.get_domain_info(user_domain.domain)
     if not zone:
         raise Http404
 
-    zone_price, sld = zone.pricing, zone.registry
-
+    zone_price, _ = zone.pricing, zone.registry
     billing_value = zone_price.restore(sld)
-    billing_error = billing.charge_account(
-        request.user.username,
-        billing_value,
-        f"{user_domain.domain} domain restore",
-        f"dm_{domain_id}"
-    )
-    if billing_error:
-        return render(request, "domains/error.html", {
-            "error": billing_error,
-            "back_url": reverse('domain', args=(domain_id,))
-        })
 
-    try:
-        _pending = apps.epp_client.restore_domain(user_domain.domain)
-    except grpc.RpcError as rpc_error:
-        billing.charge_account(
+    if request.method == "POST" and request.POST.get("restore") == "true":
+        billing_error = billing.charge_account(
             request.user.username,
-            -billing_value,
+            billing_value,
             f"{user_domain.domain} domain restore",
             f"dm_{domain_id}"
         )
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
-            "back_url": reverse('domain', args=(domain_id,))
-        })
+        if billing_error:
+            return render(request, "domains/error.html", {
+                "error": billing_error,
+                "back_url": reverse('domain', args=(domain_id,))
+            })
 
-    #
-    # if not pending:
-    #     user_domain.delete()
+        try:
+            _pending = apps.epp_client.restore_domain(user_domain.domain)
+        except grpc.RpcError as rpc_error:
+            billing.charge_account(
+                request.user.username,
+                -billing_value,
+                f"{user_domain.domain} domain restore",
+                f"dm_{domain_id}"
+            )
+            error = rpc_error.details()
+            return render(request, "domains/error.html", {
+                "error": error,
+                "back_url": reverse('domain', args=(domain_id,))
+            })
 
-    return redirect('domain', domain_id)
+        return redirect('domain', domain_id)
+
+    return render(request, "domains/restore_domain.html", {
+        "domain": user_domain,
+        "price_decimal": billing_value
+    })
 
 
 @login_required

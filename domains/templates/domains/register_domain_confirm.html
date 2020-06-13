@@ -1,0 +1,23 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% block content %}
+    <div class="container my-3">
+        <div class="jumbotron">
+            <h1 class="display-4">Register domain</h1>
+            <p>
+                <b>Domain: </b> {{ domain }}<br/>
+                <b>You will be charged: </b> {{ price_decimal|floatformat:2|intcomma }} GBP
+            </p>
+            <hr class="my-4">
+            <p>Are you sure you want to register this domain?</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <a class="btn btn-secondary btn-md" href="{{ back_url }}" role="button">Cancel</a>
+                <button type="submit" name="renew" value="true" class="btn btn-primary">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,7 @@
 import typing
 import datetime
 import grpc
+import decimal
 import dataclasses
 import ipaddress
 from google.protobuf.wrappers_pb2 import StringValue
@@ -10,6 +11,7 @@ from .epp_grpc import contact_pb2
 from .epp_grpc import domain_pb2
 from .epp_grpc import host_pb2
 from .epp_grpc import rgp_pb2
+from .epp_grpc import fee_pb2
 from .epp_grpc import epp_pb2_grpc
 
 
@@ -343,7 +345,7 @@ class Domain:
     last_updated_client: typing.Optional[str]
     last_updated_date: typing.Optional[datetime.datetime]
     last_transfer_date: typing.Optional[datetime.datetime]
-    rgp_state: RGPState
+    rgp_state: typing.List[RGPState]
     auth_info: typing.Optional[str]
     sec_dns: typing.Optional[SecDNSData]
     registry_name: str
@@ -366,7 +368,7 @@ class Domain:
         self.last_updated_client = resp.last_updated_client.value if resp.HasField("last_updated_client") else None
         self.last_updated_date = resp.last_updated_date.ToDatetime() if resp.HasField("last_updated_date") else None
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
-        self.rgp_state = RGPState(state=resp.rgp_state)
+        self.rgp_state = list(map(lambda s: RGPState(state=s), resp.rgp_state))
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
         self.sec_dns = SecDNSData.from_pb(resp.sec_dns) if resp.HasField("sec_dns") else None
         self.registry_name = resp.registry_name
@@ -530,12 +532,19 @@ class Domain:
 
 
 @dataclasses.dataclass
-class DomainPeriod:
+class Period:
     unit: int
     value: int
 
-    def to_pb(self) -> domain_pb2.Period:
-        return domain_pb2.Period(
+    @classmethod
+    def from_pb(cls, resp: common_pb2.Period):
+        return cls(
+            unit=resp.unit,
+            value=resp.value
+        )
+
+    def to_pb(self) -> common_pb2.Period:
+        return common_pb2.Period(
             unit=self.unit,
             value=self.value
         )
@@ -841,6 +850,61 @@ class Contact:
         return resp.pending
 
 
+@dataclasses.dataclass
+class Fee:
+    value: decimal.Decimal
+    description: typing.Optional[str]
+    refundable: typing.Optional[bool]
+    grace_period: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: fee_pb2.Fee):
+        return cls(
+            value=decimal.Decimal(resp.value),
+            description=resp.description.value if resp.HasField("description") else None,
+            refundable=resp.refundable.value if resp.HasField("refundable") else None,
+            grace_period=resp.description.value if resp.HasField("grace_period") else None,
+        )
+
+
+@dataclasses.dataclass
+class Credit:
+    value: decimal.Decimal
+    description: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: fee_pb2.Credit):
+        return cls(
+            value=decimal.Decimal(resp.value),
+            description=resp.description.value if resp.HasField("description") else None
+        )
+
+
+@dataclasses.dataclass
+class FeeData:
+    currency: str
+    period: typing.Optional[Period]
+    fees: typing.List[Fee]
+    credits: typing.List[Credit]
+    balance: typing.Optional[str]
+    credit_limit: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: fee_pb2.FeeData):
+        return cls(
+            currency=resp.currency,
+            period=Period.from_pb(resp.period) if resp.HasField("period") else None,
+            fees=list(map(Fee.from_pb, resp.fees)),
+            credits=list(map(Credit.from_pb, resp.credits)),
+            balance=resp.balance.value if resp.HasField("balance") else None,
+            credit_limit=resp.credit_limit.value if resp.HasField("credit_limit") else None,
+        )
+
+    @property
+    def total_fee(self):
+        return sum(map(lambda f: f.value, self.fees)) + sum(map(lambda c: c.value, self.credits))
+
+
 class EPPClient:
     def __init__(self, server, ca, creds=None):
         with open(ca, 'rb') as f:
@@ -868,7 +932,7 @@ class EPPClient:
     def create_domain(
         self,
         domain: str,
-        period: DomainPeriod,
+        period: Period,
         registrant: str,
         contacts: typing.List[DomainContact],
         name_servers: typing.List[DomainNameServer],
@@ -884,15 +948,16 @@ class EPPClient:
         ))
         return resp.pending, resp.creation_date.ToDatetime(), resp.expiry_date.ToDatetime(), resp.registry_name
 
-    def delete_domain(self, domain: str) -> typing.Tuple[bool, str]:
+    def delete_domain(self, domain: str) -> typing.Tuple[bool, str, str, typing.Optional[FeeData]]:
         resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(name=domain))
-        return resp.pending, resp.registry_name
+        return resp.pending, resp.registry_name, resp.transaction_id,\
+               FeeData.from_pb(resp.fee_data) if resp.HasField("fee_data") else None
 
     def restore_domain(self, domain: str) -> typing.Tuple[bool, str]:
         resp = self.stub.DomainRestoreRequest(rgp_pb2.RequestRequest(name=domain))
         return resp.pending, resp.registry_name
 
-    def renew_domain(self, domain: str, period: DomainPeriod, cur_expiry: datetime.datetime) -> \
+    def renew_domain(self, domain: str, period: Period, cur_expiry: datetime.datetime) -> \
             typing.Tuple[bool, datetime.datetime, str]:
         exp = Timestamp()
         exp.FromDatetime(cur_expiry)
@@ -911,7 +976,7 @@ class EPPClient:
         ))
         return DomainTransfer.from_pb(resp)
 
-    def transfer_request_domain(self, domain: str, auth_info: str, period: typing.Optional[DomainPeriod] = None) -> \
+    def transfer_request_domain(self, domain: str, auth_info: str, period: typing.Optional[Period] = None) -> \
             DomainTransfer:
         resp = self.stub.DomainTransferRequest(domain_pb2.DomainTransferRequestRequest(
             name=domain,

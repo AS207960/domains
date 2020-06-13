@@ -12,6 +12,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from . import fee_pb2 as fee__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -19,8 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='epp.rgp',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\trgp.proto\x12\x07\x65pp.rgp\"\x1e\n\x0eRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"X\n\x0cRestoreReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12 \n\x05state\x18\x02 \x01(\x0e\x32\x11.epp.rgp.RGPState\x12\x15\n\rregistry_name\x18\x03 \x01(\t*\x9d\x01\n\x08RGPState\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tAddPeriod\x10\x01\x12\x13\n\x0f\x41utoRenewPeriod\x10\x02\x12\x0f\n\x0bRenewPeriod\x10\x03\x12\x12\n\x0eTransferPeriod\x10\x04\x12\x14\n\x10RedemptionPeriod\x10\x05\x12\x12\n\x0ePendingRestore\x10\x06\x12\x11\n\rPendingDelete\x10\x07\x62\x06proto3'
-)
+  serialized_pb=b'\n\trgp.proto\x12\x07\x65pp.rgp\x1a\tfee.proto\"\x1e\n\x0eRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x94\x01\n\x0cRestoreReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\x12 \n\x05state\x18\x02 \x03(\x0e\x32\x11.epp.rgp.RGPState\x12\"\n\x08\x66\x65\x65_data\x18\x04 \x01(\x0b\x32\x10.epp.fee.FeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t*\x9d\x01\n\x08RGPState\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tAddPeriod\x10\x01\x12\x13\n\x0f\x41utoRenewPeriod\x10\x02\x12\x0f\n\x0bRenewPeriod\x10\x03\x12\x12\n\x0eTransferPeriod\x10\x04\x12\x14\n\x10RedemptionPeriod\x10\x05\x12\x12\n\x0ePendingRestore\x10\x06\x12\x11\n\rPendingDelete\x10\x07\x62\x06proto3'
+  ,
+  dependencies=[fee__pb2.DESCRIPTOR,])
 
 _RGPSTATE = _descriptor.EnumDescriptor(
   name='RGPState',
@@ -63,8 +65,8 @@ _RGPSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=145,
-  serialized_end=302,
+  serialized_start=217,
+  serialized_end=374,
 )
 _sym_db.RegisterEnumDescriptor(_RGPSTATE)
 
@@ -106,8 +108,8 @@ _REQUESTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=22,
-  serialized_end=52,
+  serialized_start=33,
+  serialized_end=63,
 )
 
 
@@ -126,14 +128,28 @@ _RESTOREREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='state', full_name='epp.rgp.RestoreReply.state', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
+      name='transaction_id', full_name='epp.rgp.RestoreReply.transaction_id', index=1,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='registry_name', full_name='epp.rgp.RestoreReply.registry_name', index=2,
+      name='state', full_name='epp.rgp.RestoreReply.state', index=2,
+      number=2, type=14, cpp_type=8, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fee_data', full_name='epp.rgp.RestoreReply.fee_data', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='registry_name', full_name='epp.rgp.RestoreReply.registry_name', index=4,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -151,11 +167,12 @@ _RESTOREREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=54,
-  serialized_end=142,
+  serialized_start=66,
+  serialized_end=214,
 )
 
 _RESTOREREPLY.fields_by_name['state'].enum_type = _RGPSTATE
+_RESTOREREPLY.fields_by_name['fee_data'].message_type = fee__pb2._FEEDATA
 DESCRIPTOR.message_types_by_name['RequestRequest'] = _REQUESTREQUEST
 DESCRIPTOR.message_types_by_name['RestoreReply'] = _RESTOREREPLY
 DESCRIPTOR.enum_types_by_name['RGPState'] = _RGPSTATE

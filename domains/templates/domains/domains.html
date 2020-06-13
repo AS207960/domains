@@ -39,9 +39,9 @@
                                 {% if domain.1.expired %}
                                     <span class="badge badge-danger">Expired</span>
                                 {% endif %}
-                                {% if domain.1.rgp_state %}
-                                    <span class="badge badge-info">{{ domain.1.rgp_state }}</span>
-                                {% endif %}
+                                {% for rgp_state in domain.1.rgp_state %}
+                                    <span class="badge badge-info">{{ rgp_state }}</span>
+                                {% endfor %}
                                 {% if 8 in domain.1.statuses %}
                                     <span class="badge badge-info">Pending delete</span>
                                 {% endif %}

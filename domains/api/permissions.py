@@ -2,7 +2,7 @@ from rest_framework import permissions
 from . import auth
 
 
-def keycloak(db_class):
+def keycloak(db_class, pre_filtered=False):
     class Keycloak(permissions.BasePermission):
         def has_permission(self, request, view):
             if not isinstance(request.auth, auth.OAuthToken):
@@ -14,6 +14,9 @@ def keycloak(db_class):
                 return True
 
         def has_object_permission(self, request, view, obj):
+            if pre_filtered:
+                return True
+
             if not isinstance(request.auth, auth.OAuthToken):
                 return False
 

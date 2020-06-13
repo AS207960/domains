@@ -172,7 +172,7 @@ class Domain:
     tech_contact: typing.Optional[models.Contact]
     name_servers: typing.List[DomainNameServer]
     hosts: typing.List[models.NameServer]
-    rgp_state: typing.Optional[str]
+    rgp_state: typing.List[str]
     auth_info: typing.Optional[str]
     sec_dns: typing.Optional[apps.epp_api.SecDNSData]
     created: typing.Optional[datetime.datetime]
@@ -323,7 +323,10 @@ class DomainSerializer(serializers.Serializer):
         child=DomainNameHostSerializer(read_only=True),
         read_only=True
     )
-    rgp_state = serializers.CharField(max_length=255, read_only=True, allow_null=True)
+    rgp_state = serializers.ListField(
+        child=serializers.CharField(max_length=255, read_only=True, allow_null=True),
+        read_only=True
+    )
     auth_info = serializers.CharField(max_length=255, read_only=True)
     sec_dns = DomainSecDNSSerializer(allow_null=True)
     block_transfer = serializers.BooleanField(write_only=True)
@@ -402,7 +405,7 @@ class DomainSerializer(serializers.Serializer):
             tech_contact=tech,
             name_servers=name_servers,
             hosts=hosts,
-            rgp_state=domain.rgp_state.name if domain.rgp_state else None,
+            rgp_state=list(map(lambda s: s.name, domain.rgp_state)),
             auth_info=d.auth_info,
             sec_dns=domain.sec_dns,
             created=domain.creation_date,
@@ -715,9 +718,9 @@ class DomainCreateSerializer(serializers.Serializer):
                 DomainNameServer(host_object='ns2.as207960.net', host_name=None, addresses=None),
             ]
 
-        period_obj = apps.epp_api.DomainPeriod(
-            unit=apps.epp_api.domain_pb2.Period.Unit.Years if period['unit'] == "y"
-            else apps.epp_api.domain_pb2.Period.Unit.Months if period['unit'] == "m" else None,
+        period_obj = apps.epp_api.Period(
+            unit=apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y"
+            else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None,
             value=period['value']
         )
 

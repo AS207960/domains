@@ -1,12 +1,10 @@
 from rest_framework import viewsets, exceptions, status, decorators
 from rest_framework.response import Response
-from rest_framework.settings import api_settings
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.conf import settings
 import grpc
-import decimal
 from concurrent.futures import ThreadPoolExecutor
 
 from . import serializers, permissions, auth
@@ -17,7 +15,7 @@ from ..views import billing
 class ContactAddressViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ContactAddressSerializer
     queryset = models.ContactAddress.objects.all()
-    permission_classes = [permissions.keycloak(models.ContactAddress)]
+    permission_classes = [permissions.keycloak(models.ContactAddress, pre_filtered=True)]
 
     def filter_queryset(self, queryset):
         if not isinstance(self.request.auth, auth.OAuthToken):
@@ -250,9 +248,9 @@ class Domain(viewsets.ViewSet):
         domain_data = apps.epp_client.get_domain(domain.domain)
         zone_price, _ = zone.pricing, zone.registry
 
-        period_obj = apps.epp_api.DomainPeriod(
-            unit=apps.epp_api.domain_pb2.Period.Unit.Years if period['unit'] == "y"
-            else apps.epp_api.domain_pb2.Period.Unit.Months if period['unit'] == "m" else None,
+        period_obj = apps.epp_api.Period(
+            unit=apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y"
+            else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None,
             value=period['value']
         )
 
@@ -309,8 +307,8 @@ class Domain(viewsets.ViewSet):
                 )
             else:
                 period = serializer.validated_data['period']
-                period_unit = apps.epp_api.domain_pb2.Period.Unit.Years if period['unit'] == "y" \
-                    else apps.epp_api.domain_pb2.Period.Unit.Months if period['unit'] == "m" else None
+                period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
+                    else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
 
                 price = zone.pricing.registration(sld, unit=period_unit, value=period['value'])
 
@@ -357,8 +355,8 @@ class Domain(viewsets.ViewSet):
 
         if zone.renew_supported:
             period = serializer.validated_data['period']
-            period_unit = apps.epp_api.domain_pb2.Period.Unit.Years if period['unit'] == "y" \
-                else apps.epp_api.domain_pb2.Period.Unit.Months if period['unit'] == "m" else None
+            period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
+                else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
 
             price = zone.pricing.renew(sld, unit=period_unit, value=period['value'])
 

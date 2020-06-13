@@ -301,7 +301,7 @@ class DomainSearchForm(forms.Form):
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))
 
 
-def map_period(period: apps.epp_api.DomainPeriod):
+def map_period(period: apps.epp_api.Period):
     str_value = str(period.value)
     if period.unit == 0:
         str_value += " year"
@@ -312,9 +312,9 @@ def map_period(period: apps.epp_api.DomainPeriod):
     return f"{period.unit}:{period.value}", str_value
 
 
-def unmap_period(value: str) -> apps.epp_api.DomainPeriod:
+def unmap_period(value: str) -> apps.epp_api.Period:
     unit, value = value.split(":", 1)
-    return apps.epp_api.DomainPeriod(
+    return apps.epp_api.Period(
         unit=int(unit),
         value=int(value)
     )
@@ -402,7 +402,7 @@ class DomainRenewForm(forms.Form):
 
     def __init__(self, *args, zone_info,  **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['period'].choices = map(map_period, zone_info.periods)
+        self.fields['period'].choices = map(map_period, zone_info.pricing.periods)
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.layout = crispy_forms.layout.Layout(

@@ -9,9 +9,9 @@
             {% if domain.expired %}
                 <span class="badge badge-danger">Expired</span>
             {% endif %}
-            {% if domain.rgp_state %}
-                <span class="badge badge-info">{{ domain.rgp_state }}</span>
-            {% endif %}
+            {% for rgp_state in domain.rgp_state %}
+                <span class="badge badge-info">{{ rgp_state }}</span>
+            {% endfor %}
         </h2>
         {% if error %}
             <div class="alert alert-danger" role="alert">
@@ -60,7 +60,7 @@
             <div class="col">
                 <p>
                     <div class="btn-group">
-                        {% if domain.rgp_state == 5 %}
+                        {% if 5 in domain.rgp_state %}
                             {% if registration_enabled %}
                                 <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
                             {% endif %}
