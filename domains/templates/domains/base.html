@@ -49,6 +49,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'domain_prices' %}">Domain prices</a>
                 </li>
+                {% if perms.domains.access_eppclient %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_index' %}">EPP Client</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="https://billing.as207960.net" target="_blank">Billing</a>
                 </li>

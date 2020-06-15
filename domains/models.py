@@ -519,7 +519,7 @@ class NameServer(models.Model):
             name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
             if name_server_obj:
                 return name_server_obj
-    
+
             name_server_obj = cls(
                 name_server=name_server,
                 registry_id=registry_id,

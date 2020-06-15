@@ -1,0 +1,130 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Domain info</h1>
+        {% crispy domain_form domain_form.helper %}
+        {% if domain_info %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ domain_info.name }}</td>
+                </tr>
+                <tr>
+                    <th>Registry ID</th>
+                    <td>{{ domain_info.registry_id }}</td>
+                </tr>
+                <tr>
+                    <th>Registry name</th>
+                    <td>{{ domain_info.registry_name }}</td>
+                </tr>
+                {% for status in domain_info.statuses %}
+                <tr>
+                    <th>Status</th>
+                    <td>{{ status }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Registrant</th>
+                    <td>{{ domain_info.registrant }}</td>
+                </tr>
+                {% for contact in domain_info.contacts %}
+                <tr>
+                    <th>Contact type: {{ contact.contact_type }}</th>
+                    <td>{{ contact.contact_id }}</td>
+                </tr>
+                {% endfor %}
+                {% for nameserver in domain_info.name_servers %}
+                <tr>
+                    <th>Nameserver</th>
+                    {% if nameserver.host_obj %}
+                        <td>{{ nameserver.host_obj }}</td>
+                    {% else %}
+                        <td>Name: {{ nameserver.host_name }}, addresses: {{ nameserver.address }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                {% for host in domain_info.hosts %}
+                    <tr>
+                        <th>Host</th>
+                        <td>{{ host }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Client ID</th>
+                    <td>{{ domain_info.client_id }}</td>
+                </tr>
+                <tr>
+                    <th>Client created ID</th>
+                    <td>{{ domain_info.client_created_id }}</td>
+                </tr>
+                <tr>
+                    <th>Creation date</th>
+                    <td>{{ domain_info.creation_date }}</td>
+                </tr>
+                <tr>
+                    <th>Expiry date</th>
+                    <td>{{ domain_info.expiry_date }}</td>
+                </tr>
+                <tr>
+                    <th>Last updated client</th>
+                    <td>{{ domain_info.last_updated_client }}</td>
+                </tr>
+                <tr>
+                    <th>Last updated date</th>
+                    <td>{{ domain_info.last_updated_date }}</td>
+                </tr>
+                <tr>
+                    <th>Last transfer date</th>
+                    <td>{{ domain_info.last_transfer_date }}</td>
+                </tr>
+                {% for state in domain_info.rgp_state %}
+                    <tr>
+                        <th>RGP State</th>
+                        <td>{{ state }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Auth info</th>
+                    <td>{{ domain_info.auth_info }}</td>
+                </tr>
+                {% if domain_info.sec_dns %}
+                    <tr>
+                        <th>DNSSEC Max sig life</th>
+                        <td>{{ domain_info.sec_dns.max_sig_life }}</td>
+                    </tr>
+                    {% if domain_info.sec_dns.ds_data %}
+                        {% for ds_data in domain_info.sec_dns.ds_data %}
+                            <tr>
+                                <th>DNSSEC DS Data</th>
+                                <td>
+                                    Key tag: {{ ds_data.key_tag }}, algorithm {{ ds_data.algorithm }},
+                                    digest type: {{ ds_data.digest_type }}, digest: {{ ds_data.digest }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    {% if domain_info.sec_dns.key_data %}
+                        {% for key_data in domain_info.sec_dns.key_data %}
+                            <tr>
+                                <th>DNSSEC Key Data</th>
+                                <td>
+                                    Flags: {{ key_data.flags }}, protocol: {{ key_data.protocol }},
+                                    algorithm {{ key_data.algorithm }}, public key: {{ key_data.public_key }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

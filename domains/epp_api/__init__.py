@@ -6,13 +6,7 @@ import dataclasses
 import ipaddress
 from google.protobuf.wrappers_pb2 import StringValue
 from google.protobuf.timestamp_pb2 import Timestamp
-from .epp_grpc import common_pb2
-from .epp_grpc import contact_pb2
-from .epp_grpc import domain_pb2
-from .epp_grpc import host_pb2
-from .epp_grpc import rgp_pb2
-from .epp_grpc import fee_pb2
-from .epp_grpc import epp_pb2_grpc
+from .epp_grpc import common_pb2, contact_pb2, domain_pb2, host_pb2, rgp_pb2, fee_pb2, epp_pb2, epp_pb2_grpc
 
 
 @dataclasses.dataclass

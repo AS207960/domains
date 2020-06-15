@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import domain, hosts, contacts
+from .views import domain, hosts, contacts, admin
 
 urlpatterns = [
     path('', domain.domains, name='domains'),
@@ -39,5 +39,9 @@ urlpatterns = [
     path('addresses/new/', contacts.new_address, name='new_address'),
     path('addresses/<uuid:address_id>/delete/', contacts.delete_address, name='delete_address'),
     path('addresses/<uuid:address_id>/', contacts.edit_address, name='edit_address'),
-    path('api/', include('domains.api.urls'))
+    path('api/', include('domains.api.urls')),
+    path('epp_client/', admin.index, name='admin_index'),
+    path('epp_client/domain_info/', admin.domain_info, name='admin_domain_info'),
+    path('epp_client/balance_switch/', admin.balance_switch, name='admin_balance_switch'),
+    path('epp_client/nominet_tags/', admin.nominet_tags, name='admin_nominet_tags'),
 ]

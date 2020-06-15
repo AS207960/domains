@@ -1,0 +1,32 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Nominet tag list</h1>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Tag</th>
+                <th scope="col">Name</th>
+                <th scope="col">Trading name</th>
+                <th scope="col">Handshake</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tag in tags %}
+            <tr>
+                <th>{{ tag.tag }}</th>
+                <td>{{ tag.name}}</td>
+                <td>{% if tag.trading_name %}{{ tag.trading_name }}{% else %}N/A{% endif %}</td>
+                <td>
+                    {% if tag.handshake %}
+                        <span class="badge badge-success">Yes</span>
+                    {% else %}
+                        <span class="badge badge-danger">No</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

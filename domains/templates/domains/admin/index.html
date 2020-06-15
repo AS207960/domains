@@ -1,0 +1,32 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <h1>EPP Client</h1>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Domain info</h5>
+                        <a href="{% url 'admin_domain_info' %}" class="btn btn-primary">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Balance enquiry</h5>
+                        <a href="{% url 'admin_balance_switch' %}" class="btn btn-primary">SWITCH</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nominet tag list</h5>
+                        <a href="{% url 'admin_nominet_tags' %}" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

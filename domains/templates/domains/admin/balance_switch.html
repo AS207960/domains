@@ -1,0 +1,17 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Balance Info</h1>
+        <h2>Registry: SWITCH</h2>
+        <table class="table">
+            <tr>
+                <th scope="row">Balance</th>
+                <td>{{ balance }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Currency</th>
+                <td>{{ currency }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
