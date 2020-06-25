@@ -34,7 +34,7 @@ def domains(request):
     active_domains = user_domains.filter(pending=False, deleted=False)
     deleted_domains = user_domains.filter(deleted=True)
     pending_domains = user_domains.filter(pending=True, deleted=False)
-    pending_transfers = models.PendingDomainTransfer.objects.filter(user=request.user)
+    pending_transfers = models.PendingDomainTransfer.get_object_list(access_token)
     domains_data = []
     error = None
     try:
