@@ -9,7 +9,7 @@ import grpc
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info
-from . import billing
+from . import billing, gchat_bot
 
 
 def domain_prices(request):
@@ -30,17 +30,24 @@ def domain_prices(request):
 @login_required
 def domains(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domains = models.DomainRegistration.get_object_list(access_token).filter(pending=False)
+    user_domains = models.DomainRegistration.get_object_list(access_token)
+    active_domains = user_domains.filter(pending=False, deleted=False)
+    deleted_domains = user_domains.filter(deleted=True)
+    pending_domains = user_domains.filter(pending=True, deleted=False)
+    pending_transfers = models.PendingDomainTransfer.objects.filter(user=request.user)
     domains_data = []
     error = None
     try:
         with ThreadPoolExecutor() as executor:
-            domains_data = list(executor.map(lambda d: (d.id, apps.epp_client.get_domain(d.domain)), user_domains))
+            domains_data = list(executor.map(lambda d: (d.id, apps.epp_client.get_domain(d.domain)), active_domains))
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
 
     return render(request, "domains/domains.html", {
         "domains": domains_data,
+        "deleted_domains": deleted_domains,
+        "pending_domains": pending_domains,
+        "pending_transfers": pending_transfers,
         "error": error,
         "registration_enabled": settings.REGISTRATION_ENABLED
     })
@@ -49,7 +56,7 @@ def domains(request):
 @login_required
 def domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -109,6 +116,12 @@ def domain(request, domain_id):
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
+
+        if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
+            user_domain.deleted = True
+            user_domain.save()
+            return redirect('domains')
+
         if request.method == "POST" and request.POST.get("type") == "host_search":
             new_host_form = forms.HostSearchForm(
                 request.POST,
@@ -206,7 +219,7 @@ def domain(request, domain_id):
 @require_POST
 def update_domain_contact(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -295,7 +308,7 @@ def update_domain_contact(request, domain_id):
 @require_POST
 def domain_block_transfer(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -333,7 +346,7 @@ def domain_block_transfer(request, domain_id):
 @require_POST
 def domain_del_block_transfer(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -370,7 +383,7 @@ def domain_del_block_transfer(request, domain_id):
 @login_required
 def domain_regen_transfer_code(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -410,7 +423,7 @@ def domain_regen_transfer_code(request, domain_id):
 @require_POST
 def add_domain_host_obj(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -473,7 +486,7 @@ def add_domain_host_obj(request, domain_id):
 @require_POST
 def add_domain_host_addr(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -528,7 +541,7 @@ def add_domain_host_addr(request, domain_id):
 @require_POST
 def add_domain_ds_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -574,7 +587,7 @@ def add_domain_ds_data(request, domain_id):
 @require_POST
 def delete_domain_ds_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -615,7 +628,7 @@ def delete_domain_ds_data(request, domain_id):
 @require_POST
 def add_domain_dnskey_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -660,7 +673,7 @@ def add_domain_dnskey_data(request, domain_id):
 @require_POST
 def delete_domain_dnskey_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -699,7 +712,7 @@ def delete_domain_dnskey_data(request, domain_id):
 @login_required
 def delete_domain_sec_dns(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -733,7 +746,7 @@ def delete_domain_sec_dns(request, domain_id):
 @login_required
 def delete_domain_host_obj(request, domain_id, host_name):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -783,18 +796,24 @@ def domain_search(request):
         if form.is_valid():
             zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
             if zone:
-                try:
-                    available, reason, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
-                except grpc.RpcError as rpc_error:
-                    error = rpc_error.details()
+                pending_domain = models.DomainRegistration.objects.filter(
+                    domain=form.cleaned_data['domain']
+                ).first()
+                if pending_domain:
+                    form.add_error('domain', "Domain unavailable")
                 else:
-                    if not available:
-                        if not reason:
-                            form.add_error('domain', "Domain unavailable")
-                        else:
-                            form.add_error('domain', f"Domain unavailable: {reason}")
+                    try:
+                        available, reason, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
+                    except grpc.RpcError as rpc_error:
+                        error = rpc_error.details()
                     else:
-                        return redirect('domain_register', form.cleaned_data['domain'])
+                        if not available:
+                            if not reason:
+                                form.add_error('domain', "Domain unavailable")
+                            else:
+                                form.add_error('domain', f"Domain unavailable: {reason}")
+                        else:
+                            return redirect('domain_register', form.cleaned_data['domain'])
             else:
                 form.add_error('domain', "Unsupported or invalid domain")
     else:
@@ -830,6 +849,11 @@ def domain_register(request, domain_name):
             user=request.user
         )
         if form.is_valid():
+            pending_domain = models.DomainRegistration.objects.filter(
+                domain=domain_name
+            ).first()
+            if pending_domain:
+                raise Http404
             try:
                 available, _, registry_id = apps.epp_client.check_domain(domain_name)
             except grpc.RpcError as rpc_error:
@@ -909,7 +933,6 @@ def domain_register_confirm(request, domain_name):
     zone_price, registry_name = zone.pricing, zone.registry
     domain_id = uuid.uuid4()
     auth_info = models.make_secret()
-    contact_objs = []
 
     billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
     if billing_value is None:
@@ -926,7 +949,6 @@ def domain_register_confirm(request, domain_name):
         admin_contact = models.Contact.objects.get(id=admin_id) if admin_id else None
         billing_contact = models.Contact.objects.get(id=billing_id) if billing_id else None
         tech_contact = models.Contact.objects.get(id=tech_id) if tech_id else None
-
 
         try:
             _, _, registry_id = apps.epp_client.check_domain(domain_name)
@@ -947,50 +969,54 @@ def domain_register_confirm(request, domain_name):
                 "error": billing_error,
                 "back_url": referrer
             })
-        try:
-            if zone.admin_supported and admin_contact:
-                contact_objs.append(apps.epp_api.DomainContact(
-                    contact_type="admin",
-                    contact_id=admin_contact.get_registry_id(registry_id).registry_contact_id
-                ))
-            if zone.billing_supported and billing_contact:
-                contact_objs.append(apps.epp_api.DomainContact(
-                    contact_type="billing",
-                    contact_id=billing_contact.get_registry_id(registry_id).registry_contact_id
-                ))
-            if zone.tech_supported and tech_contact:
-                contact_objs.append(apps.epp_api.DomainContact(
-                    contact_type="tech",
-                    contact_id=tech_contact.get_registry_id(registry_id).registry_contact_id
-                ))
+        if zone.direct_registration_supported:
+            try:
+                contact_objs = []
+                if zone.admin_supported and admin_contact:
+                    contact_objs.append(apps.epp_api.DomainContact(
+                        contact_type="admin",
+                        contact_id=admin_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
+                if zone.billing_supported and billing_contact:
+                    contact_objs.append(apps.epp_api.DomainContact(
+                        contact_type="billing",
+                        contact_id=billing_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
+                if zone.tech_supported and tech_contact:
+                    contact_objs.append(apps.epp_api.DomainContact(
+                        contact_type="tech",
+                        contact_id=tech_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
 
-            pending, _, _, _ = apps.epp_client.create_domain(
-                domain=domain_name,
-                period=period,
-                registrant=registrant.get_registry_id(registry_id).registry_contact_id,
-                contacts=contact_objs,
-                name_servers=[apps.epp_api.DomainNameServer(
-                    host_obj='ns1.as207960.net',
-                    host_name=None,
-                    address=[]
-                ), apps.epp_api.DomainNameServer(
-                    host_obj='ns2.as207960.net',
-                    host_name=None,
-                    address=[]
-                )],
-                auth_info=auth_info,
-            )
-        except grpc.RpcError as rpc_error:
-            billing.charge_account(
-                request.user.username,
-                -billing_value,
-                f"{domain_name} domain registration",
-                f"dm_{domain_id}"
-            )
-            return render(request, "domains/error.html", {
-                "error": rpc_error.details(),
-                "back_url": referrer
-            })
+                pending, _, _, _ = apps.epp_client.create_domain(
+                    domain=domain_name,
+                    period=period,
+                    registrant=registrant.get_registry_id(registry_id).registry_contact_id,
+                    contacts=contact_objs,
+                    name_servers=[apps.epp_api.DomainNameServer(
+                        host_obj='ns1.as207960.net',
+                        host_name=None,
+                        address=[]
+                    ), apps.epp_api.DomainNameServer(
+                        host_obj='ns2.as207960.net',
+                        host_name=None,
+                        address=[]
+                    )],
+                    auth_info=auth_info,
+                )
+            except grpc.RpcError as rpc_error:
+                billing.charge_account(
+                    request.user.username,
+                    -billing_value,
+                    f"{domain_name} domain registration",
+                    f"dm_{domain_id}"
+                )
+                return render(request, "domains/error.html", {
+                    "error": rpc_error.details(),
+                    "back_url": referrer
+                })
+        else:
+            pending = True
 
         del request.session['period_unit']
         del request.session['period_value']
@@ -1012,11 +1038,17 @@ def domain_register_confirm(request, domain_name):
         if pending:
             domain_obj.pending = True
             domain_obj.save()
+            if not zone.direct_registration_supported:
+                gchat_bot.request_registration(domain_obj, registry_id, period)
+            else:
+                gchat_bot.notify_registration(domain_obj, registry_id, period)
+
             return render(request, "domains/domain_pending.html", {
                 "domain_name": domain_name
             })
         else:
             domain_obj.save()
+            gchat_bot.notify_registration(domain_obj, registry_id, period)
             return redirect('domain', domain_obj.id)
 
     return render(request, "domains/register_domain_confirm.html", {
@@ -1029,7 +1061,7 @@ def domain_register_confirm(request, domain_name):
 @login_required
 def delete_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -1046,7 +1078,7 @@ def delete_domain(request, domain_id):
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
             try:
-                pending, _registry_name, _transaction_id, fee_data = apps.epp_client.delete_domain(user_domain.domain)
+                pending, _registry_name, _transaction_id, _fee_data = apps.epp_client.delete_domain(user_domain.domain)
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
                 return render(request, "domains/error.html", {
@@ -1054,17 +1086,11 @@ def delete_domain(request, domain_id):
                     "back_url": referrer
                 })
 
-            if fee_data:
-                billing.charge_account(
-                    request.user.username,
-                    fee_data.total_fee,
-                    f"{user_domain.domain} domain delete",
-                    f"dm_{domain_id}",
-                    can_reject=False
-                )
-
             if not (domain_info.restore_supported or not pending):
                 user_domain.delete()
+            else:
+                user_domain.deleted = True
+                user_domain.save()
             return redirect('domains')
 
     return render(request, "domains/delete_domain.html", {
@@ -1076,7 +1102,7 @@ def delete_domain(request, domain_id):
 
 @login_required
 def renew_domain(request, domain_id):
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
 
     zone, sld = zone_info.get_domain_info(user_domain.domain)
     if not zone:
@@ -1122,7 +1148,7 @@ def renew_domain_confirm(request, domain_id):
         })
 
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
 
     if not user_domain.has_scope(access_token, 'edit'):
         return render(request, "domains/error.html", {
@@ -1162,7 +1188,7 @@ def renew_domain_confirm(request, domain_id):
             request.user.username,
             billing_value,
             f"{user_domain.domain} domain renewal",
-            f"dm_{domain_id}"
+            f"dm_renew_{domain_id}"
         )
         if billing_error:
             return render(request, "domains/error.html", {
@@ -1171,13 +1197,15 @@ def renew_domain_confirm(request, domain_id):
             })
 
         try:
-            apps.epp_client.renew_domain(user_domain.domain, period, domain_data.expiry_date)
+            _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
+                user_domain.domain, period, domain_data.expiry_date
+            )
         except grpc.RpcError as rpc_error:
             billing.charge_account(
                 request.user.username,
                 -billing_value,
                 f"{user_domain.domain} domain renewal",
-                f"dm_{domain_id}"
+                f"dm_renew_{domain_id}"
             )
             error = rpc_error.details()
             return render(request, "domains/error.html", {
@@ -1187,6 +1215,8 @@ def renew_domain_confirm(request, domain_id):
 
         del request.session['period_unit']
         del request.session['period_value']
+
+        gchat_bot.notify_renew(user_domain, registry_id, period)
 
         return redirect('domain', domain_id)
 
@@ -1200,7 +1230,7 @@ def renew_domain_confirm(request, domain_id):
 @login_required
 def restore_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=True)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -1222,7 +1252,7 @@ def restore_domain(request, domain_id):
             request.user.username,
             billing_value,
             f"{user_domain.domain} domain restore",
-            f"dm_{domain_id}"
+            f"dm_restore_{domain_id}"
         )
         if billing_error:
             return render(request, "domains/error.html", {
@@ -1230,22 +1260,35 @@ def restore_domain(request, domain_id):
                 "back_url": reverse('domain', args=(domain_id,))
             })
 
-        try:
-            _pending = apps.epp_client.restore_domain(user_domain.domain)
-        except grpc.RpcError as rpc_error:
-            billing.charge_account(
-                request.user.username,
-                -billing_value,
-                f"{user_domain.domain} domain restore",
-                f"dm_{domain_id}"
-            )
-            error = rpc_error.details()
-            return render(request, "domains/error.html", {
-                "error": error,
-                "back_url": reverse('domain', args=(domain_id,))
-            })
+        if zone.direct_restore_supported:
+            try:
+                pending, registry_id = apps.epp_client.restore_domain(user_domain.domain)
+                user_domain.deleted = pending
+                user_domain.pending = pending
+                user_domain.save()
+                gchat_bot.notify_restore(user_domain, registry_id)
+            except grpc.RpcError as rpc_error:
+                billing.charge_account(
+                    request.user.username,
+                    -billing_value,
+                    f"{user_domain.domain} domain restore",
+                    f"dm_restore_{domain_id}"
+                )
+                error = rpc_error.details()
+                return render(request, "domains/error.html", {
+                    "error": error,
+                    "back_url": reverse('domain', args=(domain_id,))
+                })
+        else:
+            gchat_bot.request_restore(user_domain)
+            pending = True
 
-        return redirect('domain', domain_id)
+        if pending:
+            return render(request, "domains/domain_restore_pending.html", {
+                "domain_name": user_domain.domain
+            })
+        else:
+            return redirect('domain', domain_id)
 
     return render(request, "domains/restore_domain.html", {
         "domain": user_domain,
@@ -1277,7 +1320,10 @@ def domain_transfer_query(request):
                     form.add_error('domain', "Extension not yet supported for transfers")
                 else:
                     try:
-                        available, _, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
+                        if zone.pre_transfer_query_supported:
+                            available, _, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
+                        else:
+                            available = False
                     except grpc.RpcError as rpc_error:
                         error = rpc_error.details()
                     else:
@@ -1336,76 +1382,105 @@ def domain_transfer(request, domain_name):
         form = forms.DomainTransferForm(request.POST, zone=zone, user=request.user)
 
         if form.is_valid():
-            domain_id = uuid.uuid4()
-            billing_error = billing.charge_account(
-                request.user.username,
-                price_decimal,
-                f"{domain_name} domain transfer",
-                f"dm_{domain_id}"
-            )
-            if billing_error:
-                error = billing_error
+            try:
+                available, _, registry_id = apps.epp_client.check_domain(domain_name)
+                if not zone.pre_transfer_query_supported:
+                    available = False
+            except grpc.RpcError as rpc_error:
+                error = rpc_error.details()
             else:
-                try:
-                    transfer_data = apps.epp_client.transfer_request_domain(
-                        domain_name,
-                        form.cleaned_data['auth_code']
-                    )
-                except grpc.RpcError as rpc_error:
-                    billing.charge_account(
+                if not available:
+                    domain_id = uuid.uuid4()
+                    billing_error = billing.charge_account(
                         request.user.username,
-                        -price_decimal,
-                        f"{domain_name} domain renewal",
-                        f"dm_{domain_id}"
+                        price_decimal,
+                        f"{domain_name} domain transfer",
+                        f"dm_transfer_{domain_id}"
                     )
-                    error = rpc_error.details()
-                else:
-                    registrant = form.cleaned_data['registrant']  # type: models.Contact
-                    admin_contact = form.cleaned_data['admin']  # type: models.Contact
-                    tech_contact = form.cleaned_data['tech']  # type: models.Contact
-                    billing_contact = form.cleaned_data['billing']  # type: models.Contact
-
-                    if transfer_data.status == 5:
-                        domain_data = apps.epp_client.get_domain(domain_name)
-                        registrant_id = registrant.get_registry_id(transfer_data.registry_name)
-                        domain_data.set_registrant(registrant_id.registry_contact_id)
-                        if tech_contact and zone.tech_supported:
-                            tech_contact_id = tech_contact.get_registry_id(transfer_data.registry_name)
-                            domain_data.set_tech(tech_contact_id.registry_contact_id)
-                        if admin_contact and zone.admin_supported:
-                            admin_contact_id = admin_contact.get_registry_id(transfer_data.registry_name)
-                            domain_data.set_admin(admin_contact_id.registry_contact_id)
-                        if billing_contact and zone.billing_supported:
-                            billing_contact_id = billing_contact.get_registry_id(transfer_data.registry_name)
-                            domain_data.set_billing(billing_contact_id.registry_contact_id)
-
-                        domain_obj = models.DomainRegistration(
-                            id=domain_id,
-                            domain=domain_name,
-                            user=request.user,
-                            auth_info=form.cleaned_data['auth_code'],
-                            registrant_contact=registrant,
-                            admin_contact=admin_contact,
-                            tech_contact=tech_contact,
-                            billing_contact=billing_contact
-                        )
-                        domain_obj.save()
-                        return redirect('domain', domain_obj.id)
+                    if billing_error:
+                        error = billing_error
                     else:
-                        domain_obj = models.PendingDomainTransfer(
-                            id=domain_id,
-                            domain=domain_name,
-                            user=request.user,
-                            auth_info=form.cleaned_data['auth_code'],
-                            registrant_contact=registrant,
-                            admin_contact=admin_contact,
-                            tech_contact=tech_contact,
-                            billing_contact=billing_contact
-                        )
-                        domain_obj.save()
-                        return render(request, "domains/domain_transfer_pending.html", {
-                            "domain_name": domain_name
-                        })
+                        registrant = form.cleaned_data['registrant']  # type: models.Contact
+                        admin_contact = form.cleaned_data['admin']  # type: models.Contact
+                        tech_contact = form.cleaned_data['tech']  # type: models.Contact
+                        billing_contact = form.cleaned_data['billing']  # type: models.Contact
+
+                        if zone.direct_transfer_supported:
+                            try:
+                                transfer_data = apps.epp_client.transfer_request_domain(
+                                    domain_name,
+                                    form.cleaned_data['auth_code']
+                                )
+                            except grpc.RpcError as rpc_error:
+                                billing.charge_account(
+                                    request.user.username,
+                                    -price_decimal,
+                                    f"{domain_name} domain transfer",
+                                    f"dm_transfer_{domain_id}"
+                                )
+                                error = rpc_error.details()
+                            else:
+                                if transfer_data.status == 5:
+                                    domain_data = apps.epp_client.get_domain(domain_name)
+                                    registrant_id = registrant.get_registry_id(registry_id)
+                                    domain_data.set_registrant(registrant_id.registry_contact_id)
+                                    if tech_contact and zone.tech_supported:
+                                        tech_contact_id = tech_contact.get_registry_id(registry_id)
+                                        domain_data.set_tech(tech_contact_id.registry_contact_id)
+                                    if admin_contact and zone.admin_supported:
+                                        admin_contact_id = admin_contact.get_registry_id(registry_id)
+                                        domain_data.set_admin(admin_contact_id.registry_contact_id)
+                                    if billing_contact and zone.billing_supported:
+                                        billing_contact_id = billing_contact.get_registry_id(registry_id)
+                                        domain_data.set_billing(billing_contact_id.registry_contact_id)
+
+                                    domain_obj = models.DomainRegistration(
+                                        id=domain_id,
+                                        domain=domain_name,
+                                        user=request.user,
+                                        auth_info=form.cleaned_data['auth_code'],
+                                        registrant_contact=registrant,
+                                        admin_contact=admin_contact,
+                                        tech_contact=tech_contact,
+                                        billing_contact=billing_contact
+                                    )
+                                    domain_obj.save()
+                                    gchat_bot.notify_transfer(domain_obj, registry_id)
+                                    return redirect('domain', domain_obj.id)
+                                else:
+                                    domain_obj = models.PendingDomainTransfer(
+                                        id=domain_id,
+                                        domain=domain_name,
+                                        user=request.user,
+                                        auth_info=form.cleaned_data['auth_code'],
+                                        registrant_contact=registrant,
+                                        admin_contact=admin_contact,
+                                        tech_contact=tech_contact,
+                                        billing_contact=billing_contact
+                                    )
+                                    domain_obj.save()
+                                    gchat_bot.notify_transfer_pending(domain_obj, registry_id)
+                                    return render(request, "domains/domain_transfer_pending.html", {
+                                        "domain_name": domain_name
+                                    })
+                        else:
+                            domain_obj = models.PendingDomainTransfer(
+                                id=domain_id,
+                                domain=domain_name,
+                                user=request.user,
+                                auth_info=form.cleaned_data['auth_code'],
+                                registrant_contact=registrant,
+                                admin_contact=admin_contact,
+                                tech_contact=tech_contact,
+                                billing_contact=billing_contact
+                            )
+                            domain_obj.save()
+                            gchat_bot.request_transfer(domain_obj, registry_id)
+                            return render(request, "domains/domain_transfer_pending.html", {
+                                "domain_name": domain_name
+                            })
+                else:
+                    raise Http404
     else:
         form = forms.DomainTransferForm(zone=zone, user=request.user)
 

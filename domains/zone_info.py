@@ -240,6 +240,25 @@ class DomainInfo:
         self.pricing = pricing
 
     @property
+    def direct_registration_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+        )
+
+    @property
+    def direct_transfer_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_DENIC
+        )
+
+    @property
+    def direct_restore_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+        )
+
+    @property
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
@@ -452,7 +471,7 @@ if settings.DEBUG:
         )),
         ('de', DomainInfo(
             DomainInfo.REGISTRY_DENIC,
-            MarkupPrice(1368, renewal=1080, restore=4500, currency='EUR', tld='de', markup=decimal.Decimal("1.5"))
+            MarkupPrice(1368, renewal=1080, restore=4500, currency='USD', display_currency='EUR', tld='de', markup=decimal.Decimal("1.5"))
         )),
         ('tv', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(2566, restore=4000))),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),

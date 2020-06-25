@@ -29,7 +29,7 @@ SECRET_KEY = '2!ma5g##@c@p!erb#bi25i*ic1-iqr&hwxh0(w7%lgfqb^i5ye'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost", "as207960-domains.eu.ngrok.io"]
 
 
 # Application definition
@@ -149,6 +149,12 @@ EXTERNAL_URL_BASE = "http://localhost:8000"
 PHONENUMBER_DEFAULT_REGION = "GB"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 CRISPY_FAIL_SILENTLY = not DEBUG
+
+GCHAT_SERVICE_ACCOUNT = os.path.join(BASE_DIR, "secrets/Domain Registration-24045e71a81b.json")
+GCHAT_PROJECT_ID = '226795660453'
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "AS207960 Domains <domains@as207960.net>"
 
 with open(os.path.join(BASE_DIR, "secrets/keycloak.json")) as f:
     keycloak_conf = json.load(f)

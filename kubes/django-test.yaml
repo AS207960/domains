@@ -33,7 +33,7 @@ data:
   SENTRY_ENVIRONMENT: "test"
   KEYCLOAK_SERVER_URL: "https://sso.as207960.net/"
   KEYCLOAK_REALM: test
-  KEYCLOAK_SCOPES: "openid email profile"
+  KEYCLOAK_SCOPES: "openid email profile offline_access"
   KEYCLOAK_CLIENT_ID: "domains"
   DB_HOST: "postgres"
   DB_NAME: "domains-test"

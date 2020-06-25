@@ -1,5 +1,5 @@
 Django
-git+https://github.com/TheEnbyperor/django-keycloak-auth@9e634ea6866faddc6c67f7a6c89c3f3d28d573c6
+git+https://github.com/TheEnbyperor/django-keycloak-auth@62b33537491fe6374ca1a4205ea65a76a14bb3a4
 sentry-sdk
 psycopg2-binary
 gunicorn
@@ -13,3 +13,5 @@ django-grpc
 djangorestframework
 pyyaml
 uritemplate
+google-api-python-client
+google-auth

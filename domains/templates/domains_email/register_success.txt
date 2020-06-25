@@ -1,0 +1,9 @@
+Hello {{ name }},
+
+Your order for the registration of the domain {{ domain }} has succeeded.
+Thank you for choosing to register with us!
+You can now manage the domain from the domains control panel.
+
+Thanks,
+The AS207960 Team
+https://as207960.net

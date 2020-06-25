@@ -33,13 +33,19 @@ data:
   SENTRY_ENVIRONMENT: "prod"
   KEYCLOAK_SERVER_URL: "https://sso.as207960.net/"
   KEYCLOAK_REALM: master
-  KEYCLOAK_SCOPES: "openid email profile"
+  KEYCLOAK_SCOPES: "openid email profile offline_access"
   KEYCLOAK_CLIENT_ID: "domains"
   DB_HOST: "postgres"
   DB_NAME: "domains"
   BILLING_URL: "https://billing.as207960.net"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
+  EMAIL_HOST: "mx.postal.as207960.net"
+  EMAIL_HOST_USER: "apikey"
+  EMAIL_PORT: "25"
+  EMAIL_FROM: "AS207960 Domains <domains@as207960.net>"
+  GCHAT_PROJECT_ID: "226795660453"
+  GCHAT_SERVICE_ACCOUNT: "/google-creds/sa.json"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,6 +76,9 @@ spec:
         - name: ca-cert
           configMap:
             name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domain-google-creds
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
@@ -82,6 +91,8 @@ spec:
               name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -93,6 +104,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -107,6 +121,8 @@ spec:
               name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -118,6 +134,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -148,6 +167,9 @@ spec:
         - name: ca-cert
           configMap:
             name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domain-google-creds
       containers:
         - name: grpc
           image: as207960/domains-django:(version)
@@ -162,6 +184,8 @@ spec:
               name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -173,6 +197,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
 ---
 apiVersion: v1
 kind: Service

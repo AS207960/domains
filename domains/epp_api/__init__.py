@@ -543,6 +543,15 @@ class Period:
             value=self.value
         )
 
+    def __str__(self):
+        if self.unit == common_pb2.Period.Years:
+            unit = "years"
+        elif self.unit == common_pb2.Period.Months:
+            unit = "months"
+        else:
+            unit = f"unknown unit ({self.unit})"
+        return f"{self.value} {unit}"
+
 
 @dataclasses.dataclass
 class DomainTransfer:

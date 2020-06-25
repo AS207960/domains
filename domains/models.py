@@ -1,5 +1,6 @@
 from django.db import models, InternalError
 from django.core import validators
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
@@ -61,7 +62,7 @@ def sync_resource_to_keycloak(self, display_name, resource_type, scopes, urn, vi
         "ownerManagedAccess": True,
         "scopes": scopes,
         "type": urn,
-        "uri": reverse(view_name, args=(self.id,)),
+        "uri": reverse(view_name, args=(self.id,)) if view_name else None,
     }
 
     if created or not self.resource_id:
@@ -108,6 +109,15 @@ def eval_permission(token, resource, scope, submit_request=False):
                 return True
 
     return False
+
+
+def get_resource_owner(resource_id):
+    uma_client = django_keycloak_auth.clients.get_uma_client()
+    token = django_keycloak_auth.clients.get_access_token()
+    resource = uma_client.resource_set_read(token, resource_id)
+    owner = resource.get("owner", {}).get("id")
+    user = get_user_model().objects.filter(username=owner).first()
+    return user
 
 
 class ContactAddress(models.Model):
@@ -534,6 +544,7 @@ class DomainRegistration(models.Model):
     domain = models.CharField(max_length=255)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     pending = models.BooleanField(default=False, blank=True)
+    deleted = models.BooleanField(default=False, blank=True)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_registrant')
     admin_contact = models.ForeignKey(
@@ -578,6 +589,9 @@ class DomainRegistration(models.Model):
             args=args, kwargs=kwargs
         )
 
+    def get_user(self):
+        return get_resource_owner(self.resource_id)
+
     def __str__(self):
         return self.domain
 
@@ -585,7 +599,6 @@ class DomainRegistration(models.Model):
 class PendingDomainTransfer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_registrant')
@@ -595,9 +608,65 @@ class PendingDomainTransfer(models.Model):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_billing')
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_tech')
+    resource_id = models.UUIDField(null=True)
 
     class Meta:
         ordering = ['domain']
 
+    def __init__(self, *args, user=None, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def get_object_list(cls, access_token: str, action='view'):
+        return cls.objects.filter(pk__in=get_object_ids(access_token, 'pending-transfer', action))
+
+    @classmethod
+    def has_class_scope(cls, access_token: str, action='view'):
+        scope_name = f"{action}-pending-transfer"
+        return django_keycloak_auth.clients.get_authz_client() \
+            .eval_permission(access_token, f"pending-transfer", scope_name)
+
+    def has_scope(self, access_token: str, action='view'):
+        scope_name = f"{action}-domain"
+        return eval_permission(access_token, self.resource_id, scope_name)
+
+    def save(self, *args, **kwargs):
+        sync_resource_to_keycloak(
+            self,
+            display_name="Pending transfer", resource_type="pending-transfer", scopes=[
+                'view-pending-transfer',
+                'edit-pending-transfer',
+                'delete-pending-transfer',
+                'create-ns-pending-transfer'
+            ],
+            urn="urn:as207960:domains:pending-transfer", super_save=super().save, view_name=None,
+            args=args, kwargs=kwargs
+        )
+
+    def get_user(self):
+        if self.user:
+            return self.user
+        return get_resource_owner(self.resource_id)
+
     def __str__(self):
         return self.domain
+
+
+class HangoutsSpaces(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    space_id = models.CharField(max_length=255)
+
+
+class HangoutsUsers(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.CharField(max_length=255)
+
+
+class HangoutsUserLinkState(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    return_url = models.URLField(max_length=1000)
+    message_name = models.CharField(max_length=255)
+    linked = models.BooleanField(default=False, blank=True)
+    user = models.CharField(max_length=255)

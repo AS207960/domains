@@ -105,8 +105,7 @@
                             <tr>
                                 <th>DNSSEC DS Data</th>
                                 <td>
-                                    Key tag: {{ ds_data.key_tag }}, algorithm {{ ds_data.algorithm }},
-                                    digest type: {{ ds_data.digest_type }}, digest: {{ ds_data.digest }}
+                                    {{ ds_data.key_tag }} {{ ds_data.algorithm }} {{ ds_data.digest_type }} {{ ds_data.digest }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -116,8 +115,7 @@
                             <tr>
                                 <th>DNSSEC Key Data</th>
                                 <td>
-                                    Flags: {{ key_data.flags }}, protocol: {{ key_data.protocol }},
-                                    algorithm {{ key_data.algorithm }}, public key: {{ key_data.public_key }}
+                                    {{ key_data.flags }} {{ key_data.protocol }} {{ key_data.algorithm }} {{ key_data.public_key }}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -1,7 +1,7 @@
 {% extends 'domains/base.html' %}
 {% block content %}
     <div class="container my-3">
-        <h1>Domain pending</h1>
+        <h1>Domain restore pending</h1>
         <div class="row">
             <div class="col">
                 <b>Domain name: </b> {{ domain_name }}
@@ -9,8 +9,8 @@
         </div>
         <hr>
         <p>
-            Your domain registration has been submitted for further processing and possible approval by the registry.
-            We'll be in touch when we have more details.
+            Your domain restore is pending further processing and possible approval by the registry.
+            We'll be in touch when we hear more.
         </p>
         <a href="{% url 'domains' %}" class="btn btn-primary">Continue</a>
     </div>

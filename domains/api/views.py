@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from . import serializers, permissions, auth
 from .. import models, apps, zone_info
-from ..views import billing
+from ..views import billing, gchat_bot
 
 
 class ContactAddressViewSet(viewsets.ModelViewSet):
@@ -127,7 +127,7 @@ class Domain(viewsets.ViewSet):
             raise PermissionDenied
 
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if not domain.has_scope(request.auth.token, 'edit'):
+        if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
         serializer = serializers.DomainSerializer(
@@ -146,7 +146,7 @@ class Domain(viewsets.ViewSet):
             raise PermissionDenied
 
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if not domain.has_scope(request.auth.token, 'edit'):
+        if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
         serializer = serializers.DomainSerializer(
@@ -166,15 +166,17 @@ class Domain(viewsets.ViewSet):
             raise PermissionDenied
 
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if not domain.has_scope(request.auth.token, 'delete'):
+        if not domain.has_scope(request.auth.token, 'delete') or domain.deleted:
             raise PermissionDenied
 
-        pending = apps.epp_client.delete_domain(domain.domain)
+        _pending = apps.epp_client.delete_domain(domain.domain)
         domain_info, sld = zone_info.get_domain_info(domain.domain)
-        if not (domain_info.restore_supported or not pending):
+        if not domain_info.restore_supported:
             domain.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
+            domain.deleted = True
+            domain.save()
             domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
             serializer = serializers.DomainSerializer(domain_data, context={'request': request})
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -185,7 +187,7 @@ class Domain(viewsets.ViewSet):
             raise PermissionDenied
 
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit'):
+        if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit') or not domain.deleted:
             raise PermissionDenied
 
         zone, _ = zone_info.get_domain_info(domain.domain)
@@ -202,21 +204,29 @@ class Domain(viewsets.ViewSet):
             request.user.username,
             billing_value,
             f"{domain.domain} domain restore",
-            f"dm_{domain.pk}"
+            f"dm_restore_{domain.pk}"
         )
         if billing_error:
             raise serializers.BillingError()
 
-        try:
-            _pending = apps.epp_client.restore_domain(domain.domain)
-        except grpc.RpcError as rpc_error:
-            billing.charge_account(
-                request.user.username,
-                -billing_value,
-                f"{domain.domain} domain restore",
-                f"dm_{domain.pk}"
-            )
-            raise rpc_error
+        if zone.direct_restore_supported:
+            try:
+                pending, registry_id = apps.epp_client.restore_domain(domain.domain)
+                domain.deleted = pending
+                domain.pending = pending
+                domain.save()
+                gchat_bot.notify_restore(domain, registry_id)
+            except grpc.RpcError as rpc_error:
+                billing.charge_account(
+                    request.user.username,
+                    -billing_value,
+                    f"{domain.domain} domain restore",
+                    f"dm_restore_{domain.pk}"
+                )
+                raise rpc_error
+        else:
+            gchat_bot.request_restore(domain)
+            domain.pending = True
 
         domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
@@ -228,7 +238,7 @@ class Domain(viewsets.ViewSet):
             raise PermissionDenied
 
         domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
-        if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit'):
+        if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
         serializer = serializers.DomainRenewSerializer(data=request.data, context={
@@ -261,21 +271,25 @@ class Domain(viewsets.ViewSet):
             request.user.username,
             billing_value,
             f"{domain.domain} domain renewal",
-            f"dm_{domain.pk}"
+            f"dm_renew_{domain.pk}"
         )
         if billing_error:
             raise serializers.BillingError()
 
         try:
-            apps.epp_client.renew_domain(domain.domain, period_obj, domain_data.expiry_date)
+            _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
+                domain.domain, period_obj, domain_data.expiry_date
+            )
         except grpc.RpcError as rpc_error:
             billing.charge_account(
                 request.user.username,
                 -billing_value,
                 f"{domain.domain} domain renewal",
-                f"dm_{domain.pk}"
+                f"dm_renew_{domain.pk}"
             )
             raise rpc_error
+
+        gchat_bot.notify_renew(domain, registry_id, period)
 
         domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
@@ -297,35 +311,46 @@ class Domain(viewsets.ViewSet):
 
         zone, sld = zone_info.get_domain_info(serializer.validated_data['domain'])
         if zone:
-            available, reason, _ = apps.epp_client.check_domain(serializer.validated_data['domain'])
-            if not available:
+            pending_domain = models.DomainRegistration.objects.filter(
+                domain=serializer.validated_data['domain']
+            ).first()
+            if pending_domain:
                 data = serializers.DomainCheck(
                     available=False,
                     domain=serializer.validated_data['domain'],
-                    reason=reason,
+                    reason="In use",
                     price=None
                 )
             else:
-                period = serializer.validated_data['period']
-                period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
-                    else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
-
-                price = zone.pricing.registration(sld, unit=period_unit, value=period['value'])
-
-                if price is None:
+                available, reason, _ = apps.epp_client.check_domain(serializer.validated_data['domain'])
+                if not available:
                     data = serializers.DomainCheck(
                         available=False,
                         domain=serializer.validated_data['domain'],
-                        reason="Invalid period for domain",
+                        reason=reason,
                         price=None
                     )
                 else:
-                    data = serializers.DomainCheck(
-                        available=True,
-                        domain=serializer.validated_data['domain'],
-                        reason=None,
-                        price=price
-                    )
+                    period = serializer.validated_data['period']
+                    period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
+                        else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
+
+                    price = zone.pricing.registration(sld, unit=period_unit, value=period['value'])
+
+                    if price is None:
+                        data = serializers.DomainCheck(
+                            available=False,
+                            domain=serializer.validated_data['domain'],
+                            reason="Invalid period for domain",
+                            price=None
+                        )
+                    else:
+                        data = serializers.DomainCheck(
+                            available=True,
+                            domain=serializer.validated_data['domain'],
+                            reason=None,
+                            price=price
+                        )
         else:
             data = serializers.DomainCheck(
                 available=False,
@@ -353,7 +378,7 @@ class Domain(viewsets.ViewSet):
 
         zone, sld = zone_info.get_domain_info(domain.domain)
 
-        if zone.renew_supported:
+        if zone.renew_supported and not domain.deleted:
             period = serializer.validated_data['period']
             period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
                 else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
@@ -378,7 +403,8 @@ class Domain(viewsets.ViewSet):
             data = serializers.DomainCheck(
                 available=False,
                 domain=domain.domain,
-                reason="Unsupported by the registry",
+                reason="Unsupported by the registry" if not zone.renew_supported else
+                "Domain not in state to be renewed",
                 price=None
             )
 
@@ -396,7 +422,7 @@ class Domain(viewsets.ViewSet):
 
         zone, sld = zone_info.get_domain_info(domain.domain)
 
-        if zone.restore_supported:
+        if zone.restore_supported and domain.deleted:
             price = zone.pricing.restore(sld)
 
             data = serializers.DomainCheck(
@@ -409,7 +435,8 @@ class Domain(viewsets.ViewSet):
             data = serializers.DomainCheck(
                 available=False,
                 domain=domain.domain,
-                reason="Unsupported by the registry",
+                reason="Unsupported by the registry" if not zone.restore_supported else
+                "Domain not in state to be restored",
                 price=None
             )
 

@@ -31,3 +31,18 @@ def charge_account(username: str, amount: decimal.Decimal, descriptor: str, char
         return None
     else:
         return 'There was an unexpected error'
+
+
+def reverse_charge(charge_id: str):
+    client_token = django_keycloak_auth.clients.get_access_token()
+    r = requests.post(
+        f"{settings.BILLING_URL}/reverse_charge/", json={
+            "id": charge_id
+        }, headers={
+            "Authorization": f"Bearer {client_token}"
+        }
+    )
+    if r.status_code == 200:
+        return None
+    else:
+        return 'There was an unexpected error'

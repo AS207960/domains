@@ -11,7 +11,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.settings import api_settings
 
 from .. import apps, models, zone_info
-from ..views import billing
+from ..views import billing, gchat_bot
 
 
 class ObjectExists(exceptions.APIException):
@@ -166,6 +166,7 @@ class Domain:
     id: str
     domain: str
     statuses: [str]
+    deleted: bool
     registrant: models.Contact
     admin_contact: typing.Optional[models.Contact]
     billing_contact: typing.Optional[models.Contact]
@@ -300,6 +301,7 @@ class DomainSerializer(serializers.Serializer):
         child=serializers.CharField(read_only=True),
         read_only=True
     )
+    deleted = serializers.BooleanField(read_only=True)
     registrant = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all())
     registrant_url = serializers.HyperlinkedRelatedField(
         view_name='contact-detail', source='registrant', read_only=True,
@@ -399,6 +401,7 @@ class DomainSerializer(serializers.Serializer):
             id=d.id,
             domain=d.domain,
             statuses=list(map(lambda s: s.name, domain.statuses)),
+            deleted=d.deleted,
             registrant=registrant,
             admin_contact=admin,
             billing_contact=billing,
@@ -697,7 +700,6 @@ class DomainCreateSerializer(serializers.Serializer):
             raise ObjectExists()
 
         zone_price, registry_name = domain_info.pricing, domain_info.registry
-        price_decimal = decimal.Decimal(zone_price.registration(sld)) / decimal.Decimal(100)
 
         auth_info = models.make_secret()
         registrant = validated_data['registrant']
@@ -788,37 +790,43 @@ class DomainCreateSerializer(serializers.Serializer):
         if billing_error:
             raise BillingError()
 
-        try:
-            if domain_info.registrant_supported:
-                create_req.registrant = registrant.get_registry_id(registry_id).registry_contact_id
-            if domain_info.admin_supported and admin_contact:
-                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                    type="admin",
-                    id=admin_contact.get_registry_id(registry_id).registry_contact_id
-                ))
-            if domain_info.billing_supported and billing_contact:
-                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                    type="billing",
-                    id=billing_contact.get_registry_id(registry_id).registry_contact_id
-                ))
-            if domain_info.tech_supported and tech_contact:
-                create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                    type="tech",
-                    id=tech_contact.get_registry_id(registry_id).registry_contact_id
-                ))
+        if domain_info.direct_registration_supported:
+            try:
+                if domain_info.registrant_supported:
+                    create_req.registrant = registrant.get_registry_id(registry_id).registry_contact_id
+                if domain_info.admin_supported and admin_contact:
+                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                        type="admin",
+                        id=admin_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
+                if domain_info.billing_supported and billing_contact:
+                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                        type="billing",
+                        id=billing_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
+                if domain_info.tech_supported and tech_contact:
+                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
+                        type="tech",
+                        id=tech_contact.get_registry_id(registry_id).registry_contact_id
+                    ))
 
-            resp = apps.epp_client.stub.DomainCreate(create_req)
-        except grpc.RpcError as rpc_error:
-            billing.charge_account(
-                self.context['request'].user.username,
-                -billing_value,
-                f"{domain} domain registration",
-                f"dm_{domain_id}"
-            )
-            raise rpc_error
-
-        domain_db_obj.pending = resp.pending
-        domain_db_obj.save()
+                resp = apps.epp_client.stub.DomainCreate(create_req)
+            except grpc.RpcError as rpc_error:
+                billing.charge_account(
+                    self.context['request'].user.username,
+                    -billing_value,
+                    f"{domain} domain registration",
+                    f"dm_{domain_id}"
+                )
+                raise rpc_error
+            domain_db_obj.pending = resp.pending
+            domain_db_obj.save()
+            gchat_bot.notify_registration(domain_db_obj, registry_id, period)
+        else:
+            resp = None
+            domain_db_obj.pending = True
+            domain_db_obj.save()
+            gchat_bot.request_registration(domain_db_obj, registry_id, period)
 
         return DomainCreate(
             id=str(domain_id),
@@ -830,9 +838,9 @@ class DomainCreateSerializer(serializers.Serializer):
             name_servers=name_servers,
             auth_info=auth_info,
             sec_dns=sec_dns,
-            pending=resp.pending,
-            created=resp.creation_date.ToDatetime() if resp.HasField("creation_date") else None,
-            expiry=resp.expiry_date.ToDatetime() if resp.HasField("expiry_date") else None,
+            pending=domain_db_obj.pending,
+            created=resp.creation_date.ToDatetime() if resp and resp.HasField("creation_date") else None,
+            expiry=resp.expiry_date.ToDatetime() if resp and resp.HasField("expiry_date") else None,
         )
 
 
