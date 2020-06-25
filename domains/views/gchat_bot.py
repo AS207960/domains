@@ -10,6 +10,7 @@ import google.oauth2.service_account
 import google.auth.transport.requests
 import googleapiclient.discovery
 import json
+import retry
 import threading
 from .. import models, epp_api
 from . import emails, billing
@@ -81,6 +82,7 @@ def as_thread(fun):
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def request_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -168,6 +170,7 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def notify_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -224,6 +227,7 @@ def notify_registration(domain_obj: models.DomainRegistration, registry_id: str,
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -306,6 +310,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -337,7 +342,7 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
                                 "content": str(domain_obj.pk)
                             }
                         }]
-                    }, make_user_data(get_user())],
+                    }, make_user_data(user)],
                     "name": f"domain-transfer-{domain_obj.pk}"
                 }]
             }
@@ -345,6 +350,7 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -396,6 +402,7 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def request_restore(domain_obj: models.DomainRegistration):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -447,6 +454,7 @@ def request_restore(domain_obj: models.DomainRegistration):
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -498,6 +506,7 @@ def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
 
 
 @as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
 def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -756,7 +765,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-register-fail":
-            billing.reverse_charge(f"dm_{domain.pk}")
+            as_thread(billing.reverse_charge)(f"dm_{domain.pk}")
             as_thread(emails.mail_register_failed)(domain)
             domain.delete()
 
@@ -885,7 +894,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-transfer-fail":
-            billing.reverse_charge(f"dm_transfer_{domain.pk}")
+            as_thread(billing.reverse_charge)(f"dm_transfer_{domain.pk}")
             as_thread(emails.mail_transfer_failed)(domain)
             domain.delete()
 
