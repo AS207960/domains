@@ -111,7 +111,7 @@ spec:
         - name: gunicorn
           image: as207960/domains-django:(version)
           imagePullPolicy: Always
-          command: ["gunicorn", "-w", "8", "-b", "[::]:8000", "--forwarded-allow-ips", "*", "--access-logfile", "-", "as207960_domains.wsgi:application"]
+          command: ["gunicorn", "-w", "8", "-b", "[::]:8000", "--forwarded-allow-ips", "*", "--access-logfile", "-", "--log-level=debug", "as207960_domains.wsgi:application"]
           ports:
             - containerPort: 8000
           volumeMounts:

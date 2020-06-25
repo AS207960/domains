@@ -10,6 +10,7 @@ import google.oauth2.service_account
 import google.auth.transport.requests
 import googleapiclient.discovery
 import json
+import threading
 from .. import models, epp_api
 from . import emails, billing
 
@@ -71,6 +72,15 @@ def make_user_data(user):
     }
 
 
+def as_thread(fun):
+    def new_fun(*args, **kwargs):
+        t = threading.Thread(target=fun, args=args, kwargs=kwargs)
+        t.setDaemon(True)
+        t.start()
+    return new_fun
+
+
+@as_thread
 def request_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -157,6 +167,7 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
         ).execute()
 
 
+@as_thread
 def notify_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -212,6 +223,7 @@ def notify_registration(domain_obj: models.DomainRegistration, registry_id: str,
         ).execute()
 
 
+@as_thread
 def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -293,6 +305,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
         ).execute()
 
 
+@as_thread
 def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -331,6 +344,7 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
         ).execute()
 
 
+@as_thread
 def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -381,6 +395,7 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
         ).execute()
 
 
+@as_thread
 def request_restore(domain_obj: models.DomainRegistration):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -431,6 +446,7 @@ def request_restore(domain_obj: models.DomainRegistration):
         ).execute()
 
 
+@as_thread
 def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -481,6 +497,7 @@ def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
         ).execute()
 
 
+@as_thread
 def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
@@ -695,7 +712,7 @@ def card_clicked(event):
             }
 
         if action_name == "mark-domain-registered":
-            emails.mail_registered(domain)
+            as_thread(emails.mail_registered)(domain)
             domain.pending = False
             domain.save()
 
@@ -740,7 +757,7 @@ def card_clicked(event):
             }
         elif action_name == "mark-domain-register-fail":
             billing.reverse_charge(f"dm_{domain.pk}")
-            emails.mail_register_failed(domain)
+            as_thread(emails.mail_register_failed)(domain)
             domain.delete()
 
             return {
@@ -770,7 +787,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-restored":
-            emails.mail_restored(domain)
+            as_thread(emails.mail_restored)(domain)
             domain.pending = False
             domain.deleted = False
             domain.save()
@@ -813,7 +830,7 @@ def card_clicked(event):
             }
 
         if action_name == "mark-domain-transferred":
-            emails.mail_transferred(domain)
+            as_thread(emails.mail_transferred)(domain)
 
             new_domain = models.DomainRegistration(
                 domain=domain.domain,
@@ -869,7 +886,7 @@ def card_clicked(event):
             }
         elif action_name == "mark-domain-transfer-fail":
             billing.reverse_charge(f"dm_transfer_{domain.pk}")
-            emails.mail_transfer_failed(domain)
+            as_thread(emails.mail_transfer_failed)(domain)
             domain.delete()
 
             return {
