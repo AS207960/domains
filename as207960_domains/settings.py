@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
 
 sentry_sdk.init(
     dsn="https://da23a217b5584ccaa296aea526e3fc2c@o222429.ingest.sentry.io/5247893",
