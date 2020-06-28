@@ -35,6 +35,7 @@ def new_contact(request):
             form.instance.created_date = timezone.now()
             form.save()
             return redirect('contacts')
+        print(form.errors)
     else:
         form = forms.ContactForm(user=request.user)
 

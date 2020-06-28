@@ -1,46 +1,20 @@
-<html lang="en">
-<head>
-    <style type="text/css" style="font-weight: 300">
-        @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
-    </style>
-</head>
-<body style="padding: 0;margin: 0">
-<div style="background: #231f20; font-family: 'Lato', 'Helvetica Neue', helvetica, sans-serif;height: 100% !important;width: 100% !important;">
-    <div style="padding: 40px;">
-        <table style="margin: 0 auto; border-radius: 5px; background: #fff; max-width: 600px; width:100%; border: 1px solid #c7d0d4; border-spacing: 0;">
-            <tr>
-                <td style="border-bottom: 1px solid #dee7eb; text-align: center;padding: 20px 0;">
-                    <img src="https://as207960.net/assets/img/logo.png" height="150px" alt="AS207960" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 20px;">
-                    <p>
-                        Hello {{ name }},
-                    </p>
-                    <p>
-                        Your order for the registration of the domain {{ domain }} has unfortunately failed.<br/>
-                        The value of this registration has been refunded to your account with us.
-                    </p>
-                    {% if reason %}
-                        <p>
-                            The reason for this failure was: {{ reason }}
-                        </p>
-                    {% else %}
-                        <p>
-                            We don't currently have a known reason for this failure. We'll be in touch soon with further
-                            details.
-                        </p>
-                    {% endif %}
-                    <p>
-                        Thanks,<br/>
-                        The AS207960 Team<br/>
-                        <a href="https://as207960.net">as207960.net</a>
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-</body>
-</html>
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <p>
+        Hello {{ name }},
+    </p>
+    <p>
+        Your order for the registration of the domain {{ domain }} has unfortunately failed.<br/>
+        The value of this registration has been refunded to your account with us.
+    </p>
+    {% if reason %}
+        <p>
+            The reason for this failure was: {{ reason }}
+        </p>
+    {% else %}
+        <p>
+            We don't currently have a known reason for this failure. We'll be in touch soon with further
+            details.
+        </p>
+    {% endif %}
+{% endblock %}
