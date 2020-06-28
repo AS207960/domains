@@ -312,16 +312,18 @@ class Contact(models.Model):
                 self.pending_domains_registrant.count() or self.pending_domains_admin.count() or \
                 self.pending_domains_tech.count() or self.pending_domains_billing.count():
             return False
-        else:
-            for i in self.contactregistry_set.all():
-                try:
-                    contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
-                except grpc.RpcError as rpc_error:
-                    error = rpc_error.details()
-                    raise InternalError(error)
 
-                if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
-                    return False
+        for i in self.contactregistry_set.all():
+            try:
+                contact_data = apps.epp_client.get_contact(i.registry_contact_id, i.registry_id)
+            except grpc.RpcError as rpc_error:
+                error = rpc_error.details()
+                raise InternalError(error)
+
+            if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
+                return False
+            
+        return True
 
     def delete(self, *args, **kwargs):
         for i in self.contactregistry_set.all():
