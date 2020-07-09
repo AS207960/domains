@@ -32,7 +32,7 @@ data:
 
       server {
         listen       [::]:80;
-        server_name  domains.as207960.net;
+        server_name  domains.glau.ca;
 
         root /data/;
 
@@ -70,6 +70,8 @@ spec:
       part: nginx
   template:
     metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
       labels:
         app: domains
         part: nginx
@@ -124,10 +126,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - domains.as207960.net
+        - domains.glau.ca
       secretName: domains-tls
   rules:
-  - host: domains.as207960.net
+  - host: domains.glau.ca
     http:
       paths:
       - path: /

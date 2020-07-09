@@ -322,7 +322,7 @@ class Contact(models.Model):
 
             if apps.epp_api.contact_pb2.Linked in contact_data.statuses:
                 return False
-            
+
         return True
 
     def delete(self, *args, **kwargs):
