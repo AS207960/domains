@@ -1,16 +1,20 @@
 {% extends 'domains/base.html' %}
 {% block content %}
-    <div class="container my-3">
-        <div class="jumbotron">
-            <h1 class="display-4">My domains</h1>
-            <hr class="my-4">
-            {% if registration_enabled %}
-                <div class="btn-group">
-                    <a class="btn btn-primary btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>
-                    <a class="btn btn-secondary btn-lg" href="{% url 'domain_transfer_query' %}" role="button">Transfer a domain</a>
-                </div>
-            {% endif %}
+    <section class="stripe my-5">
+        <div class="container py-3">
+            <div class="jumbotron my-0">
+                <h1 class="display-4">My domains</h1>
+                <hr class="my-4">
+                {% if registration_enabled %}
+                    <div class="btn-group">
+                        <a class="btn btn-primary btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>
+                        <a class="btn btn-secondary btn-lg" href="{% url 'domain_transfer_query' %}" role="button">Transfer a domain</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
+    </section>
+    <div class="container my-3">
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Error!</h4>

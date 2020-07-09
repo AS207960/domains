@@ -1,12 +1,16 @@
 {% extends 'domains/base.html' %}
 {% block content %}
-    <div class="container my-3">
-        <div class="jumbotron">
-            <h1 class="display-4">My host objects</h1>
-            <p>These can be used for DNS servers on domains</p>
-            <hr class="my-4">
-            <p>Hosts can be created from the respective domain's page</p>
+    <section class="stripe my-5">
+        <div class="container py-3">
+            <div class="jumbotron my-0">
+                <h1 class="display-4">My host objects</h1>
+                <p>These can be used for DNS servers on domains</p>
+                <hr class="my-4">
+                <p>Hosts can be created from the respective domain's page</p>
+            </div>
         </div>
+    </section>
+    <div class="container my-3">
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Error!</h4>
