@@ -200,7 +200,8 @@ class MarkupPrice:
             }
         )
         r_data = r.json()
-        return decimal.Decimal(r_data.get("amount"))
+        fee = decimal.Decimal(r_data.get("amount")).quantize(decimal.Decimal('1.00'))
+        return fee
 
     def registration(self, sld: str, value=1, unit=0):
         return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Create)

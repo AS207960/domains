@@ -2,17 +2,23 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% block content %}
-    <div class="container my-3">
-        <h1>Renew a domain</h1>
-        <div class="row">
-            <div class="col">
-                <b>Domain name: </b> {{ domain_name }}
-            </div>
-            <div class="col">
-                <b>Price per year: </b> {{ price_decimal|floatformat:2|intcomma }} {{ currency }}
+    <section class="stripe my-5">
+        <div class="container py-3">
+            <div class="jumbotron my-0 py-5">
+
+                <h1>Renew a domain</h1>
+                <div class="row">
+                    <div class="col">
+                        <b>Domain name: </b> {{ domain_name }}
+                    </div>
+                    <div class="col">
+                        <b>Price per year: </b> {{ price_decimal|floatformat:2|intcomma }} {{ currency }}
+                    </div>
+                </div>
             </div>
         </div>
-        <hr>
+    </section>
+    <div class="container my-3 pt-3 pt-md-5">
         {% crispy domain_form domain_form.helper %}
     </div>
 {% endblock %}

@@ -655,6 +655,75 @@ class PendingDomainTransfer(models.Model):
         return self.domain
 
 
+class DomainRegistrationOrder(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    domain = models.CharField(max_length=255)
+    domain_id = models.UUIDField(default=uuid.uuid4)
+    pending = models.BooleanField(blank=True, default=True)
+    registrant_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_registrant')
+    admin_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_admin')
+    billing_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_billing')
+    tech_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_tech')
+    period_unit = models.PositiveSmallIntegerField()
+    period_value = models.PositiveSmallIntegerField()
+    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        ordering = ['domain']
+
+
+class DomainTransferOrder(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    domain = models.CharField(max_length=255)
+    domain_id = models.UUIDField(default=uuid.uuid4)
+    pending = models.BooleanField(blank=True, default=True)
+    auth_code = models.CharField(max_length=255)
+    registrant_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_registrant')
+    admin_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_admin')
+    billing_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_billing')
+    tech_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_tech')
+    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        ordering = ['domain']
+
+
+class DomainRenewOrder(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE)
+    pending = models.BooleanField(blank=True, default=True)
+    period_unit = models.PositiveSmallIntegerField()
+    period_value = models.PositiveSmallIntegerField()
+    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['domain']
+
+
+class DomainRestoreOrder(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE)
+    pending = models.BooleanField(blank=True, default=True)
+    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['domain']
+
+
 class HangoutsSpaces(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     space_id = models.CharField(max_length=255)

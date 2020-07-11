@@ -94,7 +94,8 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                         f"registration of {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain registration request",
+                        "title": "Domain registration request" if not settings.DEBUG
+                        else "Domain registration request [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -181,7 +182,8 @@ def notify_registration(domain_obj: models.DomainRegistration, registry_id: str,
                 "text": f"{user.first_name} {user.last_name} has registered {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain registration notification",
+                        "title": "Domain registration notification" if not settings.DEBUG
+                        else "Domain registration notification [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -239,7 +241,8 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                         f"transfer of {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain transfer request",
+                        "title": "Domain transfer request" if not settings.DEBUG
+                        else "Domain transfer request [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -322,7 +325,8 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
                         f"{domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain transfer pending notification",
+                        "title": "Domain transfer pending notification" if not settings.DEBUG
+                        else "Domain transfer pending notification [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -361,7 +365,8 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
                 "text": f"{user.first_name} {user.last_name} has transferred {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain transfer notification",
+                        "title": "Domain transfer notification" if not settings.DEBUG
+                        else "Domain transfer notification [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -414,7 +419,8 @@ def request_restore(domain_obj: models.DomainRegistration):
                         f"restoration of {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain restore request",
+                        "title": "Domain restore request" if not settings.DEBUG
+                        else "Domain restore request [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -465,7 +471,8 @@ def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
                 "text": f"{user.first_name} {user.last_name} has restored {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain restore notification",
+                        "title": "Domain restore notification" if not settings.DEBUG
+                        else "Domain restore notification [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",
@@ -517,7 +524,8 @@ def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period
                 "text": f"{user.first_name} {user.last_name} has renewed {domain_obj.domain}",
                 "cards": [{
                     "header": {
-                        "title": "Domain renew notification",
+                        "title": "Domain renew notification" if not settings.DEBUG
+                        else "Domain renew notification [TEST]",
                     },
                     "sections": [{
                         "header": "Domain data",

@@ -154,7 +154,7 @@ class DomainContactForm(forms.Form):
             crispy_forms.layout.Hidden('type', contact_type)
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Save'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Save', css_class='btn-block'))
 
     def set_cur_id(self, cur_id, registry_id):
         reg_contact = models.ContactRegistry.objects.filter(registry_contact_id=cur_id, registry_id=registry_id).first()

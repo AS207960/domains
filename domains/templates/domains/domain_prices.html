@@ -1,14 +1,18 @@
 {% extends 'domains/base.html' %}
 {% load humanize %}
 {% block content %}
-    <div class="container my-3">
-        <div class="jumbotron">
-            <h1 class="display-4">Domain prices</h1>
-            <hr class="my-4">
-            <p>
-                These are standard prices, premium domains will be charged differently.
-            </p>
+    <section class="stripe my-5">
+        <div class="container py-3">
+            <div class="jumbotron my-0">
+                <h1 class="display-4">Domain prices</h1>
+                <hr class="my-4">
+                <p>
+                    These are standard prices, premium domains will be charged differently.
+                </p>
+            </div>
         </div>
+    </section>
+    <div class="container my-3">
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">

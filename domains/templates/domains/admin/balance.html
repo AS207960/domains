@@ -1,0 +1,34 @@
+{% extends 'domains/base.html' %}
+{% load humanize %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Balance Info</h1>
+        <h2>Registry: {{ registry }}</h2>
+        <table class="table">
+            <tr>
+                <th scope="row">Balance</th>
+                <td>{{ balance.balance }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Credit Limit</th>
+                <td>{% if balance.credit_limit %}{{ balance.credit_limit|intcomma }}{% else %}N/A{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Available credit</th>
+                <td>{% if balance.available_credit %}{{ balance.available_credit|intcomma }}{% else %}N/A{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Fixed credit threshold</th>
+                <td>{% if balance.fixed_credit_threshold %}{{ balance.fixed_credit_threshold|intcomma }}{% else %}N/A{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Percentage credit threshold</th>
+                <td>{% if balance.percentage_credit_threshold %}{{ balance.percentage_credit_threshold }}%{% else %}N/A{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Currency</th>
+                <td>{{ balance.currency }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

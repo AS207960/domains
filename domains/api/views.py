@@ -200,14 +200,14 @@ class Domain(viewsets.ViewSet):
         zone_price, sld = zone.pricing, zone.registry
 
         billing_value = zone_price.restore(sld)
-        billing_error = billing.charge_account(
+        charge_state = billing.charge_account(
             request.user.username,
             billing_value,
             f"{domain.domain} domain restore",
             f"dm_restore_{domain.pk}"
         )
-        if billing_error:
-            raise serializers.BillingError()
+        if not charge_state.success:
+            raise serializers.BillingError(detail=charge_state.error)
 
         if zone.direct_restore_supported:
             try:
@@ -217,12 +217,7 @@ class Domain(viewsets.ViewSet):
                 domain.save()
                 gchat_bot.notify_restore(domain, registry_id)
             except grpc.RpcError as rpc_error:
-                billing.charge_account(
-                    request.user.username,
-                    -billing_value,
-                    f"{domain.domain} domain restore",
-                    f"dm_restore_{domain.pk}"
-                )
+                billing.reverse_charge(f"dm_restore_{domain.pk}")
                 raise rpc_error
         else:
             gchat_bot.request_restore(domain)
@@ -267,26 +262,21 @@ class Domain(viewsets.ViewSet):
         billing_value = zone_price.renewal(sld, unit=period_obj.unit, value=period_obj.value)
         if billing_value is None:
             raise PermissionDenied
-        billing_error = billing.charge_account(
+        charge_state = billing.charge_account(
             request.user.username,
             billing_value,
             f"{domain.domain} domain renewal",
             f"dm_renew_{domain.pk}"
         )
-        if billing_error:
-            raise serializers.BillingError()
+        if not charge_state.success:
+            raise serializers.BillingError(detail=charge_state.error)
 
         try:
             _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
                 domain.domain, period_obj, domain_data.expiry_date
             )
         except grpc.RpcError as rpc_error:
-            billing.charge_account(
-                request.user.username,
-                -billing_value,
-                f"{domain.domain} domain renewal",
-                f"dm_renew_{domain.pk}"
-            )
+            billing.reverse_charge(f"dm_renew_{domain.pk}")
             raise rpc_error
 
         gchat_bot.notify_renew(domain, registry_id, period)

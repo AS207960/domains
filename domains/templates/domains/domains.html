@@ -17,7 +17,7 @@
     <div class="container my-3">
         {% if error %}
             <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading">Error!</h4>
+                <h4 class="alert-heading">Oh no! &#x1f631;</h4>
                 <p>There was an error processing your request</p>
                 <hr>
                 <p class="mb-0">{{ error }}</p>
@@ -37,24 +37,35 @@
                 <tbody>
                 {% if domains %}
                     {% for domain in domains %}
-                        <tr class="{% if domain.1.expired %}table-danger {% endif %}">
-                            <th scope="row">
-                                {{ domain.1.name }}
-                                {% if domain.1.expired %}
-                                    <span class="badge badge-danger">Expired</span>
-                                {% endif %}
-                                {% for rgp_state in domain.1.rgp_state %}
-                                    <span class="badge badge-info">{{ rgp_state }}</span>
-                                {% endfor %}
-                                {% if 8 in domain.1.statuses %}
-                                    <span class="badge badge-info">Pending delete</span>
-                                {% endif %}
-                            </th>
-                            <td>{% if domain.1.creation_date %}{{ domain.1.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                            <td>{% if domain.1.expiry_date %}{{ domain.1.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                            <td>{% if domain.1.last_updated_date %}{{ domain.1.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                            <td><a href="{% url 'domain' domain.0 %}" class="btn btn-primary btn-sm">Edit</a></td>
-                        </tr>
+                        {% if domain.error %}
+                            <tr class="table-dark">
+                                <th scope="row">
+                                    <del>{{ domain.obj.domain }}</del>
+                                </th>
+                                <td colspan="4" class="text-danger">
+                                    Unable to contact registry: {{ domain.error }}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr class="{% if domain.domain.expired %}table-danger {% endif %}">
+                                <th scope="row">
+                                    {{ domain.domain.name }}
+                                    {% if domain.domain.expired %}
+                                        <span class="badge badge-danger">Expired</span>
+                                    {% endif %}
+                                    {% for rgp_state in domain.domain.rgp_state %}
+                                        <span class="badge badge-info">{{ rgp_state }}</span>
+                                    {% endfor %}
+                                    {% if 8 in domain.domain.statuses %}
+                                        <span class="badge badge-info">Pending delete</span>
+                                    {% endif %}
+                                </th>
+                                <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td>{% if domain.domain.expiry_date %}{{ domain.domain.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td>{% if domain.domain.last_updated_date %}{{ domain.domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td><a href="{% url 'domain' domain.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <tr>
@@ -138,7 +149,7 @@
                             </th>
                             <td>
                                 {% if registration_enabled and not domain.pending %}
-                                    <a href="{% url 'restore_domain' domain.id %}" class="btn btn-info">Restore</a>
+                                    <a href="{% url 'restore_domain' domain.id %}" class="btn btn-info">&#x1f519; Restore</a>
                                 {% endif %}
                             </td>
                         </tr>

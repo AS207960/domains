@@ -781,14 +781,14 @@ class DomainCreateSerializer(serializers.Serializer):
         billing_value = zone_price.registration(sld, unit=period_obj.unit, value=period_obj.value)
         if billing_value is None:
             raise PermissionDenied
-        billing_error = billing.charge_account(
+        charge_state = billing.charge_account(
             self.context['request'].user.username,
             billing_value,
             f"{domain} domain registration",
             f"dm_{domain_id}"
         )
-        if billing_error:
-            raise BillingError()
+        if not charge_state.success:
+            raise BillingError(detail=charge_state.error)
 
         if domain_info.direct_registration_supported:
             try:
@@ -812,12 +812,7 @@ class DomainCreateSerializer(serializers.Serializer):
 
                 resp = apps.epp_client.stub.DomainCreate(create_req)
             except grpc.RpcError as rpc_error:
-                billing.charge_account(
-                    self.context['request'].user.username,
-                    -billing_value,
-                    f"{domain} domain registration",
-                    f"dm_{domain_id}"
-                )
+                billing.reverse_charge(f"dm_{domain_id}")
                 raise rpc_error
             domain_db_obj.pending = resp.pending
             domain_db_obj.save()

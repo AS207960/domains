@@ -7,7 +7,7 @@ import grpc
 def catch_epp_error(fun):
     def new_fun(request, *args, **kwargs):
         referrer = request.META.get("HTTP_REFERER")
-        referrer = referrer if referrer else reverse('admin_indeb')
+        referrer = referrer if referrer else reverse('admin_index')
 
         try:
             return fun(request, *args, **kwargs)
@@ -49,13 +49,41 @@ def domain_info(request):
 @login_required
 @permission_required('domains.access_eppclient', raise_exception=True)
 @catch_epp_error
-def balance_switch(request):
+def domain_transfer_info(request):
+    domain = None
+
+    if request.method == "POST":
+        form = forms.DomainSearchForm(request.POST)
+        if form.is_valid():
+            domain = apps.epp_client.transfer_query_domain(form.cleaned_data["domain"])
+    else:
+        form = forms.DomainSearchForm()
+
+    return render(request, "domains/admin/domain_transfer_info.html", {
+        "domain_form": form,
+        "transfer_Info": domain
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def balance(request, registry_name):
     info = apps.epp_client.stub.BalanceInfo(apps.epp_api.epp_pb2.RegistryInfo(
-        registry_name='switch'
+        registry_name=registry_name
     ))
-    return render(request, "domains/admin/balance_switch.html", {
-        "balance": info.balance,
-        "currency": info.currency
+    return render(request, "domains/admin/balance.html", {
+        "balance": {
+            "balance": info.balance,
+            "credit_limit": info.credit_limit.value if info.HasField("credit_limit") else None,
+            "available_credit": info.available_credit.value if info.HasField("available_credit") else None,
+            "fixed_credit_threshold": info.fixed_credit_threshold.value
+            if info.HasField("fixed_credit_threshold") else None,
+            "percentage_credit_threshold": info.percentage_credit_threshold.value
+            if info.HasField("percentage_credit_threshold") else None,
+            "currency": info.currency
+        },
+        "registry": registry_name
     })
 
 

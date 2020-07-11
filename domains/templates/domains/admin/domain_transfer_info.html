@@ -1,0 +1,52 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Domain transfer info</h1>
+        {% crispy domain_form domain_form.helper %}
+        {% if transfer_info %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Pending</th>
+                    <td>{{ transfer_info.pending }}</td>
+                </tr>
+                <tr>
+                    <th>Registry name</th>
+                    <td>{{ transfer_info.registry_name }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ transfer_info.status }}</td>
+                </tr>
+                <tr>
+                    <th>Requested client ID</th>
+                    <td>{{ transfer_info.requested_client_id }}</td>
+                </tr>
+                <tr>
+                    <th>Requested Date</th>
+                    <td>{{ transfer_info.requested_date }}</td>
+                </tr>
+                <tr>
+                    <th>Act client ID</th>
+                    <td>{{ transfer_info.act_client_id }}</td>
+                </tr>
+                <tr>
+                    <th>Act Date</th>
+                    <td>{{ transfer_info.act_date }}</td>
+                </tr>
+                <tr>
+                    <th>New Expiry Date</th>
+                    <td>{{ transfer_info.expiry_date }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

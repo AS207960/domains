@@ -12,16 +12,24 @@ from .. import models, apps, forms
 def hosts(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_hosts = models.NameServer.get_object_list(access_token)
-    hosts_data = []
     error = None
-    try:
-        with ThreadPoolExecutor() as executor:
-            hosts_data = list(executor.map(
-                lambda h: (h.id, apps.epp_client.get_host(h.name_server, h.registry_id)),
-                user_hosts
-            ))
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
+
+    def get_host(h):
+        try:
+            return {
+                "id": h.id,
+                "obj": h,
+                "host": apps.epp_client.get_host(h.name_server, h.registry_id)
+            }
+        except grpc.RpcError as rpc_error:
+            return {
+                "id": h.id,
+                "obj": h,
+                "error": rpc_error.details()
+            }
+
+    with ThreadPoolExecutor() as executor:
+        hosts_data = list(executor.map(get_host, user_hosts))
 
     return render(request, "domains/hosts.html", {
         "hosts": hosts_data,
