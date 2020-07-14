@@ -32,7 +32,7 @@ data:
 
       server {
         listen       [::]:80;
-        server_name  domains.glau.ca;
+        server_name  domains.glauca.digital;
 
         root /data/;
 
@@ -126,10 +126,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - domains.glau.ca
+        - domains.glauca.digital
       secretName: domains-tls
   rules:
-  - host: domains.glau.ca
+  - host: domains.glauca.digital
     http:
       paths:
       - path: /

@@ -27,9 +27,9 @@ apiVersion: v1
 metadata:
   name: domains-django-conf
 data:
-  HOST: domains.glau.ca
+  HOST: domains.glauca.digital
   DJANGO_SETTINGS_MODULE: as207960_domains.settings
-  EXTERNAL_URL: "https://domains.glau.ca"
+  EXTERNAL_URL: "https://domains.glauca.digital"
   SENTRY_ENVIRONMENT: "prod"
   KEYCLOAK_SERVER_URL: "https://sso.as207960.net/"
   KEYCLOAK_REALM: master
@@ -43,7 +43,7 @@ data:
   EMAIL_HOST: "mx.postal.as207960.net"
   EMAIL_HOST_USER: "apikey"
   EMAIL_PORT: "25"
-  EMAIL_FROM: "Glauca Domains <domains@glau.ca>"
+  EMAIL_FROM: "Glauca Domains <domains@glauca.digital>"
   GCHAT_PROJECT_ID: "226795660453"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
 ---
