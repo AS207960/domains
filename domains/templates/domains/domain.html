@@ -7,14 +7,14 @@
                 <h1 class="display-4">
                     {{ domain.name }}
                 </h1>
-                <h2>
+                <h4>
                     {% if domain.expired %}
                         <span class="badge badge-danger">Expired</span>
                     {% endif %}
                     {% for rgp_state in domain.rgp_state %}
                         <span class="badge badge-info">{{ rgp_state }}</span>
                     {% endfor %}
-                </h2>
+                </h4>
                 {% if error %}
                     <div class="alert alert-danger" role="alert">
                         <h4 class="alert-heading">Error!</h4>

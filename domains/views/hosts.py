@@ -154,7 +154,7 @@ def host_create(request, host_name: str):
 
     domain = None
     for domain_obj in models.DomainRegistration.get_object_list(access_token, action='create-ns'):
-        if host_name.endswith(domain_obj.domain):
+        if host_name.lower().endswith(domain_obj.domain):
             domain = domain_obj
             break
 
@@ -197,7 +197,7 @@ def host_create(request, host_name: str):
                     )
                     host_obj.save()
 
-                    return redirect('hosts')
+                    return redirect('host', host_obj.id)
         else:
             form = forms.HostRegisterForm()
 

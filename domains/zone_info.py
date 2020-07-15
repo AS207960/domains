@@ -244,6 +244,7 @@ class DomainInfo:
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
+            self.REGISTRY_VERISIGN,
         )
 
     @property
@@ -474,8 +475,14 @@ if settings.DEBUG:
             DomainInfo.REGISTRY_DENIC,
             MarkupPrice(1368, renewal=1080, restore=4500, currency='USD', display_currency='EUR', tld='de', markup=decimal.Decimal("1.5"))
         )),
-        ('tv', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(2566, restore=4000))),
-        ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),
+        ('tv', DomainInfo(
+            DomainInfo.REGISTRY_VERISIGN,
+            MarkupPrice(2566, restore=4000, currency='USD', tld='tv', markup=decimal.Decimal("1.25"))
+        )),
+        ('cc', DomainInfo(
+            DomainInfo.REGISTRY_VERISIGN,
+            MarkupPrice(825, restore=4000, currency='USD', tld='cc', markup=decimal.Decimal("1.5"))
+        )),
     )
 else:
     ZONES = (

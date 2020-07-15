@@ -945,7 +945,13 @@ def domain_register_confirm(request, order_id):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
-    registration_order = get_object_or_404(models.DomainRegistrationOrder, id=order_id, pending=True)
+    registration_order = get_object_or_404(models.DomainRegistrationOrder, id=order_id)
+
+    if not registration_order.pending:
+        if registration_order.domain_obj:
+            return redirect('domain', registration_order.domain_obj.id)
+        else:
+            return redirect('domain_register', registration_order.domain)
 
     if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create')\
             or registration_order.user != request.user:
@@ -1061,7 +1067,8 @@ def domain_register_confirm(request, order_id):
                 pending, _, _, _ = apps.epp_client.create_domain(
                     domain=registration_order.domain,
                     period=period,
-                    registrant=registration_order.registrant_contact.get_registry_id(registry_id).registry_contact_id,
+                    registrant=registration_order.registrant_contact.get_registry_id(registry_id).registry_contact_id
+                    if zone.registrant_supported else 'NONE',
                     contacts=contact_objs,
                     name_servers=[apps.epp_api.DomainNameServer(
                         host_obj='ns1.as207960.net',
@@ -1098,11 +1105,11 @@ def domain_register_confirm(request, order_id):
 
         registration_order.pending = False
         registration_order.domain_obj = domain_obj
-        registration_order.save()
 
         if pending:
             domain_obj.pending = True
             domain_obj.save()
+            registration_order.save()
             if not zone.direct_registration_supported:
                 gchat_bot.request_registration(domain_obj, registry_id, period)
             else:
@@ -1113,6 +1120,7 @@ def domain_register_confirm(request, order_id):
             })
         else:
             domain_obj.save()
+            registration_order.save()
             gchat_bot.notify_registration(domain_obj, registry_id, period)
             return redirect('domain', domain_obj.id)
 
