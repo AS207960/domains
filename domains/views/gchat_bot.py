@@ -235,7 +235,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dt_{domain_obj.pk}",
+            threadKey=f"dm_transfer_{domain_obj.pk}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"transfer of {domain_obj.domain}",
@@ -413,7 +413,7 @@ def request_restore(domain_obj: models.DomainRegistration):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dt_{domain_obj.pk}",
+            threadKey=f"dm_{domain_obj.pk}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"restoration of {domain_obj.domain}",
@@ -565,6 +565,46 @@ def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period
                         }]
                     }],
                     "name": f"domain-renew-{domain_obj.pk}"
+                }]
+            }
+        ).execute()
+
+
+@as_thread
+@retry.retry(delay=1, backoff=1.5, max_delay=60)
+def notify_delete(domain_obj: models.DomainRegistration, registry_id: str):
+    user = domain_obj.get_user()
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_obj.pk}",
+            body={
+                "text": f"{user.first_name} {user.last_name} has deleted {domain_obj.domain}",
+                "cards": [{
+                    "header": {
+                        "title": "Domain delete notification" if not settings.DEBUG
+                        else "Domain delete notification [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Registry ID",
+                                "content": registry_id
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }]
+                    }, make_user_data(user)],
+                    "name": f"domain-delete-{domain_obj.pk}"
                 }]
             }
         ).execute()

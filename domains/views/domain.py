@@ -1151,7 +1151,7 @@ def delete_domain(request, domain_id):
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
             try:
-                pending, _registry_name, _transaction_id, _fee_data = apps.epp_client.delete_domain(user_domain.domain)
+                pending, registry_name, _transaction_id, _fee_data = apps.epp_client.delete_domain(user_domain.domain)
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
                 return render(request, "domains/error.html", {
@@ -1159,9 +1159,11 @@ def delete_domain(request, domain_id):
                     "back_url": referrer
                 })
 
-            if not (domain_info.restore_supported or not pending):
+            if (not domain_info.restore_supported) or (domain_info.restore_supported and not pending):
+                gchat_bot.notify_delete(user_domain, registry_name)
                 user_domain.delete()
             else:
+                gchat_bot.notify_delete(user_domain, registry_name)
                 user_domain.deleted = True
                 user_domain.save()
             return redirect('domains')
@@ -1393,7 +1395,7 @@ def restore_domain_confirm(request, order_id):
     zone_price, _ = zone.pricing, zone.registry
     billing_value = zone_price.restore(sld)
 
-    if restore_order.pending:
+    if not restore_order.pending:
         return redirect('domain', user_domain.id)
 
     if request.method == "POST" and request.POST.get("restore") == "true" or "charge_state_id" in request.GET:

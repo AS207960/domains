@@ -5,6 +5,8 @@ import requests
 import dataclasses
 import typing
 import json
+import uuid
+import retry
 
 
 @dataclasses.dataclass
@@ -26,18 +28,22 @@ class ChargeState:
 def charge_account(username: str, amount: decimal.Decimal, descriptor: str, charge_id: str, can_reject=True,
                    off_session=True, return_uri=None) -> ChargeResult:
     client_token = django_keycloak_auth.clients.get_access_token()
-    r = requests.post(
-        f"{settings.BILLING_URL}/charge_user/{username}/", json={
+    r = retry.api.retry_call(requests.post, fargs=(
+        f"{settings.BILLING_URL}/charge_user/{username}/",
+    ), fkwargs={
+        "json": {
             "amount": int(decimal.Decimal(100) * amount),
             "descriptor": descriptor,
             "id": charge_id,
             "can_reject": can_reject,
             "off_session": off_session,
             "return_uri": return_uri
-        }, headers={
-            "Authorization": f"Bearer {client_token}"
+        },
+        "headers": {
+            "Authorization": f"Bearer {client_token}",
+            "Idempotency-Key": str(uuid.uuid4())
         }
-    )
+    }, delay=1, tries=10)
     try:
         data = r.json()
     except json.JSONDecodeError:
@@ -104,13 +110,17 @@ def get_charge_state(charge_state_id: str) -> ChargeState:
 
 def reverse_charge(charge_id: str):
     client_token = django_keycloak_auth.clients.get_access_token()
-    r = requests.post(
-        f"{settings.BILLING_URL}/reverse_charge/", json={
+    r = retry.api.retry_call(requests.post, fargs=(
+        f"{settings.BILLING_URL}/reverse_charge/",
+    ), fkwargs={
+        "json": {
             "id": charge_id
-        }, headers={
-            "Authorization": f"Bearer {client_token}"
+        },
+        "headers": {
+            "Authorization": f"Bearer {client_token}",
+            "Idempotency-Key": str(uuid.uuid4())
         }
-    )
+    }, delay=1, tries=10)
     if r.status_code == 200:
         return None
     else:
