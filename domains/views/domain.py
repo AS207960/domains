@@ -13,6 +13,15 @@ from .. import models, apps, forms, zone_info
 from . import billing, gchat_bot
 
 
+def index(request):
+    form = forms.DomainSearchForm()
+
+    return render(request, "domains/index.html", {
+        "registration_enabled": settings.REGISTRATION_ENABLED,
+        "domain_form": form
+    })
+
+
 def domain_prices(request):
     zones = list(map(lambda z: {
         "zone": z[0],
@@ -789,18 +798,7 @@ def delete_domain_host_obj(request, domain_id, host_name):
     return redirect(referrer)
 
 
-@login_required
 def domain_search(request):
-    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('domains')
-
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
     error = None
 
     if request.method == "POST":
@@ -825,7 +823,10 @@ def domain_search(request):
                             else:
                                 form.add_error('domain', f"Domain unavailable: {reason}")
                         else:
-                            return redirect('domain_register', form.cleaned_data['domain'])
+                            if request.user.is_authenticated:
+                                return redirect('domain_register', form.cleaned_data['domain'])
+                            else:
+                                return redirect('domain_search_success', form.cleaned_data['domain'])
             else:
                 form.add_error('domain', "Unsupported or invalid domain")
     else:
@@ -837,10 +838,24 @@ def domain_search(request):
     })
 
 
+def domain_search_success(request, domain_name):
+    return render(request, "domains/domain_search_success.html", {
+        "domain": domain_name,
+    })
+
+
 @login_required
 def domain_register(request, domain_name):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     error = None
 
@@ -1537,7 +1552,14 @@ def domain_transfer(request, domain_name):
         })
 
     zone_price, registry_name = zone.pricing, zone.registry
-    price_decimal = zone_price.transfer(sld)
+    try:
+        price_decimal = zone_price.transfer(sld)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
 
     if request.method == "POST":
         form = forms.DomainTransferForm(request.POST, zone=zone, user=request.user)
@@ -1605,7 +1627,14 @@ def domain_transfer_confirm(request, order_id):
         })
 
     zone_price, _ = zone.pricing, zone.registry
-    price_decimal = zone_price.transfer(sld)
+    try:
+        price_decimal = zone_price.transfer(sld)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
 
     if "charge_state_id" in request.GET:
         if transfer_order.charge_state_id != request.GET.get("charge_state_id"):

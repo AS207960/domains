@@ -14,7 +14,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="https://glau.ca">
+            <a class="navbar-brand" href="https://glauca.digital">
                 <img src="https://as207960.net/assets/img/logo.svg" height="75" alt="">
                 <span class="navbar-brand mb-0 h1">Glauca</span>
             </a>
@@ -24,28 +24,40 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'domains' %}">My domains</a>
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'hosts' %}">My hosts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contacts' %}">My contacts</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'addresses' %}">My addresses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'domain_prices' %}">Domain prices</a>
-                    </li>
-                    {% if perms.domains.access_eppclient %}
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'admin_index' %}">EPP Client</a>
+                            <a class="nav-link" href="{% url 'domains' %}">My domains</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'hosts' %}">My hosts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contacts' %}">My contacts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'addresses' %}">My addresses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'domain_prices' %}">Domain prices</a>
+                        </li>
+                        {% if perms.domains.access_eppclient %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'admin_index' %}">EPP Client</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://billing.as207960.net" target="_blank">Billing</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'domain_prices' %}">Domain prices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'oidc_login' %}">Login</a>
                         </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://billing.as207960.net" target="_blank">Billing</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -92,7 +104,7 @@
 
 <footer class="footer mt-auto py-3">
     <div class="container">
-        <span class="text-muted"><a href="https://glau.ca/contact">Contact Us</a></span> |
+        <span class="text-muted"><a href="https://glauca.digital/contact">Contact Us</a></span> |
         AS207960 Cyfyngedig, trading as Glauca, is a limited company registered in Wales under company number 12417574
     </div>
 </footer>

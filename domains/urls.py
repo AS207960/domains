@@ -3,9 +3,11 @@ from django.urls import path, include
 from .views import domain, hosts, contacts, admin, gchat_bot
 
 urlpatterns = [
-    path('', domain.domains, name='domains'),
+    path('', domain.index, name='index'),
     path('prices/', domain.domain_prices, name='domain_prices'),
+    path('domains/', domain.domains, name='domains'),
     path('domains/new/', domain.domain_search, name='domain_search'),
+    path('domains/new/<str:domain_name>/success/', domain.domain_search_success, name='domain_search_success'),
     path('domains/register/<str:domain_name>/', domain.domain_register, name='domain_register'),
     path('domains/register/confirm/<uuid:order_id>/', domain.domain_register_confirm, name='domain_register_confirm'),
     path('domains/transfer/', domain.domain_transfer_query, name='domain_transfer_query'),
