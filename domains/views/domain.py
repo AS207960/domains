@@ -1496,6 +1496,7 @@ def domain_transfer_query(request):
 
     if request.method == "POST":
         form = forms.DomainSearchForm(request.POST)
+        form.helper.form_action = request.get_full_path()
 
         if form.is_valid():
             zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
@@ -1531,6 +1532,7 @@ def domain_transfer_query(request):
 
     else:
         form = forms.DomainSearchForm()
+        form.helper.form_action = request.get_full_path()
 
     return render(request, "domains/domain_transfer_query.html", {
         "domain_form": form,

@@ -35,10 +35,12 @@ def domain_info(request):
 
     if request.method == "POST":
         form = forms.DomainSearchForm(request.POST)
+        form.helper.form_action = request.get_full_path()
         if form.is_valid():
             domain = apps.epp_client.get_domain(form.cleaned_data["domain"])
     else:
         form = forms.DomainSearchForm()
+        form.helper.form_action = request.get_full_path()
 
     return render(request, "domains/admin/domain_info.html", {
         "domain_form": form,
@@ -54,10 +56,12 @@ def domain_transfer_info(request):
 
     if request.method == "POST":
         form = forms.DomainSearchForm(request.POST)
+        form.helper.form_action = request.get_full_path()
         if form.is_valid():
             domain = apps.epp_client.transfer_query_domain(form.cleaned_data["domain"])
     else:
         form = forms.DomainSearchForm()
+        form.helper.form_action = request.get_full_path()
 
     return render(request, "domains/admin/domain_transfer_info.html", {
         "domain_form": form,
