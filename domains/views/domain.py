@@ -857,6 +857,12 @@ def domain_register(request, domain_name):
             "back_url": referrer
         })
 
+    user_addresses = models.Contact.get_object_list(access_token)
+    user_contacts = models.ContactAddress.get_object_list(access_token)
+    if not user_contacts.count() or not user_addresses.count():
+        request.session["after_setup_uri"] = request.get_full_path()
+        return render(request, "domains/domain_create_contact.html")
+
     error = None
 
     zone, sld = zone_info.get_domain_info(domain_name)

@@ -17,6 +17,26 @@ def contacts(request):
 
 
 @login_required
+def setup_contacts(request):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_addresses = models.Contact.get_object_list(access_token)
+
+    if not user_addresses.count():
+        request.session["next_uri"] = request.get_full_path()
+        return redirect('new_address')
+
+    user_contacts = models.ContactAddress.get_object_list(access_token)
+
+    if not user_contacts.count():
+        request.session["next_uri"] = request.get_full_path()
+        return redirect('new_contact')
+
+    if "after_setup_uri" in request.session:
+        return redirect(request.session.pop("after_setup_uri"))
+    return redirect('contacts')
+
+
+@login_required
 def new_contact(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
@@ -34,6 +54,8 @@ def new_contact(request):
             form.instance.user = request.user
             form.instance.created_date = timezone.now()
             form.save()
+            if "next_uri" in request.session:
+                return redirect(request.session.pop("next_uri"))
             return redirect('contacts')
     else:
         form = forms.ContactForm(user=request.user)
@@ -153,6 +175,9 @@ def new_address(request):
                     "error": str(e),
                     "back_url": referrer
                 })
+
+            if "next_uri" in request.session:
+                return redirect(request.session.pop("next_uri"))
             return redirect('addresses')
     else:
         form = forms.AddressForm()

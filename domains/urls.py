@@ -36,6 +36,7 @@ urlpatterns = [
     path('hosts/<uuid:host_id>/delete/', hosts.host_delete, name='host_delete'),
     path('hosts/create/<str:host_name>/', hosts.host_create, name='host_create'),
     path('contacts/', contacts.contacts, name='contacts'),
+    path('contacts/setup/', contacts.setup_contacts, name='setup_contacts'),
     path('contacts/new/', contacts.new_contact, name='new_contact'),
     path('contacts/<uuid:contact_id>/', contacts.edit_contact, name='edit_contact'),
     path('contacts/<uuid:contact_id>/delete/', contacts.delete_contact, name='delete_contact'),
