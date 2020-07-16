@@ -27,7 +27,7 @@ apiVersion: v1
 metadata:
   name: domains-django-test-conf
 data:
-  HOST: domains.test.glacu.digital
+  HOST: domains.test.glauca.digital
   DJANGO_SETTINGS_MODULE: as207960_domains.settings
   EXTERNAL_URL: "https://domains.test.glauca.digital"
   SENTRY_ENVIRONMENT: "test"
@@ -40,6 +40,12 @@ data:
   BILLING_URL: "https://billing.test.as207960.net"
   EPP_PROXY_ADDR: "epp-proxy-test-primary:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
+  EMAIL_HOST: "mx.postal.as207960.net"
+  EMAIL_HOST_USER: "apikey"
+  EMAIL_PORT: "25"
+  EMAIL_FROM: "Glauca Domains [TEST] <domains-test@glauca.digital>"
+  GCHAT_PROJECT_ID: "1045619794257"
+  GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,6 +76,9 @@ spec:
         - name: ca-cert
           configMap:
             name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domains-test-google-creds
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
@@ -82,6 +91,8 @@ spec:
               name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
           envFrom:
             - configMapRef:
                 name: domains-django-test-conf
@@ -93,6 +104,9 @@ spec:
             - secretRef:
                 name: domains-test-keycloak
               prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-test-email
+              prefix: "EMAIL_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -107,6 +121,8 @@ spec:
               name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
           envFrom:
             - configMapRef:
                 name: domains-django-test-conf
@@ -118,6 +134,9 @@ spec:
             - secretRef:
                 name: domains-test-keycloak
               prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-test-email
+              prefix: "EMAIL_"
 ---
 apiVersion: v1
 kind: Service

@@ -19,13 +19,13 @@ def contacts(request):
 @login_required
 def setup_contacts(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_addresses = models.Contact.get_object_list(access_token)
+    user_addresses = models.ContactAddress.get_object_list(access_token)
 
     if not user_addresses.count():
         request.session["next_uri"] = request.get_full_path()
         return redirect('new_address')
 
-    user_contacts = models.ContactAddress.get_object_list(access_token)
+    user_contacts = models.Contact.get_object_list(access_token)
 
     if not user_contacts.count():
         request.session["next_uri"] = request.get_full_path()
