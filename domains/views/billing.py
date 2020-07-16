@@ -43,7 +43,7 @@ def charge_account(username: str, amount: decimal.Decimal, descriptor: str, char
             "Authorization": f"Bearer {client_token}",
             "Idempotency-Key": str(uuid.uuid4())
         },
-        "timout": 5
+        "timeout": 5
     }, delay=1, tries=10)
     try:
         data = r.json()
@@ -121,7 +121,7 @@ def reverse_charge(charge_id: str):
             "Authorization": f"Bearer {client_token}",
             "Idempotency-Key": str(uuid.uuid4())
         },
-        "timout": 5
+        "timeout": 5
     }, delay=1, tries=10)
     if r.status_code == 200:
         return None
