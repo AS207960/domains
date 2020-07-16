@@ -16,3 +16,4 @@ uritemplate
 google-api-python-client
 google-auth
 retry
+requests
