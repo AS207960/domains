@@ -140,6 +140,65 @@ spec:
                 name: domains-email
               prefix: "EMAIL_"
 ---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: domains-run-renewal
+spec:
+  schedule: "00 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+          labels:
+            app: domains
+            part: django
+        spec:
+          volumes:
+            - name: static
+              persistentVolumeClaim:
+                claimName: domains-django-static
+            - name: media
+              persistentVolumeClaim:
+                claimName: domains-django-media
+            - name: ca-cert
+              configMap:
+                name: epp-ca
+            - name: google-creds
+              secret:
+                secretName: domains-google-creds
+          containers:
+            - name: django
+              image: as207960/domains-django:(version)
+              imagePullPolicy: Always
+              command: ["sh", "-c", "python3 manage.py run-renewal"]
+              volumeMounts:
+                - mountPath: "/app/static/"
+                  name: static
+                - mountPath: "/app/media/"
+                  name: media
+                - mountPath: "/ca-cert/"
+                  name: ca-cert
+                - mountPath: "/google-creds/"
+                  name: google-creds
+              envFrom:
+                - configMapRef:
+                    name: domains-django-conf
+                - secretRef:
+                    name: domains-db-creds
+                  prefix: "DB_"
+                - secretRef:
+                    name: domains-django-secret
+                - secretRef:
+                    name: domains-keycloak
+                  prefix: "KEYCLOAK_"
+                - secretRef:
+                    name: domains-email
+                  prefix: "EMAIL_"
+          restartPolicy: OnFailure
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
