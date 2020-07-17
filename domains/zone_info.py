@@ -264,7 +264,9 @@ class DomainInfo:
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_DENIC
+            self.REGISTRY_DENIC,
+            self.REGISTRY_VERISIGN_COMNET,
+            self.REGISTRY_PIR,
         )
 
     @property
