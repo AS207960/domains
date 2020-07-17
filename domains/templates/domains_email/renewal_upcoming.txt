@@ -1,10 +1,10 @@
 Hello {{ name }},
 
 The following domains are expiring soon. No further action is required on your part, and we'll renew them
-a few days before the expiry date.
+a 7 days before the expiry date.
 
 {% for domain in domains %}
-- {{ domain }}
+- {{ domain.domain.name }} (expiring: {{ domain.expiry_date }})
 {% endfor %}
 
 Thanks,

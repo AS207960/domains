@@ -1,0 +1,14 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <p>
+        Hello {{ name }},
+    </p>
+    <p>
+        The following domains have been successfully renewed. No further action is required on your part.
+    </p>
+    <ul>
+        {% for domain in domains %}
+            <li>{{ domain.domain.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,17 +1,33 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-# from dateutil import relativedelta
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 import datetime
 import grpc
-import decimal
 from domains import models, zone_info, apps
 from domains.views import billing
 
-NOTIFY_INTERVAL = datetime.timedelta(days=7)
+NOTIFY_INTERVAL = datetime.timedelta(days=15, weeks=52)
 RENEW_INTERVAL = datetime.timedelta(days=5)
 FAIL_INTERVAL = datetime.timedelta(days=1)
+
+
+def mail_success(user, domains):
+    context = {
+        "name": user.first_name,
+        "domains": domains
+    }
+    html_content = render_to_string("domains_email/renewal_success.html", context)
+    txt_content = render_to_string("domains_email/renewal_success.txt", context)
+
+    email = EmailMultiAlternatives(
+        subject='Domain renewal successful',
+        body=txt_content,
+        to=[user.email],
+        bcc=['q@as207960.net']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
 
 
 def mail_upcoming(user, domains):
@@ -32,6 +48,42 @@ def mail_upcoming(user, domains):
     email.send()
 
 
+def mail_failed(user, domains):
+    context = {
+        "name": user.first_name,
+        "domains": domains
+    }
+    html_content = render_to_string("domains_email/renewal_failed.html", context)
+    txt_content = render_to_string("domains_email/renewal_failed.txt", context)
+
+    email = EmailMultiAlternatives(
+        subject='Domain renewal failed',
+        body=txt_content,
+        to=[user.email],
+        bcc=['q@as207960.net']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
+def mail_deleted(user, domains):
+    context = {
+        "name": user.first_name,
+        "domains": domains
+    }
+    html_content = render_to_string("domains_email/renewal_deleted.html", context)
+    txt_content = render_to_string("domains_email/renewal_deleted.txt", context)
+
+    email = EmailMultiAlternatives(
+        subject='Domain renewal failed - domains deleted',
+        body=txt_content,
+        to=[user.email],
+        bcc=['q@as207960.net']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
 class Command(BaseCommand):
     help = 'Automatically renews all eligible domains'
 
@@ -40,9 +92,18 @@ class Command(BaseCommand):
         domains = models.DomainRegistration.objects.filter(pending=False, deleted=False)
 
         notifications = {}
+        renewed = {}
+        failed = {}
+        deleted = {}
+
+        def insert_into_dict(d, key, value):
+            if key not in d:
+                d[key] = [value]
+            else:
+                d[key].append(value)
 
         for domain in domains:
-            domain_info = zone_info.get_domain_info(domain.domain)[0]  # type: zone_info.DomainInfo
+            domain_info, sld = zone_info.get_domain_info(domain.domain)
 
             if not domain_info:
                 print(f"Can't renew {domain.domain}: unknown zone")
@@ -56,11 +117,24 @@ class Command(BaseCommand):
 
             user = domain.get_user()
 
-            if (domain_data.expiry_date - RENEW_INTERVAL) >= now:
+            expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
+            email_data = {
+                "obj": domain,
+                "domain": domain_data,
+                "expiry_date": expiry_date
+            }
+            print(f"{domain_data.name} expiring on {expiry_date}")
+
+            if (expiry_date - RENEW_INTERVAL) <= now:
+                if (domain.last_billed + RENEW_INTERVAL) > now:
+                    continue
+
                 renewal_period = domain_info.pricing.periods[0]
 
                 try:
-                    renewal_price = domain_info.pricing.renewal(unit=renewal_period.unit, value=renewal_period.value)
+                    renewal_price = domain_info.pricing.renewal(
+                        sld, unit=renewal_period.unit, value=renewal_period.value
+                    )
                 except grpc.RpcError as rpc_error:
                     print(f"Can't get renewal price for {domain.domain}: {rpc_error.details()}")
                     continue
@@ -69,7 +143,7 @@ class Command(BaseCommand):
                     print(f"No renewal price available for {domain.domain}")
                     continue
 
-                print(f"{domain_data.name} expiring soon, renewing for {renewal_price}")
+                print(f"{domain_data.name} expiring soon, renewing for {renewal_price:.2f} GBP")
                 charge_state = billing.charge_account(
                     user.username, renewal_price, f"{domain.domain} automatic renewal", f"dm_auto_renew_{domain.id}"
                 )
@@ -85,33 +159,43 @@ class Command(BaseCommand):
                             billing.reverse_charge(f"dm_auto_renew_{domain.id}")
                             continue
                     print(f"{domain_data.name} renewed")
+                    insert_into_dict(renewed, user, email_data)
                 else:
                     print(f"Failed to charge for {domain_data.name} renewal: {charge_state.error}")
-                    if (domain_data.expiry_date - FAIL_INTERVAL) >= now:
+                    if (expiry_date - FAIL_INTERVAL) >= now:
                         print(f"Deleting {domain.domain} due to billing failure")
-                        try:
-                            apps.epp_client.delete_domain(domain_data.name)
-                        except grpc.RpcError as rpc_error:
-                            print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
-                            billing.charge_account(
-                                user.username, renewal_price, f"{domain.domain} automatic renewal",
-                                f"dm_auto_renew_{domain.id}", can_reject=False
-                            )
-                            continue
+                        # try:
+                        #     apps.epp_client.delete_domain(domain_data.name)
+                        # except grpc.RpcError as rpc_error:
+                        #     print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
+                        #     billing.charge_account(
+                        #         user.username, renewal_price, f"{domain.domain} automatic renewal",
+                        #         f"dm_auto_renew_{domain.id}", can_reject=False
+                        #     )
+                        #     continue
+                        # domain.delete()
                         print(f"Deleted {domain.domain}")
+                        insert_into_dict(deleted, user, email_data)
+                    else:
+                        insert_into_dict(failed, user, email_data)
 
-            elif (domain_data.expiry_date - NOTIFY_INTERVAL) >= now:
+            elif (expiry_date - NOTIFY_INTERVAL) <= now:
                 if domain.last_renew_notify + NOTIFY_INTERVAL > now:
                     continue
 
                 print(f"{domain_data.name} expiring soon, notifying owner")
-                if user not in notifications:
-                    notifications[user] = [{
-                        "obj": domain,
-                        "domain": domain_data
-                    }]
-                else:
-                    notifications[user].append({
-                        "obj": domain,
-                        "domain": domain_data
-                    })
+                insert_into_dict(notifications, user, email_data)
+            else:
+                print(f"Not doing anything with {domain_data.name}")
+
+        for user, domains in notifications.items():
+            mail_upcoming(user, domains)
+
+        for user, domains in renewed.items():
+            mail_success(user, domains)
+
+        for user, domains in failed.items():
+            mail_failed(user, domains)
+
+        for user, domains in deleted.items():
+            mail_deleted(user, domains)

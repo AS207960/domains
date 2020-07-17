@@ -1,0 +1,11 @@
+Hello {{ name }},
+
+The following domains have been successfully renewed. No further action is required on your part.
+
+{% for domain in domains %}
+- {{ domain.domain.name }}
+{% endfor %}
+
+Thanks,
+The Glauca Team
+https://glauca.digital

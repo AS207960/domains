@@ -1,0 +1,14 @@
+Hello {{ name }},
+
+We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account for them.
+We'll retry a few more times in the coming days, so be sure to top up your account for these domains.
+If we can't charge your account by one day before the expiry date, then our shark minions will shed a tear as they
+delete your domains.
+
+{% for domain in domains %}
+- {{ domain.domain.name }} (expiring: {{ domain.expiry_date }})
+{% endfor %}
+
+Thanks,
+The Glauca Team
+https://glauca.digital

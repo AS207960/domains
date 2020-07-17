@@ -1,0 +1,16 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <p>
+        Hello {{ name }},
+    </p>
+    <p>
+        We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account
+        for them. This was our last attempt and unfortunately your domains have now been deleted. They'll be available
+        to buy again in about 30 days (depending on registry policy).
+    </p>
+    <ul>
+        {% for domain in domains %}
+            <li>{{ domain.domain.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
