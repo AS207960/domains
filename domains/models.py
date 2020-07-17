@@ -83,6 +83,12 @@ def sync_resource_to_keycloak(self, display_name, resource_type, scopes, urn, vi
         )
 
 
+def delete_resource(resource_id):
+    uma_client = django_keycloak_auth.clients.get_uma_client()
+    token = django_keycloak_auth.clients.get_access_token()
+    uma_client.resource_set_delete(token, resource_id)
+
+
 def get_object_ids(access_token, resource_type, action):
     scope_name = f"{action}-{resource_type}"
     permissions = django_keycloak_auth.clients.get_authz_client().get_permissions(access_token)
@@ -176,6 +182,10 @@ class ContactAddress(models.Model):
             urn="urn:as207960:domains:contact_address", super_save=super().save, view_name='edit_address',
             args=args, kwargs=kwargs
         )
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, *kwargs)
+        delete_resource(self.resource_id)
 
     def can_delete(self):
         return self.local_contacts.count() + self.int_contacts.count() == 0
@@ -302,6 +312,10 @@ class Contact(models.Model):
             urn="urn:as207960:domains:contact", super_save=super().save, view_name='edit_contact',
             args=args, kwargs=kwargs
         )
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, *kwargs)
+        delete_resource(self.resource_id)
     
     def __str__(self):
         return self.description
@@ -522,6 +536,10 @@ class NameServer(models.Model):
             args=args, kwargs=kwargs
         )
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, *kwargs)
+        delete_resource(self.resource_id)
+
     def __str__(self):
         return self.name_server
 
@@ -556,6 +574,8 @@ class DomainRegistration(models.Model):
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_tech')
     resource_id = models.UUIDField(null=True)
+    last_billed = models.DateTimeField(default=timezone.datetime.min)
+    last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
 
     class Meta:
         ordering = ['domain']
@@ -590,6 +610,10 @@ class DomainRegistration(models.Model):
             urn="urn:as207960:domains:domain", super_save=super().save, view_name='domain',
             args=args, kwargs=kwargs
         )
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, *kwargs)
+        delete_resource(self.resource_id)
 
     def get_user(self):
         return get_resource_owner(self.resource_id)
@@ -646,6 +670,10 @@ class PendingDomainTransfer(models.Model):
             args=args, kwargs=kwargs
         )
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, *kwargs)
+        delete_resource(self.resource_id)
+
     def get_user(self):
         if self.user:
             return self.user
@@ -673,6 +701,7 @@ class DomainRegistrationOrder(models.Model):
     charge_state_id = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+    price = models.DecimalField(decimal_places=2, max_digits=9)
 
     class Meta:
         ordering = ['domain']
@@ -695,6 +724,7 @@ class DomainTransferOrder(models.Model):
     charge_state_id = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+    price = models.DecimalField(decimal_places=2, max_digits=9)
 
     class Meta:
         ordering = ['domain']
@@ -708,6 +738,7 @@ class DomainRenewOrder(models.Model):
     period_value = models.PositiveSmallIntegerField()
     charge_state_id = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    price = models.DecimalField(decimal_places=2, max_digits=9)
 
     class Meta:
         ordering = ['domain']

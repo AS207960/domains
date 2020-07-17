@@ -1,0 +1,12 @@
+Hello {{ name }},
+
+The following domains are expiring soon. No further action is required on your part, and we'll renew them
+a few days before the expiry date.
+
+{% for domain in domains %}
+- {{ domain }}
+{% endfor %}
+
+Thanks,
+The Glauca Team
+https://glauca.digital

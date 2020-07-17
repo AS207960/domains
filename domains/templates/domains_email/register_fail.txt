@@ -6,5 +6,5 @@ The value of this registration has been refunded to your account with us.
 {% if reason %}The reason for this failure was: {{ reason }}{% else %}We don't currently have a known reason for this failure. We'll be in touch soon with further details.{% endif %}
 
 Thanks,
-The AS207960 Team
-https://as207960.net
+The Glauca Team
+https://glauca.digital

@@ -8,6 +8,7 @@ import django_keycloak_auth.clients
 import ipaddress
 import grpc
 import uuid
+import retry
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info
 from . import billing, gchat_bot
@@ -916,6 +917,13 @@ def domain_register(request, domain_name):
                                 error = rpc_error.details()
                                 success = False
 
+                billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+                if billing_value is None:
+                    return render(request, "domains/error.html", {
+                        "error": "You don't have permission to perform this action",
+                        "back_url": referrer
+                    })
+
                 if success:
                     order = models.DomainRegistrationOrder(
                         domain=domain_name,
@@ -925,7 +933,8 @@ def domain_register(request, domain_name):
                         admin_contact=admin_contact,
                         billing_contact=billing_contact,
                         tech_contact=tech_contact,
-                        user=request.user
+                        user=request.user,
+                        price=billing_value
                     )
                     order.save()
                     return redirect('domain_register_confirm', order.id)
@@ -977,17 +986,7 @@ def domain_register_confirm(request, order_id):
         value=registration_order.period_value,
         unit=registration_order.period_unit
     )
-    zone_price, registry_name = zone.pricing, zone.registry
     auth_info = models.make_secret()
-
-    billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
-    if billing_value is None:
-        registration_order.pending = False
-        registration_order.save()
-        return render(request, "domains/error.html", {
-            "error": "Domain no longer available to purchase.",
-            "back_url": referrer
-        })
 
     if (request.method == "POST" and request.POST.get("register") == "true") or "charge_state_id" in request.GET:
         try:
@@ -1014,7 +1013,7 @@ def domain_register_confirm(request, order_id):
         if not registration_order.charge_state_id:
             charge_state = billing.charge_account(
                 request.user.username,
-                billing_value,
+                registration_order.price,
                 f"{registration_order.domain} domain registration",
                 f"dm_{registration_order.domain_id}",
                 off_session=False,
@@ -1132,7 +1131,7 @@ def domain_register_confirm(request, order_id):
 
     return render(request, "domains/register_domain_confirm.html", {
         "domain": registration_order.domain,
-        "price_decimal": billing_value,
+        "price_decimal": registration_order.price,
         "back_url": referrer,
     })
 
@@ -1165,7 +1164,7 @@ def delete_domain(request, domain_id):
                     "back_url": referrer
                 })
 
-            if (not domain_info.restore_supported) or (domain_info.restore_supported and not pending):
+            if not domain_info.restore_supported:
                 gchat_bot.notify_delete(user_domain, registry_name)
                 user_domain.delete()
             else:
@@ -1183,6 +1182,8 @@ def delete_domain(request, domain_id):
 
 @login_required
 def renew_domain(request, domain_id):
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, pending=False, deleted=False)
 
     zone, sld = zone_info.get_domain_info(user_domain.domain)
@@ -1201,11 +1202,24 @@ def renew_domain(request, domain_id):
         if form.is_valid():
             period = form.cleaned_data['period']
 
+            period = apps.epp_api.Period(
+                value=period.value,
+                unit=period.unit
+            )
+
+            billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+            if billing_value is None:
+                return render(request, "domains/error.html", {
+                    "error": "You don't have permission to perform this action",
+                    "back_url": referrer
+                })
+
             order = models.DomainRenewOrder(
                 domain=user_domain,
                 period_unit=period.unit,
                 period_value=period.value,
-                user=request.user
+                user=request.user,
+                price=billing_value
             )
             order.save()
 
@@ -1268,13 +1282,6 @@ def renew_domain_confirm(request, order_id):
         unit=renew_order.period_unit
     )
 
-    billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
-    if billing_value is None:
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
     if not renew_order.pending:
         return redirect('domain', user_domain.id)
 
@@ -1289,7 +1296,7 @@ def renew_domain_confirm(request, order_id):
         if not renew_order.charge_state_id:
             charge_state = billing.charge_account(
                 request.user.username,
-                billing_value,
+                renew_order.price,
                 f"{user_domain.domain} domain renewal",
                 f"dm_renew_{user_domain.id}",
                 off_session=False,
@@ -1349,7 +1356,7 @@ def renew_domain_confirm(request, order_id):
 
     return render(request, "domains/renew_domain_confirm.html", {
         "domain": user_domain,
-        "price_decimal": billing_value,
+        "price_decimal": renew_order.price,
         "back_url": referrer,
     })
 
@@ -1583,34 +1590,24 @@ def domain_transfer(request, domain_name):
         form = forms.DomainTransferForm(request.POST, zone=zone, user=request.user)
 
         if form.is_valid():
-            try:
-                if not zone.pre_transfer_query_supported:
-                    available = False
-                else:
-                    available, _, registry_id = apps.epp_client.check_domain(domain_name)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
-            else:
-                if not available:
-                    registrant = form.cleaned_data['registrant']  # type: models.Contact
-                    admin_contact = form.cleaned_data['admin']  # type: models.Contact
-                    tech_contact = form.cleaned_data['tech']  # type: models.Contact
-                    billing_contact = form.cleaned_data['billing']  # type: models.Contact
+            registrant = form.cleaned_data['registrant']  # type: models.Contact
+            admin_contact = form.cleaned_data['admin']  # type: models.Contact
+            tech_contact = form.cleaned_data['tech']  # type: models.Contact
+            billing_contact = form.cleaned_data['billing']  # type: models.Contact
 
-                    order = models.DomainTransferOrder(
-                        domain=domain_name,
-                        auth_code=form.cleaned_data['auth_code'],
-                        registrant_contact=registrant,
-                        admin_contact=admin_contact,
-                        billing_contact=billing_contact,
-                        tech_contact=tech_contact,
-                        user=request.user
-                    )
-                    order.save()
+            order = models.DomainTransferOrder(
+                domain=domain_name,
+                auth_code=form.cleaned_data['auth_code'],
+                registrant_contact=registrant,
+                admin_contact=admin_contact,
+                billing_contact=billing_contact,
+                tech_contact=tech_contact,
+                price=price_decimal,
+                user=request.user
+            )
+            order.save()
 
-                    return redirect('domain_transfer_confirm', order.id)
-                else:
-                    raise Http404
+            return redirect('domain_transfer_confirm', order.id)
     else:
         form = forms.DomainTransferForm(zone=zone, user=request.user)
 
@@ -1627,30 +1624,12 @@ def domain_transfer(request, domain_name):
 def domain_transfer_confirm(request, order_id):
     referrer = reverse('domains')
 
-    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     transfer_order = get_object_or_404(models.DomainTransferOrder, id=order_id, pending=True)
-
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create') \
-            or transfer_order.user != request.user:
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
 
     zone, sld = zone_info.get_domain_info(transfer_order.domain)
     if not zone:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
-    zone_price, _ = zone.pricing, zone.registry
-    try:
-        price_decimal = zone_price.transfer(sld)
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
             "back_url": referrer
         })
 
@@ -1664,7 +1643,7 @@ def domain_transfer_confirm(request, order_id):
     if not transfer_order.charge_state_id:
         charge_state = billing.charge_account(
             request.user.username,
-            price_decimal,
+            transfer_order.price,
             f"{transfer_order.domain} domain transfer",
             f"dm_transfer_{transfer_order.domain_id}",
             off_session=False,
@@ -1728,20 +1707,25 @@ def domain_transfer_confirm(request, order_id):
                 )
                 domain_obj.save()
 
-                domain_data = apps.epp_client.get_domain(transfer_order.domain)
-                registrant_id = transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
-                domain_data.set_registrant(registrant_id.registry_contact_id)
-                if transfer_order.tech_contact and zone.tech_supported:
-                    tech_contact_id = transfer_order.tech_contact.get_registry_id(domain_data.registry_name)
-                    domain_data.set_tech(tech_contact_id.registry_contact_id)
-                if transfer_order.admin_contact and zone.admin_supported:
-                    admin_contact_id = transfer_order.admin_contact.get_registry_id(domain_data.registry_name)
-                    domain_data.set_admin(admin_contact_id.registry_contact_id)
-                if transfer_order.billing_contact and zone.billing_supported:
-                    billing_contact_id = transfer_order.billing_contact.get_registry_id(domain_data.registry_name)
-                    domain_data.set_billing(billing_contact_id.registry_contact_id)
+                gchat_bot.notify_transfer(domain_obj, transfer_data.registry_name)
 
-                gchat_bot.notify_transfer(domain_obj, domain_data.registry_name)
+                @gchat_bot.as_thread
+                @retry.retry(delay=1, backoff=1.5, max_delay=60)
+                def setup_domain():
+                    domain_data = apps.epp_client.get_domain(transfer_order.domain)
+                    registrant_id = transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
+                    domain_data.set_registrant(registrant_id.registry_contact_id)
+                    if transfer_order.tech_contact and zone.tech_supported:
+                        tech_contact_id = transfer_order.tech_contact.get_registry_id(domain_data.registry_name)
+                        domain_data.set_tech(tech_contact_id.registry_contact_id)
+                    if transfer_order.admin_contact and zone.admin_supported:
+                        admin_contact_id = transfer_order.admin_contact.get_registry_id(domain_data.registry_name)
+                        domain_data.set_admin(admin_contact_id.registry_contact_id)
+                    if transfer_order.billing_contact and zone.billing_supported:
+                        billing_contact_id = transfer_order.billing_contact.get_registry_id(domain_data.registry_name)
+                        domain_data.set_billing(billing_contact_id.registry_contact_id)
+
+                setup_domain()
                 return redirect('domain', domain_obj.id)
             else:
                 domain_obj = models.PendingDomainTransfer(

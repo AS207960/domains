@@ -7,6 +7,15 @@ import typing
 import json
 import uuid
 import retry
+import threading
+
+
+def as_thread(fun):
+    def new_fun(*args, **kwargs):
+        t = threading.Thread(target=fun, args=args, kwargs=kwargs)
+        t.setDaemon(True)
+        t.start()
+    return new_fun
 
 
 @dataclasses.dataclass
@@ -109,9 +118,15 @@ def get_charge_state(charge_state_id: str) -> ChargeState:
     )
 
 
+@as_thread
 def reverse_charge(charge_id: str):
     client_token = django_keycloak_auth.clients.get_access_token()
-    r = retry.api.retry_call(requests.post, fargs=(
+
+    def run_request(*args, **kwargs):
+        r = requests.post(*args, **kwargs)
+        r.raise_for_status()
+
+    retry.api.retry_call(run_request, fargs=(
         f"{settings.BILLING_URL}/reverse_charge/",
     ), fkwargs={
         "json": {
@@ -123,7 +138,3 @@ def reverse_charge(charge_id: str):
         },
         "timeout": 5
     }, delay=1, tries=10)
-    if r.status_code == 200:
-        return None
-    else:
-        return 'There was an unexpected error'

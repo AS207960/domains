@@ -813,7 +813,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-register-fail":
-            as_thread(billing.reverse_charge)(f"dm_{domain.pk}")
+            billing.reverse_charge(f"dm_{domain.pk}")
             as_thread(emails.mail_register_failed)(domain)
             domain.delete()
 
@@ -942,7 +942,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-transfer-fail":
-            as_thread(billing.reverse_charge)(f"dm_transfer_{domain.pk}")
+            billing.reverse_charge(f"dm_transfer_{domain.pk}")
             as_thread(emails.mail_transfer_failed)(domain)
             domain.delete()
 

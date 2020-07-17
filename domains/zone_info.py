@@ -206,7 +206,7 @@ class MarkupPrice:
     def registration(self, sld: str, value=1, unit=0):
         return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Create)
 
-    def renewal(self, sld: str, value=1, unit=0):
+    def renewal(self, sld: str, value=None, unit=None):
         return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Renew)
 
     def restore(self, sld: str):
@@ -244,14 +244,14 @@ class DomainInfo:
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_VERISIGN,
+            self.REGISTRY_VERISIGN
         )
 
     @property
     def direct_transfer_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_DENIC
+            # self.REGISTRY_DENIC
         )
 
     @property

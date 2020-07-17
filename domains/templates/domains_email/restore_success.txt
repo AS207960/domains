@@ -3,5 +3,5 @@ Hello {{ name }},
 Your order for the restoration of the domain {{ domain }} has succeeded.
 
 Thanks,
-The AS207960 Team
-https://as207960.net
+The Glauca Team
+https://glauca.digital
