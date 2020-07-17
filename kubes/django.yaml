@@ -27,7 +27,7 @@ apiVersion: v1
 metadata:
   name: domains-django-conf
 data:
-  HOST: domains.glauca.digital
+  HOST: "domains.glauca.digital,domains-nginx"
   DJANGO_SETTINGS_MODULE: as207960_domains.settings
   EXTERNAL_URL: "https://domains.glauca.digital"
   SENTRY_ENVIRONMENT: "prod"
@@ -37,7 +37,7 @@ data:
   KEYCLOAK_CLIENT_ID: "domains"
   DB_HOST: "postgres"
   DB_NAME: "domains"
-  BILLING_URL: "https://billing.as207960.net"
+  BILLING_URL: "http://billing-nginx"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_HOST: "mx.postal.as207960.net"
