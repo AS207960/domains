@@ -164,16 +164,16 @@ class Command(BaseCommand):
                     print(f"Failed to charge for {domain_data.name} renewal: {charge_state.error}")
                     if (expiry_date - FAIL_INTERVAL) >= now:
                         print(f"Deleting {domain.domain} due to billing failure")
-                        # try:
-                        #     apps.epp_client.delete_domain(domain_data.name)
-                        # except grpc.RpcError as rpc_error:
-                        #     print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
-                        #     billing.charge_account(
-                        #         user.username, renewal_price, f"{domain.domain} automatic renewal",
-                        #         f"dm_auto_renew_{domain.id}", can_reject=False
-                        #     )
-                        #     continue
-                        # domain.delete()
+                        try:
+                            apps.epp_client.delete_domain(domain_data.name)
+                        except grpc.RpcError as rpc_error:
+                            print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
+                            billing.charge_account(
+                                user.username, renewal_price, f"{domain.domain} automatic renewal",
+                                f"dm_auto_renew_{domain.id}", can_reject=False
+                            )
+                            continue
+                        domain.delete()
                         print(f"Deleted {domain.domain}")
                         insert_into_dict(deleted, user, email_data)
                     else:
@@ -190,6 +190,9 @@ class Command(BaseCommand):
 
         for user, domains in notifications.items():
             mail_upcoming(user, domains)
+            for domain in domains:
+                domain["obj"].last_renew_notify = now
+                domain["obj"].save()
 
         for user, domains in renewed.items():
             mail_success(user, domains)
