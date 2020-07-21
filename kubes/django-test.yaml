@@ -62,6 +62,8 @@ spec:
       part: django
   template:
     metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
       labels:
         app: domains-test
         part: django
@@ -159,6 +161,8 @@ spec:
       part: celery
   template:
     metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
       labels:
         app: domains-test
         part: celery

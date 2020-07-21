@@ -2,6 +2,7 @@ from django.conf import settings
 import decimal
 import django_keycloak_auth.clients
 import requests
+import typing
 from . import apps
 
 
@@ -126,7 +127,10 @@ class LengthPrice:
 
 
 class MarkupPrice:
-    def __init__(self, price: int, markup: decimal.Decimal, tld: str, currency: str, display_currency=None, periods=None, restore=0, renewal=None, transfer=0):
+    def __init__(
+            self, price: int, markup: decimal.Decimal, tld: str, currency: typing.Optional[str], display_currency=None,
+            periods=None, restore=0, renewal=None, transfer=0
+    ):
         self.price = price
         self._tld = tld
         self._markup = markup
@@ -169,7 +173,7 @@ class MarkupPrice:
         resp = apps.epp_client.stub.DomainCheck(apps.epp_api.domain_pb2.DomainCheckRequest(
             name=domain,
             fee_check=apps.epp_api.fee_pb2.FeeCheck(
-                currency=apps.epp_api.StringValue(value=self._currency),
+                currency=apps.epp_api.StringValue(value=self._currency) if self._currency else None,
                 commands=[apps.epp_api.fee_pb2.FeeCommand(
                     command=command,
                     period=period.to_pb() if unit is not None else None
@@ -490,39 +494,15 @@ else:
     ZONES = (
         ('com', DomainInfo(
             DomainInfo.REGISTRY_VERISIGN_COMNET,
-            MarkupPrice(2234, transfer=2234, restore=16200, currency='EUR', display_currency='USD', tld='com', markup=decimal.Decimal("1.5"))
+            MarkupPrice(2234, transfer=2234, restore=16200, currency=None, display_currency='USD', tld='com', markup=decimal.Decimal("1.5"))
         )),
         ('net', DomainInfo(
             DomainInfo.REGISTRY_VERISIGN_COMNET,
-            MarkupPrice(3009, transfer=3009, restore=15120, currency='EUR', display_currency='USD', tld='net', markup=decimal.Decimal("1.4"))
+            MarkupPrice(3009, transfer=3009, restore=15120, currency=None, display_currency='USD', tld='net', markup=decimal.Decimal("1.4"))
         )),
         ('org', DomainInfo(
             DomainInfo.REGISTRY_PIR,
-            MarkupPrice(2758, transfer=2758, restore=15660, currency='EUR', display_currency='USD', tld='org', markup=decimal.Decimal("1.45"))
-        )),
-        ('gay', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(6480, transfer=6480, restore=37500, currency='EUR', display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
-        )),
-        ('site', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(5205, transfer=5205, restore=16500, currency='EUR', display_currency='USD', tld='site', markup=decimal.Decimal("1.25"))
-        )),
-        ('website', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(3900, transfer=3900, restore=13500, currency='EUR', display_currency='USD', tld='website', markup=decimal.Decimal("1.25"))
-        )),
-        ('tech', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(9390, transfer=9390, restore=16500, currency='EUR', display_currency='USD', tld='tech', markup=decimal.Decimal("1.25"))
-        )),
-        ('xyz', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(2142, transfer=2142, restore=18000, currency='EUR', tld='xyz', markup=decimal.Decimal("1.5"))
-        )),
-        ('de', DomainInfo(
-            DomainInfo.REGISTRY_DENIC,
-            MarkupPrice(1596, transfer=1260, restore=5250, currency='EUR', tld='de', markup=decimal.Decimal("1.75"))
+            MarkupPrice(2758, transfer=2758, restore=15660, currency=None, display_currency='USD', tld='org', markup=decimal.Decimal("1.45"))
         )),
         ('ch', DomainInfo(DomainInfo.REGISTRY_SWITCH, SimplePrice(999, periods=[apps.epp_api.Period(
             unit=0,
@@ -532,9 +512,33 @@ else:
             unit=0,
             value=1
         )]))),
+        ('gay', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
+        )),
+        ('site', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(5205, transfer=5205, restore=16500, currency=None, display_currency='USD', tld='site', markup=decimal.Decimal("1.25"))
+        )),
+        ('website', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(3900, transfer=3900, restore=13500, currency=None, display_currency='USD', tld='website', markup=decimal.Decimal("1.25"))
+        )),
+        ('tech', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(9390, transfer=9390, restore=16500, currency=None, display_currency='USD', tld='tech', markup=decimal.Decimal("1.25"))
+        )),
+        ('xyz', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(2142, transfer=2142, restore=18000, currency=None, display_currency='EUR', tld='xyz', markup=decimal.Decimal("1.5"))
+        )),
+        ('de', DomainInfo(
+            DomainInfo.REGISTRY_DENIC,
+            MarkupPrice(1596, transfer=1260, restore=5250, currency=None, display_currency='EUR', tld='de', markup=decimal.Decimal("1.75"))
+        )),
         ('space', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(3893, transfer=3893, restore=13500, currency='EUR', display_currency='USD', tld='space', markup=decimal.Decimal("1.25"))
+            MarkupPrice(3893, transfer=3893, restore=13500, currency=None, display_currency='USD', tld='space', markup=decimal.Decimal("1.25"))
         )),
         ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1400, periods=map(lambda i: apps.epp_api.Period(
             unit=0,
@@ -542,19 +546,19 @@ else:
         ), range(1, 6))))),
         ('cymru', DomainInfo(
             DomainInfo.REGISTRY_NOMINET_GTLD,
-            MarkupPrice(2167, transfer=2167, restore=2688, currency='EUR', display_currency='GBP', tld='cymru', markup=decimal.Decimal("1.4"))
+            MarkupPrice(2167, transfer=2167, restore=2688, currency=None, display_currency='GBP', tld='cymru', markup=decimal.Decimal("1.4"))
         )),
         ('wales', DomainInfo(
             DomainInfo.REGISTRY_NOMINET_GTLD,
-            MarkupPrice(2167, transfer=2167, restore=2688, currency='EUR', display_currency='GBP', tld='wales', markup=decimal.Decimal("1.4"))
+            MarkupPrice(2167, transfer=2167, restore=2688, currency=None, display_currency='GBP', tld='wales', markup=decimal.Decimal("1.4"))
         )),
         ('moe', DomainInfo(
             DomainInfo.REGISTRY_INTERLINK,
-            MarkupPrice(3120, transfer=3120, restore=14040, currency='EUR', display_currency='USD', tld='moe', markup=decimal.Decimal("1.3"))
+            MarkupPrice(3120, transfer=3120, restore=14040, currency=None, display_currency='USD', tld='moe', markup=decimal.Decimal("1.3"))
         )),
         ('eu', DomainInfo(
             DomainInfo.REGISTRY_EURID,
-            MarkupPrice(1728, transfer=1728, restore=2880, currency='EUR', tld='eu', markup=decimal.Decimal("1.6"))
+            MarkupPrice(1728, transfer=1728, restore=2880, currency=None, display_currency='EUR', tld='eu', markup=decimal.Decimal("1.6"))
         )),
     )
 
