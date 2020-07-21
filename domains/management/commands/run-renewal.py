@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         now = timezone.now()
-        domains = models.DomainRegistration.objects.filter(pending=False, deleted=False)
+        domains = models.DomainRegistration.objects.filter(deleted=False)
 
         notifications = {}
         renewed = {}
@@ -161,6 +161,7 @@ class Command(BaseCommand):
                     print(f"{domain_data.name} renewed")
                     insert_into_dict(renewed, user, email_data)
                 else:
+                    email_data["error"] = charge_state.error
                     print(f"Failed to charge for {domain_data.name} renewal: {charge_state.error}")
                     if (expiry_date - FAIL_INTERVAL) >= now:
                         print(f"Deleting {domain.domain} due to billing failure")

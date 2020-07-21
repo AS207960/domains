@@ -4,13 +4,13 @@
 {% block content %}
     <div class="container my-3">
         <div class="jumbotron">
-            <h1 class="display-4">Restore domain</h1>
+            <h1 class="display-4">Transfer domain</h1>
             <p>
-                <b>Domain: </b> {{ domain.domain }}<br/>
+                <b>Domain: </b> {{ domain }}<br/>
                 <b>You will be charged: </b> {{ price_decimal|floatformat:2|intcomma }} GBP
             </p>
             <hr class="my-4">
-            <p>Are you sure you want to restore this domain?</p>
+            <p>Are you sure you want to transfer this domain?</p>
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="btn-group">
@@ -18,7 +18,7 @@
                         Cancel
                     </button>
                     <button type="submit" name="order" value="true" class="btn btn-primary">
-                        Restore
+                        Transfer
                     </button>
                 </div>
             </form>

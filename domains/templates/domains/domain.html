@@ -173,6 +173,21 @@
         </div>
         <hr>
         <h2>DNS Servers</h2>
+        {% if domain_info.registry == domain_info.REGISTRY_DENIC %}
+            <div class="alert alert-info" role="alert">
+                DENIC handles DNS severs in a weird way,
+                please see <a href="#" class="alert-link">our advice</a> if you're having issues.
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <p>
+                    <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
+                        Delete all
+                    </a>
+                </p>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
@@ -215,7 +230,7 @@
         <div class="row">
             <div class="col">
                 <h2>Add DNS server</h2>
-                {% crispy host_object_form host_object_form.helper %}
+                {% crispy host_object_form_set host_object_form_set.helper %}
             </div>
 {#            <div class="col">#}
 {#                <h2>Add server directly</h2>#}

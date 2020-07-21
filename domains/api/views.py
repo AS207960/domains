@@ -83,7 +83,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domains = models.DomainRegistration.get_object_list(request.auth.token).filter(pending=False)
+        domains = models.DomainRegistration.get_object_list(request.auth.token)
 
         with ThreadPoolExecutor() as executor:
             domains_data = list(executor.map(
@@ -98,7 +98,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
@@ -126,7 +126,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
@@ -145,7 +145,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
@@ -165,7 +165,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'delete') or domain.deleted:
             raise PermissionDenied
 
@@ -186,7 +186,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit') or not domain.deleted:
             raise PermissionDenied
 
@@ -213,7 +213,6 @@ class Domain(viewsets.ViewSet):
             try:
                 pending, registry_id = apps.epp_client.restore_domain(domain.domain)
                 domain.deleted = pending
-                domain.pending = pending
                 domain.save()
                 gchat_bot.notify_restore(domain, registry_id)
             except grpc.RpcError as rpc_error:
@@ -221,7 +220,6 @@ class Domain(viewsets.ViewSet):
                 raise rpc_error
         else:
             gchat_bot.request_restore(domain)
-            domain.pending = True
 
         domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
@@ -232,7 +230,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not settings.REGISTRATION_ENABLED or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
@@ -357,7 +355,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
@@ -406,7 +404,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk, pending=False)
+        domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 

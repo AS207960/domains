@@ -10,7 +10,7 @@
     </p>
     <ul>
         {% for domain in domains %}
-            <li>{{ domain.domain.name }}</li>
+            <li>{{ domain.domain.name }}; reason for failure: {{ domain.error }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

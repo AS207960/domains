@@ -106,7 +106,7 @@ def get_charge_state(charge_state_id: str) -> ChargeState:
 
     status = data.get("status")
     last_error = data.get("last_error")
-    if status not in ("unknown", "processing", "failed", "completed"):
+    if status not in ("unknown", "pending", "processing", "failed", "completed"):
         status = "unknown"
         last_error = "There was an unexpected error."
 

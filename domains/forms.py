@@ -167,7 +167,7 @@ class DomainHostObjectForm(forms.Form):
         attrs={'placeholder': 'ns1.example.com'}
     ))
 
-    def __init__(self, *args, user, domain_id, registry_id=None, **kwargs):
+    def __init__(self, *args, domain_id, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
@@ -180,6 +180,33 @@ class DomainHostObjectForm(forms.Form):
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+
+
+class BaseDomainHostObjectFormSet(forms.BaseFormSet):
+    def __init__(self, *args, domain_id, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.domain_id = domain_id
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_action = reverse('add_domain_host_obj', args=(domain_id,))
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-9'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'host',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+
+    def get_form_kwargs(self, index):
+        kwargs = self.form_kwargs.copy()
+        kwargs["domain_id"] = self.domain_id
+        return kwargs
+
+
+DomainHostObjectFormSet = forms.formset_factory(
+    DomainHostObjectForm, min_num=1, validate_min=True, extra=3, formset=BaseDomainHostObjectFormSet
+)
 
 
 class DomainHostAddrForm(forms.Form):

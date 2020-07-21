@@ -814,12 +814,10 @@ class DomainCreateSerializer(serializers.Serializer):
             except grpc.RpcError as rpc_error:
                 billing.reverse_charge(f"dm_{domain_id}")
                 raise rpc_error
-            domain_db_obj.pending = resp.pending
             domain_db_obj.save()
             gchat_bot.notify_registration(domain_db_obj, registry_id, period)
         else:
             resp = None
-            domain_db_obj.pending = True
             domain_db_obj.save()
             gchat_bot.request_registration(domain_db_obj, registry_id, period)
 

@@ -2,14 +2,14 @@
 {% block content %}
     <div class="container my-3">
         <div class="jumbotron">
-            {% if error %}
                 <div class="alert alert-danger" role="alert">
                     <h4 class="alert-heading">Oh no! &#x1f631;</h4>
                     <p>There was an error processing your request</p>
-                    <hr>
-                    <p class="mb-0">{{ error }}</p>
+                    {% if error %}
+                        <hr>
+                        <p class="mb-0">{{ error }}</p>
+                    {% endif %}
                 </div>
-            {% endif %}
             <hr>
             <a href="{{ back_url }}" class="btn btn-primary">Go back</a>
         </div>

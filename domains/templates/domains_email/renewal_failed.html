@@ -11,7 +11,7 @@
     </p>
     <ul>
         {% for domain in domains %}
-            <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }})</li>
+            <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for failure: {{ domain.error }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

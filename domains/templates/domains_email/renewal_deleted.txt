@@ -5,7 +5,7 @@ This was our last attempt and unfortunately your domains have now been deleted. 
 about 30 days (depending on registry policy).
 
 {% for domain in domains %}
-- {{ domain.domain.name }}
+- {{ domain.domain.name }}; reason for failure: {{ domain.error }}
 {% endfor %}
 
 Thanks,

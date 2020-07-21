@@ -4,16 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousOperation
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from celery import shared_task
 import django_keycloak_auth.clients
 import google.oauth2.id_token
 import google.oauth2.service_account
 import google.auth.transport.requests
 import googleapiclient.discovery
 import json
-import retry
 import threading
-from .. import models, epp_api
-from . import emails, billing
+from .. import models
 
 REQUEST = google.auth.transport.requests.Request()
 CREDENTIALS = google.oauth2.service_account.Credentials.from_service_account_file(
@@ -81,17 +80,20 @@ def as_thread(fun):
     return new_fun
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def request_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_registration(registration_order_id, registry_id: str, period: str):
+    domain_registration_order = \
+        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+    user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            threadKey=f"dm_{domain_registration_order.domain_id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"registration of {domain_obj.domain}",
+                        f"registration of {domain_registration_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain registration request" if not settings.DEBUG
@@ -102,7 +104,7 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_registration_order.domain
                             }
                         }, {
                             "keyValue": {
@@ -112,26 +114,26 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_registration_order.domain_id)
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Period",
-                                "content": str(period)
+                                "content": period
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Auth code",
-                                "content": domain_obj.auth_info
+                                "content": domain_registration_order.auth_info
                             }
                         }]
                     }, {
                         "header": "Contacts",
                         "widgets": [
-                            make_contact(domain_obj.registrant_contact, "Registrant"),
-                            make_contact(domain_obj.admin_contact, "Admin"),
-                            make_contact(domain_obj.tech_contact, "Tech"),
-                            make_contact(domain_obj.billing_contact, "Billing")
+                            make_contact(domain_registration_order.registrant_contact, "Registrant"),
+                            make_contact(domain_registration_order.admin_contact, "Admin"),
+                            make_contact(domain_registration_order.tech_contact, "Tech"),
+                            make_contact(domain_registration_order.billing_contact, "Billing")
                         ]
                     }, make_user_data(user), {
                         "widgets": [{
@@ -143,7 +145,7 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                                             "actionMethodName": "mark-domain-registered",
                                             "parameters": [{
                                                 "key": "domain_id",
-                                                "value": str(domain_obj.pk)
+                                                "value": str(domain_registration_order.pk)
                                             }]
                                         }
                                     }
@@ -156,7 +158,7 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                                             "actionMethodName": "mark-domain-register-fail",
                                             "parameters": [{
                                                 "key": "domain_id",
-                                                "value": str(domain_obj.pk)
+                                                "value": str(domain_registration_order.pk)
                                             }]
                                         }
                                     }
@@ -164,22 +166,25 @@ def request_registration(domain_obj: models.DomainRegistration, registry_id: str
                             }]
                         }]
                     }],
-                    "name": f"domain-register-{domain_obj.pk}"
+                    "name": f"domain-register-{domain_registration_order.domain_id}"
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_registration(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_registration(registration_order_id, period: str):
+    domain_registration_order = \
+        models.DomainRegistration.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+    user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            threadKey=f"dm_{domain_registration_order.domain_id}",
             body={
-                "text": f"{user.first_name} {user.last_name} has registered {domain_obj.domain}",
+                "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain registration notification" if not settings.DEBUG
@@ -190,22 +195,17 @@ def notify_registration(domain_obj: models.DomainRegistration, registry_id: str,
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": domain_registration_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_registration_order.domain_id)
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Period",
-                                "content": str(period)
+                                "content": period
                             }
                         }]
                     }, make_user_data(user), {
@@ -215,30 +215,34 @@ def notify_registration(domain_obj: models.DomainRegistration, registry_id: str,
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse(
+                                                'domain', args=(domain_registration_order.domain_obj.pk,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-register-{domain_obj.pk}"
+                    "name": f"domain-register-{domain_registration_order.domain_obj_id}"
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_transfer(transfer_order_id, registry_id):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+    user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_transfer_{domain_obj.pk}",
+            threadKey=f"dm_{domain_transfer_order.domain_id}",
             body={
-                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"transfer of {domain_obj.domain}",
+                "text": f"<users/all> {user.first_name} {user.last_name} "
+                        f"has requested the transfer of {domain_transfer_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain transfer request" if not settings.DEBUG
@@ -249,7 +253,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_transfer_order.domain
                             }
                         }, {
                             "keyValue": {
@@ -259,21 +263,21 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_transfer_order.pk)
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Auth code",
-                                "content": domain_obj.auth_info
+                                "content": domain_transfer_order.auth_code
                             }
                         }]
                     }, {
                         "header": "Contacts",
                         "widgets": [
-                            make_contact(domain_obj.registrant_contact, "Registrant"),
-                            make_contact(domain_obj.admin_contact, "Admin"),
-                            make_contact(domain_obj.tech_contact, "Tech"),
-                            make_contact(domain_obj.billing_contact, "Billing")
+                            make_contact(domain_transfer_order.registrant_contact, "Registrant"),
+                            make_contact(domain_transfer_order.admin_contact, "Admin"),
+                            make_contact(domain_transfer_order.tech_contact, "Tech"),
+                            make_contact(domain_transfer_order.billing_contact, "Billing")
                         ]
                     }, make_user_data(user), {
                         "widgets": [{
@@ -285,7 +289,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                                             "actionMethodName": "mark-domain-transferred",
                                             "parameters": [{
                                                 "key": "domain_id",
-                                                "value": str(domain_obj.pk)
+                                                "value": str(domain_transfer_order.pk)
                                             }]
                                         }
                                     }
@@ -298,7 +302,7 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                                             "actionMethodName": "mark-domain-transfer-fail",
                                             "parameters": [{
                                                 "key": "domain_id",
-                                                "value": str(domain_obj.pk)
+                                                "value": str(domain_transfer_order.pk)
                                             }]
                                         }
                                     }
@@ -306,23 +310,26 @@ def request_transfer(domain_obj: models.PendingDomainTransfer, registry_id):
                             }]
                         }]
                     }],
-                    "name": f"domain-transfer-{domain_obj.pk}",
+                    "name": f"domain-transfer-{domain_transfer_order.domain_id}",
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_id: str):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_transfer_pending(transfer_order_id, registry_id: str):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+    user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_transfer_{domain_obj.pk}",
+            threadKey=f"dm_{domain_transfer_order.domain_id}",
             body={
-                "text": f"{user.first_name} {user.last_name} has started the transfer of "
-                        f"{domain_obj.domain}",
+                "text": f"{user.first_name} {user.last_name} "
+                        f"has started the transfer of {domain_transfer_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain transfer pending notification" if not settings.DEBUG
@@ -333,7 +340,7 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_transfer_order.domain
                             }
                         }, {
                             "keyValue": {
@@ -343,26 +350,29 @@ def notify_transfer_pending(domain_obj: models.PendingDomainTransfer, registry_i
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_transfer_order.pk)
                             }
                         }]
                     }, make_user_data(user)],
-                    "name": f"domain-transfer-{domain_obj.pk}"
+                    "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_transfer(transfer_order_id, registry_id: str):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+    user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            threadKey=f"dm_{domain_transfer_order.domain_id}",
             body={
-                "text": f"{user.first_name} {user.last_name} has transferred {domain_obj.domain}",
+                "text": f"{user.first_name} {user.last_name} has transferred {domain_transfer_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain transfer notification" if not settings.DEBUG
@@ -373,7 +383,7 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_transfer_order.domain
                             }
                         }, {
                             "keyValue": {
@@ -383,7 +393,7 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_transfer_order.domain_id)
                             }
                         }]
                     }, make_user_data(user), {
@@ -393,30 +403,33 @@ def notify_transfer(domain_obj: models.DomainRegistration, registry_id: str):
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse(
+                                                'domain', args=(domain_transfer_order.domain_id,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-transfer-{domain_obj.pk}"
+                    "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def request_restore(domain_obj: models.DomainRegistration):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_restore(restore_order_id):
+    domain_restore_order = models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
+    user = domain_restore_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            threadKey=f"dm_{domain_restore_order.domain_obj.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"restoration of {domain_obj.domain}",
+                        f"restoration of {domain_restore_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain restore request" if not settings.DEBUG
@@ -427,12 +440,12 @@ def request_restore(domain_obj: models.DomainRegistration):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_restore_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_restore_order.domain_obj.id)
                             }
                         }]
                     }, make_user_data(user), {
@@ -445,7 +458,20 @@ def request_restore(domain_obj: models.DomainRegistration):
                                             "actionMethodName": "mark-domain-restored",
                                             "parameters": [{
                                                 "key": "domain_id",
-                                                "value": str(domain_obj.pk)
+                                                "value": str(domain_restore_order.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }, {
+                                "textButton": {
+                                    "text": "Mark failed",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-restore-fail",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_restore_order.pk)
                                             }]
                                         }
                                     }
@@ -453,22 +479,24 @@ def request_restore(domain_obj: models.DomainRegistration):
                             }]
                         }]
                     }],
-                    "name": f"domain-restore-{domain_obj.pk}",
+                    "name": f"domain-restore-{domain_restore_order.domain_obj.id}",
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
-    user = domain_obj.get_user()
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_restore(restore_order_id):
+    domain_restore_order = models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
+    user = domain_restore_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            threadKey=f"dm_{domain_restore_order.domain_obj.id}",
             body={
-                "text": f"{user.first_name} {user.last_name} has restored {domain_obj.domain}",
+                "text": f"{user.first_name} {user.last_name} has restored {domain_restore_order.domain}",
                 "cards": [{
                     "header": {
                         "title": "Domain restore notification" if not settings.DEBUG
@@ -479,17 +507,12 @@ def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": domain_restore_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_restore_order.domain_obj.id)
                             }
                         }]
                     }, make_user_data(user), {
@@ -499,22 +522,26 @@ def notify_restore(domain_obj: models.DomainRegistration, registry_id: str):
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse(
+                                                'domain', args=(domain_restore_order.domain_obj.id,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-restore-{domain_obj.pk}"
+                    "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
                 }]
             }
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period: epp_api.Period):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_renew(domain_id, registry_id: str, period: str):
+    domain_obj = \
+        models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
@@ -547,7 +574,7 @@ def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period
                         }, {
                             "keyValue": {
                                 "topLabel": "Period",
-                                "content": str(period)
+                                "content": period
                             }
                         }]
                     }, make_user_data(user), {
@@ -570,9 +597,11 @@ def notify_renew(domain_obj: models.DomainRegistration, registry_id: str, period
         ).execute()
 
 
-@as_thread
-@retry.retry(delay=1, backoff=1.5, max_delay=60)
-def notify_delete(domain_obj: models.DomainRegistration, registry_id: str):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_delete(domain_id, registry_id: str):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
     user = domain_obj.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
@@ -736,6 +765,8 @@ def message_event(event):
 
 
 def card_clicked(event):
+    from .. import tasks
+
     action = event.get("action", {})
     action_params = action.get("parameters", [])
     action_name = action.get("actionMethodName")
@@ -758,26 +789,25 @@ def card_clicked(event):
         filter(lambda p: p.get("key") == "domain_id", action_params)
     ), None)
 
-    if action_name in ("mark-domain-registered", "mark-domain-register-fail", "mark-domain-restored"):
-        domain = models.DomainRegistration.objects.filter(pk=domain_id).first()  # type: models.DomainRegistration
-        if not domain:
+    if action_name in ("mark-domain-registered", "mark-domain-register-fail"):
+        domain_registration_order = models.DomainRegistrationOrder.objects \
+            .filter(pk=domain_id).first()  # type: models.DomainRegistrationOrder
+        if not domain_registration_order:
             return None
 
-        if not domain.has_scope(account_access_token, 'edit'):
+        if not domain_registration_order.has_scope(account_access_token, 'edit'):
             return {
                 "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
             }
 
         if action_name == "mark-domain-registered":
-            as_thread(emails.mail_registered)(domain)
-            domain.pending = False
-            domain.save()
+            tasks.process_domain_registration_complete.delay(domain_registration_order.id)
 
             return {
                 "actionResponse": {
                     "type": "UPDATE_MESSAGE"
                 },
-                "text": f"Registration of {domain.domain} completed by <{user_id}>",
+                "text": f"Registration of {domain_registration_order.domain} completed by <{user_id}>",
                 "cards": [{
                     "header": {
                         "title": "Domain registration complete",
@@ -787,12 +817,12 @@ def card_clicked(event):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain.domain
+                                "content": domain_registration_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain.pk)
+                                "content": str(domain_registration_order.domain_id)
                             }
                         }]
                     }, {
@@ -802,26 +832,25 @@ def card_clicked(event):
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse(
+                                                'domain', args=(domain_registration_order.domain_id,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-register-{domain.pk}"
+                    "name": f"domain-register-{domain_registration_order.domain_id}"
                 }]
             }
         elif action_name == "mark-domain-register-fail":
-            billing.reverse_charge(f"dm_{domain.pk}")
-            as_thread(emails.mail_register_failed)(domain)
-            domain.delete()
+            tasks.process_domain_registration_failed.delay(domain_registration_order.id)
 
             return {
                 "actionResponse": {
                     "type": "UPDATE_MESSAGE"
                 },
-                "text": f"Registration of {domain.domain} marked failed by <{user_id}>",
+                "text": f"Registration of {domain_registration_order.domain} marked failed by <{user_id}>",
                 "cards": [{
                     "header": {
                         "title": "Domain registration failed",
@@ -831,29 +860,37 @@ def card_clicked(event):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain.domain
+                                "content": domain_registration_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain.id)
+                                "content": str(domain_registration_order.domain_id)
                             }
                         }]
                     }],
-                    "name": f"domain-register-{domain.id}"
+                    "name": f"domain-register-{domain_registration_order.domain_id}"
                 }]
             }
-        elif action_name == "mark-domain-restored":
-            as_thread(emails.mail_restored)(domain)
-            domain.pending = False
-            domain.deleted = False
-            domain.save()
+    elif action_name in ("mark-domain-restored", "mark-domain-restore-fail"):
+        domain_restore_order = models.DomainRestoreOrder.objects\
+            .filter(pk=domain_id).first()  # type: models.DomainRestoreOrder
+        if not domain_restore_order:
+            return None
+
+        if not domain_restore_order.has_scope(account_access_token, 'edit'):
+            return {
+                "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
+            }
+
+        if action_name == "mark-domain-restored":
+            tasks.process_domain_restore_complete.delay(domain_restore_order.id)
 
             return {
                 "actionResponse": {
                     "type": "UPDATE_MESSAGE"
                 },
-                "text": f"Restore of {domain.domain} marked complete by <{user_id}>",
+                "text": f"Restore of {domain_restore_order.domain} marked complete by <{user_id}>",
                 "cards": [{
                     "header": {
                         "title": "Domain restore complete",
@@ -863,50 +900,67 @@ def card_clicked(event):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain.domain
+                                "content": domain_restore_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain.id)
+                                "content": str(domain_restore_order.id)
                             }
                         }]
                     }],
-                    "name": f"domain-restore-{domain.id}"
+                    "name": f"domain-restore-{domain_restore_order.id}"
                 }]
             }
-
-    elif action_name in ("mark-domain-transferred", "mark-domain-transfer-fail"):
-        domain = models.PendingDomainTransfer.objects.filter(pk=domain_id).first()  # type: models.PendingDomainTransfer
-        if not domain:
-            return None
-
-        if not domain.has_scope(account_access_token, 'edit'):
-            return {
-                "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
-            }
-
-        if action_name == "mark-domain-transferred":
-            as_thread(emails.mail_transferred)(domain)
-
-            new_domain = models.DomainRegistration(
-                domain=domain.domain,
-                auth_info=None,
-                pending=False,
-                deleted=False,
-                registrant_contact=domain.registrant_contact,
-                admin_contact=domain.admin_contact,
-                billing_contact=domain.billing_contact,
-                tech_contact=domain.tech_contact,
-            )
-            new_domain.save()
-            domain.delete()
+        elif action_name == "mark-domain-restore-fail":
+            tasks.process_domain_restore_complete.delay(domain_restore_order.id)
 
             return {
                 "actionResponse": {
                     "type": "UPDATE_MESSAGE"
                 },
-                "text": f"Transfer of {domain.domain} completed by <{user_id}>",
+                "text": f"Restore of {domain_restore_order.domain} marked failed by <{user_id}>",
+                "cards": [{
+                    "header": {
+                        "title": "Domain restore failed",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_restore_order.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_restore_order.id)
+                            }
+                        }]
+                    }],
+                    "name": f"domain-restore-{domain_restore_order.id}"
+                }]
+            }
+
+    elif action_name in ("mark-domain-transferred", "mark-domain-transfer-fail"):
+        domain_transfer_order = models.DomainTransferOrder.objects\
+            .filter(pk=domain_id).first()  # type: models.DomainTransferOrder
+        if not domain_transfer_order:
+            return None
+
+        if not domain_transfer_order.has_scope(account_access_token, 'edit'):
+            return {
+                "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
+            }
+
+        if action_name == "mark-domain-transferred":
+            tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
+
+            return {
+                "actionResponse": {
+                    "type": "UPDATE_MESSAGE"
+                },
+                "text": f"Transfer of {domain_transfer_order.domain} completed by <{user_id}>",
                 "cards": [{
                     "header": {
                         "title": "Domain transfer complete",
@@ -916,12 +970,12 @@ def card_clicked(event):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": new_domain.domain
+                                "content": domain_transfer_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(new_domain.pk)
+                                "content": str(domain_transfer_order.domain_id)
                             }
                         }]
                     }, {
@@ -931,26 +985,25 @@ def card_clicked(event):
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(new_domain.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse(
+                                                'domain', args=(domain_transfer_order.domain_id,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-transfer-{domain.id}"
+                    "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }
         elif action_name == "mark-domain-transfer-fail":
-            billing.reverse_charge(f"dm_transfer_{domain.pk}")
-            as_thread(emails.mail_transfer_failed)(domain)
-            domain.delete()
+            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
 
             return {
                 "actionResponse": {
                     "type": "UPDATE_MESSAGE"
                 },
-                "text": f"Transfer of {domain.domain} marked failed by <{user_id}>",
+                "text": f"Transfer of {domain_transfer_order.domain} marked failed by <{user_id}>",
                 "cards": [{
                     "header": {
                         "title": "Domain transfer failed",
@@ -960,15 +1013,15 @@ def card_clicked(event):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain.domain
+                                "content": domain_transfer_order.domain
                             }
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain.id)
+                                "content": str(domain_transfer_order.domain_id)
                             }
                         }]
                     }],
-                    "name": f"domain-transfer-{domain.id}"
+                    "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }

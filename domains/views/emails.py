@@ -1,9 +1,15 @@
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from celery import shared_task
 from .. import models
 
 
-def mail_registered(domain: models.DomainRegistration):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_registered(registration_order_id):
+    domain = models.DomainRegistrationOrder.objects\
+        .filter(pk=registration_order_id).first()  # type: models.DomainRegistrationOrder
     user = domain.get_user()
     if user:
         context = {
@@ -23,7 +29,12 @@ def mail_registered(domain: models.DomainRegistration):
         email.send()
 
 
-def mail_register_failed(domain: models.DomainRegistration, reason: str = None):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_register_failed(registration_order_id, reason: str = None):
+    domain = models.DomainRegistrationOrder.objects \
+        .filter(pk=registration_order_id).first()  # type: models.DomainRegistrationOrder
     user = domain.get_user()
     if user:
         context = {
@@ -44,7 +55,11 @@ def mail_register_failed(domain: models.DomainRegistration, reason: str = None):
         email.send()
 
 
-def mail_transferred(domain: models.PendingDomainTransfer):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_transferred(transfer_order_id):
+    domain = models.DomainTransferOrder.objects.filter(pk=transfer_order_id).first()  # type: models.DomainTransferOrder
     user = domain.get_user()
     if user:
         context = {
@@ -64,7 +79,11 @@ def mail_transferred(domain: models.PendingDomainTransfer):
         email.send()
 
 
-def mail_transfer_failed(domain: models.PendingDomainTransfer, reason: str = None):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_transfer_failed(transfer_order_id, reason: str = None):
+    domain = models.DomainTransferOrder.objects.filter(pk=transfer_order_id).first()  # type: models.DomainTransferOrder
     user = domain.get_user()
     if user:
         context = {
@@ -85,7 +104,11 @@ def mail_transfer_failed(domain: models.PendingDomainTransfer, reason: str = Non
         email.send()
 
 
-def mail_restored(domain: models.DomainRegistration):
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_restored(restore_order_id):
+    domain = models.DomainRestoreOrder.objects.filter(pk=restore_order_id).first()  # type: models.DomainRestoreOrder
     user = domain.get_user()
     if user:
         context = {
@@ -97,6 +120,31 @@ def mail_restored(domain: models.DomainRegistration):
 
         email = EmailMultiAlternatives(
             subject='Domain restore success',
+            body=txt_content,
+            to=[user.email],
+            bcc=['q@as207960.net']
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_restore_failed(restore_order_id, reason: str = None):
+    domain = models.DomainRestoreOrder.objects.filter(pk=restore_order_id).first()  # type: models.DomainRestoreOrder
+    user = domain.get_user()
+    if user:
+        context = {
+            "name": user.first_name,
+            "domain": domain.domain,
+            "reason": reason
+        }
+        html_content = render_to_string("domains_email/restore_fail.html", context)
+        txt_content = render_to_string("domains_email/restore_fail.txt", context)
+
+        email = EmailMultiAlternatives(
+            subject='Domain restore failure',
             body=txt_content,
             to=[user.email],
             bcc=['q@as207960.net']

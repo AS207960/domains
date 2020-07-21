@@ -6,7 +6,7 @@ If we can't charge your account by one day before the expiry date, then our shar
 delete your domains.
 
 {% for domain in domains %}
-- {{ domain.domain.name }} (expiring: {{ domain.expiry_date }})
+- {{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for failure: {{ domain.error }}
 {% endfor %}
 
 Thanks,

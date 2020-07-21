@@ -22,24 +22,18 @@ NAME_SERVER_SEARCH = threading.Lock()
 
 def make_secret():
     special = "!@#$%^*"
-    alphabet = string.ascii_uppercase + string.ascii_lowercase + string.digits + special
-    secret = "".join(secrets.choice(alphabet) for i in range(12))
-    if not any(c in secret for c in special):
-        secret += secrets.choice(special)
-    else:
-        secret += secrets.choice(alphabet)
-    if not any(c in secret for c in string.ascii_lowercase):
-        secret += secrets.choice(string.ascii_lowercase)
-    else:
-        secret += secrets.choice(alphabet)
-    if not any(c in secret for c in string.digits):
-        secret += secrets.choice(string.digits)
-    else:
-        secret += secrets.choice(alphabet)
-    if not any(c in secret for c in string.ascii_uppercase):
-        secret += secrets.choice(string.ascii_uppercase)
-    else:
-        secret += secrets.choice(alphabet)
+    ascii_uppercase = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+    ascii_lowercase = "abcdefghijkmnpqrstuvwxyz"
+    digits = "23456789"
+    alphabet = ascii_uppercase + ascii_lowercase + digits + special
+    secret = "".join(secrets.choice(alphabet) for _ in range(12))
+
+    for sa in (special, ascii_lowercase, digits, ascii_uppercase):
+        if not any(c in sa for c in sa):
+            secret += secrets.choice(sa)
+        else:
+            secret += secrets.choice(alphabet)
+
     return secret
 
 
@@ -312,10 +306,6 @@ class Contact(models.Model):
             urn="urn:as207960:domains:contact", super_save=super().save, view_name='edit_contact',
             args=args, kwargs=kwargs
         )
-
-    def delete(self, *args, **kwargs):
-        super().delete(*args, *kwargs)
-        delete_resource(self.resource_id)
     
     def __str__(self):
         return self.description
@@ -323,8 +313,10 @@ class Contact(models.Model):
     def can_delete(self):
         if self.domains_registrant.count() or self.domains_admin.count() or \
                 self.domains_tech.count() or self.domains_billing.count() or \
-                self.pending_domains_registrant.count() or self.pending_domains_admin.count() or \
-                self.pending_domains_tech.count() or self.pending_domains_billing.count():
+                self.domain_registration_orders_registrant.count() or self.domain_registration_orders_admin.count() or \
+                self.domain_registration_orders_tech.count() or self.domain_registration_orders_billing.count() or \
+                self.domain_transfer_orders_registrant.count() or self.domain_transfer_orders_admin.count() or \
+                self.domain_transfer_orders_tech.count() or self.domain_transfer_orders_billing.count():
             return False
 
         for i in self.contactregistry_set.all():
@@ -347,6 +339,8 @@ class Contact(models.Model):
                 error = rpc_error.details()
                 raise InternalError(error)
             i.delete()
+
+        delete_resource(self.resource_id)
         super().delete(*args, **kwargs)
 
     def get_registry_id(self, registry_id: str):
@@ -563,7 +557,6 @@ class DomainRegistration(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
-    pending = models.BooleanField(default=False, blank=True)
     deleted = models.BooleanField(default=False, blank=True)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_registrant')
@@ -618,26 +611,47 @@ class DomainRegistration(models.Model):
     def get_user(self):
         return get_resource_owner(self.resource_id)
 
+    @property
+    def pending_restore(self):
+        return self.domainrestoreorder_set.exclude(state__in=("C", "F")).count() != 0
+
     def __str__(self):
         return self.domain
 
 
-class PendingDomainTransfer(models.Model):
+class AbstractOrder(models.Model):
+    STATE_PENDING = "P"
+    STATE_STARTED = "T"
+    STATE_NEEDS_PAYMENT = "N"
+    STATE_PROCESSING = "S"
+    STATE_PENDING_APPROVAL = "A"
+    STATE_COMPLETED = "C"
+    STATE_FAILED = "F"
+
+    STATES = (
+        (STATE_PENDING, "Pending"),
+        (STATE_STARTED, "Started"),
+        (STATE_NEEDS_PAYMENT, "Needs payment"),
+        (STATE_PROCESSING, "Processing"),
+        (STATE_PENDING_APPROVAL, "Pending approval"),
+        (STATE_COMPLETED, "Completed"),
+        (STATE_FAILED, "Failed")
+    )
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    domain = models.CharField(max_length=255)
-    auth_info = models.CharField(max_length=255, blank=True, null=True)
-    registrant_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_registrant')
-    admin_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_admin')
-    billing_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_billing')
-    tech_contact = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='pending_domains_tech')
+    state = models.CharField(max_length=1, default=STATE_PENDING, choices=STATES)
+    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
+    price = models.DecimalField(decimal_places=2, max_digits=9)
+    redirect_uri = models.TextField(blank=True, null=True)
+    last_error = models.TextField(blank=True, null=True)
     resource_id = models.UUIDField(null=True)
 
+    resource_type: str
+    resource_urn: str
+    resource_display_name: str
+
     class Meta:
-        ordering = ['domain']
+        abstract = True
 
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
@@ -645,28 +659,27 @@ class PendingDomainTransfer(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, 'pending-transfer', action))
+        return cls.objects.filter(pk__in=get_object_ids(access_token, cls.resource_type, action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
-        scope_name = f"{action}-pending-transfer"
+        scope_name = f"{action}-{cls.resource_type}"
         return django_keycloak_auth.clients.get_authz_client() \
-            .eval_permission(access_token, f"pending-transfer", scope_name)
+            .eval_permission(access_token, cls.resource_type, scope_name)
 
     def has_scope(self, access_token: str, action='view'):
-        scope_name = f"{action}-domain"
+        scope_name = f"{action}-{self.resource_type}"
         return eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         sync_resource_to_keycloak(
             self,
-            display_name="Pending transfer", resource_type="pending-transfer", scopes=[
-                'view-pending-transfer',
-                'edit-pending-transfer',
-                'delete-pending-transfer',
-                'create-ns-pending-transfer'
+            display_name=self.resource_display_name, resource_type=self.resource_type, scopes=[
+                f'view-{self.resource_type}',
+                f'edit-{self.resource_type}',
+                f'delete-{self.resource_type}',
             ],
-            urn="urn:as207960:domains:pending-transfer", super_save=super().save, view_name=None,
+            urn=self.resource_urn, super_save=super().save, view_name=None,
             args=args, kwargs=kwargs
         )
 
@@ -679,15 +692,15 @@ class PendingDomainTransfer(models.Model):
             return self.user
         return get_resource_owner(self.resource_id)
 
-    def __str__(self):
-        return self.domain
 
+class DomainRegistrationOrder(AbstractOrder):
+    resource_type = "registration-order"
+    resource_urn = "urn:as207960:domains:registration_order"
+    resource_display_name = "Registration order"
 
-class DomainRegistrationOrder(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     domain = models.CharField(max_length=255)
     domain_id = models.UUIDField(default=uuid.uuid4)
-    pending = models.BooleanField(blank=True, default=True)
+    auth_info = models.CharField(max_length=255)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_registrant')
     admin_contact = models.ForeignKey(
@@ -698,20 +711,22 @@ class DomainRegistrationOrder(models.Model):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_tech')
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
-    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=9)
+    domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
 
+    def __str__(self):
+        return self.domain
 
-class DomainTransferOrder(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+class DomainTransferOrder(AbstractOrder):
+    resource_type = "transfer-order"
+    resource_urn = "urn:as207960:domains:transfer_order"
+    resource_display_name = "Transfer order"
+
     domain = models.CharField(max_length=255)
     domain_id = models.UUIDField(default=uuid.uuid4)
-    pending = models.BooleanField(blank=True, default=True)
     auth_code = models.CharField(max_length=255)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_registrant')
@@ -721,38 +736,45 @@ class DomainTransferOrder(models.Model):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_billing')
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_tech')
-    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    domain_obj = models.OneToOneField(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=9)
+    domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
 
+    def __str__(self):
+        return self.domain
 
-class DomainRenewOrder(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE)
-    pending = models.BooleanField(blank=True, default=True)
+
+class DomainRenewOrder(AbstractOrder):
+    resource_type = "renew-order"
+    resource_urn = "urn:as207960:domains:renew_order"
+    resource_display_name = "Renew order"
+
+    domain = models.CharField(max_length=255)
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
-    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    price = models.DecimalField(decimal_places=2, max_digits=9)
+    domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
 
+    def __str__(self):
+        return self.domain
 
-class DomainRestoreOrder(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE)
-    pending = models.BooleanField(blank=True, default=True)
-    charge_state_id = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+class DomainRestoreOrder(AbstractOrder):
+    resource_type = "restore-order"
+    resource_urn = "urn:as207960:domains:restore_order"
+    resource_display_name = "Restore order"
+
+    domain = models.CharField(max_length=255)
+    domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
+
+    def __str__(self):
+        return self.domain
 
 
 class HangoutsSpaces(models.Model):

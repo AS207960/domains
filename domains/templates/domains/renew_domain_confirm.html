@@ -13,10 +13,14 @@
             <p>Are you sure you want to renew this domain?</p>
             <form action="" method="post">
                 {% csrf_token %}
-                <a class="btn btn-secondary btn-md" href="{{ back_url }}" role="button">Cancel</a>
-                <button type="submit" name="renew" value="true" class="btn btn-primary">
-                    Renew
-                </button>
+                <div class="btn-group">
+                    <button type="submit" name="order" value="false" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" name="order" value="true" class="btn btn-primary">
+                        Renew
+                    </button>
+                </div>
             </form>
         </div>
     </div>
