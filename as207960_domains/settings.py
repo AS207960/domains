@@ -191,6 +191,11 @@ GCHAT_PROJECT_ID = os.getenv("GCHAT_PROJECT_ID")
 
 BILLING_URL = os.getenv("BILLING_URL")
 
+CELERY_RESULT_BACKEND = "rpc://"
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

@@ -107,6 +107,9 @@ spec:
             - secretRef:
                 name: domains-test-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-test-celery
+              prefix: "CELERY_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -137,6 +140,73 @@ spec:
             - secretRef:
                 name: domains-test-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-test-celery
+              prefix: "CELERY_"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domains-celery-test
+  labels:
+    app: domains-test
+    part: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domains-test
+      part: celery
+  template:
+    metadata:
+      labels:
+        app: domains-test
+        part: celery
+    spec:
+      volumes:
+        - name: static
+          persistentVolumeClaim:
+            claimName: domains-django-test-static
+        - name: media
+          persistentVolumeClaim:
+            claimName: domains-django-test-media
+        - name: ca-cert
+          configMap:
+            name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domains-test-google-creds
+      containers:
+        - name: gunicorn
+          image: as207960/domains-django:(version)
+          imagePullPolicy: Always
+          command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "6"]
+          volumeMounts:
+            - mountPath: "/app/static/"
+              name: static
+            - mountPath: "/app/media/"
+              name: media
+            - mountPath: "/ca-cert/"
+              name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
+          envFrom:
+            - configMapRef:
+                name: domains-django-test-conf
+            - secretRef:
+                name: domains-db-test-creds
+              prefix: "DB_"
+            - secretRef:
+                name: domains-django-test-secret
+            - secretRef:
+                name: domains-test-keycloak
+              prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-test-email
+              prefix: "EMAIL_"
+            - secretRef:
+                name: domains-test-celery
+              prefix: "CELERY_"
 ---
 apiVersion: v1
 kind: Service
