@@ -9,6 +9,7 @@
                 <p>
                     These are standard prices, premium domains will be charged differently.
                 </p>
+                <a href="{% url 'domain_price_query' %}" class="btn btn-info">Lookup exact price</a>
             </div>
         </div>
     </section>
@@ -35,7 +36,7 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-        </table>
+            </table>
         </div>
     </div>
 {% endblock %}

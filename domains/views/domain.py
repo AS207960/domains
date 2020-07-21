@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.utils.safestring import mark_safe
 from django.http import Http404
 from django.conf import settings
 from django.views.decorators.http import require_POST
@@ -7,11 +6,9 @@ from django.contrib.auth.decorators import login_required
 import django_keycloak_auth.clients
 import ipaddress
 import grpc
-import uuid
-import retry
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
-from . import billing, gchat_bot
+from . import  gchat_bot
 
 
 def index(request):
@@ -35,6 +32,36 @@ def domain_prices(request):
 
     return render(request, "domains/domain_prices.html", {
         "domains": zones
+    })
+
+
+def domain_price_query(request):
+    if request.method == "POST":
+        form = forms.DomainSearchForm(request.POST)
+        form.helper.form_action = request.get_full_path()
+        if form.is_valid():
+            zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
+            if zone:
+                try:
+                    data = zone.pricing.fees(sld)
+                    return render(request, "domains/domain_price_query.html", {
+                        "domain_form": form,
+                        "domain_data": data
+                    })
+                except grpc.RpcError as rpc_error:
+                    return render(request, "domains/domain_price_query.html", {
+                        "error": rpc_error.details(),
+                        "domain_form": form
+                    })
+            else:
+                form.add_error('domain', "Unsupported or invalid domain")
+
+    else:
+        form = forms.DomainSearchForm()
+        form.helper.form_action = request.get_full_path()
+
+    return render(request, "domains/domain_price_query.html", {
+        "domain_form": form
     })
 
 

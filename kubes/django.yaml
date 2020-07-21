@@ -109,6 +109,9 @@ spec:
             - secretRef:
                 name: domains-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-celery
+              prefix: "CELERY_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -139,6 +142,9 @@ spec:
             - secretRef:
                 name: domains-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-celery
+              prefix: "CELERY_"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -197,7 +203,78 @@ spec:
                 - secretRef:
                     name: domains-email
                   prefix: "EMAIL_"
+                - secretRef:
+                    name: domains-celery
+                  prefix: "CELERY_"
           restartPolicy: OnFailure
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domain-celery
+  labels:
+    app: domains
+    part: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domains
+      part: celery
+  template:
+    metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+      labels:
+        app: domains
+        part: celery
+    spec:
+      volumes:
+        - name: static
+          persistentVolumeClaim:
+            claimName: domains-django-static
+        - name: media
+          persistentVolumeClaim:
+            claimName: domains-django-media
+        - name: ca-cert
+          configMap:
+            name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domains-google-creds
+      containers:
+        - name: grpc
+          image: as207960/domains-django:(version)
+          imagePullPolicy: Always
+          command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "32"]
+          ports:
+            - containerPort: 50051
+          volumeMounts:
+            - mountPath: "/app/static/"
+              name: static
+            - mountPath: "/app/media/"
+              name: media
+            - mountPath: "/ca-cert/"
+              name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
+          envFrom:
+            - configMapRef:
+                name: domains-django-conf
+            - secretRef:
+                name: domains-db-creds
+              prefix: "DB_"
+            - secretRef:
+                name: domains-django-secret
+            - secretRef:
+                name: domains-keycloak
+              prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
+            - secretRef:
+                name: domains-celery
+              prefix: "CELERY_"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -263,6 +340,9 @@ spec:
             - secretRef:
                 name: domains-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-celery
+              prefix: "CELERY_"
 ---
 apiVersion: v1
 kind: Service

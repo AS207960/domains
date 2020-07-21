@@ -1,0 +1,61 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+    <section class="stripe my-5">
+        <div class="container py-3">
+            <div class="jumbotron my-0">
+                <h1 class="display-4">Check a domain's price</h1>
+                <h2>Check the exact price for any given domain, including premium domains</h2>
+                <hr class="my-4">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Error!</h4>
+                        <p>There was an error processing your request</p>
+                        <hr>
+                        <p class="mb-0">{{ error }}</p>
+                    </div>
+                {% endif %}
+                {% crispy domain_form domain_form.helper %}
+            </div>
+        </div>
+    </section>
+    {% if domain_data %}
+        <div class="container my-3 pt-3 pt-md-5">
+            <h2>Price check results</h2>
+            <div class="row">
+                <div class="col">
+                    <p>
+                        Transfer: <b>{% if domain_data.transfer %}{{ domain_data.transfer|floatformat:2|intcomma }} GBP{% else %}N/A{% endif %}</b>
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        Restore: <b>{% if domain_data.restore %}{{ domain_data.restore|floatformat:2|intcomma }} GBP{% else %}N/A{% endif %}</b>
+                    </p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Period</th>
+                        <th>Registration</th>
+                        <th>Renewal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for period in domain_data.periods %}
+                        <tr>
+                            <th>{{ period.period }}</th>
+                            <td>{% if period.create %}{{ period.create|floatformat:2|intcomma }} GBP{% else %}N/A{% endif %}</td>
+                            <td>{% if period.create %}{{ period.renew|floatformat:2|intcomma }} GBP{% else %}N/A{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

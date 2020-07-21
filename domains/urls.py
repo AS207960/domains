@@ -5,6 +5,7 @@ from .views import domain, hosts, contacts, admin, gchat_bot
 urlpatterns = [
     path('', domain.index, name='index'),
     path('prices/', domain.domain_prices, name='domain_prices'),
+    path('prices/query/', domain.domain_price_query, name='domain_price_query'),
     path('domains/', domain.domains, name='domains'),
     path('domains/new/', domain.domain_search, name='domain_search'),
     path('domains/new/<str:domain_name>/success/', domain.domain_search_success, name='domain_search_success'),

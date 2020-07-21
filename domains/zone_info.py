@@ -1,4 +1,5 @@
 from django.conf import settings
+from concurrent.futures import ThreadPoolExecutor
 import decimal
 import django_keycloak_auth.clients
 import requests
@@ -39,6 +40,17 @@ class SimplePrice:
 
     def representative_transfer(self):
         return decimal.Decimal(self._transfer) / decimal.Decimal(100) if self._transfer is not None else None
+
+    def fees(self, sld):
+        return {
+            "periods": list(map(lambda p: {
+                "period": p,
+                "create": self.registration(sld, p.value, p.unit),
+                "renew": self.renewal(sld, p.value, p.unit),
+            }, self.periods)),
+            "restore": self.restore(sld),
+            "transfer": self.transfer(sld),
+        }
 
     def registration(self, _sld: str, value=1, unit=0):
         if apps.epp_api.Period(
@@ -95,6 +107,17 @@ class LengthPrice:
 
     def representative_transfer(self):
         return decimal.Decimal(self._transfer) / decimal.Decimal(100) if self._transfer is not None else None
+
+    def fees(self, sld):
+        return {
+            "periods": list(map(lambda p: {
+                "period": p,
+                "create": self.registration(sld, p.value, p.unit),
+                "renew": self.renewal(sld, p.value, p.unit),
+            }, self.periods)),
+            "restore": self.restore(sld),
+            "transfer": self.transfer(sld),
+        }
 
     def registration(self, sld: str, value=1, unit=0):
         if apps.epp_api.Period(
@@ -160,6 +183,119 @@ class MarkupPrice:
     def representative_transfer(self):
         return decimal.Decimal(self._transfer) / decimal.Decimal(100) if self._transfer is not None else None
 
+    def fees(self, sld):
+        domain = f"{sld}.{self._tld}"
+
+        commands_split = [[apps.epp_api.fee_pb2.FeeCommand(
+            command=apps.epp_api.fee_pb2.Transfer,
+            period=None
+        ), apps.epp_api.fee_pb2.FeeCommand(
+            command=apps.epp_api.fee_pb2.Restore,
+            period=None
+        )]]
+
+        for period in self.periods:
+            commands_split.append([apps.epp_api.fee_pb2.FeeCommand(
+                command=apps.epp_api.fee_pb2.Create,
+                period=period.to_pb()
+            ), apps.epp_api.fee_pb2.FeeCommand(
+                command=apps.epp_api.fee_pb2.Renew,
+                period=period.to_pb()
+            )])
+
+        commands_resp = []
+
+        with ThreadPoolExecutor() as e:
+            resps = e.map(lambda commands: apps.epp_client.stub.DomainCheck(apps.epp_api.domain_pb2.DomainCheckRequest(
+                name=domain,
+                fee_check=apps.epp_api.fee_pb2.FeeCheck(
+                    currency=apps.epp_api.StringValue(value=self._currency) if self._currency else None,
+                    commands=commands
+                )
+            )), commands_split)
+
+        for resp in resps:
+            if not resp.HasField("fee_check"):
+                return {
+                    "periods": [],
+                    "restore": None,
+                    "transfer": None
+                }
+            if not resp.fee_check.available:
+                return {
+                    "periods": [],
+                    "restore": None,
+                    "transfer": None
+                }
+            commands_resp.extend(resp.fee_check.commands)
+
+        restore_command = next(filter(lambda c: c.command == apps.epp_api.fee_pb2.Restore, commands_resp), None)
+        transfer_command = next(filter(lambda c: c.command == apps.epp_api.fee_pb2.Transfer, commands_resp), None)
+        create_commands = list(filter(lambda c: c.command == apps.epp_api.fee_pb2.Create, commands_resp))
+        renew_commands = list(filter(lambda c: c.command == apps.epp_api.fee_pb2.Renew, commands_resp))
+
+        def map_fee(f):
+            period = apps.epp_api.Period.from_pb(f.period)
+            return {
+                "period": period,
+                "fee": self._convert_fee(f)
+            }
+
+        with ThreadPoolExecutor() as e:
+            create_periods = list(e.map(map_fee, create_commands))
+            renew_periods = list(e.map(map_fee, renew_commands))
+        periods = []
+
+        for create_period in create_periods:
+            periods.append({
+                "period": create_period["period"],
+                "create": create_period["fee"],
+                "renew": None
+            })
+
+        for renew_period in renew_periods:
+            found = False
+            for period in periods:
+                if period["period"] == renew_period["period"]:
+                    found = True
+                    period["renew"] = renew_period["fee"]
+
+            if not found:
+                periods.append({
+                    "period": renew_period["period"],
+                    "create": None,
+                    "renew": renew_period["fee"]
+                })
+
+        return {
+            "periods": periods,
+            "restore": self._convert_fee(restore_command) if restore_command else None,
+            "transfer": self._convert_fee(transfer_command) if transfer_command else None,
+        }
+
+    def _convert_fee(self, command):
+        total_fee = decimal.Decimal(0)
+        for fee in command.fees:
+            total_fee += decimal.Decimal(fee.value)
+        for credit in command.credits:
+            total_fee += decimal.Decimal(credit.value)
+
+        final_fee = total_fee * self._markup
+
+        client_token = django_keycloak_auth.clients.get_access_token()
+        r = requests.post(
+            f"{settings.BILLING_URL}/convert_currency/", json={
+                "amount": str(final_fee),
+                "from": command.currency,
+                "to": "GBP",
+            }, headers={
+                "Authorization": f"Bearer {client_token}"
+            }
+        )
+        r_data = r.json()
+        fee = decimal.Decimal(r_data.get("amount")).quantize(decimal.Decimal('1.00'))
+        return fee
+
     def _get_fee(self, sld, value, unit, command):
         domain = f"{sld}.{self._tld}"
         if unit is not None:
@@ -185,27 +321,8 @@ class MarkupPrice:
         if not resp.fee_check.available:
             return None
         command = resp.fee_check.commands[0]
-        total_fee = decimal.Decimal(0)
-        for fee in command.fees:
-            total_fee += decimal.Decimal(fee.value)
-        for credit in command.credits:
-            total_fee += decimal.Decimal(credit.value)
 
-        final_fee = total_fee * self._markup
-
-        client_token = django_keycloak_auth.clients.get_access_token()
-        r = requests.post(
-            f"{settings.BILLING_URL}/convert_currency/", json={
-                "amount": str(final_fee),
-                "from": command.currency,
-                "to": "GBP",
-            }, headers={
-                "Authorization": f"Bearer {client_token}"
-            }
-        )
-        r_data = r.json()
-        fee = decimal.Decimal(r_data.get("amount")).quantize(decimal.Decimal('1.00'))
-        return fee
+        return self._convert_fee(command)
 
     def registration(self, sld: str, value=1, unit=0):
         return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Create)
@@ -485,10 +602,7 @@ if settings.DEBUG:
             DomainInfo.REGISTRY_VERISIGN,
             MarkupPrice(2566, restore=4000, currency='USD', tld='tv', markup=decimal.Decimal("1.25"))
         )),
-        ('cc', DomainInfo(
-            DomainInfo.REGISTRY_VERISIGN,
-            MarkupPrice(825, restore=4000, currency='USD', tld='cc', markup=decimal.Decimal("1.5"))
-        )),
+        ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),
     )
 else:
     ZONES = (
