@@ -177,7 +177,7 @@ spec:
           secret:
             secretName: domains-test-google-creds
       containers:
-        - name: gunicorn
+        - name: celery
           image: as207960/domains-django:(version)
           imagePullPolicy: Always
           command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "6"]
