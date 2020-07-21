@@ -42,33 +42,43 @@ def domain_prices(request):
 def domains(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domains = models.DomainRegistration.get_object_list(access_token)
-    active_domains = user_domains.filter(deleted=False)
-    deleted_domains = user_domains.filter(deleted=True)
     registration_orders = models.DomainRegistrationOrder.get_object_list(access_token)
     transfer_orders = models.DomainTransferOrder.get_object_list(access_token)
     renew_orders = models.DomainRenewOrder.get_object_list(access_token)
     restore_orders = models.DomainRestoreOrder.get_object_list(access_token)
     error = None
 
+    active_domains = []
+    deleted_domains = []
+
     def get_domain(d):
-        try:
-            return {
-                "id": d.id,
-                "obj": d,
-                "domain": apps.epp_client.get_domain(d.domain)
-            }
-        except grpc.RpcError as rpc_error:
-            return {
-                "id": d.id,
-                "obj": d,
-                "error": rpc_error.details()
-            }
+        if d.deleted:
+            deleted_domains.append(d)
+        else:
+            try:
+                domain_data = apps.epp_client.get_domain(d.domain)
+                if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
+                    d.deleted = True
+                    d.save()
+                    deleted_domains.append(d)
+                else:
+                    active_domains.append({
+                        "id": d.id,
+                        "obj": d,
+                        "domain": domain_data
+                    })
+            except grpc.RpcError as rpc_error:
+                active_domains.append({
+                    "id": d.id,
+                    "obj": d,
+                    "error": rpc_error.details()
+                })
 
     with ThreadPoolExecutor() as executor:
-        domains_data = list(executor.map(get_domain, active_domains))
+        executor.map(get_domain, user_domains)
 
     return render(request, "domains/domains.html", {
-        "domains": domains_data,
+        "domains": active_domains,
         "deleted_domains": deleted_domains,
         "registration_orders": registration_orders,
         "transfer_orders": transfer_orders,

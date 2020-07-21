@@ -37,13 +37,13 @@ data:
   KEYCLOAK_CLIENT_ID: "domains"
   DB_HOST: "postgres"
   DB_NAME: "domains-test"
-  BILLING_URL: "http://billing-test-nginx"
+  BILLING_URL: "http://billing-nginx-test"
   EPP_PROXY_ADDR: "epp-proxy-test-primary:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_HOST: "mx.postal.as207960.net"
   EMAIL_HOST_USER: "apikey"
   EMAIL_PORT: "25"
-  EMAIL_FROM: "Glauca Domains [TEST] <domains-test@glauca.digital>"
+  EMAIL_FROM: "=?UTF-8?q?Glauca=20Domains=20[TEST]?= <domains-test@glauca.digital>"
   GCHAT_PROJECT_ID: "1045619794257"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
 ---
@@ -184,7 +184,7 @@ spec:
         - name: celery
           image: as207960/domains-django:(version)
           imagePullPolicy: Always
-          command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "6"]
+          command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "32"]
           volumeMounts:
             - mountPath: "/app/static/"
               name: static
