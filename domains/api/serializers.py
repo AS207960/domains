@@ -119,19 +119,202 @@ class ContactAddressSerializer(serializers.ModelSerializer):
 
 class ContactSerializer(serializers.ModelSerializer):
     local_address = PermissionPrimaryKeyRelatedField(model=models.Contact)
+    local_address_url = serializers.HyperlinkedRelatedField(
+        view_name='contactaddress-detail', source='local_address', read_only=True,
+    )
     int_address = PermissionPrimaryKeyRelatedField(model=models.Contact)
+    int_address_url = serializers.HyperlinkedRelatedField(
+        view_name='contactaddress-detail', source='int_address', read_only=True,
+    )
+    entity_type = serializers.ChoiceField(choices=(
+        ("not_set", "Not set"),
+        ("unknown_entity", "Unknown entity"),
+        ("uk_limited_company", "UK Limited Company"),
+        ("uk_public_limited_company", "UK Public Limited Company"),
+        ("uk_partnership", "UK Partnership"),
+        ("uk_sole_trader", "UK Sole Trader"),
+        ("uk_limited_liability_partnership", "UK Limited Liability Partnership"),
+        ("uk_industrial_provident_registered_company", "UK Industrial Provident Registered Company"),
+        ("uk_individual", "UK Individual"),
+        ("uk_school", "UK School"),
+        ("uk_registered_charity", "UK Registered Charity"),
+        ("uk_government_body", "UK Government Body"),
+        ("uk_corporation_by_royal_charter", "UK Corporation by Royal Charter"),
+        ("uk_statutory_body", "UK Statutory Body"),
+        ("uk_political_party", "UK Political party"),
+        ("other_uk_entity", "Other UK Entity"),
+        ("finnish_individual", "Finnish Individual"),
+        ("finnish_company", "Finnish Company"),
+        ("finnish_association", "Finnish Association"),
+        ("finnish_institution", "Finnish Institution"),
+        ("finnish_political_party", "Finnish Political Party"),
+        ("finnish_municipality", "Finnish Municipality"),
+        ("finnish_government", "Finnish Government"),
+        ("finnish_public_community", "Finnish Public Community"),
+        ("other_individual", "Other Individual"),
+        ("other_company", "Other Company"),
+        ("other_association", "Other Association"),
+        ("other_institution", "Other Institution"),
+        ("other_political_party", "Other Political Party"),
+        ("other_municipality", "Other Municipality"),
+        ("other_government", "Other Government"),
+        ("other_public_community", "Other Public Community"),
+    ), read_only=True)
 
     class Meta:
         model = models.Contact
-        fields = ('url', 'id', 'description', 'local_address', 'int_address', 'phone', 'phone_ext', 'fax', 'fax_ext',
-                  'email', 'entity_type', 'trading_name', 'company_number', 'disclose_phone', 'disclose_fax',
-                  'disclose_email')
+        fields = ('url', 'id', 'description', 'local_address', 'local_address_url', 'int_address', 'int_address_url',
+                  'phone', 'phone_ext', 'fax', 'fax_ext', 'email', 'entity_type', 'trading_name', 'company_number',
+                  'disclose_phone', 'disclose_fax', 'disclose_email')
         read_only_fields = ('created_date', 'updated_date')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["local_address"].auth_token = self.context['request'].auth.token
         self.fields["int_address"].auth_token = self.context['request'].auth.token
+
+    def to_representation(self, instance: models.Contact):
+        ret = super().to_representation(instance)
+
+        if instance.entity_type == 0:
+            ret["entity_type"] = "not_set"
+        elif instance.entity_type == 1:
+            ret["entity_type"] = "unknown_entity"
+        elif instance.entity_type == 2:
+            ret["entity_type"] = "uk_limited_company"
+        elif instance.entity_type == 3:
+            ret["entity_type"] = "uk_public_limited_company"
+        elif instance.entity_type == 4:
+            ret["entity_type"] = "uk_partnership"
+        elif instance.entity_type == 5:
+            ret["entity_type"] = "uk_sole_trader"
+        elif instance.entity_type == 6:
+            ret["entity_type"] = "uk_limited_liability_partnership"
+        elif instance.entity_type == 7:
+            ret["entity_type"] = "uk_industrial_provident_registered_company"
+        elif instance.entity_type == 8:
+            ret["entity_type"] = "uk_individual"
+        elif instance.entity_type == 9:
+            ret["entity_type"] = "uk_school"
+        elif instance.entity_type == 10:
+            ret["entity_type"] = "uk_registered_charity"
+        elif instance.entity_type == 11:
+            ret["entity_type"] = "uk_government_body"
+        elif instance.entity_type == 12:
+            ret["entity_type"] = "uk_corporation_by_royal_charter"
+        elif instance.entity_type == 13:
+            ret["entity_type"] = "uk_statutory_body"
+        elif instance.entity_type == 31:
+            ret["entity_type"] = "uk_political_party"
+        elif instance.entity_type == 14:
+            ret["entity_type"] = "other_uk_entity"
+        elif instance.entity_type == 15:
+            ret["entity_type"] = "finnish_individual"
+        elif instance.entity_type == 16:
+            ret["entity_type"] = "finnish_company"
+        elif instance.entity_type == 17:
+            ret["entity_type"] = "finnish_association"
+        elif instance.entity_type == 18:
+            ret["entity_type"] = "finnish_institution"
+        elif instance.entity_type == 19:
+            ret["entity_type"] = "finnish_political_party"
+        elif instance.entity_type == 20:
+            ret["entity_type"] = "finnish_municipality"
+        elif instance.entity_type == 21:
+            ret["entity_type"] = "finnish_government"
+        elif instance.entity_type == 22:
+            ret["entity_type"] = "finnish_public_community"
+        elif instance.entity_type == 23:
+            ret["entity_type"] = "other_individual"
+        elif instance.entity_type == 24:
+            ret["entity_type"] = "other_company"
+        elif instance.entity_type == 25:
+            ret["entity_type"] = "other_association"
+        elif instance.entity_type == 26:
+            ret["entity_type"] = "other_institution"
+        elif instance.entity_type == 27:
+            ret["entity_type"] = "other_political_party"
+        elif instance.entity_type == 28:
+            ret["entity_type"] = "other_municipality"
+        elif instance.entity_type == 29:
+            ret["entity_type"] = "other_government"
+        elif instance.entity_type == 30:
+            ret["entity_type"] = "other_public_community"
+        else:
+            ret["entity_typ"] = "unknown"
+
+        return ret
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+
+        if "entity_type" in ret:
+            if ret["entity_type"] == "not_set":
+                ret["entity_type"] = 0
+            elif ret["entity_type"] == "unknown_entity":
+                ret["entity_type"] = 1
+            elif ret["entity_type"] == "uk_limited_company":
+                ret["entity_type"] = 2
+            elif ret["entity_type"] == "uk_public_limited_company":
+                ret["entity_type"] = 3
+            elif ret["entity_type"] == "uk_partnership":
+                ret["entity_type"] = 4
+            elif ret["entity_type"] == "uk_sole_trader":
+                ret["entity_type"] = 5
+            elif ret["entity_type"] == "uk_limited_liability_partnership":
+                ret["entity_type"] = 6
+            elif ret["entity_type"] == "uk_industrial_provident_registered_company":
+                ret["entity_type"] = 7
+            elif ret["entity_type"] == "uk_individual":
+                ret["entity_type"] = 8
+            elif ret["entity_type"] == "uk_school":
+                ret["entity_type"] = 9
+            elif ret["entity_type"] == "uk_registered_charity":
+                ret["entity_type"] = 10
+            elif ret["entity_type"] == "uk_government_body":
+                ret["entity_type"] = 11
+            elif ret["entity_type"] == "uk_corporation_by_royal_charter":
+                ret["entity_type"] = 12
+            elif ret["entity_type"] == "uk_statutory_body":
+                ret["entity_type"] = 13
+            elif ret["entity_type"] == "uk_political_party":
+                ret["entity_type"] = 31
+            elif ret["entity_type"] == "other_uk_entity":
+                ret["entity_type"] = 14
+            elif ret["entity_type"] == "finnish_individual":
+                ret["entity_type"] = 15
+            elif ret["entity_type"] == "finnish_company":
+                ret["entity_type"] = 16
+            elif ret["entity_type"] == "finnish_association":
+                ret["entity_type"] = 17
+            elif ret["entity_type"] == "finnish_institution":
+                ret["entity_type"] = 18
+            elif ret["entity_type"] == "finnish_political_party":
+                ret["entity_type"] = 19
+            elif ret["entity_type"] == "finnish_municipality":
+                ret["entity_type"] = 20
+            elif ret["entity_type"] == "finnish_government":
+                ret["entity_type"] = 21
+            elif ret["entity_type"] == "finnish_public_community":
+                ret["entity_type"] = 22
+            elif ret["entity_type"] == "other_individual":
+                ret["entity_type"] = 23
+            elif ret["entity_type"] == "other_company":
+                ret["entity_type"] = 24
+            elif ret["entity_type"] == "other_association":
+                ret["entity_type"] = 25
+            elif ret["entity_type"] == "other_institution":
+                ret["entity_type"] = 26
+            elif ret["entity_type"] == "other_political_party":
+                ret["entity_type"] = 27
+            elif ret["entity_type"] == "other_municipality":
+                ret["entity_type"] = 28
+            elif ret["entity_type"] == "other_government":
+                ret["entity_type"] = 29
+            elif ret["entity_type"] == "other_public_community":
+                ret["entity_type"] = 30
+
+        return ret
 
 
 @dataclasses.dataclass
@@ -906,6 +1089,19 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
     def create(self, validated_data):
         zone, sld = zone_info.get_domain_info(validated_data["domain"])
 
+        if zone.admin_required and not validated_data['admin_contact']:
+            raise serializers.ValidationError({
+                "admin_contact": "Required for this registry"
+            })
+        if zone.billing_required and not validated_data['billing_contact']:
+            raise serializers.ValidationError({
+                "billing_contact": "Required for this registry"
+            })
+        if zone.tech_required and not validated_data['tech_contact']:
+            raise serializers.ValidationError({
+                "tech_contact": "Required for this registry"
+            })
+
         if not zone:
             raise PermissionDenied
 
@@ -1013,6 +1209,19 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
 
     def create(self, validated_data):
         zone, sld = zone_info.get_domain_info(validated_data["domain"])
+
+        if zone.admin_required and not validated_data['admin_contact']:
+            raise serializers.ValidationError({
+                "admin_contact": "Required for this registry"
+            })
+        if zone.billing_required and not validated_data['billing_contact']:
+            raise serializers.ValidationError({
+                "billing_contact": "Required for this registry"
+            })
+        if zone.tech_required and not validated_data['tech_contact']:
+            raise serializers.ValidationError({
+                "tech_contact": "Required for this registry"
+            })
 
         if not zone:
             raise PermissionDenied

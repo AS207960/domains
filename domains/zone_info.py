@@ -356,6 +356,7 @@ class DomainInfo:
     REGISTRY_DNSBELGIUM = "dnsbelgium"
     REGISTRY_INTERLINK = "interlink"
     REGISTRY_EURID = "eurid"
+    REGISTRY_GOOGLE = "google"
 
     def __init__(self, registry, pricing):
         self.registry = registry
@@ -388,6 +389,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
+            self.REGISTRY_GOOGLE,
         )
 
     @property
@@ -470,6 +472,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
+            self.REGISTRY_GOOGLE,
         )
 
     @property
@@ -491,6 +494,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
+            self.REGISTRY_GOOGLE,
         )
 
     @property
@@ -513,6 +517,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
+            self.REGISTRY_GOOGLE,
         )
 
 
@@ -673,6 +678,10 @@ else:
         ('eu', DomainInfo(
             DomainInfo.REGISTRY_EURID,
             MarkupPrice(1728, transfer=1728, restore=2880, currency=None, display_currency='EUR', tld='eu', markup=decimal.Decimal("1.6"))
+        )),
+        ('soy', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(478, transfer=4478, restore=216, currency=None, display_currency='USD', tld='soy', markup=decimal.Decimal("1.2"))
         )),
     )
 

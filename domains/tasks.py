@@ -541,8 +541,9 @@ def process_domain_transfer_contacts(transfer_order_id):
         return
 
     domain_data = apps.epp_client.get_domain(domain_transfer_order.domain)
-    registrant_id = process_domain_transfer.registrant_contact.get_registry_id(domain_data.registry_name)
-    domain_data.set_registrant(registrant_id.registry_contact_id)
+    if zone.registrant_supported:
+        registrant_id = domain_transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
+        domain_data.set_registrant(registrant_id.registry_contact_id)
     if domain_transfer_order.tech_contact and zone.tech_supported:
         tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(domain_data.registry_name)
         domain_data.set_tech(tech_contact_id.registry_contact_id)

@@ -4,13 +4,10 @@ from rest_framework.settings import api_settings
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
-from django.conf import settings
-import grpc
 from concurrent.futures import ThreadPoolExecutor
 
 from . import serializers, permissions, auth
 from .. import models, apps, zone_info
-from ..views import billing, gchat_bot
 
 
 class ContactAddressViewSet(viewsets.ModelViewSet):
