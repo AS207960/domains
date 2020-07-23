@@ -1,17 +1,94 @@
 import dataclasses
+import collections
 import datetime
 import decimal
 import ipaddress
 import typing
-import uuid
 
-import grpc
 from django.core.exceptions import PermissionDenied
 from rest_framework import exceptions, serializers
 from rest_framework.settings import api_settings
 
-from .. import apps, models, zone_info
-from ..views import billing, gchat_bot
+from .. import apps, models, zone_info, tasks
+
+
+class PermissionPrimaryKeyRelatedFieldValidator:
+    requires_context = True
+
+    def __call__(self, value, ctx):
+        if not value.has_scope(ctx.auth_token, 'view'):
+            raise serializers.ValidationError("you don't have permission to reference this object")
+
+
+class PermissionPrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
+    def __init__(self, model, **kwargs):
+        self.model = model
+        self.auth_token = None
+        super().__init__(queryset=model.objects.all(), **kwargs)
+
+    def get_choices(self, cutoff=None):
+        if self.auth_token:
+            queryset = self.model.get_object_list(self.auth_token)
+        else:
+            queryset = self.get_queryset()
+
+        if queryset is None:
+            return {}
+
+        if cutoff is not None:
+            queryset = queryset[:cutoff]
+
+        return collections.OrderedDict([
+            (
+                self.to_representation(item),
+                self.display_value(item)
+            )
+            for item in queryset
+        ])
+
+    def get_validators(self):
+        validators = super().get_validators()
+        validators.append(PermissionPrimaryKeyRelatedFieldValidator())
+        return validators
+
+
+class WriteOnceMixin:
+    def get_fields(self):
+        fields = super().get_fields()
+
+        if 'update' in getattr(self.context.get('view'), 'action', ''):
+            self._set_write_once_fields(fields)
+            self._set_write_after_fields(fields)
+
+        return fields
+
+    def _set_write_once_fields(self, fields):
+        write_once_fields = getattr(self.Meta, 'write_once_fields', None)
+        if not write_once_fields:
+            return
+
+        if not isinstance(write_once_fields, (list, tuple)):
+            raise TypeError(
+                'The `write_once_fields` option must be a list or tuple. '
+                'Got {}.'.format(type(write_once_fields).__name__)
+            )
+
+        for field_name in write_once_fields:
+            fields[field_name].read_only = True
+
+    def _set_write_after_fields(self, fields):
+        write_after_fields = getattr(self.Meta, 'write_after_fields', None)
+        if not write_after_fields:
+            return
+
+        if not isinstance(write_after_fields, (list, tuple)):
+            raise TypeError(
+                'The `write_after_fields` option must be a list or tuple. '
+                'Got {}.'.format(type(write_after_fields).__name__)
+            )
+
+        for field_name in write_after_fields:
+            fields[field_name].read_only = False
 
 
 class ObjectExists(exceptions.APIException):
@@ -41,6 +118,9 @@ class ContactAddressSerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
+    local_address = PermissionPrimaryKeyRelatedField(model=models.Contact)
+    int_address = PermissionPrimaryKeyRelatedField(model=models.Contact)
+
     class Meta:
         model = models.Contact
         fields = ('url', 'id', 'description', 'local_address', 'int_address', 'phone', 'phone_ext', 'fax', 'fax_ext',
@@ -48,17 +128,10 @@ class ContactSerializer(serializers.ModelSerializer):
                   'disclose_email')
         read_only_fields = ('created_date', 'updated_date')
 
-    def validate(self, data):
-        errs = {}
-
-        for k in ('local_address', 'int_address'):
-            if data.get(k):
-                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
-                    errs[k] = "you don't have permission to reference this object"
-
-        if errs:
-            raise serializers.ValidationError(errs)
-        return data
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["local_address"].auth_token = self.context['request'].auth.token
+        self.fields["int_address"].auth_token = self.context['request'].auth.token
 
 
 @dataclasses.dataclass
@@ -302,19 +375,19 @@ class DomainSerializer(serializers.Serializer):
         read_only=True
     )
     deleted = serializers.BooleanField(read_only=True)
-    registrant = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all())
+    registrant = PermissionPrimaryKeyRelatedField(model=models.Contact)
     registrant_url = serializers.HyperlinkedRelatedField(
         view_name='contact-detail', source='registrant', read_only=True,
     )
-    admin_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    admin_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
     admin_contact_url = serializers.HyperlinkedRelatedField(
         view_name='contact-detail', source='admin_contact', allow_null=True, read_only=True
     )
-    billing_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    billing_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
     billing_contact_url = serializers.HyperlinkedRelatedField(
         view_name='contact-detail', source='billing_contact', allow_null=True, read_only=True
     )
-    tech_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
+    tech_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
     tech_contact_url = serializers.HyperlinkedRelatedField(
         view_name='contact-detail', source='tech_contact', allow_null=True, read_only=True
     )
@@ -338,22 +411,21 @@ class DomainSerializer(serializers.Serializer):
     last_updated = serializers.DateTimeField(read_only=True, allow_null=True)
     last_transferred = serializers.DateTimeField(read_only=True, allow_null=True)
 
-    def validate(self, data):
-        errs = {}
-
-        for k in ('registrant', 'admin_contact', 'billing_contact', 'tech_contact'):
-            if data.get(k):
-                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
-                    errs[k] = "you don't have permission to reference this object"
-
-        if errs:
-            raise serializers.ValidationError(errs)
-        return data
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["registrant"].auth_token = self.context['request'].auth.token
+        self.fields["admin_contact"].auth_token = self.context['request'].auth.token
+        self.fields["billing_contact"].auth_token = self.context['request'].auth.token
+        self.fields["tech_contact"].auth_token = self.context['request'].auth.token
 
     @classmethod
     def get_domain(cls, d: models.DomainRegistration, user):
+        domain_info = zone_info.get_domain_info(d.domain)[0]
         domain = apps.epp_client.get_domain(d.domain)
-        registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user)
+        if domain_info.registrant_supported:
+            registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user)
+        else:
+            registrant = d.registrant_contact
         if domain.admin:
             admin = models.Contact.get_contact(domain.admin.contact_id, domain.registry_name, user)
         elif d.admin_contact:
@@ -396,6 +468,10 @@ class DomainSerializer(serializers.Serializer):
                 user
             )
             hosts.append(ns_obj)
+
+        if apps.epp_api.rgp_pb2.RedemptionPeriod in domain.rgp_state:
+            d.deleted = True
+            d.save()
 
         return Domain(
             id=d.id,
@@ -645,202 +721,6 @@ class DomainSerializer(serializers.Serializer):
         return instance
 
 
-class DomainCreateSerializer(serializers.Serializer):
-    url = serializers.HyperlinkedIdentityField(view_name='domain-detail', lookup_field='id', lookup_url_kwarg='pk')
-    id = serializers.UUIDField(read_only=True)
-    domain = serializers.CharField(max_length=255)
-    registrant = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all())
-    registrant_url = serializers.HyperlinkedRelatedField(
-        view_name='contact-detail', source='registrant', read_only=True,
-    )
-    admin_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
-    admin_contact_url = serializers.HyperlinkedRelatedField(
-        view_name='contact-detail', source='admin_contact', allow_null=True, read_only=True
-    )
-    billing_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
-    billing_contact_url = serializers.HyperlinkedRelatedField(
-        view_name='contact-detail', source='billing_contact', allow_null=True, read_only=True
-    )
-    tech_contact = serializers.PrimaryKeyRelatedField(queryset=models.Contact.objects.all(), allow_null=True)
-    tech_contact_url = serializers.HyperlinkedRelatedField(
-        view_name='contact-detail', source='tech_contact', allow_null=True, read_only=True
-    )
-    name_servers = serializers.ListField(
-        child=DomainNameServerSerializer()
-    )
-    auth_info = serializers.CharField(max_length=255, read_only=True)
-    sec_dns = DomainSecDNSSerializer(allow_null=True)
-    period = DomainPeriodSerializer(write_only=True)
-    pending = serializers.BooleanField(read_only=True)
-    created = serializers.DateTimeField(read_only=True, allow_null=True)
-    expiry = serializers.DateTimeField(read_only=True, allow_null=True)
-
-    def validate(self, data):
-        errs = {}
-
-        for k in ('registrant', 'admin_contact', 'billing_contact', 'tech_contact'):
-            if data.get(k):
-                if not data[k].has_scope(self.context['request'].auth.token, 'view'):
-                    errs[k] = "you don't have permission to reference this object"
-
-        if errs:
-            raise serializers.ValidationError(errs)
-        return data
-
-    def create(self, validated_data):
-        domain = validated_data['domain']
-        domain_info, sld = zone_info.get_domain_info(domain)
-
-        if not domain_info:
-            raise PermissionDenied
-
-        available, _, registry_id = apps.epp_client.check_domain(domain)
-
-        if not available:
-            raise ObjectExists()
-
-        zone_price, registry_name = domain_info.pricing, domain_info.registry
-
-        auth_info = models.make_secret()
-        registrant = validated_data['registrant']
-        admin_contact = validated_data['admin_contact']
-        billing_contact = validated_data['billing_contact']
-        tech_contact = validated_data['tech_contact']
-        period = validated_data['period']
-        name_servers = list(map(
-            lambda n: DomainNameServer(**{"host_object": None, "host_name": None, "addresses": None, **n}),
-            validated_data['name_servers']
-        ))
-        sec_dns = validated_data['sec_dns']
-        domain_id = uuid.uuid4()
-
-        if not name_servers:
-            name_servers = [
-                DomainNameServer(host_object='ns1.as207960.net', host_name=None, addresses=None),
-                DomainNameServer(host_object='ns2.as207960.net', host_name=None, addresses=None),
-            ]
-
-        period_obj = apps.epp_api.Period(
-            unit=apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y"
-            else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None,
-            value=period['value']
-        )
-
-        domain_db_obj = models.DomainRegistration(
-            id=domain_id,
-            domain=domain,
-            registrant_contact=registrant,
-            admin_contact=admin_contact,
-            tech_contact=tech_contact,
-            billing_contact=billing_contact,
-            auth_info=auth_info,
-            user=self.context['request'].user
-        )
-
-        create_req = apps.epp_api.domain_pb2.DomainCreateRequest(
-            name=domain,
-            period=period_obj.to_pb(),
-        )
-
-        for ns in name_servers:
-            if ns.host_object:
-                host_available, _ = apps.epp_client.check_host(ns.host_object, registry_id)
-                if host_available:
-                    apps.epp_client.create_host(ns.host_object, [], registry_id)
-                create_req.nameservers.append(apps.epp_api.domain_pb2.NameServer(
-                    host_obj=ns.host_object
-                ))
-            elif ns.host_name:
-                create_req.nameservers.append(apps.epp_api.domain_pb2.NameServer(
-                    host_name=ns.host_name,
-                    addresses=NameServerSerializer.map_addrs(ns.addresses)
-                ))
-
-        if sec_dns:
-            if sec_dns['max_sig_life']:
-                create_req.sec_dns.max_sig_life.value = sec_dns['max_sig_life'].total_seconds()
-            if sec_dns['ds_data']:
-                create_req.sec_dns.ds_data.data.extend(list(map(
-                    lambda k: apps.epp_api.SecDNSDSData(
-                        key_tag=k['key_tag'],
-                        algorithm=k['algorithm'],
-                        digest_type=k['digest_type'],
-                        digest=k['digest'],
-                        key_data=apps.epp_api.SecDNSKeyData(
-                            **k['key_data']
-                        ) if 'key_data' in k and k['key_data'] else None
-                    ).to_pb(),
-                    sec_dns['ds_data']
-                )))
-            if sec_dns['key_data']:
-                create_req.sec_dns.key_data.data.extend(list(map(
-                    lambda k: apps.epp_api.SecDNSKeyData(**k).to_pb(),
-                    sec_dns['key_data']
-                )))
-
-        billing_value = zone_price.registration(sld, unit=period_obj.unit, value=period_obj.value)
-        if billing_value is None:
-            raise PermissionDenied
-        charge_state = billing.charge_account(
-            self.context['request'].user.username,
-            billing_value,
-            f"{domain} domain registration",
-            f"dm_{domain_id}"
-        )
-        if not charge_state.success:
-            raise BillingError(detail=charge_state.error)
-
-        if domain_info.direct_registration_supported:
-            try:
-                if domain_info.registrant_supported:
-                    create_req.registrant = registrant.get_registry_id(registry_id).registry_contact_id
-                if domain_info.admin_supported and admin_contact:
-                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                        type="admin",
-                        id=admin_contact.get_registry_id(registry_id).registry_contact_id
-                    ))
-                if domain_info.billing_supported and billing_contact:
-                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                        type="billing",
-                        id=billing_contact.get_registry_id(registry_id).registry_contact_id
-                    ))
-                if domain_info.tech_supported and tech_contact:
-                    create_req.contacts.append(apps.epp_api.domain_pb2.Contact(
-                        type="tech",
-                        id=tech_contact.get_registry_id(registry_id).registry_contact_id
-                    ))
-
-                resp = apps.epp_client.stub.DomainCreate(create_req)
-            except grpc.RpcError as rpc_error:
-                billing.reverse_charge(f"dm_{domain_id}")
-                raise rpc_error
-            domain_db_obj.save()
-            gchat_bot.notify_registration(domain_db_obj, registry_id, period)
-        else:
-            resp = None
-            domain_db_obj.save()
-            gchat_bot.request_registration(domain_db_obj, registry_id, period)
-
-        return DomainCreate(
-            id=str(domain_id),
-            domain=domain,
-            registrant=domain_db_obj.registrant_contact,
-            admin_contact=domain_db_obj.admin_contact,
-            billing_contact=domain_db_obj.billing_contact,
-            tech_contact=domain_db_obj.tech_contact,
-            name_servers=name_servers,
-            auth_info=auth_info,
-            sec_dns=sec_dns,
-            pending=domain_db_obj.pending,
-            created=resp.creation_date.ToDatetime() if resp and resp.HasField("creation_date") else None,
-            expiry=resp.expiry_date.ToDatetime() if resp and resp.HasField("expiry_date") else None,
-        )
-
-
-class DomainRenewSerializer(serializers.Serializer):
-    period = DomainPeriodSerializer(write_only=True)
-
-
 class DomainCheckSerializer(serializers.Serializer):
     domain = serializers.CharField(max_length=255)
     period = DomainPeriodSerializer(write_only=True)
@@ -862,3 +742,429 @@ class DomainCheckRestoreSerializer(serializers.Serializer):
     available = serializers.BooleanField(read_only=True)
     reason = serializers.CharField(read_only=True, allow_null=True)
     price = serializers.DecimalField(max_digits=9, decimal_places=2, read_only=True, allow_null=True)
+
+
+class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
+    state = serializers.ChoiceField(choices=(
+        ("pending", "Pending"),
+        ("started", "Started"),
+        ("processing", "Processing"),
+        ("needs_payment", "Needs payment"),
+        ("pending_approval", "Pending approval"),
+        ("completed", "Completed"),
+        ("failed", "Failed"),
+    ), read_only=True)
+
+    def to_representation(self, instance: models.AbstractOrder):
+        ret = {
+            "url": self.fields["url"].to_representation(instance),
+            "id": self.fields["id"].to_representation(instance.pk),
+            "redirect_uri": self.fields["redirect_uri"].to_representation(instance.redirect_uri)
+            if instance.redirect_uri else None,
+            "last_error": self.fields["last_error"].to_representation(instance.last_error)
+            if instance.last_error else None,
+            "off_session": instance.off_session,
+            "price": instance.price
+        }
+
+        if instance.state == models.AbstractOrder.STATE_STARTED:
+            ret["state"] = "started"
+        elif instance.state == models.AbstractOrder.STATE_PENDING:
+            ret["state"] = "pending"
+        elif instance.state == models.AbstractOrder.STATE_PROCESSING:
+            ret["state"] = "processing"
+        elif instance.state == models.AbstractOrder.STATE_NEEDS_PAYMENT:
+            ret["state"] = "needs_payment"
+        elif instance.state == models.AbstractOrder.STATE_PENDING_APPROVAL:
+            ret["state"] = "pending_approval"
+        elif instance.state == models.AbstractOrder.STATE_COMPLETED:
+            ret["state"] = "completed"
+        elif instance.state == models.AbstractOrder.STATE_FAILED:
+            ret["state"] = "failed"
+        else:
+            ret["state"] = "unknown"
+
+        return ret
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+
+        if "state" in ret:
+            if ret["state"] == "started":
+                ret["state"] = models.AbstractOrder.STATE_STARTED
+            elif ret["state"] == "pending":
+                ret["state"] = models.AbstractOrder.STATE_PENDING
+            elif ret["state"] == "processing":
+                ret["state"] = models.AbstractOrder.STATE_PROCESSING
+            elif ret["state"] == "needs_payment":
+                ret["state"] = models.AbstractOrder.STATE_NEEDS_PAYMENT
+            elif ret["state"] == "pending_approval":
+                ret["state"] = models.AbstractOrder.STATE_PENDING_APPROVAL
+            elif ret["state"] == "completed":
+                ret["state"] = models.AbstractOrder.STATE_COMPLETED
+            elif ret["state"] == "failed":
+                ret["state"] = models.AbstractOrder.STATE_FAILED
+
+        return ret
+
+    def update(self, instance, validated_data):
+        if instance.state != models.DomainRegistrationOrder.STATE_PENDING:
+            raise serializers.ValidationError({
+                "state": ["invalid state transition"]
+            })
+        else:
+            if validated_data["state"] not in (
+                    models.DomainRegistrationOrder.STATE_STARTED, models.DomainRegistrationOrder.STATE_FAILED
+            ):
+                raise serializers.ValidationError({
+                    "state": ["invalid state transition"]
+                })
+
+            instance.state = validated_data["state"]
+            instance.save()
+
+        return instance
+
+
+class DomainRegistrationOrderSerializer(BaseOrderSerializer):
+    period = DomainPeriodSerializer()
+    registrant = PermissionPrimaryKeyRelatedField(model=models.Contact, source='registrant_contact')
+    registrant_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='registrant_contact', read_only=True,
+    )
+    admin_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    admin_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='admin_contact', allow_null=True, read_only=True
+    )
+    billing_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    billing_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='billing_contact', allow_null=True, read_only=True
+    )
+    tech_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    tech_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='tech_contact', allow_null=True, read_only=True
+    )
+    domain_obj = serializers.PrimaryKeyRelatedField(
+        allow_null=True, read_only=True
+    )
+    domain_obj_url = serializers.HyperlinkedRelatedField(
+        view_name='domain-detail', source='domain_obj', allow_null=True, read_only=True
+    )
+
+    class Meta:
+        model = models.DomainRegistrationOrder
+        fields = ('url', 'id', 'state', 'domain', 'domain_id', 'registrant', 'registrant_url',
+                  'admin_contact', 'admin_contact_url', 'billing_contact', 'billing_contact_url',
+                  'tech_contact', 'tech_contact_url', 'domain_obj', 'domain_obj_url', 'redirect_uri',
+                  'last_error', 'period', 'price', 'off_session')
+        read_only_fields = ('domain_id', 'redirect_uri', 'last_error', 'price', 'domain_obj')
+        write_once_fields = ('domain', 'registrant', 'admin_contact', 'billing_contact', 'tech_contact', 'period',
+                             'off_session',)
+        write_after_fields = ('state',)
+        extra_kwargs = {'off_session': {'default': True}}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["registrant"].auth_token = self.context['request'].auth.token
+        self.fields["admin_contact"].auth_token = self.context['request'].auth.token
+        self.fields["billing_contact"].auth_token = self.context['request'].auth.token
+        self.fields["tech_contact"].auth_token = self.context['request'].auth.token
+
+    def to_representation(self, instance: models.DomainRegistrationOrder):
+        ret = super().to_representation(instance)
+
+        ret = dict(**ret, **{
+            "domain": self.fields["domain"].to_representation(instance.domain),
+            "domain_id": self.fields["domain_id"].to_representation(instance.domain_id),
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "registrant": self.fields["registrant"].to_representation(instance.registrant_contact),
+            "registrant_url": self.fields["registrant_url"].to_representation(instance.registrant_contact),
+            "admin_contact": self.fields["admin_contact"].to_representation(instance.admin_contact)
+            if instance.admin_contact is not None else None,
+            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance.admin_contact)
+            if instance.admin_contact is not None else None,
+            "billing_contact": self.fields["billing_contact"].to_representation(instance.billing_contact)
+            if instance.billing_contact is not None else None,
+            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance.billing_contact)
+            if instance.billing_contact is not None else None,
+            "tech_contact": self.fields["tech_contact"].to_representation(instance.tech_contact)
+            if instance.tech_contact is not None else None,
+            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance.tech_contact)
+            if instance.tech_contact is not None else None,
+            "period": {
+                "unit": "y" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Years
+                else "m" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Months else "unknown",
+                "value": instance.period_value,
+            },
+        })
+
+        return ret
+
+    def create(self, validated_data):
+        zone, sld = zone_info.get_domain_info(validated_data["domain"])
+
+        if not zone:
+            raise PermissionDenied
+
+        zone_price, registry_name = zone.pricing, zone.registry
+        period = apps.epp_api.Period(
+            unit=apps.epp_api.common_pb2.Period.Unit.Years if validated_data['period']['unit'] == "y"
+            else apps.epp_api.common_pb2.Period.Unit.Months if validated_data['period']['unit'] == "m" else None,
+            value=validated_data['period']['value']
+        )
+
+        billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
+        if billing_value is None:
+            raise PermissionDenied
+
+        order = models.DomainRegistrationOrder(
+            domain=validated_data["domain"],
+            period_unit=period.unit,
+            period_value=period.value,
+            registrant_contact=validated_data['registrant_contact'],
+            admin_contact=validated_data['admin_contact'],
+            billing_contact=validated_data['billing_contact'],
+            tech_contact=validated_data['tech_contact'],
+            user=self.context['request'].user,
+            price=billing_value,
+            auth_info=models.make_secret(),
+            state=models.DomainRegistrationOrder.STATE_STARTED,
+            off_session=validated_data["off_session"]
+        )
+        order.save()
+        tasks.process_domain_registration.delay(order.id)
+        return order
+
+
+class DomainTransferOrderSerializer(BaseOrderSerializer):
+    registrant = PermissionPrimaryKeyRelatedField(model=models.Contact, source='registrant_contact')
+    registrant_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='registrant_contact', read_only=True,
+    )
+    admin_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    admin_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='admin_contact', allow_null=True, read_only=True
+    )
+    billing_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    billing_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='billing_contact', allow_null=True, read_only=True
+    )
+    tech_contact = PermissionPrimaryKeyRelatedField(model=models.Contact, allow_null=True)
+    tech_contact_url = serializers.HyperlinkedRelatedField(
+        view_name='contact-detail', source='tech_contact', allow_null=True, read_only=True
+    )
+    domain_obj = serializers.PrimaryKeyRelatedField(
+        allow_null=True, read_only=True
+    )
+    domain_obj_url = serializers.HyperlinkedRelatedField(
+        view_name='domain-detail', source='domain_obj', allow_null=True, read_only=True
+    )
+
+    class Meta:
+        model = models.DomainTransferOrder
+        fields = ('url', 'id', 'state', 'domain', 'domain_id', 'registrant', 'registrant_url',
+                  'admin_contact', 'admin_contact_url', 'billing_contact', 'billing_contact_url',
+                  'tech_contact', 'tech_contact_url', 'domain_obj', 'domain_obj_url', 'redirect_uri',
+                  'last_error', 'auth_code', 'price', 'off_session')
+        read_only_fields = ('domain_id', 'redirect_uri', 'last_error', 'price', 'domain_obj')
+        write_once_fields = ('domain', 'registrant', 'admin_contact', 'billing_contact', 'tech_contact', 'auth_code',
+                             'off_session',)
+        write_after_fields = ('state',)
+        extra_kwargs = {'off_session': {'default': True}}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["registrant"].auth_token = self.context['request'].auth.token
+        self.fields["admin_contact"].auth_token = self.context['request'].auth.token
+        self.fields["billing_contact"].auth_token = self.context['request'].auth.token
+        self.fields["tech_contact"].auth_token = self.context['request'].auth.token
+
+    def to_representation(self, instance: models.DomainTransferOrder):
+        ret = super().to_representation(instance)
+
+        ret = dict(**ret, **{
+            "domain": self.fields["domain"].to_representation(instance.domain),
+            "domain_id": self.fields["domain_id"].to_representation(instance.domain_id),
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "registrant": self.fields["registrant"].to_representation(instance.registrant_contact),
+            "registrant_url": self.fields["registrant_url"].to_representation(instance.registrant_contact),
+            "admin_contact": self.fields["admin_contact"].to_representation(instance.admin_contact)
+            if instance.admin_contact is not None else None,
+            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance.admin_contact)
+            if instance.admin_contact is not None else None,
+            "billing_contact": self.fields["billing_contact"].to_representation(instance.billing_contact)
+            if instance.billing_contact is not None else None,
+            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance.billing_contact)
+            if instance.billing_contact is not None else None,
+            "tech_contact": self.fields["tech_contact"].to_representation(instance.tech_contact)
+            if instance.tech_contact is not None else None,
+            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance.tech_contact)
+            if instance.tech_contact is not None else None,
+            "auth_code": self.fields["auth_code"].to_representation(instance.auth_code),
+        })
+
+        return ret
+
+    def create(self, validated_data):
+        zone, sld = zone_info.get_domain_info(validated_data["domain"])
+
+        if not zone:
+            raise PermissionDenied
+
+        zone_price, registry_name = zone.pricing, zone.registry
+        billing_value = zone_price.transfer(sld)
+        if billing_value is None:
+            raise PermissionDenied
+
+        order = models.DomainTransferOrder(
+            domain=validated_data["domain"],
+            auth_code=validated_data['auth_code'],
+            registrant_contact=validated_data['registrant_contact'],
+            admin_contact=validated_data['admin_contact'],
+            billing_contact=validated_data['billing_contact'],
+            tech_contact=validated_data['tech_contact'],
+            user=self.context['request'].user,
+            price=billing_value,
+            state=models.DomainRegistrationOrder.STATE_STARTED,
+            off_session=validated_data["off_session"]
+        )
+        order.save()
+        tasks.process_domain_transfer.delay(order.id)
+        return order
+
+
+class DomainRenewOrderSerializer(BaseOrderSerializer):
+    period = DomainPeriodSerializer()
+    domain_obj = serializers.PrimaryKeyRelatedField(
+        allow_null=True, read_only=True
+    )
+    domain_obj_url = serializers.HyperlinkedRelatedField(
+        view_name='domain-detail', source='domain_obj', allow_null=True, read_only=True
+    )
+
+    class Meta:
+        model = models.DomainRenewOrder
+        fields = ('url', 'id', 'state', 'domain', 'domain_obj', 'domain_obj_url', 'redirect_uri',
+                  'last_error', 'period', 'price', 'off_session')
+        read_only_fields = ('domain', 'redirect_uri', 'last_error', 'price', 'domain_obj')
+        write_once_fields = ('off_session', 'period',)
+        write_after_fields = ('state',)
+        extra_kwargs = {'off_session': {'default': True}}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def to_representation(self, instance: models.DomainRenewOrder):
+        ret = super().to_representation(instance)
+
+        ret = dict(**ret, **{
+            "domain": self.fields["domain"].to_representation(instance.domain),
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "period": {
+                "unit": "y" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Years
+                else "m" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Months else "unknown",
+                "value": instance.period_value,
+            },
+        })
+
+        return ret
+
+    def create(self, validated_data):
+        domain = validated_data["domain_obj"]
+        zone, sld = zone_info.get_domain_info(domain.domain)
+
+        if not zone:
+            raise PermissionDenied
+
+        zone_price, registry_name = zone.pricing, zone.registry
+        period = apps.epp_api.Period(
+            unit=apps.epp_api.common_pb2.Period.Unit.Years if validated_data['period']['unit'] == "y"
+            else apps.epp_api.common_pb2.Period.Unit.Months if validated_data['period']['unit'] == "m" else None,
+            value=validated_data['period']['value']
+        )
+
+        billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+        if billing_value is None:
+            raise PermissionDenied
+
+        order = models.DomainRenewOrder(
+            domain=domain.domain,
+            domain_obj=domain,
+            period_unit=period.unit,
+            period_value=period.value,
+            user=self.context['request'].user,
+            price=billing_value,
+            state=models.DomainRegistrationOrder.STATE_STARTED,
+            off_session=validated_data["off_session"]
+        )
+        order.save()
+        tasks.process_domain_renewal.delay(order.id)
+        return order
+
+
+class DomainRestoreOrderSerializer(BaseOrderSerializer):
+    domain_obj = serializers.PrimaryKeyRelatedField(
+        allow_null=True, read_only=True
+    )
+    domain_obj_url = serializers.HyperlinkedRelatedField(
+        view_name='domain-detail', source='domain_obj', allow_null=True, read_only=True
+    )
+
+    class Meta:
+        model = models.DomainRestoreOrder
+        fields = ('url', 'id', 'state', 'domain', 'domain_obj', 'domain_obj_url', 'redirect_uri',
+                  'last_error', 'price', 'off_session')
+        read_only_fields = ('domain', 'redirect_uri', 'last_error', 'price', 'domain_obj')
+        write_once_fields = ('off_session',)
+        write_after_fields = ('state',)
+        extra_kwargs = {'off_session': {'default': True}}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def to_representation(self, instance: models.DomainRestoreOrder):
+        ret = super().to_representation(instance)
+
+        ret = dict(**ret, **{
+            "domain": self.fields["domain"].to_representation(instance.domain),
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
+            if instance.domain_obj else None,
+        })
+
+        return ret
+
+    def create(self, validated_data):
+        domain = validated_data["domain_obj"]
+        zone, sld = zone_info.get_domain_info(domain.domain)
+
+        if not zone:
+            raise PermissionDenied
+
+        zone_price, registry_name = zone.pricing, zone.registry
+
+        billing_value = zone_price.restore(sld)
+        if billing_value is None:
+            raise PermissionDenied
+
+        order = models.DomainRestoreOrder(
+            domain=domain.domain,
+            domain_obj=domain,
+            user=self.context['request'].user,
+            price=billing_value,
+            state=models.DomainRegistrationOrder.STATE_STARTED,
+            off_session=validated_data["off_session"]
+        )
+        order.save()
+        tasks.process_domain_restore.delay(order.id)
+        return order

@@ -644,6 +644,7 @@ class AbstractOrder(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=9)
     redirect_uri = models.TextField(blank=True, null=True)
     last_error = models.TextField(blank=True, null=True)
+    off_session = models.BooleanField(blank=True, default=True)
     resource_id = models.UUIDField(null=True)
 
     resource_type: str

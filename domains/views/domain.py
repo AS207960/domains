@@ -28,7 +28,7 @@ def domain_prices(request):
         "renewal": z[1].pricing.representative_renewal(),
         "restore": z[1].pricing.representative_restore(),
         "transfer": z[1].pricing.representative_transfer(),
-    }, zone_info.ZONES))
+    }, sorted(zone_info.ZONES, key=lambda z: z[0])))
 
     return render(request, "domains/domain_prices.html", {
         "domains": zones
@@ -899,7 +899,7 @@ def domain_register(request, domain_name):
 
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
 
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+    if not settings.REGISTRATION_ENABLED or not models.DomainRegistrationOrder.has_class_scope(access_token, 'create'):
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
@@ -952,7 +952,9 @@ def domain_register(request, domain_name):
                 billing_contact=billing_contact,
                 tech_contact=tech_contact,
                 user=request.user,
-                price=billing_value
+                price=billing_value,
+                auth_info=models.make_secret(),
+                off_session=False,
             )
             order.save()
             tasks.process_domain_registration.delay(order.id)
@@ -1079,9 +1081,17 @@ def delete_domain(request, domain_id):
 
 @login_required
 def renew_domain(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+
+    if not user_domain.has_scope(access_token, 'edit') or \
+            not models.DomainRenewOrder.has_class_scope(access_token, 'create'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone, sld = zone_info.get_domain_info(user_domain.domain)
     if not zone:
@@ -1117,7 +1127,8 @@ def renew_domain(request, domain_id):
                 period_unit=period.unit,
                 period_value=period.value,
                 user=request.user,
-                price=billing_value
+                price=billing_value,
+                off_session=False,
             )
             order.save()
             tasks.process_domain_renewal.delay(order.id)
@@ -1150,7 +1161,8 @@ def restore_domain(request, domain_id):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
-    if not user_domain.has_scope(access_token, 'edit'):
+    if not user_domain.has_scope(access_token, 'edit') or \
+            not models.DomainRestoreOrder.has_class_scope(access_token, 'create'):
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
@@ -1170,7 +1182,8 @@ def restore_domain(request, domain_id):
         domain=user_domain.domain,
         domain_obj=user_domain,
         price=billing_value,
-        user=request.user
+        user=request.user,
+        off_session=False,
     )
     order.save()
     tasks.process_domain_restore.delay(order.id)
@@ -1185,18 +1198,7 @@ def restore_domain_confirm(request, order_id):
     return confirm_order(request, restore_order, "domains/restore_domain.html", "domains/domain_restore_pending.html")
 
 
-@login_required
 def domain_transfer_query(request):
-    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('domains')
-
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
     error = None
 
     if request.method == "POST":
@@ -1225,11 +1227,14 @@ def domain_transfer_query(request):
                                     error = rpc_error.details()
                                 else:
                                     if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
+                                        available = False
                                         form.add_error('domain', "Domain not eligible for transfer")
-                                    else:
-                                        return redirect('domain_transfer', form.cleaned_data['domain'])
-                            else:
-                                return redirect('domain_transfer', form.cleaned_data['domain'])
+
+                            if available:
+                                if request.user.is_authenticated:
+                                    return redirect('domain_transfer', form.cleaned_data['domain'])
+                                else:
+                                    return redirect('domain_transfer_search_success', form.cleaned_data['domain'])
                         else:
                             form.add_error('domain', "Domain does not exist")
             else:
@@ -1245,17 +1250,29 @@ def domain_transfer_query(request):
     })
 
 
+def domain_transfer_search_success(request, domain_name):
+    return render(request, "domains/domain_transfer_search_success.html", {
+        "domain": domain_name,
+    })
+
+
 @login_required
 def domain_transfer(request, domain_name):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
-    if not settings.REGISTRATION_ENABLED or not models.DomainRegistration.has_class_scope(access_token, 'create'):
+    if not settings.REGISTRATION_ENABLED or not models.DomainTransferOrder.has_class_scope(access_token, 'create'):
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
+
+    user_addresses = models.Contact.get_object_list(access_token)
+    user_contacts = models.ContactAddress.get_object_list(access_token)
+    if not user_contacts.count() or not user_addresses.count():
+        request.session["after_setup_uri"] = request.get_full_path()
+        return render(request, "domains/domain_create_contact.html")
 
     error = None
 
@@ -1293,7 +1310,8 @@ def domain_transfer(request, domain_name):
                 billing_contact=billing_contact,
                 tech_contact=tech_contact,
                 price=price_decimal,
-                user=request.user
+                user=request.user,
+                off_session=False,
             )
             order.save()
             tasks.process_domain_transfer.delay(order.id)

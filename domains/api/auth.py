@@ -25,7 +25,7 @@ class BearerAuthentication(authentication.BaseAuthentication):
         if not user:
             raise exceptions.AuthenticationFailed('Nonexistent user')
 
-        return None, OAuthToken(token=token)
+        return user, OAuthToken(token=token)
 
 
 class SessionAuthentication(authentication.BaseAuthentication):
