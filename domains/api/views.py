@@ -128,6 +128,8 @@ class Domain(viewsets.ViewSet):
             return serializers.DomainRestoreOrderSerializer(*args, **kwargs)
         elif self.action == "check":
             return serializers.DomainCheckSerializer(*args, **kwargs)
+        elif self.action == "check_transfer":
+            return serializers.DomainCheckSerializer(*args, **kwargs)
         elif self.action == "check_renew":
             return serializers.DomainCheckRenewSerializer(*args, **kwargs)
         elif self.action == "check_restore":
@@ -329,6 +331,7 @@ class Domain(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         zone, sld = zone_info.get_domain_info(serializer.validated_data['domain'])
+        data = None
         if zone:
             if not zone.transfer_supported:
                 data = serializers.DomainCheck(
@@ -355,21 +358,22 @@ class Domain(viewsets.ViewSet):
                                 price=None
                             )
 
-                    if available:
-                        price = zone.pricing.transfer(sld)
+                if available:
+                    price = zone.pricing.transfer(sld)
+                    data = serializers.DomainCheck(
+                        available=True,
+                        domain=serializer.validated_data['domain'],
+                        reason=None,
+                        price=price
+                    )
+                else:
+                    if not data:
                         data = serializers.DomainCheck(
-                            available=True,
+                            available=False,
                             domain=serializer.validated_data['domain'],
                             reason=None,
-                            price=price
+                            price=None
                         )
-                else:
-                    data = serializers.DomainCheck(
-                        available=False,
-                        domain=serializer.validated_data['domain'],
-                        reason="Domain does not exist",
-                        price=None
-                    )
         else:
             data = serializers.DomainCheck(
                 available=False,
