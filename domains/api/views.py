@@ -4,10 +4,39 @@ from rest_framework.settings import api_settings
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
+from django.conf import settings
 from concurrent.futures import ThreadPoolExecutor
 
 from . import serializers, permissions, auth
 from .. import models, apps, zone_info
+
+
+class EPPBalanceViewSet(viewsets.ViewSet):
+    def retrieve(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        if "access-epp" not in request.auth.claims.get("resource_access", {}).get(
+                settings.OIDC_CLIENT_ID, {}
+        ).get("roles", []):
+            raise PermissionDenied
+
+        info = apps.epp_client.stub.BalanceInfo(apps.epp_api.epp_pb2.RegistryInfo(
+            registry_name=pk
+        ))
+        balance_data = {
+            "balance": info.balance,
+            "credit_limit": info.credit_limit.value if info.HasField("credit_limit") else None,
+            "available_credit": info.available_credit.value if info.HasField("available_credit") else None,
+            "fixed_credit_threshold": info.fixed_credit_threshold.value
+            if info.HasField("fixed_credit_threshold") else None,
+            "percentage_credit_threshold": info.percentage_credit_threshold.value
+            if info.HasField("percentage_credit_threshold") else None,
+            "currency": info.currency
+        }
+
+        serializer = serializers.EPPBalanceSerializer(balance_data, context={'request': request})
+        return Response(serializer.data)
 
 
 class ContactAddressViewSet(viewsets.ModelViewSet):

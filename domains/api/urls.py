@@ -11,6 +11,7 @@ router.register(r'domain_transfer_orders', views.DomainTransferOrderViewSet, bas
 router.register(r'domain_renew_orders', views.DomainRenewOrderViewSet, basename='domainreneworder')
 router.register(r'domain_restore_orders', views.DomainRestoreOrderViewSet, basename='domainrestoreorder')
 router.register(r'name_servers', views.NameServer, basename='nameserver')
+router.register(r'internal/balance', views.EPPBalanceViewSet, basename='balance')
 
 
 urlpatterns = [

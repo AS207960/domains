@@ -1377,3 +1377,12 @@ class DomainRestoreOrderSerializer(BaseOrderSerializer):
         order.save()
         tasks.process_domain_restore.delay(order.id)
         return order
+
+
+class EPPBalanceSerializer(serializers.Serializer):
+    balance = serializers.FloatField(read_only=True)
+    credit_limit = serializers.FloatField(read_only=True, allow_null=True)
+    available_credit = serializers.FloatField(read_only=True, allow_null=True)
+    fixed_credit_threshold = serializers.FloatField(read_only=True, allow_null=True)
+    percentage_credit_threshold = serializers.FloatField(read_only=True, allow_null=True)
+    currency = serializers.CharField(read_only=True)

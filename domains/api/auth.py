@@ -3,6 +3,7 @@ from rest_framework import exceptions
 from django.contrib.auth import get_user_model
 import django_keycloak_auth.clients
 import keycloak
+import jose.jwt
 import dataclasses
 
 
@@ -25,7 +26,7 @@ class BearerAuthentication(authentication.BaseAuthentication):
         if not user:
             raise exceptions.AuthenticationFailed('Nonexistent user')
 
-        return user, OAuthToken(token=token)
+        return user, OAuthToken(token=token, claims=claims)
 
 
 class SessionAuthentication(authentication.BaseAuthentication):
@@ -35,7 +36,16 @@ class SessionAuthentication(authentication.BaseAuthentication):
             return None
         self.enforce_csrf(request)
         token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
-        return user, OAuthToken(token=token)
+
+        certs = django_keycloak_auth.clients.get_openid_connect_client().certs()
+        try:
+            claims = jose.jwt.decode(token, certs, options={
+                "verify_aud": False
+            })
+        except jose.jwt.JWTError:
+            raise exceptions.AuthenticationFailed('Invalid token')
+
+        return user, OAuthToken(token=token, claims=claims)
 
     def enforce_csrf(self, request):
         check = authentication.CSRFCheck()
@@ -48,3 +58,4 @@ class SessionAuthentication(authentication.BaseAuthentication):
 @dataclasses.dataclass
 class OAuthToken:
     token: str
+    claims: dict
