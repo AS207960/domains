@@ -23,8 +23,6 @@ class BearerAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('Invalid token')
 
         user = get_user_model().objects.filter(username=claims["sub"]).first()
-        if not user:
-            raise exceptions.AuthenticationFailed('Nonexistent user')
 
         return user, OAuthToken(token=token, claims=claims)
 
