@@ -19,6 +19,11 @@
     </section>
 
     <div class="container my-3 pt-3 pt-md-5">
+        {% if zone_notice %}
+            <div class="alert alert-warning" role="alert">
+                {{ zone_notice }}
+            </div>
+        {% endif %}
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Oh no! &#x1f631;</h4>

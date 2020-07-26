@@ -920,7 +920,7 @@ def domain_register(request, domain_name):
             "back_url": referrer
         })
 
-    zone_price, registry_name = zone.pricing, zone.registry
+    zone_price, registry_name, zone_notice = zone.pricing, zone.registry, zone.notice
     price_decimal = zone_price.representative_registration()
 
     if request.method == "POST":
@@ -969,6 +969,7 @@ def domain_register(request, domain_name):
         "domain_form": form,
         "domain_name": domain_name,
         "price_decimal": price_decimal,
+        "zone_notice": zone_notice,
         "currency": zone_price.currency,
         "zone_info": zone,
         "error": error

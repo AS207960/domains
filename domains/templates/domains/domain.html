@@ -73,7 +73,7 @@
                                     <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
                                 {% endif %}
                             {% endif %}
-                            <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
                             <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">Regenerate transfer code</a>
                         {% endif %}
                     </div>
@@ -184,7 +184,7 @@
             <div class="col">
                 <p>
                     <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
-                        Delete all
+                        &#x1f5d1; Delete all
                     </a>
                 </p>
             </div>
@@ -207,7 +207,7 @@
                                 <th>{{ ns.host_obj }}</th>
                                 <td>N/A</td>
                                 <td>N/A</td>
-                                <td><a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}" class="btn btn-danger btn-sm">Delete</a></td>
+                                <td><a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}" class="btn btn-danger btn-sm">&#x1f5d1; Delete</a></td>
                             </tr>
                         {% elif ns.host_name %}
                             {% for addr in ns.addresses %}
@@ -282,7 +282,7 @@
                 </div>
                 <div class="col">
                     <p>
-                        <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">Disable DNSSEC</a>
+                        <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">&#x1f5d1; Disable DNSSEC</a>
                     </p>
                 </div>
             </div>
@@ -314,7 +314,7 @@
                                             <input type="hidden" name="digest_type" value="{{ ds_data.digest_type }}">
                                             <input type="hidden" name="digest" value="{{ ds_data.digest }}">
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                Delete
+                                                &#x1f5d1; Delete
                                             </button>
                                         </form>
                                     </td>
@@ -357,7 +357,7 @@
                                             <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
                                             <input type="hidden" name="public_key" value="{{ ds_data.public_key }}">
                                             <button type="submit" class="btn btn-danger btn-sm">
-                                                Delete
+                                                &#x1f5d1; Delete
                                             </button>
                                         </form>
                                     </td>

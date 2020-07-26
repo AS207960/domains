@@ -358,9 +358,10 @@ class DomainInfo:
     REGISTRY_EURID = "eurid"
     REGISTRY_GOOGLE = "google"
 
-    def __init__(self, registry, pricing):
+    def __init__(self, registry, pricing, notice=None):
         self.registry = registry
         self.pricing = pricing
+        self.notice = notice
 
     @property
     def direct_registration_supported(self):
@@ -608,6 +609,12 @@ if settings.DEBUG:
             MarkupPrice(2566, restore=4000, currency='USD', tld='tv', markup=decimal.Decimal("1.25"))
         )),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),
+        ('dev', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, transfer=2940, restore=22500, currency=None, display_currency='USD', tld='dev', markup=decimal.Decimal("1.4")),
+            notice=".dev is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
+                   ".dev domain."
+        )),
     )
 else:
     ZONES = (
@@ -647,6 +654,10 @@ else:
             DomainInfo.REGISTRY_CENTRALNIC,
             MarkupPrice(9390, transfer=9390, restore=16500, currency=None, display_currency='USD', tld='tech', markup=decimal.Decimal("1.25"))
         )),
+        ('design', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(8194, transfer=8194, restore=20160, currency=None, display_currency='USD', tld='design', markup=decimal.Decimal("1.2"))
+        )),
         ('xyz', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
             MarkupPrice(2142, transfer=2142, restore=18000, currency=None, display_currency='EUR', tld='xyz', markup=decimal.Decimal("1.5"))
@@ -659,7 +670,7 @@ else:
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3893, transfer=3893, restore=13500, currency=None, display_currency='USD', tld='space', markup=decimal.Decimal("1.25"))
         )),
-        ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1400, periods=map(lambda i: apps.epp_api.Period(
+        ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1499, periods=map(lambda i: apps.epp_api.Period(
             unit=0,
             value=i
         ), range(1, 6))))),
@@ -681,7 +692,34 @@ else:
         )),
         ('soy', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
-            MarkupPrice(478, transfer=4478, restore=216, currency=None, display_currency='USD', tld='soy', markup=decimal.Decimal("1.2"))
+            MarkupPrice(4478, transfer=4478, restore=21600, currency=None, display_currency='USD', tld='soy', markup=decimal.Decimal("1.2"))
+        )),
+        ('how', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(4954, transfer=4954, restore=21600, currency=None, display_currency='USD', tld='how', markup=decimal.Decimal("1.2"))
+        )),
+        ('page', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2436, transfer=2436, restore=26100, currency=None, display_currency='USD', tld='page', markup=decimal.Decimal("1.45"))
+        )),
+        ('dev', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, transfer=2940, restore=25200, currency=None, display_currency='USD', tld='dev', markup=decimal.Decimal("1.4")),
+            notice=".dev is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
+                   ".dev domain."
+        )),
+        ('app', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(3198, transfer=3198, restore=23400, currency=None, display_currency='USD', tld='app', markup=decimal.Decimal("1.3")),
+            notice=".app is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
+                   ".app domain."
+        )),
+        ('new', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(84960, transfer=84960, restore=21600, currency=None, display_currency='USD', tld='new', markup=decimal.Decimal("1.2")),
+            notice=".new domains must allow a user to create something, without further navigation, within 100 days "
+                   "of being purchased. .new is a HSTS preload zone, meaning you'll need to deploy HTTPS on any "
+                   "website hosted on a .new domain."
         )),
     )
 

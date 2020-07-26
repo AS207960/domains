@@ -5,7 +5,7 @@ from ... import models, hooks
 
 
 class Command(BaseCommand):
-    help = "Synchronises model instances to keylcloak resources"
+    help = "Synchronises model instances to keycloak resources"
     requires_migrations_checks = True
 
     def handle(self, *args, **options):
