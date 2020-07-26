@@ -351,6 +351,7 @@ class DomainInfo:
     REGISTRY_DONUTS = "donuts"
     REGISTRY_VERISIGN_COMNET = "verisign-comnet"
     REGISTRY_PIR = "pir"
+    REGISTRY_CENTRALNIC_CCTLD = "centralni-ccctld"
     REGISTRY_CENTRALNIC = "centralnic"
     REGISTRY_NOMINET_GTLD = "nominet-gtld"
     REGISTRY_DNSBELGIUM = "dnsbelgium"
@@ -367,7 +368,8 @@ class DomainInfo:
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_VERISIGN
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_CENTRALNIC_CCTLD
         )
 
     @property
@@ -400,7 +402,8 @@ class DomainInfo:
             self.REGISTRY_AFILIAS,
             self.REGISTRY_NOMINET,
             self.REGISTRY_TRAFICOM,
-            self.REGISTRY_VERISIGN
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_CENTRALNIC_CCTLD
         )
 
     @property
@@ -469,6 +472,7 @@ class DomainInfo:
             self.REGISTRY_DONUTS,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
@@ -491,6 +495,7 @@ class DomainInfo:
             self.REGISTRY_DONUTS,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
@@ -514,6 +519,7 @@ class DomainInfo:
             self.REGISTRY_DONUTS,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
+            self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
@@ -580,7 +586,10 @@ if settings.DEBUG:
         # ('jp.net', SimplePrice(900)),
         # ('jpn.com', SimplePrice(3200)),
         # ('mex.com', SimplePrice(1200)),
-        # ('pw', SimplePrice(1800)),
+        ('pw', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(2700, renewal=2700, currency=None, display_currency='USD', tld='pw', markup=decimal.Decimal("1.5"))
+        )),
         # ('radio.am', SimplePrice(1400, restore=3500)),
         # ('radio.fm', SimplePrice(1400, restore=3500)),
         # ('ru.com', SimplePrice(3000)),
@@ -638,6 +647,26 @@ else:
             unit=0,
             value=1
         )]))),
+        ('pw', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(2700, transfer=2700, currency=None, display_currency='USD', tld='pw', markup=decimal.Decimal("1.5"))
+        )),
+        ('fm', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(12240, transfer=12240, restore=17280, currency=None, display_currency='USD', tld='fm', markup=decimal.Decimal("1.2"))
+        )),
+        ('fo', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(6048, transfer=6048, restore=18808, currency=None, display_currency='EUR', tld='fo', markup=decimal.Decimal("1.2"))
+        )),
+        ('gd', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(3900, transfer=3900, restore=10920, currency=None, display_currency='USD', tld='gd', markup=decimal.Decimal("1.3"))
+        )),
+        ('vg', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(3900, transfer=3900, restore=10920, currency=None, display_currency='USD', tld='vg', markup=decimal.Decimal("1.3"))
+        )),
         ('gay', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
             MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
