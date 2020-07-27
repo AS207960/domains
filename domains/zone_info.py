@@ -393,6 +393,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_GOOGLE,
+            self.REGISTRY_VERISIGN
         )
 
     @property

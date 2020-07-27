@@ -65,7 +65,7 @@ def domain_transfer_info(request):
 
     return render(request, "domains/admin/domain_transfer_info.html", {
         "domain_form": form,
-        "transfer_Info": domain,
+        "transfer_info": domain,
         "title": "Domain transfer info"
     })
 
@@ -89,7 +89,7 @@ def domain_transfer_request(request):
 
     return render(request, "domains/admin/domain_transfer_info.html", {
         "domain_form": form,
-        "transfer_Info": domain,
+        "transfer_info": domain,
         "title": "Domain transfer request"
     })
 
