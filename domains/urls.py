@@ -51,6 +51,7 @@ urlpatterns = [
     path('epp_client/', admin.index, name='admin_index'),
     path('epp_client/domain_info/', admin.domain_info, name='admin_domain_info'),
     path('epp_client/domain_transfer_info/', admin.domain_transfer_info, name='admin_domain_transfer_info'),
+    path('epp_client/domain_transfer_request/', admin.domain_transfer_request, name='admin_domain_transfer_request'),
     path('epp_client/balance/<str:registry_name>/', admin.balance, name='admin_balance'),
     path('epp_client/nominet_tags/', admin.nominet_tags, name='admin_nominet_tags'),
 ]

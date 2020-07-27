@@ -858,6 +858,11 @@ else:
                    "of being purchased. .new is a HSTS preload zone, meaning you'll need to deploy HTTPS on any "
                    "website hosted on a .new domain."
         )),
+        ('tv', DomainInfo(
+            DomainInfo.REGISTRY_VERISIGN,
+            MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"))
+        )),
+        ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(1299, transfer=1299, restore=6500))),
     )
 
 

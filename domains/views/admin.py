@@ -65,7 +65,32 @@ def domain_transfer_info(request):
 
     return render(request, "domains/admin/domain_transfer_info.html", {
         "domain_form": form,
-        "transfer_Info": domain
+        "transfer_Info": domain,
+        "title": "Domain transfer info"
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def domain_transfer_request(request):
+    domain = None
+
+    if request.method == "POST":
+        form = forms.AdminDomainTransferForm(request.POST)
+        form.helper.form_action = request.get_full_path()
+        if form.is_valid():
+            domain = apps.epp_client.transfer_request_domain(
+                form.cleaned_data["domain"], form.cleaned_data["auth_code"], form.cleaned_data["period"]
+            )
+    else:
+        form = forms.AdminDomainTransferForm()
+        form.helper.form_action = request.get_full_path()
+
+    return render(request, "domains/admin/domain_transfer_info.html", {
+        "domain_form": form,
+        "transfer_Info": domain,
+        "title": "Domain transfer request"
     })
 
 

@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container my-3">
-        <h1>Domain transfer info</h1>
+        <h1>{{ title }}</h1>
         {% crispy domain_form domain_form.helper %}
         {% if transfer_info %}
             <table class="table">
