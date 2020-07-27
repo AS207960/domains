@@ -402,7 +402,6 @@ class DomainInfo:
             self.REGISTRY_AFILIAS,
             self.REGISTRY_NOMINET,
             self.REGISTRY_TRAFICOM,
-            self.REGISTRY_VERISIGN,
             self.REGISTRY_CENTRALNIC_CCTLD
         )
 
