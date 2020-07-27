@@ -669,7 +669,7 @@ else:
         )),
         ('ae.org', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2520, transfer=2520, restore=2520, currency=None, display_currency='USD', tld='ag.org', markup=decimal.Decimal("1.6"))
+            MarkupPrice(2520, transfer=2520, restore=2520, currency=None, display_currency='USD', tld='ae.org', markup=decimal.Decimal("1.6"))
         )),
         ('br.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
