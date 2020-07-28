@@ -122,7 +122,7 @@
                             </td>
                             <td style="width: 0;">
                                 {% if domain.state != "C" and domain.state != "F" %}
-                                    <a href="{% url 'domain_register_confirm' domain.id %}" class="btn btn-primary">
+                                    <a href="{% url 'domain_register_confirm' domain.id %}" class="btn btn-primary btn-sm">
                                         Continue
                                     </a>
                                 {% endif %}
@@ -184,7 +184,7 @@
                             </td>
                             <td style="width: 0;">
                                 {% if domain.state != "C" and domain.state != "F" %}
-                                    <a href="{% url 'domain_transfer_confirm' domain.id %}" class="btn btn-primary">
+                                    <a href="{% url 'domain_transfer_confirm' domain.id %}" class="btn btn-primary btn-sm">
                                         Continue
                                     </a>
                                 {% endif %}
@@ -246,7 +246,7 @@
                             </td>
                             <td style="width: 0;">
                                 {% if domain.state != "C" and domain.state != "F" %}
-                                    <a href="{% url 'renew_domain_confirm' domain.id %}" class="btn btn-primary">
+                                    <a href="{% url 'renew_domain_confirm' domain.id %}" class="btn btn-primary btn-sm">
                                         Continue
                                     </a>
                                 {% endif %}
@@ -308,7 +308,7 @@
                                     {% endif %}
                                 </td>
                                 <td style="width: 0;">
-                                    <a href="{% url 'restore_domain_confirm' domain.id %}" class="btn btn-primary">
+                                    <a href="{% url 'restore_domain_confirm' domain.id %}" class="btn btn-primary btn-sm">
                                         Continue
                                     </a>
                                 </td>
@@ -345,7 +345,7 @@
                             </th>
                             <td style="width: 0;">
                                 {% if registration_enabled and not domain.pending_restore %}
-                                    <a href="{% url 'restore_domain' domain.id %}" class="btn btn-info">&#x1f519; Restore</a>
+                                    <a href="{% url 'restore_domain' domain.id %}" class="btn btn-info btn-sm">&#x1f519; Restore</a>
                                 {% endif %}
                             </td>
                         </tr>

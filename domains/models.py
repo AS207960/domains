@@ -539,6 +539,7 @@ class NameServer(models.Model):
 
     @classmethod
     def get_name_server(cls, name_server: str, registry_id: str, user):
+        name_server = name_server.lower()
         with NAME_SERVER_SEARCH:
             name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
             if name_server_obj:
