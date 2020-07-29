@@ -1105,15 +1105,15 @@ else:
             DomainInfo.REGISTRY_MINDS_MACHINES,
             MarkupPrice(6820, transfer=6820, restore=18000, currency=None, display_currency='USD', tld='vip', markup=decimal.Decimal("1.5"))
         )),
-        ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+        ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
-        ('plc.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+        ('plc.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
-        ('net.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+        ('net.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
