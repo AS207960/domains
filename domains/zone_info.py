@@ -343,6 +343,7 @@ class MarkupPrice:
 
 class DomainInfo:
     REGISTRY_NOMINET = "nominet"
+    REGISTRY_NOMINET_RRPPROXY = "nominet-rrpproxy"
     REGISTRY_SWITCH = "switch"
     REGISTRY_TRAFICOM = "traficom"
     REGISTRY_AFILIAS = "afilias"
@@ -358,6 +359,18 @@ class DomainInfo:
     REGISTRY_INTERLINK = "interlink"
     REGISTRY_EURID = "eurid"
     REGISTRY_GOOGLE = "google"
+    REGISTRY_SHORTDOT = "shortdot"
+    REGISTRY_RADIX = "radix"
+    REGISTRY_ZODIAC_LEO = "zodiac-leo"
+    REGISTRY_GMO = "gmo"
+    REGISTRY_DOT_STRATEGY = "dot-strategy"
+    REGISTRY_UNITED_TLD = "united-tld"
+    REGISTRY_MTLD = "mtld"
+    REGISTRY_REGISTRY_PRO = "registry-pro"
+    REGISTRY_WHOIS_THERE = "knock-knock-whois-there"
+    REGISTRY_CORE = "core"
+    REGISTRY_CLUB_DOMAINS = "club-domains"
+    REGISTRY_MINDS_MACHINES = "minds-machines"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -376,7 +389,9 @@ class DomainInfo:
     def direct_transfer_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            # self.REGISTRY_DENIC
+            self.REGISTRY_DENIC,
+            self.REGISTRY_CENTRALNIC_CCTLD,
+            self.REGISTRY_VERISIGN
         )
 
     @property
@@ -393,7 +408,26 @@ class DomainInfo:
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_GOOGLE,
-            self.REGISTRY_VERISIGN
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_SHORTDOT,
+            self.REGISTRY_RADIX,
+            self.REGISTRY_CENTRALNIC,
+            self.REGISTRY_CENTRALNIC_CCTLD,
+            self.REGISTRY_NOMINET_GTLD,
+            self.REGISTRY_DONUTS,
+            self.REGISTRY_ZODIAC_LEO,
+            self.REGISTRY_GMO,
+            self.REGISTRY_DOT_STRATEGY,
+            self.REGISTRY_UNITED_TLD,
+            self.REGISTRY_MTLD,
+            self.REGISTRY_REGISTRY_PRO,
+            self.REGISTRY_WHOIS_THERE,
+            self.REGISTRY_CORE,
+            self.REGISTRY_EURID,
+            self.REGISTRY_INTERLINK,
+            self.REGISTRY_CLUB_DOMAINS,
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_MINDS_MACHINES,
         )
 
     @property
@@ -417,6 +451,7 @@ class DomainInfo:
     def restore_supported(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_RRPPROXY,
         )
 
     @property
@@ -478,6 +513,19 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
+            self.REGISTRY_SHORTDOT,
+            self.REGISTRY_RADIX,
+            self.REGISTRY_ZODIAC_LEO,
+            self.REGISTRY_GMO,
+            self.REGISTRY_DOT_STRATEGY,
+            self.REGISTRY_UNITED_TLD,
+            self.REGISTRY_MTLD,
+            self.REGISTRY_REGISTRY_PRO,
+            self.REGISTRY_WHOIS_THERE,
+            self.REGISTRY_CORE,
+            self.REGISTRY_CLUB_DOMAINS,
+            self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_MINDS_MACHINES,
         )
 
     @property
@@ -501,6 +549,19 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
+            self.REGISTRY_SHORTDOT,
+            self.REGISTRY_RADIX,
+            self.REGISTRY_ZODIAC_LEO,
+            self.REGISTRY_GMO,
+            self.REGISTRY_DOT_STRATEGY,
+            self.REGISTRY_UNITED_TLD,
+            self.REGISTRY_MTLD,
+            self.REGISTRY_REGISTRY_PRO,
+            self.REGISTRY_WHOIS_THERE,
+            self.REGISTRY_CORE,
+            self.REGISTRY_CLUB_DOMAINS,
+            self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_MINDS_MACHINES,
         )
 
     @property
@@ -525,6 +586,19 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
+            self.REGISTRY_SHORTDOT,
+            self.REGISTRY_RADIX,
+            self.REGISTRY_ZODIAC_LEO,
+            self.REGISTRY_GMO,
+            self.REGISTRY_DOT_STRATEGY,
+            self.REGISTRY_UNITED_TLD,
+            self.REGISTRY_MTLD,
+            self.REGISTRY_REGISTRY_PRO,
+            self.REGISTRY_WHOIS_THERE,
+            self.REGISTRY_CORE,
+            self.REGISTRY_CLUB_DOMAINS,
+            self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_MINDS_MACHINES,
         )
 
 
@@ -863,6 +937,186 @@ else:
             MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"))
         )),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(1299, transfer=1299, restore=6500))),
+        ('icu', DomainInfo(
+            DomainInfo.REGISTRY_SHORTDOT,
+            MarkupPrice(1795, transfer=1795, restore=26520, currency=None, display_currency='USD', tld='icu', markup=decimal.Decimal("1.7"))
+        )),
+        ('info', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3132, transfer=3132, restore=15120, currency=None, display_currency='USD', tld='info', markup=decimal.Decimal("1.4"))
+        )),
+        ('online', DomainInfo(
+            DomainInfo.REGISTRY_RADIX,
+            MarkupPrice(6178, transfer=6178, restore=15840, currency=None, display_currency='USD', tld='online', markup=decimal.Decimal("1.2"))
+        )),
+        ('wang', DomainInfo(
+            DomainInfo.REGISTRY_RADIX,
+            MarkupPrice(2196, transfer=2196, restore=16200, currency=None, display_currency='USD', tld='wang', markup=decimal.Decimal("1.5"))
+        )),
+        ('store', DomainInfo(
+            DomainInfo.REGISTRY_RADIX,
+            MarkupPrice(9907, transfer=9907, restore=21600, currency=None, display_currency='USD', tld='store', markup=decimal.Decimal("1.2"))
+        )),
+        ('fun', DomainInfo(
+            DomainInfo.REGISTRY_RADIX,
+            MarkupPrice(4072, transfer=4072, restore=18720, currency=None, display_currency='USD', tld='fun', markup=decimal.Decimal("1.3"))
+        )),
+        ('shop', DomainInfo(
+            DomainInfo.REGISTRY_GMO,
+            MarkupPrice(5904, transfer=5904, restore=23040, currency=None, display_currency='USD', tld='shop', markup=decimal.Decimal("1.2"))
+        )),
+        ('buzz', DomainInfo(
+            DomainInfo.REGISTRY_DOT_STRATEGY,
+            MarkupPrice(5472, transfer=5472, restore=12960, currency=None, display_currency='USD', tld='buzz', markup=decimal.Decimal("1.2"))
+        )),
+        ('live', DomainInfo(
+            DomainInfo.REGISTRY_UNITED_TLD,
+            MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='live', markup=decimal.Decimal("1.3"))
+        )),
+        ('studio', DomainInfo(
+            DomainInfo.REGISTRY_UNITED_TLD,
+            MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='studio', markup=decimal.Decimal("1.3"))
+        )),
+        ('mobi', DomainInfo(
+            DomainInfo.REGISTRY_MTLD,
+            MarkupPrice(3234, transfer=3234, restore=14040, currency=None, display_currency='USD', tld='mobi', markup=decimal.Decimal("1.3"))
+        )),
+        ('pro', DomainInfo(
+            DomainInfo.REGISTRY_MTLD,
+            MarkupPrice(3069, transfer=3069, restore=15120, currency=None, display_currency='USD', tld='pro', markup=decimal.Decimal("1.4"))
+        )),
+        ('life', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='life', markup=decimal.Decimal("1.2"))
+        )),
+        ('blog', DomainInfo(
+            DomainInfo.REGISTRY_WHOIS_THERE,
+            MarkupPrice(4968, transfer=4968, restore=12960, currency=None, display_currency='USD', tld='blog', markup=decimal.Decimal("1.2"))
+        )),
+        ('cat', DomainInfo(
+            DomainInfo.REGISTRY_CORE,
+            MarkupPrice(4680, transfer=4680, currency=None, display_currency='USD', tld='cat', markup=decimal.Decimal("1.2"))
+        )),
+        ('club', DomainInfo(
+            DomainInfo.REGISTRY_CLUB_DOMAINS,
+            MarkupPrice(2611, transfer=2611, restore=15120, currency=None, display_currency='USD', tld='club', markup=decimal.Decimal("1.4"))
+        )),
+        ('ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(9000, transfer=9000, restore=9000, currency=None, display_currency='USD', tld='ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('com.ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='com.ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('net.ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='net.ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('org.ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='org.ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('nom.ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='nom.ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('co.ag', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='co.ag', markup=decimal.Decimal("1.2"))
+        )),
+        ('bz', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(2400, transfer=2400, restore=11250, currency=None, display_currency='USD', tld='bz', markup=decimal.Decimal("1.5"))
+        )),
+        ('com.bz', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='com.bz', markup=decimal.Decimal("1.3"))
+        )),
+        ('net.bz', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='net.bz', markup=decimal.Decimal("1.3"))
+        )),
+        ('co.bz', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='co.bz', markup=decimal.Decimal("1.3"))
+        )),
+        ('lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(2700, transfer=2700, restore=11250, currency=None, display_currency='USD', tld='lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('com.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='com.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('net.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='net.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('org.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='org.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('co.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='co.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('p.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='p.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('l.lc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='l.lc', markup=decimal.Decimal("1.5"))
+        )),
+        ('mn', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(4550, transfer=4550, restore=5200, currency=None, display_currency='USD', tld='mn', markup=decimal.Decimal("1.3"))
+        )),
+        ('pr', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(120000, transfer=120000, restore=12000, currency=None, display_currency='USD', tld='pr', markup=decimal.Decimal("1.2"))
+        )),
+        ('sc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(9000, transfer=9000, restore=9000, currency=None, display_currency='USD', tld='sc', markup=decimal.Decimal("1.2"))
+        )),
+        ('vc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3250, transfer=3250, restore=9750, currency=None, display_currency='USD', tld='vc', markup=decimal.Decimal("1.3"))
+        )),
+        ('uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
+            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='uk', markup=decimal.Decimal("1.5"))
+        )),
+        ('co.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
+            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='co.uk', markup=decimal.Decimal("1.5"))
+        )),
+        ('me.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
+            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='me.uk', markup=decimal.Decimal("1.5"))
+        )),
+        ('work', DomainInfo(
+            DomainInfo.REGISTRY_MINDS_MACHINES,
+            MarkupPrice(2062, transfer=2062, restore=19200, currency=None, display_currency='USD', tld='work', markup=decimal.Decimal("1.6"))
+        )),
+        ('vip', DomainInfo(
+            DomainInfo.REGISTRY_MINDS_MACHINES,
+            MarkupPrice(6820, transfer=6820, restore=18000, currency=None, display_currency='USD', tld='vip', markup=decimal.Decimal("1.5"))
+        )),
+        ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+            unit=0,
+            value=2
+        )]))),
+        ('plc.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+            unit=0,
+            value=2
+        )]))),
+        ('net.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(11520, periods=[apps.epp_api.Period(
+            unit=0,
+            value=2
+        )]))),
     )
 
 
