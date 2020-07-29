@@ -889,10 +889,13 @@ else:
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3893, transfer=3893, restore=13500, currency=None, display_currency='USD', tld='space', markup=decimal.Decimal("1.25"))
         )),
-        ('fi', DomainInfo(DomainInfo.REGISTRY_TRAFICOM, SimplePrice(1499, periods=map(lambda i: apps.epp_api.Period(
-            unit=0,
-            value=i
-        ), range(1, 6))))),
+        ('fi', DomainInfo(
+            DomainInfo.REGISTRY_TRAFICOM,
+            SimplePrice(1499, transfer=1499, restore=1499, periods=map(lambda i: apps.epp_api.Period(
+                unit=0,
+                value=i
+            ), range(1, 6)))
+        )),
         ('cymru', DomainInfo(
             DomainInfo.REGISTRY_NOMINET_GTLD,
             MarkupPrice(2167, transfer=2167, restore=2688, currency=None, display_currency='GBP', tld='cymru', markup=decimal.Decimal("1.4"))

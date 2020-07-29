@@ -1,6 +1,6 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from .. import apps, forms
+from .. import apps, forms, models
 import grpc
 
 
@@ -91,6 +91,45 @@ def domain_transfer_request(request):
         "domain_form": form,
         "transfer_info": domain,
         "title": "Domain transfer request"
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def contact_info(request):
+    contact = None
+
+    if request.method == "POST":
+        form = forms.AdminContactCheckForm(request.POST)
+        if form.is_valid():
+            contact = apps.epp_client.get_contact(form.cleaned_data["contact"], form.cleaned_data["registry_id"])
+    else:
+        form = forms.AdminContactCheckForm()
+
+    return render(request, "domains/admin/contact_info.html", {
+        "contact_form": form,
+        "contact_info": contact
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def get_contact_id(request):
+    registry_id = None
+
+    if request.method == "POST":
+        form = forms.AdminContactGetIDForm(request.POST)
+        if form.is_valid():
+            contact = get_object_or_404(models.Contact, id=form.cleaned_data["contact"])
+            registry_id = contact.get_registry_id(form.cleaned_data["registry_id"])
+    else:
+        form = forms.AdminContactGetIDForm()
+
+    return render(request, "domains/admin/contact_get_id.html", {
+        "contact_form": form,
+        "contact_info": registry_id
     })
 
 

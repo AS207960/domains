@@ -1,0 +1,208 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Contact info</h1>
+        {% crispy contact_form contact_form.helper %}
+        {% if contact_info %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ contact_info.id }}</td>
+                </tr>
+                <tr>
+                    <th>Registry ID</th>
+                    <td>{{ contact_info.registry_id }}</td>
+                </tr>
+                <tr>
+                    <th>Registry name</th>
+                    <td>{{ contact_info.registry_name }}</td>
+                </tr>
+                {% for status in contact_info.statuses %}
+                <tr>
+                    <th>Status</th>
+                    <td>{{ status }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Local Address Name</th>
+                    <td>{{ contact_info.local_address.name }}</td>
+                </tr>
+                {% if contact_info.local_address.organisation %}
+                    <tr>
+                        <th>Local Address Organisation</th>
+                        <td>{{ contact_info.local_address.organisation }}</td>
+                    </tr>
+                {% endif %}
+                {% for street in contact_info.local_address.streets %}
+                    <tr>
+                        <th>Local Address Street</th>
+                        <td>{{ street }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Local Address City</th>
+                    <td>{{ contact_info.local_address.city }}</td>
+                </tr>
+                {% if contact_info.local_address.province %}
+                    <tr>
+                        <th>Local Address Province</th>
+                        <td>{{ contact_info.local_address.province }}</td>
+                    </tr>
+                {% endif %}
+                {% if contact_info.local_address.postal_code %}
+                    <tr>
+                        <th>Local Address Postal Code</th>
+                        <td>{{ contact_info.local_address.postal_code }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Local Address Country</th>
+                    <td>{{ contact_info.local_address.country_code }}</td>
+                </tr>
+                {% if contact_info.local_address.identity_number %}
+                    <tr>
+                        <th>Local Address Identity Number</th>
+                        <td>{{ contact_info.local_address.identity_number }}</td>
+                    </tr>
+                {% endif %}
+                {% if contact_info.local_address.birth_date %}
+                    <tr>
+                        <th>Local Address Birth Date</th>
+                        <td>{{ contact_info.local_address.birth_date }}</td>
+                    </tr>
+                {% endif %}
+                {% if contact_info.int_address %}
+                    <tr>
+                        <th>Int Address Name</th>
+                        <td>{{ contact_info.int_address.name }}</td>
+                    </tr>
+                    {% if contact_info.int_address.organisation %}
+                        <tr>
+                            <th>Int Address Organisation</th>
+                            <td>{{ contact_info.int_address.organisation }}</td>
+                        </tr>
+                    {% endif %}
+                    {% for street in contact_info.int_address.streets %}
+                        <tr>
+                            <th>Int Address Street</th>
+                            <td>{{ street }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>Int Address City</th>
+                        <td>{{ contact_info.int_address.city }}</td>
+                    </tr>
+                    {% if contact_info.int_address.province %}
+                        <tr>
+                            <th>Int Address Province</th>
+                            <td>{{ contact_info.int_address.province }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if contact_info.int_address.postal_code %}
+                        <tr>
+                            <th>Int Address Postal Code</th>
+                            <td>{{ contact_info.int_address.postal_code }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Int Address Country</th>
+                        <td>{{ contact_info.int_address.country_code }}</td>
+                    </tr>
+                    {% if contact_info.int_address.identity_number %}
+                        <tr>
+                            <th>Int Address Identity Number</th>
+                            <td>{{ contact_info.int_address.identity_number }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if contact_info.int_address.birth_date %}
+                        <tr>
+                            <th>Int Address Birth Date</th>
+                            <td>{{ contact_info.int_address.birth_date }}</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+                {% if contact_info.phone %}
+                    <tr>
+                        <th>Voice Phone Number</th>
+                        <td>{{ contact_info.phone.number }}</td>
+                    </tr>
+                    {% if contact_info.phone.ext %}
+                        <tr>
+                            <th>Voice Phone Ext</th>
+                            <td>{{ contact_info.phone.ext }}</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+                {% if contact_info.fax %}
+                    <tr>
+                        <th>Fax Phone Number</th>
+                        <td>{{ contact_info.fax.number }}</td>
+                    </tr>
+                    {% if contact_info.fax.ext %}
+                        <tr>
+                            <th>Fax Phone Ext</th>
+                            <td>{{ contact_info.fax.ext }}</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+                <tr>
+                    <th>Email</th>
+                    <td>{{ contact_info.email }}</td>
+                </tr>
+                <tr>
+                    <th>Entity Type</th>
+                    <td>{{ contact_info.entity_type }}</td>
+                </tr>
+                {% if contact_info.trading_name %}
+                    <tr>
+                        <th>Trading name</th>
+                        <td>{{ contact_info.trading_name }}</td>
+                    </tr>
+                {% endif %}
+                {% if contact_info.company_number %}
+                    <tr>
+                        <th>Company number</th>
+                        <td>{{ contact_info.company_number }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Client ID</th>
+                    <td>{{ contact_info.client_id }}</td>
+                </tr>
+                <tr>
+                    <th>Client created ID</th>
+                    <td>{{ contact_info.client_created_id }}</td>
+                </tr>
+                <tr>
+                    <th>Creation date</th>
+                    <td>{{ contact_info.creation_date }}</td>
+                </tr>
+                <tr>
+                    <th>Last updated client</th>
+                    <td>{{ contact_info.last_updated_client }}</td>
+                </tr>
+                <tr>
+                    <th>Last updated date</th>
+                    <td>{{ contact_info.last_updated_date }}</td>
+                </tr>
+                <tr>
+                    <th>Last transfer date</th>
+                    <td>{{ contact_info.last_transfer_date }}</td>
+                </tr>
+                <tr>
+                    <th>Auth info</th>
+                    <td>{{ contact_info.auth_info }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

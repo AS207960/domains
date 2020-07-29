@@ -1,0 +1,32 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Get Contact ID</h1>
+        {% crispy contact_form contact_form.helper %}
+        {% if contact_info %}
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ contact_info.registry_contact_id }}</td>
+                </tr>
+                <tr>
+                    <th>Registry name</th>
+                    <td>{{ contact_info.registry_id }}</td>
+                </tr>
+                <tr>
+                    <th>Auth info</th>
+                    <td>{{ contact_info.auth_info }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

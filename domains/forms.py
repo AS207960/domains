@@ -466,7 +466,6 @@ class AdminDomainCheckForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
-        self.helper.form_action = 'domain_search'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-10'
@@ -503,7 +502,6 @@ class AdminDomainTransferForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
-        self.helper.form_action = 'domain_search'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-10'
@@ -514,6 +512,44 @@ class AdminDomainTransferForm(forms.Form):
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Transfer'))
+
+
+class AdminContactCheckForm(forms.Form):
+    contact = forms.CharField(max_length=63, label="Registry Contact ID", required=True)
+    registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'contact',
+            'registry_id'
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))
+
+
+class AdminContactGetIDForm(forms.Form):
+    contact = forms.UUIDField(label="Contact ID", required=True)
+    registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'contact',
+            'registry_id'
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Get'))
 
 
 class HostSearchForm(forms.Form):

@@ -7,9 +7,18 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Domains</h5>
-                        <a href="{% url 'admin_domain_info' %}" class="btn btn-primary">Info Query</a>
-                        <a href="{% url 'admin_domain_transfer_info' %}" class="btn btn-primary">Transfer Query</a>
-                        <a href="{% url 'admin_domain_transfer_request' %}" class="btn btn-primary">Transfer Request</a>
+                        <a href="{% url 'admin_domain_info' %}" class="btn btn-primary mt-1">Info Query</a>
+                        <a href="{% url 'admin_domain_transfer_info' %}" class="btn btn-primary mt-1">Transfer Query</a>
+                        <a href="{% url 'admin_domain_transfer_request' %}" class="btn btn-primary mt-1">Transfer Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Contacts</h5>
+                        <a href="{% url 'admin_contact_info' %}" class="btn btn-primary mt-1">Info Query</a>
+                        <a href="{% url 'admin_get_contact_id' %}" class="btn btn-primary mt-1">Get ID</a>
                     </div>
                 </div>
             </div>
@@ -17,8 +26,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Balance enquiry</h5>
-                        <a href="{% url 'admin_balance' 'switch' %}" class="btn btn-primary">SWITCH</a>
-                        <a href="{% url 'admin_balance' 'verisign-tv' %}" class="btn btn-primary">Verisign</a>
+                        <a href="{% url 'admin_balance' 'switch' %}" class="btn btn-primary mt-1">SWITCH</a>
+                        <a href="{% url 'admin_balance' 'verisign-tv' %}" class="btn btn-primary mt-1">Verisign</a>
                     </div>
                 </div>
             </div>
@@ -26,7 +35,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Nominet tag list</h5>
-                        <a href="{% url 'admin_nominet_tags' %}" class="btn btn-primary">View</a>
+                        <a href="{% url 'admin_nominet_tags' %}" class="btn btn-primary mt-1">View</a>
                     </div>
                 </div>
             </div>
