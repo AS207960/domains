@@ -428,6 +428,7 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_AFILIAS,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_DNSBELGIUM,
         )
 
     @property
@@ -444,7 +445,8 @@ class DomainInfo:
     def renew_supported(self):
         return self.registry not in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_DENIC
+            self.REGISTRY_DENIC,
+            self.REGISTRY_DNSBELGIUM
         )
 
     @property
@@ -460,7 +462,8 @@ class DomainInfo:
             self.REGISTRY_NOMINET,
             self.REGISTRY_SWITCH,
             self.REGISTRY_TRAFICOM,
-            self.REGISTRY_EURID
+            self.REGISTRY_EURID,
+            self.REGISTRY_DNSBELGIUM,
         )
 
     @property
@@ -571,6 +574,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
+            self.REGISTRY_DNSBELGIUM
         )
 
     @property
@@ -876,6 +880,10 @@ else:
         ('de', DomainInfo(
             DomainInfo.REGISTRY_DENIC,
             MarkupPrice(1596, transfer=1260, restore=5250, currency=None, display_currency='EUR', tld='de', markup=decimal.Decimal("1.75"))
+        )),
+        ('be', DomainInfo(
+            DomainInfo.REGISTRY_DNSBELGIUM,
+            MarkupPrice(2694, transfer=2694, restore=6480, currency=None, display_currency='EUR', tld='be', markup=decimal.Decimal("1.35"))
         )),
         ('space', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
