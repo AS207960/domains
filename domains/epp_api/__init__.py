@@ -1,6 +1,7 @@
 import typing
 import datetime
 import grpc
+import idna
 import decimal
 import dataclasses
 import ipaddress
@@ -114,6 +115,24 @@ class DomainNameServer:
             host_name=self.host_name,
             addresses=list(map(lambda a: a.to_pb(), self.address))
         )
+
+    @property
+    def unicode_host_obj(self):
+        if not self.host_obj:
+            return None
+        try:
+            return idna.decode(self.host_obj, uts46=True)
+        except idna.IDNAError:
+            return self.host_obj
+
+    @property
+    def unicode_host_name(self):
+        if not self.host_name:
+            return None
+        try:
+            return idna.decode(self.host_name, uts46=True)
+        except idna.IDNAError:
+            return self.host_name
 
 
 @dataclasses.dataclass
@@ -383,6 +402,13 @@ class Domain:
     @property
     def tech(self):
         return self.get_contact("tech")
+
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.name, uts46=True)
+        except idna.IDNAError:
+            return self.name
 
     def set_auth_info(self, auth_info: str) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
@@ -666,6 +692,13 @@ class Host:
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
         self.registry_name = registry_name
         return self
+
+    @property
+    def unicode_name(self):
+        try:
+            return idna.decode(self.name, uts46=True)
+        except idna.IDNAError:
+            return self.name
 
     def set_addresses(self, addresses: typing.List[IPAddress]) -> bool:
         rem_addrs = list(filter(lambda a: a not in addresses, self.addresses))

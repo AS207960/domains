@@ -35,7 +35,7 @@
                         {% if host.error %}
                             <tr class="table-dark">
                                 <th scope="row">
-                                    <del>{{ host.obj.name_server }}</del>
+                                    <del>{{ host.obj.unicode_name_server }}</del>
                                 </th>
                                 <td colspan="4" class="text-danger">
                                     Unable to contact registry: {{ host.error }}
@@ -43,7 +43,7 @@
                             </tr>
                         {% else %}
                             <tr>
-                                <th scope="row">{{ host.host.name }}</th>
+                                <th scope="row">{{ host.host.unicode_name }}</th>
                                 <td>{% if host.host.creation_date %}{{ host.host.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td>{% if host.host.last_updated_date %}{{ host.host.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>

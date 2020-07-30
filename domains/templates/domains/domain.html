@@ -5,7 +5,7 @@
         <div class="container py-3">
             <div class="jumbotron my-0">
                 <h1 class="display-4">
-                    {{ domain.name }}
+                    {{ domain.unicode_domain }}
                 </h1>
                 <h4>
                     {% if domain.expired %}
@@ -204,7 +204,7 @@
                     {% for ns in domain.name_servers %}
                         {% if ns.host_obj %}
                             <tr>
-                                <th>{{ ns.host_obj }}</th>
+                                <th>{{ ns.unicode_host_obj }}</th>
                                 <td>N/A</td>
                                 <td>N/A</td>
                                 <td><a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}" class="btn btn-danger btn-sm">&#x1f5d1; Delete</a></td>
@@ -212,7 +212,7 @@
                         {% elif ns.host_name %}
                             {% for addr in ns.addresses %}
                                 <tr>
-                                    <th>{{ ns.host_name }}</th>
+                                    <th>{{ ns.unicode_host_name }}</th>
                                     <td>{{ addr.address }}</td>
                                     <td>{{ addr.ip_type }}</td>
                                     <td></td>
@@ -252,7 +252,7 @@
                 {% if hosts %}
                     {% for host in hosts %}
                         <tr>
-                            <th>{{ host.name_server }}</th>
+                            <th>{{ host.unicode_name_server }}</th>
                             <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">Edit</a></td>
                         </tr>
                     {% endfor %}

@@ -18,3 +18,4 @@ google-auth
 retry
 requests
 celery
+idna

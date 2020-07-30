@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 import django_keycloak_auth.clients
 import ipaddress
 import grpc
+import idna
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
 from . import  gchat_bot
@@ -40,21 +41,26 @@ def domain_price_query(request):
         form = forms.DomainSearchForm(request.POST)
         form.helper.form_action = request.get_full_path()
         if form.is_valid():
-            zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
-            if zone:
-                try:
-                    data = zone.pricing.fees(sld)
-                    return render(request, "domains/domain_price_query.html", {
-                        "domain_form": form,
-                        "domain_data": data
-                    })
-                except grpc.RpcError as rpc_error:
-                    return render(request, "domains/domain_price_query.html", {
-                        "error": rpc_error.details(),
-                        "domain_form": form
-                    })
+            try:
+                domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
+            except idna.IDNAError:
+                form.add_error('domain', "Invalid Unicode")
             else:
-                form.add_error('domain', "Unsupported or invalid domain")
+                zone, sld = zone_info.get_domain_info(domain_idna)
+                if zone:
+                    try:
+                        data = zone.pricing.fees(sld)
+                        return render(request, "domains/domain_price_query.html", {
+                            "domain_form": form,
+                            "domain_data": data
+                        })
+                    except grpc.RpcError as rpc_error:
+                        return render(request, "domains/domain_price_query.html", {
+                            "error": rpc_error.details(),
+                            "domain_form": form
+                        })
+                else:
+                    form.add_error('domain', "Unsupported or invalid domain")
 
     else:
         form = forms.DomainSearchForm()
@@ -190,19 +196,24 @@ def domain(request, domain_id):
                 domain_name=user_domain.domain
             )
             if new_host_form.is_valid():
-                host = f"{new_host_form.cleaned_data['host']}.{domain_data.name}"
                 try:
-                    available, reason = apps.epp_client.check_host(host, domain_data.registry_name)
-                except grpc.RpcError as rpc_error:
-                    error = rpc_error.details()
+                    host_idna = idna.encode(new_host_form.cleaned_data['host'], uts46=True).decode()
+                except idna.IDNAError:
+                    new_host_form.add_error('host', "Invalid Unicode")
                 else:
-                    if not available:
-                        if not reason:
-                            new_host_form.add_error('host', "Host name unavailable")
-                        else:
-                            new_host_form.add_error('host', f"Host name unavailable: {reason}")
+                    host = f"{host_idna}.{domain_data.name}"
+                    try:
+                        available, reason = apps.epp_client.check_host(host, domain_data.registry_name)
+                    except grpc.RpcError as rpc_error:
+                        error = rpc_error.details()
                     else:
-                        return redirect('host_create', host)
+                        if not available:
+                            if not reason:
+                                new_host_form.add_error('host', "Host name unavailable")
+                            else:
+                                new_host_form.add_error('host', f"Host name unavailable: {reason}")
+                        else:
+                            return redirect('host_create', host)
 
         if domain_info.registrant_supported:
             registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user)
@@ -509,7 +520,11 @@ def add_domain_host_obj(request, domain_id):
         for form in form_set.forms:
             host_obj = form.cleaned_data.get('host')
             if host_obj:
-                hosts.append(host_obj)
+                try:
+                    host_idna = idna.encode(host_obj, uts46=True).decode()
+                    hosts.append(host_idna)
+                except idna.IDNAError:
+                    pass
 
         for host_obj in hosts:
             try:
@@ -852,31 +867,36 @@ def domain_search(request):
     if request.method == "POST":
         form = forms.DomainSearchForm(request.POST)
         if form.is_valid():
-            zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
-            if zone:
-                pending_domain = models.DomainRegistration.objects.filter(
-                    domain=form.cleaned_data['domain']
-                ).first()
-                if pending_domain:
-                    form.add_error('domain', "Domain unavailable")
-                else:
-                    try:
-                        available, reason, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
-                    except grpc.RpcError as rpc_error:
-                        error = rpc_error.details()
-                    else:
-                        if not available:
-                            if not reason:
-                                form.add_error('domain', "Domain unavailable")
-                            else:
-                                form.add_error('domain', f"Domain unavailable: {reason}")
-                        else:
-                            if request.user.is_authenticated:
-                                return redirect('domain_register', form.cleaned_data['domain'])
-                            else:
-                                return redirect('domain_search_success', form.cleaned_data['domain'])
+            try:
+                domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
+            except idna.IDNAError:
+                form.add_error('domain', "Invalid Unicode")
             else:
-                form.add_error('domain', "Unsupported or invalid domain")
+                zone, sld = zone_info.get_domain_info(domain_idna)
+                if zone:
+                    pending_domain = models.DomainRegistration.objects.filter(
+                        domain=form.cleaned_data['domain']
+                    ).first()
+                    if pending_domain:
+                        form.add_error('domain', "Domain unavailable")
+                    else:
+                        try:
+                            available, reason, _ = apps.epp_client.check_domain(domain_idna)
+                        except grpc.RpcError as rpc_error:
+                            error = rpc_error.details()
+                        else:
+                            if not available:
+                                if not reason:
+                                    form.add_error('domain', "Domain unavailable")
+                                else:
+                                    form.add_error('domain', f"Domain unavailable: {reason}")
+                            else:
+                                if request.user.is_authenticated:
+                                    return redirect('domain_register', domain_idna)
+                                else:
+                                    return redirect('domain_search_success', domain_idna)
+                else:
+                    form.add_error('domain', "Unsupported or invalid domain")
     else:
         form = forms.DomainSearchForm()
 
@@ -915,6 +935,14 @@ def domain_register(request, domain_name):
 
     zone, sld = zone_info.get_domain_info(domain_name)
     if not zone:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        domain_unicode = idna.decode(domain_name, uts46=True)
+    except idna.IDNAError:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
@@ -967,7 +995,7 @@ def domain_register(request, domain_name):
 
     return render(request, "domains/domain_form.html", {
         "domain_form": form,
-        "domain_name": domain_name,
+        "domain_name": domain_unicode,
         "price_decimal": price_decimal,
         "zone_notice": zone_notice,
         "currency": zone_price.currency,
@@ -1001,19 +1029,19 @@ def confirm_order(request, order, confirm_template, pending_template):
                 return redirect(referrer)
 
         return render(request, confirm_template, {
-            "domain": order.domain,
+            "domain": order.unicode_domain,
             "price_decimal": order.price,
         })
 
     if order.state == order.STATE_NEEDS_PAYMENT:
         if "charge_state_id" in request.GET:
             return render(request, "domains/domain_order_processing.html", {
-                "domain_name": order.domain
+                "domain_name": order.unicode_domain
             })
         return redirect(order.redirect_uri)
     elif order.state == order.STATE_PENDING_APPROVAL:
         return render(request, pending_template, {
-            "domain_name": order.domain
+            "domain_name": order.unicode_domain
         })
     elif order.state == order.STATE_FAILED:
         return render(request, "domains/error.html", {
@@ -1024,7 +1052,7 @@ def confirm_order(request, order, confirm_template, pending_template):
         return redirect('domain', order.domain_obj.id)
     else:
         return render(request, "domains/domain_order_processing.html", {
-            "domain_name": order.domain
+            "domain_name": order.unicode_domain
         })
 
 
@@ -1207,40 +1235,44 @@ def domain_transfer_query(request):
         form.helper.form_action = request.get_full_path()
 
         if form.is_valid():
-            zone, sld = zone_info.get_domain_info(form.cleaned_data['domain'])
-            if zone:
-                if not zone.transfer_supported:
-                    form.add_error('domain', "Extension not yet supported for transfers")
-                else:
-                    try:
-                        if zone.pre_transfer_query_supported:
-                            available, _, _ = apps.epp_client.check_domain(form.cleaned_data['domain'])
-                        else:
-                            available = True
-                    except grpc.RpcError as rpc_error:
-                        error = rpc_error.details()
-                    else:
-                        if not available:
-                            if zone.pre_transfer_query_supported:
-                                try:
-                                    domain_data = apps.epp_client.get_domain(form.cleaned_data['domain'])
-                                except grpc.RpcError as rpc_error:
-                                    error = rpc_error.details()
-                                else:
-                                    if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
-                                        available = False
-                                        form.add_error('domain', "Domain not eligible for transfer")
-
-                        if available:
-                            if request.user.is_authenticated:
-                                return redirect('domain_transfer', form.cleaned_data['domain'])
-                            else:
-                                return redirect('domain_transfer_search_success', form.cleaned_data['domain'])
-                        else:
-                            form.add_error('domain', "Domain does not exist")
+            try:
+                domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
+            except idna.IDNAError:
+                form.add_error('domain', "Invalid Unicode")
             else:
-                form.add_error('domain', "Unsupported or invalid domain")
+                zone, sld = zone_info.get_domain_info(domain_idna)
+                if zone:
+                    if not zone.transfer_supported:
+                        form.add_error('domain', "Extension not yet supported for transfers")
+                    else:
+                        try:
+                            if zone.pre_transfer_query_supported:
+                                available, _, _ = apps.epp_client.check_domain(domain_idna)
+                            else:
+                                available = True
+                        except grpc.RpcError as rpc_error:
+                            error = rpc_error.details()
+                        else:
+                            if not available:
+                                if zone.pre_transfer_query_supported:
+                                    try:
+                                        domain_data = apps.epp_client.get_domain(domain_idna)
+                                    except grpc.RpcError as rpc_error:
+                                        error = rpc_error.details()
+                                    else:
+                                        if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
+                                            available = False
+                                            form.add_error('domain', "Domain not eligible for transfer")
 
+                            if available:
+                                if request.user.is_authenticated:
+                                    return redirect('domain_transfer', domain_idna)
+                                else:
+                                    return redirect('domain_transfer_search_success', domain_idna)
+                            else:
+                                form.add_error('domain', "Domain does not exist")
+                else:
+                    form.add_error('domain', "Unsupported or invalid domain")
     else:
         form = forms.DomainSearchForm()
         form.helper.form_action = request.get_full_path()
@@ -1279,6 +1311,14 @@ def domain_transfer(request, domain_name):
 
     zone, sld = zone_info.get_domain_info(domain_name)
     if not zone or not zone.transfer_supported:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        domain_unicode = idna.decode(domain_name, uts46=True)
+    except idna.IDNAError:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
@@ -1323,7 +1363,7 @@ def domain_transfer(request, domain_name):
 
     return render(request, "domains/domain_transfer.html", {
         "domain_form": form,
-        "domain_name": domain_name,
+        "domain_name": domain_unicode,
         "price_decimal": price_decimal,
         "zone_info": zone,
         "error": error

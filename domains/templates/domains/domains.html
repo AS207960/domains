@@ -40,7 +40,7 @@
                         {% if domain.error %}
                             <tr class="table-dark">
                                 <th scope="row">
-                                    <del>{{ domain.obj.domain }}</del>
+                                    <del>{{ domain.obj.unicode_domain }}</del>
                                 </th>
                                 <td colspan="4" class="text-danger">
                                     Unable to contact registry: {{ domain.error }}
@@ -49,7 +49,7 @@
                         {% else %}
                             <tr class="{% if domain.domain.expired %}table-danger {% endif %}">
                                 <th scope="row">
-                                    {{ domain.domain.name }}
+                                    {{ domain.domain.unicode_domain }}
                                     {% if domain.domain.expired %}
                                         <span class="badge badge-danger">Expired</span>
                                     {% endif %}
@@ -91,7 +91,7 @@
                     {% for domain in registration_orders %}
                         <tr>
                             <th scope="row">
-                                {{ domain.domain }}
+                                {{ domain.unicode_domain }}
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
@@ -153,7 +153,7 @@
                     {% for domain in transfer_orders %}
                         <tr>
                             <th scope="row">
-                                {{ domain.domain }}
+                                {{ domain.unicode_domain }}
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
@@ -215,7 +215,7 @@
                     {% for domain in renew_orders %}
                         <tr>
                             <th scope="row">
-                                {{ domain.domain }}
+                                {{ domain.unicode_domain }}
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
@@ -278,7 +278,7 @@
                         {% if domain.state != "C" %}
                             <tr>
                                 <th scope="row">
-                                    {{ domain.domain }}
+                                    {{ domain.unicode_domain }}
                                 </th>
                                 <td>
                                     {% if domain.state == "P" %}
@@ -338,7 +338,7 @@
                     {% for domain in deleted_domains %}
                         <tr>
                             <th scope="row">
-                                {{ domain.domain }}
+                                {{ domain.unicode_domain }}
                                 {% if domain.pending_restore %}
                                     <span class="badge badge-info">Pending restore</span>
                                 {% endif %}

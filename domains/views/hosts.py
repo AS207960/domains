@@ -3,6 +3,7 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from concurrent.futures import ThreadPoolExecutor
 import grpc
+import idna
 import django_keycloak_auth.clients
 import ipaddress
 from .. import models, apps, forms
@@ -165,6 +166,11 @@ def host_create(request, host_name: str):
         })
 
     try:
+        host_unicode = idna.decode(host_name, uts46=True)
+    except idna.IDNAError:
+        host_unicode = host_name
+
+    try:
         domain_data = apps.epp_client.get_domain(domain.domain)
         available, _ = apps.epp_client.check_host(host_name, domain_data.registry_name)
     except grpc.RpcError as rpc_error:
@@ -203,7 +209,7 @@ def host_create(request, host_name: str):
 
     return render(request, "domains/host_form.html", {
         "title": "Create a host object",
-        "host": host_name,
+        "host": host_unicode,
         "host_form": form,
         "error": error
     })

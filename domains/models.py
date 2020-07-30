@@ -12,7 +12,7 @@ from . import apps
 import uuid
 import grpc
 import secrets
-import string
+import idna
 import typing
 import threading
 
@@ -504,6 +504,13 @@ class NameServer(models.Model):
         self.user = user
         super().__init__(*args, **kwargs)
 
+    @property
+    def unicode_name_server(self):
+        try:
+            return idna.decode(self.unicode_name_server, uts46=True)
+        except idna.IDNAError:
+            return self.unicode_name_server
+
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
         return cls.objects.filter(pk__in=get_object_ids(access_token, 'name-server', action))
@@ -577,6 +584,13 @@ class DomainRegistration(models.Model):
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
+
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.domain, uts46=True)
+        except idna.IDNAError:
+            return self.domain
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
@@ -718,6 +732,13 @@ class DomainRegistrationOrder(AbstractOrder):
     class Meta:
         ordering = ['domain']
 
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.domain, uts46=True)
+        except idna.IDNAError:
+            return self.domain
+
     def __str__(self):
         return self.domain
 
@@ -743,6 +764,13 @@ class DomainTransferOrder(AbstractOrder):
     class Meta:
         ordering = ['domain']
 
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.domain, uts46=True)
+        except idna.IDNAError:
+            return self.domain
+
     def __str__(self):
         return self.domain
 
@@ -760,6 +788,13 @@ class DomainRenewOrder(AbstractOrder):
     class Meta:
         ordering = ['domain']
 
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.domain, uts46=True)
+        except idna.IDNAError:
+            return self.domain
+
     def __str__(self):
         return self.domain
 
@@ -774,6 +809,13 @@ class DomainRestoreOrder(AbstractOrder):
 
     class Meta:
         ordering = ['domain']
+
+    @property
+    def unicode_domain(self):
+        try:
+            return idna.decode(self.domain, uts46=True)
+        except idna.IDNAError:
+            return self.domain
 
     def __str__(self):
         return self.domain

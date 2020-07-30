@@ -4,7 +4,7 @@
     <div class="container my-3">
         <div class="jumbotron">
             <h1 class="display-4">Delete host</h1>
-            <b>Host: </b> {{ host.name }}
+            <b>Host: </b> {{ host.unicode_name }}
             <hr class="my-4">
             {% if can_delete %}
             <p>Are you sure you want to delete this host?</p>
