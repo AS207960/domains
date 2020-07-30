@@ -177,7 +177,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
 )
 def notify_registration(registration_order_id, period: str):
     domain_registration_order = \
-        models.DomainRegistration.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
