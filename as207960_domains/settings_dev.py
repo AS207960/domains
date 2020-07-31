@@ -159,11 +159,16 @@ DEFAULT_FROM_EMAIL = "AS207960 Domains <domains@as207960.net>"
 with open(os.path.join(BASE_DIR, "secrets/keycloak.json")) as f:
     keycloak_conf = json.load(f)
 
+with open(os.path.join(BASE_DIR, "secrets/verisign_ns.json")) as f:
+    verisign_ns_conf = json.load(f)
+
 KEYCLOAK_SERVER_URL = keycloak_conf["server_url"]
 KEYCLOAK_REALM = keycloak_conf["realm"]
 OIDC_CLIENT_ID = keycloak_conf["client_id"]
 OIDC_CLIENT_SECRET = keycloak_conf["client_secret"]
 OIDC_SCOPES = keycloak_conf["scopes"]
+
+VERISIGN_NS_API_KEY = verisign_ns_conf["key"]
 
 REGISTRATION_ENABLED = True
 EPP_PROXY_ADDR = "localhost:50052"

@@ -1,7 +1,6 @@
 import typing
 import datetime
 import grpc
-import idna
 import decimal
 import dataclasses
 import ipaddress
@@ -121,17 +120,17 @@ class DomainNameServer:
         if not self.host_obj:
             return None
         try:
-            return idna.decode(self.host_obj, uts46=True)
-        except idna.IDNAError:
-            return self.host_obj
+            return self.host_objdomain.encode().decode('idna')
+        except UnicodeError:
+            return self.host_objdomain
 
     @property
     def unicode_host_name(self):
         if not self.host_name:
             return None
         try:
-            return idna.decode(self.host_name, uts46=True)
-        except idna.IDNAError:
+            return self.host_name.encode().decode('idna')
+        except UnicodeError:
             return self.host_name
 
 
@@ -406,8 +405,8 @@ class Domain:
     @property
     def unicode_domain(self):
         try:
-            return idna.decode(self.name, uts46=True)
-        except idna.IDNAError:
+            return self.name.encode().decode('idna')
+        except UnicodeError:
             return self.name
 
     def set_auth_info(self, auth_info: str) -> bool:
@@ -696,8 +695,8 @@ class Host:
     @property
     def unicode_name(self):
         try:
-            return idna.decode(self.name, uts46=True)
-        except idna.IDNAError:
+            return self.name.encode().decode('idna')
+        except UnicodeError:
             return self.name
 
     def set_addresses(self, addresses: typing.List[IPAddress]) -> bool:

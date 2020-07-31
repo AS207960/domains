@@ -1,0 +1,79 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+    <section class="stripe">
+        <div class="container py-3">
+            <div class="jumbotron my-0">
+                <h1 class="display-4">Get a domain for your online presence</h1>
+                <hr class="my-4">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Error!</h4>
+                        <p>There was an error processing your request</p>
+                        <hr>
+                        <p class="mb-0">{{ error }}</p>
+                    </div>
+                {% endif %}
+                {% crispy name_form name_form.helper %}
+            </div>
+        </div>
+    </section>
+    {% if suggestions != None %}
+        <div class="container my-3 pt-3 pt-md-5">
+            <h2>Domain search results</h2>
+            <h4>Search again for a different set of TLDs</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if suggestions %}
+                        {% for suggestion in suggestions %}
+                            <tr>
+                                <th>{{ suggestion.name }}</th>
+                                <td>
+                                    {% if suggestion.availability == suggestion.availability.AVAILABLE %}
+                                        <span class="badge badge-success">Available</span>
+                                    {% elif suggestion.availability == suggestion.availability.REGISTERED %}
+                                        <span class="badge badge-danger">Registered</span>
+                                    {% elif suggestion.availability == suggestion.availability.RESERVED %}
+                                        <span class="badge badge-warning">Reserved</span>
+                                    {% elif suggestion.availability == suggestion.availability.PREMIUM %}
+                                        <span class="badge badge-primary">Premium</span>
+                                    {% elif suggestion.availability == suggestion.availability.UNKNOWN %}
+                                        <span class="badge badge-secondary">Unknown</span>
+                                    {% elif suggestion.availability == suggestion.availability.INVALID %}
+                                        <span class="badge badge-danger">Invalid</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if suggestion.availability == suggestion.availability.AVAILABLE or suggestion.availability == suggestion.availability.PREMIUM %}
+                                        <a href="{% url 'domain_register' suggestion.name %}" class="btn btn-primary btn-sm">
+                                            Register
+                                        </a>
+                                    {% elif suggestion.availability == suggestion.availability.UNKNOWN %}
+                                        <a href="{% url 'domain_search' %}?domain={{ suggestion.name }}" class="btn btn-primary btn-sm">
+                                            Check availability
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No suggestions</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

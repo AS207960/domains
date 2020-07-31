@@ -1,11 +1,14 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import domain, hosts, contacts, admin, gchat_bot
+from .views import domain, hosts, contacts, admin, gchat_bot, suggest
 
 urlpatterns = [
     path('', domain.index, name='index'),
     path('prices/', domain.domain_prices, name='domain_prices'),
     path('prices/query/', domain.domain_price_query, name='domain_price_query'),
+    path('domains/suggest/', suggest.suggest_name, name='suggest_domain'),
+    path('domains/suggest/personal/', suggest.suggest_personal_name, name='suggest_personal_domain'),
+    path('domains/suggest/online/', suggest.suggest_online, name='suggest_online_domain'),
     path('domains/', domain.domains, name='domains'),
     path('domains/new/', domain.domain_search, name='domain_search'),
     path('domains/new/<str:domain_name>/success/', domain.domain_search_success, name='domain_search_success'),

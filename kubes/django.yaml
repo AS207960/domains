@@ -112,6 +112,9 @@ spec:
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
+            - secretRef:
+                name: verisign-ns-key
+              prefix: "VERISIGN_NS_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -145,6 +148,9 @@ spec:
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
+            - secretRef:
+                name: verisign-ns-key
+              prefix: "VERISIGN_NS_"
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -206,6 +212,9 @@ spec:
                 - secretRef:
                     name: domains-celery
                   prefix: "CELERY_"
+                - secretRef:
+                    name: verisign-ns-key
+                  prefix: "VERISIGN_NS_"
           restartPolicy: OnFailure
 ---
 apiVersion: apps/v1
@@ -275,6 +284,9 @@ spec:
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
+            - secretRef:
+                name: verisign-ns-key
+              prefix: "VERISIGN_NS_"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -343,6 +355,9 @@ spec:
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
+            - secretRef:
+                name: verisign-ns-key
+              prefix: "VERISIGN_NS_"
 ---
 apiVersion: v1
 kind: Service

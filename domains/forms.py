@@ -590,3 +590,68 @@ class HostRegisterForm(forms.Form):
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Create'))
+
+
+class NameSearchForm(forms.Form):
+    domain = forms.CharField(label="Your preferred domain", required=True, widget=forms.TextInput(
+        attrs={'placeholder': 'myawesome.website'}
+    ))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'domain',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))
+
+
+class PersonalNameSearchForm(forms.Form):
+    name = forms.CharField(label="Your name", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'name',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))
+
+
+class OnlineNameSearchForm(forms.Form):
+    online_uri = forms.URLField(label="Your existing online URL (social media, etc)", required=False)
+    online_title = forms.CharField(label="Your preferred title", required=False)
+    online_description = forms.CharField(label="A brief description", required=False)
+    domain = forms.CharField(label="Your preferred domain", required=False, widget=forms.TextInput(
+        attrs={'placeholder': 'myawesome.website'}
+    ))
+    location = forms.CharField(label="Your location", required=False)
+    email = forms.EmailField(label="Your email", required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'online_uri',
+            'online_title',
+            'online_description',
+            'domain',
+            'location',
+            'email',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))

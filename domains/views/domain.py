@@ -9,7 +9,7 @@ import grpc
 import idna
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
-from . import  gchat_bot
+from . import gchat_bot
 
 
 def index(request):
@@ -43,8 +43,8 @@ def domain_price_query(request):
         if form.is_valid():
             try:
                 domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
-            except idna.IDNAError:
-                form.add_error('domain', "Invalid Unicode")
+            except idna.IDNAError as e:
+                form.add_error('domain', f"Invalid Unicode: {e}")
             else:
                 zone, sld = zone_info.get_domain_info(domain_idna)
                 if zone:
@@ -198,8 +198,8 @@ def domain(request, domain_id):
             if new_host_form.is_valid():
                 try:
                     host_idna = idna.encode(new_host_form.cleaned_data['host'], uts46=True).decode()
-                except idna.IDNAError:
-                    new_host_form.add_error('host', "Invalid Unicode")
+                except idna.IDNAError as e:
+                    new_host_form.add_error('host', f"Invalid Unicode: {e}")
                 else:
                     host = f"{host_idna}.{domain_data.name}"
                     try:
@@ -868,9 +868,9 @@ def domain_search(request):
         form = forms.DomainSearchForm(request.POST)
         if form.is_valid():
             try:
-                domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
-            except idna.IDNAError:
-                form.add_error('domain', "Invalid Unicode")
+                domain_idna = form.cleaned_data['domain'].encode('idna').decode()
+            except UnicodeError as e:
+                form.add_error('domain', f"Invalid Unicode: {e}")
             else:
                 zone, sld = zone_info.get_domain_info(domain_idna)
                 if zone:
@@ -898,7 +898,9 @@ def domain_search(request):
                 else:
                     form.add_error('domain', "Unsupported or invalid domain")
     else:
-        form = forms.DomainSearchForm()
+        form = forms.DomainSearchForm(initial={
+            "domain": request.GET.get("domain")
+        })
 
     return render(request, "domains/domain_search.html", {
         "domain_form": form,
@@ -941,12 +943,9 @@ def domain_register(request, domain_name):
         })
 
     try:
-        domain_unicode = idna.decode(domain_name, uts46=True)
-    except idna.IDNAError:
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
+        domain_unicode = domain_name.encode().decode('idna')
+    except UnicodeError:
+        domain_unicode = domain_name
 
     zone_price, registry_name, zone_notice = zone.pricing, zone.registry, zone.notice
     price_decimal = zone_price.representative_registration()
@@ -1237,8 +1236,8 @@ def domain_transfer_query(request):
         if form.is_valid():
             try:
                 domain_idna = idna.encode(form.cleaned_data['domain'], uts46=True).decode()
-            except idna.IDNAError:
-                form.add_error('domain', "Invalid Unicode")
+            except idna.IDNAError as e:
+                form.add_error('domain', f"Invalid Unicode: {e}")
             else:
                 zone, sld = zone_info.get_domain_info(domain_idna)
                 if zone:
