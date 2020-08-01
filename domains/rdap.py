@@ -288,25 +288,25 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user)
             add_entity(domain_data.registrant, contact, rdap_pb2.RoleRegistrant)
         elif domain_obj.registrant_contact:
-            add_entity(domain_obj.registrant_contact_id, domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
+            add_entity(str(domain_obj.registrant_contact_id), domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
 
         if domain_data.admin:
             contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.admin.contact_id, contact, rdap_pb2.RoleAdministrative)
         elif domain_obj.admin_contact:
-            add_entity(domain_obj.admin_contact_id, domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
+            add_entity(str(domain_obj.admin_contact_id), domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
 
         if domain_data.billing:
             contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.billing.contact_id, contact, rdap_pb2.RoleBilling)
         elif domain_obj.billing_contact:
-            add_entity(domain_obj.billing_contact_id, domain_obj.billing_contact, rdap_pb2.RoleBilling)
+            add_entity(str(domain_obj.billing_contact_id), domain_obj.billing_contact, rdap_pb2.RoleBilling)
 
         if domain_data.tech:
             contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.tech.contact_id, contact, rdap_pb2.RoleTechnical)
         if domain_obj.tech_contact:
-            add_entity(domain_obj.tech_contact_id, domain_obj.tech_contact, rdap_pb2.RoleTechnical)
+            add_entity(str(domain_obj.tech_contact_id), domain_obj.tech_contact, rdap_pb2.RoleTechnical)
 
         for i, c in entities.items():
             resp_data.entities.append(self.contact_to_card(i, c["roles"], c["contact"]))
