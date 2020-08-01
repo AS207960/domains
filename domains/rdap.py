@@ -58,7 +58,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 properties={
                     "type": "voice"
                 },
-                uri=contact.phone.as_rfc3699
+                uri=contact.phone.as_rfc3966
             ))
             if contact.fax:
                 contact.fax.extension = contact.fax_ext
@@ -67,7 +67,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                     properties={
                         "type": "fax"
                     },
-                    uri=contact.fax.as_rfc3699
+                    uri=contact.fax.as_rfc3966
                 ))
         else:
             entity.card.properties.extend([rdap_pb2.jCard.Property(
