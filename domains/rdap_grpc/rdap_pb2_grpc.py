@@ -28,6 +28,21 @@ class RDAPStub(object):
                 request_serializer=rdap__pb2.LookupRequest.SerializeToString,
                 response_deserializer=rdap__pb2.NameServerResponse.FromString,
                 )
+        self.DomainSearch = channel.unary_unary(
+                '/rdap.RDAP/DomainSearch',
+                request_serializer=rdap__pb2.DomainSearchRequest.SerializeToString,
+                response_deserializer=rdap__pb2.DomainSearchResponse.FromString,
+                )
+        self.EntitySearch = channel.unary_unary(
+                '/rdap.RDAP/EntitySearch',
+                request_serializer=rdap__pb2.DomainSearchRequest.SerializeToString,
+                response_deserializer=rdap__pb2.EntitySearchResponse.FromString,
+                )
+        self.NameServerSearch = channel.unary_unary(
+                '/rdap.RDAP/NameServerSearch',
+                request_serializer=rdap__pb2.DomainSearchRequest.SerializeToString,
+                response_deserializer=rdap__pb2.NameServerSearchResponse.FromString,
+                )
 
 
 class RDAPServicer(object):
@@ -51,6 +66,24 @@ class RDAPServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DomainSearch(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def EntitySearch(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NameServerSearch(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RDAPServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -68,6 +101,21 @@ def add_RDAPServicer_to_server(servicer, server):
                     servicer.NameServerLookup,
                     request_deserializer=rdap__pb2.LookupRequest.FromString,
                     response_serializer=rdap__pb2.NameServerResponse.SerializeToString,
+            ),
+            'DomainSearch': grpc.unary_unary_rpc_method_handler(
+                    servicer.DomainSearch,
+                    request_deserializer=rdap__pb2.DomainSearchRequest.FromString,
+                    response_serializer=rdap__pb2.DomainSearchResponse.SerializeToString,
+            ),
+            'EntitySearch': grpc.unary_unary_rpc_method_handler(
+                    servicer.EntitySearch,
+                    request_deserializer=rdap__pb2.DomainSearchRequest.FromString,
+                    response_serializer=rdap__pb2.EntitySearchResponse.SerializeToString,
+            ),
+            'NameServerSearch': grpc.unary_unary_rpc_method_handler(
+                    servicer.NameServerSearch,
+                    request_deserializer=rdap__pb2.DomainSearchRequest.FromString,
+                    response_serializer=rdap__pb2.NameServerSearchResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -124,5 +172,53 @@ class RDAP(object):
         return grpc.experimental.unary_unary(request, target, '/rdap.RDAP/NameServerLookup',
             rdap__pb2.LookupRequest.SerializeToString,
             rdap__pb2.NameServerResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DomainSearch(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/rdap.RDAP/DomainSearch',
+            rdap__pb2.DomainSearchRequest.SerializeToString,
+            rdap__pb2.DomainSearchResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EntitySearch(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/rdap.RDAP/EntitySearch',
+            rdap__pb2.DomainSearchRequest.SerializeToString,
+            rdap__pb2.EntitySearchResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NameServerSearch(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/rdap.RDAP/NameServerSearch',
+            rdap__pb2.DomainSearchRequest.SerializeToString,
+            rdap__pb2.NameServerSearchResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

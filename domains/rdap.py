@@ -79,7 +79,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             ), rdap_pb2.jCard.Property(
                 name="tel",
                 properties={
-                    "type": "voice"
+                    "type": "fax"
                 },
                 text="REDACTED"
             )])
@@ -123,6 +123,17 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             action=rdap_pb2.EventLastUpdateOfRDAP,
             date=date
         ))
+
+        if not (
+                contact.local_address.disclose_name or contact.local_address.disclose_organisation
+                or contact.local_address.disclose_address or contact.disclose_email or contact.disclose_phone
+                or contact.disclose_fax
+        ):
+            entity.remarks.append(rdap_pb2.Remark(
+                title=google.protobuf.wrappers_pb2.StringValue(value="REDACTED FOR PRIVACY"),
+                description="some of the data in this object has been removed",
+                type=google.protobuf.wrappers_pb2.StringValue(value="object redacted due to authorization")
+            ))
 
         return entity
 
@@ -178,27 +189,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         elif status == apps.epp_api.rgp_pb2.PendingDelete:
             return rdap_pb2.StatusPendingDelete
 
-    def DomainLookup(self, request: rdap_pb2.LookupRequest, context):
-        domain_obj = models.DomainRegistration.objects.filter(
-            domain=request.query
-        ).first()  # type: models.DomainRegistration
-        if not domain_obj:
-            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
-                error_code=404,
-                title="Not found",
-                description="No such domain"
-            ))
-            return response
-
-        try:
-            domain_data = apps.epp_client.get_domain(domain_obj.domain)
-        except grpc.RpcError as e:
-            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
-                error_code=500,
-                title="Internal Server Error",
-                description=e.details()
-            ))
-            return response
+    def domain_to_proto(self, domain_obj: models.DomainRegistration) -> rdap_pb2.Domain:
+        domain_data = apps.epp_client.get_domain(domain_obj.domain)
 
         resp_data = rdap_pb2.Domain(
             handle=domain_data.registry_id,
@@ -256,6 +248,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 )]
             ),
             entities=[rdap_pb2.Entity(
+                handle=domain_data.client_id,
                 roles=[rdap_pb2.RoleAbuse],
                 card=rdap_pb2.jCard(
                     properties=[rdap_pb2.jCard.Property(
@@ -274,42 +267,46 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
         entities = {}
 
-        def add_entity(id, obj, role):
-            if id not in entities:
-                entities[id] = {
+        def add_entity(handle, obj, role):
+            obj_id = str(obj.id)
+            if obj_id not in entities:
+                entities[obj_id] = {
+                    "handle": handle,
                     "contact": obj,
                     "roles": [role]
                 }
             else:
-                entities[id]["roles"].append(role)
+                entities[obj_id]["roles"].append(role)
+                if not entities[obj_id]["handle"]:
+                    entities[obj_id]["handle"] = handle
 
         user = domain_obj.get_user()
         if domain_data.registrant:
             contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user)
             add_entity(domain_data.registrant, contact, rdap_pb2.RoleRegistrant)
         elif domain_obj.registrant_contact:
-            add_entity(str(domain_obj.registrant_contact_id), domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
+            add_entity(None, domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
 
         if domain_data.admin:
             contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.admin.contact_id, contact, rdap_pb2.RoleAdministrative)
         elif domain_obj.admin_contact:
-            add_entity(str(domain_obj.admin_contact_id), domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
+            add_entity(None, domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
 
         if domain_data.billing:
             contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.billing.contact_id, contact, rdap_pb2.RoleBilling)
         elif domain_obj.billing_contact:
-            add_entity(str(domain_obj.billing_contact_id), domain_obj.billing_contact, rdap_pb2.RoleBilling)
+            add_entity(None, domain_obj.billing_contact, rdap_pb2.RoleBilling)
 
         if domain_data.tech:
             contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user)
             add_entity(domain_data.tech.contact_id, contact, rdap_pb2.RoleTechnical)
-        if domain_obj.tech_contact:
-            add_entity(str(domain_obj.tech_contact_id), domain_obj.tech_contact, rdap_pb2.RoleTechnical)
+        elif domain_obj.tech_contact:
+            add_entity(None, domain_obj.tech_contact, rdap_pb2.RoleTechnical)
 
-        for i, c in entities.items():
-            resp_data.entities.append(self.contact_to_card(i, c["roles"], c["contact"]))
+        for c in entities.values():
+            resp_data.entities.append(self.contact_to_card(c["handle"], c["roles"], c["contact"]))
 
         if domain_data.creation_date:
             date = google.protobuf.timestamp_pb2.Timestamp()
@@ -348,9 +345,10 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         ))
 
         for ns in domain_data.name_servers:
-            resp_data.name_servers.append(rdap_pb2.NameServer(
-                name=ns.host_obj
-            ))
+            resp_data.name_servers.append(self.name_server_to_proto(models.NameServer(
+                name_server=ns.host_obj,
+                registry_id=domain_data.registry_name
+            )))
 
         if domain_data.sec_dns:
             resp_data.sec_dns.delegation_signed.value = True
@@ -373,7 +371,125 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         else:
             resp_data.sec_dns.delegation_signed.value = False
 
+        return resp_data
+
+    def name_server_status_to_rdap(self, status: apps.epp_api.HostStatus):
+        if status == apps.epp_api.host_pb2.Ok:
+            return rdap_pb2.StatusActive
+        if status == apps.epp_api.host_pb2.Linked:
+            return rdap_pb2.StatusAssociated
+        elif status == apps.epp_api.host_pb2.ClientDeleteProhibited:
+            return rdap_pb2.StatusClientDeleteProhibited
+        elif status == apps.epp_api.host_pb2.ClientUpdateProhibited:
+            return rdap_pb2.StatusClientUpdateProhibited
+        elif status == apps.epp_api.host_pb2.PendingCreate:
+            return rdap_pb2.StatusPendingCreate
+        elif status == apps.epp_api.host_pb2.PendingDelete:
+            return rdap_pb2.StatusPendingDelete
+        elif status == apps.epp_api.host_pb2.PendingTransfer:
+            return rdap_pb2.StatusPendingTransfer
+        elif status == apps.epp_api.host_pb2.PendingUpdate:
+            return rdap_pb2.StatusPendingUpdate
+        elif status == apps.epp_api.host_pb2.ServerDeleteProhibited:
+            return rdap_pb2.StatusServerDeleteProhibited
+        elif status == apps.epp_api.host_pb2.ServerUpdateProhibited:
+            return rdap_pb2.StatusServerUpdateProhibited
+
+    def name_server_to_proto(self, name_server_obj: models.NameServer) -> rdap_pb2.NameServer:
+        name_server_data = apps.epp_client.get_host(name_server_obj.name_server, name_server_obj.registry_id)
+
+        resp_data = rdap_pb2.NameServer(
+            handle=name_server_data.registry_id,
+            name=name_server_data.name,
+            port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net")
+        )
+
+        for status in name_server_data.statuses:
+            resp_data.statuses.append(self.name_server_status_to_rdap(status))
+
+        if name_server_data.creation_date:
+            date = google.protobuf.timestamp_pb2.Timestamp()
+            date.FromDatetime(name_server_data.creation_date)
+            resp_data.events.append(rdap_pb2.Event(
+                action=rdap_pb2.EventRegistration,
+                date=date
+            ))
+        if name_server_data.last_updated_date:
+            date = google.protobuf.timestamp_pb2.Timestamp()
+            date.FromDatetime(name_server_data.last_updated_date)
+            resp_data.events.append(rdap_pb2.Event(
+                action=rdap_pb2.EventLastChanged,
+                date=date
+            ))
+        if name_server_data.last_transfer_date:
+            date = google.protobuf.timestamp_pb2.Timestamp()
+            date.FromDatetime(name_server_data.last_transfer_date)
+            resp_data.events.append(rdap_pb2.Event(
+                action=rdap_pb2.EventTransfer,
+                date=date
+            ))
+
+        for address in name_server_data.addresses:
+            if address.ip_type == apps.epp_api.common_pb2.IPAddress.IPv4:
+                resp_data.ip_addresses.v4.append(address.address)
+            elif address.ip_type == apps.epp_api.common_pb2.IPAddress.IPv6:
+                resp_data.ip_addresses.v6.append(address.address)
+
+        return resp_data
+
+    def DomainLookup(self, request: rdap_pb2.LookupRequest, context):
+        domain_obj = models.DomainRegistration.objects.filter(
+            domain=request.query
+        ).first()  # type: models.DomainRegistration
+        if not domain_obj:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=404,
+                title="Not found",
+                description="No such domain"
+            ))
+            return response
+
+        try:
+            resp_data = self.domain_to_proto(domain_obj)
+        except grpc.RpcError as e:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error",
+                description=e.details()
+            ))
+            return response
+
         response = rdap_pb2.DomainResponse(success=resp_data)
+        return response
+
+    def DomainSearch(self, request: rdap_pb2.DomainSearchRequest, context):
+        if request.WhichOneof("query") == "name":
+            domain_objs = models.DomainRegistration.objects.filter(
+                domain__search=request.name
+            )
+        else:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=400,
+                title="Not provided",
+                description="Service not provided"
+            ))
+            return response
+
+        resp_data = []
+        for domain_obj in domain_objs:
+            try:
+                resp_data.append(self.domain_to_proto(domain_obj))
+            except grpc.RpcError as e:
+                response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                    error_code=500,
+                    title="Internal Server Error",
+                    description=e.details()
+                ))
+                return response
+
+        response = rdap_pb2.DomainSearchResponse(success=rdap_pb2.DomainSearchResponse.Domains(
+            data=resp_data
+        ))
         return response
 
     def EntityLookup(self, request: rdap_pb2.LookupRequest, context):
@@ -401,10 +517,104 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         response = rdap_pb2.EntityResponse(success=entity)
         return response
 
+    def EntitySearch(self, request: rdap_pb2.EntitySearchRequest, context):
+        entities = {}
+
+        if request.WhichOneof("query") == "name":
+            contact_objs = models.Contact.objects.filter(
+                Q(local_address__name__search=request.name, local_address__disclose_name=True) |
+                Q(int_address__name__search=request.name, int_address__disclose_name=True) |
+                Q(local_address__organisation__search=request.name, local_address__disclose_organisation=True) |
+                Q(int_address__name__search=request.name, int_address__disclose_organisation=True) |
+                Q(trading_name__search=request.name)
+            )
+            for contact_obj in contact_objs:
+                if contact_obj.id not in entities:
+                    entities[contact_obj.id] = contact_obj
+        elif request.WhichOneof("query") == "handle":
+            try:
+                contact_objs = list(models.Contact.objects.filter(
+                    id__search=request.handle
+                ))
+                for contact_obj in contact_objs:
+                    if contact_obj.id not in entities:
+                        entities[contact_obj.id] = contact_obj
+            except django.core.exceptions.ValidationError:
+                pass
+            registry_contact_objs = models.ContactRegistry.objects.filter(
+                registry_contact_id__search=request.handle
+            )
+            for registry_contact_obj in registry_contact_objs:
+                if registry_contact_obj.registry_contact_id not in entities:
+                    entities[registry_contact_obj.registry_contact_id] = registry_contact_obj.contact
+        else:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=400,
+                title="Not provided",
+                description="Service not provided"
+            ))
+            return response
+
+        resp_data = []
+        for handle, contact_obj in entities.items():
+            resp_data.append(self.contact_to_card(handle, [], contact_obj))
+
+        response = rdap_pb2.EntitySearchResponse(success=rdap_pb2.EntitySearchResponse.Entities(
+            data=resp_data
+        ))
+        return response
+
     def NameServerLookup(self, request: rdap_pb2.LookupRequest, context):
-        response = rdap_pb2.EntityResponse(error=rdap_pb2.ErrorResponse(
-            error_code=400,
-            title="Not provided",
-            description="Service not provided"
+        name_server_obj = models.NameServer.objects.filter(
+            domain=request.query
+        ).first()  # type: models.NameServer
+        if not name_server_obj:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=404,
+                title="Not found",
+                description="No such name server"
+            ))
+            return response
+
+        try:
+            resp_data = self.name_server_to_proto(name_server_obj)
+        except grpc.RpcError as e:
+            response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error",
+                description=e.details()
+            ))
+            return response
+
+        response = rdap_pb2.NameServerResponse(success=resp_data)
+        return response
+
+    def NameServerSearch(self, request: rdap_pb2.NameServerSearchRequest, context):
+        if request.WhichOneof("query") == "name":
+            name_server_objs = models.NameServer.objects.filter(
+                domain__search=request.name
+            )
+        else:
+            response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
+                error_code=400,
+                title="Not provided",
+                description="Service not provided"
+            ))
+            return response
+
+        resp_data = []
+        for name_server_obj in name_server_objs:
+            try:
+                resp_data.append(self.name_server_to_proto(name_server_obj))
+            except grpc.RpcError as e:
+                response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
+                    error_code=500,
+                    title="Internal Server Error",
+                    description=e.details()
+                ))
+                return response
+
+        response = rdap_pb2.NameServerSearchResponse(success=rdap_pb2.NameServerSearchResponse.NameServers(
+            data=resp_data
         ))
         return response

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='rdap',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x96\x05\n\x05jCard\x12(\n\nproperties\x18\x01 \x03(\x0b\x32\x14.rdap.jCard.Property\x1a\xe2\x04\n\x08Property\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\nproperties\x18\x02 \x03(\x0b\x32$.rdap.jCard.Property.PropertiesEntry\x12\x0e\n\x04text\x18\x03 \x01(\tH\x00\x12\r\n\x03uri\x18\x04 \x01(\tH\x00\x12\x34\n\ntext_array\x18\x05 \x01(\x0b\x32\x1e.rdap.jCard.Property.TextArrayH\x00\x12*\n\x04\x64\x61te\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12*\n\x04time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\tdate_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12\x11\n\x07\x62oolean\x18\n \x01(\x08H\x00\x12\x11\n\x07integer\x18\x0b \x01(\x03H\x00\x12\x0f\n\x05\x66loat\x18\x0c \x01(\x01H\x00\x12\x12\n\x08language\x18\r \x01(\tH\x00\x12\x33\n\textension\x18\x0e \x01(\x0b\x32\x1e.rdap.jCard.Property.ExtensionH\x00\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x19\n\tTextArray\x12\x0c\n\x04\x64\x61ta\x18\x01 \x03(\t\x1a(\n\tExtension\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tB\x07\n\x05value\"\xa2\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x19\n\x04\x63\x61rd\x18\x02 \x01(\x0b\x32\x0b.rdap.jCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\xbf\x01\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponseb\x06proto3'
+  serialized_pb=b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"R\n\x13\x44omainSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x11\n\x07ns_name\x18\x02 \x01(\tH\x00\x12\x0f\n\x05ns_ip\x18\x03 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x13\x45ntitySearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x10\n\x06handle\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x17NameServerSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd2\x01\n\x14\x44omainSearchResponse\x12\x35\n\x07success\x18\x01 \x01(\x0b\x32\".rdap.DomainSearchResponse.DomainsH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a%\n\x07\x44omains\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.DomainB\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd4\x01\n\x14\x45ntitySearchResponse\x12\x36\n\x07success\x18\x01 \x01(\x0b\x32#.rdap.EntitySearchResponse.EntitiesH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a&\n\x08\x45ntities\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.EntityB\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xe6\x01\n\x18NameServerSearchResponse\x12=\n\x07success\x18\x01 \x01(\x0b\x32*.rdap.NameServerSearchResponse.NameServersH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a-\n\x0bNameServers\x12\x1e\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x10.rdap.NameServerB\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x96\x05\n\x05jCard\x12(\n\nproperties\x18\x01 \x03(\x0b\x32\x14.rdap.jCard.Property\x1a\xe2\x04\n\x08Property\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\nproperties\x18\x02 \x03(\x0b\x32$.rdap.jCard.Property.PropertiesEntry\x12\x0e\n\x04text\x18\x03 \x01(\tH\x00\x12\r\n\x03uri\x18\x04 \x01(\tH\x00\x12\x34\n\ntext_array\x18\x05 \x01(\x0b\x32\x1e.rdap.jCard.Property.TextArrayH\x00\x12*\n\x04\x64\x61te\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12*\n\x04time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\tdate_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12\x11\n\x07\x62oolean\x18\n \x01(\x08H\x00\x12\x11\n\x07integer\x18\x0b \x01(\x03H\x00\x12\x0f\n\x05\x66loat\x18\x0c \x01(\x01H\x00\x12\x12\n\x08language\x18\r \x01(\tH\x00\x12\x33\n\textension\x18\x0e \x01(\x0b\x32\x1e.rdap.jCard.Property.ExtensionH\x00\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x19\n\tTextArray\x12\x0c\n\x04\x64\x61ta\x18\x01 \x03(\t\x1a(\n\tExtension\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tB\x07\n\x05value\"\xa2\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x19\n\x04\x63\x61rd\x18\x02 \x01(\x0b\x32\x0b.rdap.jCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\x9c\x03\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponse\x12\x45\n\x0c\x44omainSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.DomainSearchResponse\x12\x45\n\x0c\x45ntitySearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.EntitySearchResponse\x12M\n\x10NameServerSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1e.rdap.NameServerSearchResponseb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -78,8 +78,8 @@ _EVENTACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2991,
-  serialized_end=3252,
+  serialized_start=3868,
+  serialized_end=4129,
 )
 _sym_db.RegisterEnumDescriptor(_EVENTACTION)
 
@@ -137,8 +137,8 @@ _ENTITYROLE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3255,
-  serialized_end=3467,
+  serialized_start=4132,
+  serialized_end=4344,
 )
 _sym_db.RegisterEnumDescriptor(_ENTITYROLE)
 
@@ -288,8 +288,8 @@ _STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3470,
-  serialized_end=4360,
+  serialized_start=4347,
+  serialized_end=5237,
 )
 _sym_db.RegisterEnumDescriptor(_STATUS)
 
@@ -384,6 +384,136 @@ _LOOKUPREQUEST = _descriptor.Descriptor(
 )
 
 
+_DOMAINSEARCHREQUEST = _descriptor.Descriptor(
+  name='DomainSearchRequest',
+  full_name='rdap.DomainSearchRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='rdap.DomainSearchRequest.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ns_name', full_name='rdap.DomainSearchRequest.ns_name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ns_ip', full_name='rdap.DomainSearchRequest.ns_ip', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='query', full_name='rdap.DomainSearchRequest.query',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=117,
+  serialized_end=199,
+)
+
+
+_ENTITYSEARCHREQUEST = _descriptor.Descriptor(
+  name='EntitySearchRequest',
+  full_name='rdap.EntitySearchRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='rdap.EntitySearchRequest.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='handle', full_name='rdap.EntitySearchRequest.handle', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='query', full_name='rdap.EntitySearchRequest.query',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=201,
+  serialized_end=265,
+)
+
+
+_NAMESERVERSEARCHREQUEST = _descriptor.Descriptor(
+  name='NameServerSearchRequest',
+  full_name='rdap.NameServerSearchRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='rdap.NameServerSearchRequest.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ip', full_name='rdap.NameServerSearchRequest.ip', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='query', full_name='rdap.NameServerSearchRequest.query',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=267,
+  serialized_end=331,
+)
+
+
 _ERRORRESPONSE = _descriptor.Descriptor(
   name='ErrorResponse',
   full_name='rdap.ErrorResponse',
@@ -424,8 +554,8 @@ _ERRORRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=117,
-  serialized_end=188,
+  serialized_start=333,
+  serialized_end=404,
 )
 
 
@@ -462,8 +592,8 @@ _REDIRECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=190,
-  serialized_end=242,
+  serialized_start=406,
+  serialized_end=458,
 )
 
 
@@ -510,8 +640,86 @@ _DOMAINRESPONSE = _descriptor.Descriptor(
       name='response', full_name='rdap.DomainResponse.response',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=245,
-  serialized_end=388,
+  serialized_start=461,
+  serialized_end=604,
+)
+
+
+_DOMAINSEARCHRESPONSE_DOMAINS = _descriptor.Descriptor(
+  name='Domains',
+  full_name='rdap.DomainSearchResponse.Domains',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='data', full_name='rdap.DomainSearchResponse.Domains.data', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=768,
+  serialized_end=805,
+)
+
+_DOMAINSEARCHRESPONSE = _descriptor.Descriptor(
+  name='DomainSearchResponse',
+  full_name='rdap.DomainSearchResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='success', full_name='rdap.DomainSearchResponse.success', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='redirect', full_name='rdap.DomainSearchResponse.redirect', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='error', full_name='rdap.DomainSearchResponse.error', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_DOMAINSEARCHRESPONSE_DOMAINS, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='response', full_name='rdap.DomainSearchResponse.response',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=607,
+  serialized_end=817,
 )
 
 
@@ -558,8 +766,86 @@ _ENTITYRESPONSE = _descriptor.Descriptor(
       name='response', full_name='rdap.EntityResponse.response',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=391,
-  serialized_end=534,
+  serialized_start=820,
+  serialized_end=963,
+)
+
+
+_ENTITYSEARCHRESPONSE_ENTITIES = _descriptor.Descriptor(
+  name='Entities',
+  full_name='rdap.EntitySearchResponse.Entities',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='data', full_name='rdap.EntitySearchResponse.Entities.data', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1128,
+  serialized_end=1166,
+)
+
+_ENTITYSEARCHRESPONSE = _descriptor.Descriptor(
+  name='EntitySearchResponse',
+  full_name='rdap.EntitySearchResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='success', full_name='rdap.EntitySearchResponse.success', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='redirect', full_name='rdap.EntitySearchResponse.redirect', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='error', full_name='rdap.EntitySearchResponse.error', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_ENTITYSEARCHRESPONSE_ENTITIES, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='response', full_name='rdap.EntitySearchResponse.response',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=966,
+  serialized_end=1178,
 )
 
 
@@ -606,8 +892,86 @@ _NAMESERVERRESPONSE = _descriptor.Descriptor(
       name='response', full_name='rdap.NameServerResponse.response',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=537,
-  serialized_end=688,
+  serialized_start=1181,
+  serialized_end=1332,
+)
+
+
+_NAMESERVERSEARCHRESPONSE_NAMESERVERS = _descriptor.Descriptor(
+  name='NameServers',
+  full_name='rdap.NameServerSearchResponse.NameServers',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='data', full_name='rdap.NameServerSearchResponse.NameServers.data', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1508,
+  serialized_end=1553,
+)
+
+_NAMESERVERSEARCHRESPONSE = _descriptor.Descriptor(
+  name='NameServerSearchResponse',
+  full_name='rdap.NameServerSearchResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='success', full_name='rdap.NameServerSearchResponse.success', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='redirect', full_name='rdap.NameServerSearchResponse.redirect', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='error', full_name='rdap.NameServerSearchResponse.error', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_NAMESERVERSEARCHRESPONSE_NAMESERVERS, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='response', full_name='rdap.NameServerSearchResponse.response',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=1335,
+  serialized_end=1565,
 )
 
 
@@ -651,8 +1015,8 @@ _EVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=691,
-  serialized_end=820,
+  serialized_start=1568,
+  serialized_end=1697,
 )
 
 
@@ -689,8 +1053,8 @@ _PUBLICID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=822,
-  serialized_end=866,
+  serialized_start=1699,
+  serialized_end=1743,
 )
 
 
@@ -734,8 +1098,8 @@ _REMARK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=868,
-  serialized_end=986,
+  serialized_start=1745,
+  serialized_end=1863,
 )
 
 
@@ -772,8 +1136,8 @@ _JCARD_PROPERTY_PROPERTIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1524,
-  serialized_end=1573,
+  serialized_start=2401,
+  serialized_end=2450,
 )
 
 _JCARD_PROPERTY_TEXTARRAY = _descriptor.Descriptor(
@@ -802,8 +1166,8 @@ _JCARD_PROPERTY_TEXTARRAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1575,
-  serialized_end=1600,
+  serialized_start=2452,
+  serialized_end=2477,
 )
 
 _JCARD_PROPERTY_EXTENSION = _descriptor.Descriptor(
@@ -839,8 +1203,8 @@ _JCARD_PROPERTY_EXTENSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1602,
-  serialized_end=1642,
+  serialized_start=2479,
+  serialized_end=2519,
 )
 
 _JCARD_PROPERTY = _descriptor.Descriptor(
@@ -963,8 +1327,8 @@ _JCARD_PROPERTY = _descriptor.Descriptor(
       name='value', full_name='rdap.jCard.Property.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1041,
-  serialized_end=1651,
+  serialized_start=1918,
+  serialized_end=2528,
 )
 
 _JCARD = _descriptor.Descriptor(
@@ -993,8 +1357,8 @@ _JCARD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=989,
-  serialized_end=1651,
+  serialized_start=1866,
+  serialized_end=2528,
 )
 
 
@@ -1080,8 +1444,8 @@ _ENTITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1654,
-  serialized_end=1944,
+  serialized_start=2531,
+  serialized_end=2821,
 )
 
 
@@ -1132,8 +1496,8 @@ _DOMAIN_SECDNS_DSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2529,
-  serialized_end=2610,
+  serialized_start=3406,
+  serialized_end=3487,
 )
 
 _DOMAIN_SECDNS_KEYDATA = _descriptor.Descriptor(
@@ -1183,8 +1547,8 @@ _DOMAIN_SECDNS_KEYDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2612,
-  serialized_end=2693,
+  serialized_start=3489,
+  serialized_end=3570,
 )
 
 _DOMAIN_SECDNS = _descriptor.Descriptor(
@@ -1241,8 +1605,8 @@ _DOMAIN_SECDNS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2272,
-  serialized_end=2693,
+  serialized_start=3149,
+  serialized_end=3570,
 )
 
 _DOMAIN = _descriptor.Descriptor(
@@ -1334,8 +1698,8 @@ _DOMAIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1947,
-  serialized_end=2693,
+  serialized_start=2824,
+  serialized_end=3570,
 )
 
 
@@ -1414,8 +1778,8 @@ _NAMESERVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2696,
-  serialized_end=2949,
+  serialized_start=3573,
+  serialized_end=3826,
 )
 
 
@@ -1452,10 +1816,31 @@ _IPADDRESSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2951,
-  serialized_end=2988,
+  serialized_start=3828,
+  serialized_end=3865,
 )
 
+_DOMAINSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _DOMAINSEARCHREQUEST.fields_by_name['name'])
+_DOMAINSEARCHREQUEST.fields_by_name['name'].containing_oneof = _DOMAINSEARCHREQUEST.oneofs_by_name['query']
+_DOMAINSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _DOMAINSEARCHREQUEST.fields_by_name['ns_name'])
+_DOMAINSEARCHREQUEST.fields_by_name['ns_name'].containing_oneof = _DOMAINSEARCHREQUEST.oneofs_by_name['query']
+_DOMAINSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _DOMAINSEARCHREQUEST.fields_by_name['ns_ip'])
+_DOMAINSEARCHREQUEST.fields_by_name['ns_ip'].containing_oneof = _DOMAINSEARCHREQUEST.oneofs_by_name['query']
+_ENTITYSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _ENTITYSEARCHREQUEST.fields_by_name['name'])
+_ENTITYSEARCHREQUEST.fields_by_name['name'].containing_oneof = _ENTITYSEARCHREQUEST.oneofs_by_name['query']
+_ENTITYSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _ENTITYSEARCHREQUEST.fields_by_name['handle'])
+_ENTITYSEARCHREQUEST.fields_by_name['handle'].containing_oneof = _ENTITYSEARCHREQUEST.oneofs_by_name['query']
+_NAMESERVERSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _NAMESERVERSEARCHREQUEST.fields_by_name['name'])
+_NAMESERVERSEARCHREQUEST.fields_by_name['name'].containing_oneof = _NAMESERVERSEARCHREQUEST.oneofs_by_name['query']
+_NAMESERVERSEARCHREQUEST.oneofs_by_name['query'].fields.append(
+  _NAMESERVERSEARCHREQUEST.fields_by_name['ip'])
+_NAMESERVERSEARCHREQUEST.fields_by_name['ip'].containing_oneof = _NAMESERVERSEARCHREQUEST.oneofs_by_name['query']
 _DOMAINRESPONSE.fields_by_name['success'].message_type = _DOMAIN
 _DOMAINRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
 _DOMAINRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
@@ -1468,6 +1853,20 @@ _DOMAINRESPONSE.fields_by_name['redirect'].containing_oneof = _DOMAINRESPONSE.on
 _DOMAINRESPONSE.oneofs_by_name['response'].fields.append(
   _DOMAINRESPONSE.fields_by_name['error'])
 _DOMAINRESPONSE.fields_by_name['error'].containing_oneof = _DOMAINRESPONSE.oneofs_by_name['response']
+_DOMAINSEARCHRESPONSE_DOMAINS.fields_by_name['data'].message_type = _DOMAIN
+_DOMAINSEARCHRESPONSE_DOMAINS.containing_type = _DOMAINSEARCHRESPONSE
+_DOMAINSEARCHRESPONSE.fields_by_name['success'].message_type = _DOMAINSEARCHRESPONSE_DOMAINS
+_DOMAINSEARCHRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
+_DOMAINSEARCHRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
+_DOMAINSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _DOMAINSEARCHRESPONSE.fields_by_name['success'])
+_DOMAINSEARCHRESPONSE.fields_by_name['success'].containing_oneof = _DOMAINSEARCHRESPONSE.oneofs_by_name['response']
+_DOMAINSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _DOMAINSEARCHRESPONSE.fields_by_name['redirect'])
+_DOMAINSEARCHRESPONSE.fields_by_name['redirect'].containing_oneof = _DOMAINSEARCHRESPONSE.oneofs_by_name['response']
+_DOMAINSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _DOMAINSEARCHRESPONSE.fields_by_name['error'])
+_DOMAINSEARCHRESPONSE.fields_by_name['error'].containing_oneof = _DOMAINSEARCHRESPONSE.oneofs_by_name['response']
 _ENTITYRESPONSE.fields_by_name['success'].message_type = _ENTITY
 _ENTITYRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
 _ENTITYRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
@@ -1480,6 +1879,20 @@ _ENTITYRESPONSE.fields_by_name['redirect'].containing_oneof = _ENTITYRESPONSE.on
 _ENTITYRESPONSE.oneofs_by_name['response'].fields.append(
   _ENTITYRESPONSE.fields_by_name['error'])
 _ENTITYRESPONSE.fields_by_name['error'].containing_oneof = _ENTITYRESPONSE.oneofs_by_name['response']
+_ENTITYSEARCHRESPONSE_ENTITIES.fields_by_name['data'].message_type = _ENTITY
+_ENTITYSEARCHRESPONSE_ENTITIES.containing_type = _ENTITYSEARCHRESPONSE
+_ENTITYSEARCHRESPONSE.fields_by_name['success'].message_type = _ENTITYSEARCHRESPONSE_ENTITIES
+_ENTITYSEARCHRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
+_ENTITYSEARCHRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
+_ENTITYSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _ENTITYSEARCHRESPONSE.fields_by_name['success'])
+_ENTITYSEARCHRESPONSE.fields_by_name['success'].containing_oneof = _ENTITYSEARCHRESPONSE.oneofs_by_name['response']
+_ENTITYSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _ENTITYSEARCHRESPONSE.fields_by_name['redirect'])
+_ENTITYSEARCHRESPONSE.fields_by_name['redirect'].containing_oneof = _ENTITYSEARCHRESPONSE.oneofs_by_name['response']
+_ENTITYSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _ENTITYSEARCHRESPONSE.fields_by_name['error'])
+_ENTITYSEARCHRESPONSE.fields_by_name['error'].containing_oneof = _ENTITYSEARCHRESPONSE.oneofs_by_name['response']
 _NAMESERVERRESPONSE.fields_by_name['success'].message_type = _NAMESERVER
 _NAMESERVERRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
 _NAMESERVERRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
@@ -1492,6 +1905,20 @@ _NAMESERVERRESPONSE.fields_by_name['redirect'].containing_oneof = _NAMESERVERRES
 _NAMESERVERRESPONSE.oneofs_by_name['response'].fields.append(
   _NAMESERVERRESPONSE.fields_by_name['error'])
 _NAMESERVERRESPONSE.fields_by_name['error'].containing_oneof = _NAMESERVERRESPONSE.oneofs_by_name['response']
+_NAMESERVERSEARCHRESPONSE_NAMESERVERS.fields_by_name['data'].message_type = _NAMESERVER
+_NAMESERVERSEARCHRESPONSE_NAMESERVERS.containing_type = _NAMESERVERSEARCHRESPONSE
+_NAMESERVERSEARCHRESPONSE.fields_by_name['success'].message_type = _NAMESERVERSEARCHRESPONSE_NAMESERVERS
+_NAMESERVERSEARCHRESPONSE.fields_by_name['redirect'].message_type = _REDIRECTRESPONSE
+_NAMESERVERSEARCHRESPONSE.fields_by_name['error'].message_type = _ERRORRESPONSE
+_NAMESERVERSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _NAMESERVERSEARCHRESPONSE.fields_by_name['success'])
+_NAMESERVERSEARCHRESPONSE.fields_by_name['success'].containing_oneof = _NAMESERVERSEARCHRESPONSE.oneofs_by_name['response']
+_NAMESERVERSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _NAMESERVERSEARCHRESPONSE.fields_by_name['redirect'])
+_NAMESERVERSEARCHRESPONSE.fields_by_name['redirect'].containing_oneof = _NAMESERVERSEARCHRESPONSE.oneofs_by_name['response']
+_NAMESERVERSEARCHRESPONSE.oneofs_by_name['response'].fields.append(
+  _NAMESERVERSEARCHRESPONSE.fields_by_name['error'])
+_NAMESERVERSEARCHRESPONSE.fields_by_name['error'].containing_oneof = _NAMESERVERSEARCHRESPONSE.oneofs_by_name['response']
 _EVENT.fields_by_name['action'].enum_type = _EVENTACTION
 _EVENT.fields_by_name['date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _EVENT.fields_by_name['actor'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -1576,11 +2003,17 @@ _NAMESERVER.fields_by_name['statuses'].enum_type = _STATUS
 _NAMESERVER.fields_by_name['remarks'].message_type = _REMARK
 _NAMESERVER.fields_by_name['port43'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 DESCRIPTOR.message_types_by_name['LookupRequest'] = _LOOKUPREQUEST
+DESCRIPTOR.message_types_by_name['DomainSearchRequest'] = _DOMAINSEARCHREQUEST
+DESCRIPTOR.message_types_by_name['EntitySearchRequest'] = _ENTITYSEARCHREQUEST
+DESCRIPTOR.message_types_by_name['NameServerSearchRequest'] = _NAMESERVERSEARCHREQUEST
 DESCRIPTOR.message_types_by_name['ErrorResponse'] = _ERRORRESPONSE
 DESCRIPTOR.message_types_by_name['RedirectResponse'] = _REDIRECTRESPONSE
 DESCRIPTOR.message_types_by_name['DomainResponse'] = _DOMAINRESPONSE
+DESCRIPTOR.message_types_by_name['DomainSearchResponse'] = _DOMAINSEARCHRESPONSE
 DESCRIPTOR.message_types_by_name['EntityResponse'] = _ENTITYRESPONSE
+DESCRIPTOR.message_types_by_name['EntitySearchResponse'] = _ENTITYSEARCHRESPONSE
 DESCRIPTOR.message_types_by_name['NameServerResponse'] = _NAMESERVERRESPONSE
+DESCRIPTOR.message_types_by_name['NameServerSearchResponse'] = _NAMESERVERSEARCHRESPONSE
 DESCRIPTOR.message_types_by_name['Event'] = _EVENT
 DESCRIPTOR.message_types_by_name['PublicID'] = _PUBLICID
 DESCRIPTOR.message_types_by_name['Remark'] = _REMARK
@@ -1600,6 +2033,27 @@ LookupRequest = _reflection.GeneratedProtocolMessageType('LookupRequest', (_mess
   # @@protoc_insertion_point(class_scope:rdap.LookupRequest)
   })
 _sym_db.RegisterMessage(LookupRequest)
+
+DomainSearchRequest = _reflection.GeneratedProtocolMessageType('DomainSearchRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINSEARCHREQUEST,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.DomainSearchRequest)
+  })
+_sym_db.RegisterMessage(DomainSearchRequest)
+
+EntitySearchRequest = _reflection.GeneratedProtocolMessageType('EntitySearchRequest', (_message.Message,), {
+  'DESCRIPTOR' : _ENTITYSEARCHREQUEST,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.EntitySearchRequest)
+  })
+_sym_db.RegisterMessage(EntitySearchRequest)
+
+NameServerSearchRequest = _reflection.GeneratedProtocolMessageType('NameServerSearchRequest', (_message.Message,), {
+  'DESCRIPTOR' : _NAMESERVERSEARCHREQUEST,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.NameServerSearchRequest)
+  })
+_sym_db.RegisterMessage(NameServerSearchRequest)
 
 ErrorResponse = _reflection.GeneratedProtocolMessageType('ErrorResponse', (_message.Message,), {
   'DESCRIPTOR' : _ERRORRESPONSE,
@@ -1622,6 +2076,21 @@ DomainResponse = _reflection.GeneratedProtocolMessageType('DomainResponse', (_me
   })
 _sym_db.RegisterMessage(DomainResponse)
 
+DomainSearchResponse = _reflection.GeneratedProtocolMessageType('DomainSearchResponse', (_message.Message,), {
+
+  'Domains' : _reflection.GeneratedProtocolMessageType('Domains', (_message.Message,), {
+    'DESCRIPTOR' : _DOMAINSEARCHRESPONSE_DOMAINS,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.DomainSearchResponse.Domains)
+    })
+  ,
+  'DESCRIPTOR' : _DOMAINSEARCHRESPONSE,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.DomainSearchResponse)
+  })
+_sym_db.RegisterMessage(DomainSearchResponse)
+_sym_db.RegisterMessage(DomainSearchResponse.Domains)
+
 EntityResponse = _reflection.GeneratedProtocolMessageType('EntityResponse', (_message.Message,), {
   'DESCRIPTOR' : _ENTITYRESPONSE,
   '__module__' : 'rdap_pb2'
@@ -1629,12 +2098,42 @@ EntityResponse = _reflection.GeneratedProtocolMessageType('EntityResponse', (_me
   })
 _sym_db.RegisterMessage(EntityResponse)
 
+EntitySearchResponse = _reflection.GeneratedProtocolMessageType('EntitySearchResponse', (_message.Message,), {
+
+  'Entities' : _reflection.GeneratedProtocolMessageType('Entities', (_message.Message,), {
+    'DESCRIPTOR' : _ENTITYSEARCHRESPONSE_ENTITIES,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.EntitySearchResponse.Entities)
+    })
+  ,
+  'DESCRIPTOR' : _ENTITYSEARCHRESPONSE,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.EntitySearchResponse)
+  })
+_sym_db.RegisterMessage(EntitySearchResponse)
+_sym_db.RegisterMessage(EntitySearchResponse.Entities)
+
 NameServerResponse = _reflection.GeneratedProtocolMessageType('NameServerResponse', (_message.Message,), {
   'DESCRIPTOR' : _NAMESERVERRESPONSE,
   '__module__' : 'rdap_pb2'
   # @@protoc_insertion_point(class_scope:rdap.NameServerResponse)
   })
 _sym_db.RegisterMessage(NameServerResponse)
+
+NameServerSearchResponse = _reflection.GeneratedProtocolMessageType('NameServerSearchResponse', (_message.Message,), {
+
+  'NameServers' : _reflection.GeneratedProtocolMessageType('NameServers', (_message.Message,), {
+    'DESCRIPTOR' : _NAMESERVERSEARCHRESPONSE_NAMESERVERS,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.NameServerSearchResponse.NameServers)
+    })
+  ,
+  'DESCRIPTOR' : _NAMESERVERSEARCHRESPONSE,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.NameServerSearchResponse)
+  })
+_sym_db.RegisterMessage(NameServerSearchResponse)
+_sym_db.RegisterMessage(NameServerSearchResponse.NameServers)
 
 Event = _reflection.GeneratedProtocolMessageType('Event', (_message.Message,), {
   'DESCRIPTOR' : _EVENT,
@@ -1757,8 +2256,8 @@ _RDAP = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=4363,
-  serialized_end=4554,
+  serialized_start=5240,
+  serialized_end=5652,
   methods=[
   _descriptor.MethodDescriptor(
     name='DomainLookup',
@@ -1785,6 +2284,33 @@ _RDAP = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LOOKUPREQUEST,
     output_type=_NAMESERVERRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DomainSearch',
+    full_name='rdap.RDAP.DomainSearch',
+    index=3,
+    containing_service=None,
+    input_type=_DOMAINSEARCHREQUEST,
+    output_type=_DOMAINSEARCHRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='EntitySearch',
+    full_name='rdap.RDAP.EntitySearch',
+    index=4,
+    containing_service=None,
+    input_type=_DOMAINSEARCHREQUEST,
+    output_type=_ENTITYSEARCHRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='NameServerSearch',
+    full_name='rdap.RDAP.NameServerSearch',
+    index=5,
+    containing_service=None,
+    input_type=_DOMAINSEARCHREQUEST,
+    output_type=_NAMESERVERSEARCHRESPONSE,
     serialized_options=None,
   ),
 ])
