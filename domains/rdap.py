@@ -566,7 +566,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def NameServerLookup(self, request: rdap_pb2.LookupRequest, context):
         name_server_obj = models.NameServer.objects.filter(
-            domain=request.query
+            name_server=request.query
         ).first()  # type: models.NameServer
         if not name_server_obj:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -592,7 +592,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
     def NameServerSearch(self, request: rdap_pb2.NameServerSearchRequest, context):
         if request.WhichOneof("query") == "name":
             name_server_objs = models.NameServer.objects.filter(
-                domain__search=request.name
+                name_server__search=request.name
             )
         else:
             response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(

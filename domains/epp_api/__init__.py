@@ -120,9 +120,9 @@ class DomainNameServer:
         if not self.host_obj:
             return None
         try:
-            return self.host_objdomain.encode().decode('idna')
+            return self.host_obj.encode().decode('idna')
         except UnicodeError:
-            return self.host_objdomain
+            return self.host_obj
 
     @property
     def unicode_host_name(self):
