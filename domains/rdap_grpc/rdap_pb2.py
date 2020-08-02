@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='rdap',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"R\n\x13\x44omainSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x11\n\x07ns_name\x18\x02 \x01(\tH\x00\x12\x0f\n\x05ns_ip\x18\x03 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x13\x45ntitySearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x10\n\x06handle\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x17NameServerSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd2\x01\n\x14\x44omainSearchResponse\x12\x35\n\x07success\x18\x01 \x01(\x0b\x32\".rdap.DomainSearchResponse.DomainsH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a%\n\x07\x44omains\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.DomainB\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd4\x01\n\x14\x45ntitySearchResponse\x12\x36\n\x07success\x18\x01 \x01(\x0b\x32#.rdap.EntitySearchResponse.EntitiesH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a&\n\x08\x45ntities\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.EntityB\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xe6\x01\n\x18NameServerSearchResponse\x12=\n\x07success\x18\x01 \x01(\x0b\x32*.rdap.NameServerSearchResponse.NameServersH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a-\n\x0bNameServers\x12\x1e\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x10.rdap.NameServerB\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x96\x05\n\x05jCard\x12(\n\nproperties\x18\x01 \x03(\x0b\x32\x14.rdap.jCard.Property\x1a\xe2\x04\n\x08Property\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\nproperties\x18\x02 \x03(\x0b\x32$.rdap.jCard.Property.PropertiesEntry\x12\x0e\n\x04text\x18\x03 \x01(\tH\x00\x12\r\n\x03uri\x18\x04 \x01(\tH\x00\x12\x34\n\ntext_array\x18\x05 \x01(\x0b\x32\x1e.rdap.jCard.Property.TextArrayH\x00\x12*\n\x04\x64\x61te\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12*\n\x04time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\tdate_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12\x11\n\x07\x62oolean\x18\n \x01(\x08H\x00\x12\x11\n\x07integer\x18\x0b \x01(\x03H\x00\x12\x0f\n\x05\x66loat\x18\x0c \x01(\x01H\x00\x12\x12\n\x08language\x18\r \x01(\tH\x00\x12\x33\n\textension\x18\x0e \x01(\x0b\x32\x1e.rdap.jCard.Property.ExtensionH\x00\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x19\n\tTextArray\x12\x0c\n\x04\x64\x61ta\x18\x01 \x03(\t\x1a(\n\tExtension\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tB\x07\n\x05value\"\xa2\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x19\n\x04\x63\x61rd\x18\x02 \x01(\x0b\x32\x0b.rdap.jCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\x9c\x03\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponse\x12\x45\n\x0c\x44omainSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.DomainSearchResponse\x12\x45\n\x0c\x45ntitySearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.EntitySearchResponse\x12M\n\x10NameServerSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1e.rdap.NameServerSearchResponseb\x06proto3'
+  serialized_pb=b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"R\n\x13\x44omainSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x11\n\x07ns_name\x18\x02 \x01(\tH\x00\x12\x0f\n\x05ns_ip\x18\x03 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x13\x45ntitySearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x10\n\x06handle\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x17NameServerSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd2\x01\n\x14\x44omainSearchResponse\x12\x35\n\x07success\x18\x01 \x01(\x0b\x32\".rdap.DomainSearchResponse.DomainsH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a%\n\x07\x44omains\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.DomainB\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd4\x01\n\x14\x45ntitySearchResponse\x12\x36\n\x07success\x18\x01 \x01(\x0b\x32#.rdap.EntitySearchResponse.EntitiesH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a&\n\x08\x45ntities\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.EntityB\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xe6\x01\n\x18NameServerSearchResponse\x12=\n\x07success\x18\x01 \x01(\x0b\x32*.rdap.NameServerSearchResponse.NameServersH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a-\n\x0bNameServers\x12\x1e\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x10.rdap.NameServerB\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x96\x05\n\x05jCard\x12(\n\nproperties\x18\x01 \x03(\x0b\x32\x14.rdap.jCard.Property\x1a\xe2\x04\n\x08Property\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\nproperties\x18\x02 \x03(\x0b\x32$.rdap.jCard.Property.PropertiesEntry\x12\x0e\n\x04text\x18\x03 \x01(\tH\x00\x12\r\n\x03uri\x18\x04 \x01(\tH\x00\x12\x34\n\ntext_array\x18\x05 \x01(\x0b\x32\x1e.rdap.jCard.Property.TextArrayH\x00\x12*\n\x04\x64\x61te\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12*\n\x04time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\tdate_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12/\n\ttimestamp\x18\t \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12\x11\n\x07\x62oolean\x18\n \x01(\x08H\x00\x12\x11\n\x07integer\x18\x0b \x01(\x03H\x00\x12\x0f\n\x05\x66loat\x18\x0c \x01(\x01H\x00\x12\x12\n\x08language\x18\r \x01(\tH\x00\x12\x33\n\textension\x18\x0e \x01(\x0b\x32\x1e.rdap.jCard.Property.ExtensionH\x00\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x19\n\tTextArray\x12\x0c\n\x04\x64\x61ta\x18\x01 \x03(\t\x1a(\n\tExtension\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tB\x07\n\x05value\"\x8f\x13\n\x06JSCard\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12+\n\x07updated\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12*\n\x04kind\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tfull_name\x18\x04 \x01(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12\x32\n\x0corganisation\x18\x05 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12/\n\tjob_title\x18\x06 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12*\n\x04role\x18\x07 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12%\n\x06\x65mails\x18\x08 \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12%\n\x06phones\x18\t \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12%\n\x06online\x18\n \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12>\n\x18preferred_contact_method\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12P\n\x1bpreferred_contact_languages\x18\x0c \x03(\x0b\x32+.rdap.JSCard.PreferredContactLanguagesEntry\x12\'\n\taddresses\x18\r \x03(\x0b\x32\x14.rdap.JSCard.Address\x12/\n\ranniversaries\x18\x0e \x03(\x0b\x32\x18.rdap.JSCard.Anniversary\x12\x30\n\rpersonal_info\x18\x0f \x03(\x0b\x32\x19.rdap.JSCard.PersonalInfo\x12+\n\x05notes\x18\x10 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12\x12\n\ncategories\x18\x11 \x03(\t\x1a\xce\x01\n\x0fLocalisedString\x12\r\n\x05value\x18\x01 \x01(\t\x12.\n\x08language\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x46\n\rlocalisations\x18\x03 \x03(\x0b\x32/.rdap.JSCard.LocalisedString.LocalisationsEntry\x1a\x34\n\x12LocalisationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\xe5\x01\n\x08Resource\x12-\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\r\n\x05value\x18\x03 \x01(\t\x12\x30\n\nmedia_type\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tpreferred\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0e\n\x06labels\x18\x06 \x03(\t\x1a\xc4\x01\n\x10\x43ontactLanguages\x12@\n\tlanguages\x18\x01 \x03(\x0b\x32-.rdap.JSCard.ContactLanguages.ContactLanguage\x1an\n\x0f\x43ontactLanguage\x12*\n\x04type\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\npreference\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xb3\x05\n\x07\x41\x64\x64ress\x12-\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05label\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x66ull_address\x18\x03 \x01(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12,\n\x06street\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\textension\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\x08locality\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x06region\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07\x63ountry\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x0fpost_office_box\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tpost_code\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x63ountry_code\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x63oordinates\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\x08timezone\x18\r \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tpreferred\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\x97\x01\n\x0b\x41nniversary\x12\x0c\n\x04type\x18\x01 \x01(\t\x12+\n\x05label\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x05place\x18\x04 \x01(\x0b\x32\x14.rdap.JSCard.Address\x1aX\n\x0cPersonalInfo\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12+\n\x05level\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a_\n\x1ePreferredContactLanguagesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.rdap.JSCard.ContactLanguages:\x02\x38\x01\"\xc1\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x19\n\x04\x63\x61rd\x18\x02 \x01(\x0b\x32\x0b.rdap.jCard\x12\x1d\n\x07js_card\x18\n \x01(\x0b\x32\x0c.rdap.JSCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\x9c\x03\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponse\x12\x45\n\x0c\x44omainSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.DomainSearchResponse\x12\x45\n\x0c\x45ntitySearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.EntitySearchResponse\x12M\n\x10NameServerSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1e.rdap.NameServerSearchResponseb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -78,8 +78,8 @@ _EVENTACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3868,
-  serialized_end=4129,
+  serialized_start=6349,
+  serialized_end=6610,
 )
 _sym_db.RegisterEnumDescriptor(_EVENTACTION)
 
@@ -137,8 +137,8 @@ _ENTITYROLE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4132,
-  serialized_end=4344,
+  serialized_start=6613,
+  serialized_end=6825,
 )
 _sym_db.RegisterEnumDescriptor(_ENTITYROLE)
 
@@ -288,8 +288,8 @@ _STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4347,
-  serialized_end=5237,
+  serialized_start=6828,
+  serialized_end=7718,
 )
 _sym_db.RegisterEnumDescriptor(_STATUS)
 
@@ -1362,6 +1362,615 @@ _JCARD = _descriptor.Descriptor(
 )
 
 
+_JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY = _descriptor.Descriptor(
+  name='LocalisationsEntry',
+  full_name='rdap.JSCard.LocalisedString.LocalisationsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='rdap.JSCard.LocalisedString.LocalisationsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='rdap.JSCard.LocalisedString.LocalisationsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3460,
+  serialized_end=3512,
+)
+
+_JSCARD_LOCALISEDSTRING = _descriptor.Descriptor(
+  name='LocalisedString',
+  full_name='rdap.JSCard.LocalisedString',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='rdap.JSCard.LocalisedString.value', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='language', full_name='rdap.JSCard.LocalisedString.language', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='localisations', full_name='rdap.JSCard.LocalisedString.localisations', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3306,
+  serialized_end=3512,
+)
+
+_JSCARD_RESOURCE = _descriptor.Descriptor(
+  name='Resource',
+  full_name='rdap.JSCard.Resource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='context', full_name='rdap.JSCard.Resource.context', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='rdap.JSCard.Resource.type', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='rdap.JSCard.Resource.value', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='media_type', full_name='rdap.JSCard.Resource.media_type', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferred', full_name='rdap.JSCard.Resource.preferred', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='labels', full_name='rdap.JSCard.Resource.labels', index=5,
+      number=6, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3515,
+  serialized_end=3744,
+)
+
+_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE = _descriptor.Descriptor(
+  name='ContactLanguage',
+  full_name='rdap.JSCard.ContactLanguages.ContactLanguage',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='rdap.JSCard.ContactLanguages.ContactLanguage.type', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preference', full_name='rdap.JSCard.ContactLanguages.ContactLanguage.preference', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3833,
+  serialized_end=3943,
+)
+
+_JSCARD_CONTACTLANGUAGES = _descriptor.Descriptor(
+  name='ContactLanguages',
+  full_name='rdap.JSCard.ContactLanguages',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='languages', full_name='rdap.JSCard.ContactLanguages.languages', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3747,
+  serialized_end=3943,
+)
+
+_JSCARD_ADDRESS = _descriptor.Descriptor(
+  name='Address',
+  full_name='rdap.JSCard.Address',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='context', full_name='rdap.JSCard.Address.context', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='label', full_name='rdap.JSCard.Address.label', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='full_address', full_name='rdap.JSCard.Address.full_address', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='street', full_name='rdap.JSCard.Address.street', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='extension', full_name='rdap.JSCard.Address.extension', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='locality', full_name='rdap.JSCard.Address.locality', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='region', full_name='rdap.JSCard.Address.region', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='country', full_name='rdap.JSCard.Address.country', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='post_office_box', full_name='rdap.JSCard.Address.post_office_box', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='post_code', full_name='rdap.JSCard.Address.post_code', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='country_code', full_name='rdap.JSCard.Address.country_code', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='coordinates', full_name='rdap.JSCard.Address.coordinates', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timezone', full_name='rdap.JSCard.Address.timezone', index=12,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferred', full_name='rdap.JSCard.Address.preferred', index=13,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3946,
+  serialized_end=4637,
+)
+
+_JSCARD_ANNIVERSARY = _descriptor.Descriptor(
+  name='Anniversary',
+  full_name='rdap.JSCard.Anniversary',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='rdap.JSCard.Anniversary.type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='label', full_name='rdap.JSCard.Anniversary.label', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='date', full_name='rdap.JSCard.Anniversary.date', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='place', full_name='rdap.JSCard.Anniversary.place', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4640,
+  serialized_end=4791,
+)
+
+_JSCARD_PERSONALINFO = _descriptor.Descriptor(
+  name='PersonalInfo',
+  full_name='rdap.JSCard.PersonalInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='rdap.JSCard.PersonalInfo.type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='rdap.JSCard.PersonalInfo.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='level', full_name='rdap.JSCard.PersonalInfo.level', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4793,
+  serialized_end=4881,
+)
+
+_JSCARD_PREFERREDCONTACTLANGUAGESENTRY = _descriptor.Descriptor(
+  name='PreferredContactLanguagesEntry',
+  full_name='rdap.JSCard.PreferredContactLanguagesEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='rdap.JSCard.PreferredContactLanguagesEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='rdap.JSCard.PreferredContactLanguagesEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4883,
+  serialized_end=4978,
+)
+
+_JSCARD = _descriptor.Descriptor(
+  name='JSCard',
+  full_name='rdap.JSCard',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='uid', full_name='rdap.JSCard.uid', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='updated', full_name='rdap.JSCard.updated', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kind', full_name='rdap.JSCard.kind', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='full_name', full_name='rdap.JSCard.full_name', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='organisation', full_name='rdap.JSCard.organisation', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='job_title', full_name='rdap.JSCard.job_title', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='role', full_name='rdap.JSCard.role', index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='emails', full_name='rdap.JSCard.emails', index=7,
+      number=8, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='phones', full_name='rdap.JSCard.phones', index=8,
+      number=9, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='online', full_name='rdap.JSCard.online', index=9,
+      number=10, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferred_contact_method', full_name='rdap.JSCard.preferred_contact_method', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferred_contact_languages', full_name='rdap.JSCard.preferred_contact_languages', index=11,
+      number=12, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='addresses', full_name='rdap.JSCard.addresses', index=12,
+      number=13, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='anniversaries', full_name='rdap.JSCard.anniversaries', index=13,
+      number=14, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='personal_info', full_name='rdap.JSCard.personal_info', index=14,
+      number=15, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='notes', full_name='rdap.JSCard.notes', index=15,
+      number=16, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='categories', full_name='rdap.JSCard.categories', index=16,
+      number=17, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_JSCARD_LOCALISEDSTRING, _JSCARD_RESOURCE, _JSCARD_CONTACTLANGUAGES, _JSCARD_ADDRESS, _JSCARD_ANNIVERSARY, _JSCARD_PERSONALINFO, _JSCARD_PREFERREDCONTACTLANGUAGESENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2531,
+  serialized_end=4978,
+)
+
+
 _ENTITY = _descriptor.Descriptor(
   name='Entity',
   full_name='rdap.Entity',
@@ -1384,49 +1993,56 @@ _ENTITY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='roles', full_name='rdap.Entity.roles', index=2,
+      name='js_card', full_name='rdap.Entity.js_card', index=2,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='roles', full_name='rdap.Entity.roles', index=3,
       number=3, type=14, cpp_type=8, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='public_ids', full_name='rdap.Entity.public_ids', index=3,
+      name='public_ids', full_name='rdap.Entity.public_ids', index=4,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='entities', full_name='rdap.Entity.entities', index=4,
+      name='entities', full_name='rdap.Entity.entities', index=5,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='remarks', full_name='rdap.Entity.remarks', index=5,
+      name='remarks', full_name='rdap.Entity.remarks', index=6,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='events', full_name='rdap.Entity.events', index=6,
+      name='events', full_name='rdap.Entity.events', index=7,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='statuses', full_name='rdap.Entity.statuses', index=7,
+      name='statuses', full_name='rdap.Entity.statuses', index=8,
       number=8, type=14, cpp_type=8, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port43', full_name='rdap.Entity.port43', index=8,
+      name='port43', full_name='rdap.Entity.port43', index=9,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -1444,8 +2060,8 @@ _ENTITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2531,
-  serialized_end=2821,
+  serialized_start=4981,
+  serialized_end=5302,
 )
 
 
@@ -1496,8 +2112,8 @@ _DOMAIN_SECDNS_DSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3406,
-  serialized_end=3487,
+  serialized_start=5887,
+  serialized_end=5968,
 )
 
 _DOMAIN_SECDNS_KEYDATA = _descriptor.Descriptor(
@@ -1547,8 +2163,8 @@ _DOMAIN_SECDNS_KEYDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3489,
-  serialized_end=3570,
+  serialized_start=5970,
+  serialized_end=6051,
 )
 
 _DOMAIN_SECDNS = _descriptor.Descriptor(
@@ -1605,8 +2221,8 @@ _DOMAIN_SECDNS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3149,
-  serialized_end=3570,
+  serialized_start=5630,
+  serialized_end=6051,
 )
 
 _DOMAIN = _descriptor.Descriptor(
@@ -1698,8 +2314,8 @@ _DOMAIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2824,
-  serialized_end=3570,
+  serialized_start=5305,
+  serialized_end=6051,
 )
 
 
@@ -1778,8 +2394,8 @@ _NAMESERVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3573,
-  serialized_end=3826,
+  serialized_start=6054,
+  serialized_end=6307,
 )
 
 
@@ -1816,8 +2432,8 @@ _IPADDRESSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3828,
-  serialized_end=3865,
+  serialized_start=6309,
+  serialized_end=6346,
 )
 
 _DOMAINSEARCHREQUEST.oneofs_by_name['query'].fields.append(
@@ -1972,7 +2588,60 @@ _JCARD_PROPERTY.oneofs_by_name['value'].fields.append(
   _JCARD_PROPERTY.fields_by_name['extension'])
 _JCARD_PROPERTY.fields_by_name['extension'].containing_oneof = _JCARD_PROPERTY.oneofs_by_name['value']
 _JCARD.fields_by_name['properties'].message_type = _JCARD_PROPERTY
+_JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY.containing_type = _JSCARD_LOCALISEDSTRING
+_JSCARD_LOCALISEDSTRING.fields_by_name['language'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_LOCALISEDSTRING.fields_by_name['localisations'].message_type = _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY
+_JSCARD_LOCALISEDSTRING.containing_type = _JSCARD
+_JSCARD_RESOURCE.fields_by_name['context'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_RESOURCE.fields_by_name['type'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_RESOURCE.fields_by_name['media_type'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_RESOURCE.fields_by_name['preferred'].message_type = google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_JSCARD_RESOURCE.containing_type = _JSCARD
+_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE.fields_by_name['type'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE.fields_by_name['preference'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT32VALUE
+_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE.containing_type = _JSCARD_CONTACTLANGUAGES
+_JSCARD_CONTACTLANGUAGES.fields_by_name['languages'].message_type = _JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE
+_JSCARD_CONTACTLANGUAGES.containing_type = _JSCARD
+_JSCARD_ADDRESS.fields_by_name['context'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['label'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['full_address'].message_type = _JSCARD_LOCALISEDSTRING
+_JSCARD_ADDRESS.fields_by_name['street'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['extension'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['locality'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['region'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['country'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['post_office_box'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['post_code'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['country_code'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['coordinates'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['timezone'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ADDRESS.fields_by_name['preferred'].message_type = google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+_JSCARD_ADDRESS.containing_type = _JSCARD
+_JSCARD_ANNIVERSARY.fields_by_name['label'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_ANNIVERSARY.fields_by_name['date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_JSCARD_ANNIVERSARY.fields_by_name['place'].message_type = _JSCARD_ADDRESS
+_JSCARD_ANNIVERSARY.containing_type = _JSCARD
+_JSCARD_PERSONALINFO.fields_by_name['level'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD_PERSONALINFO.containing_type = _JSCARD
+_JSCARD_PREFERREDCONTACTLANGUAGESENTRY.fields_by_name['value'].message_type = _JSCARD_CONTACTLANGUAGES
+_JSCARD_PREFERREDCONTACTLANGUAGESENTRY.containing_type = _JSCARD
+_JSCARD.fields_by_name['updated'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_JSCARD.fields_by_name['kind'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD.fields_by_name['full_name'].message_type = _JSCARD_LOCALISEDSTRING
+_JSCARD.fields_by_name['organisation'].message_type = _JSCARD_LOCALISEDSTRING
+_JSCARD.fields_by_name['job_title'].message_type = _JSCARD_LOCALISEDSTRING
+_JSCARD.fields_by_name['role'].message_type = _JSCARD_LOCALISEDSTRING
+_JSCARD.fields_by_name['emails'].message_type = _JSCARD_RESOURCE
+_JSCARD.fields_by_name['phones'].message_type = _JSCARD_RESOURCE
+_JSCARD.fields_by_name['online'].message_type = _JSCARD_RESOURCE
+_JSCARD.fields_by_name['preferred_contact_method'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_JSCARD.fields_by_name['preferred_contact_languages'].message_type = _JSCARD_PREFERREDCONTACTLANGUAGESENTRY
+_JSCARD.fields_by_name['addresses'].message_type = _JSCARD_ADDRESS
+_JSCARD.fields_by_name['anniversaries'].message_type = _JSCARD_ANNIVERSARY
+_JSCARD.fields_by_name['personal_info'].message_type = _JSCARD_PERSONALINFO
+_JSCARD.fields_by_name['notes'].message_type = _JSCARD_LOCALISEDSTRING
 _ENTITY.fields_by_name['card'].message_type = _JCARD
+_ENTITY.fields_by_name['js_card'].message_type = _JSCARD
 _ENTITY.fields_by_name['roles'].enum_type = _ENTITYROLE
 _ENTITY.fields_by_name['public_ids'].message_type = _PUBLICID
 _ENTITY.fields_by_name['entities'].message_type = _ENTITY
@@ -2018,6 +2687,7 @@ DESCRIPTOR.message_types_by_name['Event'] = _EVENT
 DESCRIPTOR.message_types_by_name['PublicID'] = _PUBLICID
 DESCRIPTOR.message_types_by_name['Remark'] = _REMARK
 DESCRIPTOR.message_types_by_name['jCard'] = _JCARD
+DESCRIPTOR.message_types_by_name['JSCard'] = _JSCARD
 DESCRIPTOR.message_types_by_name['Entity'] = _ENTITY
 DESCRIPTOR.message_types_by_name['Domain'] = _DOMAIN
 DESCRIPTOR.message_types_by_name['NameServer'] = _NAMESERVER
@@ -2195,6 +2865,85 @@ _sym_db.RegisterMessage(jCard.Property.PropertiesEntry)
 _sym_db.RegisterMessage(jCard.Property.TextArray)
 _sym_db.RegisterMessage(jCard.Property.Extension)
 
+JSCard = _reflection.GeneratedProtocolMessageType('JSCard', (_message.Message,), {
+
+  'LocalisedString' : _reflection.GeneratedProtocolMessageType('LocalisedString', (_message.Message,), {
+
+    'LocalisationsEntry' : _reflection.GeneratedProtocolMessageType('LocalisationsEntry', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.LocalisedString.LocalisationsEntry)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_LOCALISEDSTRING,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.LocalisedString)
+    })
+  ,
+
+  'Resource' : _reflection.GeneratedProtocolMessageType('Resource', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_RESOURCE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Resource)
+    })
+  ,
+
+  'ContactLanguages' : _reflection.GeneratedProtocolMessageType('ContactLanguages', (_message.Message,), {
+
+    'ContactLanguage' : _reflection.GeneratedProtocolMessageType('ContactLanguage', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.ContactLanguages.ContactLanguage)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_CONTACTLANGUAGES,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.ContactLanguages)
+    })
+  ,
+
+  'Address' : _reflection.GeneratedProtocolMessageType('Address', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ADDRESS,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Address)
+    })
+  ,
+
+  'Anniversary' : _reflection.GeneratedProtocolMessageType('Anniversary', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ANNIVERSARY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Anniversary)
+    })
+  ,
+
+  'PersonalInfo' : _reflection.GeneratedProtocolMessageType('PersonalInfo', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PERSONALINFO,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.PersonalInfo)
+    })
+  ,
+
+  'PreferredContactLanguagesEntry' : _reflection.GeneratedProtocolMessageType('PreferredContactLanguagesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PREFERREDCONTACTLANGUAGESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.PreferredContactLanguagesEntry)
+    })
+  ,
+  'DESCRIPTOR' : _JSCARD,
+  '__module__' : 'rdap_pb2'
+  # @@protoc_insertion_point(class_scope:rdap.JSCard)
+  })
+_sym_db.RegisterMessage(JSCard)
+_sym_db.RegisterMessage(JSCard.LocalisedString)
+_sym_db.RegisterMessage(JSCard.LocalisedString.LocalisationsEntry)
+_sym_db.RegisterMessage(JSCard.Resource)
+_sym_db.RegisterMessage(JSCard.ContactLanguages)
+_sym_db.RegisterMessage(JSCard.ContactLanguages.ContactLanguage)
+_sym_db.RegisterMessage(JSCard.Address)
+_sym_db.RegisterMessage(JSCard.Anniversary)
+_sym_db.RegisterMessage(JSCard.PersonalInfo)
+_sym_db.RegisterMessage(JSCard.PreferredContactLanguagesEntry)
+
 Entity = _reflection.GeneratedProtocolMessageType('Entity', (_message.Message,), {
   'DESCRIPTOR' : _ENTITY,
   '__module__' : 'rdap_pb2'
@@ -2249,6 +2998,8 @@ _sym_db.RegisterMessage(IpAddresses)
 
 
 _JCARD_PROPERTY_PROPERTIESENTRY._options = None
+_JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY._options = None
+_JSCARD_PREFERREDCONTACTLANGUAGESENTRY._options = None
 
 _RDAP = _descriptor.ServiceDescriptor(
   name='RDAP',
@@ -2256,8 +3007,8 @@ _RDAP = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=5240,
-  serialized_end=5652,
+  serialized_start=7721,
+  serialized_end=8133,
   methods=[
   _descriptor.MethodDescriptor(
     name='DomainLookup',
