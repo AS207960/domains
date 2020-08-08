@@ -194,8 +194,10 @@ class Command(BaseCommand):
                             print(f"{domain.domain} failed validation with current DS set")
                             return
 
-                        cds[ns_ip] = cds_rrs
-                        dnskey[ns_ip] = dns_dnskey
+                        if cds_rrs:
+                            cds[ns_ip] = cds_rrs
+                        if dnskey_rrs:
+                            dnskey[ns_ip] = dns_dnskey
 
                 return cds, dnskey
 
