@@ -140,19 +140,11 @@ class Command(BaseCommand):
 
                 for ns in name_servers:
                     try:
-                        ns_ip = resolver.resolve(ns, dns.rdatatype.AAAA, raise_on_no_answer=True, tcp=True)
-                    except dns.resolver.NXDOMAIN:
-                        print(f"Getting IP of {ns} returned NXDOMAIN")
+                        ns_ip = socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]
+                    except socket.gaierror as e:
+                        print(f"Getting IP of {ns}: {e.args[1]}")
                         return
-                    except dns.resolver.NoAnswer:
-                        print(f"Getting IP of {ns} returned no answer")
-                        return
-                    except dns.resolver.NoNameservers:
-                        print(f"Getting IP of {ns} no nameservers")
-                        return
-                    except dns.exception.Timeout:
-                        print(f"Getting IP of {ns} timed out")
-                        return
+
                     ns_rrs = list(filter(lambda rr: isinstance(rr, dns.rdtypes.IN.AAAA.AAAA), ns_ip))
                     for ns_rr in ns_rrs:
                         ns_ip = ns_rr.address
@@ -259,7 +251,7 @@ class Command(BaseCommand):
                         key_tag=r.key_tag,
                         algorithm=r.algorithm,
                         digest_type=r.digest_type,
-                        digest=r.digest.hex(),
+                        digest=r.digest.hex().upper(),
                         key_data=None
                     ), cds_data_set))
                 else:
