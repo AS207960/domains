@@ -190,8 +190,8 @@ spec:
           secret:
             secretName: domains-test-google-creds
         - name: privkey
-            secret:
-              secretName: domains-test-jwt-priv
+          secret:
+            secretName: domains-test-jwt-priv
       containers:
         - name: celery
           image: as207960/domains-django:(version)

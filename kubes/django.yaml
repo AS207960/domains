@@ -38,6 +38,7 @@ data:
   DB_HOST: "postgres"
   DB_NAME: "domains"
   BILLING_URL: "http://billing-nginx"
+  HEXDNS_URL: "https://dns.glauca.digital"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_HOST: "mx.postal.as207960.net"
@@ -46,6 +47,7 @@ data:
   EMAIL_FROM: "Glauca Domains <domains@glauca.digital>"
   GCHAT_PROJECT_ID: "226795660453"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
+  PRIV_KEY_LOCATION: "/privkey/privkey.pem"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,6 +83,9 @@ spec:
         - name: google-creds
           secret:
             secretName: domains-google-creds
+        - name: privkey
+          secret:
+            secretName: domains-jwt-priv
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
@@ -95,6 +100,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -131,6 +138,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -181,6 +190,9 @@ spec:
             - name: google-creds
               secret:
                 secretName: domains-google-creds
+            - name: privkey
+              secret:
+                secretName: domains-jwt-priv
           containers:
             - name: django
               image: as207960/domains-django:(version)
@@ -195,6 +207,8 @@ spec:
                   name: ca-cert
                 - mountPath: "/google-creds/"
                   name: google-creds
+                - mountPath: "/privkey/"
+                  name: privkey
               envFrom:
                 - configMapRef:
                     name: domains-django-conf
@@ -251,6 +265,9 @@ spec:
         - name: google-creds
           secret:
             secretName: domains-google-creds
+        - name: privkey
+          secret:
+            secretName: domains-jwt-priv
       containers:
         - name: grpc
           image: as207960/domains-django:(version)
@@ -267,6 +284,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-conf
@@ -322,6 +341,9 @@ spec:
         - name: google-creds
           secret:
             secretName: domains-google-creds
+        - name: privkey
+          secret:
+            secretName: domains-jwt-priv
       containers:
         - name: grpc
           image: as207960/domains-django:(version)
@@ -338,6 +360,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-conf
