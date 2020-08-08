@@ -15,7 +15,7 @@ from domains import models, zone_info, apps
 
 
 resolver = dns.resolver.Resolver(configure=False)
-resolver.nameservers = [socket.getaddrinfo("settings.RESOLVER_ADDR", None)[0][4][0]]
+resolver.nameservers = [socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]]
 resolver.port = settings.RESOLVER_PORT
 
 ALGORITHMS = (5, 7, 8, 10, 13, 14, 15, 16, 0)
