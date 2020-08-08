@@ -38,6 +38,7 @@ data:
   DB_HOST: "postgres"
   DB_NAME: "domains-test"
   BILLING_URL: "http://billing-nginx-test"
+  HEXDNS_URL: "https://dns.glauca.digital"
   EPP_PROXY_ADDR: "epp-proxy-test-primary:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_HOST: "mx.postal.as207960.net"
@@ -46,6 +47,7 @@ data:
   EMAIL_FROM: "=?UTF-8?q?Glauca=20Domains=20[TEST]?= <domains-test@glauca.digital>"
   GCHAT_PROJECT_ID: "1045619794257"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
+  PRIV_KEY_LOCATION: "/privkey/privkey.pem"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,6 +83,9 @@ spec:
         - name: google-creds
           secret:
             secretName: domains-test-google-creds
+        - name: privkey
+          secret:
+            secretName: domains-test-jwt-priv
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
@@ -95,6 +100,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-test-conf
@@ -128,6 +135,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-test-conf
@@ -180,6 +189,9 @@ spec:
         - name: google-creds
           secret:
             secretName: domains-test-google-creds
+        - name: privkey
+            secret:
+              secretName: domains-test-jwt-priv
       containers:
         - name: celery
           image: as207960/domains-django:(version)
@@ -194,6 +206,8 @@ spec:
               name: ca-cert
             - mountPath: "/google-creds/"
               name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
           envFrom:
             - configMapRef:
                 name: domains-django-test-conf

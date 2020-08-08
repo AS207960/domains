@@ -1386,3 +1386,13 @@ class EPPBalanceSerializer(serializers.Serializer):
     fixed_credit_threshold = serializers.FloatField(read_only=True, allow_null=True)
     percentage_credit_threshold = serializers.FloatField(read_only=True, allow_null=True)
     currency = serializers.CharField(read_only=True)
+
+
+class UserDomainCheckSerializer(serializers.Serializer):
+    domain = serializers.CharField(max_length=255)
+    access = serializers.BooleanField(read_only=True)
+    token = serializers.CharField(read_only=True)
+
+
+class UserDomainChecksSerializer(serializers.Serializer):
+    domains = serializers.ListField(child=UserDomainCheckSerializer())

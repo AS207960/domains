@@ -2,13 +2,16 @@ from rest_framework import viewsets, exceptions, status, decorators, mixins
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.conf import settings
 from concurrent.futures import ThreadPoolExecutor
-
+import django_keycloak_auth.clients
+import jwt
+import datetime
 from . import serializers, permissions, auth
-from .. import models, apps, zone_info
+from .. import models, apps, zone_info, tasks
 
 
 class EPPBalanceViewSet(viewsets.ViewSet):
@@ -37,6 +40,108 @@ class EPPBalanceViewSet(viewsets.ViewSet):
 
         serializer = serializers.EPPBalanceSerializer(balance_data, context={'request': request})
         return Response(serializer.data)
+
+
+class UserDomainsViewSet(viewsets.ViewSet):
+    def update(self, request, pk=None):
+        if not isinstance(request.auth, auth.OAuthToken):
+            raise PermissionDenied
+
+        if "access-user-domains" not in request.auth.claims.get("resource_access", {}).get(
+                settings.OIDC_CLIENT_ID, {}
+        ).get("roles", []):
+            raise PermissionDenied
+
+        user = get_object_or_404(get_user_model(), username=pk)
+        token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+
+        serializer = serializers.UserDomainChecksSerializer(data=request.data, context={
+            'request': request
+        })
+        serializer.is_valid(raise_exception=True)
+
+        out = []
+        for domain in serializer.validated_data["domains"]:
+            domain_obj = models.DomainRegistration.objects.filter(domain=domain["domain"]).first()
+            if not domain_obj:
+                access = None
+            else:
+                access = domain_obj.has_scope(token, 'edit')
+            if not access:
+                out.append({
+                    "domain": domain["domain"],
+                    "domain_id": None,
+                    "access": False,
+                    "token": None,
+                })
+            else:
+                domain_jwt = jwt.encode({
+                    "iat": datetime.datetime.utcnow(),
+                    "nbf": datetime.datetime.utcnow(),
+                    "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
+                    "iss": "urn:as207960:domains",
+                    "aud": ["urn:as207960:hexdns"],
+                    "domain": domain["domain"],
+                    "domain_id": str(domain_obj.id),
+                    "sub": pk,
+                }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
+
+                out.append({
+                    "domain": domain["domain"],
+                    "access": True,
+                    "token": domain_jwt
+                })
+
+        serializer = serializers.UserDomainChecksSerializer({
+            "domains": out
+        }, context={'request': request})
+        return Response(serializer.data)
+
+    @decorators.action(detail=True, methods=['get'])
+    def all(self, request, pk=None):
+        if "access-user-domains" not in request.auth.claims.get("resource_access", {}).get(
+                settings.OIDC_CLIENT_ID, {}
+        ).get("roles", []):
+            raise PermissionDenied
+
+        user = get_object_or_404(get_user_model(), username=pk)
+        token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+
+        out = []
+        for domain_obj in models.DomainRegistration.get_object_list(token, 'edit'):
+            domain_jwt = jwt.encode({
+                "iat": datetime.datetime.utcnow(),
+                "nbf": datetime.datetime.utcnow(),
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
+                "iss": "urn:as207960:domains",
+                "aud": ["urn:as207960:hexdns"],
+                "domain": domain_obj.domain,
+                "domain_id": str(domain_obj.id),
+                "sub": pk,
+            }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
+
+            out.append({
+                "domain": domain_obj.domain,
+                "access": True,
+                "token": domain_jwt
+            })
+
+        serializer = serializers.UserDomainChecksSerializer({
+            "domains": out
+        }, context={'request': request})
+        return Response(serializer.data)
+
+    @decorators.action(detail=True, methods=['post'])
+    def set_dns(self, request, pk=None):
+        if "access-user-domains" not in request.auth.claims.get("resource_access", {}).get(
+                settings.OIDC_CLIENT_ID, {}
+        ).get("roles", []):
+            raise PermissionDenied
+
+        domain_obj = get_object_or_404(models.DomainRegistration, id=pk)
+        tasks.set_dns_to_own.delay(domain_obj.id)
+
+        return Response(status=status.HTTP_202_ACCEPTED)
 
 
 class ContactAddressViewSet(viewsets.ModelViewSet):

@@ -19,3 +19,5 @@ retry
 requests
 celery
 idna
+pyjwt
+cryptography

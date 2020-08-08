@@ -596,3 +596,33 @@ def process_domain_transfer_failed(transfer_order_id):
     billing.reverse_charge(f"dm_transfer_{domain_transfer_order.domain_id}")
     domain_transfer_order.state = domain_transfer_order.STATE_FAILED
     domain_transfer_order.save()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def set_dns_to_own(domain_id):
+    domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+    domain_data = apps.epp_client.get_domain(domain.domain)
+
+    hosts = ["ns1.as207960.net", "ns2.as207960.net"]
+
+    for host in hosts:
+        host_available, _ = apps.epp_client.check_host(host, domain_data.registry_name)
+
+        if host_available:
+            apps.epp_client.create_host(host, [], domain_data.registry_name)
+
+    domain_data.add_host_objs(hosts)
+    apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+        name=domain_data.name,
+        remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+            nameserver=h.to_pb()
+        ), domain_data.name_servers)),
+        add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+            nameserver=apps.epp_api.domain_pb2.NameServer(
+                host_obj=h
+            )
+        ), hosts))
+    ))
+

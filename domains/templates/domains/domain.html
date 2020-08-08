@@ -181,12 +181,17 @@
             </div>
         {% endif %}
         <div class="row">
-            <div class="col">
-                <p>
+            <div class="col my-2">
+                <div class="btn-group">
                     <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
                         &#x1f5d1; Delete all
                     </a>
-                </p>
+                    {% if not is_hexdns %}
+                        <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-primary btn-sm">
+                            &#x1f4df; Setup for HexDNS
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="table-responsive">

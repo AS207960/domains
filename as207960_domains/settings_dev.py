@@ -162,6 +162,9 @@ with open(os.path.join(BASE_DIR, "secrets/keycloak.json")) as f:
 with open(os.path.join(BASE_DIR, "secrets/verisign_ns.json")) as f:
     verisign_ns_conf = json.load(f)
 
+with open(os.path.join(BASE_DIR, "secrets/jwt_priv.pem")) as f:
+    JWT_PRIV_KEY = f.read()
+
 KEYCLOAK_SERVER_URL = keycloak_conf["server_url"]
 KEYCLOAK_REALM = keycloak_conf["realm"]
 OIDC_CLIENT_ID = keycloak_conf["client_id"]
@@ -175,6 +178,7 @@ EPP_PROXY_ADDR = "localhost:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"
+HEXDNS_URL = "http://localhost:8002"
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

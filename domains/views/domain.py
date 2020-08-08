@@ -7,6 +7,8 @@ import django_keycloak_auth.clients
 import ipaddress
 import grpc
 import idna
+import jwt
+import datetime
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
 from . import gchat_bot
@@ -143,6 +145,7 @@ def domain(request, domain_id):
     admin = None
     billing = None
     tech = None
+    is_hexdns = False
     host_objs = []
 
     registrant_form = forms.DomainContactForm(
@@ -253,6 +256,15 @@ def domain(request, domain_id):
             request.user
         ), domain_data.hosts))
 
+        if all(
+                any(
+                    (hns == ns.host_obj.lower() if ns.host_obj else hns == ns.host_name.lower())
+                    for ns in domain_data.name_servers
+                )
+                for hns in ("ns1.as207960.net", "ns2.as207960.net")
+        ):
+            is_hexdns = True
+
     except grpc.RpcError as rpc_error:
         return render(request, "domains/error.html", {
             "error": rpc_error.details(),
@@ -279,7 +291,8 @@ def domain(request, domain_id):
         "host_addr_form": host_addr_form,
         "ds_form": ds_form,
         "dnskey_form": dnskey_form,
-        "registration_enabled": settings.REGISTRATION_ENABLED
+        "registration_enabled": settings.REGISTRATION_ENABLED,
+        "is_hexdns": is_hexdns
     })
 
 
@@ -859,6 +872,32 @@ def delete_domain_host_obj(request, domain_id, host_name):
         })
 
     return redirect(referrer)
+
+
+@login_required
+def domain_hexdns(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_jwt = jwt.encode({
+        "iat": datetime.datetime.utcnow(),
+        "nbf": datetime.datetime.utcnow(),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
+        "iss": "urn:as207960:domains",
+        "aud": ["urn:as207960:hexdns"],
+        "domain": user_domain.domain,
+        "sub": request.user.username,
+    }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
+
+    return redirect(f"{settings.HEXDNS_URL}/setup_domains_zone/?domain_token={domain_jwt}")
 
 
 def domain_search(request):
