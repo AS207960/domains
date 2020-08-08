@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 continue
 
             name_servers = list(map(lambda ns: ns.host_obj if ns.host_obj else ns.host_name, domain_data.name_servers))
-            name_servers = ["ns1.as207960.net", "ns2.as207960.net"]
+            # name_servers = ["ns1.as207960.net", "ns2.as207960.net"]
             domain_name = dns.name.from_text(domain.domain)
 
             if not name_servers:
