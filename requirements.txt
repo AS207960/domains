@@ -21,3 +21,4 @@ celery
 idna
 pyjwt
 cryptography
+dnspython
