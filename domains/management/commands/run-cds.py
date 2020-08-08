@@ -98,7 +98,7 @@ class Command(BaseCommand):
                 continue
             except dns.resolver.NoNameservers:
                 print(f"Getting DS of {domain} no nameservers")
-                return
+                continue
             except dns.exception.Timeout:
                 print(f"Getting DS of {domain_name} timed out")
                 continue
