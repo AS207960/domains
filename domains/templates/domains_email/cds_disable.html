@@ -1,0 +1,13 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <p>
+        Hello {{ name }},
+    </p>
+    <p>
+        We have received your (or your DNS operator's) request to disable DNSSEC for the domain {{ domain.domain }}
+        via CDS. This has now been processed.
+    </p>
+    <p>
+        For the sneaky techy deets go read <a href="https://tools.ietf.org/html/rfc8078">RFC8078</a>
+    </p>
+{% endblock %}

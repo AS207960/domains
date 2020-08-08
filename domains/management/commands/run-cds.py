@@ -1,4 +1,6 @@
 from django.core.management.base import BaseCommand
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import dns.query
 import dns.resolver
@@ -6,12 +8,56 @@ import dns.rdataclass
 import dns.rdatatype
 import dns.exception
 import dns.rdtypes
-from domains import models, zone_info
+import base64
+import grpc
+from domains import models, zone_info, apps
 
 
 resolver = dns.resolver.Resolver(configure=False)
 resolver.nameservers = [settings.RESOLVER_ADDR]
 resolver.port = settings.RESOLVER_PORT
+
+ALGORITHMS = (5, 7, 8, 10, 13, 14, 15, 16, 0)
+DIGEST_TYPES = (1, 2, 4, 0)
+
+
+def mail_update(user, domain, add_cds, rem_cds, is_ds):
+    context = {
+        "name": user.first_name,
+        "domain": domain,
+        "add_cds": add_cds,
+        "rem_cds": rem_cds,
+        "is_ds": is_ds
+    }
+    html_content = render_to_string("domains_email/cds_update.html", context)
+    txt_content = render_to_string("domains_email/cds_update.txt", context)
+
+    email = EmailMultiAlternatives(
+        subject='Domain CDS update',
+        body=txt_content,
+        to=[user.email],
+        bcc=['q@as207960.net']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
+def mail_disabled(user, domain):
+    context = {
+        "name": user.first_name,
+        "domain": domain,
+    }
+    html_content = render_to_string("domains_email/cds_disable.html", context)
+    txt_content = render_to_string("domains_email/cds_disable.html", context)
+
+    email = EmailMultiAlternatives(
+        subject='Domain DNSSEC disabled',
+        body=txt_content,
+        to=[user.email],
+        bcc=['q@as207960.net']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
 
 
 class Command(BaseCommand):
@@ -28,13 +74,13 @@ class Command(BaseCommand):
                 continue
 
             # TODO: Use nameservers from EPP rather than hard coded for testing
-            # try:
-            #     domain_data = apps.epp_client.get_domain(domain.domain)
-            # except grpc.RpcError as rpc_error:
-            #     print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
-            #     continue
-            #
-            # name_servers = list(map(lambda ns: ns.host_obj if ns.host_obj else ns.host_name, domain_data.name_servers))
+            try:
+                domain_data = apps.epp_client.get_domain(domain.domain)
+            except grpc.RpcError as rpc_error:
+                print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
+                continue
+
+            name_servers = list(map(lambda ns: ns.host_obj if ns.host_obj else ns.host_name, domain_data.name_servers))
             name_servers = ["ns1.as207960.net", "ns2.as207960.net"]
             domain_name = dns.name.from_text(domain.domain)
 
@@ -61,8 +107,9 @@ class Command(BaseCommand):
             original_ds = original_ds_msg.get_rrset(
                 dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DS
             )
+            cds_type = dns.rdatatype.CDS if domain_info.ds_data_supported else dns.rdatatype.CDNSKEY
 
-            def validate_message(msg, dnskey_set, ds_set, covers=dns.rdatatype.DNSKEY):
+            def validate_message(msg, dnskey_set, ds_set, covers=dns.rdatatype.DNSKEY, exact=True):
                 data_set = msg.get_rrset(
                     dns.message.ANSWER, domain_name, dns.rdataclass.IN, covers
                 )
@@ -76,11 +123,12 @@ class Command(BaseCommand):
                         ds = dns.dnssec.make_ds(domain_name, key, cds.digest_type)
                         if ds.digest == cds.digest:
                             found_dnskeys.add(key)
-                    if not found_dnskeys:
-                        raise dns.dnssec.ValidationFailure("no suitable DNSKEYs")
+
+                if not found_dnskeys:
+                    raise dns.dnssec.ValidationFailure("no suitable DNSKEYs")
 
                 dns.dnssec.validate(data_set, rrsig, {
-                    domain_name: dnskey_set
+                    domain_name: dnskey_set if not exact else found_dnskeys
                 })
 
             def get_cds():
@@ -105,7 +153,7 @@ class Command(BaseCommand):
                             continue
 
                         try:
-                            msg = dns.message.make_query(domain_name, dns.rdatatype.CDS)
+                            msg = dns.message.make_query(domain_name, cds_type)
                             msg.use_edns(ednsflags=dns.flags.DO)
                             dns_cds = dns.query.tcp(msg, ns_ip, timeout=15)
                         except dns.exception.Timeout:
@@ -125,7 +173,7 @@ class Command(BaseCommand):
                             return
 
                         cds_rrs = dns_cds.get_rrset(
-                            dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.CDS
+                            dns.message.ANSWER, domain_name, dns.rdataclass.IN, cds_type
                         )
                         dnskey_rrs = dns_dnskey.get_rrset(
                             dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DNSKEY
@@ -133,9 +181,9 @@ class Command(BaseCommand):
 
                         try:
                             if original_ds:
-                                validate_message(dns_cds, dnskey_rrs, original_ds, dns.rdatatype.CDS)
                                 validate_message(dns_dnskey, dnskey_rrs, original_ds)
-                        except dns.dnssec.ValidationFailure as e:
+                                validate_message(dns_cds, dnskey_rrs, original_ds, cds_type, False)
+                        except dns.dnssec.ValidationFailure:
                             print(f"{domain.domain} failed validation with current DS set")
                             return
 
@@ -157,14 +205,85 @@ class Command(BaseCommand):
                 print(f"{domain.domain} has differing CDS records")
                 continue
 
-            cds_set = cds_values[0]
+            cds_data_set = cds_values[0]
+            current_cds_set = []
+            if domain_data.sec_dns:
+                if domain_info.ds_data_supported:
+                    current_cds_set = domain_data.sec_dns.ds_data
+                else:
+                    current_cds_set = domain_data.sec_dns.key_data
 
-            try:
-                for res in dnskey_results.values():
-                    dnskey = res.get_rrset(dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DNSKEY)
-                    validate_message(res, dnskey, cds_set)
-            except dns.dnssec.ValidationFailure:
-                print(f"{domain.domain} failed validation with presented CDS set")
-                continue
+            if len(cds_data_set) == 1 and cds_data_set[0].algorithm == 0:
+                try:
+                    apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+                        name=domain.domain,
+                        sec_dns=apps.epp_api.domain_pb2.UpdateSecDNSData(
+                            remove_all=True
+                        )
+                    ))
+                except grpc.RpcError as rpc_error:
+                    print(f"Can't remove DNSSEC for {domain.domain}: {rpc_error.details()}")
+                    continue
 
-            print(cds_set)
+                mail_disabled(user, domain)
+            else:
+                if not domain_info.ds_data_supported:
+                    cds_set = list(map(lambda d: dns.dnssec.make_ds(domain_name, d, "SHA256"), cds_data_set))
+                else:
+                    cds_set = cds_data_set
+
+                try:
+                    for res in dnskey_results.values():
+                        dnskey = res.get_rrset(dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DNSKEY)
+                        validate_message(res, dnskey, cds_set)
+                except dns.dnssec.ValidationFailure:
+                    print(f"{domain.domain} failed validation with presented CDS set")
+                    continue
+
+                for cds in cds_set:
+                    if cds.algorithm not in ALGORITHMS or cds.digest_type not in DIGEST_TYPES:
+                        print(f"{domain.domain} CDS uses invalid algorithm/digest")
+                        continue
+
+                if domain_info.ds_data_supported:
+                    cds_data_set = list(map(lambda r: apps.epp_api.SecDNSDSData(
+                        key_tag=r.key_tag,
+                        algorithm=r.algorithm,
+                        digest_type=r.digest_type,
+                        digest=r.digest.hex(),
+                        key_data=None
+                    ), cds_data_set))
+                else:
+                    cds_data_set = list(map(lambda r: apps.epp_api.SecDNSKeyData(
+                        flags=r.flags,
+                        protocol=r.protocol,
+                        algorithm=r.algorithm,
+                        public_key=base64.b64encode(r.key).decode(),
+                    ), cds_data_set))
+
+                rem_cds_set = list(filter(lambda d: d not in cds_data_set, current_cds_set))
+                add_cds_set = list(filter(lambda d: d not in current_cds_set, cds_data_set))
+
+                if rem_cds_set or add_cds_set:
+                    req = apps.epp_api.domain_pb2.DomainUpdateRequest(
+                        name=domain.domain,
+                    )
+                    if domain_info.ds_data_supported:
+                        if rem_cds_set:
+                            req.sec_dns.remove_ds_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
+                        if add_cds_set:
+                            req.sec_dns.add_ds_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
+                    else:
+                        if rem_cds_set:
+                            req.sec_dns.remove_key_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
+                        if add_cds_set:
+                            req.sec_dns.add_key_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
+
+                    print(req)
+                    # try:
+                    #     apps.epp_client.stub.DomainUpdate(req)
+                    # except grpc.RpcError as rpc_error:
+                    #     print(f"Can't update DNSSEC for {domain.domain}: {rpc_error.details()}")
+                    #     continue
+                    #
+                    # mail_update(user, domain, add_cds_set, rem_cds_set, domain_info.ds_data_supported)

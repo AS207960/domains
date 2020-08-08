@@ -490,7 +490,8 @@ class DomainInfo:
     @property
     def ds_data_supported(self):
         return self.registry not in (
-            self.REGISTRY_DENIC
+            self.REGISTRY_DENIC,
+            # self.REGISTRY_SWITCH
         )
 
     @property
