@@ -48,7 +48,6 @@ data:
   GCHAT_PROJECT_ID: "226795660453"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
   PRIV_KEY_LOCATION: "/privkey/privkey.pem"
-
   RESOLVER_ADDR: "hexdns-unbound"
   RESOLVER_PORT: "5053"
 ---
