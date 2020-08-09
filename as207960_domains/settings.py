@@ -108,11 +108,12 @@ GRPCSERVER = {
 
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_cockroachdb",
         "HOST": os.getenv("DB_HOST", "localhost"),
         "NAME": os.getenv("DB_NAME", "domains"),
         "USER": os.getenv("DB_USER", "domains"),
         "PASSWORD": os.getenv("DB_PASS"),
+        "PORT": '26257',
     }
 }
 
