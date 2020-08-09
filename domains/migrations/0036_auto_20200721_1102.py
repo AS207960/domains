@@ -29,10 +29,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='domainrestoreorder',
-            name='pending',
-        ),
-        migrations.RemoveField(
-            model_name='domainrestoreorder',
             name='user',
         ),
         migrations.AddField(
