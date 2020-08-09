@@ -95,13 +95,13 @@ class Command(BaseCommand):
                     domain_name, dns.rdatatype.DS, raise_on_no_answer=False, tcp=True
                 ).response
             except dns.resolver.NXDOMAIN:
-                print(f"Getting DS of {domain_name} returned NXDOMAIN")
+                print(f"Getting DS of {domain.domain} returned NXDOMAIN")
                 continue
             except dns.resolver.NoNameservers:
-                print(f"Getting DS of {domain} no nameservers")
+                print(f"Getting DS of {domain.domain} no nameservers")
                 continue
             except dns.exception.Timeout:
-                print(f"Getting DS of {domain_name} timed out")
+                print(f"Getting DS of {domain.domain} timed out")
                 continue
 
             if original_ds_msg.rcode() != 0:
@@ -142,7 +142,7 @@ class Command(BaseCommand):
                     try:
                         ns_ips = socket.getaddrinfo(ns, None, socket.AF_INET6)
                     except socket.gaierror as e:
-                        print(f"Getting IP of {ns}: {e.args[1]}")
+                        print(f"Getting IP of {ns} for domain {domain.domain}: {e.args[1]}")
                         return
 
                     for ns_ip in ns_ips:
@@ -155,14 +155,14 @@ class Command(BaseCommand):
                             msg.use_edns(ednsflags=dns.flags.DO)
                             dns_cds = dns.query.tcp(msg, ns_ip, timeout=15)
                         except dns.exception.Timeout:
-                            print(f"{domain.domain} timed out")
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
                             return
                         except OSError as e:
-                            print(f"Can't access NS {ns_ip}: {e}")
+                            print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
                             return
 
                         if dns_cds.rcode() == dns.rcode.NXDOMAIN:
-                            print(f"{domain.domain} returned NXDOMAIN")
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} returned NXDOMAIN")
                             return
 
                         try:
@@ -170,7 +170,10 @@ class Command(BaseCommand):
                             msg.use_edns(ednsflags=dns.flags.DO)
                             dns_dnskey = dns.query.tcp(msg, ns_ip, timeout=15)
                         except dns.exception.Timeout:
-                            print(f"{domain.domain} timed out")
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
+                            return
+                        except OSError as e:
+                            print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
                             return
 
                         cds_rrs = dns_cds.get_rrset(
@@ -289,7 +292,6 @@ class Command(BaseCommand):
                         if add_cds_set:
                             req.sec_dns.add_key_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
 
-                    print(req)
                     try:
                         apps.epp_client.stub.DomainUpdate(req)
                     except grpc.RpcError as rpc_error:

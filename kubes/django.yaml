@@ -233,6 +233,76 @@ spec:
                   prefix: "VERISIGN_NS_"
           restartPolicy: OnFailure
 ---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: domains-run-cds
+spec:
+  schedule: "17 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+          labels:
+            app: domains
+            part: django
+        spec:
+          volumes:
+            - name: static
+              persistentVolumeClaim:
+                claimName: domains-django-static
+            - name: media
+              persistentVolumeClaim:
+                claimName: domains-django-media
+            - name: ca-cert
+              configMap:
+                name: epp-ca
+            - name: google-creds
+              secret:
+                secretName: domains-google-creds
+            - name: privkey
+              secret:
+                secretName: domains-jwt-priv
+          containers:
+            - name: django
+              image: as207960/domains-django:(version)
+              imagePullPolicy: Always
+              command: ["sh", "-c", "python3 manage.py run-cds"]
+              volumeMounts:
+                - mountPath: "/app/static/"
+                  name: static
+                - mountPath: "/app/media/"
+                  name: media
+                - mountPath: "/ca-cert/"
+                  name: ca-cert
+                - mountPath: "/google-creds/"
+                  name: google-creds
+                - mountPath: "/privkey/"
+                  name: privkey
+              envFrom:
+                - configMapRef:
+                    name: domains-django-conf
+                - secretRef:
+                    name: domains-db-creds
+                  prefix: "DB_"
+                - secretRef:
+                    name: domains-django-secret
+                - secretRef:
+                    name: domains-keycloak
+                  prefix: "KEYCLOAK_"
+                - secretRef:
+                    name: domains-email
+                  prefix: "EMAIL_"
+                - secretRef:
+                    name: domains-celery
+                  prefix: "CELERY_"
+                - secretRef:
+                    name: verisign-ns-key
+                  prefix: "VERISIGN_NS_"
+          restartPolicy: OnFailure
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
