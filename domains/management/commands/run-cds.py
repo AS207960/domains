@@ -140,11 +140,11 @@ class Command(BaseCommand):
 
                 for ns in name_servers:
                     try:
-                        ns_ips = socket.getaddrinfo(settings.RESOLVER_ADDR, None, socket.AF_INET6)[0][4][0]
+                        ns_ips = socket.getaddrinfo(settings.RESOLVER_ADDR, None, socket.AF_INET6)
                     except socket.gaierror as e:
                         print(f"Getting IP of {ns}: {e.args[1]}")
                         return
-                    
+
                     for ns_ip in ns_ips:
                         ns_ip = ns_ip[4][0]
                         if ns_ip in cds:
