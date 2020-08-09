@@ -140,7 +140,7 @@ class Command(BaseCommand):
 
                 for ns in name_servers:
                     try:
-                        ns_ips = socket.getaddrinfo(settings.RESOLVER_ADDR, None, socket.AF_INET6)
+                        ns_ips = socket.getaddrinfo(ns, None, socket.AF_INET6)
                     except socket.gaierror as e:
                         print(f"Getting IP of {ns}: {e.args[1]}")
                         return
@@ -157,6 +157,8 @@ class Command(BaseCommand):
                         except dns.exception.Timeout:
                             print(f"{domain.domain} timed out")
                             return
+                        except OSError as e:
+                            print(f"Can't access NS {ns_ip}: {e}")
 
                         if dns_cds.rcode() == dns.rcode.NXDOMAIN:
                             print(f"{domain.domain} returned NXDOMAIN")
