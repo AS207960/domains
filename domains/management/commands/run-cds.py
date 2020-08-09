@@ -290,10 +290,10 @@ class Command(BaseCommand):
                             req.sec_dns.add_key_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
 
                     print(req)
-                    # try:
-                    #     apps.epp_client.stub.DomainUpdate(req)
-                    # except grpc.RpcError as rpc_error:
-                    #     print(f"Can't update DNSSEC for {domain.domain}: {rpc_error.details()}")
-                    #     continue
-                    #
-                    # mail_update(user, domain, add_cds_set, rem_cds_set, domain_info.ds_data_supported)
+                    try:
+                        apps.epp_client.stub.DomainUpdate(req)
+                    except grpc.RpcError as rpc_error:
+                        print(f"Can't update DNSSEC for {domain.domain}: {rpc_error.details()}")
+                        continue
+
+                    mail_update(user, domain, add_cds_set, rem_cds_set, domain_info.ds_data_supported)
