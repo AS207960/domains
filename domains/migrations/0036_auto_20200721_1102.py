@@ -11,18 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='domainregistrationorder',
-            name='user',
-        ),
-        migrations.RemoveField(
-            model_name='domainreneworder',
-            name='user',
-        ),
-        migrations.RemoveField(
-            model_name='domainrestoreorder',
-            name='user',
-        ),
         migrations.AddField(
             model_name='domainregistrationorder',
             name='auth_info',
