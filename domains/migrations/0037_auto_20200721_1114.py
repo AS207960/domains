@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('domains', '0036_auto_20200721_1102'),
+        ('domains', '0001_squashed_0036_auto_20200721_1102'),
     ]
 
     operations = [
