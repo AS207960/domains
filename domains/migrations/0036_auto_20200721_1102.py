@@ -13,15 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='domainregistrationorder',
-            name='pending',
-        ),
-        migrations.RemoveField(
-            model_name='domainregistrationorder',
             name='user',
-        ),
-        migrations.RemoveField(
-            model_name='domainreneworder',
-            name='pending',
         ),
         migrations.RemoveField(
             model_name='domainreneworder',
