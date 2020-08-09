@@ -159,6 +159,7 @@ class Command(BaseCommand):
                             return
                         except OSError as e:
                             print(f"Can't access NS {ns_ip}: {e}")
+                            return
 
                         if dns_cds.rcode() == dns.rcode.NXDOMAIN:
                             print(f"{domain.domain} returned NXDOMAIN")
@@ -208,12 +209,6 @@ class Command(BaseCommand):
                 continue
 
             cds_data_set = cds_values[0]
-            current_cds_set = []
-            if domain_data.sec_dns:
-                if domain_info.ds_data_supported:
-                    current_cds_set = domain_data.sec_dns.ds_data
-                else:
-                    current_cds_set = domain_data.sec_dns.key_data
 
             if len(cds_data_set) == 1 and cds_data_set[0].algorithm == 0:
                 try:
@@ -229,6 +224,19 @@ class Command(BaseCommand):
 
                 mail_disabled(user, domain)
             else:
+                current_cds_set = []
+                if domain_data.sec_dns:
+                    if domain_info.ds_data_supported:
+                        current_cds_set = list(map(lambda r: apps.epp_api.SecDNSDSData(
+                            key_tag=r.key_tag,
+                            algorithm=r.algorithm,
+                            digest_type=r.digest_type,
+                            digest=r.digest.upper(),
+                            key_data=None
+                        ), domain_data.sec_dns.ds_data))
+                    else:
+                        current_cds_set = domain_data.sec_dns.key_data
+
                 if not domain_info.ds_data_supported:
                     cds_set = list(map(lambda d: dns.dnssec.make_ds(domain_name, d, "SHA256"), cds_data_set))
                 else:
