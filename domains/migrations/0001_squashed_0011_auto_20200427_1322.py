@@ -12,9 +12,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('domains', '0001_squashed_0009_auto_20200424_2131'), ('domains', '0010_domainregistration_auth_info'), ('domains', '0011_auto_20200427_1322')]
-
     initial = True
 
     dependencies = [
