@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('domains', '0009_auto_20200424_2131'),
+        ('domains', '0001_squashed_0009_auto_20200424_2131'),
     ]
 
     operations = [
