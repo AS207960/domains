@@ -35,7 +35,7 @@ data:
   KEYCLOAK_REALM: master
   KEYCLOAK_SCOPES: "openid email profile offline_access"
   KEYCLOAK_CLIENT_ID: "domains"
-  DB_HOST: "postgres"
+  DB_HOST: "cockroachdb"
   DB_NAME: "domains"
   BILLING_URL: "http://billing-nginx"
   HEXDNS_URL: "https://dns.glauca.digital"
