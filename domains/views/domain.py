@@ -22,7 +22,8 @@ def index(request):
     return render(request, "domains/index.html", {
         "registration_enabled": settings.REGISTRATION_ENABLED,
         "domain_form": form,
-        "tlds": json.dumps(tlds)
+        "tlds": json.dumps(tlds),
+        "register_url": request.build_absolute_uri(reverse('domain_register', args=("$domain.$tld",)))
     })
 
 
