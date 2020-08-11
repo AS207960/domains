@@ -104,7 +104,7 @@
                             }).then(function (res) {
                                 return res.json();
                             }).then(function (data) {
-                                api.pricing.setPrice(domain, data.price, "GBP", null, data.message);
+                                api.pricing.setPrice(domain, data.price, data.currency, null, data.message);
                             });
                         });
                     })

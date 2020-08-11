@@ -1433,11 +1433,13 @@ def internal_check_price(request):
         return HttpResponseBadRequest()
 
     if search_action == "register":
-        price = domain_info.pricing.registration(sld)
+        price = domain_info.pricing.representative_registration(sld)
+        currency = domain_info.pricing.currency
     else:
         return HttpResponseBadRequest()
 
     return HttpResponse(json.dumps({
         "price": float(price),
+        "currency": currency,
         "message": domain_info.notice
     }), content_type="application/json")
