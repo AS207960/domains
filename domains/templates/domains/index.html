@@ -43,8 +43,74 @@
                 </a>
             </div>
         </div>
-{#        {% if registration_enabled %}#}
-{#            {% crispy domain_form domain_form.helper %}#}
-{#        {% endif %}#}
+    </div>
+    <div class="container my-3">
+       <h1>Try our new domain spinner</h1>
+        <noscript>
+            <p>
+                Unfortunately this requires JavaScript to be enabled, sorry.
+            </p>
+        </noscript>
+        <name-studio api-key="0c0b5c77ab961788c00ddc8668b1de9d" env="prod">
+            <script type="application/json" data-type="name-studio">
+                {
+                    "i18n": {
+                        "en": {
+                            "namestudio-status": {
+                                "btnregister": "Register",
+                                "btnnotavailable": "Unavailable"
+                            },
+                            "namestudio-segment": {
+                                "headerprefixes": "Add a prefix",
+                                "headersuffixes": "Add a suffix"
+                            }
+                        }
+                    },
+                    "tlds": {{ tlds|safe }},
+                    "cart-url": "/domains/register/$domain.$tld/",
+                    "cart-method": "get",
+                    "styles": {
+                        "colors": {
+                            "base": "#f7fafc",
+                            "accents": "#3182ce",
+                            "availability": "#38a169",
+                            "errors": "#e53e3e"
+                        }
+                    },
+                    "version": {
+                        "actual": "1.10.2-beta",
+                        "major": "1.0"
+                    }
+                }
+            </script>
+        </name-studio>
+        <script>
+            window.addEventListener('name-studio.verisign', function (evt) {
+                var detail = evt.detail;
+                var api = evt.target.api;
+                if (detail.type === "ready") {
+                    api.subscribe(api.phases.RESULT_READY, function(evt) {
+                        evt.value.forEach(function (domain) {
+                            var data = new FormData();
+                            data.append('domain', domain);
+                            data.append('action', 'register');
+                            fetch("{% url 'internal_check_price' %}", {
+                                method: "POST",
+                                body: data,
+                                credentials: 'same-origin',
+                                headers: {
+                                    "X-CSRFToken": "{{ csrf_token }}"
+                                }
+                            }).then(function (res) {
+                                return res.json();
+                            }).then(function (data) {
+                                api.pricing.setPrice(domain, data.price, "GBP", null, data.message);
+                            });
+                        });
+                    })
+                }
+                console.log(detail, api);
+            })
+        </script>
     </div>
 {% endblock %}

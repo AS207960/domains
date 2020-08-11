@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest, HttpResponse
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,7 @@ import ipaddress
 import grpc
 import idna
 import jwt
+import json
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
@@ -16,10 +17,12 @@ from . import gchat_bot
 
 def index(request):
     form = forms.DomainSearchForm()
+    tlds = list(map(lambda z: z[0], sorted(zone_info.ZONES, key=lambda z: z[0])))
 
     return render(request, "domains/index.html", {
         "registration_enabled": settings.REGISTRATION_ENABLED,
-        "domain_form": form
+        "domain_form": form,
+        "tlds": json.dumps(tlds)
     })
 
 
@@ -1416,3 +1419,24 @@ def domain_transfer_confirm(request, order_id):
         request, transfer_order, "domains/transfer_domain_confirm.html", "domains/domain_transfer_pending.html"
     )
 
+
+@require_POST
+def internal_check_price(request):
+    search_action = request.POST.get("action")
+    search_domain = request.POST.get("domain")
+    if not search_domain or not search_action:
+        return HttpResponseBadRequest()
+
+    domain_info, sld = zone_info.get_domain_info(search_domain)
+    if not domain_info:
+        return HttpResponseBadRequest()
+
+    if search_action == "register":
+        price = domain_info.pricing.registration(sld)
+    else:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(json.dumps({
+        "price": float(price),
+        "message": domain_info.notice
+    }), content_type="application/json")

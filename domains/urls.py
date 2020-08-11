@@ -9,6 +9,7 @@ urlpatterns = [
     path('domains/suggest/', suggest.suggest_name, name='suggest_domain'),
     path('domains/suggest/personal/', suggest.suggest_personal_name, name='suggest_personal_domain'),
     path('domains/suggest/online/', suggest.suggest_online, name='suggest_online_domain'),
+    path('domains/check_price/', domain.internal_check_price, name='internal_check_price'),
     path('domains/', domain.domains, name='domains'),
     path('domains/new/', domain.domain_search, name='domain_search'),
     path('domains/new/<str:domain_name>/success/', domain.domain_search_success, name='domain_search_success'),
