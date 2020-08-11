@@ -1433,8 +1433,8 @@ def internal_check_price(request):
         return HttpResponseBadRequest()
 
     if search_action == "register":
-        price = domain_info.pricing.representative_registration(sld)
-        currency = domain_info.pricing.currency
+        price = domain_info.pricing.registration(sld)
+        currency = "GBP"
     else:
         return HttpResponseBadRequest()
 
