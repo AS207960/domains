@@ -5,6 +5,7 @@ import django_keycloak_auth.clients
 import keycloak
 import jose.jwt
 import dataclasses
+import datetime
 
 
 class BearerAuthentication(authentication.BaseAuthentication):
@@ -23,6 +24,17 @@ class BearerAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('Invalid token')
 
         user = get_user_model().objects.filter(username=claims["sub"]).first()
+        if not user:
+            oidc_profile = django_keycloak_auth.clients.update_or_create_user_and_oidc_profile(id_token_object=claims)
+            user = oidc_profile.user
+
+        try:
+            django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+        except django_keycloak_auth.clients.TokensExpired:
+            user.oidc_profile.access_token = token
+            user.oidc_profile.expires_before = datetime.datetime.fromtimestamp(claims["exp"])\
+                .replace(tzinfo=datetime.timezone.utc)
+            user.oidc_profile.save()
 
         return user, OAuthToken(token=token, claims=claims)
 

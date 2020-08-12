@@ -39,6 +39,7 @@ data:
   DB_NAME: "domains"
   BILLING_URL: "http://billing-nginx"
   HEXDNS_URL: "https://dns.glauca.digital"
+  FEEDBACK_URL: "http://feedback-nginx"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_HOST: "mx.postal.as207960.net"

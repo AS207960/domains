@@ -1,9 +1,6 @@
-Hello {{ name }},
-
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
 We have received your (or your DNS operator's) request to disable DNSSEC for the domain {{ domain.domain }} via CDS. This has now been processed.
 
 For the sneaky techy deets go read RFC8078 (https://tools.ietf.org/html/rfc8078)
-
-Thanks,
-The Glauca Team
-https://glauca.digital
+{% endblock content %}

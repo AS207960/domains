@@ -1,12 +1,9 @@
-Hello {{ name }},
-
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
 The following domains are expiring soon. No further action is required on your part, and we'll renew them
 a 7 days before the expiry date.
 
 {% for domain in domains %}
 - {{ domain.domain.name }} (expiring: {{ domain.expiry_date }})
 {% endfor %}
-
-Thanks,
-The Glauca Team
-https://glauca.digital
+{% endblock content %}

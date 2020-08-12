@@ -1,9 +1,6 @@
 {% extends "domains_email/email_base.html" %}
 {% block content %}
     <p>
-        Hello {{ name }},
-    </p>
-    <p>
         We have received your (or your DNS operator's) request to disable DNSSEC for the domain {{ domain.domain }}
         via CDS. This has now been processed.
     </p>
