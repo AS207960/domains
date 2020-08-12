@@ -13,7 +13,7 @@
             </div>
         </div>
     </section>
-    <div class="container my-3">
+    <div class="container my-3 pt-3 pt-md-5">
         <table class="table table-striped table-hover"  id="domain-prices">
             <thead class="thead-dark">
             <tr>
@@ -43,7 +43,18 @@
         $(document).ready( function () {
             $('#domain-prices').DataTable({
                 responsive: true,
-                pageLength: 25
+                pageLength: 25,
+                columns: [{
+                    type: "string"
+                }, {
+                    type: "any-number"
+                }, {
+                    type: "any-number"
+                }, {
+                    type: "any-number"
+                }, {
+                    type: "any-number"
+                }]
             });
         } );
     </script>

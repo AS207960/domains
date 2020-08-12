@@ -24,6 +24,8 @@
     <orderEntry type="library" name="webcomponents-loader" level="application" />
     <orderEntry type="library" name="name-studio" level="application" />
     <orderEntry type="library" name="index" level="application" />
+    <orderEntry type="library" name="any-number" level="application" />
+    <orderEntry type="library" name="responsive.bootstrap4" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
