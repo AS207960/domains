@@ -541,18 +541,53 @@ def process_domain_transfer_contacts(transfer_order_id):
         return
 
     domain_data = apps.epp_client.get_domain(domain_transfer_order.domain)
+
+    update_req = apps.epp_api.domain_pb2.DomainUpdateRequest(
+        name=domain_data.name,
+    )
+    should_send = False
     if zone.registrant_supported:
         registrant_id = domain_transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
-        domain_data.set_registrant(registrant_id.registry_contact_id)
+        if domain_data.registrant != registrant_id.registry_contact_id:
+            update_req.new_registrant.value = registrant_id.registry_contact_id
+            should_send = True
+
+    def _update_contact(contact_type, new_id):
+        global should_send
+        old_contact = next(filter(lambda c: c.contact_type == contact_type, domain_data.contacts), None)
+
+        if old_contact:
+            if old_contact.contact_id == new_id:
+                return
+            update_req.remove.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+                contact=apps.epp_api.domain_pb2.Contact(
+                    type=contact_type,
+                    id=old_contact.contact_id
+                )
+            ))
+
+        update_req.add.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+            contact=apps.epp_api.domain_pb2.Contact(
+                type=contact_type,
+                id=new_id
+            )
+        ))
+        should_send = True
+
     if domain_transfer_order.tech_contact and zone.tech_supported:
         tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(domain_data.registry_name)
-        domain_data.set_tech(tech_contact_id.registry_contact_id)
+        _update_contact("tech", tech_contact_id.registry_contact_id)
+
     if domain_transfer_order.admin_contact and zone.admin_supported:
         admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(domain_data.registry_name)
-        domain_data.set_admin(admin_contact_id.registry_contact_id)
+        _update_contact("tech", admin_contact_id.registry_contact_id)
+
     if domain_transfer_order.billing_contact and zone.billing_supported:
         billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name)
-        domain_data.set_billing(billing_contact_id.registry_contact_id)
+        _update_contact("tech", billing_contact_id.registry_contact_id)
+
+    if should_send:
+        apps.epp_client.stub.DomainUpdate(update_req)
 
 
 @shared_task(

@@ -424,6 +424,8 @@ class Domain:
         rem = []
         add = []
         if old_contact:
+            if old_contact.contact_id == contact_id:
+                return False
             rem.append(domain_pb2.DomainUpdateRequest.Param(
                     contact=domain_pb2.Contact(
                         type=contact_type,
