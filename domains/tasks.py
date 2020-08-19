@@ -642,9 +642,12 @@ def set_dns_to_own(domain_id):
 
     hosts = ["ns1.as207960.net", "ns2.as207960.net"]
 
-    cus_ns = list(map(lambda ns: ns.host_obj, domain_data.name_servers))
+    cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
 
-    if cus_ns == hosts:
+    rem_hosts = list(filter(lambda a: a not in hosts, cur_ns))
+    add_hosts = list(filter(lambda a: a not in cur_ns, hosts))
+
+    if (not rem_hosts) and (not add_hosts):
         return
 
     for host in hosts:
@@ -657,12 +660,14 @@ def set_dns_to_own(domain_id):
     apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
         name=domain_data.name,
         remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-            nameserver=h.to_pb()
-        ), domain_data.name_servers)),
+            nameserver=apps.epp_api.domain_pb2.NameServer(
+                host_obj=h
+            )
+        ), rem_hosts)),
         add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
             nameserver=apps.epp_api.domain_pb2.NameServer(
                 host_obj=h
             )
-        ), hosts))
+        ), add_hosts))
     ))
 
