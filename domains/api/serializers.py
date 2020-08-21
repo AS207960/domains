@@ -941,10 +941,10 @@ class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
     def to_representation(self, instance: models.AbstractOrder):
         ret = {
             "url": self.fields["url"].to_representation(instance),
-            "id": self.fields["id"].to_representation(instance.pk),
-            "redirect_uri": self.fields["redirect_uri"].to_representation(instance.redirect_uri)
+            "id": self.fields["id"].to_representation(instance),
+            "redirect_uri": self.fields["redirect_uri"].to_representation(instance)
             if instance.redirect_uri else None,
-            "last_error": self.fields["last_error"].to_representation(instance.last_error)
+            "last_error": self.fields["last_error"].to_representation(instance)
             if instance.last_error else None,
             "off_session": instance.off_session,
             "price": instance.price
@@ -1057,11 +1057,11 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
         ret = super().to_representation(instance)
 
         ret = dict(**ret, **{
-            "domain": self.fields["domain"].to_representation(instance.domain),
-            "domain_id": self.fields["domain_id"].to_representation(instance.domain_id),
-            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
+            "domain": self.fields["domain"].to_representation(instance),
+            "domain_id": self.fields["domain_id"].to_representation(instance),
+            "domain_obj": self.fields["domain_obj"].to_representation(instance)
             if instance.domain_obj else None,
-            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance)
             if instance.domain_obj else None,
             "registrant": self.fields["registrant"].to_representation(instance.registrant_contact),
             "registrant_url": self.fields["registrant_url"].to_representation(instance.registrant_contact),
