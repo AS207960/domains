@@ -32,7 +32,7 @@ def mail_registered(registration_order_id):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain registration", f"domain_registration_order_{domain.id}"
+            f"{domain.domain} domain registration", domain.id
         )
 
         context = {
@@ -62,7 +62,7 @@ def mail_register_failed(registration_order_id, reason: str = None):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain registration", f"domain_registration_order_{domain.id}"
+            f"{domain.domain} domain registration", domain.id
         )
 
         context = {
@@ -92,7 +92,7 @@ def mail_transferred(transfer_order_id):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain transfer", f"domain_transfer_order_{domain.id}"
+            f"{domain.domain} domain transfer", domain.id
         )
 
         context = {
@@ -121,7 +121,7 @@ def mail_transfer_failed(transfer_order_id, reason: str = None):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain transfer", f"domain_transfer_order_{domain.id}"
+            f"{domain.domain} domain transfer", domain.id
         )
 
         context = {
@@ -151,7 +151,7 @@ def mail_restored(restore_order_id):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain restoration", f"domain_restore_order_{domain.id}"
+            f"{domain.domain} domain restoration", domain.id
         )
 
         context = {
@@ -180,7 +180,7 @@ def mail_restore_failed(restore_order_id, reason: str = None):
     user = domain.get_user()
     if user:
         feedback_url = get_feedback_url(
-            f"{domain.domain} domain restoration", f"domain_restore_order_{domain.id}"
+            f"{domain.domain} domain restoration", domain.id
         )
 
         context = {

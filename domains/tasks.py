@@ -4,7 +4,6 @@ from django.conf import settings
 from django.shortcuts import reverse
 from . import models, zone_info, apps
 from .views import billing, gchat_bot, emails
-import time
 import grpc
 
 logger = get_task_logger(__name__)
@@ -117,7 +116,7 @@ def process_domain_registration(self, registration_order_id):
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
-        billing.reverse_charge(f"dm_{domain_registration_order.domain_id}")
+        billing.reverse_charge(domain_registration_order.domain_id)
         return
 
     try:
@@ -130,14 +129,14 @@ def process_domain_registration(self, registration_order_id):
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "Domain no longer available to purchase."
         domain_registration_order.save()
-        billing.reverse_charge(f"dm_{domain_registration_order.domain_id}")
+        billing.reverse_charge(domain_registration_order.domain_id)
         return
 
     should_return = handle_charge(
         domain_registration_order,
         user.username,
         f"{domain_registration_order.domain} domain registration",
-        f"dm_{domain_registration_order.domain_id}",
+        domain_registration_order.domain_id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'domain_register_confirm', args=(domain_registration_order.id, )
         )
@@ -206,7 +205,7 @@ def process_domain_registration(self, registration_order_id):
                 domain_registration_order.state = domain_registration_order.STATE_FAILED
                 domain_registration_order.last_error = rpc_error.details()
                 domain_registration_order.save()
-                billing.reverse_charge(f"dm_{domain_registration_order.domain_id}")
+                billing.reverse_charge(domain_registration_order.domain_id)
                 logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()}")
                 return
         else:
@@ -273,7 +272,7 @@ def process_domain_registration_failed(registration_order_id):
 
     emails.mail_register_failed.delay(domain_registration_order.id)
 
-    billing.reverse_charge(f"dm_{domain_registration_order.domain_id}")
+    billing.reverse_charge(domain_registration_order.domain_id)
     domain_registration_order.state = domain_registration_order.STATE_FAILED
     domain_registration_order.save()
 
@@ -297,7 +296,7 @@ def process_domain_renewal(self, renewal_order_id):
         domain_renewal_order.state = domain_renewal_order.STATE_FAILED
         domain_renewal_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_renewal_order.domain}")
-        billing.reverse_charge(f"dm_renew_{domain_renewal_order.domain_obj.id}")
+        billing.reverse_charge(domain_renewal_order.domain_obj.id)
         return
 
     try:
@@ -310,7 +309,7 @@ def process_domain_renewal(self, renewal_order_id):
         domain_renewal_order,
         user.username,
         f"{domain_renewal_order.domain} domain renewal",
-        f"dm_renew_{domain_renewal_order.domain_obj.id}",
+        domain_renewal_order.domain_obj.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'renew_domain_confirm', args=(domain_renewal_order.id, )
         )
@@ -328,7 +327,7 @@ def process_domain_renewal(self, renewal_order_id):
             domain_renewal_order.state = domain_renewal_order.STATE_FAILED
             domain_renewal_order.last_error = rpc_error.details()
             domain_renewal_order.save()
-            billing.reverse_charge(f"dm_renew_{domain_renewal_order.domain_obj.id}")
+            billing.reverse_charge(domain_renewal_order.domain_obj.id)
             logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
             return
 
@@ -360,14 +359,14 @@ def process_domain_restore(self, restore_order_id):
         domain_restore_order.state = domain_restore_order.STATE_FAILED
         domain_restore_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_restore_order.domain}")
-        billing.reverse_charge(f"dm_restore_{domain_restore_order.domain_obj.id}")
+        billing.reverse_charge(domain_restore_order.domain_obj.id)
         return
 
     should_return = handle_charge(
         domain_restore_order,
         user.username,
         f"{domain_restore_order.domain} domain restore",
-        f"dm_restore_{domain_restore_order.domain_obj.id}",
+        domain_restore_order.domain_obj.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'restore_domain_confirm', args=(domain_restore_order.id, )
         )
@@ -388,7 +387,7 @@ def process_domain_restore(self, restore_order_id):
                 domain_restore_order.state = domain_restore_order.STATE_FAILED
                 domain_restore_order.last_error = rpc_error.details()
                 domain_restore_order.save()
-                billing.reverse_charge(f"dm_restore_{domain_restore_order.domain_obj.id}")
+                billing.reverse_charge(domain_restore_order.domain_obj.id)
                 logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()}")
                 return
 
@@ -441,7 +440,7 @@ def process_domain_restore_failed(restore_order_id):
 
     emails.mail_restore_failed.delay(domain_restore_order.id)
 
-    billing.reverse_charge(f"dm_restore_{domain_restore_order.domain_obj.id}")
+    billing.reverse_charge(domain_restore_order.domain_obj.id)
     domain_restore_order.state = domain_restore_order.STATE_FAILED
     domain_restore_order.save()
 
@@ -460,14 +459,14 @@ def process_domain_transfer(self, transfer_order_id):
         domain_transfer_order.state = domain_transfer_order.STATE_FAILED
         domain_transfer_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
-        billing.reverse_charge(f"dm_transfer_{domain_transfer_order.domain_id}")
+        billing.reverse_charge(domain_transfer_order.domain_id)
         return
 
     should_return = handle_charge(
         domain_transfer_order,
         user.username,
         f"{domain_transfer_order.domain} domain transfer",
-        f"dm_{domain_transfer_order.domain_id}",
+        domain_transfer_order.domain_id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'domain_transfer_confirm', args=(domain_transfer_order.id, )
         )
@@ -484,7 +483,7 @@ def process_domain_transfer(self, transfer_order_id):
                     domain_transfer_order.auth_code
                 )
             except grpc.RpcError as rpc_error:
-                billing.reverse_charge(f"dm_transfer_{domain_transfer_order.domain_id}")
+                billing.reverse_charge(domain_transfer_order.domain_id)
                 domain_transfer_order.state = domain_transfer_order.STATE_FAILED
                 domain_transfer_order.last_error = rpc_error.details()
                 logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
@@ -508,7 +507,7 @@ def process_domain_transfer(self, transfer_order_id):
             try:
                 _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
             except grpc.RpcError as rpc_error:
-                billing.reverse_charge(f"dm_transfer_{domain_transfer_order.domain_id}")
+                billing.reverse_charge(domain_transfer_order.domain_id)
                 domain_transfer_order.state = domain_transfer_order.STATE_FAILED
                 domain_transfer_order.last_error = rpc_error.details()
                 domain_transfer_order.save()
@@ -628,7 +627,7 @@ def process_domain_transfer_failed(transfer_order_id):
 
     emails.mail_transfer_failed.delay(domain_transfer_order.id)
 
-    billing.reverse_charge(f"dm_transfer_{domain_transfer_order.domain_id}")
+    billing.reverse_charge(domain_transfer_order.domain_id)
     domain_transfer_order.state = domain_transfer_order.STATE_FAILED
     domain_transfer_order.save()
 

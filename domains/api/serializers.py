@@ -331,7 +331,7 @@ class NameServer:
 
 class NameServerSerializer(serializers.Serializer):
     url = serializers.HyperlinkedIdentityField(view_name='nameserver-detail', lookup_field='id', lookup_url_kwarg='pk')
-    id = serializers.UUIDField(read_only=True)
+    id = serializers.CharField(read_only=True)
     name_server = serializers.CharField(max_length=255)
     statuses = serializers.ListField(
         child=serializers.CharField(),
@@ -551,7 +551,7 @@ class DomainPeriodSerializer(serializers.Serializer):
 
 class DomainSerializer(serializers.Serializer):
     url = serializers.HyperlinkedIdentityField(view_name='domain-detail', lookup_field='id', lookup_url_kwarg='pk')
-    id = serializers.UUIDField(read_only=True)
+    id = serializers.CharField(read_only=True)
     domain = serializers.CharField(max_length=255, read_only=True)
     statuses = serializers.ListField(
         child=serializers.CharField(read_only=True),

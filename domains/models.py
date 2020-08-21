@@ -14,6 +14,7 @@ import grpc
 import secrets
 import typing
 import threading
+import as207960_utils.models
 
 CONTACT_SEARCH = threading.Lock()
 NAME_SERVER_SEARCH = threading.Lock()
@@ -40,88 +41,9 @@ def make_id():
     return secrets.token_urlsafe(12)[:16].upper()
 
 
-def sync_resource_to_keycloak(self, display_name, resource_type, scopes, urn, view_name, super_save, args, kwargs):
-    uma_client = django_keycloak_auth.clients.get_uma_client()
-    token = django_keycloak_auth.clients.get_access_token()
-    created = False
-
-    if not self.pk:
-        created = True
-    super_save(*args, **kwargs)
-
-    create_kwargs = {
-        "name": f"{resource_type}_{self.id}",
-        "displayName": f"{display_name}: {str(self)}",
-        "ownerManagedAccess": True,
-        "scopes": scopes,
-        "type": urn,
-        "uri": reverse(view_name, args=(self.id,)) if view_name else None,
-    }
-
-    if created or not self.resource_id:
-        if self.user:
-            create_kwargs['owner'] = self.user.username
-
-        d = uma_client.resource_set_create(
-            token,
-            **create_kwargs
-        )
-        self.resource_id = d['_id']
-        super_save(*args, **kwargs)
-    else:
-        uma_client.resource_set_update(
-            token,
-            id=self.resource_id,
-            **create_kwargs
-        )
-
-
-def delete_resource(resource_id):
-    uma_client = django_keycloak_auth.clients.get_uma_client()
-    token = django_keycloak_auth.clients.get_access_token()
-    uma_client.resource_set_delete(token, resource_id)
-
-
-def get_object_ids(access_token, resource_type, action):
-    scope_name = f"{action}-{resource_type}"
-    permissions = django_keycloak_auth.clients.get_authz_client().get_permissions(access_token)
-    permissions = permissions.get("permissions", [])
-    permissions = filter(
-        lambda p: scope_name in p.get('scopes', []) and p.get('rsname', "").startswith(f"{resource_type}_"),
-        permissions
-    )
-    object_ids = list(map(lambda p: p['rsname'][len(f"{resource_type}_"):], permissions))
-    return object_ids
-
-
-def eval_permission(token, resource, scope, submit_request=False):
-    resource = str(resource)
-    permissions = django_keycloak_auth.clients.get_authz_client().get_permissions(
-        token=token,
-        resource_scopes_tuples=[(resource, scope)],
-        submit_request=submit_request
-    )
-
-    for permission in permissions.get('permissions', []):
-        for scope in permission.get('scopes', []):
-            if permission.get('rsid') == resource and scope == scope:
-                return True
-
-    return False
-
-
-def get_resource_owner(resource_id):
-    uma_client = django_keycloak_auth.clients.get_uma_client()
-    token = django_keycloak_auth.clients.get_access_token()
-    resource = uma_client.resource_set_read(token, resource_id)
-    owner = resource.get("owner", {}).get("id")
-    user = get_user_model().objects.filter(username=owner).first()
-    return user
-
-
 class ContactAddress(models.Model):
     user: settings.AUTH_USER_MODEL
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = as207960_utils.models.TypedUUIDField('domains_contactaddress', primary_key=True)
     description = models.CharField(max_length=255)
     name = models.CharField(max_length=255, validators=[validators.MinLengthValidator(4)])
     birthday = models.DateField(blank=True, null=True)
@@ -137,7 +59,7 @@ class ContactAddress(models.Model):
     disclose_name = models.BooleanField(default=False, blank=True)
     disclose_organisation = models.BooleanField(default=False, blank=True)
     disclose_address = models.BooleanField(default=False, blank=True)
-    resource_id = models.UUIDField(null=True)
+    resource_id = models.UUIDField(null=True, db_index=True)
 
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
@@ -152,7 +74,7 @@ class ContactAddress(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, 'contact-address', action))
+        return cls.objects.filter(resource_id__in=as207960_utils.models.get_object_ids(access_token, 'contact-address', action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
@@ -162,12 +84,12 @@ class ContactAddress(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-contact-address"
-        return eval_permission(access_token, self.resource_id, scope_name)
+        return as207960_utils.models.eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
-        sync_resource_to_keycloak(
+        as207960_utils.models.sync_resource_to_keycloak(
             self,
-            display_name="Contact address", resource_type="contact-address", scopes=[
+            display_name="Contact address", scopes=[
                 'view-contact-address',
                 'edit-contact-address',
                 'delete-contact-address',
@@ -178,7 +100,7 @@ class ContactAddress(models.Model):
 
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
-        delete_resource(self.resource_id)
+        as207960_utils.models.delete_resource(self.resource_id)
 
     def can_delete(self):
         return self.local_contacts.count() + self.int_contacts.count() == 0
@@ -239,7 +161,7 @@ class Contact(models.Model):
         (30, "Other Public Community"),
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = as207960_utils.models.TypedUUIDField('domains_contact', primary_key=True)
     description = models.CharField(max_length=255)
     local_address = models.ForeignKey(
         ContactAddress,
@@ -268,7 +190,7 @@ class Contact(models.Model):
     disclose_phone = models.BooleanField(default=False, blank=True)
     disclose_fax = models.BooleanField(default=False, blank=True)
     disclose_email = models.BooleanField(default=False, blank=True)
-    resource_id = models.UUIDField(null=True)
+    resource_id = models.UUIDField(null=True, db_index=True)
 
     class Meta:
         ordering = ['description']
@@ -279,7 +201,7 @@ class Contact(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, 'contact', action))
+        return cls.objects.filter(resource_id__in=as207960_utils.models.get_object_ids(access_token, 'contact', action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
@@ -289,15 +211,15 @@ class Contact(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-contact"
-        return eval_permission(access_token, self.resource_id, scope_name)
+        return as207960_utils.models.eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
         if not kwargs.pop('skip_update_date', False):
             self.updated_date = timezone.now()
 
-        sync_resource_to_keycloak(
+        as207960_utils.models.sync_resource_to_keycloak(
             self,
-            display_name="Contact", resource_type="contact", scopes=[
+            display_name="Contact", scopes=[
                 'view-contact',
                 'edit-contact',
                 'delete-contact',
@@ -339,7 +261,7 @@ class Contact(models.Model):
                 raise InternalError(error)
             i.delete()
 
-        delete_resource(self.resource_id)
+        as207960_utils.models.delete_resource(self.resource_id)
         super().delete(*args, **kwargs)
 
     def get_registry_id(self, registry_id: str):
@@ -491,10 +413,10 @@ class ContactRegistry(models.Model):
 
 
 class NameServer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = as207960_utils.models.TypedUUIDField('domains_nameserver', primary_key=True)
     name_server = models.CharField(max_length=255)
     registry_id = models.CharField(max_length=255)
-    resource_id = models.UUIDField(null=True)
+    resource_id = models.UUIDField(null=True, db_index=True)
 
     class Meta:
         ordering = ['name_server']
@@ -512,7 +434,7 @@ class NameServer(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, 'name-server', action))
+        return cls.objects.filter(resource_id__in=as207960_utils.models.get_object_ids(access_token, 'name-server', action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
@@ -522,12 +444,12 @@ class NameServer(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-name-server"
-        return eval_permission(access_token, self.resource_id, scope_name)
+        return as207960_utils.models.eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
-        sync_resource_to_keycloak(
+        as207960_utils.models.sync_resource_to_keycloak(
             self,
-            display_name="Name server", resource_type="name-server", scopes=[
+            display_name="Name server", scopes=[
                 'view-name-server',
                 'edit-name-server',
                 'delete-name-server',
@@ -538,7 +460,7 @@ class NameServer(models.Model):
 
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
-        delete_resource(self.resource_id)
+        as207960_utils.models.delete_resource(self.resource_id)
 
     def __str__(self):
         return self.name_server
@@ -561,7 +483,7 @@ class NameServer(models.Model):
 
 
 class DomainRegistration(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = as207960_utils.models.TypedUUIDField('domains_domainregistration', primary_key=True)
     domain = models.CharField(max_length=255)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     deleted = models.BooleanField(default=False, blank=True)
@@ -573,7 +495,7 @@ class DomainRegistration(models.Model):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_billing')
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_tech')
-    resource_id = models.UUIDField(null=True)
+    resource_id = models.UUIDField(null=True, db_index=True)
     last_billed = models.DateTimeField(default=timezone.datetime.min)
     last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
 
@@ -593,7 +515,7 @@ class DomainRegistration(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, 'domain', action))
+        return cls.objects.filter(resource_id__in=as207960_utils.models.get_object_ids(access_token, 'domain', action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
@@ -603,12 +525,12 @@ class DomainRegistration(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-domain"
-        return eval_permission(access_token, self.resource_id, scope_name)
+        return as207960_utils.models.eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
-        sync_resource_to_keycloak(
+        as207960_utils.models.sync_resource_to_keycloak(
             self,
-            display_name="Domain", resource_type="domain", scopes=[
+            display_name="Domain", scopes=[
                 'view-domain',
                 'edit-domain',
                 'delete-domain',
@@ -620,10 +542,10 @@ class DomainRegistration(models.Model):
 
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
-        delete_resource(self.resource_id)
+        as207960_utils.models.delete_resource(self.resource_id)
 
     def get_user(self):
-        return get_resource_owner(self.resource_id)
+        return as207960_utils.models.get_resource_owner(self.resource_id)
 
     @property
     def pending_restore(self):
@@ -652,14 +574,13 @@ class AbstractOrder(models.Model):
         (STATE_FAILED, "Failed")
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     state = models.CharField(max_length=1, default=STATE_PENDING, choices=STATES)
     charge_state_id = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=9)
     redirect_uri = models.TextField(blank=True, null=True)
     last_error = models.TextField(blank=True, null=True)
     off_session = models.BooleanField(blank=True, default=True)
-    resource_id = models.UUIDField(null=True)
+    resource_id = models.UUIDField(null=True, db_index=True)
 
     resource_type: str
     resource_urn: str
@@ -674,7 +595,7 @@ class AbstractOrder(models.Model):
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
-        return cls.objects.filter(pk__in=get_object_ids(access_token, cls.resource_type, action))
+        return cls.objects.filter(resource_id__in=as207960_utils.models.get_object_ids(access_token, cls.resource_type, action))
 
     @classmethod
     def has_class_scope(cls, access_token: str, action='view'):
@@ -684,12 +605,12 @@ class AbstractOrder(models.Model):
 
     def has_scope(self, access_token: str, action='view'):
         scope_name = f"{action}-{self.resource_type}"
-        return eval_permission(access_token, self.resource_id, scope_name)
+        return as207960_utils.models.eval_permission(access_token, self.resource_id, scope_name)
 
     def save(self, *args, **kwargs):
-        sync_resource_to_keycloak(
+        as207960_utils.models.sync_resource_to_keycloak(
             self,
-            display_name=self.resource_display_name, resource_type=self.resource_type, scopes=[
+            display_name=self.resource_display_name, scopes=[
                 f'view-{self.resource_type}',
                 f'edit-{self.resource_type}',
                 f'delete-{self.resource_type}',
@@ -700,12 +621,12 @@ class AbstractOrder(models.Model):
 
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
-        delete_resource(self.resource_id)
+        as207960_utils.models.delete_resource(self.resource_id)
 
     def get_user(self):
         if self.user:
             return self.user
-        return get_resource_owner(self.resource_id)
+        return as207960_utils.models.get_resource_owner(self.resource_id)
 
 
 class DomainRegistrationOrder(AbstractOrder):
@@ -713,8 +634,9 @@ class DomainRegistrationOrder(AbstractOrder):
     resource_urn = "urn:as207960:domains:registration_order"
     resource_display_name = "Registration order"
 
+    id = as207960_utils.models.TypedUUIDField(f'domains_domainregistrationorder', primary_key=True)
     domain = models.CharField(max_length=255)
-    domain_id = models.UUIDField(default=uuid.uuid4)
+    domain_id = as207960_utils.models.TypedUUIDField('domains_domainregistration')
     auth_info = models.CharField(max_length=255)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_registration_orders_registrant')
@@ -747,8 +669,9 @@ class DomainTransferOrder(AbstractOrder):
     resource_urn = "urn:as207960:domains:transfer_order"
     resource_display_name = "Transfer order"
 
+    id = as207960_utils.models.TypedUUIDField(f'domains_domaintransferorder', primary_key=True)
     domain = models.CharField(max_length=255)
-    domain_id = models.UUIDField(default=uuid.uuid4)
+    domain_id = as207960_utils.models.TypedUUIDField('domains_domainregistration')
     auth_code = models.CharField(max_length=255)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_registrant')
@@ -779,6 +702,7 @@ class DomainRenewOrder(AbstractOrder):
     resource_urn = "urn:as207960:domains:renew_order"
     resource_display_name = "Renew order"
 
+    id = as207960_utils.models.TypedUUIDField(f'domains_domainreneworder', primary_key=True)
     domain = models.CharField(max_length=255)
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
@@ -803,6 +727,7 @@ class DomainRestoreOrder(AbstractOrder):
     resource_urn = "urn:as207960:domains:restore_order"
     resource_display_name = "Restore order"
 
+    id = as207960_utils.models.TypedUUIDField(f'domains_domainrestoreorder', primary_key=True)
     domain = models.CharField(max_length=255)
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
 

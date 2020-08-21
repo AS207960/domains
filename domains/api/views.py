@@ -10,7 +10,8 @@ from concurrent.futures import ThreadPoolExecutor
 import django_keycloak_auth.clients
 import jwt
 import datetime
-from . import serializers, permissions, auth
+from as207960_utils.api import permissions, auth
+from . import serializers
 from .. import models, apps, zone_info, tasks
 
 
