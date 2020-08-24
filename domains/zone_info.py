@@ -887,7 +887,7 @@ else:
             MarkupPrice(2694, transfer=2694, restore=6480, currency=None, display_currency='EUR', tld='be', markup=decimal.Decimal("1.35"))
         )),
         ('space', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_RADIX,
             MarkupPrice(3893, transfer=3893, restore=13500, currency=None, display_currency='USD', tld='space', markup=decimal.Decimal("1.25"))
         )),
         ('fi', DomainInfo(
@@ -1000,6 +1000,10 @@ else:
         ('life', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='life', markup=decimal.Decimal("1.2"))
+        )),
+        ('business', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='business', markup=decimal.Decimal("1.3"))
         )),
         ('blog', DomainInfo(
             DomainInfo.REGISTRY_WHOIS_THERE,
