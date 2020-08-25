@@ -423,7 +423,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def DomainLookup(self, request: rdap_pb2.LookupRequest, context):
         domain_obj = models.DomainRegistration.objects.filter(
-            domain=request.query
+            domain__iexact=request.query
         ).first()  # type: models.DomainRegistration
         if not domain_obj:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -450,7 +450,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         if request.WhichOneof("query") == "name":
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             domain_objs = models.DomainRegistration.objects.filter(
-                domain__regex=f"^{regex}$"
+                domain__iregex=f"^{regex}$"
             )
         else:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -479,14 +479,14 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
     def EntityLookup(self, request: rdap_pb2.LookupRequest, context):
         try:
             contact_obj = models.Contact.objects.filter(
-                id=request.query
+                id__iexact=request.query
             ).first()  # type: models.Contact
         except django.core.exceptions.ValidationError:
             contact_obj = None
 
         if not contact_obj:
             registry_contact_obj = models.ContactRegistry.objects.filter(
-                registry_contact_id=request.query
+                registry_contact_id__iexact=request.query
             ).first()  # type: models.ContactRegistry
             if not registry_contact_obj:
                 response = rdap_pb2.EntityResponse(error=rdap_pb2.ErrorResponse(
@@ -507,11 +507,11 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         if request.WhichOneof("query") == "name":
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             contact_objs = models.Contact.objects.filter(
-                Q(local_address__name__regex=f"^{regex}$", local_address__disclose_name=True) |
-                Q(int_address__name__regex=f"^{regex}$", int_address__disclose_name=True) |
-                Q(local_address__organisation__regex=f"^{regex}$", local_address__disclose_organisation=True) |
-                Q(int_address__name__regex=f"^{regex}$", int_address__disclose_organisation=True) |
-                Q(trading_name__regex=f"^{regex}$")
+                Q(local_address__name__iregex=f"^{regex}$", local_address__disclose_name=True) |
+                Q(int_address__name__iregex=f"^{regex}$", int_address__disclose_name=True) |
+                Q(local_address__organisation__iregex=f"^{regex}$", local_address__disclose_organisation=True) |
+                Q(int_address__name__iregex=f"^{regex}$", int_address__disclose_organisation=True) |
+                Q(trading_name__iregex=f"^{regex}$")
             )
             for contact_obj in contact_objs:
                 if contact_obj.id not in entities:
@@ -528,7 +528,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             except django.core.exceptions.ValidationError:
                 pass
             registry_contact_objs = models.ContactRegistry.objects.filter(
-                registry_contact_id__regex=f"^{regex}$"
+                registry_contact_id__iregex=f"^{regex}$"
             )
             for registry_contact_obj in registry_contact_objs:
                 if registry_contact_obj.registry_contact_id not in entities:
@@ -552,7 +552,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def NameServerLookup(self, request: rdap_pb2.LookupRequest, context):
         name_server_obj = models.NameServer.objects.filter(
-            name_server=request.query
+            name_server__iexact=request.query
         ).first()  # type: models.NameServer
         if not name_server_obj:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -579,7 +579,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         if request.WhichOneof("query") == "name":
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             name_server_objs = models.NameServer.objects.filter(
-                name_server__regex=f"^{regex}$"
+                name_server__iregex=f"^{regex}$"
             )
         else:
             response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
