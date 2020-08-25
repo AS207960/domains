@@ -63,7 +63,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 contact.fax.extension = contact.fax_ext
                 entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
                     type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
-                    value=contact.phone.as_rfc3966
+                    value=contact.fax.as_rfc3966
                 ))
         else:
             entity.js_card.phones.extend([rdap_pb2.JSCard.Resource(
@@ -447,8 +447,9 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def DomainSearch(self, request: rdap_pb2.DomainSearchRequest, context):
         if request.WhichOneof("query") == "name":
+            regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             domain_objs = models.DomainRegistration.objects.filter(
-                domain__regex=re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
+                domain__regex=f"^{regex}$"
             )
         else:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -504,21 +505,22 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         entities = {}
 
         if request.WhichOneof("query") == "name":
-            request_regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
+            regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             contact_objs = models.Contact.objects.filter(
-                Q(local_address__name__regex=request_regex, local_address__disclose_name=True) |
-                Q(int_address__name__regex=request_regex, int_address__disclose_name=True) |
-                Q(local_address__organisation__regex=request_regex, local_address__disclose_organisation=True) |
-                Q(int_address__name__regex=request_regex, int_address__disclose_organisation=True) |
-                Q(trading_name__regex=request_regex)
+                Q(local_address__name__regex=f"^{regex}$", local_address__disclose_name=True) |
+                Q(int_address__name__regex=f"^{regex}$", int_address__disclose_name=True) |
+                Q(local_address__organisation__regex=f"^{regex}$", local_address__disclose_organisation=True) |
+                Q(int_address__name__regex=f"^{regex}$", int_address__disclose_organisation=True) |
+                Q(trading_name__regex=f"^{regex}$")
             )
             for contact_obj in contact_objs:
                 if contact_obj.id not in entities:
                     entities[contact_obj.id] = contact_obj
         elif request.WhichOneof("query") == "handle":
+            regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.handle).replace("*", ".*")
             try:
                 contact_objs = list(models.Contact.objects.filter(
-                    id__regex=re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.handle).replace("*", ".*")
+                    id__regex=f"^{regex}$"
                 ))
                 for contact_obj in contact_objs:
                     if contact_obj.id not in entities:
@@ -526,7 +528,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             except django.core.exceptions.ValidationError:
                 pass
             registry_contact_objs = models.ContactRegistry.objects.filter(
-                registry_contact_id__regex=re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.handle).replace("*", ".*")
+                registry_contact_id__regex=f"^{regex}$"
             )
             for registry_contact_obj in registry_contact_objs:
                 if registry_contact_obj.registry_contact_id not in entities:
@@ -575,8 +577,9 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def NameServerSearch(self, request: rdap_pb2.NameServerSearchRequest, context):
         if request.WhichOneof("query") == "name":
+            regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             name_server_objs = models.NameServer.objects.filter(
-                name_server__regex=re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
+                name_server__regex=f"^{regex}$"
             )
         else:
             response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
