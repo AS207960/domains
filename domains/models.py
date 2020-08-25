@@ -29,7 +29,7 @@ def make_secret():
     secret = "".join(secrets.choice(alphabet) for _ in range(12))
 
     for sa in (special, ascii_lowercase, digits, ascii_uppercase):
-        if not any(c in sa for c in sa):
+        if not any(c in secret for c in sa):
             secret += secrets.choice(sa)
         else:
             secret += secrets.choice(alphabet)
