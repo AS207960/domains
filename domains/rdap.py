@@ -113,9 +113,9 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         ))
 
         if not (
-                contact.local_address.disclose_name or contact.local_address.disclose_organisation
-                or contact.local_address.disclose_address or contact.disclose_email or contact.disclose_phone
-                or contact.disclose_fax
+                contact.local_address.disclose_name and contact.local_address.disclose_organisation
+                and contact.local_address.disclose_address and contact.disclose_email and contact.disclose_phone
+                and contact.disclose_fax
         ):
             entity.remarks.append(rdap_pb2.Remark(
                 title=google.protobuf.wrappers_pb2.StringValue(value="REDACTED FOR PRIVACY"),
