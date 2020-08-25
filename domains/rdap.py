@@ -4,6 +4,7 @@ import google.protobuf.timestamp_pb2
 import re
 import django.core.exceptions
 import datetime
+import concurrent.futures
 from django.db.models import Q
 from .rdap_grpc import rdap_pb2
 from .rdap_grpc import rdap_pb2_grpc
@@ -459,17 +460,16 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             ))
             return response
 
-        resp_data = []
-        for domain_obj in domain_objs:
-            try:
-                resp_data.append(self.domain_to_proto(domain_obj))
-            except grpc.RpcError as e:
-                response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
-                    error_code=500,
-                    title="Internal Server Error",
-                    description=e.details()
-                ))
-                return response
+        try:
+            with concurrent.futures.ThreadPoolExecutor() as p:
+                resp_data = list(p.map(self.domain_to_proto, domain_objs))
+        except grpc.RpcError as e:
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error",
+                description=e.details()
+            ))
+            return response
 
         response = rdap_pb2.DomainSearchResponse(success=rdap_pb2.DomainSearchResponse.Domains(
             data=resp_data
@@ -589,17 +589,16 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             ))
             return response
 
-        resp_data = []
-        for name_server_obj in name_server_objs:
-            try:
-                resp_data.append(self.name_server_to_proto(name_server_obj))
-            except grpc.RpcError as e:
-                response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
-                    error_code=500,
-                    title="Internal Server Error",
-                    description=e.details()
-                ))
-                return response
+        try:
+            with concurrent.futures.ThreadPoolExecutor() as p:
+                resp_data = list(p.map(self.name_server_to_proto, name_server_objs))
+        except grpc.RpcError as e:
+            response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error",
+                description=e.details()
+            ))
+            return response
 
         response = rdap_pb2.NameServerSearchResponse(success=rdap_pb2.NameServerSearchResponse.NameServers(
             data=resp_data
