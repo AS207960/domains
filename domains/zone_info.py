@@ -854,10 +854,10 @@ else:
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
             MarkupPrice(178, transfer=2160, restore=8460, currency=None, display_currency='USD', tld='radio.fm', markup=decimal.Decimal("1.7"))
         )),
-        ('gay', DomainInfo(
-            DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
-        )),
+        # ('gay', DomainInfo(
+        #     DomainInfo.REGISTRY_CENTRALNIC,
+        #     MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
+        # )),
         ('site', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
             MarkupPrice(5205, transfer=5205, restore=16500, currency=None, display_currency='USD', tld='site', markup=decimal.Decimal("1.25"))
