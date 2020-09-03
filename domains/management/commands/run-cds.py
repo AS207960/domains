@@ -74,7 +74,6 @@ class Command(BaseCommand):
                 print(f"Can't renew {domain.domain}: unknown zone")
                 continue
 
-            # TODO: Use nameservers from EPP rather than hard coded for testing
             try:
                 domain_data = apps.epp_client.get_domain(domain.domain)
             except grpc.RpcError as rpc_error:

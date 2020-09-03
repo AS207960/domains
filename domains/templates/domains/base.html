@@ -49,9 +49,6 @@
                                 <a class="nav-link" href="{% url 'admin_index' %}">EPP Client</a>
                             </li>
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="https://billing.as207960.net" target="_blank">Billing</a>
-                        </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'domain_prices' %}">Domain prices</a>
@@ -60,6 +57,9 @@
                             <a class="nav-link" href="{% url 'oidc_login' %}">Login</a>
                         </li>
                     {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://portal.glauca.digital" target="_blank">Service portal</a>
+                    </li>
                 </ul>
             </div>
         </div>
