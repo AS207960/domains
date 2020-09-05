@@ -856,7 +856,10 @@ else:
         )),
         # ('gay', DomainInfo(
         #     DomainInfo.REGISTRY_CENTRALNIC,
-        #     MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25"))
+        #     MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25")),
+        #     notice="The registry will be donating 20% of all registration revenue to LGBTQ non-profit organizations. "
+        #     "The .gay domain will remain safe, with anti-LGBTQ content strictly prohibited and may end in domain suspension, "
+        #     "s outlined in the .gay Rights Protections Policy."
         # )),
         ('site', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
