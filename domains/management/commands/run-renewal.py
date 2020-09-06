@@ -24,7 +24,8 @@ def mail_success(user, domains):
         subject='Domain renewal successful',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net']
+        bcc=['q@as207960.net'],
+        reply_to=['info@glauca.digital']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -42,7 +43,8 @@ def mail_upcoming(user, domains):
         subject='Upcoming domain renewals',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net']
+        bcc=['q@as207960.net'],
+        reply_to=['info@glauca.digital']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -60,7 +62,8 @@ def mail_failed(user, domains):
         subject='Domain renewal failed',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net']
+        bcc=['q@as207960.net'],
+        reply_to=['info@glauca.digital']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -78,7 +81,8 @@ def mail_deleted(user, domains):
         subject='Domain renewal failed - domains deleted',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net']
+        bcc=['q@as207960.net'],
+        reply_to=['info@glauca.digital']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
