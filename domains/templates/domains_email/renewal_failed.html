@@ -1,14 +1,26 @@
 {% extends "domains_email/email_base.html" %}
 {% block content %}
-    <p>
-        We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account
-        for them. We'll retry a few more times in the coming days, so be sure to top up your account!
-        If we can't charge your account by one day before the expiry date, then our shark minions will shed a tear as
-        they delete your domains.
-    </p>
-    <ul>
-        {% for domain in domains %}
-            <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for failure: {{ domain.error }}</li>
-        {% endfor %}
-    </ul>
+    <table style="border-spacing: 0;">
+        <tr>
+            <td>
+                <p>
+                    We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge
+                    your account
+                    for them. We'll retry a few more times in the coming days, so be sure to top up your account!
+                    If we can't charge your account by one day before the expiry date, then our shark minions will shed
+                    a tear as
+                    they delete your domains.
+                </p>
+                <ul>
+                    {% for domain in domains %}
+                        <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for
+                            failure: {{ domain.error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+            </td>
+        </tr>
+    </table>
 {% endblock %}

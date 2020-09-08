@@ -1,12 +1,22 @@
 {% extends "domains_email/email_base.html" %}
 {% block content %}
-    <p>
-        The following domains are expiring soon. No further action is required on your part, and we'll renew them
-        a 7 days before the expiry date.
-    </p>
-    <ul>
-        {% for domain in domains %}
-            <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }})</li>
-        {% endfor %}
-    </ul>
+    <table style="border-spacing: 0;">
+        <tr>
+            <td style="padding-right: 10px;">
+                <img src="https://as207960.net/assets/img/shark-curl.png" height="100" alt=""/>
+            </td>
+            <td>
+                <p>
+                    The following domains are expiring soon. No further action is required on your part, and we'll renew
+                    them
+                    a 7 days before the expiry date.
+                </p>
+                <ul>
+                    {% for domain in domains %}
+                        <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
 {% endblock %}
