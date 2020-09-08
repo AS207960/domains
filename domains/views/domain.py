@@ -188,6 +188,16 @@ def domain(request, domain_id):
     dnskey_form = forms.DomainDNSKeyDataForm(
         domain_id=domain_id
     )
+    
+    ds_form.fields['algorithm'].choices = list(filter(
+        lambda c: c[0] in domain_info.supported_dnssec_algorithms, ds_form.fields['algorithm'].choices
+    ))
+    dnskey_form.fields['algorithm'].choices = list(filter(
+        lambda c: c[0] in domain_info.supported_dnssec_algorithms, dnskey_form.fields['algorithm'].choices
+    ))
+    ds_form.fields['digest_type'].choices = list(filter(
+        lambda c: c[0] in domain_info.supported_dnssec_digests, ds_form.fields['digest_type'].choices
+    ))
 
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)

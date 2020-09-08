@@ -18,9 +18,6 @@ resolver = dns.resolver.Resolver(configure=False)
 resolver.nameservers = [socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]]
 resolver.port = settings.RESOLVER_PORT
 
-ALGORITHMS = (5, 7, 8, 10, 13, 14, 15, 16, 0)
-DIGEST_TYPES = (1, 2, 4, 0)
-
 
 def mail_update(user, domain, add_cds, rem_cds, is_ds):
     context = {
@@ -83,7 +80,6 @@ class Command(BaseCommand):
                 continue
 
             name_servers = list(map(lambda ns: ns.host_obj if ns.host_obj else ns.host_name, domain_data.name_servers))
-            # name_servers = ["ns1.as207960.net", "ns2.as207960.net"]
             domain_name = dns.name.from_text(domain.domain)
 
             if not name_servers:
@@ -255,7 +251,11 @@ class Command(BaseCommand):
                     continue
 
                 for cds in cds_set:
-                    if cds.algorithm not in ALGORITHMS or cds.digest_type not in DIGEST_TYPES:
+                    if not (
+                            cds.algorithm in domain_info.supported_dnssec_algorithms or cds.algorithm == 0
+                    ) or not (
+                            cds.digest_type in domain_info.supported_dnssec_digests or cds.digest_type == 0
+                    ):
                         print(f"{domain.domain} CDS uses invalid algorithm/digest")
                         continue
 

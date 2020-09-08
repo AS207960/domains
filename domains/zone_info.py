@@ -378,6 +378,22 @@ class DomainInfo:
         self.notice = notice
 
     @property
+    def supported_dnssec_algorithms(self):
+        if self.registry == self.REGISTRY_TRAFICOM:
+            return 7, 8, 10, 13
+        elif self.registry == self.REGISTRY_SWITCH:
+            return 8, 10, 13, 14
+        else:
+            return 5, 7, 8, 10, 13, 14, 15, 16
+
+    @property
+    def supported_dnssec_digests(self):
+        if self.registry == self.REGISTRY_SWITCH:
+            return 2, 4
+        else:
+            return 1, 2, 4
+
+    @property
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
@@ -1148,7 +1164,7 @@ else:
     )
 
 
-def get_domain_info(domain: str):
+def get_domain_info(domain: str) -> (typing.Optional[DomainInfo], str):
     parts = domain.rstrip(".").split(".", maxsplit=1)
     if len(parts) != 2:
         return None, domain
