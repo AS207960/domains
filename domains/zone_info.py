@@ -382,7 +382,7 @@ class DomainInfo:
         if self.registry == self.REGISTRY_TRAFICOM:
             return 7, 8, 10, 13
         elif self.registry == self.REGISTRY_SWITCH:
-            return 8, 10, 13, 14
+            return 8, 10, 13, 14, 15, 16
         else:
             return 5, 7, 8, 10, 13, 14, 15, 16
 
