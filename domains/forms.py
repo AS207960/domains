@@ -239,10 +239,13 @@ class DomainDSDataForm(forms.Form):
         (7, "RSASHA1-NSEC3-SHA1 (7) INSECURE"),
         (8, "RSA/SHA-256 (8)"),
         (10, "RSA/SHA-512 (10) NOT RECOMMENDED"),
+        (12, "GOST R 34.10-2001 (12)"),
         (13, "ECDSA Curve P-256 with SHA-256 (13)"),
         (14, "ECDSA Curve P-384 with SHA-384 (14)"),
         (15, "Ed25519 (15)"),
         (16, "Ed448 (16)"),
+        (253, "Private Algorithm - Domain Name (254)"),
+        (254, "Private Algorithm - OID (254)"),
     )
 
     DIGEST_TYPES = (
@@ -280,10 +283,13 @@ class DomainDNSKeyDataForm(forms.Form):
         (7, "RSASHA1-NSEC3-SHA1 (7) INSECURE"),
         (8, "RSA/SHA-256 (8)"),
         (10, "RSA/SHA-512 (10) NOT RECOMMENDED"),
+        (12, "GOST R 34.10-2001 (12)"),
         (13, "ECDSA Curve P-256 with SHA-256 (13)"),
         (14, "ECDSA Curve P-384 with SHA-384 (14)"),
         (15, "Ed25519 (15)"),
         (16, "Ed448 (16)"),
+        (253, "Private Algorithm - Domain Name (254)"),
+        (254, "Private Algorithm - OID (254)"),
     )
 
     flags = forms.IntegerField(min_value=0, max_value=65535, required=True)

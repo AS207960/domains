@@ -383,6 +383,8 @@ class DomainInfo:
             return 7, 8, 10, 13
         elif self.registry == self.REGISTRY_SWITCH:
             return 8, 10, 13, 14, 15, 16
+        elif self.registry == self.REGISTRY_VERISIGN:
+            return 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
         else:
             return 5, 7, 8, 10, 13, 14, 15, 16
 
