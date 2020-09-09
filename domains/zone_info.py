@@ -1026,6 +1026,10 @@ else:
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='business', markup=decimal.Decimal("1.3"))
         )),
+        ('pizza', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(9363, transfer=9363, restore=12960, currency=None, display_currency='USD', tld='pizza', markup=decimal.Decimal("1.2"))
+        )),
         ('blog', DomainInfo(
             DomainInfo.REGISTRY_WHOIS_THERE,
             MarkupPrice(4968, transfer=4968, restore=12960, currency=None, display_currency='USD', tld='blog', markup=decimal.Decimal("1.2"))
