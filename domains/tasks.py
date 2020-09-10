@@ -579,11 +579,11 @@ def process_domain_transfer_contacts(transfer_order_id):
 
     if domain_transfer_order.admin_contact and zone.admin_supported:
         admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(domain_data.registry_name)
-        _update_contact("tech", admin_contact_id.registry_contact_id)
+        _update_contact("admin", admin_contact_id.registry_contact_id)
 
     if domain_transfer_order.billing_contact and zone.billing_supported:
         billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name)
-        _update_contact("tech", billing_contact_id.registry_contact_id)
+        _update_contact("billing", billing_contact_id.registry_contact_id)
 
     if should_send:
         apps.epp_client.stub.DomainUpdate(update_req)
