@@ -655,7 +655,6 @@ def set_dns_to_own(domain_id):
         if host_available:
             apps.epp_client.create_host(host, [], domain_data.registry_name)
 
-    domain_data.add_host_objs(hosts)
     apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
         name=domain_data.name,
         remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
