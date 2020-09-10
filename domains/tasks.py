@@ -150,20 +150,21 @@ def process_domain_registration(self, registration_order_id):
 
     if domain_registration_order.state == domain_registration_order.STATE_PROCESSING:
         if zone.direct_registration_supported:
-            for host in ('ns1.as207960.net', 'ns2.as207960.net'):
-                try:
-                    host_available, _ = apps.epp_client.check_host(host, registry_id)
-                except grpc.RpcError as rpc_error:
-                    logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
-                    raise rpc_error
-
-                if host_available:
+            if zone.pre_create_host_objects:
+                for host in ('ns1.as207960.net', 'ns2.as207960.net'):
                     try:
-                        apps.epp_client.create_host(host, [], registry_id)
+                        host_available, _ = apps.epp_client.check_host(host, registry_id)
                     except grpc.RpcError as rpc_error:
-                        logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: "
-                                     f"{rpc_error.details()}")
+                        logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
                         raise rpc_error
+    
+                    if host_available:
+                        try:
+                            apps.epp_client.create_host(host, [], registry_id)
+                        except grpc.RpcError as rpc_error:
+                            logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: "
+                                         f"{rpc_error.details()}")
+                            raise rpc_error
 
             try:
                 contact_objs = []
@@ -642,6 +643,8 @@ def set_dns_to_own(domain_id):
     domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
     domain_data = apps.epp_client.get_domain(domain.domain)
 
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
     hosts = ["ns1.as207960.net", "ns2.as207960.net"]
 
     cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
@@ -652,11 +655,12 @@ def set_dns_to_own(domain_id):
     if (not rem_hosts) and (not add_hosts):
         return
 
-    for host in hosts:
-        host_available, _ = apps.epp_client.check_host(host, domain_data.registry_name)
-
-        if host_available:
-            apps.epp_client.create_host(host, [], domain_data.registry_name)
+    if domain_info.pre_create_host_objects:
+        for host in hosts:
+            host_available, _ = apps.epp_client.check_host(host, domain_data.registry_name)
+    
+            if host_available:
+                apps.epp_client.create_host(host, [], domain_data.registry_name)
 
     apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
         name=domain_data.name,

@@ -624,6 +624,17 @@ class DomainInfo:
             self.REGISTRY_MINDS_MACHINES,
         )
 
+    @property
+    def pre_create_host_objects(self):
+        return self.registry in (
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_TRAFICOM,
+            self.REGISTRY_AFILIAS,
+            self.REGISTRY_CENTRALNIC_CCTLD,
+            self.REGISTRY_VERISIGN,
+        )
+
 
 if settings.DEBUG:
     ZONES = (

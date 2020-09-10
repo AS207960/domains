@@ -783,9 +783,10 @@ class DomainSerializer(serializers.Serializer):
 
             for ns in add_name_servers:
                 if ns.host_object:
-                    host_available, _ = apps.epp_client.check_host(ns.host_object, instance.domain_obj.registry_name)
-                    if host_available:
-                        apps.epp_client.create_host(ns.host_object, [], instance.domain_obj.registry_name)
+                    if domain_info.pre_create_host_objects:
+                        host_available, _ = apps.epp_client.check_host(ns.host_object, instance.domain_obj.registry_name)
+                        if host_available:
+                            apps.epp_client.create_host(ns.host_object, [], instance.domain_obj.registry_name)
                     update_req.add.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
                         nameserver=apps.epp_api.domain_pb2.NameServer(
                             host_obj=ns.host_object

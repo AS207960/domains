@@ -528,6 +528,8 @@ def add_domain_host_obj(request, domain_id):
             "back_url": referrer
         })
 
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
     try:
         domain_data = apps.epp_client.get_domain(user_domain.domain)
     except grpc.RpcError as rpc_error:
@@ -553,25 +555,26 @@ def add_domain_host_obj(request, domain_id):
                 except idna.IDNAError:
                     pass
 
-        for host_obj in hosts:
-            try:
-                host_available, _ = apps.epp_client.check_host(host_obj, domain_data.registry_name)
-            except grpc.RpcError as rpc_error:
-                error = rpc_error.details()
-                return render(request, "domains/error.html", {
-                    "error": error,
-                    "back_url": referrer
-                })
-
-            if host_available:
+        if domain_info.pre_create_host_objects:
+            for host_obj in hosts:
                 try:
-                    apps.epp_client.create_host(host_obj, [], domain_data.registry_name)
+                    host_available, _ = apps.epp_client.check_host(host_obj, domain_data.registry_name)
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                     return render(request, "domains/error.html", {
                         "error": error,
                         "back_url": referrer
                     })
+
+                if host_available:
+                    try:
+                        apps.epp_client.create_host(host_obj, [], domain_data.registry_name)
+                    except grpc.RpcError as rpc_error:
+                        error = rpc_error.details()
+                        return render(request, "domains/error.html", {
+                            "error": error,
+                            "back_url": referrer
+                        })
 
         try:
             domain_data.add_host_objs(hosts)
