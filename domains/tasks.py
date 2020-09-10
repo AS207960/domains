@@ -13,7 +13,10 @@ logger = get_task_logger(__name__)
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
 def update_contact(contact_registry_id):
-    contact_obj = models.ContactRegistry.objects.get(id=contact_registry_id)  # type: models.ContactRegistry
+    contact_obj = models.ContactRegistry.objects.filter(id=contact_registry_id).first  # type: models.ContactRegistry
+    if not contact_obj:
+        return
+    
     instance = contact_obj.contact
     try:
         contact = apps.epp_client.get_contact(contact_obj.registry_contact_id, contact_obj.registry_id)
