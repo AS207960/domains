@@ -2,11 +2,14 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% load static %}
+{% block title %}Get a domain for your online presence{% endblock %}
+{% block description %}Already have an online presence but want to up your game? Let us suggest a perfect domain to suit you.{% endblock %}
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0">
                 <h1 class="display-4">Get a domain for your online presence</h1>
+                <p>Already have an online presence but want to up your game? Let us suggest a perfect domain to suit you.</p>
                 <hr class="my-4">
                 {% if error %}
                     <div class="alert alert-danger" role="alert">

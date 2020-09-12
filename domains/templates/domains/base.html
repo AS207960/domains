@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Glauca Domains</title>
+    <title>{% block title %}{% endblock %} | Glauca Domains</title>
     <meta name="description" content="Glauca domain management">
 
     <link rel="icon" href="https://as207960.net/favicon.svg">
@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="https://as207960.net/assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap4.min.css">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@GlaucaDigital">
+    <meta name="og:url" content="https://domains.glauca.digital/">
+    <meta property="og:site_name" content="Glauca">
+    <meta name="og:locale" content="en_GB">
+    <meta name="og:type" content="website">
+    <meta name="twitter:image" content="https://as207960.net/assets/img/logo2.png">
+    <meta name="og:image" content="https://as207960.net/assets/img/logo2.png">
+    <meta name="description" content="{% block description %}{% endblock %}">
 </head>
 <body>
 <header>

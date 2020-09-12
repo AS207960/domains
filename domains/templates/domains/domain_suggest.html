@@ -2,11 +2,14 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% load static %}
+{% block title %}Get your perfect domain{% endblock %}
+{% block description %}Get your perfect domain from Glauca. Let us help you find your online identity.{% endblock %}
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0">
                 <h1 class="display-4">Get your perfect domain</h1>
+                <p>Get your perfect domain from Glauca. Let us help you find your online identity.</p>
                 <hr class="my-4">
                 {% if error %}
                     <div class="alert alert-danger" role="alert">

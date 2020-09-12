@@ -2,11 +2,14 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% load static %}
+{% block title %}Get a domain for your personal presence{% endblock %}
+{% block description %}Want your own space on the internet? Find the perfect personal domain from Glauca.{% endblock %}
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0">
                 <h1 class="display-4">Get your personal domain</h1>
+                <p>Want your own space on the internet? Find the perfect personal domain from Glauca.</p>
                 <hr class="my-4">
                 {% if error %}
                     <div class="alert alert-danger" role="alert">
