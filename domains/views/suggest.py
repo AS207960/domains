@@ -18,8 +18,11 @@ def suggest_name(request):
     suggestions = None
     error = None
 
-    if request.method == "POST":
-        form = forms.NameSearchForm(request.POST)
+    if request.method == "POST" or "domain" in request.GET:
+        if request.method == "POST":
+            form = forms.NameSearchForm(request.POST)
+        else:
+            form = forms.NameSearchForm(request.GET)
         if form.is_valid():
             ip_addr = get_ip(request)
             try:
