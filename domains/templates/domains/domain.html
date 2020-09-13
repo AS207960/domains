@@ -190,6 +190,10 @@
                         <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-primary btn-sm">
                             &#x1f4df; Setup for HexDNS
                         </a>
+                    {% else %}
+                        <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-secondary btn-sm">
+                            &#x1f440; View in HexDNS
+                        </a>
                     {% endif %}
                 </div>
             </div>
