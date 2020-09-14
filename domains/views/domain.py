@@ -1086,7 +1086,7 @@ def domain_register(request, domain_name):
         "domain_name": domain_unicode,
         "price_decimal": price_decimal,
         "zone_notice": zone_notice,
-        "currency": zone_price.currency,
+        "currency": "GBP",
         "zone_info": zone,
         "error": error
     })
@@ -1261,7 +1261,7 @@ def renew_domain(request, domain_id):
         "zone_info": zone,
         "domain_form": form,
         "price_decimal": price_decimal,
-        "currency": zone_price.currency,
+        "currency": "GBP",
     })
 
 
