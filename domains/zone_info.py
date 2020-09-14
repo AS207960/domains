@@ -883,13 +883,13 @@ else:
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
             MarkupPrice(178, transfer=2160, restore=8460, currency=None, display_currency='USD', tld='radio.fm', markup=decimal.Decimal("1.7"))
         )),
-        # ('gay', DomainInfo(
-        #     DomainInfo.REGISTRY_CENTRALNIC,
-        #     MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25")),
-        #     notice="The registry will be donating 20% of all registration revenue to LGBTQ non-profit organizations. "
-        #     "The .gay domain will remain safe, with anti-LGBTQ content strictly prohibited and may end in domain suspension, "
-        #     "s outlined in the .gay Rights Protections Policy."
-        # )),
+        ('gay', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(6480, transfer=6480, restore=37500, currency=None, display_currency='USD', tld='gay', markup=decimal.Decimal("1.25")),
+            notice="The registry will be donating 20% of all registration revenue to LGBTQ non-profit organizations. "
+            "The .gay domain will remain safe, with anti-LGBTQ content strictly prohibited and may end in domain suspension, "
+            "outlined in the .gay Rights Protections Policy."
+        )),
         ('site', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
             MarkupPrice(5205, transfer=5205, restore=16500, currency=None, display_currency='USD', tld='site', markup=decimal.Decimal("1.25"))
