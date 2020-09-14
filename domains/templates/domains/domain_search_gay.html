@@ -1,0 +1,76 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Register a domain{% endblock %}
+{% block content %}
+    <section class="stripe ">
+        <div class="container py-3">
+            <div class="jumbotron my-0 py-5">
+                <h1 class="display-4">
+                    Register your <img src="{% static 'domains/img/dotGay__CMYK.svg' %}" alt=".gay" style="height: 3.5rem"> domain
+                </h1>
+                <p>
+                    For LGBTQ individuals, organizations, businesses and their allies, <span style="color: #ed1162">.gay</span>
+                    serves as a virtual Pride flag and inclusive badge of honor. A <span style="color: #ed1162">.gay</span>
+                    domain helps everyone, whether small business, global organization or individual ally, express their
+                    support and celebration of LGBTQ communities.
+                </p>
+                <hr class="my-4">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Error!</h4>
+                        <p>There was an error processing your request</p>
+                        <hr>
+                        <p class="mb-0">{{ error }}</p>
+                    </div>
+                {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <div class="col-10 pr-0">
+                            <input type="text" name="domain" placeholder="yourdomain"
+                                                      maxlength="63" class="form-control"
+                                                      required="">
+                        </div>
+                        <div class="col-2 pl-2">
+                            <img src="{% static 'domains/img/dotGay__CMYK.svg' %}" alt=".gay"
+                                 style="height: 38px; padding-top: 7px">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="submit" value="Search" class="btn btn-primary">
+                        <a href="{% url 'domain_prices' %}" class="btn btn-info" target="_blank">Prices</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <div class="container my-3 pt-3 pt-md-5">
+        <p>
+            20% of .gay’s new registration revenue (not just profit!) will be donated to address important issues facing
+            LGBTQ communities. We’re proud to share that the inaugural beneficiary partners include GLAAD and
+            CenterLink.
+        </p>
+        <h2>Acceptable use and .gay rights protection policy</h2>
+        <p>
+            This policy exists to discourage homophobic, or anti-LGBTQ usage and provide specific remedies for domains
+            that intentionally use .gay to malign or harm LGBTQ individuals or groups.
+        </p>
+        <p>
+            To read more about proper codes of conduct and/or report abuse, please visit the
+            <a href="https://toplevel.design/policy">.gay Rights Protections Policy</a>.
+        </p>
+        <p>
+            Verified reports of violations can result in the domain being suspended, preventing the site from resolving.
+            Also, .gay will prohibit registrations to parties that are, or are associated with, recognized hate groups.
+            Additionally, .gay domains with forum websites must have enforcement policies and capabilities to respond to
+            contributor behavior that violates the above.
+        </p>
+    </div>
+    <style>
+        section.stripe::before {
+            background: linear-gradient(100deg, #ed1b2e, #f15a32, #fcb215, #65bc45, #0ba998, #1769b3, #6d318e, #ed1162);
+            animation: stripe 10s ease-in-out alternate infinite;
+        }
+    </style>
+{% endblock %}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('domains/check_price/', domain.internal_check_price, name='internal_check_price'),
     path('domains/', domain.domains, name='domains'),
     path('domains/new/', domain.domain_search, name='domain_search'),
+    path('domains/new_gay/', domain.domain_search_gay, name='domain_search_gay'),
     path('domains/new/<str:domain_name>/success/', domain.domain_search_success, name='domain_search_success'),
     path('domains/register/<str:domain_name>/', domain.domain_register, name='domain_register'),
     path('domains/transfer/', domain.domain_transfer_query, name='domain_transfer_query'),

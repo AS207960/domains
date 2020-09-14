@@ -917,42 +917,53 @@ def domain_hexdns(request, domain_id):
     return redirect(f"{settings.HEXDNS_URL}/setup_domains_zone/?domain_token={domain_jwt}")
 
 
+def _domain_search(request, domain_name):
+    try:
+        domain_idna = domain_name.encode('idna').decode()
+    except UnicodeError as e:
+        return "invalid", f"Invalid Unicode: {e}"
+    else:
+        zone, sld = zone_info.get_domain_info(domain_idna)
+        if zone:
+            pending_domain = models.DomainRegistration.objects.filter(
+                domain=domain_name
+            ).first()
+            if pending_domain:
+                return "invalid", "Domain unavailable"
+            else:
+                try:
+                    available, reason, _ = apps.epp_client.check_domain(domain_idna)
+                except grpc.RpcError as rpc_error:
+                    return "error", rpc_error.details()
+                else:
+                    if not available:
+                        if not reason:
+                            return "invalid", "Domain unavailable"
+                        else:
+                            return "invalid", f"Domain unavailable: {reason}"
+                    else:
+                        if request.user.is_authenticated:
+                            return "resp", redirect('domain_register', domain_idna)
+                        else:
+                            return "resp", redirect('domain_search_success', domain_idna)
+        else:
+            return "invalid", "Unsupported or invalid domain"
+
+
 def domain_search(request):
     error = None
 
     if request.method == "POST":
         form = forms.DomainSearchForm(request.POST)
         if form.is_valid():
-            try:
-                domain_idna = form.cleaned_data['domain'].encode('idna').decode()
-            except UnicodeError as e:
-                form.add_error('domain', f"Invalid Unicode: {e}")
-            else:
-                zone, sld = zone_info.get_domain_info(domain_idna)
-                if zone:
-                    pending_domain = models.DomainRegistration.objects.filter(
-                        domain=form.cleaned_data['domain']
-                    ).first()
-                    if pending_domain:
-                        form.add_error('domain', "Domain unavailable")
-                    else:
-                        try:
-                            available, reason, _ = apps.epp_client.check_domain(domain_idna)
-                        except grpc.RpcError as rpc_error:
-                            error = rpc_error.details()
-                        else:
-                            if not available:
-                                if not reason:
-                                    form.add_error('domain', "Domain unavailable")
-                                else:
-                                    form.add_error('domain', f"Domain unavailable: {reason}")
-                            else:
-                                if request.user.is_authenticated:
-                                    return redirect('domain_register', domain_idna)
-                                else:
-                                    return redirect('domain_search_success', domain_idna)
-                else:
-                    form.add_error('domain', "Unsupported or invalid domain")
+            resp = _domain_search(request, form.cleaned_data['domain'])
+            if resp is not None:
+                if resp[0] == "error":
+                    error = resp[1]
+                elif resp[0] == "invalid":
+                    form.add_error('domain', resp[1])
+                elif resp[0] == "resp":
+                    return resp[1]
     else:
         form = forms.DomainSearchForm(initial={
             "domain": request.GET.get("domain")
@@ -960,6 +971,27 @@ def domain_search(request):
 
     return render(request, "domains/domain_search.html", {
         "domain_form": form,
+        "error": error
+    })
+
+
+def domain_search_gay(request):
+    error = None
+
+    if request.method == "POST":
+        form = forms.DomainSearchForm(request.POST)
+        if form.is_valid():
+            domain_name = f"{form.cleaned_data['domain']}.gay"
+            resp = _domain_search(request, domain_name)
+            if resp is not None:
+                if resp[0] == "error":
+                    error = resp[1]
+                elif resp[0] == "invalid":
+                    error = resp[1]
+                elif resp[0] == "resp":
+                    return resp[1]
+
+    return render(request, "domains/domain_search_gay.html", {
         "error": error
     })
 
