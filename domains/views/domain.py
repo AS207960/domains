@@ -1036,7 +1036,6 @@ def domain_register(request, domain_name):
         domain_unicode = domain_name
 
     zone_price, registry_name, zone_notice = zone.pricing, zone.registry, zone.notice
-    price_decimal = zone_price.representative_registration()
 
     if request.method == "POST":
         form = forms.DomainRegisterForm(
@@ -1079,6 +1078,8 @@ def domain_register(request, domain_name):
             zone=zone,
             user=request.user
         )
+
+    price_decimal = zone_price.registration(sld)
 
     return render(request, "domains/domain_form.html", {
         "domain_form": form,
@@ -1214,7 +1215,6 @@ def renew_domain(request, domain_id):
         raise Http404
 
     zone_price, _ = zone.pricing, zone.registry
-    price_decimal = zone_price.representative_renewal()
 
     if request.method == "POST":
         form = forms.DomainRenewForm(
@@ -1252,6 +1252,8 @@ def renew_domain(request, domain_id):
             return redirect('renew_domain_confirm', order.id)
     else:
         form = forms.DomainRenewForm(zone_info=zone)
+
+    price_decimal = zone_price.renewal(sld)
 
     return render(request, "domains/renew_domain.html", {
         "domain": user_domain,
