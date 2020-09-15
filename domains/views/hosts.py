@@ -6,6 +6,8 @@ import grpc
 import idna
 import django_keycloak_auth.clients
 import ipaddress
+import urllib.parse
+from django.conf import settings
 from .. import models, apps, forms
 
 
@@ -50,6 +52,14 @@ def host(request, host_id):
             "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
+
+    sharing_data = {
+        "referrer": settings.OIDC_CLIENT_ID,
+        "referrer_uri": request.build_absolute_uri()
+    }
+    sharing_data_uri = urllib.parse.urlencode(sharing_data)
+    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/resource/" \
+                  f"{user_host.resource_id}?{sharing_data_uri}"
 
     error = None
     host_data = None
@@ -102,6 +112,7 @@ def host(request, host_id):
         "address_form": address_form,
         "error": error,
         "host_id": user_host.id,
+        "sharing_uri": sharing_uri,
     })
 
 

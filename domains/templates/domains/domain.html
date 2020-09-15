@@ -66,6 +66,7 @@
             <div class="col">
                 <p>
                     <div class="btn-group">
+                        <a href="{{ sharing_uri }}" class="btn btn-primary">&#x1f91d; Share</a>
                         {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
                             <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
                         {% else %}

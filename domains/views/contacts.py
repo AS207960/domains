@@ -2,7 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 import django_keycloak_auth.clients
 import django.db
+import urllib.parse
 from django.utils import timezone
+from django.conf import settings
 from .. import models, forms
 
 
@@ -82,6 +84,14 @@ def edit_contact(request, contact_id):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('addresses')
 
+    sharing_data = {
+        "referrer": settings.OIDC_CLIENT_ID,
+        "referrer_uri": request.build_absolute_uri()
+    }
+    sharing_data_uri = urllib.parse.urlencode(sharing_data)
+    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/resource/" \
+                  f"{user_contact.resource_id}?{sharing_data_uri}"
+
     if request.method == "POST":
         form = forms.ContactForm(request.POST, user=request.user, instance=user_contact)
         if form.is_valid():
@@ -98,7 +108,8 @@ def edit_contact(request, contact_id):
 
     return render(request, "domains/contact_form.html", {
         "contact_form": form,
-        "title": "Edit contact"
+        "title": "Edit contact",
+        "sharing_uri": sharing_uri
     })
 
 
@@ -201,6 +212,14 @@ def edit_address(request, address_id):
             "back_url": referrer
         })
 
+    sharing_data = {
+        "referrer": settings.OIDC_CLIENT_ID,
+        "referrer_uri": request.build_absolute_uri()
+    }
+    sharing_data_uri = urllib.parse.urlencode(sharing_data)
+    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/resource/" \
+                  f"{user_address.resource_id}?{sharing_data_uri}"
+
     if request.method == "POST":
         form = forms.AddressForm(request.POST, instance=user_address)
         if form.is_valid():
@@ -217,7 +236,8 @@ def edit_address(request, address_id):
 
     return render(request, "domains/address_form.html", {
         "contact_form": form,
-        "title": "Edit address"
+        "title": "Edit address",
+        "sharing_uri": sharing_uri
     })
 
 

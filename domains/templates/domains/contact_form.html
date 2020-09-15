@@ -4,6 +4,12 @@
 {% block content %}
     <div class="container my-3">
         <h1>{{ title }}</h1>
+        {% if sharing_uri %}
+            <div class="btn-group my-3">
+                <a href="{{ sharing_uri }}" class="btn btn-info">&#x1f91d; Share</a>
+            </div>
+        {% endif %}
+        <hr>
         {% crispy contact_form contact_form.helper %}
     </div>
 {% endblock %}

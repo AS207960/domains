@@ -8,6 +8,13 @@
             <div class="col">
                 <b>Host name: </b> {{ host }}
             </div>
+            {% if sharing_uri %}
+                <div class="col">
+                    <div class="btn-group my-3">
+                        <a href="{{ sharing_uri }}" class="btn btn-info">&#x1f91d; Share</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <hr>
         {% if error %}

@@ -35,6 +35,7 @@
                                 <div class="btn-group">
                                     <a href="{% url 'edit_contact' contact.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a>
                                     <a href="{% url 'delete_contact' contact.id %}" class="btn btn-danger btn-sm">&#x1f5d1; Delete</a>
+                                    <a href="{{ contact.sharing_uri }}" class="btn btn-info btn-sm">&#x1f91d; Share</a>
                                 </div>
                             </td>
                         </tr>

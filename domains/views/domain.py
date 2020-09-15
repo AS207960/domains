@@ -9,6 +9,7 @@ import grpc
 import idna
 import jwt
 import json
+import urllib.parse
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
@@ -140,6 +141,14 @@ def domain(request, domain_id):
             "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
+
+    sharing_data = {
+        "referrer": settings.OIDC_CLIENT_ID,
+        "referrer_uri": request.build_absolute_uri()
+    }
+    sharing_data_uri = urllib.parse.urlencode(sharing_data)
+    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/resource/" \
+                  f"{user_domain.resource_id}?{sharing_data_uri}"
 
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
@@ -306,7 +315,8 @@ def domain(request, domain_id):
         "ds_form": ds_form,
         "dnskey_form": dnskey_form,
         "registration_enabled": settings.REGISTRATION_ENABLED,
-        "is_hexdns": is_hexdns
+        "is_hexdns": is_hexdns,
+        "sharing_uri": sharing_uri
     })
 
 
