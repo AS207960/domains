@@ -921,6 +921,7 @@ def domain_hexdns(request, domain_id):
         "iss": "urn:as207960:domains",
         "aud": ["urn:as207960:hexdns"],
         "domain": user_domain.domain,
+        "domain_id": user_domain.id,
         "sub": request.user.username,
     }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
 
