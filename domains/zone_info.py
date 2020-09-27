@@ -371,6 +371,8 @@ class DomainInfo:
     REGISTRY_CORE = "core"
     REGISTRY_CLUB_DOMAINS = "club-domains"
     REGISTRY_MINDS_MACHINES = "minds-machines"
+    REGISTRY_ICB = "ICB"
+    REGISTRY_CO = "CO"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -447,6 +449,8 @@ class DomainInfo:
             self.REGISTRY_AFILIAS,
             self.REGISTRY_MINDS_MACHINES,
             self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_ICB,
+            self.REGISTRY_CO,
         )
 
     @property
@@ -548,6 +552,8 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_ICB,
+            self.REGISTRY_CO,
         )
 
     @property
@@ -584,6 +590,8 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_ICB,
+            self.REGISTRY_CO,
         )
 
     @property
@@ -622,6 +630,8 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_ICB,
+            self.REGISTRY_CO,
         )
 
     @property
@@ -755,6 +765,10 @@ else:
             unit=0,
             value=1
         )]))),
+        ('me', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(2839, transfer=2839, currency=None, display_currency='EUR', tld='me', markup=decimal.Decimal("1.3"))
+        )),
         ('pw', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
             MarkupPrice(2700, transfer=2700, currency=None, display_currency='USD', tld='pw', markup=decimal.Decimal("1.7"))
@@ -1021,6 +1035,10 @@ else:
             DomainInfo.REGISTRY_UNITED_TLD,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='studio', markup=decimal.Decimal("1.3"))
         )),
+        ('rocks', DomainInfo(
+            DomainInfo.REGISTRY_UNITED_TLD,
+            MarkupPrice(2513, transfer=2513, restore=15120, currency=None, display_currency='USD', tld='rocks', markup=decimal.Decimal("1.4"))
+        )),
         ('mobi', DomainInfo(
             DomainInfo.REGISTRY_MTLD,
             MarkupPrice(3234, transfer=3234, restore=14040, currency=None, display_currency='USD', tld='mobi', markup=decimal.Decimal("1.3"))
@@ -1041,6 +1059,22 @@ else:
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(9363, transfer=9363, restore=12960, currency=None, display_currency='USD', tld='pizza', markup=decimal.Decimal("1.2"))
         )),
+        ('systems', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='systems', markup=decimal.Decimal("1.3"))
+        )),
+        ('guide', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(5252, transfer=5252, restore=12960, currency=None, display_currency='USD', tld='guide', markup=decimal.Decimal("1.2"))
+        )),
+        ('email', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='email', markup=decimal.Decimal("1.3"))
+        )),
+        # ('academy', DomainInfo(
+        #     DomainInfo.REGISTRY_DONUTS,
+        #     MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='academy', markup=decimal.Decimal("1.2"))
+        # )),
         ('blog', DomainInfo(
             DomainInfo.REGISTRY_WHOIS_THERE,
             MarkupPrice(4968, transfer=4968, restore=12960, currency=None, display_currency='USD', tld='blog', markup=decimal.Decimal("1.2"))
@@ -1177,6 +1211,29 @@ else:
                 value=2
             )]),
             notice="This TLD is restricted to businesses in the telecommunications sector in the UK."
+        )),
+        ('scot', DomainInfo(
+            DomainInfo.REGISTRY_CORE,
+            MarkupPrice(4752, transfer=4752, restore=18000, currency=None, display_currency='GBP', tld='scot', markup=decimal.Decimal("1.2"))
+        )),
+        ('io', DomainInfo(
+            DomainInfo.REGISTRY_ICB,
+            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='io', markup=decimal.Decimal("1.2"))
+        )),
+        ('ac', DomainInfo(
+            DomainInfo.REGISTRY_ICB,
+            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='ac', markup=decimal.Decimal("1.2"))
+        )),
+        ('sh', DomainInfo(
+            DomainInfo.REGISTRY_ICB,
+            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='sh', markup=decimal.Decimal("1.2"))
+        )),
+        ('co', DomainInfo(
+            DomainInfo.REGISTRY_CO,
+            MarkupPrice(4352, transfer=4352, restore=14040, currency=None, display_currency='USD', tld='co', markup=decimal.Decimal("1.3"), periods=map(lambda i: apps.epp_api.Period(
+                unit=0,
+                value=i
+            ), range(1, 6)))
         )),
     )
 
