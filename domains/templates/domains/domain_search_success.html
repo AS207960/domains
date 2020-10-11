@@ -1,11 +1,19 @@
 {% extends 'domains/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block title %}Register {{ domain }}{% endblock %}
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0 py-5">
-                <h1 class="display-4">Your domain is available!</h1>
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <h1 class="display-4">Your domain is available!</h1>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <img src="https://as207960.net/assets/img/shark-heart.svg" alt="" class="mw-100">
+                    </div>
+                </div>
             </div>
         </div>
     </section>

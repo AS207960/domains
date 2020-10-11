@@ -8,18 +8,22 @@
             <div class="jumbotron my-0">
                 <h1 class="display-4">Glauca Domains</h1>
                 <hr class="my-4">
+                <div class="btn-group">
+                    {% if user.is_authenticated %}
+                        <a class="btn btn-primary btn-lg" href="{% url 'domains' %}" role="button">Manage your
+                            domains</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-lg" href="{% url 'oidc_login' %}" role="button">Login to manage
+                            your domains</a>
+                    {% endif %}
+                    <a class="btn btn-info btn-lg" href="{% url 'domain_prices' %}" role="button">Our prices</a>
+                </div>
+                {% if registration_enabled %}
                     <div class="btn-group">
-                        {% if user.is_authenticated %}
-                            <a class="btn btn-primary btn-lg" href="{% url 'domains' %}" role="button">Manage your domains</a>
-{#                            {% if registration_enabled %}#}
-{#                                <a class="btn btn-success btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>#}
-{#                                <a class="btn btn-secondary btn-lg" href="{% url 'domain_transfer_query' %}" role="button">Transfer a domain</a>#}
-{#                            {% endif %}#}
-                        {% else %}
-                            <a class="btn btn-primary btn-lg" href="{% url 'oidc_login' %}" role="button">Login to manage your domains</a>
-                        {% endif %}
-                        <a class="btn btn-info btn-lg" href="{% url 'domain_prices' %}" role="button">Our prices</a>
+                                <a class="btn btn-success btn-lg" href="{% url 'domain_search' %}" role="button">Register a new domain</a>
+                                <a class="btn btn-secondary btn-lg" href="{% url 'domain_transfer_query' %}" role="button">Transfer a domain</a>
                     </div>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -47,7 +51,7 @@
         </div>
     </div>
     <div class="container my-3">
-       <h1>Try our new domain spinner</h1>
+        <h1>Try our new domain spinner</h1>
         <noscript>
             <p>
                 Unfortunately this requires JavaScript to be enabled, sorry.
@@ -91,7 +95,7 @@
                 var detail = evt.detail;
                 var api = evt.target.api;
                 if (detail.type === "ready") {
-                    api.subscribe(api.phases.RESULT_READY, function(evt) {
+                    api.subscribe(api.phases.RESULT_READY, function (evt) {
                         evt.value.forEach(function (domain) {
                             var data = new FormData();
                             data.append('domain', domain);
@@ -114,4 +118,16 @@
             })
         </script>
     </div>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://domains.glauca.digital",
+          "potentialAction": [{
+            "@type": "SearchAction",
+            "target": "https://domains.glauca.digital/domains/suggest/?domain={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }]
+        }
+    </script>
 {% endblock %}
