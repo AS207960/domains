@@ -8,7 +8,7 @@
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0">
-                <h1 class="display-4">Get your personal domain</h1>
+                <h1 class="display-4">Get your <span class="text-gradient teal-indigo">personal</span> domain<span class="text-gradient teal-indigo">.</span></h1>
                 <p>Want your own space on the internet? Find the perfect personal domain from Glauca.</p>
                 <hr class="my-4">
                 {% if error %}
@@ -19,7 +19,7 @@
                         <p class="mb-0">{{ error }}</p>
                     </div>
                 {% endif %}
-                <h2>Search for a name...</h2>
+                <h2>Search for a name<span class="text-gradient teal-indigo">...</span></h2>
                 {% crispy name_form name_form.helper %}
             </div>
         </div>
