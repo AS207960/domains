@@ -25,7 +25,7 @@ def mail_success(user, domains):
         body=txt_content,
         to=[user.email],
         bcc=['q@as207960.net'],
-        reply_to=['info@glauca.digital']
+        reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -44,7 +44,7 @@ def mail_upcoming(user, domains):
         body=txt_content,
         to=[user.email],
         bcc=['q@as207960.net'],
-        reply_to=['info@glauca.digital']
+        reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -63,7 +63,7 @@ def mail_failed(user, domains):
         body=txt_content,
         to=[user.email],
         bcc=['q@as207960.net'],
-        reply_to=['info@glauca.digital']
+        reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()
@@ -82,7 +82,7 @@ def mail_deleted(user, domains):
         body=txt_content,
         to=[user.email],
         bcc=['q@as207960.net'],
-        reply_to=['info@glauca.digital']
+        reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
     email.send()

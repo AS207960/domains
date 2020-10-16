@@ -215,7 +215,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                     value="tel:+44-29-2010-2455"
                 )],
                 emails=[rdap_pb2.JSCard.Resource(
-                    value="info@as207960.net"
+                    value="hello@as207960.net"
                 )],
                 online=[rdap_pb2.JSCard.Resource(
                     type=google.protobuf.wrappers_pb2.StringValue(value="uri"),
