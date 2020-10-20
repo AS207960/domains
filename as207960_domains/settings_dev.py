@@ -180,6 +180,7 @@ EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 BILLING_URL = "http://localhost:8001"
 HEXDNS_URL = "http://localhost:8002"
 FEEDBACK_URL = "http://localhost:8003"
+PAT_URL = "http://localhost:8004"
 
 RESOLVER_ADDR = "2a0d:1a40:7900::2"
 RESOLVER_PORT = 53
@@ -196,6 +197,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'as207960_utils.api.auth.BearerAuthentication',
+        'as207960_utils.api.auth.PATAuthentication',
         'as207960_utils.api.auth.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [

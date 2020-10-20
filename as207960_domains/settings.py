@@ -204,7 +204,7 @@ VERISIGN_NS_API_KEY = os.getenv("VERISIGN_NS_API_KEY")
 BILLING_URL = os.getenv("BILLING_URL")
 HEXDNS_URL = os.getenv("HEXDNS_URL")
 FEEDBACK_URL = os.getenv("FEEDBACK_URL")
-
+PAT_URL = os.getenv("PAT_URL")
 
 CELERY_RESULT_BACKEND = "rpc://"
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
@@ -225,6 +225,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'as207960_utils.api.auth.BearerAuthentication',
+        'as207960_utils.api.auth.PATAuthentication',
+        'as207960_utils.api.auth.SessionAuthentication',
+    ] if PAT_URL else [
         'as207960_utils.api.auth.BearerAuthentication',
         'as207960_utils.api.auth.SessionAuthentication',
     ],
