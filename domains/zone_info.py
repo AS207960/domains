@@ -1764,10 +1764,6 @@ else:
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3529, transfer=3529, restore=14040, currency=None, display_currency='USD', tld='rip', markup=decimal.Decimal("1.3"))
         )),
-        ('rocks', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(2513, transfer=2513, restore=15120, currency=None, display_currency='USD', tld='rocks', markup=decimal.Decimal("1.4"))
-        )),
         ('run', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='run', markup=decimal.Decimal("1.3"))
