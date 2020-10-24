@@ -1842,7 +1842,7 @@ else:
         )),
         ('support', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(3794, transfer=3794, restore=14040 currency=None, display_currency='USD', tld='support', markup=decimal.Decimal("1.3"))
+            MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='support', markup=decimal.Decimal("1.3"))
         )),
         ('surgery', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
