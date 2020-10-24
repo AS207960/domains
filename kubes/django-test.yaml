@@ -199,7 +199,7 @@ spec:
         - name: celery
           image: as207960/domains-django:(version)
           imagePullPolicy: Always
-          command: ["celery", "worker", "-A", "as207960_domains", "--loglevel=INFO", "-c", "32"]
+          command: ["celery", "-A", "as207960_domains", "worker", "--loglevel=INFO", "-c", "32"]
           volumeMounts:
             - mountPath: "/app/static/"
               name: static
