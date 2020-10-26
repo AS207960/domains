@@ -371,6 +371,7 @@ class DomainInfo:
     REGISTRY_CORE = "core"
     REGISTRY_CLUB_DOMAINS = "club-domains"
     REGISTRY_MINDS_MACHINES = "minds-machines"
+    REGISTRY_INFIBEAM = "infibeam"
     REGISTRY_ICB = "ICB"
     REGISTRY_CO = "CO"
 
@@ -448,6 +449,7 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_AFILIAS,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_INFIBEAM,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
@@ -552,6 +554,7 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
         )
@@ -590,6 +593,7 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
         )
@@ -630,6 +634,7 @@ class DomainInfo:
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
+            self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
         )
@@ -2139,6 +2144,10 @@ else:
                 unit=0,
                 value=i
             ), range(1, 6)))
+        )),
+        ('ooo', DomainInfo(
+            DomainInfo.REGISTRY_INFIBEAM,
+            MarkupPrice(4954, transfer=4953, restore=20160, currency=None, display_currency='USD', tld='ooo', markup=decimal.Decimal("1.2"))
         )),
     )
 
