@@ -82,10 +82,10 @@ def domain_price_query(request):
 def domains(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domains = models.DomainRegistration.get_object_list(access_token)
-    registration_orders = models.DomainRegistrationOrder.get_object_list(access_token)
-    transfer_orders = models.DomainTransferOrder.get_object_list(access_token)
-    renew_orders = models.DomainRenewOrder.get_object_list(access_token)
-    restore_orders = models.DomainRestoreOrder.get_object_list(access_token)
+    registration_orders = models.DomainRegistrationOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
+    transfer_orders = models.DomainTransferOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
+    renew_orders = models.DomainRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
+    restore_orders = models.DomainRestoreOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     error = None
 
     active_domains = []
