@@ -17,6 +17,7 @@ urlpatterns = [
     path('domains/register/<str:domain_name>/', domain.domain_register, name='domain_register'),
     path('domains/transfer/', domain.domain_transfer_query, name='domain_transfer_query'),
     path('domains/transfer/<str:domain_name>/', domain.domain_transfer, name='domain_transfer'),
+    path('domains/transfer/<str:domain_name>/success/', domain.domain_transfer_search_success, name='domain_transfer_search_success'),
     path('domains/register_confirm/<str:order_id>/', domain.domain_register_confirm, name='domain_register_confirm'),
     path('domains/transfer_confirm/<str:order_id>/', domain.domain_transfer_confirm, name='domain_transfer_confirm'),
     path('domains/restore_confirm/<str:order_id>/', domain.restore_domain_confirm, name='restore_domain_confirm'),
