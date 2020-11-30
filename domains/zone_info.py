@@ -297,7 +297,7 @@ class MarkupPrice:
         msg_response = billing_pb2.ConvertCurrencyResponse()
         msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString()))
 
-        fee = (decimal.Decimal(msg_response.amount) * decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
+        fee = (decimal.Decimal(msg_response.amount) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
         return fee
 
     def _get_fee(self, sld, value, unit, command):
