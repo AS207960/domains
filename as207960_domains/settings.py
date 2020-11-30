@@ -214,6 +214,8 @@ CELERY_ACCEPT_CONTENT = ["json"]
 RESOLVER_ADDR = os.getenv("RESOLVER_ADDR")
 RESOLVER_PORT = int(os.getenv("RESOLVER_PORT"))
 
+RABBITMQ_RPC_URL = os.getenv("RABBITMQ_RPC_URL")
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

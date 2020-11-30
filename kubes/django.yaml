@@ -126,6 +126,8 @@ spec:
             - secretRef:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
+            - secretRef:
+                name: domains-rpc
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)

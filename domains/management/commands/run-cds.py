@@ -125,7 +125,7 @@ class Command(BaseCommand):
                         if ds.digest == cds.digest:
                             found_dnskeys.add(key)
 
-                if not found_dnskeys:
+                if not found_dnskeys or not data_set:
                     raise dns.dnssec.ValidationFailure("no suitable DNSKEYs")
 
                 dns.dnssec.validate(data_set, rrsig, {
