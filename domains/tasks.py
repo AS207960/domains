@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from . import models, zone_info, apps
 from .views import billing, gchat_bot, emails
 import grpc
+from .proto import billing_pb2
 
 logger = get_task_logger(__name__)
 
@@ -100,27 +101,80 @@ def handle_charge(order: models.AbstractOrder, username, descriptor, charge_id, 
     return False
 
 
+def charge_order(order: models.AbstractOrder, username, descriptor, charge_id, return_uri, notif_queue=None) -> bool:
+    if order.state == order.STATE_FAILED:
+        logger.info(f"{descriptor} failed")
+        return True
+    elif order.state in (order.STATE_COMPLETED, order.STATE_PENDING_APPROVAL):
+        logger.info(f"{descriptor} already complete")
+        return True
+
+    if not order.charge_state_id:
+        charge_state = billing.charge_account(
+            username,
+            order.price,
+            descriptor,
+            charge_id,
+            off_session=order.off_session,
+            return_uri=return_uri,
+            notif_queue=notif_queue
+        )
+        order.charge_state_id = charge_state.charge_state_id
+        order.save()
+        if not charge_state.success:
+            if charge_state.redirect_uri:
+                order.state = order.STATE_NEEDS_PAYMENT
+                order.redirect_uri = charge_state.redirect_uri
+            else:
+                order.state = order.STATE_FAILED
+                order.last_error = charge_state.error
+                order.redirect_uri = None
+                order.save()
+                logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
+
+        order.save()
+
+
 @shared_task(
-    bind=True, autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None,
-    default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
-def process_domain_registration(self, registration_order_id):
+def process_domain_registration(registration_order_id):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
     user = domain_registration_order.get_user()
 
-    period = apps.epp_api.Period(
-        value=domain_registration_order.period_value,
-        unit=domain_registration_order.period_unit
-    )
-
-    zone, sld = zone_info.get_domain_info(domain_registration_order.domain)
+    zone, _ = zone_info.get_domain_info(domain_registration_order.domain)
     if not zone:
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
         billing.reverse_charge(domain_registration_order.domain_id)
         return
+
+    charge_order(
+        order=domain_registration_order,
+        username=user.username,
+        descriptor=f"{domain_registration_order.domain} domain registration",
+        charge_id=domain_registration_order.domain_id,
+        return_uri=settings.EXTERNAL_URL_BASE + reverse(
+            'domain_register_confirm', args=(domain_registration_order.id,)
+        ),
+        notif_queue="domains_registration_billing_notif"
+    )
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def process_domain_registration_paid(registration_order_id):
+    domain_registration_order = \
+        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+
+    period = apps.epp_api.Period(
+        value=domain_registration_order.period_value,
+        unit=domain_registration_order.period_unit
+    )
+    zone, sld = zone_info.get_domain_info(domain_registration_order.domain)
 
     try:
         available, _, registry_id = apps.epp_client.check_domain(domain_registration_order.domain)
@@ -135,102 +189,84 @@ def process_domain_registration(self, registration_order_id):
         billing.reverse_charge(domain_registration_order.domain_id)
         return
 
-    should_return = handle_charge(
-        domain_registration_order,
-        user.username,
-        f"{domain_registration_order.domain} domain registration",
-        domain_registration_order.domain_id,
-        return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'domain_register_confirm', args=(domain_registration_order.id, )
-        )
-    )
+    if zone.direct_registration_supported:
+        if zone.pre_create_host_objects:
+            for host in ('ns1.as207960.net', 'ns2.as207960.net'):
+                try:
+                    host_available, _ = apps.epp_client.check_host(host, registry_id)
+                except grpc.RpcError as rpc_error:
+                    logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
+                    raise rpc_error
 
-    if should_return:
-        return
-
-    if domain_registration_order.state == domain_registration_order.STATE_PROCESSING:
-        if zone.direct_registration_supported:
-            if zone.pre_create_host_objects:
-                for host in ('ns1.as207960.net', 'ns2.as207960.net'):
+                if host_available:
                     try:
-                        host_available, _ = apps.epp_client.check_host(host, registry_id)
+                        apps.epp_client.create_host(host, [], registry_id)
                     except grpc.RpcError as rpc_error:
-                        logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
+                        logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: "
+                                     f"{rpc_error.details()}")
                         raise rpc_error
 
-                    if host_available:
-                        try:
-                            apps.epp_client.create_host(host, [], registry_id)
-                        except grpc.RpcError as rpc_error:
-                            logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: "
-                                         f"{rpc_error.details()}")
-                            raise rpc_error
-
-            try:
-                contact_objs = []
-                if zone.admin_supported and domain_registration_order.admin_contact:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="admin",
-                        contact_id=domain_registration_order.admin_contact.get_registry_id(
-                            registry_id).registry_contact_id
-                    ))
-                if zone.billing_supported and domain_registration_order.billing_contact:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="billing",
-                        contact_id=domain_registration_order.billing_contact.get_registry_id(
-                            registry_id).registry_contact_id
-                    ))
-                if zone.tech_supported and domain_registration_order.tech_contact:
-                    contact_objs.append(apps.epp_api.DomainContact(
-                        contact_type="tech",
-                        contact_id=domain_registration_order.tech_contact.get_registry_id(
-                            registry_id).registry_contact_id
-                    ))
-
-                pending, _, _, _ = apps.epp_client.create_domain(
-                    domain=domain_registration_order.domain,
-                    period=period,
-                    registrant=domain_registration_order.registrant_contact.get_registry_id(
+        try:
+            contact_objs = []
+            if zone.admin_supported and domain_registration_order.admin_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="admin",
+                    contact_id=domain_registration_order.admin_contact.get_registry_id(
                         registry_id).registry_contact_id
-                    if zone.registrant_supported else 'NONE',
-                    contacts=contact_objs,
-                    name_servers=[apps.epp_api.DomainNameServer(
-                        host_obj='ns1.as207960.net',
-                        host_name=None,
-                        address=[]
-                    ), apps.epp_api.DomainNameServer(
-                        host_obj='ns2.as207960.net',
-                        host_name=None,
-                        address=[]
-                    )],
-                    auth_info=domain_registration_order.auth_info,
-                )
-            except grpc.RpcError as rpc_error:
-                domain_registration_order.state = domain_registration_order.STATE_FAILED
-                domain_registration_order.last_error = rpc_error.details()
-                domain_registration_order.save()
-                billing.reverse_charge(domain_registration_order.domain_id)
-                logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()}")
-                return
-        else:
-            pending = True
+                ))
+            if zone.billing_supported and domain_registration_order.billing_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="billing",
+                    contact_id=domain_registration_order.billing_contact.get_registry_id(
+                        registry_id).registry_contact_id
+                ))
+            if zone.tech_supported and domain_registration_order.tech_contact:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="tech",
+                    contact_id=domain_registration_order.tech_contact.get_registry_id(
+                        registry_id).registry_contact_id
+                ))
 
-        if pending:
-            domain_registration_order.state = domain_registration_order.STATE_PENDING_APPROVAL
+            pending, _, _, _ = apps.epp_client.create_domain(
+                domain=domain_registration_order.domain,
+                period=period,
+                registrant=domain_registration_order.registrant_contact.get_registry_id(
+                    registry_id).registry_contact_id
+                if zone.registrant_supported else 'NONE',
+                contacts=contact_objs,
+                name_servers=[apps.epp_api.DomainNameServer(
+                    host_obj='ns1.as207960.net',
+                    host_name=None,
+                    address=[]
+                ), apps.epp_api.DomainNameServer(
+                    host_obj='ns2.as207960.net',
+                    host_name=None,
+                    address=[]
+                )],
+                auth_info=domain_registration_order.auth_info,
+            )
+        except grpc.RpcError as rpc_error:
+            domain_registration_order.state = domain_registration_order.STATE_FAILED
+            domain_registration_order.last_error = rpc_error.details()
             domain_registration_order.save()
-            if not zone.direct_registration_supported:
-                gchat_bot.request_registration.delay(domain_registration_order.id, registry_id, str(period))
-                logger.info(f"{domain_registration_order.domain} registration successfully requested")
-            else:
-                gchat_bot.notify_registration.delay(domain_registration_order.id, str(period))
-                logger.info(f"{domain_registration_order.domain} registration successfully submitted")
+            billing.reverse_charge(domain_registration_order.domain_id)
+            logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()}")
+            return
+    else:
+        pending = True
+
+    if pending:
+        domain_registration_order.state = domain_registration_order.STATE_PENDING_APPROVAL
+        domain_registration_order.save()
+        if not zone.direct_registration_supported:
+            gchat_bot.request_registration.delay(domain_registration_order.id, registry_id, str(period))
+            logger.info(f"{domain_registration_order.domain} registration successfully requested")
         else:
-            process_domain_registration_complete.delay(domain_registration_order.id)
-            logger.info(f"{domain_registration_order.domain} registered successfully")
-
-        return
-
-    raise self.retry(countdown=3)
+            gchat_bot.notify_registration.delay(domain_registration_order.id, str(period))
+            logger.info(f"{domain_registration_order.domain} registration successfully submitted")
+    else:
+        process_domain_registration_complete.delay(domain_registration_order.id)
+        logger.info(f"{domain_registration_order.domain} registered successfully")
 
 
 @shared_task(
@@ -282,18 +318,12 @@ def process_domain_registration_failed(registration_order_id):
 
 
 @shared_task(
-    bind=True, autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None,
-    default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
-def process_domain_renewal(self, renewal_order_id):
+def process_domain_renewal(renewal_order_id):
     domain_renewal_order = \
         models.DomainRenewOrder.objects.get(id=renewal_order_id)  # type: models.DomainRenewOrder
     user = domain_renewal_order.get_user()
-
-    period = apps.epp_api.Period(
-        value=domain_renewal_order.period_value,
-        unit=domain_renewal_order.period_unit
-    )
 
     zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
     if not zone:
@@ -303,57 +333,62 @@ def process_domain_renewal(self, renewal_order_id):
         billing.reverse_charge(domain_renewal_order.domain_obj.id)
         return
 
+    charge_order(
+        order=domain_renewal_order,
+        username=user.username,
+        descriptor=f"{domain_renewal_order.domain} domain renewal",
+        charge_id=domain_renewal_order.domain_obj.id,
+        return_uri=settings.EXTERNAL_URL_BASE + reverse(
+            'renew_domain_confirm', args=(domain_renewal_order.id,)
+        ),
+        notif_queue="domains_renew_billing_notif"
+    )
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def process_domain_renewal_paid(renew_order_id):
+    domain_renewal_order = \
+        models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+
+    period = apps.epp_api.Period(
+        value=domain_renewal_order.period_value,
+        unit=domain_renewal_order.period_unit
+    )
+
     try:
         domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
         raise rpc_error
 
-    should_return = handle_charge(
-        domain_renewal_order,
-        user.username,
-        f"{domain_renewal_order.domain} domain renewal",
-        domain_renewal_order.domain_obj.id,
-        return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'renew_domain_confirm', args=(domain_renewal_order.id, )
+    try:
+        _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
+            domain_renewal_order.domain, period, domain_data.expiry_date
         )
-    )
-
-    if should_return:
-        return
-
-    if domain_renewal_order.state == domain_renewal_order.STATE_PROCESSING:
-        try:
-            _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-                domain_renewal_order.domain, period, domain_data.expiry_date
-            )
-        except grpc.RpcError as rpc_error:
-            domain_renewal_order.state = domain_renewal_order.STATE_FAILED
-            domain_renewal_order.last_error = rpc_error.details()
-            domain_renewal_order.save()
-            billing.reverse_charge(domain_renewal_order.domain_obj.id)
-            logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
-            return
-
-        gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
-
-        domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
-        domain_renewal_order.redirect_uri = None
-        domain_renewal_order.last_error = None
+    except grpc.RpcError as rpc_error:
+        domain_renewal_order.state = domain_renewal_order.STATE_FAILED
+        domain_renewal_order.last_error = rpc_error.details()
         domain_renewal_order.save()
-
-        logger.info(f"{domain_renewal_order.domain} successfully renewed")
-
+        billing.reverse_charge(domain_renewal_order.domain_obj.id)
+        logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
         return
 
-    raise self.retry(countdown=3)
+    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
+
+    domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
+    domain_renewal_order.redirect_uri = None
+    domain_renewal_order.last_error = None
+    domain_renewal_order.save()
+
+    logger.info(f"{domain_renewal_order.domain} successfully renewed")
 
 
 @shared_task(
-    bind=True, autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None,
-    default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
-def process_domain_restore(self, restore_order_id):
+def process_domain_restore(restore_order_id):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
     user = domain_restore_order.get_user()
@@ -366,53 +401,56 @@ def process_domain_restore(self, restore_order_id):
         billing.reverse_charge(domain_restore_order.domain_obj.id)
         return
 
-    should_return = handle_charge(
-        domain_restore_order,
-        user.username,
-        f"{domain_restore_order.domain} domain restore",
-        domain_restore_order.domain_obj.id,
+    charge_order(
+        order=domain_restore_order,
+        username=user.username,
+        descriptor=f"{domain_restore_order.domain} domain restore",
+        charge_id=domain_restore_order.domain_obj.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'restore_domain_confirm', args=(domain_restore_order.id, )
-        )
+            'restore_domain_confirm', args=(domain_restore_order.id,)
+        ),
+        notif_queue="domains_restore_billing_notif"
     )
 
-    if should_return:
-        return
 
-    if domain_restore_order.state == domain_restore_order.STATE_PROCESSING:
-        if zone.direct_restore_supported:
-            try:
-                pending, registry_id = apps.epp_client.restore_domain(domain_restore_order.domain)
-                domain_restore_order.domain_obj.deleted = pending
-                domain_restore_order.domain_obj.pending = pending
-                domain_restore_order.domain_obj.save()
-                gchat_bot.notify_restore.delay(domain_restore_order.id)
-            except grpc.RpcError as rpc_error:
-                domain_restore_order.state = domain_restore_order.STATE_FAILED
-                domain_restore_order.last_error = rpc_error.details()
-                domain_restore_order.save()
-                billing.reverse_charge(domain_restore_order.domain_obj.id)
-                logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()}")
-                return
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def process_domain_restore_paid(restore_order_id):
+    domain_restore_order = \
+        models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
 
-        else:
-            gchat_bot.request_restore.delay(domain_restore_order.id)
-            pending = True
+    zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
 
-        if pending:
-            domain_restore_order.state = domain_restore_order.STATE_PENDING_APPROVAL
-        else:
-            domain_restore_order.state = domain_restore_order.STATE_COMPLETED
+    if zone.direct_restore_supported:
+        try:
+            pending, registry_id = apps.epp_client.restore_domain(domain_restore_order.domain)
+            domain_restore_order.domain_obj.deleted = pending
+            domain_restore_order.domain_obj.pending = pending
+            domain_restore_order.domain_obj.save()
+            gchat_bot.notify_restore.delay(domain_restore_order.id)
+        except grpc.RpcError as rpc_error:
+            domain_restore_order.state = domain_restore_order.STATE_FAILED
+            domain_restore_order.last_error = rpc_error.details()
+            domain_restore_order.save()
+            billing.reverse_charge(domain_restore_order.domain_obj.id)
+            logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()}")
+            return
 
-        domain_restore_order.redirect_uri = None
-        domain_restore_order.last_error = None
-        domain_restore_order.save()
+    else:
+        gchat_bot.request_restore.delay(domain_restore_order.id)
+        pending = True
 
-        logger.info(f"{domain_restore_order.domain} successfully restored")
+    if pending:
+        domain_restore_order.state = domain_restore_order.STATE_PENDING_APPROVAL
+    else:
+        domain_restore_order.state = domain_restore_order.STATE_COMPLETED
 
-        return
+    domain_restore_order.redirect_uri = None
+    domain_restore_order.last_error = None
+    domain_restore_order.save()
 
-    raise self.retry(countdown=3)
+    logger.info(f"{domain_restore_order.domain} successfully restored")
 
 
 @shared_task(

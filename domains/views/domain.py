@@ -1113,25 +1113,6 @@ def confirm_order(request, order, confirm_template, pending_template):
             "back_url": referrer
         })
 
-    if order.state == order.STATE_PENDING:
-        if request.method == "POST":
-            if request.POST.get("order") == "true":
-                order.state = order.STATE_STARTED
-                order.save()
-
-                return render(request, "domains/domain_order_processing.html", {
-                    "domain_name": order.domain
-                })
-            elif request.POST.get("order") == "false":
-                order.state = order.STATE_FAILED
-                order.save()
-                return redirect(referrer)
-
-        return render(request, confirm_template, {
-            "domain": order.unicode_domain,
-            "price_decimal": order.price,
-        })
-
     if order.state == order.STATE_NEEDS_PAYMENT:
         if "charge_state_id" in request.GET:
             return render(request, "domains/domain_order_processing.html", {

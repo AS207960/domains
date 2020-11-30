@@ -99,10 +99,10 @@ GRPCSERVER = {
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": "localhost",
+#        "HOST": "localhost",
         "NAME": "as207960_domains",
         "USER": "postgres",
-        "PASSWORD": "",
+#        "PASSWORD": "",
     }
 }
 
@@ -174,7 +174,7 @@ OIDC_SCOPES = keycloak_conf["scopes"]
 VERISIGN_NS_API_KEY = verisign_ns_conf["key"]
 
 REGISTRATION_ENABLED = True
-EPP_PROXY_ADDR = "localhost:50052"
+EPP_PROXY_ADDR = "q-station.cdf1.as207960.net:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"
@@ -184,6 +184,8 @@ PAT_URL = "http://localhost:8004"
 
 RESOLVER_ADDR = "2a0d:1a40:7900::2"
 RESOLVER_PORT = 53
+
+RABBITMQ_RPC_URL = "amqp://guest:guest@localhost:5672/rpc"
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

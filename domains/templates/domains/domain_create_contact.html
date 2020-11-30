@@ -7,13 +7,14 @@
         <div class="container py-3">
             <div class="jumbotron my-0 py-5">
                 <h1 class="display-4">Welcome to Glauca!</h1>
+                <h2>Your domain is available to register.</h2>
             </div>
         </div>
     </section>
     <div class="container my-3 pt-3 pt-md-5">
         <h2>Looks like you haven't got any contacts yet.</h2>
         <h3>Let's set some up for you.</h3>
-        <hr class="my-4">
-        <a href="{% url 'setup_contacts' %}" class="btn btn-primary btn-block">Next</a>
+        <hr>
+        <a href="{% url 'setup_contacts' %}" class="btn btn-primary btn-block btn-lg">Next</a>
     </div>
 {% endblock %}

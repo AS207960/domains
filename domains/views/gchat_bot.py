@@ -11,7 +11,6 @@ import google.oauth2.service_account
 import google.auth.transport.requests
 import googleapiclient.discovery
 import json
-import threading
 from .. import models
 
 REQUEST = google.auth.transport.requests.Request()
@@ -70,14 +69,6 @@ def make_user_data(user):
             }
         }]
     }
-
-
-def as_thread(fun):
-    def new_fun(*args, **kwargs):
-        t = threading.Thread(target=fun, args=args, kwargs=kwargs)
-        t.setDaemon(True)
-        t.start()
-    return new_fun
 
 
 @shared_task(

@@ -953,8 +953,6 @@ class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
 
         if instance.state == models.AbstractOrder.STATE_STARTED:
             ret["state"] = "started"
-        elif instance.state == models.AbstractOrder.STATE_PENDING:
-            ret["state"] = "pending"
         elif instance.state == models.AbstractOrder.STATE_PROCESSING:
             ret["state"] = "processing"
         elif instance.state == models.AbstractOrder.STATE_NEEDS_PAYMENT:
@@ -976,8 +974,6 @@ class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
         if "state" in ret:
             if ret["state"] == "started":
                 ret["state"] = models.AbstractOrder.STATE_STARTED
-            elif ret["state"] == "pending":
-                ret["state"] = models.AbstractOrder.STATE_PENDING
             elif ret["state"] == "processing":
                 ret["state"] = models.AbstractOrder.STATE_PROCESSING
             elif ret["state"] == "needs_payment":
@@ -1128,7 +1124,6 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
             user=self.context['request'].user,
             price=billing_value,
             auth_info=models.make_secret(),
-            state=models.DomainRegistrationOrder.STATE_STARTED,
             off_session=validated_data["off_session"]
         )
         order.save()
@@ -1241,7 +1236,6 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
             tech_contact=validated_data['tech_contact'],
             user=self.context['request'].user,
             price=billing_value,
-            state=models.DomainRegistrationOrder.STATE_STARTED,
             off_session=validated_data["off_session"]
         )
         order.save()
@@ -1313,7 +1307,6 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
             period_value=period.value,
             user=self.context['request'].user,
             price=billing_value,
-            state=models.DomainRegistrationOrder.STATE_STARTED,
             off_session=validated_data["off_session"]
         )
         order.save()
@@ -1372,7 +1365,6 @@ class DomainRestoreOrderSerializer(BaseOrderSerializer):
             domain_obj=domain,
             user=self.context['request'].user,
             price=billing_value,
-            state=models.DomainRegistrationOrder.STATE_STARTED,
             off_session=validated_data["off_session"]
         )
         order.save()

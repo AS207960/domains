@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 from django.conf import settings
 import grpc
+import as207960_utils.rpc
 import django_keycloak_auth.clients
 from . import epp_api
 
@@ -13,6 +14,7 @@ def get_call_creds(_context, callback):
 
 epp_creds = grpc.metadata_call_credentials(get_call_creds)
 epp_client = epp_api.EPPClient(settings.EPP_PROXY_ADDR, settings.EPP_PROXY_CA, epp_creds)
+rpc_client = as207960_utils.rpc.RpcClient()
 
 
 class DomainsConfig(AppConfig):

@@ -1,9 +1,8 @@
 from django.conf import settings
 from concurrent.futures import ThreadPoolExecutor
 import decimal
-import django_keycloak_auth.clients
-import requests
 import typing
+from .proto import billing_pb2
 from . import apps
 
 
@@ -24,6 +23,8 @@ class SimplePrice:
             unit=0,
             value=i
         ), range(1, 11)))
+        self.default_value = self.periods[0].value
+        self.default_unit = self.periods[0].unit
 
     @property
     def currency(self):
@@ -52,7 +53,11 @@ class SimplePrice:
             "transfer": self.transfer(sld),
         }
 
-    def registration(self, _sld: str, value=1, unit=0):
+    def registration(self, _sld: str, value=None, unit=None):
+        if value is None:
+            value = self.default_value
+        if unit is None:
+            unit = self.default_unit
         if apps.epp_api.Period(
             unit=unit,
             value=value
@@ -282,18 +287,17 @@ class MarkupPrice:
 
         final_fee = total_fee * self._markup
 
-        client_token = django_keycloak_auth.clients.get_access_token()
-        r = requests.post(
-            f"{settings.BILLING_URL}/convert_currency/", json={
-                "amount": str(final_fee),
-                "from": command.currency,
-                "to": "GBP",
-            }, headers={
-                "Authorization": f"Bearer {client_token}"
-            }
+        msg = billing_pb2.BillingRequest(
+            convert_currency=billing_pb2.ConvertCurrencyRequest(
+                from_currency=command.currency,
+                to_currency="GBP",
+                amount=int(round(final_fee * decimal.Decimal(100)))
+            )
         )
-        r_data = r.json()
-        fee = decimal.Decimal(r_data.get("amount")).quantize(decimal.Decimal('1.00'))
+        msg_response = billing_pb2.ConvertCurrencyResponse()
+        msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString()))
+
+        fee = (decimal.Decimal(msg_response.amount) * decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
         return fee
 
     def _get_fee(self, sld, value, unit, command):

@@ -565,7 +565,6 @@ class AbstractOrder(models.Model):
     STATE_FAILED = "F"
 
     STATES = (
-        (STATE_PENDING, "Pending"),
         (STATE_STARTED, "Started"),
         (STATE_NEEDS_PAYMENT, "Needs payment"),
         (STATE_PROCESSING, "Processing"),
@@ -574,7 +573,7 @@ class AbstractOrder(models.Model):
         (STATE_FAILED, "Failed")
     )
 
-    state = models.CharField(max_length=1, default=STATE_PENDING, choices=STATES)
+    state = models.CharField(max_length=1, default=STATE_STARTED, choices=STATES)
     charge_state_id = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=9)
     redirect_uri = models.TextField(blank=True, null=True)

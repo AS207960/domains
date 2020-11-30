@@ -7,15 +7,9 @@ import typing
 import json
 import uuid
 import retry
-import threading
-
-
-def as_thread(fun):
-    def new_fun(*args, **kwargs):
-        t = threading.Thread(target=fun, args=args, kwargs=kwargs)
-        t.setDaemon(True)
-        t.start()
-    return new_fun
+from ..proto import billing_pb2
+from .. import apps
+import google.protobuf.wrappers_pb2
 
 
 @dataclasses.dataclass
@@ -35,55 +29,46 @@ class ChargeState:
 
 
 def charge_account(username: str, amount: decimal.Decimal, descriptor: str, charge_id: str, can_reject=True,
-                   off_session=True, return_uri=None) -> ChargeResult:
-    client_token = django_keycloak_auth.clients.get_access_token()
-    r = retry.api.retry_call(requests.post, fargs=(
-        f"{settings.BILLING_URL}/charge_user/{username}/",
-    ), fkwargs={
-        "json": {
-            "amount": int(decimal.Decimal(100) * amount),
-            "descriptor": descriptor,
-            "id": charge_id,
-            "can_reject": can_reject,
-            "off_session": off_session,
-            "return_uri": return_uri
-        },
-        "headers": {
-            "Authorization": f"Bearer {client_token}",
-            "Idempotency-Key": str(uuid.uuid4())
-        },
-        "timeout": 5
-    }, delay=1, tries=10)
-    try:
-        data = r.json()
-    except json.JSONDecodeError:
-        return ChargeResult(
-            success=False,
-            error='There was an unexpected error.',
-            redirect_uri=None,
-            charge_state_id=None
+                   off_session=True, return_uri=None, notif_queue=None) -> ChargeResult:
+    charge_request = billing_pb2.BillingRequest(
+        charge_user=billing_pb2.ChargeUserRequest(
+            amount=int(decimal.Decimal(100) * amount),
+            id=charge_id,
+            descriptor=descriptor,
+            can_reject=can_reject,
+            off_session=off_session,
+            user_id=username,
+            return_uri=google.protobuf.wrappers_pb2.StringValue(
+                value=return_uri
+            ) if return_uri else None,
+            notif_queue=google.protobuf.wrappers_pb2.StringValue(
+                value=notif_queue
+            ) if notif_queue else None
         )
+    )
+    charge_response = billing_pb2.ChargeUserResponse()
+    charge_response.ParseFromString(apps.rpc_client.call('billing_rpc', charge_request.SerializeToString()))
 
-    if r.status_code in (402, 404, 302):
-        return ChargeResult(
-            success=False,
-            error=data.get("message"),
-            redirect_uri=data.get("redirect_uri"),
-            charge_state_id=data.get("charge_state_id")
-        )
-    elif r.status_code == 200:
+    if charge_response.result == billing_pb2.ChargeUserResponse.SUCCESS:
         return ChargeResult(
             success=True,
             error=None,
             redirect_uri=None,
-            charge_state_id=data.get("charge_state_id")
+            charge_state_id=charge_response.charge_state_id
         )
-    else:
+    elif charge_response.result == billing_pb2.ChargeUserResponse.REDIRECT:
         return ChargeResult(
             success=False,
-            error='There was an unexpected error.',
+            error=None,
+            redirect_uri=charge_response.redirect_uri,
+            charge_state_id=charge_response.charge_state_id
+        )
+    elif charge_response.result == billing_pb2.ChargeUserResponse.FAIL:
+        return ChargeResult(
+            success=False,
+            error=charge_response.message,
             redirect_uri=None,
-            charge_state_id=None
+            charge_state_id=charge_response.charge_state_id
         )
 
 
@@ -118,7 +103,6 @@ def get_charge_state(charge_state_id: str) -> ChargeState:
     )
 
 
-@as_thread
 def reverse_charge(charge_id: str):
     client_token = django_keycloak_auth.clients.get_access_token()
 
