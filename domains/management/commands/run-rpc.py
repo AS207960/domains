@@ -14,6 +14,9 @@ class Command(BaseCommand):
         channel = connection.channel()
 
         channel.queue_declare(queue='domains_registration_billing_notif', durable=True)
+        channel.queue_declare(queue='domains_transfer_billing_notif', durable=True)
+        channel.queue_declare(queue='domains_renew_billing_notif', durable=True)
+        channel.queue_declare(queue='domains_restore_billing_notif', durable=True)
 
         channel.basic_qos(prefetch_count=1)
         channel.basic_consume(
