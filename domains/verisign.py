@@ -2,9 +2,12 @@ import requests
 import random
 import enum
 import typing
+import decimal
 import dataclasses
+import grpc
 from django.conf import settings
-from . import zone_info
+from concurrent.futures import ThreadPoolExecutor
+from . import zone_info, apps
 
 if settings.DEBUG:
     NS_API_BASE = "https://ote-sugapi.verisign-grs.com/ns-api/2.0"
@@ -39,6 +42,8 @@ class Availability(enum.Enum):
 class SuggestedDomain:
     name: str
     availability: Availability
+    price: decimal.Decimal
+    currency: str
 
     @classmethod
     def from_result(cls, res):
@@ -50,16 +55,32 @@ class SuggestedDomain:
             availability = Availability.RESERVED
         elif res["availability"] == "premium":
             availability = Availability.PREMIUM
-        elif res["availability"] == "UNKNOWN":
-            availability = Availability.UNKNOWN
+        elif res["availability"] == "unknown":
+            try:
+                available, reason, _ = apps.epp_client.check_domain(res["name"])
+            except grpc.RpcError:
+                availability = Availability.UNKNOWN
+            else:
+                availability = Availability.AVAILABLE if available else Availability.REGISTERED
         elif res["availability"] == "INVALID":
             availability = Availability.INVALID
         else:
             availability = Availability.UNKNOWN
 
+        zone, sld = zone_info.get_domain_info(res["name"])
+        if not zone:
+            price_decimal = None
+        else:
+            try:
+                price_decimal = zone.pricing.registration(sld)
+            except grpc.RpcError:
+                price_decimal = None
+
         return cls(
             name=res["name"],
-            availability=availability
+            availability=availability,
+            price=price_decimal,
+            currency="GBP"
         )
 
 
@@ -111,7 +132,8 @@ def suggests(
         params["ip-address"] = ip_address
 
     data = make_verisign_request("/suggest", params)
-    return list(map(SuggestedDomain.from_result, data["results"]))
+    with ThreadPoolExecutor() as executor:
+        return list(executor.map(SuggestedDomain.from_result, data["results"]))
 
 
 def suggest_personal_names(
@@ -132,7 +154,8 @@ def suggest_personal_names(
         params["last-name"] = last_name
 
     data = make_verisign_request("/suggest-personal-names", params)
-    return list(map(SuggestedDomain.from_result, data["results"]))
+    with ThreadPoolExecutor() as executor:
+        return list(executor.map(SuggestedDomain.from_result, data["results"]))
 
 
 def online_presence(
@@ -167,4 +190,5 @@ def online_presence(
         params["email"] = email
 
     data = make_verisign_request("/online-presence", params)
-    return list(map(SuggestedDomain.from_result, data["results"]))
+    with ThreadPoolExecutor() as executor:
+        return list(executor.map(SuggestedDomain.from_result, data["results"]))

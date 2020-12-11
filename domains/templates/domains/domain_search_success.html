@@ -1,16 +1,17 @@
 {% extends 'domains/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load humanize %}
 {% block title %}Register {{ domain }}{% endblock %}
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0 py-5">
                 <div class="row">
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-10 d-flex align-items-center justify-content-center">
                         <h1 class="display-4">Your domain is available!</h1>
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-2">
                         <img src="https://as207960.net/assets/img/shark-heart.svg" alt="" class="mw-100">
                     </div>
                 </div>
@@ -19,7 +20,8 @@
     </section>
     <div class="container my-3 pt-3 pt-md-5">
         <h2>{{ domain }} is available to register</h2>
+        <b class="lead">Price per unit length: </b> {{ price_decimal|floatformat:2|intcomma }} {{ currency }}
         <hr class="my-4">
-        <a href="{% url 'domain_register' domain %}" class="btn btn-info">Login to proceed</a>
+        <a href="{% url 'domain_register' domain %}" class="btn btn-info btn-block btn-lg">Login to proceed</a>
     </div>
 {% endblock %}

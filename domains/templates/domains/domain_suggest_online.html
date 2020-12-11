@@ -33,6 +33,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Status</th>
+                        <th>Price</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -57,8 +58,15 @@
                                     {% endif %}
                                 </td>
                                 <td>
+                                    {% if suggestion.price %}
+                                        {{ suggestion.price|floatformat:2|intcomma }} {{ suggestion.currency }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
                                     {% if suggestion.availability == suggestion.availability.AVAILABLE or suggestion.availability == suggestion.availability.PREMIUM %}
-                                        <a href="{% url 'domain_register' suggestion.name %}" class="btn btn-primary btn-sm">
+                                        <a href="{% if user.is_authenticated %}{% url 'domain_register' suggestion.name %}{% else %}{% url 'domain_search_success' suggestion.name %}{% endif %}" class="btn btn-primary btn-sm">
                                             Register
                                         </a>
                                     {% elif suggestion.availability == suggestion.availability.UNKNOWN %}

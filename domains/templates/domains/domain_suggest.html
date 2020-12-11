@@ -8,7 +8,8 @@
     <section class="stripe">
         <div class="container py-3">
             <div class="jumbotron my-0">
-                <h1 class="display-4">Get your <span class="text-gradient teal-indigo">perfect</span> domain<span class="text-gradient teal-indigo">.</span></h1>
+                <h1 class="display-4">Get your <span class="text-gradient teal-indigo">perfect</span> domain<span
+                        class="text-gradient teal-indigo">.</span></h1>
                 <p>Get your perfect domain from Glauca. Let us help you find your online identity.</p>
                 <hr class="my-4">
                 {% if error %}
@@ -33,6 +34,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Status</th>
+                        <th>Price</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -57,12 +59,21 @@
                                     {% endif %}
                                 </td>
                                 <td>
+                                    {% if suggestion.price %}
+                                        {{ suggestion.price|floatformat:2|intcomma }} {{ suggestion.currency }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
                                     {% if suggestion.availability == suggestion.availability.AVAILABLE or suggestion.availability == suggestion.availability.PREMIUM %}
-                                        <a href="{% url 'domain_register' suggestion.name %}" class="btn btn-primary btn-sm">
+                                        <a href="{% if user.is_authenticated %}{% url 'domain_register' suggestion.name %}{% else %}{% url 'domain_search_success' suggestion.name %}{% endif %}"
+                                           class="btn btn-primary btn-sm">
                                             Register
                                         </a>
                                     {% elif suggestion.availability == suggestion.availability.UNKNOWN %}
-                                        <a href="{% url 'domain_search' %}?domain={{ suggestion.name }}" class="btn btn-primary btn-sm">
+                                        <a href="{% url 'domain_search' %}?domain={{ suggestion.name }}"
+                                           class="btn btn-primary btn-sm">
                                             Check availability
                                         </a>
                                     {% endif %}

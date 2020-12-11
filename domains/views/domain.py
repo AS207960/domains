@@ -964,10 +964,19 @@ def _domain_search(request, domain_name):
 def domain_search(request):
     error = None
 
-    if request.method == "POST":
-        form = forms.DomainSearchForm(request.POST)
-        if form.is_valid():
-            resp = _domain_search(request, form.cleaned_data['domain'])
+    if request.method == "POST" or request.GET.get("domain"):
+        domain_search_term = None
+        if request.method == "POST":
+            form = forms.DomainSearchForm(request.POST)
+            if form.is_valid():
+                domain_search_term = form.cleaned_data['domain']
+        else:
+            form = forms.DomainSearchForm(initial={
+                "domain": request.GET.get("domain")
+            })
+            domain_search_term = request.GET.get("domain")
+        if domain_search_term:
+            resp = _domain_search(request, domain_search_term)
             if resp is not None:
                 if resp[0] == "error":
                     error = resp[1]
@@ -976,9 +985,7 @@ def domain_search(request):
                 elif resp[0] == "resp":
                     return resp[1]
     else:
-        form = forms.DomainSearchForm(initial={
-            "domain": request.GET.get("domain")
-        })
+        form = forms.DomainSearchForm()
 
     return render(request, "domains/domain_search.html", {
         "domain_form": form,
@@ -1008,8 +1015,22 @@ def domain_search_gay(request):
 
 
 def domain_search_success(request, domain_name):
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    zone, sld = zone_info.get_domain_info(domain_name)
+    if not zone:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    price_decimal = zone.pricing.registration(sld)
+
     return render(request, "domains/domain_search_success.html", {
         "domain": domain_name,
+        "price_decimal": price_decimal,
+        "currency": "GBP"
     })
 
 
