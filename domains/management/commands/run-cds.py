@@ -117,6 +117,11 @@ class Command(BaseCommand):
                 rrsig = msg.get_rrset(
                     dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.RRSIG, covers
                 )
+                if not data_set:
+                    raise dns.dnssec.ValidationFailure("no suitable records")
+                if not rrsig:
+                    raise dns.dnssec.ValidationFailure("no suitable RRSIGs")
+
                 found_dnskeys = dns.rdataset.Rdataset(dns.rdataclass.IN, dns.rdatatype.DNSKEY)
                 for cds in ds_set:
                     possible_dnskeys = filter(lambda rr: dns.dnssec.key_id(rr) == cds.key_tag, dnskey_set)
