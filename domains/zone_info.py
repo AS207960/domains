@@ -378,6 +378,7 @@ class DomainInfo:
     REGISTRY_INFIBEAM = "infibeam"
     REGISTRY_ICB = "ICB"
     REGISTRY_CO = "CO"
+    REGISTRY_KENIC = "kenic"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -457,6 +458,7 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -482,6 +484,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -492,6 +495,7 @@ class DomainInfo:
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_EURID,
             self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -513,6 +517,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -561,6 +566,7 @@ class DomainInfo:
             self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -600,6 +606,7 @@ class DomainInfo:
             self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -641,6 +648,7 @@ class DomainInfo:
             self.REGISTRY_INFIBEAM,
             self.REGISTRY_ICB,
             self.REGISTRY_CO,
+            self.REGISTRY_KENIC,
         )
 
     @property
@@ -2152,6 +2160,10 @@ else:
         ('ooo', DomainInfo(
             DomainInfo.REGISTRY_INFIBEAM,
             MarkupPrice(4954, transfer=4953, restore=20160, currency=None, display_currency='USD', tld='ooo', markup=decimal.Decimal("1.2"))
+        )),
+        ('ke', DomainInfo(
+            DomainInfo.REGISTRY_KENIC,
+            MarkupPrice(17136, transfer=4176, currency=None, display_currency='USD', tld='ke', markup=decimal.Decimal("1.2"))
         )),
     )
 
