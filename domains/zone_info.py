@@ -520,6 +520,7 @@ class DomainInfo:
     def ds_data_supported(self):
         return self.registry not in (
             self.REGISTRY_DENIC,
+            self.REGISTRY_EURID,
             # self.REGISTRY_SWITCH
         )
 
