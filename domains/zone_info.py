@@ -514,6 +514,7 @@ class DomainInfo:
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_KENIC,
+            self.REGISTRY_AKEP,
         )
 
     @property
@@ -2161,6 +2162,10 @@ else:
         ('ke', DomainInfo(
             DomainInfo.REGISTRY_KENIC,
             MarkupPrice(17136, transfer=4176, currency=None, display_currency='USD', tld='ke', markup=decimal.Decimal("1.2"))
+        )),
+        ('al', DomainInfo(
+            DomainInfo.REGISTRY_KENIC,
+            MarkupPrice(9360, transfer=9360, currency=None, display_currency='USD', tld='al', markup=decimal.Decimal("1.2"))
         )),
     )
 
