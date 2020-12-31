@@ -472,10 +472,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-name: domain-rpc
-labels:
-  app: domains
-  part: rpc
+  name: domain-rpc
+  labels:
+    app: domains
+    part: rpc
 spec:
   replicas: 1
   selector:
