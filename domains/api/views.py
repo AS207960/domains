@@ -85,7 +85,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
                     "domain": domain["domain"],
                     "domain_id": str(domain_obj.id),
                     "sub": pk,
-                }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
+                }, settings.JWT_PRIV_KEY, algorithm='ES384')
 
                 out.append({
                     "domain": domain["domain"],
