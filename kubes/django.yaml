@@ -390,7 +390,6 @@ spec:
               prefix: "VERISIGN_NS_"
             - secretRef:
                 name: domains-rpc
-      restartPolicy: OnFailure
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -469,7 +468,6 @@ spec:
               prefix: "VERISIGN_NS_"
             - secretRef:
                 name: domains-rpc
-      restartPolicy: OnFailure
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -546,7 +544,6 @@ template:
             prefix: "VERISIGN_NS_"
           - secretRef:
               name: domains-rpc
-    restartPolicy: OnFailure
 ---
 apiVersion: v1
 kind: Service
