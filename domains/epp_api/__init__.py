@@ -572,9 +572,15 @@ class Period:
 
     def __str__(self):
         if self.unit == common_pb2.Period.Years:
-            unit = "years"
+            if self.value == 1:
+                unit = "year"
+            else:
+                unit = "years"
         elif self.unit == common_pb2.Period.Months:
-            unit = "months"
+            if self.value == 1:
+                unit = "month"
+            else:
+                unit = "months"
         else:
             unit = f"unknown unit ({self.unit})"
         return f"{self.value} {unit}"

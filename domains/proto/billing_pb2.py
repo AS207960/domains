@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rbilling.proto\x12\x07\x62illing\x1a\x1egoogle/protobuf/wrappers.proto\"\x8b\x01\n\x0e\x42illingRequest\x12;\n\x10\x63onvert_currency\x18\x01 \x01(\x0b\x32\x1f.billing.ConvertCurrencyRequestH\x00\x12\x31\n\x0b\x63harge_user\x18\x02 \x01(\x0b\x32\x1a.billing.ChargeUserRequestH\x00\x42\t\n\x07message\"T\n\x16\x43onvertCurrencyRequest\x12\x15\n\rfrom_currency\x18\x01 \x01(\t\x12\x13\n\x0bto_currency\x18\x02 \x01(\t\x12\x0e\n\x06\x61mount\x18\x03 \x01(\x03\")\n\x17\x43onvertCurrencyResponse\x12\x0e\n\x06\x61mount\x18\x03 \x01(\x03\"\xe2\x01\n\x11\x43hargeUserRequest\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x03\x12\n\n\x02id\x18\x02 \x01(\t\x12\x12\n\ndescriptor\x18\x03 \x01(\t\x12\x12\n\ncan_reject\x18\x04 \x01(\x08\x12\x13\n\x0boff_session\x18\x05 \x01(\x08\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12\x30\n\nreturn_uri\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bnotif_queue\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xcf\x01\n\x12\x43hargeUserResponse\x12\x17\n\x0f\x63harge_state_id\x18\x01 \x01(\t\x12\x38\n\x06result\x18\x02 \x01(\x0e\x32(.billing.ChargeUserResponse.ChargeResult\x12\x11\n\x07message\x18\x03 \x01(\tH\x00\x12\x16\n\x0credirect_uri\x18\x04 \x01(\tH\x00\"3\n\x0c\x43hargeResult\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x12\x0c\n\x08REDIRECT\x10\x02\x42\x06\n\x04\x64\x61ta\"\x80\x02\n\x17\x43hargeStateNotification\x12\x11\n\tcharge_id\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\x12;\n\x05state\x18\x03 \x01(\x0e\x32,.billing.ChargeStateNotification.ChargeState\x12\x30\n\nlast_error\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"R\n\x0b\x43hargeState\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07PENDING\x10\x01\x12\x0e\n\nPROCESSING\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x12\r\n\tCOMPLETED\x10\x04\x62\x06proto3'
+  serialized_pb=b'\n\rbilling.proto\x12\x07\x62illing\x1a\x1egoogle/protobuf/wrappers.proto\"\x8b\x01\n\x0e\x42illingRequest\x12;\n\x10\x63onvert_currency\x18\x01 \x01(\x0b\x32\x1f.billing.ConvertCurrencyRequestH\x00\x12\x31\n\x0b\x63harge_user\x18\x02 \x01(\x0b\x32\x1a.billing.ChargeUserRequestH\x00\x42\t\n\x07message\"\xee\x01\n\x16\x43onvertCurrencyRequest\x12\x15\n\rfrom_currency\x18\x01 \x01(\t\x12\x13\n\x0bto_currency\x18\x02 \x01(\t\x12\x0e\n\x06\x61mount\x18\x03 \x01(\x03\x12.\n\x08username\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tremote_ip\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x37\n\x11\x63ountry_selection\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"h\n\x17\x43onvertCurrencyResponse\x12\x0e\n\x06\x61mount\x18\x03 \x01(\x03\x12\x16\n\x0e\x61mount_inc_vat\x18\x01 \x01(\x03\x12\x0f\n\x07taxable\x18\x02 \x01(\x08\x12\x14\n\x0cused_country\x18\x04 \x01(\t\"\xe2\x01\n\x11\x43hargeUserRequest\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x03\x12\n\n\x02id\x18\x02 \x01(\t\x12\x12\n\ndescriptor\x18\x03 \x01(\t\x12\x12\n\ncan_reject\x18\x04 \x01(\x08\x12\x13\n\x0boff_session\x18\x05 \x01(\x08\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12\x30\n\nreturn_uri\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bnotif_queue\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xcf\x01\n\x12\x43hargeUserResponse\x12\x17\n\x0f\x63harge_state_id\x18\x01 \x01(\t\x12\x38\n\x06result\x18\x02 \x01(\x0e\x32(.billing.ChargeUserResponse.ChargeResult\x12\x11\n\x07message\x18\x03 \x01(\tH\x00\x12\x16\n\x0credirect_uri\x18\x04 \x01(\tH\x00\"3\n\x0c\x43hargeResult\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x12\x0c\n\x08REDIRECT\x10\x02\x42\x06\n\x04\x64\x61ta\"\x80\x02\n\x17\x43hargeStateNotification\x12\x11\n\tcharge_id\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\x12;\n\x05state\x18\x03 \x01(\x0e\x32,.billing.ChargeStateNotification.ChargeState\x12\x30\n\nlast_error\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"R\n\x0b\x43hargeState\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07PENDING\x10\x01\x12\x0e\n\nPROCESSING\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x12\r\n\tCOMPLETED\x10\x04\"\xcf\x01\n\x18SubscriptionNotification\x12\x17\n\x0fsubscription_id\x18\x01 \x01(\t\x12\x42\n\x05state\x18\x02 \x01(\x0e\x32\x33.billing.SubscriptionNotification.SubscriptionState\"V\n\x11SubscriptionState\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07PENDING\x10\x01\x12\x0c\n\x08PAST_DUE\x10\x02\x12\n\n\x06\x41\x43TIVE\x10\x03\x12\r\n\tCANCELLED\x10\x04\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -51,8 +51,8 @@ _CHARGEUSERRESPONSE_CHARGERESULT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=707,
-  serialized_end=758,
+  serialized_start=925,
+  serialized_end=976,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGEUSERRESPONSE_CHARGERESULT)
 
@@ -91,10 +91,50 @@ _CHARGESTATENOTIFICATION_CHARGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=943,
-  serialized_end=1025,
+  serialized_start=1161,
+  serialized_end=1243,
 )
 _sym_db.RegisterEnumDescriptor(_CHARGESTATENOTIFICATION_CHARGESTATE)
+
+_SUBSCRIPTIONNOTIFICATION_SUBSCRIPTIONSTATE = _descriptor.EnumDescriptor(
+  name='SubscriptionState',
+  full_name='billing.SubscriptionNotification.SubscriptionState',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNKNOWN', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PENDING', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PAST_DUE', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ACTIVE', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='CANCELLED', index=4, number=4,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1367,
+  serialized_end=1453,
+)
+_sym_db.RegisterEnumDescriptor(_SUBSCRIPTIONNOTIFICATION_SUBSCRIPTIONSTATE)
 
 
 _BILLINGREQUEST = _descriptor.Descriptor(
@@ -170,6 +210,27 @@ _CONVERTCURRENCYREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='username', full_name='billing.ConvertCurrencyRequest.username', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='remote_ip', full_name='billing.ConvertCurrencyRequest.remote_ip', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='country_selection', full_name='billing.ConvertCurrencyRequest.country_selection', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -182,8 +243,8 @@ _CONVERTCURRENCYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=200,
-  serialized_end=284,
+  serialized_start=201,
+  serialized_end=439,
 )
 
 
@@ -202,6 +263,27 @@ _CONVERTCURRENCYRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='amount_inc_vat', full_name='billing.ConvertCurrencyResponse.amount_inc_vat', index=1,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='taxable', full_name='billing.ConvertCurrencyResponse.taxable', index=2,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='used_country', full_name='billing.ConvertCurrencyResponse.used_country', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -214,8 +296,8 @@ _CONVERTCURRENCYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=286,
-  serialized_end=327,
+  serialized_start=441,
+  serialized_end=545,
 )
 
 
@@ -295,8 +377,8 @@ _CHARGEUSERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=330,
-  serialized_end=556,
+  serialized_start=548,
+  serialized_end=774,
 )
 
 
@@ -354,8 +436,8 @@ _CHARGEUSERRESPONSE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=559,
-  serialized_end=766,
+  serialized_start=777,
+  serialized_end=984,
 )
 
 
@@ -408,8 +490,48 @@ _CHARGESTATENOTIFICATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=769,
-  serialized_end=1025,
+  serialized_start=987,
+  serialized_end=1243,
+)
+
+
+_SUBSCRIPTIONNOTIFICATION = _descriptor.Descriptor(
+  name='SubscriptionNotification',
+  full_name='billing.SubscriptionNotification',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='subscription_id', full_name='billing.SubscriptionNotification.subscription_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='billing.SubscriptionNotification.state', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _SUBSCRIPTIONNOTIFICATION_SUBSCRIPTIONSTATE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1246,
+  serialized_end=1453,
 )
 
 _BILLINGREQUEST.fields_by_name['convert_currency'].message_type = _CONVERTCURRENCYREQUEST
@@ -420,6 +542,9 @@ _BILLINGREQUEST.fields_by_name['convert_currency'].containing_oneof = _BILLINGRE
 _BILLINGREQUEST.oneofs_by_name['message'].fields.append(
   _BILLINGREQUEST.fields_by_name['charge_user'])
 _BILLINGREQUEST.fields_by_name['charge_user'].containing_oneof = _BILLINGREQUEST.oneofs_by_name['message']
+_CONVERTCURRENCYREQUEST.fields_by_name['username'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CONVERTCURRENCYREQUEST.fields_by_name['remote_ip'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CONVERTCURRENCYREQUEST.fields_by_name['country_selection'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CHARGEUSERREQUEST.fields_by_name['return_uri'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CHARGEUSERREQUEST.fields_by_name['notif_queue'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CHARGEUSERRESPONSE.fields_by_name['result'].enum_type = _CHARGEUSERRESPONSE_CHARGERESULT
@@ -433,12 +558,15 @@ _CHARGEUSERRESPONSE.fields_by_name['redirect_uri'].containing_oneof = _CHARGEUSE
 _CHARGESTATENOTIFICATION.fields_by_name['state'].enum_type = _CHARGESTATENOTIFICATION_CHARGESTATE
 _CHARGESTATENOTIFICATION.fields_by_name['last_error'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CHARGESTATENOTIFICATION_CHARGESTATE.containing_type = _CHARGESTATENOTIFICATION
+_SUBSCRIPTIONNOTIFICATION.fields_by_name['state'].enum_type = _SUBSCRIPTIONNOTIFICATION_SUBSCRIPTIONSTATE
+_SUBSCRIPTIONNOTIFICATION_SUBSCRIPTIONSTATE.containing_type = _SUBSCRIPTIONNOTIFICATION
 DESCRIPTOR.message_types_by_name['BillingRequest'] = _BILLINGREQUEST
 DESCRIPTOR.message_types_by_name['ConvertCurrencyRequest'] = _CONVERTCURRENCYREQUEST
 DESCRIPTOR.message_types_by_name['ConvertCurrencyResponse'] = _CONVERTCURRENCYRESPONSE
 DESCRIPTOR.message_types_by_name['ChargeUserRequest'] = _CHARGEUSERREQUEST
 DESCRIPTOR.message_types_by_name['ChargeUserResponse'] = _CHARGEUSERRESPONSE
 DESCRIPTOR.message_types_by_name['ChargeStateNotification'] = _CHARGESTATENOTIFICATION
+DESCRIPTOR.message_types_by_name['SubscriptionNotification'] = _SUBSCRIPTIONNOTIFICATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BillingRequest = _reflection.GeneratedProtocolMessageType('BillingRequest', (_message.Message,), {
@@ -482,6 +610,13 @@ ChargeStateNotification = _reflection.GeneratedProtocolMessageType('ChargeStateN
   # @@protoc_insertion_point(class_scope:billing.ChargeStateNotification)
   })
 _sym_db.RegisterMessage(ChargeStateNotification)
+
+SubscriptionNotification = _reflection.GeneratedProtocolMessageType('SubscriptionNotification', (_message.Message,), {
+  'DESCRIPTOR' : _SUBSCRIPTIONNOTIFICATION,
+  '__module__' : 'billing_pb2'
+  # @@protoc_insertion_point(class_scope:billing.SubscriptionNotification)
+  })
+_sym_db.RegisterMessage(SubscriptionNotification)
 
 
 # @@protoc_insertion_point(module_scope)

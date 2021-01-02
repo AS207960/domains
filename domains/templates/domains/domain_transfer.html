@@ -12,7 +12,7 @@
                         <b>Domain name: </b> {{ domain_name }}
                     </div>
                     <div class="col">
-                        <b>Price to transfer: </b> {{ price_decimal|floatformat:2|intcomma }} GBP
+                        <b>Price to transfer: </b> {% include "domains/show_price.html" with price=price_decimal %}
                     </div>
                 </div>
             </div>

@@ -428,7 +428,9 @@ class Domain(viewsets.ViewSet):
                 period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
                     else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
 
-                price = zone.pricing.registration(sld, unit=period_unit, value=period['value'])
+                price = zone.pricing.registration(
+                    "GB", request.user.username, sld, unit=period_unit, value=period['value']
+                ).amount
 
                 if price is None:
                     data = serializers.DomainCheck(
@@ -494,7 +496,7 @@ class Domain(viewsets.ViewSet):
                             )
 
                 if available:
-                    price = zone.pricing.transfer(sld)
+                    price = zone.pricing.transfer("GB", request.user.username, sld).amount
                     data = serializers.DomainCheck(
                         available=True,
                         domain=serializer.validated_data['domain'],
@@ -541,7 +543,7 @@ class Domain(viewsets.ViewSet):
             period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
                 else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
 
-            price = zone.pricing.renew(sld, unit=period_unit, value=period['value'])
+            rice = zone.pricing.renew("GB", request.user.username, sld, unit=period_unit, value=period['value'])
 
             if price is None:
                 data = serializers.DomainCheck(
@@ -581,7 +583,7 @@ class Domain(viewsets.ViewSet):
         zone, sld = zone_info.get_domain_info(domain.domain)
 
         if zone.restore_supported and domain.deleted:
-            price = zone.pricing.restore(sld)
+            price = zone.pricing.restore("GB", request.user.username, sld).amount
 
             data = serializers.DomainCheck(
                 available=True,

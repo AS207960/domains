@@ -1109,7 +1109,9 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
             value=validated_data['period']['value']
         )
 
-        billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
+        billing_value = zone_price.registration(
+            "GB", self.context['request'].user.username, sld, unit=period.unit, value=period.value
+        ).amount
         if billing_value is None:
             raise PermissionDenied
 
@@ -1223,7 +1225,9 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
             raise PermissionDenied
 
         zone_price, registry_name = zone.pricing, zone.registry
-        billing_value = zone_price.transfer(sld)
+        billing_value = zone_price.transfer(
+            "GB", self.context['request'].user.username, sld
+        ).amount
         if billing_value is None:
             raise PermissionDenied
 
@@ -1296,7 +1300,9 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
             value=validated_data['period']['value']
         )
 
-        billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+        billing_value = zone_price.renewal(
+            "GB", self.context['request'].user.username, sld, unit=period.unit, value=period.value
+        ).amount
         if billing_value is None:
             raise PermissionDenied
 
@@ -1356,7 +1362,9 @@ class DomainRestoreOrderSerializer(BaseOrderSerializer):
 
         zone_price, registry_name = zone.pricing, zone.registry
 
-        billing_value = zone_price.restore(sld)
+        billing_value = zone_price.restore(
+            "GB", self.context['request'].user.username, sld
+        ).amount
         if billing_value is None:
             raise PermissionDenied
 

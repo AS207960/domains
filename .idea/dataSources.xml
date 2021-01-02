@@ -27,8 +27,9 @@
     <data-source source="LOCAL" name="as207960_domains@localhost" uuid="cf4c6fed-fb8a-4bf1-8e0f-d4606a8aaea5">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/as207960_domains</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost/as207960_domains</jdbc-url>
     </data-source>
   </component>
 </project>

@@ -20,7 +20,7 @@
     </section>
     <div class="container my-3 pt-3 pt-md-5">
         <h2>{{ domain }} is available to register</h2>
-        <b class="lead">Price per unit length: </b> {{ price_decimal|floatformat:2|intcomma }} {{ currency }}
+        <b class="lead">Price per unit length: </b> {% include "domains/show_price.html" with price=price_decimal %}
         <hr class="my-4">
         <a href="{% url 'domain_register' domain %}" class="btn btn-info btn-block btn-lg">Login to proceed</a>
     </div>

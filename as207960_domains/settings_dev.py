@@ -61,6 +61,7 @@ MIDDLEWARE = [
     "django_keycloak_auth.middleware.OIDCMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'domains.middleware.CountryMiddleware',
 ]
 
 ROOT_URLCONF = 'as207960_domains.urls'

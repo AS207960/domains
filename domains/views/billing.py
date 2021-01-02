@@ -10,6 +10,62 @@ import retry
 from ..proto import billing_pb2
 from .. import apps
 import google.protobuf.wrappers_pb2
+from django.views.decorators.http import require_POST
+from django.shortcuts import redirect
+
+
+@require_POST
+def update_country(request):
+    if "country_update" in request.POST:
+        request.session["selected_billing_country"] = request.POST["country_update"]
+
+    if "HTTP_REFERER" in request.META:
+        return redirect(request.META["HTTP_REFERER"])
+    else:
+        return redirect('index')
+
+
+@dataclasses.dataclass
+class Price:
+    amount: decimal.Decimal
+    amount_inc_vat: decimal.Decimal
+    taxable: bool
+    country: str
+    currency: str
+
+
+def convert_currency(
+        amount: decimal.Decimal, source_currency: str, username: typing.Optional[str], remote_ip: typing.Optional[str],
+        selected_country: typing.Optional[str]
+) -> Price:
+    msg = billing_pb2.BillingRequest(
+        convert_currency=billing_pb2.ConvertCurrencyRequest(
+            from_currency=source_currency,
+            to_currency="GBP",
+            amount=int(round(amount * decimal.Decimal(100))),
+            username=google.protobuf.wrappers_pb2.StringValue(
+                value=username
+            ) if username else None,
+            remote_ip=google.protobuf.wrappers_pb2.StringValue(
+                value=str(remote_ip)
+            ) if remote_ip else None,
+            country_selection=google.protobuf.wrappers_pb2.StringValue(
+                value=selected_country
+            ) if selected_country else None
+        )
+    )
+    msg_response = billing_pb2.ConvertCurrencyResponse()
+    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString()))
+
+    amount = (decimal.Decimal(msg_response.amount) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
+    amount_inc_vat = (decimal.Decimal(msg_response.amount_inc_vat) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
+    return Price(
+        amount=amount,
+        amount_inc_vat=amount_inc_vat,
+        taxable=msg_response.taxable,
+        country=msg_response.used_country,
+        currency="GBP"
+    )
 
 
 @dataclasses.dataclass

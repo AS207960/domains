@@ -56,7 +56,10 @@ def domain_price_query(request):
                 zone, sld = zone_info.get_domain_info(domain_idna)
                 if zone:
                     try:
-                        data = zone.pricing.fees(sld)
+                        data = zone.pricing.fees(
+                            request.country.iso_code, request.user.username if request.user.is_authenticated else None,
+                            sld
+                        )
                         return render(request, "domains/domain_price_query.html", {
                             "domain_form": form,
                             "domain_data": data
@@ -1025,12 +1028,13 @@ def domain_search_success(request, domain_name):
             "back_url": referrer
         })
 
-    price_decimal = zone.pricing.registration(sld)
+    price_decimal = zone.pricing.registration(
+        request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld
+    )
 
     return render(request, "domains/domain_search_success.html", {
         "domain": domain_name,
         "price_decimal": price_decimal,
-        "currency": "GBP"
     })
 
 
@@ -1082,7 +1086,9 @@ def domain_register(request, domain_name):
             tech_contact = form.cleaned_data['tech']
             period = form.cleaned_data['period']
 
-            billing_value = zone_price.registration(sld, unit=period.unit, value=period.value)
+            billing_value = zone_price.registration(
+                request.country.iso_code, request.user.username, sld, unit=period.unit, value=period.value
+            ).amount
             if billing_value is None:
                 return render(request, "domains/error.html", {
                     "error": "You don't have permission to perform this action",
@@ -1111,20 +1117,19 @@ def domain_register(request, domain_name):
             user=request.user
         )
 
-    price_decimal = zone_price.registration(sld)
+    price_decimal = zone_price.registration(request.country.iso_code, request.user.username, sld)
 
     return render(request, "domains/domain_form.html", {
         "domain_form": form,
         "domain_name": domain_unicode,
         "price_decimal": price_decimal,
         "zone_notice": zone_notice,
-        "currency": "GBP",
         "zone_info": zone,
         "error": error
     })
 
 
-def confirm_order(request, order, confirm_template, pending_template):
+def confirm_order(request, order, pending_template):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = reverse('domains')
 
@@ -1162,7 +1167,7 @@ def domain_register_confirm(request, order_id):
     registration_order = get_object_or_404(models.DomainRegistrationOrder, id=order_id)
 
     return confirm_order(
-        request, registration_order, "domains/register_domain_confirm.html", "domains/domain_pending.html"
+        request, registration_order, "domains/domain_pending.html"
     )
 
 
@@ -1243,7 +1248,9 @@ def renew_domain(request, domain_id):
                 unit=period.unit
             )
 
-            billing_value = zone_price.renewal(sld, unit=period.unit, value=period.value)
+            billing_value = zone_price.renewal(
+                request.country.iso_code, request.user.username, unit=period.unit, value=period.value
+            ).amount
             if billing_value is None:
                 return render(request, "domains/error.html", {
                     "error": "You don't have permission to perform this action",
@@ -1266,7 +1273,7 @@ def renew_domain(request, domain_id):
     else:
         form = forms.DomainRenewForm(zone_info=zone)
 
-    price_decimal = zone_price.renewal(sld)
+    price_decimal = zone_price.renewal(request.country.iso_code, request.user.username, sld)
 
     return render(request, "domains/renew_domain.html", {
         "domain": user_domain,
@@ -1282,7 +1289,7 @@ def renew_domain(request, domain_id):
 def renew_domain_confirm(request, order_id):
     renew_order = get_object_or_404(models.DomainRenewOrder, id=order_id)
 
-    return confirm_order(request, renew_order, "domains/renew_domain_confirm.html", "domains/domain_pending.html")
+    return confirm_order(request, renew_order, "domains/domain_pending.html")
 
 
 @login_required
@@ -1307,7 +1314,7 @@ def restore_domain(request, domain_id):
         })
 
     zone_price, _ = zone.pricing, zone.registry
-    billing_value = zone_price.restore(sld)
+    billing_value = zone_price.restore(request.country.iso_code, request.user.username, sld).amount
 
     order = models.DomainRestoreOrder(
         domain=user_domain.domain,
@@ -1326,7 +1333,7 @@ def restore_domain(request, domain_id):
 def restore_domain_confirm(request, order_id):
     restore_order = get_object_or_404(models.DomainRestoreOrder, id=order_id)
 
-    return confirm_order(request, restore_order, "domains/restore_domain.html", "domains/domain_restore_pending.html")
+    return confirm_order(request, restore_order, "domains/domain_restore_pending.html")
 
 
 def domain_transfer_query(request):
@@ -1428,7 +1435,7 @@ def domain_transfer(request, domain_name):
 
     zone_price, registry_name = zone.pricing, zone.registry
     try:
-        price_decimal = zone_price.transfer(sld)
+        price_decimal = zone_price.transfer(request.country.iso_code, request.user.username, sld)
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1452,7 +1459,7 @@ def domain_transfer(request, domain_name):
                 admin_contact=admin_contact,
                 billing_contact=billing_contact,
                 tech_contact=tech_contact,
-                price=price_decimal,
+                price=price_decimal.amount,
                 user=request.user,
                 off_session=False,
             )
@@ -1477,7 +1484,7 @@ def domain_transfer_confirm(request, order_id):
     transfer_order = get_object_or_404(models.DomainTransferOrder, id=order_id)
 
     return confirm_order(
-        request, transfer_order, "domains/transfer_domain_confirm.html", "domains/domain_transfer_pending.html"
+        request, transfer_order, "domains/domain_transfer_pending.html"
     )
 
 

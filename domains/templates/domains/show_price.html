@@ -1,0 +1,10 @@
+{% load humanize %}
+{% if price.amount == price.amount_inc_vat %}
+    {{ price.amount|floatformat:2|intcomma }} {{ price.currency }}
+{% else %}
+    {% if price.taxable %}
+        {{ price.amount|floatformat:2|intcomma }} {{ price.currency }} (exc. VAT)
+    {% else %}
+        {{ price.amount_inc_vat|floatformat:2|intcomma }} {{ price.currency }} (inc. {{ price.country|upper }} VAT)
+    {% endif %}
+{% endif %}

@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import domain, hosts, contacts, admin, gchat_bot, suggest
+from .views import domain, hosts, contacts, admin, gchat_bot, suggest, billing
 
 urlpatterns = [
     path('', domain.index, name='index'),
+    path('update_billing_country/', billing.update_country, name='update_billing_country'),
     path('prices/', domain.domain_prices, name='domain_prices'),
     path('prices/query/', domain.domain_price_query, name='domain_price_query'),
     path('domains/suggest/', suggest.suggest_name, name='suggest_domain'),
