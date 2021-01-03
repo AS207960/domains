@@ -35,11 +35,13 @@
                     </div>
                     <div class="col">
                         <b>Last updated date:</b><br/>
-                        {% if domain.last_updated_date %}{{ domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                        {% if domain.last_updated_date %}{{ domain.last_updated_date|date:"N jS Y P" }}{% else %}
+                            N/A{% endif %}
                     </div>
                     <div class="col">
                         <b>Last transfer date:</b><br/>
-                        {% if domain.last_transfer_date %}{{ domain.last_transfer_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                        {% if domain.last_transfer_date %}{{ domain.last_transfer_date|date:"N jS Y P" }}{% else %}
+                            N/A{% endif %}
                     </div>
                 </div>
             </div>
@@ -49,13 +51,16 @@
         <div class="row">
             <div class="col">
                 {% if registrant %}
-                <p>
-                    <b>Registered to: </b> {{ registrant }}
-                    <a href="{% url 'edit_contact' registrant.id %}" class="btn btn-primary btn-sm">View registrant</a>
-                </p>
+                    <p>
+                        <b>Registered to: </b> {{ registrant }}
+                        <a href="{% url 'edit_contact' registrant.id %}" class="btn btn-primary btn-sm">View
+                            registrant</a>
+                    </p>
                 {% endif %}
                 {% if domain_info.registrant_change_supported %}
-                    {% crispy registrant_form registrant_form.helper %}
+                    {% if domain.can_update %}
+                        {% crispy registrant_form registrant_form.helper %}
+                    {% endif %}
                 {% else %}
                     <p>
                         This TLD has a weird procedure for changing the registrant contact.
@@ -65,27 +70,33 @@
             </div>
             <div class="col">
                 <p>
-                    <div class="btn-group">
-                        <a href="{{ sharing_uri }}" class="btn btn-primary">&#x1f91d; Share</a>
-                        {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
-                            <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
-                        {% else %}
-                            {% if registration_enabled %}
-                                {% if domain_info.renew_supported %}
-                                    <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
-                                {% endif %}
+                <div class="btn-group">
+                    <a href="{{ sharing_uri }}" class="btn btn-primary">&#x1f91d; Share</a>
+                    {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
+                        <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
+                    {% else %}
+                        {% if registration_enabled %}
+                            {% if domain_info.renew_supported and domain.can_renew %}
+                                <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
                             {% endif %}
-                            <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
-                            <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">Regenerate transfer code</a>
                         {% endif %}
-                    </div>
+                        {% if domain.can_delete %}
+                            <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
+                        {% endif %}
+                        {% if domain.can_update %}
+                            <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">Regenerate
+                                transfer code</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
                 </p>
                 <p>
                     <style>
                         .auth-hide {
                             color: transparent;
-                            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+                            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
                         }
+
                         .auth-hide:hover {
                             color: initial;
                             text-shadow: none;
@@ -110,8 +121,9 @@
                         <tr>
                             <td>
                                 {{ status }}
-                                {% if 3 == status %}
-                                    <form action="{% url 'domain_del_block_transfer' domain_id %}" method="post" class="d-inline">
+                                {% if 3 == status and domain.can_update %}
+                                    <form action="{% url 'domain_del_block_transfer' domain_id %}" method="post"
+                                          class="d-inline">
                                         {% csrf_token %}
                                         <button class="btn btn-danger btn-sm">Remove</button>
                                     </form>
@@ -127,7 +139,7 @@
                 </tbody>
             </table>
         </div>
-        {% if 3 not in domain.statuses and domain_info.transfer_lock_supported %}
+        {% if 3 not in domain.statuses and domain_info.transfer_lock_supported and domain.can_update %}
             <form action="{% url 'domain_block_transfer' domain_id %}" method="post">
                 {% csrf_token %}
                 <button class="btn btn-info">Block transfer</button>
@@ -146,7 +158,9 @@
                         No admin contact defined
                     {% endif %}
                 </p>
-                {% crispy admin_contact_form admin_contact_form.helper %}
+                {% if domain.can_update %}
+                    {% crispy admin_contact_form admin_contact_form.helper %}
+                {% endif %}
             </div>
             <div class="col">
                 <h3>Billing</h3>
@@ -158,7 +172,9 @@
                         No billing contact defined
                     {% endif %}
                 </p>
-                {% crispy billing_contact_form billing_contact_form.helper %}
+                {% if domain.can_update %}
+                    {% crispy billing_contact_form billing_contact_form.helper %}
+                {% endif %}
             </div>
             <div class="col">
                 <h3>Technical</h3>
@@ -170,7 +186,9 @@
                         No technical contact defined
                     {% endif %}
                 </p>
-                {% crispy tech_contact_form tech_contact_form.helper %}
+                {% if domain.can_update %}
+                    {% crispy tech_contact_form tech_contact_form.helper %}
+                {% endif %}
             </div>
         </div>
         <hr>
@@ -182,24 +200,30 @@
                 if you're having issues.
             </div>
         {% endif %}
-        <div class="row">
-            <div class="col my-2">
-                <div class="btn-group">
-                    <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
-                        &#x1f5d1; Delete all
-                    </a>
-                    {% if not is_hexdns %}
-                        <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-primary btn-sm">
-                            &#x1f4df; Setup for HexDNS
-                        </a>
-                    {% else %}
-                        <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-secondary btn-sm">
-                            &#x1f440; View in HexDNS
-                        </a>
-                    {% endif %}
+        {% if domain.can_update or is_hexdns %}
+            <div class="row">
+                <div class="col my-2">
+                    <div class="btn-group">
+                        {% if domain.can_update %}
+                            <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
+                                &#x1f5d1; Delete all
+                            </a>
+                        {% endif %}
+                        {% if not is_hexdns %}
+                            {% if domain.can_update %}
+                                <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-primary btn-sm">
+                                    &#x1f4df; Setup for HexDNS
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-secondary btn-sm">
+                                &#x1f440; View in HexDNS
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
@@ -218,7 +242,12 @@
                                 <th>{{ ns.unicode_host_obj }}</th>
                                 <td>N/A</td>
                                 <td>N/A</td>
-                                <td><a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}" class="btn btn-danger btn-sm">&#x1f5d1; Delete</a></td>
+                                <td>
+                                    {% if domain.can_update %}
+                                        <a href="{% url 'delete_domain_host_obj' domain_id ns.host_obj %}"
+                                           class="btn btn-danger btn-sm">&#x1f5d1; Delete</a>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% elif ns.host_name %}
                             {% for addr in ns.addresses %}
@@ -239,16 +268,18 @@
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col">
-                <h2>Add DNS server</h2>
-                {% crispy host_object_form_set host_object_form_set.helper %}
+        {% if domain.can_update %}
+            <div class="row">
+                <div class="col">
+                    <h2>Add DNS server</h2>
+                    {% crispy host_object_form_set host_object_form_set.helper %}
+                </div>
+                {#            <div class="col">#}
+                {#                <h2>Add server directly</h2>#}
+                {#                {% crispy host_addr_form host_addr_form.helper %}#}
+                {#            </div>#}
             </div>
-{#            <div class="col">#}
-{#                <h2>Add server directly</h2>#}
-{#                {% crispy host_addr_form host_addr_form.helper %}#}
-{#            </div>#}
-        </div>
+        {% endif %}
         <hr>
         <h2>Associated host objects (glue records)</h2>
         <div class="table-responsive">
@@ -293,7 +324,10 @@
                 </div>
                 <div class="col">
                     <p>
-                        <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">&#x1f5d1; Disable DNSSEC</a>
+                        {% if domain.can_update %}
+                            <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">&#x1f5d1;
+                                Disable DNSSEC</a>
+                        {% endif %}
                     </p>
                 </div>
             </div>
@@ -318,16 +352,19 @@
                                     <td>{{ ds_data.digest_type }}</td>
                                     <td>{{ ds_data.digest }}</td>
                                     <td>
-                                        <form action="{% url 'delete_domain_ds_data' domain_id %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="key_tag" value="{{ ds_data.key_tag }}">
-                                            <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
-                                            <input type="hidden" name="digest_type" value="{{ ds_data.digest_type }}">
-                                            <input type="hidden" name="digest" value="{{ ds_data.digest }}">
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                &#x1f5d1; Delete
-                                            </button>
-                                        </form>
+                                        {% if domain.can_update %}
+                                            <form action="{% url 'delete_domain_ds_data' domain_id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="key_tag" value="{{ ds_data.key_tag }}">
+                                                <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
+                                                <input type="hidden" name="digest_type"
+                                                       value="{{ ds_data.digest_type }}">
+                                                <input type="hidden" name="digest" value="{{ ds_data.digest }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    &#x1f5d1; Delete
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -339,7 +376,9 @@
                         </tbody>
                     </table>
                 </div>
-                {% crispy ds_form ds_form.helper %}
+                {% if domain.can_update %}
+                    {% crispy ds_form ds_form.helper %}
+                {% endif %}
             {% elif domain.sec_dns.key_data != None %}
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
@@ -361,16 +400,19 @@
                                     <td>{{ ds_data.algorithm }}</td>
                                     <td>{{ ds_data.public_key }}</td>
                                     <td>
-                                        <form action="{% url 'delete_domain_dnskey_data' domain_id %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="flags" value="{{ ds_data.flags }}">
-                                            <input type="hidden" name="protocol" value="{{ ds_data.protocol }}">
-                                            <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
-                                            <input type="hidden" name="public_key" value="{{ ds_data.public_key }}">
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                &#x1f5d1; Delete
-                                            </button>
-                                        </form>
+                                        {% if domain.can_update %}
+                                            <form action="{% url 'delete_domain_dnskey_data' domain_id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="flags" value="{{ ds_data.flags }}">
+                                                <input type="hidden" name="protocol" value="{{ ds_data.protocol }}">
+                                                <input type="hidden" name="algorithm" value="{{ ds_data.algorithm }}">
+                                                <input type="hidden" name="public_key" value="{{ ds_data.public_key }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    &#x1f5d1; Delete
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -382,17 +424,21 @@
                         </tbody>
                     </table>
                 </div>
-                {% crispy dnskey_form dnskey_form.helper %}
+                {% if domain.can_update %}
+                    {% crispy dnskey_form dnskey_form.helper %}
+                {% endif %}
             {% endif %}
         {% else %}
             <p>
                 No DNSSEC data exists for this domain.
             </p>
-            <h3>Enable DNSSEC</h3>
-            {% if not domain_info.ds_data_supported %}
-                {% crispy dnskey_form dnskey_form.helper %}
-            {% else %}
-                {% crispy ds_form ds_form.helper %}
+            {% if domain.can_update %}
+                <h3>Enable DNSSEC</h3>
+                {% if not domain_info.ds_data_supported %}
+                    {% crispy dnskey_form dnskey_form.helper %}
+                {% else %}
+                    {% crispy ds_form ds_form.helper %}
+                {% endif %}
             {% endif %}
         {% endif %}
     </div>

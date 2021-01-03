@@ -602,9 +602,8 @@ class DomainSerializer(serializers.Serializer):
         self.fields["tech_contact"].auth_token = self.context['request'].auth.token
 
     @classmethod
-    def get_domain(cls, d: models.DomainRegistration, user):
+    def get_domain(cls, d: models.DomainRegistration, domain: apps.epp_api.Domain, user):
         domain_info = zone_info.get_domain_info(d.domain)[0]
-        domain = apps.epp_client.get_domain(d.domain)
         if domain_info.registrant_supported:
             registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user)
         else:

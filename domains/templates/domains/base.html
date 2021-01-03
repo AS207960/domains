@@ -116,18 +116,20 @@
 <footer class="footer mt-auto py-3">
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-6 col-12">
                 <p class="lead">
                     Prices for: {{ request.country.name }} {{ request.country.emoji }}
                 </p>
             </div>
-            <div class="col">
+            <div class="col-lg-6 col-12">
                 {% get_countries as countries %}
                 <form action="{% url 'update_billing_country' %}" method="post" class="form-inline">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="country_update">Change country</label>
-                        <div class="input-group mx-3">
+                    <div class="form-group mw-100 row">
+                        <div class="col-md-4 col-12">
+                            <label for="country_update">Change country</label>
+                        </div>
+                        <div class="input-group col-md-8 col-12">
                         <select name="country_update" id="country_update" class="form-control custom-select">
                             {% for country in countries %}
                                 <option value="{{ country.code }}"{% if country.code == request.country.iso_code %} selected{% endif %}>{{ country.name }}</option>

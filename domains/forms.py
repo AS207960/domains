@@ -179,7 +179,7 @@ class DomainHostObjectForm(forms.Form):
             'host',
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
 
 
 class BaseDomainHostObjectFormSet(forms.BaseFormSet):
@@ -196,7 +196,7 @@ class BaseDomainHostObjectFormSet(forms.BaseFormSet):
             'host',
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
 
     def get_form_kwargs(self, index):
         kwargs = self.form_kwargs.copy()
@@ -230,7 +230,7 @@ class DomainHostAddrForm(forms.Form):
             'address'
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
 
 
 class DomainDSDataForm(forms.Form):
@@ -274,7 +274,7 @@ class DomainDSDataForm(forms.Form):
             'digest'
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
 
 
 class DomainDNSKeyDataForm(forms.Form):
@@ -312,7 +312,7 @@ class DomainDNSKeyDataForm(forms.Form):
             'public_key'
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
 
 
 class DomainSearchForm(forms.Form):
@@ -333,6 +333,7 @@ class DomainSearchForm(forms.Form):
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Search'))
+
 
 def map_period(period: apps.epp_api.Period):
     str_value = str(period.value)
@@ -389,7 +390,7 @@ class DomainRegisterForm(forms.Form):
                 'tech'
             )
         )
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Register'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Proceed to payment', css_class="btn-block"))
 
 
 class DomainTransferForm(forms.Form):
@@ -427,7 +428,7 @@ class DomainTransferForm(forms.Form):
                 'tech'
             )
         )
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Start transfer'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Proceed to payment', css_class="btn-block"))
 
 
 class DomainRenewForm(forms.Form):
@@ -441,7 +442,7 @@ class DomainRenewForm(forms.Form):
         self.helper.layout = crispy_forms.layout.Layout(
             'period',
         )
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Renew'))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Proceed to payment', css_class="btn-block"))
 
 
 class AdminDomainCheckForm(forms.Form):

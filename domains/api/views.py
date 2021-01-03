@@ -314,8 +314,12 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        if not domain_data.can_update:
+            raise PermissionDenied
+
         serializer = serializers.DomainSerializer(
-            serializers.DomainSerializer.get_domain(domain, request.user),
+            serializers.DomainSerializer.get_domain(domain, domain_data, request.user),
             data=request.data,
             context={
                 'request': request
@@ -333,8 +337,12 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        if not domain_data.can_update:
+            raise PermissionDenied
+
         serializer = serializers.DomainSerializer(
-            serializers.DomainSerializer.get_domain(domain, request.user),
+            serializers.DomainSerializer.get_domain(domain, domain_data, request.user),
             data=request.data,
             context={
                 'request': request
@@ -353,6 +361,10 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'delete') or domain.deleted:
             raise PermissionDenied
 
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        if not domain_data.can_delete:
+            raise PermissionDenied
+
         _pending = apps.epp_client.delete_domain(domain.domain)
         domain_info, sld = zone_info.get_domain_info(domain.domain)
         if not domain_info.restore_supported:
@@ -361,7 +373,7 @@ class Domain(viewsets.ViewSet):
         else:
             domain.deleted = True
             domain.save()
-            domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
+            domain_data = serializers.DomainSerializer.get_domain(domain, domain_data, request.user)
             serializer = serializers.DomainSerializer(domain_data, context={'request': request})
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
@@ -392,6 +404,10 @@ class Domain(viewsets.ViewSet):
         domain = get_object_or_404(models.DomainRegistration, id=pk)
         if not models.DomainRenewOrder.has_class_scope(request.auth.token, 'create') \
                 or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
+            raise PermissionDenied
+        
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        if not domain_data.can_renew:
             raise PermissionDenied
 
         serializer = serializers.DomainRenewOrderSerializer(data=request.data, context={

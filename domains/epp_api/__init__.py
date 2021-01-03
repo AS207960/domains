@@ -409,6 +409,21 @@ class Domain:
         except UnicodeError:
             return self.name
 
+    @property
+    def can_update(self):
+        return int(domain_pb2.ClientUpdateProhibited) not in self.statuses \
+               and int(domain_pb2.ServerUpdateProhibited) not in self.statuses
+
+    @property
+    def can_renew(self):
+        return int(domain_pb2.ClientRenewProhibited) not in self.statuses \
+               and int(domain_pb2.ServerRenewProhibited) not in self.statuses
+
+    @property
+    def can_delete(self):
+        return int(domain_pb2.ClientDeleteProhibited) not in self.statuses \
+               and int(domain_pb2.ServerDeleteProhibited) not in self.statuses
+
     def set_auth_info(self, auth_info: str) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,

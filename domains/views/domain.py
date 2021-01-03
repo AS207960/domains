@@ -348,6 +348,12 @@ def update_domain_contact(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     form = forms.DomainContactForm(
         request.POST,
         user=request.user,
@@ -437,6 +443,12 @@ def domain_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     if domain_info.transfer_lock_supported:
         try:
             domain_data.add_states([apps.epp_api.DomainStatus(status=3)])
@@ -475,6 +487,12 @@ def domain_del_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     if domain_info.transfer_lock_supported:
         try:
             domain_data.del_states([apps.epp_api.DomainStatus(status=3)])
@@ -507,6 +525,12 @@ def domain_regen_transfer_code(request, domain_id):
         error = rpc_error.details()
         return render(request, "domains/error.html", {
             "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
 
@@ -549,6 +573,12 @@ def add_domain_host_obj(request, domain_id):
         error = rpc_error.details()
         return render(request, "domains/error.html", {
             "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
 
@@ -624,6 +654,12 @@ def add_domain_host_addr(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     form = forms.DomainHostAddrForm(
         request.POST,
         domain_id=user_domain.id
@@ -679,6 +715,12 @@ def add_domain_ds_data(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     form = forms.DomainDSDataForm(
         request.POST,
         domain_id=domain_id
@@ -725,6 +767,12 @@ def delete_domain_ds_data(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     try:
         domain_data.del_ds_data([apps.epp_api.SecDNSDSData(
             key_tag=int(request.POST.get('key_tag')),
@@ -763,6 +811,12 @@ def add_domain_dnskey_data(request, domain_id):
         error = rpc_error.details()
         return render(request, "domains/error.html", {
             "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
 
@@ -811,6 +865,12 @@ def delete_domain_dnskey_data(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     try:
         domain_data.del_dnskey_data([apps.epp_api.SecDNSKeyData(
             flags=int(request.POST.get('flags')),
@@ -850,6 +910,12 @@ def delete_domain_sec_dns(request, domain_id):
             "back_url": referrer
         })
 
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     try:
         domain_data.del_secdns_all()
     except grpc.RpcError as rpc_error:
@@ -881,6 +947,12 @@ def delete_domain_host_obj(request, domain_id, host_name):
         error = rpc_error.details()
         return render(request, "domains/error.html", {
             "error": error,
+            "back_url": referrer
+        })
+    
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
 
@@ -1186,7 +1258,16 @@ def delete_domain(request, domain_id):
 
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
-    can_delete = True
+    try:
+        domain_data = apps.epp_client.get_domain(user_domain.domain)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    can_delete = domain_data.can_delete
 
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
@@ -1231,6 +1312,21 @@ def renew_domain(request, domain_id):
     zone, sld = zone_info.get_domain_info(user_domain.domain)
     if not zone:
         raise Http404
+
+    try:
+        domain_data = apps.epp_client.get_domain(user_domain.domain)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_renew:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
 
     zone_price, _ = zone.pricing, zone.registry
 
@@ -1500,7 +1596,9 @@ def internal_check_price(request):
         return HttpResponseBadRequest()
 
     if search_action == "register":
-        price = domain_info.pricing.registration(sld)
+        price = domain_info.pricing.registration(
+            request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld
+        )
         currency = "GBP"
     else:
         return HttpResponseBadRequest()
