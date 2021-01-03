@@ -47,7 +47,7 @@ def mail_registered(registration_order_id):
             subject='Domain registration success',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")
@@ -79,7 +79,7 @@ def mail_register_failed(registration_order_id, reason: str = None):
             subject='Domain registration failure',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")
@@ -109,7 +109,7 @@ def mail_transferred(transfer_order_id):
             subject='Domain transfer success',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")
@@ -140,7 +140,7 @@ def mail_transfer_failed(transfer_order_id, reason: str = None):
             subject='Domain transfer failure',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")
@@ -170,7 +170,7 @@ def mail_restored(restore_order_id):
             subject='Domain restore success',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")
@@ -201,7 +201,7 @@ def mail_restore_failed(restore_order_id, reason: str = None):
             subject='Domain restore failure',
             body=txt_content,
             to=[user.email],
-            bcc=['q@as207960.net'],
+            bcc=['email-log@as207960.net'],
             reply_to=['Glauca Support <hello@glauca.digital>']
         )
         email.attach_alternative(html_content, "text/html")

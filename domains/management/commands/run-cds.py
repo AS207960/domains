@@ -34,7 +34,7 @@ def mail_update(user, domain, add_cds, rem_cds, is_ds):
         subject='Domain CDS update',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net'],
+        bcc=['email-log@as207960.net'],
         reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
@@ -53,7 +53,7 @@ def mail_disabled(user, domain):
         subject='Domain DNSSEC disabled',
         body=txt_content,
         to=[user.email],
-        bcc=['q@as207960.net'],
+        bcc=['email-log@as207960.net'],
         reply_to=['Glauca Support <hello@glauca.digital>']
     )
     email.attach_alternative(html_content, "text/html")
