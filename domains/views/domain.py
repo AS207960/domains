@@ -998,7 +998,7 @@ def domain_hexdns(request, domain_id):
         "domain": user_domain.domain,
         "domain_id": user_domain.id,
         "sub": request.user.username,
-    }, settings.JWT_PRIV_KEY, algorithm='ES384').decode()
+    }, settings.JWT_PRIV_KEY, algorithm='ES384')
 
     return redirect(f"{settings.HEXDNS_URL}/setup_domains_zone/?domain_token={domain_jwt}")
 

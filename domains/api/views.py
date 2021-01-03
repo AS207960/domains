@@ -405,7 +405,7 @@ class Domain(viewsets.ViewSet):
         if not models.DomainRenewOrder.has_class_scope(request.auth.token, 'create') \
                 or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
-        
+
         domain_data = apps.epp_client.get_domain(domain.domain)
         if not domain_data.can_renew:
             raise PermissionDenied
