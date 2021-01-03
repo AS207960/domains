@@ -2,16 +2,37 @@
 {% block content %}
     <table style="border-spacing: 0;width:100%;">
         <tr>
-          <td>
-            <p>
-                Your order for the registration of the domain {{ domain }} has succeeded.<br/>
-                Thank you for choosing to register with us!<br/>
-                You can now manage the domain from the domains control panel.
-            </p>
-          </td>
-          <td>
-            <img src="https://as207960.net/assets/img/shark-heart.png" height="100" alt=""/>
-          </td>
+            <td>
+                <p>
+                    Your order for the registration of the domain {{ domain }} has succeeded.<br/>
+                    Thank you for choosing to register with us!<br/>
+                    You can now manage the domain from the domains control panel.
+                </p>
+                <a href="{{ domain_url }}"
+                   style="color: #fff;background-color: #3182CE;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
+                    Manage your domain
+                </a>
+                <script type="application/ld+json">
+                    {
+                        "@context": "http://schema.org",
+                        "@type": "EmailMessage",
+                        "potentialAction": {
+                            "@type": "ViewAction",
+                            "name": "Manage domain",
+                            "url": "{{ domain_url }}"
+                        },
+                        "description": "Manage your domain on our web portal",
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "Glauca",
+                            "url": "https://glauca.digital"
+                        }
+                    }
+                </script>
+            </td>
+            <td>
+                <img src="https://as207960.net/assets/img/shark-heart.png" height="100" alt=""/>
+            </td>
         </tr>
     </table>
 {% endblock %}

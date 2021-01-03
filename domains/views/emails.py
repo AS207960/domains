@@ -1,5 +1,6 @@
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import reverse
 from celery import shared_task
 from django.conf import settings
 from .. import models
@@ -34,11 +35,13 @@ def mail_registered(registration_order_id):
         feedback_url = get_feedback_url(
             f"{domain.domain} domain registration", domain.id
         )
+        domain_url = reverse('domain', args=(domain.domain_obj.id,))
 
         context = {
             "name": user.first_name,
             "domain": domain.domain,
             "feedback_url": feedback_url,
+            "domain_url": domain_url,
         }
         html_content = render_to_string("domains_email/register_success.html", context)
         txt_content = render_to_string("domains_email/register_success.txt", context)
@@ -96,11 +99,13 @@ def mail_transferred(transfer_order_id):
         feedback_url = get_feedback_url(
             f"{domain.domain} domain transfer", domain.id
         )
+        domain_url = reverse('domain', args=(domain.domain_obj.id,))
 
         context = {
             "name": user.first_name,
             "domain": domain.domain,
             "feedback_url": feedback_url,
+            "domain_url": domain_url,
         }
         html_content = render_to_string("domains_email/transfer_success.html", context)
         txt_content = render_to_string("domains_email/transfer_success.txt", context)
