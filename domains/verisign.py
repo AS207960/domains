@@ -1,12 +1,14 @@
-import requests
-import random
-import enum
-import typing
-import decimal
 import dataclasses
-import grpc
-from django.conf import settings
+import decimal
+import enum
+import random
+import typing
 from concurrent.futures import ThreadPoolExecutor
+
+import grpc
+import requests
+from django.conf import settings
+
 from . import zone_info, apps
 
 if settings.DEBUG:
@@ -46,7 +48,7 @@ class SuggestedDomain:
     currency: str
 
     @classmethod
-    def from_result(cls, res):
+    def from_result(cls, res, iso_code=None, username=None):
         if res["availability"] == "available":
             availability = Availability.AVAILABLE
         elif res["availability"] == "registered":
@@ -72,7 +74,7 @@ class SuggestedDomain:
             price_decimal = None
         else:
             try:
-                price_decimal = zone.pricing.registration(sld)
+                price_decimal = zone.pricing.registration(iso_code, username, sld)
             except grpc.RpcError:
                 price_decimal = None
 
@@ -121,6 +123,7 @@ def get_intersecting_tlds() -> typing.List[SupportedTLD]:
 def suggests(
         name: str,
         ip_address: typing.Optional[str] = None,
+        iso_code=None, username=None
 ) -> typing.List[SuggestedDomain]:
     tlds = ",".join(list(map(lambda t: t.tld, get_intersecting_tlds())))
     params = {
@@ -133,13 +136,14 @@ def suggests(
 
     data = make_verisign_request("/suggest", params)
     with ThreadPoolExecutor() as executor:
-        return list(executor.map(SuggestedDomain.from_result, data["results"]))
+        return list(executor.map(lambda r: SuggestedDomain.from_result(r, iso_code, username), data["results"]))
 
 
 def suggest_personal_names(
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
-        middle_names: typing.Optional[typing.List[str]] = None
+        middle_names: typing.Optional[typing.List[str]] = None,
+        iso_code=None, username=None
 ) -> typing.List[SuggestedDomain]:
     tlds = ",".join(random.choices(list(map(lambda t: t.tld, get_intersecting_tlds())), k=10))
     params = {
@@ -155,7 +159,7 @@ def suggest_personal_names(
 
     data = make_verisign_request("/suggest-personal-names", params)
     with ThreadPoolExecutor() as executor:
-        return list(executor.map(SuggestedDomain.from_result, data["results"]))
+        return list(executor.map(lambda r: SuggestedDomain.from_result(r, iso_code, username), data["results"]))
 
 
 def online_presence(
@@ -167,6 +171,7 @@ def online_presence(
         preferred_name: typing.Optional[str] = None,
         location: typing.Optional[str] = None,
         email: typing.Optional[str] = None,
+        iso_code=None, username=None
 ) -> typing.List[SuggestedDomain]:
     tlds = ",".join(random.choices(list(map(lambda t: t.tld, get_intersecting_tlds())), k=10))
     params = {
@@ -191,4 +196,4 @@ def online_presence(
 
     data = make_verisign_request("/online-presence", params)
     with ThreadPoolExecutor() as executor:
-        return list(executor.map(SuggestedDomain.from_result, data["results"]))
+        return list(executor.map(lambda r: SuggestedDomain.from_result(r, iso_code, username), data["results"]))

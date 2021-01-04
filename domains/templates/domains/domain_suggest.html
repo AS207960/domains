@@ -60,7 +60,7 @@
                                 </td>
                                 <td>
                                     {% if suggestion.price %}
-                                        {{ suggestion.price|floatformat:2|intcomma }} {{ suggestion.currency }}
+                                        {% include "domains/show_price.html" with price=suggestion.price %}
                                     {% else %}
                                         N/A
                                     {% endif %}

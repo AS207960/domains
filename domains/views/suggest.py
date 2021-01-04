@@ -26,7 +26,11 @@ def suggest_name(request):
         if form.is_valid():
             ip_addr = get_ip(request)
             try:
-                suggestions = verisign.suggests(form.cleaned_data["domain"], str(ip_addr))
+                suggestions = verisign.suggests(
+                    form.cleaned_data["domain"], str(ip_addr),
+                    iso_code=request.country.iso_code,
+                    username=request.user.username if request.user.is_authenticated else None
+                )
             except verisign.VerisignError as e:
                 error = e.message
     else:
@@ -60,14 +64,22 @@ def suggest_personal_name(request):
                 middle_names = name_parts[1:-1]
                 last_name = name_parts[-1]
             try:
-                suggestions = verisign.suggest_personal_names(first_name, last_name, middle_names)
+                suggestions = verisign.suggest_personal_names(
+                    first_name, last_name, middle_names,
+                    iso_code=request.country.iso_code,
+                    username=request.user.username if request.user.is_authenticated else None
+                )
             except verisign.VerisignError as e:
                 error = e.message
     else:
         form = forms.PersonalNameSearchForm()
         if request.user.is_authenticated:
             try:
-                suggestions = verisign.suggest_personal_names(request.user.first_name, request.user.last_name)
+                suggestions = verisign.suggest_personal_names(
+                    request.user.first_name, request.user.last_name,
+                    iso_code=request.country.iso_code,
+                    username=request.user.username if request.user.is_authenticated else None
+                )
             except verisign.VerisignError as e:
                 error = e.message
 
@@ -93,6 +105,8 @@ def suggest_online(request):
                     preferred_name=form.cleaned_data.get("domain"),
                     location=form.cleaned_data.get("location"),
                     email=form.cleaned_data.get("email"),
+                    iso_code=request.country.iso_code,
+                    username=request.user.username if request.user.is_authenticated else None
                 )
             except verisign.VerisignError as e:
                 error = e.message

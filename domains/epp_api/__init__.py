@@ -831,11 +831,77 @@ class Phone:
         )
 
 
+@dataclasses.dataclass
+class ContactStatus:
+    status: int
+
+    @property
+    def name(self):
+        if self.status == 0:
+            return "client_delete_prohibited"
+        elif self.status == 1:
+            return "client_transfer_prohibited"
+        elif self.status == 2:
+            return "client_update_prohibited"
+        elif self.status == 3:
+            return "linked"
+        elif self.status == 4:
+            return "ok"
+        elif self.status == 5:
+            return "pending_create"
+        elif self.status == 6:
+            return "pending_delete"
+        elif self.status == 7:
+            return "pending_transfer"
+        elif self.status == 8:
+            return "pending_update"
+        elif self.status == 9:
+            return "server_delete_prohibited"
+        elif self.status == 10:
+            return "server_transfer_prohibited"
+        elif self.status == 11:
+            return "server_update_prohibited"
+
+    def __str__(self):
+        if self.status == 0:
+            return "Client delete prohibited"
+        elif self.status == 1:
+            return "Client transfer prohibited"
+        elif self.status == 2:
+            return "Client update prohibited"
+        elif self.status == 3:
+            return "Linked"
+        elif self.status == 4:
+            return "OK"
+        elif self.status == 5:
+            return "Pending create"
+        elif self.status == 6:
+            return "Pending delete"
+        elif self.status == 7:
+            return "Pending transfer"
+        elif self.status == 8:
+            return "Pending update"
+        elif self.status == 9:
+            return "Server delete prohibited"
+        elif self.status == 10:
+            return "Server transfer prohibited"
+        elif self.status == 11:
+            return "Server update prohibited"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.status == other
+        elif type(other) == self.__class__:
+            return other.status == self.status
+        else:
+            return False
+
+
 class Contact:
     _app = None  # type: EPPClient
     id: str
     registry_id: str
-    statuses: typing.List[int]
+    statuses: typing.List[ContactStatus]
     local_address: Address
     int_address: typing.Optional[Address]
     phone: typing.Optional[Phone]
@@ -859,7 +925,7 @@ class Contact:
         self._app = app
         self.id = resp.id
         self.registry_id = resp.registry_id
-        self.statuses = resp.statuses
+        self.statuses = list(map(lambda s: ContactStatus(status=s), resp.statuses))
         self.local_address = Address.from_pb(resp.local_address) if resp.HasField("local_address") else None
         self.int_address = Address.from_pb(resp.internationalised_address) if\
             resp.HasField("internationalised_address") else None
