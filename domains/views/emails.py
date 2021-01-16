@@ -35,7 +35,7 @@ def mail_registered(registration_order_id):
         feedback_url = get_feedback_url(
             f"{domain.domain} domain registration", domain.id
         )
-        domain_url = reverse('domain', args=(domain.domain_obj.id,))
+        domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.domain_obj.id,))
 
         context = {
             "name": user.first_name,
@@ -99,7 +99,7 @@ def mail_transferred(transfer_order_id):
         feedback_url = get_feedback_url(
             f"{domain.domain} domain transfer", domain.id
         )
-        domain_url = reverse('domain', args=(domain.domain_obj.id,))
+        domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.domain_obj.id,))
 
         context = {
             "name": user.first_name,
