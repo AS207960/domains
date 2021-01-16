@@ -16,9 +16,10 @@ class ContactForm(forms.ModelForm):
         self.fields['local_address'].queryset = models.ContactAddress.get_object_list(access_token)
         self.fields['int_address'].queryset = models.ContactAddress.get_object_list(access_token)
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'description',
             crispy_forms.layout.HTML("<hr/>"),
@@ -74,9 +75,10 @@ class AddressForm(forms.ModelForm):
         this_year = datetime.date.today().year
         self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'description',
             crispy_forms.layout.HTML("<hr/>"),
@@ -124,11 +126,9 @@ class AddressForm(forms.ModelForm):
             layout="""
             <div class="input-group input-group-sm">
                 {widget}
-                <div class="input-group-append">
                     <span class="input-group-text">
                         <img class="country-select-flag" id="{flag_id}" src="{country.flag}">
-                    </span
-                </div>
+                    </span>
             </div>
             """
         )}
@@ -146,9 +146,10 @@ class DomainContactForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('update_domain_contact', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'contact',
             crispy_forms.layout.Hidden('type', contact_type)
@@ -172,9 +173,10 @@ class DomainHostObjectForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('add_domain_host_obj', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'host',
         )
@@ -189,9 +191,10 @@ class BaseDomainHostObjectFormSet(forms.BaseFormSet):
         self.domain_id = domain_id
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('add_domain_host_obj', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'host',
         )
@@ -222,9 +225,10 @@ class DomainHostAddrForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('add_domain_host_addr', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'host',
             'address'
@@ -264,9 +268,10 @@ class DomainDSDataForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('add_domain_ds_data', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'key_tag',
             'algorithm',
@@ -302,9 +307,10 @@ class DomainDNSKeyDataForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = reverse('add_domain_dnskey_data', args=(domain_id,))
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'flags',
             'protocol',
@@ -325,9 +331,10 @@ class DomainSearchForm(forms.Form):
 
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.form_action = 'domain_search'
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'domain',
         )
@@ -473,9 +480,10 @@ class AdminDomainCheckForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'domain',
             'currency',
@@ -509,9 +517,10 @@ class AdminDomainTransferForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'domain',
             'auth_code',
@@ -529,9 +538,10 @@ class AdminContactCheckForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'contact',
             'registry_id'
@@ -548,9 +558,10 @@ class AdminContactGetIDForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'contact',
             'registry_id'
@@ -568,9 +579,10 @@ class HostSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             crispy_forms.bootstrap.AppendedText('host', f".{domain_name}"),
             crispy_forms.layout.Hidden('type', 'host_search')
@@ -588,9 +600,10 @@ class HostRegisterForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'address',
             crispy_forms.layout.Hidden('type', 'host_create')
@@ -608,9 +621,10 @@ class NameSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'domain',
         )
@@ -625,9 +639,10 @@ class PersonalNameSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'name',
         )
@@ -649,9 +664,10 @@ class OnlineNameSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-10'
+        self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'online_uri',
             'online_title',

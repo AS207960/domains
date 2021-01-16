@@ -3,7 +3,7 @@
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
-            <div class="jumbotron my-0">
+            <div class="bg-light p-3 rounded my-0">
                 <h1 class="display-4">My domains</h1>
                 <hr class="my-4">
                 {% if registration_enabled %}
@@ -26,7 +26,7 @@
         {% endif %}
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th>Creation date</th>
@@ -52,13 +52,13 @@
                                 <th scope="row">
                                     {{ domain.domain.unicode_domain }}
                                     {% if domain.domain.expired %}
-                                        <span class="badge badge-danger">Expired</span>
+                                        <span class="badge bg-danger">Expired</span>
                                     {% endif %}
                                     {% for rgp_state in domain.domain.rgp_state %}
-                                        <span class="badge badge-info">{{ rgp_state }}</span>
+                                        <span class="badge bg-info">{{ rgp_state }}</span>
                                     {% endfor %}
                                     {% if 8 in domain.domain.statuses %}
-                                        <span class="badge badge-info">Pending delete</span>
+                                        <span class="badge bg-info">Pending delete</span>
                                     {% endif %}
                                 </th>
                                 <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
@@ -80,7 +80,7 @@
         <h2>Registration orders</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th>State</th>
@@ -96,27 +96,27 @@
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
-                                    <span class="badge badge-secondary">
+                                    <span class="badge bg-secondary">
                                             &#x23f3; Pending
                                         </span>
                                 {% elif domain.state == "T" %}
-                                    <span class="badge badge-primary">
+                                    <span class="badge bg-primary">
                                             &#x1f4c7; Started
                                         </span>
                                 {% elif domain.state == "N" %}
-                                    <span class="badge badge-warning">
+                                    <span class="badge bg-warning">
                                             &#x1f4b8; Needs payment
                                         </span>
                                 {% elif domain.state == "S" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f4c7; Processing
                                         </span>
                                 {% elif domain.state == "A" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f575; Pending approval
                                         </span>
                                 {% elif domain.state == "F" %}
-                                    <span class="badge badge-danger">
+                                    <span class="badge bg-danger">
                                              &#x1f645; Failed
                                         </span>
                                 {% endif %}
@@ -142,7 +142,7 @@
         <h2>Transfer orders</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th>State</th>
@@ -158,27 +158,27 @@
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
-                                    <span class="badge badge-secondary">
+                                    <span class="badge bg-secondary">
                                             &#x23f3; Pending
                                         </span>
                                 {% elif domain.state == "T" %}
-                                    <span class="badge badge-primary">
+                                    <span class="badge bg-primary">
                                             &#x1f4c7; Started
                                         </span>
                                 {% elif domain.state == "N" %}
-                                    <span class="badge badge-warning">
+                                    <span class="badge bg-warning">
                                             &#x1f4b8; Needs payment
                                         </span>
                                 {% elif domain.state == "S" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f4c7; Processing
                                         </span>
                                 {% elif domain.state == "A" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f575; Pending approval
                                         </span>
                                 {% elif domain.state == "F" %}
-                                    <span class="badge badge-danger">
+                                    <span class="badge bg-danger">
                                              &#x1f645; Failed
                                         </span>
                                 {% endif %}
@@ -204,7 +204,7 @@
         <h2>Renewal orders</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th>State</th>
@@ -220,27 +220,27 @@
                             </th>
                             <td>
                                 {% if domain.state == "P" %}
-                                    <span class="badge badge-secondary">
+                                    <span class="badge bg-secondary">
                                             &#x23f3; Pending
                                         </span>
                                 {% elif domain.state == "T" %}
-                                    <span class="badge badge-primary">
+                                    <span class="badge bg-primary">
                                             &#x1f4c7; Started
                                         </span>
                                 {% elif domain.state == "N" %}
-                                    <span class="badge badge-warning">
+                                    <span class="badge bg-warning">
                                             &#x1f4b8; Needs payment
                                         </span>
                                 {% elif domain.state == "S" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f4c7; Processing
                                         </span>
                                 {% elif domain.state == "A" %}
-                                    <span class="badge badge-info">
+                                    <span class="badge bg-info">
                                             &#x1f575; Pending approval
                                         </span>
                                 {% elif domain.state == "F" %}
-                                    <span class="badge badge-danger">
+                                    <span class="badge bg-danger">
                                              &#x1f645; Failed
                                         </span>
                                 {% endif %}
@@ -266,7 +266,7 @@
         <h2>Restore orders</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th>State</th>
@@ -283,27 +283,27 @@
                                 </th>
                                 <td>
                                     {% if domain.state == "P" %}
-                                        <span class="badge badge-secondary">
+                                        <span class="badge bg-secondary">
                                                 &#x23f3; Pending
                                             </span>
                                     {% elif domain.state == "T" %}
-                                        <span class="badge badge-primary">
+                                        <span class="badge bg-primary">
                                                 &#x1f4c7; Started
                                             </span>
                                     {% elif domain.state == "N" %}
-                                        <span class="badge badge-warning">
+                                        <span class="badge bg-warning">
                                                 &#x1f4b8; Needs payment
                                             </span>
                                     {% elif domain.state == "S" %}
-                                        <span class="badge badge-info">
+                                        <span class="badge bg-info">
                                                 &#x1f4c7; Processing
                                             </span>
                                     {% elif domain.state == "A" %}
-                                        <span class="badge badge-info">
+                                        <span class="badge bg-info">
                                                 &#x1f575; Pending approval
                                             </span>
                                     {% elif domain.state == "F" %}
-                                        <span class="badge badge-danger">
+                                        <span class="badge bg-danger">
                                                  &#x1f645; Failed
                                             </span>
                                     {% endif %}
@@ -328,7 +328,7 @@
         <h2>Deleted domains</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                 <tr>
                     <th>Domain</th>
                     <th></th>
@@ -341,7 +341,7 @@
                             <th scope="row">
                                 {{ domain.unicode_domain }}
                                 {% if domain.pending_restore %}
-                                    <span class="badge badge-info">Pending restore</span>
+                                    <span class="badge bg-info">Pending restore</span>
                                 {% endif %}
                             </th>
                             <td style="width: 0;">

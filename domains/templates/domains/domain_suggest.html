@@ -7,7 +7,7 @@
 {% block content %}
     <section class="stripe">
         <div class="container py-3">
-            <div class="jumbotron my-0">
+            <div class="bg-light p-3 rounded my-0">
                 <h1 class="display-4">Get your <span class="text-gradient teal-indigo">perfect</span> domain<span
                         class="text-gradient teal-indigo">.</span></h1>
                 <p>Get your perfect domain from Glauca. Let us help you find your online identity.</p>
@@ -30,7 +30,7 @@
             <h2>Domain search results</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
-                    <thead class="thead-dark">
+                    <thead class="table-dark">
                     <tr>
                         <th>Name</th>
                         <th>Status</th>
@@ -45,17 +45,17 @@
                                 <th>{{ suggestion.name }}</th>
                                 <td>
                                     {% if suggestion.availability == suggestion.availability.AVAILABLE %}
-                                        <span class="badge badge-success">Available</span>
+                                        <span class="badge bg-success">Available</span>
                                     {% elif suggestion.availability == suggestion.availability.REGISTERED %}
-                                        <span class="badge badge-danger">Registered</span>
+                                        <span class="badge bg-danger">Registered</span>
                                     {% elif suggestion.availability == suggestion.availability.RESERVED %}
-                                        <span class="badge badge-warning">Reserved</span>
+                                        <span class="badge bg-warning">Reserved</span>
                                     {% elif suggestion.availability == suggestion.availability.PREMIUM %}
-                                        <span class="badge badge-primary">Premium</span>
+                                        <span class="badge bg-primary">Premium</span>
                                     {% elif suggestion.availability == suggestion.availability.UNKNOWN %}
-                                        <span class="badge badge-secondary">Unknown</span>
+                                        <span class="badge bg-secondary">Unknown</span>
                                     {% elif suggestion.availability == suggestion.availability.INVALID %}
-                                        <span class="badge badge-danger">Invalid</span>
+                                        <span class="badge bg-danger">Invalid</span>
                                     {% endif %}
                                 </td>
                                 <td>

@@ -3,7 +3,7 @@
     <div class="container my-3">
         <h1>Nominet tag list</h1>
         <table class="table">
-            <thead class="thead-dark">
+            <thead class="table-dark">
             <tr>
                 <th scope="col">Tag</th>
                 <th scope="col">Name</th>
@@ -19,9 +19,9 @@
                 <td>{% if tag.trading_name %}{{ tag.trading_name }}{% else %}N/A{% endif %}</td>
                 <td>
                     {% if tag.handshake %}
-                        <span class="badge badge-success">Yes</span>
+                        <span class="badge bg-success">Yes</span>
                     {% else %}
-                        <span class="badge badge-danger">No</span>
+                        <span class="badge bg-danger">No</span>
                     {% endif %}
                 </td>
             </tr>
