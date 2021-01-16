@@ -23,5 +23,5 @@ pyjwt
 cryptography
 dnspython
 django-cockroachdb==3.1.*
-git+https://github.com/AS207960/python-utils@a52cbfd374da96b68db0e152b980647ec938fcfe
+git+https://github.com/AS207960/python-utils@bd6c013fde4e1638ab100cec9f02102f7ad180a0
 pika
