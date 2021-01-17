@@ -381,6 +381,7 @@ class DomainInfo:
     REGISTRY_KENIC = "kenic"
     REGISTRY_AKEP = "akep"
     REGISTRY_AMNIC = "amnic"
+    REGISTRY_UNIREGISTRY = "uniregistry"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -463,6 +464,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
+            self.REGISTRY_UNIREGISTRY,
         )
 
     @property
@@ -532,7 +534,6 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_DENIC,
             self.REGISTRY_EURID,
-            # self.REGISTRY_SWITCH
         )
 
     @property
@@ -577,6 +578,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
+            self.REGISTRY_UNIREGISTRY,
         )
 
     @property
@@ -619,6 +621,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AMNIC,
             self.REGISTRY_AKEP,
+            self.REGISTRY_UNIREGISTRY,
         )
 
     @property
@@ -663,6 +666,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AMNIC,
             self.REGISTRY_AKEP,
+            self.REGISTRY_UNIREGISTRY,
         )
 
     @property
@@ -2533,6 +2537,11 @@ else:
                     value=i
                 ), range(1, 6))
             )
+        )),
+        ('lol', DomainInfo(
+            DomainInfo.REGISTRY_UNIREGISTRY,
+            MarkupPrice(4982, transfer=4982, restore=12960, currency=None, display_currency='USD', tld='lol',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
