@@ -2543,6 +2543,41 @@ else:
             MarkupPrice(4982, transfer=4982, restore=12960, currency=None, display_currency='USD', tld='lol',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('af', DomainInfo(
+            DomainInfo.REGISTRY_AMNIC,
+            MarkupPrice(
+                14400, transfer=5040, restore=3600, currency=None, display_currency='USD', tld='af',
+                markup=decimal.Decimal("1.2"), periods=map(lambda i: apps.epp_api.Period(
+                    unit=0,
+                    value=i
+                ), range(1, 6))
+            )
+        )),
+        ('ht', DomainInfo(
+            DomainInfo.REGISTRY_AMNIC,
+            MarkupPrice(
+                16560, transfer=16560, restore=3600, currency=None, display_currency='USD', tld='ht',
+                markup=decimal.Decimal("1.2"), periods=map(lambda i: apps.epp_api.Period(
+                    unit=0,
+                    value=i
+                ), range(1, 6))
+            )
+        )),
+        ('in', DomainInfo(
+            DomainInfo.REGISTRY_AMNIC,
+            MarkupPrice(
+                3024, transfer=3024, restore=15120, currency=None, display_currency='USD', tld='in',
+                markup=decimal.Decimal("1.4"), periods=map(lambda i: apps.epp_api.Period(
+                    unit=0,
+                    value=i
+                ), range(1, 6))
+            )
+        )),
+        ('rs', DomainInfo(
+            DomainInfo.REGISTRY_AKEP,
+            MarkupPrice(18295, transfer=8640, restore=8640, currency=None, display_currency='USD', tld='rs',
+                        markup=decimal.Decimal("1.2"))
+        )),
     )
 
 
