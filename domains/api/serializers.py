@@ -5,6 +5,7 @@ import decimal
 import ipaddress
 import typing
 
+from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from rest_framework import exceptions, serializers
 from rest_framework.settings import api_settings
@@ -653,6 +654,7 @@ class DomainSerializer(serializers.Serializer):
 
         if apps.epp_api.rgp_pb2.RedemptionPeriod in domain.rgp_state:
             d.deleted = True
+            d.deleted_date = timezone.now()
             d.save()
 
         return Domain(

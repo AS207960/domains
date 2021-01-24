@@ -498,6 +498,7 @@ class DomainRegistration(models.Model):
     resource_id = models.UUIDField(null=True, db_index=True)
     last_billed = models.DateTimeField(default=timezone.datetime.min)
     last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
+    deleted_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         ordering = ['domain']

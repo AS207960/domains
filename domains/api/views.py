@@ -372,6 +372,7 @@ class Domain(viewsets.ViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             domain.deleted = True
+            domain.deleted_date = timezone.now()
             domain.save()
             domain_data = serializers.DomainSerializer.get_domain(domain, domain_data, request.user)
             serializer = serializers.DomainSerializer(domain_data, context={'request': request})

@@ -1,6 +1,7 @@
 import decimal
 import dataclasses
 import typing
+import datetime
 import google.protobuf.wrappers_pb2
 from .proto import billing_pb2
 from concurrent.futures import ThreadPoolExecutor
@@ -382,6 +383,10 @@ class DomainInfo:
     REGISTRY_AKEP = "akep"
     REGISTRY_AMNIC = "amnic"
     REGISTRY_UNIREGISTRY = "uniregistry"
+    REGISTRY_AFMOF = "AFMOC"
+    REGISTRY_NIXI = "NIXI"
+    REGISTRY_FDSRDDS = "FDSRDDS"
+    REGISTRY_RNIDS = "RNIDS"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -405,6 +410,19 @@ class DomainInfo:
             return 2, 4
         else:
             return 1, 2, 4
+
+    @property
+    def redemption_period(self):
+        if self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID):
+            return datetime.timedelta(days=40)
+        elif self.registry == self.REGISTRY_PIR:
+            return datetime.timedelta(days=35)
+        elif self.registry == self.REGISTRY_AMNIC:
+            return datetime.timedelta(days=15)
+        elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDH):
+            return datetime.timedelta(days=28)
+        else:
+            return datetime.timedelta(days=30)
 
     @property
     def direct_registration_supported(self):
@@ -465,6 +483,10 @@ class DomainInfo:
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
             self.REGISTRY_UNIREGISTRY,
+            self.REGISTRY_AFMOF,
+            self.REGISTRY_NIXI,
+            self.REGISTRY_FDSRDDS,
+            self.REGISTRY_RNIDS,
         )
 
     @property
@@ -492,6 +514,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
+            self.REGISTRY_RNIDS,
         )
 
     @property
@@ -579,6 +602,10 @@ class DomainInfo:
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
             self.REGISTRY_UNIREGISTRY,
+            self.REGISTRY_AFMOF,
+            self.REGISTRY_NIXI,
+            self.REGISTRY_FDSRDDS,
+            self.REGISTRY_RNIDS,
         )
 
     @property
@@ -622,6 +649,10 @@ class DomainInfo:
             self.REGISTRY_AMNIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_UNIREGISTRY,
+            self.REGISTRY_AFMOF,
+            self.REGISTRY_NIXI,
+            self.REGISTRY_FDSRDDS,
+            self.REGISTRY_RNIDS,
         )
 
     @property
@@ -667,6 +698,10 @@ class DomainInfo:
             self.REGISTRY_AMNIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_UNIREGISTRY,
+            self.REGISTRY_AFMOF,
+            self.REGISTRY_NIXI,
+            self.REGISTRY_FDSRDDS,
+            self.REGISTRY_RNIDS,
         )
 
     @property
@@ -2544,7 +2579,7 @@ else:
                         markup=decimal.Decimal("1.2"))
         )),
         ('af', DomainInfo(
-            DomainInfo.REGISTRY_AMNIC,
+            DomainInfo.REGISTRY_AFMOF,
             MarkupPrice(
                 14400, transfer=5040, restore=3600, currency=None, display_currency='USD', tld='af',
                 markup=decimal.Decimal("1.2"), periods=map(lambda i: apps.epp_api.Period(
@@ -2554,7 +2589,7 @@ else:
             )
         )),
         ('ht', DomainInfo(
-            DomainInfo.REGISTRY_AMNIC,
+            DomainInfo.REGISTRY_FDSRDDS,
             MarkupPrice(
                 16560, transfer=16560, restore=3600, currency=None, display_currency='USD', tld='ht',
                 markup=decimal.Decimal("1.2"), periods=map(lambda i: apps.epp_api.Period(
@@ -2564,7 +2599,7 @@ else:
             )
         )),
         ('in', DomainInfo(
-            DomainInfo.REGISTRY_AMNIC,
+            DomainInfo.REGISTRY_NIXI,
             MarkupPrice(
                 3024, transfer=3024, restore=15120, currency=None, display_currency='USD', tld='in',
                 markup=decimal.Decimal("1.4"), periods=map(lambda i: apps.epp_api.Period(
@@ -2574,7 +2609,7 @@ else:
             )
         )),
         ('rs', DomainInfo(
-            DomainInfo.REGISTRY_AKEP,
+            DomainInfo.REGISTRY_RNIDS,
             MarkupPrice(18295, transfer=8640, restore=8640, currency=None, display_currency='USD', tld='rs',
                         markup=decimal.Decimal("1.2"))
         )),

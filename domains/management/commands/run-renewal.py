@@ -94,6 +94,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         now = timezone.now()
         domains = models.DomainRegistration.objects.filter(deleted=False)
+        deleted_domains = models.DomainRegistration.objects.filter(deleted=True)
 
         notifications = {}
         renewed = {}
@@ -207,3 +208,14 @@ class Command(BaseCommand):
 
         for user, domains in deleted.items():
             mail_deleted(user, domains)
+
+        for domain in deleted_domains:
+            domain_info, sld = zone_info.get_domain_info(domain.domain)
+
+            if not domain_info:
+                print(f"Can't check RGP on {domain.domain}: unknown zone")
+                continue
+
+            if domain.deleted_date and domain_info.redemption_period:
+                if domain.deleted_date + domain_info.redemption_period <= now:
+                    domain.delete()

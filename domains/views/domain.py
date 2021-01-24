@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponseBadRequest, HttpResponse
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 import django_keycloak_auth.clients
 import ipaddress
 import grpc
@@ -102,6 +103,7 @@ def domains(request):
                 domain_data = apps.epp_client.get_domain(d.domain)
                 if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
                     d.deleted = True
+                    d.deleted_date = timezone.now()
                     d.save()
                     deleted_domains.append(d)
                 else:
@@ -216,6 +218,7 @@ def domain(request, domain_id):
 
         if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
             user_domain.deleted = True
+            user_domain.deleted_date = timezone.now()
             user_domain.save()
             return redirect('domains')
 
@@ -1285,6 +1288,7 @@ def delete_domain(request, domain_id):
                 user_domain.delete()
             else:
                 user_domain.deleted = True
+                user_domain.deleted_date = timezone.now()
                 user_domain.save()
             return redirect('domains')
 
