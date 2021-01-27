@@ -34,8 +34,8 @@
                         <th scope="row">.{{ domain.zone }}</th>
                         <td>{{ domain.registration|floatformat:2|intcomma }} {{ domain.currency }}</td>
                         <td>{{ domain.renewal|floatformat:2|intcomma }} {{ domain.currency }}</td>
-                        <td>{% if domain.transfer %}{{ domain.transfer|floatformat:2|intcomma }} {{ domain.currency }}{% else %}N/A{% endif %}</td>
-                        <td>{% if domain.restore %}{{ domain.restore|floatformat:2|intcomma }} {{ domain.currency }}{% else %}N/A{% endif %}</td>
+                        <td>{% if domain.transfer is not None %}{{ domain.transfer|floatformat:2|intcomma }} {{ domain.currency }}{% else %}N/A{% endif %}</td>
+                        <td>{% if domain.restore is not None %}{{ domain.restore|floatformat:2|intcomma }} {{ domain.currency }}{% else %}N/A{% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
