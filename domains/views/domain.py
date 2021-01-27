@@ -1457,12 +1457,13 @@ def domain_transfer_query(request):
                         try:
                             if zone.pre_transfer_query_supported:
                                 available, _, _ = apps.epp_client.check_domain(domain_idna)
+                                available = not available
                             else:
                                 available = True
                         except grpc.RpcError as rpc_error:
                             error = rpc_error.details()
                         else:
-                            if not available:
+                            if available:
                                 if zone.pre_transfer_query_supported:
                                     try:
                                         domain_data = apps.epp_client.get_domain(domain_idna)
