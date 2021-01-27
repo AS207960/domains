@@ -54,44 +54,47 @@ class UserDomainsViewSet(viewsets.ViewSet):
             raise PermissionDenied
 
         user = get_object_or_404(get_user_model(), username=pk)
-        token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+        try:
+            token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+        except django_keycloak_auth.clients.TokensExpired:
+            out = []
+        else:
+            serializer = serializers.UserDomainChecksSerializer(data=request.data, context={
+                'request': request
+            })
+            serializer.is_valid(raise_exception=True)
 
-        serializer = serializers.UserDomainChecksSerializer(data=request.data, context={
-            'request': request
-        })
-        serializer.is_valid(raise_exception=True)
+            out = []
+            for domain in serializer.validated_data["domains"]:
+                domain_obj = models.DomainRegistration.objects.filter(domain=domain["domain"]).first()
+                if not domain_obj:
+                    access = None
+                else:
+                    access = domain_obj.has_scope(token, 'edit')
+                if not access:
+                    out.append({
+                        "domain": domain["domain"],
+                        "domain_id": None,
+                        "access": False,
+                        "token": None,
+                    })
+                else:
+                    domain_jwt = jwt.encode({
+                        "iat": datetime.datetime.utcnow(),
+                        "nbf": datetime.datetime.utcnow(),
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
+                        "iss": "urn:as207960:domains",
+                        "aud": ["urn:as207960:hexdns"],
+                        "domain": domain["domain"],
+                        "domain_id": str(domain_obj.id),
+                        "sub": pk,
+                    }, settings.JWT_PRIV_KEY, algorithm='ES384')
 
-        out = []
-        for domain in serializer.validated_data["domains"]:
-            domain_obj = models.DomainRegistration.objects.filter(domain=domain["domain"]).first()
-            if not domain_obj:
-                access = None
-            else:
-                access = domain_obj.has_scope(token, 'edit')
-            if not access:
-                out.append({
-                    "domain": domain["domain"],
-                    "domain_id": None,
-                    "access": False,
-                    "token": None,
-                })
-            else:
-                domain_jwt = jwt.encode({
-                    "iat": datetime.datetime.utcnow(),
-                    "nbf": datetime.datetime.utcnow(),
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
-                    "iss": "urn:as207960:domains",
-                    "aud": ["urn:as207960:hexdns"],
-                    "domain": domain["domain"],
-                    "domain_id": str(domain_obj.id),
-                    "sub": pk,
-                }, settings.JWT_PRIV_KEY, algorithm='ES384')
-
-                out.append({
-                    "domain": domain["domain"],
-                    "access": True,
-                    "token": domain_jwt
-                })
+                    out.append({
+                        "domain": domain["domain"],
+                        "access": True,
+                        "token": domain_jwt
+                    })
 
         serializer = serializers.UserDomainChecksSerializer({
             "domains": out
