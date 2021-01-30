@@ -1046,14 +1046,12 @@ def domain_search(request):
         domain_search_term = None
         if request.method == "POST":
             form = forms.DomainSearchForm(request.POST)
-            if form.is_valid():
-                domain_search_term = form.cleaned_data['domain']
         else:
-            form = forms.DomainSearchForm(initial={
+            form = forms.DomainSearchForm({
                 "domain": request.GET.get("domain")
             })
-            domain_search_term = request.GET.get("domain")
-        if domain_search_term:
+        if form.is_valid():
+            domain_search_term = form.cleaned_data['domain']
             resp = _domain_search(request, domain_search_term)
             if resp is not None:
                 if resp[0] == "error":
