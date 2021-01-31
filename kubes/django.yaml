@@ -323,7 +323,7 @@ spec:
                   prefix: "VERISIGN_NS_"
                 - secretRef:
                     name: domains-rrpproxy
-                    prefix: "RRPPROXY_"
+                  prefix: "RRPPROXY_"
                 - secretRef:
                     name: domains-rpc
           restartPolicy: OnFailure
@@ -405,7 +405,7 @@ spec:
               prefix: "VERISIGN_NS_"
             - secretRef:
                 name: domains-rrpproxy
-                prefix: "RRPPROXY_"
+              prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
 ---
@@ -486,7 +486,7 @@ spec:
               prefix: "VERISIGN_NS_"
             - secretRef:
                 name: domains-rrpproxy
-                prefix: "RRPPROXY_"
+              prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
 ---
@@ -565,7 +565,7 @@ spec:
               prefix: "VERISIGN_NS_"
             - secretRef:
                 name: domains-rrpproxy
-                prefix: "RRPPROXY_"
+              prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
 ---
