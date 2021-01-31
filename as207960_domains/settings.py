@@ -217,6 +217,8 @@ RESOLVER_PORT = int(os.getenv("RESOLVER_PORT"))
 
 RABBITMQ_RPC_URL = os.getenv("RABBITMQ_RPC_URL")
 
+POSTAL_PUBLIC_KEY = os.getenv("POSTAL_PUBLIC_KEY")
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

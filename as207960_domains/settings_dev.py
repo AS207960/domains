@@ -29,7 +29,7 @@ SECRET_KEY = '2!ma5g##@c@p!erb#bi25i*ic1-iqr&hwxh0(w7%lgfqb^i5ye'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "45.129.95.4"]
+ALLOWED_HOSTS = ["localhost", "45.129.95.4", "as207960-domains.eu.ngrok.io"]
 
 
 # Application definition
@@ -187,6 +187,10 @@ RESOLVER_ADDR = "2a0d:1a40:7900::2"
 RESOLVER_PORT = 53
 
 RABBITMQ_RPC_URL = "amqp://guest:guest@localhost:5672/rpc"
+
+POSTAL_PUBLIC_KEY = \
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChELn1Fkauo6bduyGeXNca/z27OYNMd85JZMlNiycfFHaAXzgPd53OKVSbyzBuILFPYmzkfaF" \
+    "uOCW2qgvFd8cAye6qLsUAqEetiuRTPpAysX3hss1TqIML51kb0ADTmylKi3Hr553qrDy9AEMFmvaKnTH8o0YFozGk0QtlmiLtXQIDAQAB"
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

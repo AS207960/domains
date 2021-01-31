@@ -639,8 +639,6 @@ def process_domain_transfer_complete(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
-    emails.mail_transferred.delay(domain_transfer_order.id)
-
     domain_obj = models.DomainRegistration(
         id=domain_transfer_order.domain_id,
         domain=domain_transfer_order.domain,
@@ -653,6 +651,8 @@ def process_domain_transfer_complete(transfer_order_id):
     )
     domain_obj.save()
     process_domain_transfer_contacts.delay(domain_transfer_order.id)
+
+    emails.mail_transferred.delay(domain_transfer_order.id)
 
     domain_transfer_order.state = domain_transfer_order.STATE_COMPLETED
     domain_transfer_order.domain_obj = domain_obj
