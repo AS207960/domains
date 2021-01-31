@@ -266,17 +266,17 @@ class Command(BaseCommand):
 
                 if domain_info.ds_data_supported:
                     cds_data_set = list(map(lambda r: apps.epp_api.SecDNSDSData(
-                        key_tag=r.key_tag,
-                        algorithm=r.algorithm,
-                        digest_type=r.digest_type,
+                        key_tag=int(r.key_tag),
+                        algorithm=int(r.algorithm),
+                        digest_type=int(r.digest_type),
                         digest=r.digest.hex().upper(),
                         key_data=None
                     ), cds_data_set))
                 else:
                     cds_data_set = list(map(lambda r: apps.epp_api.SecDNSKeyData(
-                        flags=r.flags,
+                        flags=int(r.flags),
                         protocol=r.protocol,
-                        algorithm=r.algorithm,
+                        algorithm=int(r.algorithm),
                         public_key=base64.b64encode(r.key).decode(),
                     ), cds_data_set))
 
