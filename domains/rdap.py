@@ -60,6 +60,12 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
                 value=contact.phone.as_rfc3966
             ))
+        else:
+            entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
+                type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
+                value="REDACTED"
+            ))
+        if contact.disclose_fax:
             if contact.fax:
                 contact.fax.extension = contact.fax_ext
                 entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
@@ -67,13 +73,10 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                     value=contact.fax.as_rfc3966
                 ))
         else:
-            entity.js_card.phones.extend([rdap_pb2.JSCard.Resource(
-                type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
-                value="REDACTED"
-            ), rdap_pb2.JSCard.Resource(
+            entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
                 type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
                 value="REDACTED"
-            )])
+            ))
 
         entity.js_card.emails.append(rdap_pb2.JSCard.Resource(
             value=contact.get_public_email()

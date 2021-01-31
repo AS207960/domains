@@ -956,7 +956,7 @@ class Disclosure:
     items: typing.List[DisclosureItem]
 
     @classmethod
-    def from_pb(cls, resp: typing.Iterable[contact_pb2.DisclosureType]):
+    def from_pb(cls, resp: typing.Iterable[int]):
         return cls(
             items=list(map(lambda i: DisclosureItem(item=i), resp))
         )
