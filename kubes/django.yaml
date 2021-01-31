@@ -130,6 +130,9 @@ spec:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
             - secretRef:
+                name: domains-rrpproxy
+              prefix: "RRPPROXY_"
+            - secretRef:
                 name: domains-rpc
       containers:
         - name: gunicorn
@@ -169,6 +172,9 @@ spec:
             - secretRef:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
+            - secretRef:
+                name: domains-rrpproxy
+              prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
 ---
@@ -241,6 +247,9 @@ spec:
                     name: verisign-ns-key
                   prefix: "VERISIGN_NS_"
                 - secretRef:
+                    name: domains-rrpproxy
+                  prefix: "RRPPROXY_"
+                - secretRef:
                     name: domains-rpc
           restartPolicy: OnFailure
 ---
@@ -312,6 +321,9 @@ spec:
                 - secretRef:
                     name: verisign-ns-key
                   prefix: "VERISIGN_NS_"
+                - secretRef:
+                    name: domains-rrpproxy
+                    prefix: "RRPPROXY_"
                 - secretRef:
                     name: domains-rpc
           restartPolicy: OnFailure
@@ -392,6 +404,9 @@ spec:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
             - secretRef:
+                name: domains-rrpproxy
+                prefix: "RRPPROXY_"
+            - secretRef:
                 name: domains-rpc
 ---
 apiVersion: apps/v1
@@ -470,6 +485,9 @@ spec:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
             - secretRef:
+                name: domains-rrpproxy
+                prefix: "RRPPROXY_"
+            - secretRef:
                 name: domains-rpc
 ---
 apiVersion: apps/v1
@@ -545,6 +563,9 @@ spec:
             - secretRef:
                 name: verisign-ns-key
               prefix: "VERISIGN_NS_"
+            - secretRef:
+                name: domains-rrpproxy
+                prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
 ---

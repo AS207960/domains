@@ -11,6 +11,7 @@ import binascii
 import json
 import email.parser
 import uuid
+import requests
 from .. import models
 
 logger = logging.getLogger(__name__)
@@ -78,6 +79,28 @@ def postal(request):
     logger.info(
         f"Got email webhook; from: {msg_from}, to: {msg_to}"
     )
+    message = email.parser.BytesParser(_class=email.message.EmailMessage, policy=email.policy.SMTPUTF8) \
+        .parsebytes(msg_bytes)
+
+    if msg_from == "noreply@emailverification.info":
+        msg_body = message.get_body(preferencelist=('plain',))
+        if msg_body:
+            msg_txt = msg_body.get_content()
+            msg_lines = msg_txt.splitlines()
+            for line in msg_lines:
+                if line.startswith("trigger = "):
+                    trigger = line[len("trigger = "):]
+                    r = requests.get(
+                        "https://api.rrpproxy.net/api/call",
+                        params={
+                            "s_login": settings.RRPPROXY_USER,
+                            "s_pw": settings.RRPPROXY_PASS,
+                            "command": "activatecontact",
+                            "trigger": trigger
+                        }
+                    )
+                    r.raise_for_status()
+        return HttpResponse(status=200)
 
     privacy_id = msg_to.split("@")[0]
     try:
@@ -90,9 +113,6 @@ def postal(request):
     if not privacy_contact:
         logger.warning("Unknown privacy email")
         return HttpResponse(status=200)
-
-    message = email.parser.BytesParser(_class=email.message.EmailMessage, policy=email.policy.SMTPUTF8) \
-        .parsebytes(msg_bytes)
 
     del message['Received']
     del message['ARC-Seal']

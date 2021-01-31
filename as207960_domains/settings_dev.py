@@ -163,6 +163,9 @@ with open(os.path.join(BASE_DIR, "secrets/keycloak.json")) as f:
 with open(os.path.join(BASE_DIR, "secrets/verisign_ns.json")) as f:
     verisign_ns_conf = json.load(f)
 
+with open(os.path.join(BASE_DIR, "secrets/rrpproxy.json")) as f:
+    rrproxy_conf = json.load(f)
+
 with open(os.path.join(BASE_DIR, "secrets/jwt_priv.pem")) as f:
     JWT_PRIV_KEY = f.read()
 
@@ -182,6 +185,9 @@ BILLING_URL = "http://localhost:8001"
 HEXDNS_URL = "http://localhost:8002"
 FEEDBACK_URL = "http://localhost:8003"
 PAT_URL = "http://localhost:8004"
+
+RRPPROXY_USER = rrproxy_conf["user"]
+RRPPROXY_PASS = rrproxy_conf["pass"]
 
 RESOLVER_ADDR = "2a0d:1a40:7900::2"
 RESOLVER_PORT = 53
