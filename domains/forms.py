@@ -1,12 +1,14 @@
-from django import forms
-from django.urls import reverse
-from . import models, apps, zone_info
 import datetime
-from django_countries.widgets import CountrySelectWidget
+
+import crispy_forms.bootstrap
 import crispy_forms.helper
 import crispy_forms.layout
-import crispy_forms.bootstrap
 import django_keycloak_auth.clients
+from django import forms
+from django.urls import reverse
+from django_countries.widgets import CountrySelectWidget
+
+from . import models, apps, zone_info
 
 
 class ContactForm(forms.ModelForm):
@@ -56,6 +58,11 @@ class ContactForm(forms.ModelForm):
             ),
             crispy_forms.layout.Fieldset(
                 'WHOIS Disclosure',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        More info <a href="https://docs.glauca.digital/domains/email-privacy/" class="alert-link">here</a>
+                    </div>
+                """),
                 'disclose_phone',
                 'disclose_fax',
                 'disclose_email'
@@ -111,6 +118,11 @@ class AddressForm(forms.ModelForm):
             ),
             crispy_forms.layout.Fieldset(
                 'WHOIS Disclosure',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        More info <a href="https://docs.glauca.digital/domains/email-privacy/" class="alert-link">here</a>
+                    </div>
+                """),
                 'disclose_name',
                 'disclose_organisation',
                 'disclose_address'
@@ -441,7 +453,7 @@ class DomainTransferForm(forms.Form):
 class DomainRenewForm(forms.Form):
     period = forms.TypedChoiceField(choices=[], required=True, coerce=unmap_period, empty_value=None)
 
-    def __init__(self, *args, zone_info,  **kwargs):
+    def __init__(self, *args, zone_info, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['period'].choices = map(map_period, zone_info.pricing.periods)
 
