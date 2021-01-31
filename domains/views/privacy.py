@@ -9,6 +9,7 @@ import base64
 import logging
 import binascii
 import json
+import email.parser
 import uuid
 from .. import models
 
@@ -90,8 +91,32 @@ def postal(request):
         logger.warning("Unknown privacy email")
         return HttpResponse(status=200)
 
+    message = email.parser.BytesParser(_class=email.message.EmailMessage, policy=email.policy.SMTPUTF8) \
+        .parsebytes(msg_bytes)
+
+    del message['Received']
+    del message['ARC-Seal']
+    del message['ARC-Message-Signature']
+    del message['ARC-Authentication-Results']
+    del message['Received-SPF']
+    del message['Authentication-Results']
+    del message['DKIM-Signature']
+
+    old_from = message['From']
+    old_subject = message['Subject']
+    del message['From']
+    del message['Reply-To']
+    del message['Subject']
+    message['From'] = "AS207960 Domain Privacy <domain-privacy@as207960.net>"
+    message['Reply-To'] = old_from
+    message['Subject'] = f"[AS207960 Domain Privacy] {old_subject}"
+    print(message)
+
+    new_msg_bytes = message.as_bytes()
+
     new_message = RawMessage(
-        to=[privacy_contact.email], from_email="AS207960 Domain Privacy <domain-privacy@as207960.net>", body=msg_bytes
+        to=[privacy_contact.email], from_email="AS207960 Domain Privacy <domain-privacy@as207960.net>",
+        body=new_msg_bytes
     )
     mail.get_connection().send_messages([new_message])
 
