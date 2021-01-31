@@ -91,7 +91,7 @@ def postal(request):
         return HttpResponse(status=200)
 
     new_message = RawMessage(
-        to=privacy_contact.email, from_email="AS207960 Domain Privacy <domain-privacy@as207960.net>", body=msg_bytes
+        to=[privacy_contact.email], from_email="AS207960 Domain Privacy <domain-privacy@as207960.net>", body=msg_bytes
     )
     mail.get_connection().send_messages([new_message])
 
