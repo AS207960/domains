@@ -190,6 +190,7 @@ class Contact(models.Model):
     disclose_phone = models.BooleanField(default=False, blank=True)
     disclose_fax = models.BooleanField(default=False, blank=True)
     disclose_email = models.BooleanField(default=False, blank=True)
+    privacy_email = models.UUIDField(default=uuid.uuid4)
     resource_id = models.UUIDField(null=True, db_index=True)
 
     class Meta:
@@ -291,11 +292,12 @@ class Contact(models.Model):
                     number=f"+{self.fax.country_code}.{self.fax.national_number}",
                     ext=self.fax_ext
                 ) if self.fax else None,
-                email=self.email,
+                email=self.get_public_email(),
                 entity_type=self.entity_type,
                 trading_name=self.trading_name,
                 company_number=self.company_number,
                 auth_info=auth_info,
+                disclosure=self.get_disclosure(),
                 registry_name=registry_id
             )
 
@@ -396,6 +398,42 @@ class Contact(models.Model):
 
     def get_int_address(self) -> typing.Optional[apps.epp_api.Address]:
         return self.int_address.as_api_obj() if self.int_address else None
+
+    def get_disclosure(self) -> apps.epp_api.Disclosure:
+        disclosure = apps.epp_api.Disclosure(items=[
+            apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.Email)
+        ])
+        if self.local_address.disclose_name:
+            disclosure.items.append(
+                apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.LocalName))
+        if self.local_address.disclose_organisation:
+            disclosure.items.append(
+                apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.LocalOrganisation))
+        if self.local_address.disclose_address:
+            disclosure.items.append(
+                apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.LocalAddress))
+        if self.int_address:
+            if self.int_address.disclose_name:
+                disclosure.items.append(
+                    apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.InternationalisedName))
+            if self.int_address.disclose_organisation:
+                disclosure.items.append(apps.epp_api.DisclosureItem(
+                    item=apps.epp_api.contact_pb2.DisclosureType.InternationalisedOrganisation))
+            if self.int_address.disclose_address:
+                disclosure.items.append(
+                    apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.InternationalisedAddress))
+        if self.disclose_phone:
+            disclosure.items.append(apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.Voice))
+        if self.disclose_fax:
+            disclosure.items.append(apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.Fax))
+
+        return disclosure
+
+    def get_public_email(self):
+        if self.disclose_email:
+            return self.email
+        else:
+            return f"{self.privacy_email.hex}@owowhosth.is"
 
 
 class ContactRegistry(models.Model):

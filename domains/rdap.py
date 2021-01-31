@@ -76,7 +76,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             )])
 
         entity.js_card.emails.append(rdap_pb2.JSCard.Resource(
-            value=contact.email if contact.disclose_email else "REDACTED",
+            value=contact.get_public_email()
         ))
 
         if contact.trading_name:

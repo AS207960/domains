@@ -32,10 +32,11 @@ def update_contact(contact_registry_id):
                 number=f"+{instance.fax.country_code}.{instance.fax.national_number}",
                 ext=instance.fax_ext
             ) if instance.fax else None,
-            email=instance.email,
+            email=instance.get_public_email(),
             entity_type=instance.entity_type,
             trading_name=instance.trading_name,
             company_number=instance.company_number,
+            disclosure=instance.get_disclosure(),
             auth_info=None
         )
     except grpc.RpcError as rpc_error:

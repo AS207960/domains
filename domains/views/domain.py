@@ -1043,7 +1043,6 @@ def domain_search(request):
     error = None
 
     if request.method == "POST" or request.GET.get("domain"):
-        domain_search_term = None
         if request.method == "POST":
             form = forms.DomainSearchForm(request.POST)
         else:

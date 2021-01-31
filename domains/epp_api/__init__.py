@@ -897,6 +897,76 @@ class ContactStatus:
             return False
 
 
+@dataclasses.dataclass
+class DisclosureItem:
+    item: int
+
+    @property
+    def name(self):
+        if self.item == 0:
+            return "local_name"
+        elif self.item == 1:
+            return "internationalised_name"
+        elif self.item == 2:
+            return "local_organisation"
+        elif self.item == 3:
+            return "internationalised_organisation"
+        elif self.item == 4:
+            return "local_address"
+        elif self.item == 5:
+            return "internationalised_address"
+        elif self.item == 6:
+            return "voice"
+        elif self.item == 7:
+            return "fax"
+        elif self.item == 8:
+            return "email"
+
+    def __str__(self):
+        if self.item == 0:
+            return "Local name"
+        elif self.item == 1:
+            return "Internationalised name"
+        elif self.item == 2:
+            return "Local organisation"
+        elif self.item == 3:
+            return "Internationalised organisation"
+        elif self.item == 4:
+            return "Local address"
+        elif self.item == 5:
+            return "Internationalised address"
+        elif self.item == 6:
+            return "Voice"
+        elif self.item == 7:
+            return "Fax"
+        elif self.item == 8:
+            return "Email"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.item == other
+        elif type(other) == self.__class__:
+            return other.status == self.item
+        else:
+            return False
+
+
+@dataclasses.dataclass
+class Disclosure:
+    items: typing.List[DisclosureItem]
+
+    @classmethod
+    def from_pb(cls, resp: typing.Iterable[contact_pb2.DisclosureType]):
+        return cls(
+            items=list(map(lambda i: DisclosureItem(item=i), resp))
+        )
+
+    def to_pb(self) -> contact_pb2.Disclosure:
+        return contact_pb2.Disclosure(
+            disclosure=list(map(lambda i: i.item, self.items))
+        )
+
+
 class Contact:
     _app = None  # type: EPPClient
     id: str
@@ -917,6 +987,7 @@ class Contact:
     last_updated_date: typing.Optional[datetime.datetime]
     last_transfer_date: typing.Optional[datetime.datetime]
     auth_info: typing.Optional[str]
+    disclosure: typing.Optional[Disclosure]
     registry_name: str
 
     @classmethod
@@ -941,6 +1012,7 @@ class Contact:
         self.last_updated_date = resp.last_updated_date.ToDatetime() if resp.HasField("last_updated_date") else None
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
+        self.disclosure = Disclosure.from_pb(resp.disclosure)
         self.registry_name = registry_name
         return self
 
@@ -954,7 +1026,8 @@ class Contact:
             entity_type: typing.Optional[int] = None,
             trading_name: typing.Optional[str] = None,
             company_number: typing.Optional[str] = None,
-            auth_info: typing.Optional[str] = None
+            auth_info: typing.Optional[str] = None,
+            disclosure: typing.Optional[Disclosure] = None,
     ) -> bool:
         resp = self._app.stub.ContactUpdate(contact_pb2.ContactUpdateRequest(
             id=self.id,
@@ -969,6 +1042,7 @@ class Contact:
             new_company_number=StringValue(value=company_number)
             if company_number and company_number != self.company_number else None,
             new_auth_info=StringValue(value=auth_info) if auth_info and auth_info != self.auth_info else None,
+            disclosure=disclosure.to_pb() if disclosure else None,
             registry_name=self.registry_name
         ))
         return resp.pending
@@ -1180,6 +1254,7 @@ class EPPClient:
         trading_name: typing.Optional[str],
         company_number: typing.Optional[str],
         auth_info: str,
+        disclosure: typing.Optional[Disclosure],
         registry_name: str,
     ) -> typing.Tuple[str, bool, datetime.datetime]:
         resp = self.stub.ContactCreate(contact_pb2.ContactCreateRequest(
@@ -1193,6 +1268,7 @@ class EPPClient:
             trading_name=StringValue(value=trading_name) if trading_name else None,
             company_number=StringValue(value=company_number) if company_number else None,
             auth_info=auth_info,
+            disclosure=disclosure.to_pb() if disclosure else None,
             registry_name=registry_name
         ))
         return resp.id, resp.pending, resp.creation_date.ToDatetime()
