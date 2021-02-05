@@ -62,7 +62,7 @@ class Command(BaseCommand):
             order.last_error = last_error
             order.save()
         elif msg.state == domains.proto.billing_pb2.ChargeStateNotification.COMPLETED:
-            if order.state != order.STATE_PROCESSING:
+            if order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT):
                 order.state = order.STATE_PROCESSING
                 order.save()
                 task.delay(order.id)

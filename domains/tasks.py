@@ -11,7 +11,8 @@ logger = get_task_logger(__name__)
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def update_contact(contact_registry_id):
     contact_obj = models.ContactRegistry.objects.filter(id=contact_registry_id).first()  # type: models.ContactRegistry
@@ -137,7 +138,8 @@ def charge_order(order: models.AbstractOrder, username, descriptor, charge_id, r
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_registration(registration_order_id):
     domain_registration_order = \
@@ -149,14 +151,14 @@ def process_domain_registration(registration_order_id):
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
-        billing.reverse_charge(domain_registration_order.domain_id)
+        billing.reverse_charge(domain_registration_order.id)
         return
 
     charge_order(
         order=domain_registration_order,
         username=user.username,
         descriptor=f"{domain_registration_order.domain} domain registration",
-        charge_id=domain_registration_order.domain_id,
+        charge_id=domain_registration_order.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'domain_register_confirm', args=(domain_registration_order.id,)
         ),
@@ -165,7 +167,8 @@ def process_domain_registration(registration_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_registration_paid(registration_order_id):
     domain_registration_order = \
@@ -187,7 +190,7 @@ def process_domain_registration_paid(registration_order_id):
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "Domain no longer available to purchase."
         domain_registration_order.save()
-        billing.reverse_charge(domain_registration_order.domain_id)
+        billing.reverse_charge(domain_registration_order.id)
         return
 
     if zone.direct_registration_supported:
@@ -250,7 +253,7 @@ def process_domain_registration_paid(registration_order_id):
             domain_registration_order.state = domain_registration_order.STATE_FAILED
             domain_registration_order.last_error = rpc_error.details()
             domain_registration_order.save()
-            billing.reverse_charge(domain_registration_order.domain_id)
+            billing.reverse_charge(domain_registration_order.id)
             logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()}")
             return
     else:
@@ -271,7 +274,8 @@ def process_domain_registration_paid(registration_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_registration_complete(registration_order_id):
     domain_registration_order = \
@@ -281,9 +285,6 @@ def process_domain_registration_complete(registration_order_id):
         value=domain_registration_order.period_value,
         unit=domain_registration_order.period_unit
     )
-
-    emails.mail_registered.delay(domain_registration_order.id)
-
     domain_obj = models.DomainRegistration(
         id=domain_registration_order.domain_id,
         domain=domain_registration_order.domain,
@@ -301,25 +302,28 @@ def process_domain_registration_complete(registration_order_id):
     domain_registration_order.redirect_uri = None
     domain_registration_order.last_error = None
     domain_registration_order.save()
+
+    emails.mail_registered.delay(domain_registration_order.id)
     gchat_bot.notify_registration.delay(domain_registration_order.id, str(period))
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_registration_failed(registration_order_id):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
 
-    emails.mail_register_failed.delay(domain_registration_order.id)
-
-    billing.reverse_charge(domain_registration_order.domain_id)
+    billing.reverse_charge(domain_registration_order.id)
     domain_registration_order.state = domain_registration_order.STATE_FAILED
     domain_registration_order.save()
 
+    emails.mail_register_failed.delay(domain_registration_order.id)
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_renewal(renewal_order_id):
     domain_renewal_order = \
@@ -331,14 +335,14 @@ def process_domain_renewal(renewal_order_id):
         domain_renewal_order.state = domain_renewal_order.STATE_FAILED
         domain_renewal_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_renewal_order.domain}")
-        billing.reverse_charge(domain_renewal_order.domain_obj.id)
+        billing.reverse_charge(domain_renewal_order.id)
         return
 
     charge_order(
         order=domain_renewal_order,
         username=user.username,
         descriptor=f"{domain_renewal_order.domain} domain renewal",
-        charge_id=domain_renewal_order.domain_obj.id,
+        charge_id=domain_renewal_order.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'renew_domain_confirm', args=(domain_renewal_order.id,)
         ),
@@ -347,7 +351,8 @@ def process_domain_renewal(renewal_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order = \
@@ -372,7 +377,7 @@ def process_domain_renewal_paid(renew_order_id):
         domain_renewal_order.state = domain_renewal_order.STATE_FAILED
         domain_renewal_order.last_error = rpc_error.details()
         domain_renewal_order.save()
-        billing.reverse_charge(domain_renewal_order.domain_obj.id)
+        billing.reverse_charge(domain_renewal_order.id)
         logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
         return
 
@@ -387,7 +392,8 @@ def process_domain_renewal_paid(renew_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_restore(restore_order_id):
     domain_restore_order = \
@@ -399,14 +405,14 @@ def process_domain_restore(restore_order_id):
         domain_restore_order.state = domain_restore_order.STATE_FAILED
         domain_restore_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_restore_order.domain}")
-        billing.reverse_charge(domain_restore_order.domain_obj.id)
+        billing.reverse_charge(domain_restore_order.id)
         return
 
     charge_order(
         order=domain_restore_order,
         username=user.username,
         descriptor=f"{domain_restore_order.domain} domain restore",
-        charge_id=domain_restore_order.domain_obj.id,
+        charge_id=domain_restore_order.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
             'restore_domain_confirm', args=(domain_restore_order.id,)
         ),
@@ -415,7 +421,8 @@ def process_domain_restore(restore_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_restore_paid(restore_order_id):
     domain_restore_order = \
@@ -434,7 +441,7 @@ def process_domain_restore_paid(restore_order_id):
             domain_restore_order.state = domain_restore_order.STATE_FAILED
             domain_restore_order.last_error = rpc_error.details()
             domain_restore_order.save()
-            billing.reverse_charge(domain_restore_order.domain_obj.id)
+            billing.reverse_charge(domain_restore_order.id)
             logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()}")
             return
 
@@ -455,7 +462,8 @@ def process_domain_restore_paid(restore_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_restore_complete(restore_order_id):
     domain_restore_order = \
@@ -475,7 +483,8 @@ def process_domain_restore_complete(restore_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_restore_failed(restore_order_id):
     domain_restore_order = \
@@ -483,95 +492,97 @@ def process_domain_restore_failed(restore_order_id):
 
     emails.mail_restore_failed.delay(domain_restore_order.id)
 
-    billing.reverse_charge(domain_restore_order.domain_obj.id)
+    billing.reverse_charge(domain_restore_order.id)
     domain_restore_order.state = domain_restore_order.STATE_FAILED
     domain_restore_order.save()
 
 
 @shared_task(
-    bind=True, autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None,
-    default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
-def process_domain_transfer(self, transfer_order_id):
+def process_domain_transfer(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     user = domain_transfer_order.get_user()
 
-    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
+    zone, _ = zone_info.get_domain_info(domain_transfer_order.domain)
     if not zone:
         domain_transfer_order.state = domain_transfer_order.STATE_FAILED
         domain_transfer_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
-        billing.reverse_charge(domain_transfer_order.domain_id)
+        billing.reverse_charge(domain_transfer_order.id)
         return
 
-    should_return = handle_charge(
-        domain_transfer_order,
-        user.username,
-        f"{domain_transfer_order.domain} domain transfer",
-        domain_transfer_order.domain_id,
+    charge_order(
+        order=domain_transfer_order,
+        username=user.username,
+        descriptor=f"{domain_transfer_order.domain} domain transfer",
+        charge_id=domain_transfer_order.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'domain_transfer_confirm', args=(domain_transfer_order.id, )
-        )
+            'domain_transfer_confirm', args=(domain_transfer_order.id,)
+        ),
+        notif_queue="domains_transfer_billing_notif"
     )
-
-    if should_return:
-        return
-
-    if domain_transfer_order.state == domain_transfer_order.STATE_PROCESSING:
-        if zone.direct_transfer_supported:
-            try:
-                transfer_data = apps.epp_client.transfer_request_domain(
-                    domain_transfer_order.domain,
-                    domain_transfer_order.auth_code
-                )
-            except grpc.RpcError as rpc_error:
-                billing.reverse_charge(domain_transfer_order.domain_id)
-                domain_transfer_order.state = domain_transfer_order.STATE_FAILED
-                domain_transfer_order.last_error = rpc_error.details()
-                logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
-                return
-            else:
-                if transfer_data.status == 5:
-                    gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
-                    logger.info(f"{domain_transfer_order.domain} successfully transferred")
-                    return
-                else:
-                    gchat_bot.notify_transfer_pending.delay(domain_transfer_order.id, transfer_data.registry_name)
-
-                    domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
-                    domain_transfer_order.redirect_uri = None
-                    domain_transfer_order.last_error = None
-                    domain_transfer_order.save()
-
-                    logger.info(f"{domain_transfer_order.domain} transfer successfully submitted")
-                    return
-        else:
-            try:
-                _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
-            except grpc.RpcError as rpc_error:
-                billing.reverse_charge(domain_transfer_order.domain_id)
-                domain_transfer_order.state = domain_transfer_order.STATE_FAILED
-                domain_transfer_order.last_error = rpc_error.details()
-                domain_transfer_order.save()
-                logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
-                return
-
-            gchat_bot.request_transfer.delay(domain_transfer_order.id, registry_id)
-
-            domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
-            domain_transfer_order.redirect_uri = None
-            domain_transfer_order.last_error = None
-            domain_transfer_order.save()
-
-            logger.info(f"{domain_transfer_order.domain} transfer successfully requested")
-            return
-
-    raise self.retry(countdown=3)
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_transfer_paid(self, transfer_order_id):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
+
+    if zone.direct_transfer_supported:
+        try:
+            transfer_data = apps.epp_client.transfer_request_domain(
+                domain_transfer_order.domain,
+                domain_transfer_order.auth_code
+            )
+        except grpc.RpcError as rpc_error:
+            billing.reverse_charge(domain_transfer_order.id)
+            domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+            domain_transfer_order.last_error = rpc_error.details()
+            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
+        else:
+            if transfer_data.status == 5:
+                gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
+                logger.info(f"{domain_transfer_order.domain} successfully transferred")
+            else:
+                gchat_bot.notify_transfer_pending.delay(domain_transfer_order.id, transfer_data.registry_name)
+
+                domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
+                domain_transfer_order.redirect_uri = None
+                domain_transfer_order.last_error = None
+                domain_transfer_order.save()
+
+                logger.info(f"{domain_transfer_order.domain} transfer successfully submitted")
+    else:
+        try:
+            _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
+        except grpc.RpcError as rpc_error:
+            billing.reverse_charge(domain_transfer_order.id)
+            domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+            domain_transfer_order.last_error = rpc_error.details()
+            domain_transfer_order.save()
+            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
+            return
+
+        gchat_bot.request_transfer.delay(domain_transfer_order.id, registry_id)
+
+        domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
+        domain_transfer_order.redirect_uri = None
+        domain_transfer_order.last_error = None
+        domain_transfer_order.save()
+
+        logger.info(f"{domain_transfer_order.domain} transfer successfully requested")
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_transfer_contacts(transfer_order_id):
     domain_transfer_order = \
@@ -633,7 +644,8 @@ def process_domain_transfer_contacts(transfer_order_id):
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_transfer_complete(transfer_order_id):
     domain_transfer_order = \
@@ -652,31 +664,33 @@ def process_domain_transfer_complete(transfer_order_id):
     domain_obj.save()
     process_domain_transfer_contacts.delay(domain_transfer_order.id)
 
-    emails.mail_transferred.delay(domain_transfer_order.id)
-
     domain_transfer_order.state = domain_transfer_order.STATE_COMPLETED
     domain_transfer_order.domain_obj = domain_obj
     domain_transfer_order.redirect_uri = None
     domain_transfer_order.last_error = None
     domain_transfer_order.save()
 
+    emails.mail_transferred.delay(domain_transfer_order.id)
+
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def process_domain_transfer_failed(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
-    emails.mail_transfer_failed.delay(domain_transfer_order.id)
-
-    billing.reverse_charge(domain_transfer_order.domain_id)
+    billing.reverse_charge(domain_transfer_order.id)
     domain_transfer_order.state = domain_transfer_order.STATE_FAILED
     domain_transfer_order.save()
 
+    emails.mail_transfer_failed.delay(domain_transfer_order.id)
+
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
 )
 def set_dns_to_own(domain_id):
     domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
