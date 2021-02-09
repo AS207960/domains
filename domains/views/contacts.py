@@ -59,6 +59,7 @@ def new_contact(request):
             if "next_uri" in request.session:
                 return redirect(request.session.pop("next_uri"))
             return redirect('contacts')
+        print(form.errors)
     else:
         form = forms.ContactForm(user=request.user)
 
