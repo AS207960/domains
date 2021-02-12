@@ -530,7 +530,7 @@ def process_domain_transfer(transfer_order_id):
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
     ignore_result=True
 )
-def process_domain_transfer_paid(self, transfer_order_id):
+def process_domain_transfer_paid(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
