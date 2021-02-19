@@ -1,0 +1,11 @@
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
+A request has been received to transfer our domain {{ domain }} away from us.
+If you do nothing this will be automatically approved by the registry in about 5 working days.
+If you'd like to speed things up, or explicitly reject this transfer you can use the below links.
+
+Approve transfer: {{ transfer_approve_url }}
+Reject transfer: {{ transfer_reject_url }}
+
+If you didn't request this please reject this request and contact us urgently by replying to this email.
+{% endblock content %}

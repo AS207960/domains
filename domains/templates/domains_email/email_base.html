@@ -1,16 +1,16 @@
 <html lang="en">
-<head>
-    <style type="text/css" style="font-weight: 300">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-    </style>
-</head>
 <body style="padding: 0;margin: 0">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" type="text/css">
 <div style="background: #2a4365; font-family: 'Montserrat', 'Noto Color Emoji', 'Apple Color Emoji', sans-serif;height: 100% !important;width: 100% !important;">
     <div style="padding: 40px;">
         <table role="presentation" style="margin: 0 auto; border-radius: 5px; background: #fff; max-width: 600px; width:100%; border: 1px solid #c7d0d4; border-spacing: 0;">
             <tr>
                 <td style="border-bottom: 1px solid #dee7eb; text-align: center;padding: 20px 0;">
                     <img src="https://as207960.net/assets/img/logo2.png" height="150px" alt="Glauca" />
+                    {% if subject %}
+                        <h1 style="margin-bottom: 0;">{{ subject }}</h1>
+                    {% endif %}
+                    <h2 style="margin-top: 0;">Domains by Glauca</h2>
                 </td>
             </tr>
             <tr>

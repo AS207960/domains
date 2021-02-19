@@ -1,0 +1,47 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <h1>View domain - {{ domain.domain }}</h1>
+        <p>
+            <b>ID:</b> {{ domain.id }}<br/>
+            <b>Auth info:</b> {{ domain.id }}<br/>
+            <b>Registrant contact:</b>
+            {% if domain.registrant_contact %}
+                {{ domain.registrant_contact.description }} ({{ domain.registrant_contact.id }})
+            {% else %}N/A{% endif %}<br/>
+            <b>Admin contact:</b>
+            {% if domain.admin_contact %}
+                {{ domain.admin_contact.description }} ({{ domain.admin_contact.id }})
+            {% else %}N/A{% endif %}<br/>
+            <b>Billing contact:</b>
+            {% if domain.billing_contact %}
+                {{ domain.billing_contact.description }} ({{ domain.billing_contact.id }})
+            {% else %}N/A{% endif %}<br/>
+            <b>Tech contact:</b>
+            {% if domain.tech_contact %}
+                {{ domain.tech_contact.description }} ({{ domain.tech_contact.id }})
+            {% else %}N/A{% endif %}<br/>
+            <b>Last billed:</b> {{ domain.last_billed }}<br/>
+            <b>Last renew notify:</b> {{ domain.last_renew_notify }}<br/>
+            <b>Deleted:</b> {{ domain.deleted }}<br/>
+            <b>Transfer out pending:</b> {{ domain.transfer_out_pending }}<br/>
+            <b>Former:</b> {{ domain.former_domain }}<br/>
+            <b>Deleted date:</b> {{ domain.deleted_date }}<br/>
+        </p>
+        {% if not domain.former_domain %}
+            <div class="btn-group">
+                <a href="{% url 'admin_domain_mark_transfer_out' domain.id %}" class="btn btn-primary btn-lg">
+                    Mark transfer out</a>
+                {% if not domain.transfer_out_pending %}
+                    <a href="{% url 'admin_domain_mark_transfer_out_request' domain.id %}" class="btn btn-primary btn-lg">
+                        Mark transfer request</a>
+                {% endif %}
+                {% if not domain.deleted %}
+                    <a href="#" class="btn btn-primary btn-lg">Mark delete redemption period</a>
+                    <a href="{% url 'domain' domain.id %}" class="btn btn-info btn-lg">View domain page</a>
+                {% endif %}
+                <a href="#" class="btn btn-primary btn-lg">Mark deleted</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

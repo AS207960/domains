@@ -1,7 +1,14 @@
 {% extends 'domains/base.html' %}
 {% block content %}
     <div class="container my-3">
-        <h1>EPP Client</h1>
+        <h1>Domains admin</h1>
+        <h2>Object management</h2>
+        <div class="btn-group mb-3">
+            <a href="{% url 'admin_view_domains' %}" class="btn btn-primary btn-lg">View domains</a>
+            <a href="#" class="btn btn-primary btn-lg">View contacts</a>
+            <a href="#" class="btn btn-primary btn-lg">View contact addresses</a>
+        </div>
+        <h2>EPP Commands</h2>
         <div class="row">
             <div class="col mt-1">
                 <div class="card">
@@ -9,7 +16,8 @@
                         <h5 class="card-title">Domains</h5>
                         <a href="{% url 'admin_domain_info' %}" class="btn btn-primary mt-1">Info Query</a>
                         <a href="{% url 'admin_domain_transfer_info' %}" class="btn btn-primary mt-1">Transfer Query</a>
-                        <a href="{% url 'admin_domain_transfer_request' %}" class="btn btn-primary mt-1">Transfer Request</a>
+                        <a href="{% url 'admin_domain_transfer_request' %}" class="btn btn-primary mt-1">Transfer
+                            Request</a>
                     </div>
                 </div>
             </div>

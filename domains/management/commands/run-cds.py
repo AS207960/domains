@@ -64,7 +64,7 @@ class Command(BaseCommand):
     help = 'Runs updates to DS/DNSKEY based on CDS/CDNSKEY'
 
     def handle(self, *args, **options):
-        domains = models.DomainRegistration.objects.filter(deleted=False)
+        domains = models.DomainRegistration.objects.filter(deleted=False, former_domain=False)
 
         for domain in domains:
             domain_info, sld = zone_info.get_domain_info(domain.domain)

@@ -74,6 +74,7 @@ class ChargeResult:
     charge_state_id: typing.Optional[str]
     error: typing.Optional[str]
     redirect_uri: typing.Optional[str]
+    immediate_completion: bool
 
 
 @dataclasses.dataclass
@@ -110,21 +111,24 @@ def charge_account(username: str, amount: decimal.Decimal, descriptor: str, char
             success=True,
             error=None,
             redirect_uri=None,
-            charge_state_id=charge_response.charge_state_id
+            charge_state_id=charge_response.charge_state_id,
+            immediate_completion=charge_response.state == billing_pb2.COMPLETED
         )
     elif charge_response.result == billing_pb2.ChargeUserResponse.REDIRECT:
         return ChargeResult(
             success=False,
             error=None,
             redirect_uri=charge_response.redirect_uri,
-            charge_state_id=charge_response.charge_state_id
+            charge_state_id=charge_response.charge_state_id,
+            immediate_completion=False
         )
     elif charge_response.result == billing_pb2.ChargeUserResponse.FAIL:
         return ChargeResult(
             success=False,
             error=charge_response.message,
             redirect_uri=None,
-            charge_state_id=charge_response.charge_state_id
+            charge_state_id=charge_response.charge_state_id,
+            immediate_completion=False
         )
 
 

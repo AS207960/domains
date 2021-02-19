@@ -525,6 +525,8 @@ class DomainRegistration(models.Model):
     domain = models.CharField(max_length=255)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
     deleted = models.BooleanField(default=False, blank=True)
+    former_domain = models.BooleanField(default=False, blank=True)
+    transfer_out_pending = models.BooleanField(default=False, blank=True)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_registrant')
     admin_contact = models.ForeignKey(

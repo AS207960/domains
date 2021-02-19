@@ -500,6 +500,17 @@ class DomainInfo:
         )
 
     @property
+    def standard_auth_code_procedure(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_DENIC,
+            self.REGISTRY_AMNIC,
+            self.REGISTRY_EURID,
+        )
+
+    @property
     def renew_supported(self):
         return self.registry not in (
             self.REGISTRY_SWITCH,

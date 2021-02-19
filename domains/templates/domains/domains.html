@@ -60,6 +60,9 @@
                                     {% if 8 in domain.domain.statuses %}
                                         <span class="badge bg-info">Pending delete</span>
                                     {% endif %}
+                                    {% if domain.obj.transfer_out_pending %}
+                                        <span class="badge bg-warning">Transfer requested</span>
+                                    {% endif %}
                                 </th>
                                 <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td>{% if domain.domain.expiry_date %}{{ domain.domain.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>

@@ -1,6 +1,7 @@
-from django.shortcuts import render, reverse, get_object_or_404
+from django.shortcuts import render, reverse, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from .. import apps, forms, models
+from . import emails
 import grpc
 
 
@@ -22,9 +23,80 @@ def catch_epp_error(fun):
 
 @login_required
 @permission_required('domains.access_eppclient', raise_exception=True)
-@catch_epp_error
 def index(request):
     return render(request, "domains/admin/index.html")
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+def view_domains(request):
+    domains = models.DomainRegistration.objects.all()
+
+    return render(request, "domains/admin/all_domains.html", {
+        "domains": domains
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+def view_domain(request, domain_id):
+    domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+
+    return render(request, "domains/admin/domain_obj_view.html", {
+        "domain": domain
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+def domain_mark_transfer_out(request, domain_id):
+    domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    action = f"Mark {domain.domain} transferred out"
+
+    if domain.former_domain:
+        return render(request, "domains/admin/confirm.html", {
+            "action": action,
+            "can_execute": False,
+            "back_url": reverse('admin_view_domain', args=(domain.id,))
+        })
+
+    if request.method == "POST" and request.POST.get("proceed") == "true":
+        domain.former_domain = True
+        domain.save()
+        emails.mail_transferred_out.delay(domain.id)
+        return redirect('admin_view_domain', domain.id)
+
+    return render(request, "domains/admin/confirm.html", {
+        "action": action,
+        "can_execute": True,
+        "back_url": reverse('admin_view_domain', args=(domain.id,))
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+def domain_mark_transfer_out_request(request, domain_id):
+    domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    action = f"Mark {domain.domain} transfer out requested"
+
+    if domain.former_domain or domain.transfer_out_pending:
+        return render(request, "domains/admin/confirm.html", {
+            "action": action,
+            "can_execute": False,
+            "back_url": reverse('admin_view_domain', args=(domain.id,))
+        })
+
+    if request.method == "POST" and request.POST.get("proceed") == "true":
+        domain.transfer_out_pending = True
+        domain.save()
+        emails.mail_transfer_out_request.delay(domain.id)
+        return redirect('admin_view_domain', domain.id)
+
+    return render(request, "domains/admin/confirm.html", {
+        "action": action,
+        "can_execute": True,
+        "back_url": reverse('admin_view_domain', args=(domain.id,))
+    })
 
 
 @login_required

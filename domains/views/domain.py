@@ -85,7 +85,7 @@ def domain_price_query(request):
 @login_required
 def domains(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domains = models.DomainRegistration.get_object_list(access_token)
+    user_domains = models.DomainRegistration.get_object_list(access_token).filter(former_domain=False)
     registration_orders = models.DomainRegistrationOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     transfer_orders = models.DomainTransferOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     renew_orders = models.DomainRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
@@ -137,7 +137,7 @@ def domains(request):
 @login_required
 def domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -330,7 +330,7 @@ def domain(request, domain_id):
 @require_POST
 def update_domain_contact(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -425,7 +425,7 @@ def update_domain_contact(request, domain_id):
 @require_POST
 def domain_block_transfer(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -469,7 +469,7 @@ def domain_block_transfer(request, domain_id):
 @require_POST
 def domain_del_block_transfer(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -512,7 +512,7 @@ def domain_del_block_transfer(request, domain_id):
 @login_required
 def domain_regen_transfer_code(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -558,7 +558,7 @@ def domain_regen_transfer_code(request, domain_id):
 @require_POST
 def add_domain_host_obj(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -638,7 +638,7 @@ def add_domain_host_obj(request, domain_id):
 @require_POST
 def add_domain_host_addr(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -699,7 +699,7 @@ def add_domain_host_addr(request, domain_id):
 @require_POST
 def add_domain_ds_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -751,7 +751,7 @@ def add_domain_ds_data(request, domain_id):
 @require_POST
 def delete_domain_ds_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -798,7 +798,7 @@ def delete_domain_ds_data(request, domain_id):
 @require_POST
 def add_domain_dnskey_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -849,7 +849,7 @@ def add_domain_dnskey_data(request, domain_id):
 @require_POST
 def delete_domain_dnskey_data(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -894,7 +894,7 @@ def delete_domain_dnskey_data(request, domain_id):
 @login_required
 def delete_domain_sec_dns(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -934,7 +934,7 @@ def delete_domain_sec_dns(request, domain_id):
 @login_required
 def delete_domain_host_obj(request, domain_id, host_name):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -982,7 +982,7 @@ def delete_domain_host_obj(request, domain_id, host_name):
 @login_required
 def domain_hexdns(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -1015,7 +1015,7 @@ def _domain_search(request, domain_name):
         zone, sld = zone_info.get_domain_info(domain_idna)
         if zone:
             pending_domain = models.DomainRegistration.objects.filter(
-                domain=domain_name
+                domain=domain_name, former_domain=False
             ).first()
             if pending_domain:
                 return "invalid", "Domain unavailable"
@@ -1246,7 +1246,7 @@ def domain_register_confirm(request, order_id):
 @login_required
 def delete_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -1282,7 +1282,8 @@ def delete_domain(request, domain_id):
 
             gchat_bot.notify_delete.delay(user_domain.id, registry_name)
             if not domain_info.restore_supported:
-                user_domain.delete()
+                user_domain.former_domain = True
+                user_domain.save()
             else:
                 user_domain.deleted = True
                 user_domain.deleted_date = timezone.now()
@@ -1301,7 +1302,7 @@ def renew_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
 
     if not user_domain.has_scope(access_token, 'edit') or \
             not models.DomainRenewOrder.has_class_scope(access_token, 'create'):
@@ -1392,7 +1393,7 @@ def renew_domain_confirm(request, order_id):
 @login_required
 def restore_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=True)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=True, former_domain=False)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 

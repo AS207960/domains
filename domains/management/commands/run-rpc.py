@@ -50,7 +50,6 @@ class Command(BaseCommand):
     def domains_callback(self, body, model, task):
         msg = domains.proto.billing_pb2.ChargeStateNotification()
         msg.ParseFromString(body)
-        print(msg)
 
         order = model.objects.filter(charge_state_id=msg.charge_id).first()
         if not order:

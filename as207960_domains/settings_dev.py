@@ -183,7 +183,8 @@ EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"
 HEXDNS_URL = "http://localhost:8002"
-FEEDBACK_URL = "http://localhost:8003"
+FEEDBACK_URL = "none"
+# FEEDBACK_URL = "http://localhost:8003"
 PAT_URL = "http://localhost:8004"
 
 RRPPROXY_USER = rrproxy_conf["user"]

@@ -48,6 +48,23 @@
         </div>
     </section>
     <div class="container my-3 pt-3 pt-md-5">
+        {% if domain_obj.transfer_out_pending %}
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">Transfer requested</h4>
+                <p>
+                    This domain has been requested to be transferred away from us.
+                    If you do nothing this will be automatically approved by the registry in about 5 working days from
+                    the date of request.
+                    You can use the bellow buttons to speed up the process or explicitly reject this request.
+                    If you didn't request this please <a href="https://support.as207960.net/new/">contact us</a> immediately.
+                </p>
+                <hr>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-success btn-lg">Approve transfer</a>
+                    <a href="#" class="btn btn-danger btn-lg">Reject transfer</a>
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col">
                 {% if registrant %}
@@ -90,20 +107,28 @@
                     {% endif %}
                 </div>
                 </p>
-                <p>
-                    <style>
-                        .auth-hide {
-                            color: transparent;
-                            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-                        }
+                {% if domain_info.standard_auth_code_procedure %}
+                    <p>
+                        <style>
+                            .auth-hide {
+                                color: transparent;
+                                text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+                            }
 
-                        .auth-hide:hover {
-                            color: initial;
-                            text-shadow: none;
-                        }
-                    </style>
-                    <b>Transfer auth code:</b> <span class="auth-hide">{{ domain_obj.auth_info }}</span>
-                </p>
+                            .auth-hide:hover {
+                                color: initial;
+                                text-shadow: none;
+                            }
+                        </style>
+                        <b>Transfer auth code:</b> <span class="auth-hide">{{ domain_obj.auth_info }}</span>
+                    </p>
+                {% else %}
+                    <p>
+                        This TLD has a non-standard transfer procedure. Please
+                        <a href="https://support.as207960.net/new/">contact us</a> to transfer this domain away from us.
+                        We promise we won't hassle you to stay with us.
+                    </p>
+                {% endif %}
             </div>
         </div>
         <hr>

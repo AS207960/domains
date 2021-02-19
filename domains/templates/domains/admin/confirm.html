@@ -1,0 +1,27 @@
+{% extends 'domains/base.html' %}
+{% block content %}
+    <div class="container my-3">
+        <div class="bg-light p-3 rounded">
+            <h1 class="display-4">Confirm action</h1>
+            {{ action }}
+            <hr class="my-4">
+            {% if can_execute %}
+            <p>Are you sure you want to do this?</p>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <a class="btn btn-primary btn-md" href="{{ back_url }}" role="button">Cancel</a>
+                    <button type="submit" name="proceed" value="true" class="btn btn-danger">
+                        Proceed
+                    </button>
+                </form>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Action prohibited</h4>
+                    <p>The objects' status prohibits this action</p>
+                    <hr>
+                    <a class="btn btn-primary btn-md" href="{{ back_url }}" role="button">Go back</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

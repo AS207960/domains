@@ -66,7 +66,8 @@ class UserDomainsViewSet(viewsets.ViewSet):
 
             out = []
             for domain in serializer.validated_data["domains"]:
-                domain_obj = models.DomainRegistration.objects.filter(domain=domain["domain"]).first()
+                domain_obj = models.DomainRegistration.objects\
+                    .filter(domain=domain["domain"], former_domain=False).first()
                 if not domain_obj:
                     access = None
                 else:
@@ -112,7 +113,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
         token = django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
 
         out = []
-        for domain_obj in models.DomainRegistration.get_object_list(token, 'edit'):
+        for domain_obj in models.DomainRegistration.get_object_list(token, 'edit').filter(former_domain=False):
             domain_jwt = jwt.encode({
                 "iat": datetime.datetime.utcnow(),
                 "nbf": datetime.datetime.utcnow(),
@@ -142,7 +143,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
         ).get("roles", []):
             raise PermissionDenied
 
-        domain_obj = get_object_or_404(models.DomainRegistration, id=pk)
+        domain_obj = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         tasks.set_dns_to_own.delay(domain_obj.id)
 
         return Response(status=status.HTTP_202_ACCEPTED)
@@ -285,7 +286,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domains = models.DomainRegistration.get_object_list(request.auth.token)
+        domains = models.DomainRegistration.get_object_list(request.auth.token).filter(former_domain=False)
 
         with ThreadPoolExecutor() as executor:
             domains_data = list(executor.map(
@@ -300,7 +301,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
@@ -313,7 +314,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
@@ -336,7 +337,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
@@ -360,7 +361,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'delete') or domain.deleted:
             raise PermissionDenied
 
@@ -371,7 +372,8 @@ class Domain(viewsets.ViewSet):
         _pending = apps.epp_client.delete_domain(domain.domain)
         domain_info, sld = zone_info.get_domain_info(domain.domain)
         if not domain_info.restore_supported:
-            domain.delete()
+            domain.former_domain = True
+            domain.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             domain.deleted = True
@@ -386,7 +388,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not models.DomainRestoreOrder.has_class_scope(request.auth.token, 'create') \
                 or not domain.has_scope(request.auth.token, 'edit') or not domain.deleted:
             raise PermissionDenied
@@ -405,7 +407,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not models.DomainRenewOrder.has_class_scope(request.auth.token, 'create') \
                 or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
@@ -547,7 +549,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
@@ -596,7 +598,7 @@ class Domain(viewsets.ViewSet):
         if not isinstance(request.auth, auth.OAuthToken):
             raise PermissionDenied
 
-        domain = get_object_or_404(models.DomainRegistration, id=pk)
+        domain = get_object_or_404(models.DomainRegistration, id=pk, former_domain=False)
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 

@@ -45,65 +45,82 @@ def update_contact(contact_registry_id):
         logger.warn(f"Failed to update contact: {error}")
 
 
-def handle_charge(order: models.AbstractOrder, username, descriptor, charge_id, return_uri) -> bool:
-    if order.state == order.STATE_PENDING:
-        logger.info(f"{descriptor} not yet ready to charge")
-        return False
-    if order.state == order.STATE_FAILED:
-        logger.info(f"{descriptor} failed")
-        return True
-    elif order.state in (order.STATE_COMPLETED, order.STATE_PENDING_APPROVAL):
-        logger.info(f"{descriptor} already complete")
-        return True
+# def handle_charge(
+#         order: models.AbstractOrder,
+#         username: str,
+#         descriptor: str,
+#         charge_id: str,
+#         return_uri: str,
+# ) -> bool:
+#     if order.state == order.STATE_PENDING:
+#         logger.info(f"{descriptor} not yet ready to charge")
+#         return False
+#     if order.state == order.STATE_FAILED:
+#         logger.info(f"{descriptor} failed")
+#         return True
+#     elif order.state in (order.STATE_COMPLETED, order.STATE_PENDING_APPROVAL):
+#         logger.info(f"{descriptor} already complete")
+#         return True
+#
+#     if not order.charge_state_id:
+#         charge_state = billing.charge_account(
+#             username,
+#             order.price,
+#             descriptor,
+#             charge_id,
+#             off_session=order.off_session,
+#             return_uri=return_uri
+#         )
+#         order.charge_state_id = charge_state.charge_state_id
+#         order.save()
+#         if not charge_state.success:
+#             if charge_state.redirect_uri:
+#                 order.state = order.STATE_NEEDS_PAYMENT
+#                 order.redirect_uri = charge_state.redirect_uri
+#             else:
+#                 order.state = order.STATE_FAILED
+#                 order.last_error = charge_state.error
+#                 order.redirect_uri = None
+#                 order.save()
+#                 logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
+#                 return True
+#         else:
+#             if charge_state.immediate_completion:
+#                 order.state = order.STATE_NEEDS_PAYMENT
+#             else:
+#                 order.state = order.STATE_NEEDS_PAYMENT
+#             order.redirect_uri = None
+#             order.save()
+#     else:
+#         charge_state = billing.get_charge_state(order.charge_state_id)
+#         if charge_state.status == "pending":
+#             order.state = order.STATE_NEEDS_PAYMENT
+#             order.redirect_uri = charge_state.redirect_uri
+#             order.save()
+#         elif charge_state.status == "completed":
+#             order.state = order.STATE_PROCESSING
+#             order.redirect_uri = None
+#             order.save()
+#         elif charge_state.status == "failed":
+#             order.state = order.STATE_FAILED
+#             order.last_error = charge_state.last_error
+#             order.redirect_uri = None
+#             order.save()
+#             logger.warn(f"Payment for {descriptor} failed with error {charge_state.last_error}")
+#             return True
+#
+#     return False
 
-    if not order.charge_state_id:
-        charge_state = billing.charge_account(
-            username,
-            order.price,
-            descriptor,
-            charge_id,
-            off_session=order.off_session,
-            return_uri=return_uri
-        )
-        order.charge_state_id = charge_state.charge_state_id
-        order.save()
-        if not charge_state.success:
-            if charge_state.redirect_uri:
-                order.state = order.STATE_NEEDS_PAYMENT
-                order.redirect_uri = charge_state.redirect_uri
-            else:
-                order.state = order.STATE_FAILED
-                order.last_error = charge_state.error
-                order.redirect_uri = None
-                order.save()
-                logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
-                return True
-        else:
-            order.state = order.STATE_PROCESSING
-            order.redirect_uri = None
 
-        order.save()
-    else:
-        charge_state = billing.get_charge_state(order.charge_state_id)
-        if charge_state.status == "pending":
-            order.state = order.STATE_NEEDS_PAYMENT
-            order.redirect_uri = charge_state.redirect_uri
-        elif charge_state.status == "completed":
-            order.state = order.STATE_PROCESSING
-            order.redirect_uri = None
-        elif charge_state.status == "failed":
-            order.state = order.STATE_FAILED
-            order.last_error = charge_state.last_error
-            order.redirect_uri = None
-            order.save()
-            logger.warn(f"Payment for {descriptor} failed with error {charge_state.last_error}")
-            return True
-
-    order.save()
-    return False
-
-
-def charge_order(order: models.AbstractOrder, username, descriptor, charge_id, return_uri, notif_queue=None) -> bool:
+def charge_order(
+        order: models.AbstractOrder,
+        username: str,
+        descriptor: str,
+        charge_id: str,
+        return_uri: str,
+        success_func,
+        notif_queue=None,
+) -> bool:
     if order.state == order.STATE_FAILED:
         logger.info(f"{descriptor} failed")
         return True
@@ -127,43 +144,17 @@ def charge_order(order: models.AbstractOrder, username, descriptor, charge_id, r
             if charge_state.redirect_uri:
                 order.state = order.STATE_NEEDS_PAYMENT
                 order.redirect_uri = charge_state.redirect_uri
+                order.save()
             else:
                 order.state = order.STATE_FAILED
                 order.last_error = charge_state.error
                 order.redirect_uri = None
                 order.save()
                 logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
-
-        order.save()
-
-
-@shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
-)
-def process_domain_registration(registration_order_id):
-    domain_registration_order = \
-        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
-    user = domain_registration_order.get_user()
-
-    zone, _ = zone_info.get_domain_info(domain_registration_order.domain)
-    if not zone:
-        domain_registration_order.state = domain_registration_order.STATE_FAILED
-        domain_registration_order.last_error = "You don't have permission to perform this action"
-        logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
-        billing.reverse_charge(domain_registration_order.id)
-        return
-
-    charge_order(
-        order=domain_registration_order,
-        username=user.username,
-        descriptor=f"{domain_registration_order.domain} domain registration",
-        charge_id=domain_registration_order.id,
-        return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'domain_register_confirm', args=(domain_registration_order.id,)
-        ),
-        notif_queue="domains_registration_billing_notif"
-    )
+        elif charge_state.immediate_completion:
+            order.state = order.STATE_PROCESSING
+            order.save()
+            success_func.delay(order.id)
 
 
 @shared_task(
@@ -277,6 +268,36 @@ def process_domain_registration_paid(registration_order_id):
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
     ignore_result=True
 )
+def process_domain_registration(registration_order_id):
+    domain_registration_order = \
+        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+    user = domain_registration_order.get_user()
+
+    zone, _ = zone_info.get_domain_info(domain_registration_order.domain)
+    if not zone:
+        domain_registration_order.state = domain_registration_order.STATE_FAILED
+        domain_registration_order.last_error = "You don't have permission to perform this action"
+        logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
+        billing.reverse_charge(domain_registration_order.id)
+        return
+
+    charge_order(
+        order=domain_registration_order,
+        username=user.username,
+        descriptor=f"{domain_registration_order.domain} domain registration",
+        charge_id=domain_registration_order.id,
+        return_uri=settings.EXTERNAL_URL_BASE + reverse(
+            'domain_register_confirm', args=(domain_registration_order.id,)
+        ),
+        success_func=process_domain_registration_paid,
+        notif_queue="domains_registration_billing_notif"
+    )
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
 def process_domain_registration_complete(registration_order_id):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
@@ -320,34 +341,6 @@ def process_domain_registration_failed(registration_order_id):
     domain_registration_order.save()
 
     emails.mail_register_failed.delay(domain_registration_order.id)
-
-@shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
-)
-def process_domain_renewal(renewal_order_id):
-    domain_renewal_order = \
-        models.DomainRenewOrder.objects.get(id=renewal_order_id)  # type: models.DomainRenewOrder
-    user = domain_renewal_order.get_user()
-
-    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
-    if not zone:
-        domain_renewal_order.state = domain_renewal_order.STATE_FAILED
-        domain_renewal_order.last_error = "You don't have permission to perform this action"
-        logger.error(f"Failed to get zone info for {domain_renewal_order.domain}")
-        billing.reverse_charge(domain_renewal_order.id)
-        return
-
-    charge_order(
-        order=domain_renewal_order,
-        username=user.username,
-        descriptor=f"{domain_renewal_order.domain} domain renewal",
-        charge_id=domain_renewal_order.id,
-        return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'renew_domain_confirm', args=(domain_renewal_order.id,)
-        ),
-        notif_queue="domains_renew_billing_notif"
-    )
 
 
 @shared_task(
@@ -395,28 +388,29 @@ def process_domain_renewal_paid(renew_order_id):
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
     ignore_result=True
 )
-def process_domain_restore(restore_order_id):
-    domain_restore_order = \
-        models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
-    user = domain_restore_order.get_user()
+def process_domain_renewal(renewal_order_id):
+    domain_renewal_order = \
+        models.DomainRenewOrder.objects.get(id=renewal_order_id)  # type: models.DomainRenewOrder
+    user = domain_renewal_order.get_user()
 
-    zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
+    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
     if not zone:
-        domain_restore_order.state = domain_restore_order.STATE_FAILED
-        domain_restore_order.last_error = "You don't have permission to perform this action"
-        logger.error(f"Failed to get zone info for {domain_restore_order.domain}")
-        billing.reverse_charge(domain_restore_order.id)
+        domain_renewal_order.state = domain_renewal_order.STATE_FAILED
+        domain_renewal_order.last_error = "You don't have permission to perform this action"
+        logger.error(f"Failed to get zone info for {domain_renewal_order.domain}")
+        billing.reverse_charge(domain_renewal_order.id)
         return
 
     charge_order(
-        order=domain_restore_order,
+        order=domain_renewal_order,
         username=user.username,
-        descriptor=f"{domain_restore_order.domain} domain restore",
-        charge_id=domain_restore_order.id,
+        descriptor=f"{domain_renewal_order.domain} domain renewal",
+        charge_id=domain_renewal_order.id,
         return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'restore_domain_confirm', args=(domain_restore_order.id,)
+            'renew_domain_confirm', args=(domain_renewal_order.id,)
         ),
-        notif_queue="domains_restore_billing_notif"
+        success_func=process_domain_renewal_paid,
+        notif_queue="domains_renew_billing_notif"
     )
 
 
@@ -465,6 +459,36 @@ def process_domain_restore_paid(restore_order_id):
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
     ignore_result=True
 )
+def process_domain_restore(restore_order_id):
+    domain_restore_order = \
+        models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
+    user = domain_restore_order.get_user()
+
+    zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
+    if not zone:
+        domain_restore_order.state = domain_restore_order.STATE_FAILED
+        domain_restore_order.last_error = "You don't have permission to perform this action"
+        logger.error(f"Failed to get zone info for {domain_restore_order.domain}")
+        billing.reverse_charge(domain_restore_order.id)
+        return
+
+    charge_order(
+        order=domain_restore_order,
+        username=user.username,
+        descriptor=f"{domain_restore_order.domain} domain restore",
+        charge_id=domain_restore_order.id,
+        return_uri=settings.EXTERNAL_URL_BASE + reverse(
+            'restore_domain_confirm', args=(domain_restore_order.id,)
+        ),
+        success_func=process_domain_restore_paid,
+        notif_queue="domains_restore_billing_notif"
+    )
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
 def process_domain_restore_complete(restore_order_id):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
@@ -495,35 +519,6 @@ def process_domain_restore_failed(restore_order_id):
     billing.reverse_charge(domain_restore_order.id)
     domain_restore_order.state = domain_restore_order.STATE_FAILED
     domain_restore_order.save()
-
-
-@shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
-)
-def process_domain_transfer(transfer_order_id):
-    domain_transfer_order = \
-        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
-    user = domain_transfer_order.get_user()
-
-    zone, _ = zone_info.get_domain_info(domain_transfer_order.domain)
-    if not zone:
-        domain_transfer_order.state = domain_transfer_order.STATE_FAILED
-        domain_transfer_order.last_error = "You don't have permission to perform this action"
-        logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
-        billing.reverse_charge(domain_transfer_order.id)
-        return
-
-    charge_order(
-        order=domain_transfer_order,
-        username=user.username,
-        descriptor=f"{domain_transfer_order.domain} domain transfer",
-        charge_id=domain_transfer_order.id,
-        return_uri=settings.EXTERNAL_URL_BASE + reverse(
-            'domain_transfer_confirm', args=(domain_transfer_order.id,)
-        ),
-        notif_queue="domains_transfer_billing_notif"
-    )
 
 
 @shared_task(
@@ -578,6 +573,36 @@ def process_domain_transfer_paid(transfer_order_id):
         domain_transfer_order.save()
 
         logger.info(f"{domain_transfer_order.domain} transfer successfully requested")
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_transfer(transfer_order_id):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+    user = domain_transfer_order.get_user()
+
+    zone, _ = zone_info.get_domain_info(domain_transfer_order.domain)
+    if not zone:
+        domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+        domain_transfer_order.last_error = "You don't have permission to perform this action"
+        logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
+        billing.reverse_charge(domain_transfer_order.id)
+        return
+
+    charge_order(
+        order=domain_transfer_order,
+        username=user.username,
+        descriptor=f"{domain_transfer_order.domain} domain transfer",
+        charge_id=domain_transfer_order.id,
+        return_uri=settings.EXTERNAL_URL_BASE + reverse(
+            'domain_transfer_confirm', args=(domain_transfer_order.id,)
+        ),
+        success_func=process_domain_transfer_paid,
+        notif_queue="domains_transfer_billing_notif"
+    )
 
 
 @shared_task(

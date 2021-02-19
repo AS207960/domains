@@ -93,8 +93,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         now = timezone.now()
-        domains = models.DomainRegistration.objects.filter(deleted=False)
-        deleted_domains = models.DomainRegistration.objects.filter(deleted=True)
+        domains = models.DomainRegistration.objects.filter(deleted=False, former_domain=False)
+        deleted_domains = models.DomainRegistration.objects.filter(deleted=True, former_domain=False)
 
         notifications = {}
         renewed = {}
@@ -179,7 +179,8 @@ class Command(BaseCommand):
                                 f"dm_auto_renew_{domain.id}", can_reject=False
                             )
                             continue
-                        domain.delete()
+                        domain.former_domain = True
+                        domain.save()
                         print(f"Deleted {domain.domain}")
                         insert_into_dict(deleted, user, email_data)
                     else:
@@ -218,4 +219,5 @@ class Command(BaseCommand):
 
             if domain.deleted_date and domain_info.redemption_period:
                 if domain.deleted_date + domain_info.redemption_period <= now:
-                    domain.delete()
+                    domain.former_domain = True
+                    domain.save()

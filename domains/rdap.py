@@ -426,7 +426,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def DomainLookup(self, request: rdap_pb2.LookupRequest, context):
         domain_obj = models.DomainRegistration.objects.filter(
-            domain__iexact=request.query
+            domain__iexact=request.query,
+            former_domain=False
         ).first()  # type: models.DomainRegistration
         if not domain_obj:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
@@ -453,7 +454,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         if request.WhichOneof("query") == "name":
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             domain_objs = models.DomainRegistration.objects.filter(
-                domain__iregex=f"^{regex}$"
+                domain__iregex=f"^{regex}$",
+                former_domain=False
             )
         else:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
