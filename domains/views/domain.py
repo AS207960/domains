@@ -141,15 +141,15 @@ def domain(request, domain_id):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
-    if user_domain.deleted:
-        return render(request, "domains/error.html", {
-            "error": "This domain has been deleted, and is in its redemption grace period.",
-            "back_url": referrer
-        })
-
     if user_domain.former_domain:
         return render(request, "domains/error.html", {
             "error": "This domain is no longer registered with us.",
+            "back_url": referrer
+        })
+
+    if user_domain.deleted:
+        return render(request, "domains/error.html", {
+            "error": "This domain has been deleted, and is in its redemption grace period.",
             "back_url": referrer
         })
 
