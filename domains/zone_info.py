@@ -419,7 +419,7 @@ class DomainInfo:
             return datetime.timedelta(days=35)
         elif self.registry == self.REGISTRY_AMNIC:
             return datetime.timedelta(days=15)
-        elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDH):
+        elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDS):
             return datetime.timedelta(days=28)
         else:
             return datetime.timedelta(days=30)

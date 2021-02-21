@@ -9,9 +9,8 @@ import grpc
 from domains import models, zone_info, apps, tasks
 from domains.views import billing, emails
 
-# NOTIFY_INTERVAL = datetime.timedelta(days=15)
-NOTIFY_INTERVAL = datetime.timedelta(days=815)
-RENEW_INTERVAL = datetime.timedelta(days=817)
+NOTIFY_INTERVAL = datetime.timedelta(days=15)
+RENEW_INTERVAL = datetime.timedelta(days=7)
 FAIL_INTERVAL = datetime.timedelta(days=1)
 
 
