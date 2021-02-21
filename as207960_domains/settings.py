@@ -100,7 +100,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'as207960_domains.wsgi.application'
 
 GRPCSERVER = {
-    'servicers': ['domains.whois.grpc_hook', 'domains.rdap.grpc_hook'],
+    'servicers': ['domains.rdap.grpc_hook'],
     'maximum_concurrent_rpcs': None,
 }
 
