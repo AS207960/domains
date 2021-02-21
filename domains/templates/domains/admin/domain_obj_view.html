@@ -4,7 +4,7 @@
         <h1>View domain - {{ domain.domain }}</h1>
         <p>
             <b>ID:</b> {{ domain.id }}<br/>
-            <b>Auth info:</b> {{ domain.id }}<br/>
+            <b>Auth info:</b> {{ domain.auth_info }}<br/>
             <b>Registrant contact:</b>
             {% if domain.registrant_contact %}
                 {{ domain.registrant_contact.description }} ({{ domain.registrant_contact.id }})
@@ -35,6 +35,9 @@
                 {% if not domain.transfer_out_pending %}
                     <a href="{% url 'admin_domain_mark_transfer_out_request' domain.id %}" class="btn btn-primary btn-lg">
                         Mark transfer request</a>
+                {% else %}
+                    <a href="{% url 'admin_domain_mark_transfer_out_cancel' domain.id %}" class="btn btn-primary btn-lg">
+                        Mark transfer cancel</a>
                 {% endif %}
                 {% if not domain.deleted %}
                     <a href="#" class="btn btn-primary btn-lg">Mark delete redemption period</a>

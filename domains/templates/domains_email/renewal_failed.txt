@@ -1,11 +1,10 @@
 {% extends "domains_email/email_base.txt" %}
 {% block content %}
-We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account for them.
-We'll retry a few more times in the coming days, so be sure to top up your account for these domains.
-If we can't charge your account by one day before the expiry date, then our shark minions will shed a tear as they
-delete your domains.
+We tried to renew {{ domain }} as it is expiring soon.
+Unfortunately the payment couldn't go through.
+Please manually renew your domain from the domain control panel.
 
-{% for domain in domains %}
-- {{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for failure: {{ domain.error }}
-{% endfor %}
+The reason for this failure was: {{ error }}
+
+If the domain isn't renewed by one day before the expiry date, then our shark minions will shed a tear as they delete your domain.
 {% endblock content %}

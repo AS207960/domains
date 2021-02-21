@@ -4,19 +4,17 @@
         <tr>
             <td>
                 <p>
-                    We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge
-                    your account
-                    for them. We'll retry a few more times in the coming days, so be sure to top up your account!
-                    If we can't charge your account by one day before the expiry date, then our shark minions will shed
-                    a tear as
-                    they delete your domains.
+                    We tried to renew {{ domain }} as it is expiring soon.
+                    Unfortunately the payment couldn't go through.
+                    Please manually renew your domain from the domain control panel.
                 </p>
-                <ul>
-                    {% for domain in domains %}
-                        <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }}); reason for
-                            failure: {{ domain.error }}</li>
-                    {% endfor %}
-                </ul>
+                <p>
+                    The reason for this failure was: {{ error }}
+                </p>
+                <p>
+                    If the domain isn't renewed by one day before the expiry date,
+                    then our shark minions will shed a tear as they delete your domain.
+                </p>
             </td>
             <td>
                 <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>

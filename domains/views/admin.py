@@ -101,6 +101,32 @@ def domain_mark_transfer_out_request(request, domain_id):
 
 @login_required
 @permission_required('domains.access_eppclient', raise_exception=True)
+def domain_mark_transfer_out_cancel(request, domain_id):
+    domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+    action = f"Mark {domain.domain} transfer out cancelled"
+
+    if not domain.transfer_out_pending:
+        return render(request, "domains/admin/confirm.html", {
+            "action": action,
+            "can_execute": False,
+            "back_url": reverse('admin_view_domain', args=(domain.id,))
+        })
+
+    if request.method == "POST" and request.POST.get("proceed") == "true":
+        domain.transfer_out_pending = False
+        domain.save()
+        emails.mail_transfer_out_request.delay(domain.id)
+        return redirect('admin_view_domain', domain.id)
+
+    return render(request, "domains/admin/confirm.html", {
+        "action": action,
+        "can_execute": True,
+        "back_url": reverse('admin_view_domain', args=(domain.id,))
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
 @catch_epp_error
 def domain_info(request):
     domain = None

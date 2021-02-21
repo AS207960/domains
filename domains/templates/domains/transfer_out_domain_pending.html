@@ -1,0 +1,16 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Transfer out {{ domain.unicode_domain }}{% endblock %}
+{% block content %}
+    <div class="container my-3">
+        <div class="bg-light p-3 rounded">
+            <h1 class="display-4">Transfer out domain - {{ action }}</h1>
+            <b>Domain: </b> {{ domain.unicode_domain }}
+            <h2>Action pending</h2>
+            <p>
+                The request has been accepted and will be acted upon shortly. In the meantime the domain will still
+                show a pending transfer.
+            </p>
+        </div>
+    </div>
+{% endblock %}

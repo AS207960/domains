@@ -255,8 +255,10 @@ def mail_transfer_out_request(domain_id):
         context = {
             "name": user.first_name,
             "domain": domain.domain,
-            "transfer_approve_url": "",
-            "transfer_reject_url": "",
+            "transfer_approve_url":
+                settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "approve")),
+            "transfer_reject_url":
+                settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "reject")),
         }
         html_content = render_to_string("domains_email/transfer_out_request.html", context)
         txt_content = render_to_string("domains_email/transfer_out_request.txt", context)
@@ -270,3 +272,89 @@ def mail_transfer_out_request(domain_id):
         )
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_auto_renew_redirect(order_id):
+    order = models.DomainAutomaticRenewOrder.objects\
+        .filter(id=order_id).first()  # type: models.DomainAutomaticRenewOrder
+    if order.domain_obj:
+        user = order.domain_obj.get_user()
+        if user:
+            context = {
+                "name": user.first_name,
+                "domain": order.unicode_domain,
+                "subject": f"{order.unicode_domain} renewal - payment required",
+                "redirect_url": order.redirect_uri
+            }
+            html_content = render_to_string("domains_email/renewal_redirect.html", context)
+            txt_content = render_to_string("domains_email/renewal_redirect.txt", context)
+
+            email = EmailMultiAlternatives(
+                subject=f"{order.unicode_domain} renewal - payment required",
+                body=txt_content,
+                to=[user.email],
+                bcc=['email-log@as207960.net'],
+                reply_to=['Glauca Support <hello@glauca.digital>']
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_auto_renew_failed(order_id):
+    order = models.DomainAutomaticRenewOrder.objects\
+        .filter(id=order_id).first()  # type: models.DomainAutomaticRenewOrder
+    if order.domain_obj:
+        user = order.domain_obj.get_user()
+        if user:
+            context = {
+                "name": user.first_name,
+                "domain": order.unicode_domain,
+                "subject": f"{order.unicode_domain} renewal - payment failed",
+                "error": order.last_error
+            }
+            html_content = render_to_string("domains_email/renewal_failed.html", context)
+            txt_content = render_to_string("domains_email/renewal_failed.txt", context)
+
+            email = EmailMultiAlternatives(
+                subject=f"{order.unicode_domain} renewal - payment failed",
+                body=txt_content,
+                to=[user.email],
+                bcc=['email-log@as207960.net'],
+                reply_to=['Glauca Support <hello@glauca.digital>']
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_auto_renew_success(order_id):
+    order = models.DomainAutomaticRenewOrder.objects\
+        .filter(id=order_id).first()  # type: models.DomainAutomaticRenewOrder
+    if order.domain_obj:
+        user = order.domain_obj.get_user()
+        if user:
+            context = {
+                "name": user.first_name,
+                "domain": order.unicode_domain,
+                "subject": f"{order.unicode_domain} renewal successful",
+            }
+            html_content = render_to_string("domains_email/renewal_success.html", context)
+            txt_content = render_to_string("domains_email/renewal_success.txt", context)
+
+            email = EmailMultiAlternatives(
+                subject=f"{order.unicode_domain} renewal successful",
+                body=txt_content,
+                to=[user.email],
+                bcc=['email-log@as207960.net'],
+                reply_to=['Glauca Support <hello@glauca.digital>']
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()

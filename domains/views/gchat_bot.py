@@ -35,7 +35,7 @@ def make_contact(contact, label):
                     "onClick": {
                         "openLink": {
                             "url": settings.EXTERNAL_URL_BASE +
-                            reverse('edit_contact', args=(contact.id,))
+                                   reverse('edit_contact', args=(contact.id,))
                         }
                     }
                 }
@@ -630,6 +630,92 @@ def notify_delete(domain_id, registry_id: str):
         ).execute()
 
 
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_transfer_accept(domain_id, registry_id: str):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+    user = domain_obj.get_user()
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_obj.id}",
+            body={
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
+                        f"acceptance of the transfer out of {domain_obj.domain}",
+                "cards": [{
+                    "header": {
+                        "title": "Domain transfer accept request" if not settings.DEBUG
+                        else "Domain transfer accept request [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Registry ID",
+                                "content": registry_id
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }]
+                    }, make_user_data(user)],
+                    "name": f"domain-transfer-accept-{domain_obj.pk}"
+                }]
+            }
+        ).execute()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_transfer_reject(domain_id, registry_id: str):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+    user = domain_obj.get_user()
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_obj.id}",
+            body={
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
+                        f"rejection of the transfer out of {domain_obj.domain}",
+                "cards": [{
+                    "header": {
+                        "title": "Domain transfer reject request" if not settings.DEBUG
+                        else "Domain transfer reject request [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Registry ID",
+                                "content": registry_id
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }]
+                    }, make_user_data(user)],
+                    "name": f"domain-transfer-reject-{domain_obj.pk}"
+                }]
+            }
+        ).execute()
+
+
 @csrf_exempt
 def webhook(request):
     auth_header = request.META.get("HTTP_AUTHORIZATION", "")
@@ -864,7 +950,7 @@ def card_clicked(event):
                 }]
             }
     elif action_name in ("mark-domain-restored", "mark-domain-restore-fail"):
-        domain_restore_order = models.DomainRestoreOrder.objects\
+        domain_restore_order = models.DomainRestoreOrder.objects \
             .filter(pk=domain_id).first()  # type: models.DomainRestoreOrder
         if not domain_restore_order:
             return None
@@ -934,7 +1020,7 @@ def card_clicked(event):
             }
 
     elif action_name in ("mark-domain-transferred", "mark-domain-transfer-fail"):
-        domain_transfer_order = models.DomainTransferOrder.objects\
+        domain_transfer_order = models.DomainTransferOrder.objects \
             .filter(pk=domain_id).first()  # type: models.DomainTransferOrder
         if not domain_transfer_order:
             return None

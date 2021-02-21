@@ -137,9 +137,21 @@ def domains(request):
 @login_required
 def domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
+
+    if user_domain.deleted:
+        return render(request, "domains/error.html", {
+            "error": "This domain has been deleted, and is in its redemption grace period.",
+            "back_url": referrer
+        })
+
+    if user_domain.former_domain:
+        return render(request, "domains/error.html", {
+            "error": "This domain is no longer registered with us.",
+            "back_url": referrer
+        })
 
     if not user_domain.has_scope(access_token, 'edit'):
         return render(request, "domains/error.html", {
@@ -1291,8 +1303,100 @@ def delete_domain(request, domain_id):
             return redirect('domains')
 
     return render(request, "domains/delete_domain.html", {
-        "domain": user_domain,
+        "domain": domain_data,
         "can_delete": can_delete,
+        "back_url": referrer
+    })
+
+
+@login_required
+def transfer_out_domain(request, domain_id, transfer_action):
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if transfer_action not in ("reject", "approve"):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id)
+
+    if user_domain.deleted or user_domain.former_domain:
+        return render(request, "domains/error.html", {
+            "error": "This domain is no longer registered with us",
+            "back_url": referrer
+        })
+
+    if not user_domain.has_scope(access_token, 'delete') or not user_domain.transfer_out_pending:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    try:
+        domain_data = apps.epp_client.get_domain(user_domain.domain)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    if request.method == "POST" and request.POST.get("confirm") == "true":
+        if transfer_action == "approve":
+            if domain_info.direct_restore_supported:
+                try:
+                    transfer_obj = apps.epp_client.transfer_accept_domain(user_domain.domain, "")
+                except grpc.RpcError as rpc_error:
+                    error = rpc_error.details()
+                    return render(request, "domains/error.html", {
+                        "error": error,
+                        "back_url": referrer
+                    })
+
+                if not transfer_obj.pending:
+                    user_domain.transfer_out_pending = False
+                    user_domain.former_domain = True
+                    user_domain.save()
+                    return redirect('domains')
+            else:
+                gchat_bot.request_transfer_accept.delay(user_domain.id, domain_data.registry_name)
+                return render(request, "domains/transfer_out_domain_pending.html", {
+                    "domain": user_domain,
+                    "action": transfer_action,
+                    "back_url": reverse('domains')
+                })
+        elif transfer_action == "reject":
+            if domain_info.direct_restore_supported:
+                try:
+                    transfer_obj = apps.epp_client.transfer_reject_domain(user_domain.domain, "")
+                except grpc.RpcError as rpc_error:
+                    error = rpc_error.details()
+                    return render(request, "domains/error.html", {
+                        "error": error,
+                        "back_url": referrer
+                    })
+
+                if not transfer_obj.pending:
+                    user_domain.transfer_out_pending = False
+                    user_domain.former_domain = False
+                    user_domain.save()
+                    return redirect('domain', user_domain.id)
+            else:
+                gchat_bot.request_transfer_reject.delay(user_domain.id, domain_data.registry_name)
+                return render(request, "domains/transfer_out_domain_pending.html", {
+                    "domain": user_domain,
+                    "action": transfer_action,
+                    "back_url": reverse('domains')
+                })
+
+    return render(request, "domains/transfer_out_domain.html", {
+        "domain": user_domain,
+        "action": transfer_action,
         "back_url": referrer
     })
 

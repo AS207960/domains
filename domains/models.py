@@ -596,7 +596,7 @@ class DomainRegistration(models.Model):
         return self.domain
 
 
-class AbstractOrder(models.Model):
+class SimpleAbstractOrder(models.Model):
     STATE_PENDING = "P"
     STATE_STARTED = "T"
     STATE_NEEDS_PAYMENT = "N"
@@ -620,6 +620,12 @@ class AbstractOrder(models.Model):
     redirect_uri = models.TextField(blank=True, null=True)
     last_error = models.TextField(blank=True, null=True)
     off_session = models.BooleanField(blank=True, default=True)
+
+    class Meta:
+        abstract = True
+
+
+class AbstractOrder(SimpleAbstractOrder):
     resource_id = models.UUIDField(null=True, db_index=True)
 
     resource_type: str
@@ -743,6 +749,27 @@ class DomainRenewOrder(AbstractOrder):
     resource_display_name = "Renew order"
 
     id = as207960_utils.models.TypedUUIDField(f'domains_domainreneworder', primary_key=True)
+    domain = models.CharField(max_length=255)
+    period_unit = models.PositiveSmallIntegerField()
+    period_value = models.PositiveSmallIntegerField()
+    domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        ordering = ['domain']
+
+    @property
+    def unicode_domain(self):
+        try:
+            return self.domain.encode().decode('idna')
+        except UnicodeError:
+            return self.domain
+
+    def __str__(self):
+        return self.domain
+
+
+class DomainAutomaticRenewOrder(SimpleAbstractOrder):
+    id = as207960_utils.models.TypedUUIDField(f'domains_domainautoreneworder', primary_key=True)
     domain = models.CharField(max_length=255)
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
