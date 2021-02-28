@@ -96,7 +96,7 @@ spec:
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
           volumeMounts:
             - mountPath: "/app/static/"
@@ -137,7 +137,7 @@ spec:
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["gunicorn", "-w", "8", "-b", "[::]:8000", "--forwarded-allow-ips", "*", "--access-logfile", "-", "--log-level=debug", "--timeout=90", "as207960_domains.wsgi:application"]
           ports:
             - containerPort: 8000
@@ -213,7 +213,7 @@ spec:
           containers:
             - name: django
               image: as207960/domains-django:(version)
-              imagePullPolicy: Always
+              imagePullPolicy: IfNotPresent
               command: ["sh", "-c", "python3 manage.py run-renewal"]
               volumeMounts:
                 - mountPath: "/app/static/"
@@ -288,7 +288,7 @@ spec:
           containers:
             - name: django
               image: as207960/domains-django:(version)
-              imagePullPolicy: Always
+              imagePullPolicy: IfNotPresent
               command: ["sh", "-c", "python3 manage.py run-cds"]
               volumeMounts:
                 - mountPath: "/app/static/"
@@ -368,7 +368,7 @@ spec:
       containers:
         - name: grpc
           image: as207960/domains-django:(version)
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["celery",  "-A", "as207960_domains", "worker", "--loglevel=INFO", "-c", "32"]
           ports:
             - containerPort: 50051
@@ -449,7 +449,7 @@ spec:
       containers:
         - name: grpc
           image: as207960/domains-django:(version)
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "python3 manage.py grpcserver -v 2 --traceback"]
           ports:
             - containerPort: 50051
@@ -530,7 +530,7 @@ spec:
       containers:
         - name: rpc
           image: as207960/domains-django:(version)
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "sh", "-c", "python3 manage.py run-rpc" ]
           volumeMounts:
             - mountPath: "/app/static/"
