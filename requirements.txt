@@ -7,7 +7,7 @@ django-crispy-forms
 django-countries
 django-phonenumber-field[phonenumbers]
 django-xff
-grpcio
+grpcio=1.30.0
 protobuf
 django-grpc
 djangorestframework
