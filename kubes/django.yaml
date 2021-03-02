@@ -607,7 +607,7 @@ spec:
           secret:
             secretName: domains-jwt-priv
       containers:
-        - name: rpc
+        - name: poll
           image: as207960/domains-django:(version)
           imagePullPolicy: IfNotPresent
           command: [ "sh", "-c", "python3 manage.py run-epp-poll afilias centralnic nominet rrpproxy switch traficom verisign-cc" ]

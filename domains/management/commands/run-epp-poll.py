@@ -8,6 +8,7 @@ import google.protobuf.json_format
 import queue
 import time
 import grpc
+import traceback
 import json
 
 
@@ -45,12 +46,18 @@ class PollClient:
             )
             try:
                 for msg in self._channel:
-                    self._callback(self, msg)
+                    try:
+                        self._callback(self, msg)
+                    except Exception as e:
+                        traceback.print_exc(e)
             except grpc.RpcError as e:
                 if e.code() == grpc.StatusCode.CANCELLED:
                     return
                 else:
-                    self._callback_exc(self, e)
+                    try:
+                        self._callback_exc(self, e)
+                    except Exception as e:
+                        traceback.print_exc(e)
 
             time.sleep(15)
 
