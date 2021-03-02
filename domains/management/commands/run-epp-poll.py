@@ -48,18 +48,18 @@ class PollClient:
                 for msg in self._channel:
                     try:
                         self._callback(self, msg)
-                    except Exception as e:
-                        traceback.print_exc(e)
+                    except:
+                        traceback.print_exc()
             except grpc.RpcError as e:
                 if e.code() == grpc.StatusCode.CANCELLED:
                     return
                 else:
                     try:
                         self._callback_exc(self, e)
-                    except Exception as e:
-                        traceback.print_exc(e)
+                    except:
+                        traceback.print_exc()
 
-            time.sleep(15)
+            time.sleep(60)
 
     def run(self):
         t = threading.Thread(target=self._run_iter)
