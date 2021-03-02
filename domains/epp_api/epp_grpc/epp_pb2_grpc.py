@@ -69,6 +69,11 @@ class EPPProxyStub(object):
                 request_serializer=domain__pb2.DomainTransferRequestRequest.SerializeToString,
                 response_deserializer=domain__pb2.DomainTransferReply.FromString,
                 )
+        self.DomainTransferCancel = channel.unary_unary(
+                '/epp.EPPProxy/DomainTransferCancel',
+                request_serializer=domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                )
         self.DomainTransferAccept = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferAccept',
                 request_serializer=domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
@@ -154,9 +159,9 @@ class EPPProxyStub(object):
                 request_serializer=contact__pb2.ContactTransferRequestRequest.SerializeToString,
                 response_deserializer=contact__pb2.ContactTransferReply.FromString,
                 )
-        self.Poll = channel.unary_stream(
+        self.Poll = channel.stream_stream(
                 '/epp.EPPProxy/Poll',
-                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                request_serializer=epp__pb2.PollAck.SerializeToString,
                 response_deserializer=epp__pb2.PollReply.FromString,
                 )
         self.NominetTagList = channel.unary_unary(
@@ -229,6 +234,12 @@ class EPPProxyServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def DomainTransferRequest(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DomainTransferCancel(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -336,7 +347,7 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Poll(self, request, context):
+    def Poll(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -405,6 +416,11 @@ def add_EPPProxyServicer_to_server(servicer, server):
             'DomainTransferRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferRequest,
                     request_deserializer=domain__pb2.DomainTransferRequestRequest.FromString,
+                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+            ),
+            'DomainTransferCancel': grpc.unary_unary_rpc_method_handler(
+                    servicer.DomainTransferCancel,
+                    request_deserializer=domain__pb2.DomainTransferAcceptRejectRequest.FromString,
                     response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainTransferAccept': grpc.unary_unary_rpc_method_handler(
@@ -492,9 +508,9 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     request_deserializer=contact__pb2.ContactTransferRequestRequest.FromString,
                     response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
             ),
-            'Poll': grpc.unary_stream_rpc_method_handler(
+            'Poll': grpc.stream_stream_rpc_method_handler(
                     servicer.Poll,
-                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    request_deserializer=epp__pb2.PollAck.FromString,
                     response_serializer=epp__pb2.PollReply.SerializeToString,
             ),
             'NominetTagList': grpc.unary_unary_rpc_method_handler(
@@ -683,6 +699,23 @@ class EPPProxy(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferRequest',
             domain__pb2.DomainTransferRequestRequest.SerializeToString,
+            domain__pb2.DomainTransferReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DomainTransferCancel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferCancel',
+            domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
             domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -977,7 +1010,7 @@ class EPPProxy(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def Poll(request,
+    def Poll(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -987,8 +1020,8 @@ class EPPProxy(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/epp.EPPProxy/Poll',
-            epp__pb2.RegistryInfo.SerializeToString,
+        return grpc.experimental.stream_stream(request_iterator, target, '/epp.EPPProxy/Poll',
+            epp__pb2.PollAck.SerializeToString,
             epp__pb2.PollReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
