@@ -22,13 +22,9 @@
         <ul>
             {% for ds in add_cds %}
                 {% if is_ds %}
-                    <li><code>
-                        <pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre>
-                    </code></li>
+                    <li><code><pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre></code></li>
                 {% else %}
-                    <li><code>
-                        <pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre>
-                    </code></li>
+                    <li><code><pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre></code></li>
                 {% endif %}
             {% endfor %}
         </ul>

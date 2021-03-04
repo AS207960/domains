@@ -70,7 +70,11 @@ class Command(BaseCommand):
             domain_info, sld = zone_info.get_domain_info(domain.domain)
 
             if not domain_info:
-                print(f"Can't renew {domain.domain}: unknown zone")
+                print(f"Can't run CDS on {domain.domain}: unknown zone")
+                continue
+
+            if domain_info.supports_cds:
+                print(f"Ignoring CDS on {domain.domain}: handled by registry")
                 continue
 
             try:

@@ -45,6 +45,9 @@ class IPAddress:
         elif self.ip_type == 2:
             return "IPv6"
 
+    def __str__(self):
+        return self.address
+
 
 @dataclasses.dataclass
 class TransferStatus:
@@ -99,6 +102,12 @@ class DomainNameServer:
     host_obj: typing.Optional[str]
     host_name: typing.Optional[str]
     address: typing.List[IPAddress]
+
+    def __str__(self):
+        if self.host_obj:
+            return self.unicode_host_obj
+        else:
+            return f"{self.unicode_host_name} ({', '.join(map(lambda a: str(a), self.address))})"
 
     @classmethod
     def from_pb(cls, resp: domain_pb2.NameServer):
@@ -1101,6 +1110,189 @@ class FeeData:
     @property
     def total_fee(self):
         return sum(map(lambda f: f.value, self.fees)) + sum(map(lambda c: c.value, self.credits))
+
+
+@dataclasses.dataclass
+class ChangeState:
+    item: int
+
+    @property
+    def name(self):
+        if self.item == 0:
+            return "after"
+        elif self.item == 1:
+            return "before"
+
+    def __str__(self):
+        if self.item == 0:
+            return "after"
+        elif self.item == 1:
+            return "before"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.item == other
+        elif type(other) == self.__class__:
+            return other.status == self.item
+        else:
+            return False
+
+
+@dataclasses.dataclass
+class ChangeOperationType:
+    item: int
+
+    @property
+    def name(self):
+        if self.item == 0:
+            return "custom"
+        elif self.item == 1:
+            return "create"
+        elif self.item == 2:
+            return "delete"
+        elif self.item == 3:
+            return "renew"
+        elif self.item == 4:
+            return "transfer"
+        elif self.item == 5:
+            return "update"
+        elif self.item == 6:
+            return "restore"
+        elif self.item == 7:
+            return "auto_renew"
+        elif self.item == 8:
+            return "auto_delete"
+        elif self.item == 9:
+            return "auto_purge"
+
+    def __str__(self):
+        if self.item == 0:
+            return "Custom"
+        elif self.item == 1:
+            return "Create"
+        elif self.item == 2:
+            return "Delete"
+        elif self.item == 3:
+            return "Renew"
+        elif self.item == 4:
+            return "Transfer"
+        elif self.item == 5:
+            return "Update"
+        elif self.item == 6:
+            return "Restore"
+        elif self.item == 7:
+            return "Automatic renew"
+        elif self.item == 8:
+            return "Automatic delete"
+        elif self.item == 9:
+            return "Automatic purge"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.item == other
+        elif type(other) == self.__class__:
+            return other.status == self.item
+        else:
+            return False
+
+
+@dataclasses.dataclass
+class ChangeOperation:
+    type: ChangeOperationType
+    operation: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: epp_pb2.ChangeData.ChangeOperation):
+        return cls(
+            type=ChangeOperationType(item=resp.operation_type),
+            operation=resp.operation.value if resp.HasField("operation") else None,
+        )
+
+    def __str__(self):
+        if self.type.item == 0:
+            return str(self.operation)
+        else:
+            if self.operation:
+                return f"{self.type} ({self.operation})"
+            else:
+                return str(self.type)
+
+
+@dataclasses.dataclass
+class ChangeCaseIDType:
+    item: int
+
+    @property
+    def name(self):
+        if self.item == 0:
+            return "custom"
+        elif self.item == 1:
+            return "udrp"
+        elif self.item == 1:
+            return "urs"
+
+    def __str__(self):
+        if self.item == 0:
+            return "Custom"
+        elif self.item == 1:
+            return "UDRP"
+        elif self.item == 2:
+            return "URS"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.item == other
+        elif type(other) == self.__class__:
+            return other.status == self.item
+        else:
+            return False
+
+
+@dataclasses.dataclass
+class ChangeCaseID:
+    type: ChangeCaseIDType
+    type_name: typing.Optional[str]
+    case_id: str
+
+    @classmethod
+    def from_pb(cls, resp: epp_pb2.ChangeData.CaseID):
+        return cls(
+            type=ChangeCaseIDType(item=resp.case_id_type),
+            type_name=resp.name.value if resp.HasField("name") else None,
+            case_id=resp.case_id
+        )
+
+    def __str__(self):
+        if self.type.item == 0:
+            return f"{self.type_name}: {self.case_id}"
+        else:
+            if self.type_name:
+                return f"{self.type} ({self.type_name}): {self.case_id}"
+            else:
+                return f"{self.type}: {self.case_id}"
+
+
+@dataclasses.dataclass
+class ChangeData:
+    change_state: ChangeState
+    change_operation: ChangeOperation
+    date: datetime.datetime
+    server_transaction_id: str
+    who: str
+    reason: typing.Optional[str]
+    case_id: typing.Optional[ChangeCaseID]
+
+    @classmethod
+    def from_pb(cls, resp: epp_pb2.ChangeData):
+        return cls(
+            change_state=ChangeState(item=resp.change_state),
+            change_operation=ChangeOperation.from_pb(resp.operation),
+            date=resp.date.ToDatetime(),
+            server_transaction_id=resp.server_transaction_id,
+            who=resp.who,
+            case_id=ChangeCaseID.from_pb(resp.case_id) if resp.HasField("case_id") else None,
+            reason=resp.reason.value if resp.HasField("reason") else None
+        )
 
 
 class EPPClient:

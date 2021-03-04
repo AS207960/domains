@@ -412,6 +412,13 @@ class DomainInfo:
             return 1, 2, 4
 
     @property
+    def supports_cds(self):
+        if self.registry == self.REGISTRY_SWITCH:
+            return True
+        else:
+            return False
+
+    @property
     def redemption_period(self):
         if self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID):
             return datetime.timedelta(days=40)

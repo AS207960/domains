@@ -1,0 +1,146 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <p>
+        Your registration of {{ domain }} has been updated by the registry.<br/>
+        Below are the details of the changes made.<br/>
+        More information may be available from the domains control panel.
+        If you're unsure about what this message means please reply to this email.
+    </p>
+    <a href="{{ domain_url }}"
+       style="color: #fff;background-color: #3182CE;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
+        Manage your domain
+    </a>
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "EmailMessage",
+            "potentialAction": {
+                "@type": "ViewAction",
+                "name": "Manage domain",
+                "url": "{{ domain_url }}"
+            },
+            "description": "Manage your domain on our web portal",
+            "publisher": {
+                "@type": "Organization",
+                "name": "Glauca",
+                "url": "https://glauca.digital"
+            }
+        }
+    </script>
+    <table style="width:100%;background:#eee;border-radius:5px;padding:20px;margin-top: 25px;">
+        <tbody>
+        <tr style="padding:5px;">
+            <th>Operation</th>
+            <td>{{ change_data.change_operation }}</td>
+        </tr>
+        <tr style="padding:5px;">
+            <th>Date</th>
+            <td>{{ change_data.date }}</td>
+        </tr>
+        <tr style="padding:5px;">
+            <th>By whom</th>
+            <td>{{ change_data.who }}</td>
+        </tr>
+        {% if change_data.reason %}
+            <tr style="padding:5px;">
+                <th>Reason</th>
+                <td>{{ change_data.reason }}</td>
+            </tr>
+        {% endif %}
+        {% if change_data.case_id %}
+            <tr style="padding:5px;">
+                <th>Relating to case ID</th>
+                <td>{{ change_data.case_id }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <p>
+        State of the domain {{ change_data.change_state }} operation:
+    </p>
+    <div style="background:#eee;border-radius:5px;padding:20px;">
+        <p>
+            <b>Name</b><br/>
+            {{ domain_data.unicode_domain }}<br/>
+        </p>
+        <p>
+            <b>Status</b>
+        </p>
+        <ul>
+            {% for status in domain_data.statuses %}
+                <li>{{ status }}</li>
+            {% endfor %}
+            {% for status in domain_data.rgp_state %}
+                <li>{{ status }}</li>
+            {% endfor %}
+        </ul>
+        <p>
+            <b>Name servers</b>
+        </p>
+        <ul>
+            {% for ns in domain_data.name_server %}
+                <li>{{ ns }}</li>
+            {% endfor %}
+        </ul>
+        <p>
+            <b>Creation date</b><br/>
+            {% if domain_data.creation_date %}
+                {{ domain_data.creation_date }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        <p>
+            <b>Expiry date</b><br/>
+            {% if domain_data.expiry_date %}
+                {{ domain_data.expiry_date }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        <p>
+            <b>Last updated date</b><br/>
+            {% if domain_data.last_updated_date %}
+                {{ domain_data.last_updated_date }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        <p>
+            <b>Last transfer date</b><br/>
+            {% if domain_data.last_transfer_date %}
+                {{ domain_data.last_transfer_date }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+        {% if domain_data.sec_dns %}
+            {% if domain_data.sec_dns.max_sig_life %}
+                <p>
+                    <b>DNSSEC maximum signature life</b><br/>
+                    { domain_data.sec_dns.max_sig_life }}
+                </p>
+            {% endif %}
+            {% if domain_data.sec_dns.ds_data %}
+                <p>
+                    <b>DS records</b>
+                    {% for ds_data in domain_data.sec_dns.ds_data %}
+                        <code style="font-size: 12px;">
+                            <pre>{{ ds_data.key_tag }} {{ ds_data.algorithm }} {{ ds_data.digest_type }} {{ ds_data.digest }}</pre>
+                        </code>
+                    {% endfor %}
+                </p>
+            {% endif %}
+            {% if domain_data.sec_dns.key_data %}
+                <p>
+                    <b>DNSKEY records</b>
+                    {% for key_data in domain_data.sec_dns.key_data %}
+                        <code style="font-size: 12px;">
+                            <pre>{{ key_data.flags }} {{ key_data.protocol }} {{ key_data.algorithm }} {{ key_data.public_key }}</pre>
+                        </code>
+                    {% endfor %}
+                </p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
