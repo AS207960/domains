@@ -99,6 +99,9 @@ class Command(BaseCommand):
             except dns.resolver.NXDOMAIN:
                 print(f"Getting DS of {domain.domain} returned NXDOMAIN")
                 continue
+            except dns.resolver.NoNameservers:
+                print(f"Getting DS of {domain.domain}: no name servers")
+                continue
             except dns.resolver.NoAnswer:
                 original_ds = None
             except dns.exception.Timeout:
