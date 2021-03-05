@@ -25,7 +25,8 @@ def mail_update(user, domain, add_cds, rem_cds, is_ds):
         "domain": domain,
         "add_cds": add_cds,
         "rem_cds": rem_cds,
-        "is_ds": is_ds
+        "is_ds": is_ds,
+        "subject": "Domain CDS update",
     }
     html_content = render_to_string("domains_email/cds_update.html", context)
     txt_content = render_to_string("domains_email/cds_update.txt", context)
@@ -93,25 +94,25 @@ class Command(BaseCommand):
 
             try:
                 original_ds_msg = resolver.resolve(
-                    domain_name, dns.rdatatype.DS, raise_on_no_answer=False, tcp=True
+                    domain_name, dns.rdatatype.DS, tcp=True
                 ).response
             except dns.resolver.NXDOMAIN:
                 print(f"Getting DS of {domain.domain} returned NXDOMAIN")
                 continue
-            except dns.resolver.NoNameservers:
-                print(f"Getting DS of {domain.domain} no nameservers")
-                continue
+            except dns.resolver.NoAnswer:
+                original_ds = None
             except dns.exception.Timeout:
                 print(f"Getting DS of {domain.domain} timed out")
                 continue
+            else:
+                if original_ds_msg.rcode() != 0:
+                    print(f"Getting DS of {domain.domain} returned error")
+                    continue
 
-            if original_ds_msg.rcode() != 0:
-                print(f"Getting DS of {domain.domain} returned error")
-                continue
+                original_ds = original_ds_msg.get_rrset(
+                    dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DS
+                )
 
-            original_ds = original_ds_msg.get_rrset(
-                dns.message.ANSWER, domain_name, dns.rdataclass.IN, dns.rdatatype.DS
-            )
             cds_type = dns.rdatatype.CDS if domain_info.ds_data_supported else dns.rdatatype.CDNSKEY
 
             def validate_message(msg, dnskey_set, ds_set, covers=dns.rdatatype.DNSKEY, exact=True):

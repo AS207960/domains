@@ -42,6 +42,7 @@ def mail_registered(registration_order_id):
             "domain": domain.domain,
             "feedback_url": feedback_url,
             "domain_url": domain_url,
+            "subject": "Domain registration success",
         }
         html_content = render_to_string("domains_email/register_success.html", context)
         txt_content = render_to_string("domains_email/register_success.txt", context)
@@ -74,6 +75,7 @@ def mail_register_failed(registration_order_id, reason: str = None):
             "domain": domain.domain,
             "reason": reason,
             "feedback_url": feedback_url,
+            "subject": "Domain registration failure",
         }
         html_content = render_to_string("domains_email/register_fail.html", context)
         txt_content = render_to_string("domains_email/register_fail.txt", context)
@@ -106,6 +108,7 @@ def mail_transferred(transfer_order_id):
             "domain": domain.domain,
             "feedback_url": feedback_url,
             "domain_url": domain_url,
+            "subject": "Domain transfer success",
         }
         html_content = render_to_string("domains_email/transfer_success.html", context)
         txt_content = render_to_string("domains_email/transfer_success.txt", context)
@@ -137,6 +140,7 @@ def mail_transfer_failed(transfer_order_id, reason: str = None):
             "domain": domain.domain,
             "reason": reason,
             "feedback_url": feedback_url,
+            "subject": "Domain transfer failure",
         }
         html_content = render_to_string("domains_email/transfer_fail.html", context)
         txt_content = render_to_string("domains_email/transfer_fail.txt", context)
@@ -167,6 +171,7 @@ def mail_restored(restore_order_id):
             "name": user.first_name,
             "domain": domain.domain,
             "feedback_url": feedback_url,
+            "subject": "Domain restore success",
         }
         html_content = render_to_string("domains_email/restore_success.html", context)
         txt_content = render_to_string("domains_email/restore_success.txt", context)
@@ -198,6 +203,7 @@ def mail_restore_failed(restore_order_id, reason: str = None):
             "domain": domain.domain,
             "reason": reason,
             "feedback_url": feedback_url,
+            "subject": "Domain restore failure",
         }
         html_content = render_to_string("domains_email/restore_fail.html", context)
         txt_content = render_to_string("domains_email/restore_fail.txt", context)
@@ -229,6 +235,7 @@ def mail_transferred_out(domain_id):
             "name": user.first_name,
             "domain": domain.domain,
             "feedback_url": feedback_url,
+            "subject": "Domain transferred out",
         }
         html_content = render_to_string("domains_email/transfer_out.html", context)
         txt_content = render_to_string("domains_email/transfer_out.txt", context)
@@ -259,6 +266,7 @@ def mail_transfer_out_request(domain_id):
                 settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "approve")),
             "transfer_reject_url":
                 settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "reject")),
+            "subject": "Domain transfer request",
         }
         html_content = render_to_string("domains_email/transfer_out_request.html", context)
         txt_content = render_to_string("domains_email/transfer_out_request.txt", context)
