@@ -25,7 +25,7 @@ def mail_update(user, domain, add_cds, rem_cds, is_ds):
         "domain": domain,
         "add_cds": add_cds,
         "rem_cds": rem_cds,
-        "is_ds": is_ds
+        "is_ds": is_ds,
         "subject": "Domain CDS update"
     }
     html_content = render_to_string("domains_email/cds_update.html", context)
