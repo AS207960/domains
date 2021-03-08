@@ -193,7 +193,7 @@ spec:
             cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
           labels:
             app: domains
-            part: django
+            part: renewal
         spec:
           volumes:
             - name: static
@@ -268,7 +268,7 @@ spec:
             cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
           labels:
             app: domains
-            part: django
+            part: cds
         spec:
           volumes:
             - name: static
