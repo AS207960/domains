@@ -2507,6 +2507,11 @@ else:
             MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='me.uk',
                         markup=decimal.Decimal("1.5"))
         )),
+        ('org.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
+            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='org.uk',
+                        markup=decimal.Decimal("1.5"))
+        )),
         ('work', DomainInfo(
             DomainInfo.REGISTRY_MINDS_MACHINES,
             MarkupPrice(2062, transfer=2062, restore=19200, currency=None, display_currency='USD', tld='work',
