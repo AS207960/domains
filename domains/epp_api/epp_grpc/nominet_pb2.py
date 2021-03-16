@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\"\xb2\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"4\n\x10\x44omainCancelData\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"t\n\x11\x44omainReleaseData\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xb5\x01\n\x19\x44omainRegistrarChangeData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12\x0f\n\x07\x63\x61se_id\x18\x03 \x01(\t\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"<\n\x0eHostCancelData\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xac\x02\n\x0bProcessData\x12\x34\n\x05stage\x18\x01 \x01(\x0e\x32%.epp.nominet.ProcessData.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"d\n\x0bSuspendData\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\"0\n\x0e\x44omainFailData\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xcd\x01\n\x16RegistrantTransferData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
+  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\"\xb2\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"4\n\x10\x44omainCancelData\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"t\n\x11\x44omainReleaseData\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xd3\x01\n\x19\x44omainRegistrarChangeData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"<\n\x0eHostCancelData\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xac\x02\n\x0bProcessData\x12\x34\n\x05stage\x18\x01 \x01(\x0e\x32%.epp.nominet.ProcessData.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"d\n\x0bSuspendData\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\"0\n\x0e\x44omainFailData\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xcd\x01\n\x16RegistrantTransferData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,])
 
@@ -49,8 +49,8 @@ _PROCESSDATA_PROCESSSTAGE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=984,
-  serialized_end=1024,
+  serialized_start=1014,
+  serialized_end=1054,
 )
 _sym_db.RegisterEnumDescriptor(_PROCESSDATA_PROCESSSTAGE)
 
@@ -262,8 +262,8 @@ _DOMAINREGISTRARCHANGEDATA = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='case_id', full_name='epp.nominet.DomainRegistrarChangeData.case_id', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -294,7 +294,7 @@ _DOMAINREGISTRARCHANGEDATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=478,
-  serialized_end=659,
+  serialized_end=689,
 )
 
 
@@ -332,8 +332,8 @@ _HOSTCANCELDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=661,
-  serialized_end=721,
+  serialized_start=691,
+  serialized_end=751,
 )
 
 
@@ -400,8 +400,8 @@ _PROCESSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=724,
-  serialized_end=1024,
+  serialized_start=754,
+  serialized_end=1054,
 )
 
 
@@ -446,8 +446,8 @@ _SUSPENDDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1026,
-  serialized_end=1126,
+  serialized_start=1056,
+  serialized_end=1156,
 )
 
 
@@ -485,8 +485,8 @@ _DOMAINFAILDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1128,
-  serialized_end=1176,
+  serialized_start=1158,
+  serialized_end=1206,
 )
 
 
@@ -552,13 +552,14 @@ _REGISTRANTTRANSFERDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1179,
-  serialized_end=1384,
+  serialized_start=1209,
+  serialized_end=1414,
 )
 
 _NOMINETTAGLISTREPLY_TAG.fields_by_name['trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _NOMINETTAGLISTREPLY_TAG.containing_type = _NOMINETTAGLISTREPLY
 _NOMINETTAGLISTREPLY.fields_by_name['tags'].message_type = _NOMINETTAGLISTREPLY_TAG
+_DOMAINREGISTRARCHANGEDATA.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DOMAINREGISTRARCHANGEDATA.fields_by_name['domains'].message_type = domain__pb2._DOMAININFOREPLY
 _DOMAINREGISTRARCHANGEDATA.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
 _PROCESSDATA.fields_by_name['stage'].enum_type = _PROCESSDATA_PROCESSSTAGE

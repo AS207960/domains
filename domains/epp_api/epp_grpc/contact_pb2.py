@@ -15,6 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from . import common_pb2 as common__pb2
+from . import nominet_ext_pb2 as nominet__ext__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +24,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rcontact.proto\x12\x0b\x65pp.contact\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\"\xd0\x02\n\rPostalAddress\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0corganisation\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07streets\x18\x04 \x03(\t\x12\x0c\n\x04\x63ity\x18\x05 \x01(\t\x12.\n\x08province\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bpostal_code\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x63ountry_code\x18\x08 \x01(\t\x12\x35\n\x0fidentity_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nbirth_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"H\n\x05Phone\x12\x0e\n\x06number\x18\x01 \x01(\t\x12/\n\textension\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"8\n\x13\x43ontactCheckRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"T\n\x11\x43ontactCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"7\n\x12\x43ontactInfoRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\nDisclosure\x12/\n\ndisclosure\x18\x01 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\"\xc9\x06\n\x10\x43ontactInfoReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12,\n\x08statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x31\n\rlocal_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x08 \x01(\t\x12\x11\n\tclient_id\x18\t \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x0b\x65ntity_type\x18\x0f \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\ndisclosure\x18\x12 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\x12/\n\tauth_info\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xd6\x03\n\x14\x43ontactCreateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x31\n\rlocal_address\x18\x02 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x03 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x04 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x05 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12,\n\x0b\x65ntity_type\x18\x07 \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\n \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\x0b \x01(\t\x12\x11\n\tauth_info\x18\x0c \x01(\t\"|\n\x12\x43ontactCreateReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"9\n\x14\x43ontactDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\x12\x43ontactDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"\x9d\x05\n\x14\x43ontactUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x0c\x61\x64\x64_statuses\x18\x02 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x33\n\x0fremove_statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x35\n\x11new_local_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12\x41\n\x1dnew_internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12%\n\tnew_phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12#\n\x07new_fax\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12/\n\tnew_email\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x30\n\x0fnew_entity_type\x18\t \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x36\n\x10new_trading_name\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x12new_company_number\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\x0c \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\r \x01(\t\x12\x33\n\rnew_auth_info\x18\x0e \x01(\x0b\x32\x1c.google.protobuf.StringValue\"=\n\x12\x43ontactUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"q\n\x1b\x43ontactTransferQueryRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"U\n\x1d\x43ontactTransferRequestRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x81\x02\n\x14\x43ontactTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x07 \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xd1\x01\n\x0f\x43ontactPANReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\xf3\x05\n\nEntityType\x12\n\n\x06NotSet\x10\x00\x12\x11\n\rUnknownEntity\x10\x01\x12\x14\n\x10UkLimitedCompany\x10\x02\x12\x1a\n\x16UkPublicLimitedCompany\x10\x03\x12\x11\n\rUkPartnership\x10\x04\x12\x10\n\x0cUkSoleTrader\x10\x05\x12!\n\x1dUkLimitedLiabilityPartnership\x10\x06\x12*\n&UkIndustrialProvidentRegisteredCompany\x10\x07\x12\x10\n\x0cUkIndividual\x10\x08\x12\x0c\n\x08UkSchool\x10\t\x12\x17\n\x13UkRegisteredCharity\x10\n\x12\x14\n\x10UkGovernmentBody\x10\x0b\x12\x1f\n\x1bUkCorporationByRoyalCharter\x10\x0c\x12\x13\n\x0fUkStatutoryBody\x10\r\x12\x14\n\x10UkPoliticalParty\x10\x1f\x12\x11\n\rOtherUkEntity\x10\x0e\x12\x15\n\x11\x46innishIndividual\x10\x0f\x12\x12\n\x0e\x46innishCompany\x10\x10\x12\x16\n\x12\x46innishAssociation\x10\x11\x12\x16\n\x12\x46innishInstitution\x10\x12\x12\x19\n\x15\x46innishPoliticalParty\x10\x13\x12\x17\n\x13\x46innishMunicipality\x10\x14\x12\x15\n\x11\x46innishGovernment\x10\x15\x12\x1a\n\x16\x46innishPublicCommunity\x10\x16\x12\x13\n\x0fOtherIndividual\x10\x17\x12\x10\n\x0cOtherCompany\x10\x18\x12\x14\n\x10OtherAssociation\x10\x19\x12\x14\n\x10OtherInstitution\x10\x1a\x12\x17\n\x13OtherPoliticalParty\x10\x1b\x12\x15\n\x11OtherMunicipality\x10\x1c\x12\x13\n\x0fOtherGovernment\x10\x1d\x12\x18\n\x14OtherPublicCommunity\x10\x1e*\xc3\x01\n\x0e\x44isclosureType\x12\r\n\tLocalName\x10\x00\x12\x19\n\x15InternationalisedName\x10\x01\x12\x15\n\x11LocalOrganisation\x10\x02\x12!\n\x1dInternationalisedOrganisation\x10\x03\x12\x10\n\x0cLocalAddress\x10\x04\x12\x1c\n\x18InternationalisedAddress\x10\x05\x12\t\n\x05Voice\x10\x06\x12\x07\n\x03\x46\x61x\x10\x07\x12\t\n\x05\x45mail\x10\x08*\x9d\x02\n\rContactStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1c\n\x18\x43lientTransferProhibited\x10\x01\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x02\x12\n\n\x06Linked\x10\x03\x12\x06\n\x02Ok\x10\x04\x12\x11\n\rPendingCreate\x10\x05\x12\x11\n\rPendingDelete\x10\x06\x12\x13\n\x0fPendingTransfer\x10\x07\x12\x11\n\rPendingUpdate\x10\x08\x12\x1a\n\x16ServerDeleteProhibited\x10\t\x12\x1c\n\x18ServerTransferProhibited\x10\n\x12\x1a\n\x16ServerUpdateProhibited\x10\x0b\x62\x06proto3'
+  serialized_pb=b'\n\rcontact.proto\x12\x0b\x65pp.contact\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\x11nominet_ext.proto\"\xd0\x02\n\rPostalAddress\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0corganisation\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07streets\x18\x04 \x03(\t\x12\x0c\n\x04\x63ity\x18\x05 \x01(\t\x12.\n\x08province\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bpostal_code\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x63ountry_code\x18\x08 \x01(\t\x12\x35\n\x0fidentity_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nbirth_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"H\n\x05Phone\x12\x0e\n\x06number\x18\x01 \x01(\t\x12/\n\textension\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"8\n\x13\x43ontactCheckRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"T\n\x11\x43ontactCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"7\n\x12\x43ontactInfoRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\nDisclosure\x12/\n\ndisclosure\x18\x01 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\"\x85\x07\n\x10\x43ontactInfoReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12,\n\x08statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x31\n\rlocal_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x08 \x01(\t\x12\x11\n\tclient_id\x18\t \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x0b\x65ntity_type\x18\x0f \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\ndisclosure\x18\x12 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\x12/\n\tauth_info\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12:\n\x14nominet_data_quality\x18\x14 \x01(\x0b\x32\x1c.epp.nominet_ext.DataQuality\"\xd6\x03\n\x14\x43ontactCreateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x31\n\rlocal_address\x18\x02 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x03 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x04 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x05 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12,\n\x0b\x65ntity_type\x18\x07 \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\n \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\x0b \x01(\t\x12\x11\n\tauth_info\x18\x0c \x01(\t\"|\n\x12\x43ontactCreateReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"9\n\x14\x43ontactDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\x12\x43ontactDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"\x9d\x05\n\x14\x43ontactUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x0c\x61\x64\x64_statuses\x18\x02 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x33\n\x0fremove_statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x35\n\x11new_local_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12\x41\n\x1dnew_internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12%\n\tnew_phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12#\n\x07new_fax\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12/\n\tnew_email\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x30\n\x0fnew_entity_type\x18\t \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x36\n\x10new_trading_name\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x12new_company_number\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\x0c \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\r \x01(\t\x12\x33\n\rnew_auth_info\x18\x0e \x01(\x0b\x32\x1c.google.protobuf.StringValue\"=\n\x12\x43ontactUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"q\n\x1b\x43ontactTransferQueryRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"U\n\x1d\x43ontactTransferRequestRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x81\x02\n\x14\x43ontactTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x07 \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xd1\x01\n\x0f\x43ontactPANReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\xf3\x05\n\nEntityType\x12\n\n\x06NotSet\x10\x00\x12\x11\n\rUnknownEntity\x10\x01\x12\x14\n\x10UkLimitedCompany\x10\x02\x12\x1a\n\x16UkPublicLimitedCompany\x10\x03\x12\x11\n\rUkPartnership\x10\x04\x12\x10\n\x0cUkSoleTrader\x10\x05\x12!\n\x1dUkLimitedLiabilityPartnership\x10\x06\x12*\n&UkIndustrialProvidentRegisteredCompany\x10\x07\x12\x10\n\x0cUkIndividual\x10\x08\x12\x0c\n\x08UkSchool\x10\t\x12\x17\n\x13UkRegisteredCharity\x10\n\x12\x14\n\x10UkGovernmentBody\x10\x0b\x12\x1f\n\x1bUkCorporationByRoyalCharter\x10\x0c\x12\x13\n\x0fUkStatutoryBody\x10\r\x12\x14\n\x10UkPoliticalParty\x10\x1f\x12\x11\n\rOtherUkEntity\x10\x0e\x12\x15\n\x11\x46innishIndividual\x10\x0f\x12\x12\n\x0e\x46innishCompany\x10\x10\x12\x16\n\x12\x46innishAssociation\x10\x11\x12\x16\n\x12\x46innishInstitution\x10\x12\x12\x19\n\x15\x46innishPoliticalParty\x10\x13\x12\x17\n\x13\x46innishMunicipality\x10\x14\x12\x15\n\x11\x46innishGovernment\x10\x15\x12\x1a\n\x16\x46innishPublicCommunity\x10\x16\x12\x13\n\x0fOtherIndividual\x10\x17\x12\x10\n\x0cOtherCompany\x10\x18\x12\x14\n\x10OtherAssociation\x10\x19\x12\x14\n\x10OtherInstitution\x10\x1a\x12\x17\n\x13OtherPoliticalParty\x10\x1b\x12\x15\n\x11OtherMunicipality\x10\x1c\x12\x13\n\x0fOtherGovernment\x10\x1d\x12\x18\n\x14OtherPublicCommunity\x10\x1e*\xc3\x01\n\x0e\x44isclosureType\x12\r\n\tLocalName\x10\x00\x12\x19\n\x15InternationalisedName\x10\x01\x12\x15\n\x11LocalOrganisation\x10\x02\x12!\n\x1dInternationalisedOrganisation\x10\x03\x12\x10\n\x0cLocalAddress\x10\x04\x12\x1c\n\x18InternationalisedAddress\x10\x05\x12\t\n\x05Voice\x10\x06\x12\x07\n\x03\x46\x61x\x10\x07\x12\t\n\x05\x45mail\x10\x08*\x9d\x02\n\rContactStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1c\n\x18\x43lientTransferProhibited\x10\x01\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x02\x12\n\n\x06Linked\x10\x03\x12\x06\n\x02Ok\x10\x04\x12\x11\n\rPendingCreate\x10\x05\x12\x11\n\rPendingDelete\x10\x06\x12\x13\n\x0fPendingTransfer\x10\x07\x12\x11\n\rPendingUpdate\x10\x08\x12\x1a\n\x16ServerDeleteProhibited\x10\t\x12\x1c\n\x18ServerTransferProhibited\x10\n\x12\x1a\n\x16ServerUpdateProhibited\x10\x0b\x62\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,nominet__ext__pb2.DESCRIPTOR,])
 
 _ENTITYTYPE = _descriptor.EnumDescriptor(
   name='EntityType',
@@ -197,8 +198,8 @@ _ENTITYTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3761,
-  serialized_end=4516,
+  serialized_start=3840,
+  serialized_end=4595,
 )
 _sym_db.RegisterEnumDescriptor(_ENTITYTYPE)
 
@@ -258,8 +259,8 @@ _DISCLOSURETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4519,
-  serialized_end=4714,
+  serialized_start=4598,
+  serialized_end=4793,
 )
 _sym_db.RegisterEnumDescriptor(_DISCLOSURETYPE)
 
@@ -334,8 +335,8 @@ _CONTACTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4717,
-  serialized_end=5002,
+  serialized_start=4796,
+  serialized_end=5081,
 )
 _sym_db.RegisterEnumDescriptor(_CONTACTSTATUS)
 
@@ -479,8 +480,8 @@ _POSTALADDRESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=110,
-  serialized_end=446,
+  serialized_start=129,
+  serialized_end=465,
 )
 
 
@@ -518,8 +519,8 @@ _PHONE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=448,
-  serialized_end=520,
+  serialized_start=467,
+  serialized_end=539,
 )
 
 
@@ -557,8 +558,8 @@ _CONTACTCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=522,
-  serialized_end=578,
+  serialized_start=541,
+  serialized_end=597,
 )
 
 
@@ -596,8 +597,8 @@ _CONTACTCHECKREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=580,
-  serialized_end=664,
+  serialized_start=599,
+  serialized_end=683,
 )
 
 
@@ -635,8 +636,8 @@ _CONTACTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=666,
-  serialized_end=721,
+  serialized_start=685,
+  serialized_end=740,
 )
 
 
@@ -667,8 +668,8 @@ _DISCLOSURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=723,
-  serialized_end=784,
+  serialized_start=742,
+  serialized_end=803,
 )
 
 
@@ -813,6 +814,13 @@ _CONTACTINFOREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='nominet_data_quality', full_name='epp.contact.ContactInfoReply.nominet_data_quality', index=19,
+      number=20, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -825,8 +833,8 @@ _CONTACTINFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=787,
-  serialized_end=1628,
+  serialized_start=806,
+  serialized_end=1707,
 )
 
 
@@ -934,8 +942,8 @@ _CONTACTCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1631,
-  serialized_end=2101,
+  serialized_start=1710,
+  serialized_end=2180,
 )
 
 
@@ -987,8 +995,8 @@ _CONTACTCREATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2103,
-  serialized_end=2227,
+  serialized_start=2182,
+  serialized_end=2306,
 )
 
 
@@ -1026,8 +1034,8 @@ _CONTACTDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2229,
-  serialized_end=2286,
+  serialized_start=2308,
+  serialized_end=2365,
 )
 
 
@@ -1065,8 +1073,8 @@ _CONTACTDELETEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2288,
-  serialized_end=2349,
+  serialized_start=2367,
+  serialized_end=2428,
 )
 
 
@@ -1188,8 +1196,8 @@ _CONTACTUPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2352,
-  serialized_end=3021,
+  serialized_start=2431,
+  serialized_end=3100,
 )
 
 
@@ -1227,8 +1235,8 @@ _CONTACTUPDATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3023,
-  serialized_end=3084,
+  serialized_start=3102,
+  serialized_end=3163,
 )
 
 
@@ -1273,8 +1281,8 @@ _CONTACTTRANSFERQUERYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3086,
-  serialized_end=3199,
+  serialized_start=3165,
+  serialized_end=3278,
 )
 
 
@@ -1319,8 +1327,8 @@ _CONTACTTRANSFERREQUESTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3201,
-  serialized_end=3286,
+  serialized_start=3280,
+  serialized_end=3365,
 )
 
 
@@ -1393,8 +1401,8 @@ _CONTACTTRANSFERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3289,
-  serialized_end=3546,
+  serialized_start=3368,
+  serialized_end=3625,
 )
 
 
@@ -1453,8 +1461,8 @@ _CONTACTPANREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3549,
-  serialized_end=3758,
+  serialized_start=3628,
+  serialized_end=3837,
 )
 
 _POSTALADDRESS.fields_by_name['organisation'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -1480,6 +1488,7 @@ _CONTACTINFOREPLY.fields_by_name['trading_name'].message_type = google_dot_proto
 _CONTACTINFOREPLY.fields_by_name['company_number'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTINFOREPLY.fields_by_name['disclosure'].enum_type = _DISCLOSURETYPE
 _CONTACTINFOREPLY.fields_by_name['auth_info'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CONTACTINFOREPLY.fields_by_name['nominet_data_quality'].message_type = nominet__ext__pb2._DATAQUALITY
 _CONTACTCREATEREQUEST.fields_by_name['local_address'].message_type = _POSTALADDRESS
 _CONTACTCREATEREQUEST.fields_by_name['internationalised_address'].message_type = _POSTALADDRESS
 _CONTACTCREATEREQUEST.fields_by_name['phone'].message_type = _PHONE

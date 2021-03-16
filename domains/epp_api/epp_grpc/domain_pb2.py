@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0c\x64omain.proto\x12\nepp.domain\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\trgp.proto\x1a\tfee.proto\x1a\x0claunch.proto\"#\n\x07\x43ontact\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\"i\n\nNameServer\x12\x12\n\x08host_obj\x18\x01 \x01(\tH\x00\x12\x13\n\thost_name\x18\x03 \x01(\tH\x00\x12(\n\taddresses\x18\x02 \x03(\x0b\x32\x15.epp.common.IPAddressB\x08\n\x06server\"\xa6\x01\n\x12\x44omainCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\tfee_check\x18\x02 \x01(\x0b\x32\x11.epp.fee.FeeCheck\x12\'\n\x0claunch_check\x18\x03 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x86\x01\n\x18\x44omainClaimsCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\'\n\x0claunch_check\x18\x02 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"`\n\x1b\x44omainTrademarkCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x33\n\rregistry_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xc6\x01\n\x10\x44omainCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\tfee_check\x18\x04 \x01(\x0b\x32\x15.epp.fee.FeeCheckData\x12\x30\n\x10\x64onuts_fee_check\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"k\n\x16\x44omainClaimsCheckReply\x12\x0e\n\x06\x65xists\x18\x01 \x01(\x08\x12*\n\x0b\x63laims_keys\x18\x02 \x03(\x0b\x32\x15.epp.launch.ClaimsKey\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\xea\x01\n\x11\x44omainInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x0blaunch_info\x18\x03 \x01(\x0b\x32\x16.epp.launch.LaunchInfo\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"\xaa\x06\n\x0f\x44omainInfoReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12*\n\x08statuses\x18\x03 \x03(\x0e\x32\x18.epp.domain.DomainStatus\x12\x12\n\nregistrant\x18\x04 \x01(\t\x12%\n\x08\x63ontacts\x18\x05 \x03(\x0b\x32\x13.epp.domain.Contact\x12+\n\x0bnameservers\x18\x06 \x03(\x0b\x32\x16.epp.domain.NameServer\x12\r\n\x05hosts\x18\x07 \x03(\t\x12\x11\n\tclient_id\x18\x08 \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\rregistry_name\x18\x0f \x01(\t\x12$\n\trgp_state\x18\x10 \x03(\x0e\x32\x11.epp.rgp.RGPState\x12/\n\tauth_info\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\'\n\x07sec_dns\x18\x12 \x01(\x0b\x32\x16.epp.domain.SecDNSData\x12/\n\x0blaunch_info\x18\x13 \x01(\x0b\x32\x1a.epp.launch.LaunchInfoData\x12/\n\x0f\x64onuts_fee_data\x18\x14 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"\xb3\x03\n\x13\x44omainCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x12\n\nregistrant\x18\x03 \x01(\t\x12%\n\x08\x63ontacts\x18\x04 \x03(\x0b\x32\x13.epp.domain.Contact\x12+\n\x0bnameservers\x18\x05 \x03(\x0b\x32\x16.epp.domain.NameServer\x12\x11\n\tauth_info\x18\x06 \x01(\t\x12\'\n\x07sec_dns\x18\x07 \x01(\x0b\x32\x16.epp.domain.SecDNSData\x12-\n\x0blaunch_data\x18\x08 \x01(\x0b\x32\x18.epp.launch.LaunchCreate\x12\x33\n\rregistry_name\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\n \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x0b \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"\xc7\x02\n\x11\x44omainCreateReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x07 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\x06 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\t \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12+\n\x0blaunch_data\x18\x08 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x15\n\rregistry_name\x18\x05 \x01(\t\"\xbb\x01\n\x13\x44omainDeleteRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12+\n\x0blaunch_data\x18\x02 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x04 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"w\n\x11\x44omainDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\"\n\x08\x66\x65\x65_data\x18\x03 \x01(\x0b\x32\x10.epp.fee.FeeData\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x82\x05\n\x13\x44omainUpdateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x32\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32%.epp.domain.DomainUpdateRequest.Param\x12\x35\n\x06remove\x18\x03 \x03(\x0b\x32%.epp.domain.DomainUpdateRequest.Param\x12\x34\n\x0enew_registrant\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x33\n\rnew_auth_info\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07sec_dns\x18\x06 \x01(\x0b\x32\x1c.epp.domain.UpdateSecDNSData\x12+\n\x0blaunch_data\x18\x07 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x33\n\rregistry_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\t \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\n \x01(\x0b\x32\x15.epp.fee.FeeAgreement\x1a\x91\x01\n\x05Param\x12,\n\nnameserver\x18\x01 \x01(\x0b\x32\x16.epp.domain.NameServerH\x00\x12&\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x13.epp.domain.ContactH\x00\x12)\n\x05state\x18\x03 \x01(\x0e\x32\x18.epp.domain.DomainStatusH\x00\x42\x07\n\x05param\"\xa8\x01\n\x11\x44omainUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\"\n\x08\x66\x65\x65_data\x18\x03 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x98\x02\n\x12\x44omainRenewRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x37\n\x13\x63urrent_expiry_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x06 \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"\xe6\x01\n\x10\x44omainRenewReply\x12\x0c\n\x04name\x18\x06 \x01(\t\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\x12/\n\x0b\x65xpiry_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\x04 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x07 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x90\x01\n\x1a\x44omainTransferQueryRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xfc\x01\n\x1c\x44omainTransferRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x11\n\tauth_info\x18\x03 \x01(\t\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x06 \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"y\n!DomainTransferAcceptRejectRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xab\x03\n\x13\x44omainTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x16\n\x0etransaction_id\x18\n \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\t \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x0b \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x08 \x01(\t\"\xa3\x01\n\nSecDNSData\x12\x31\n\x0cmax_sig_life\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x02 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x00\x12-\n\x08key_data\x18\x03 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x00\x42\x06\n\x04\x64\x61ta\"7\n\x0cSecDNSDSData\x12\'\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x19.epp.domain.SecDNSDSDatum\"\x86\x01\n\rSecDNSDSDatum\x12\x0f\n\x07key_tag\x18\x01 \x01(\r\x12\x11\n\talgorithm\x18\x02 \x01(\r\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\r\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x12,\n\x08key_data\x18\x05 \x01(\x0b\x32\x1a.epp.domain.SecDNSKeyDatum\"9\n\rSecDNSKeyData\x12(\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x1a.epp.domain.SecDNSKeyDatum\"X\n\x0eSecDNSKeyDatum\x12\r\n\x05\x66lags\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\r\x12\x11\n\talgorithm\x18\x03 \x01(\r\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xea\x02\n\x10UpdateSecDNSData\x12*\n\x06urgent\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x10new_max_sig_life\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12/\n\x0b\x61\x64\x64_ds_data\x18\x03 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x00\x12\x31\n\x0c\x61\x64\x64_key_data\x18\x04 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x00\x12\x14\n\nremove_all\x18\x05 \x01(\x08H\x01\x12\x32\n\x0eremove_ds_data\x18\x06 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x01\x12\x34\n\x0fremove_key_data\x18\x07 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x01\x42\x05\n\x03\x61\x64\x64\x42\x08\n\x06remove\"\xd2\x01\n\x0e\x44omainPANReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\x86\x03\n\x0c\x44omainStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x0e\n\nClientHold\x10\x01\x12\x19\n\x15\x43lientRenewProhibited\x10\x02\x12\x1c\n\x18\x43lientTransferProhibited\x10\x03\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x04\x12\x0c\n\x08Inactive\x10\x05\x12\x06\n\x02Ok\x10\x06\x12\x11\n\rPendingCreate\x10\x07\x12\x11\n\rPendingDelete\x10\x08\x12\x10\n\x0cPendingRenew\x10\t\x12\x13\n\x0fPendingTransfer\x10\n\x12\x11\n\rPendingUpdate\x10\x0b\x12\x1a\n\x16ServerDeleteProhibited\x10\x0c\x12\x0e\n\nServerHold\x10\r\x12\x19\n\x15ServerRenewProhibited\x10\x0e\x12\x1c\n\x18ServerTransferProhibited\x10\x0f\x12\x1a\n\x16ServerUpdateProhibited\x10\x10\x62\x06proto3'
+  serialized_pb=b'\n\x0c\x64omain.proto\x12\nepp.domain\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\trgp.proto\x1a\tfee.proto\x1a\x0claunch.proto\"#\n\x07\x43ontact\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\"i\n\nNameServer\x12\x12\n\x08host_obj\x18\x01 \x01(\tH\x00\x12\x13\n\thost_name\x18\x03 \x01(\tH\x00\x12(\n\taddresses\x18\x02 \x03(\x0b\x32\x15.epp.common.IPAddressB\x08\n\x06server\"9\n\x0b\x44omainHosts\x12*\n\x05hosts\x18\x01 \x01(\x0e\x32\x1b.epp.domain.DomainHostsType\"\xa6\x01\n\x12\x44omainCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\tfee_check\x18\x02 \x01(\x0b\x32\x11.epp.fee.FeeCheck\x12\'\n\x0claunch_check\x18\x03 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x86\x01\n\x18\x44omainClaimsCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\'\n\x0claunch_check\x18\x02 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"`\n\x1b\x44omainTrademarkCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x33\n\rregistry_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xc6\x01\n\x10\x44omainCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\tfee_check\x18\x04 \x01(\x0b\x32\x15.epp.fee.FeeCheckData\x12\x30\n\x10\x64onuts_fee_check\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"k\n\x16\x44omainClaimsCheckReply\x12\x0e\n\x06\x65xists\x18\x01 \x01(\x08\x12*\n\x0b\x63laims_keys\x18\x02 \x03(\x0b\x32\x15.epp.launch.ClaimsKey\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x92\x02\n\x11\x44omainInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12&\n\x05hosts\x18\x06 \x01(\x0b\x32\x17.epp.domain.DomainHosts\x12+\n\x0blaunch_info\x18\x03 \x01(\x0b\x32\x16.epp.launch.LaunchInfo\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"\xe6\x06\n\x0f\x44omainInfoReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12*\n\x08statuses\x18\x03 \x03(\x0e\x32\x18.epp.domain.DomainStatus\x12\x12\n\nregistrant\x18\x04 \x01(\t\x12%\n\x08\x63ontacts\x18\x05 \x03(\x0b\x32\x13.epp.domain.Contact\x12+\n\x0bnameservers\x18\x06 \x03(\x0b\x32\x16.epp.domain.NameServer\x12\r\n\x05hosts\x18\x07 \x03(\t\x12\x11\n\tclient_id\x18\x08 \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\rregistry_name\x18\x0f \x01(\t\x12$\n\trgp_state\x18\x10 \x03(\x0e\x32\x11.epp.rgp.RGPState\x12/\n\tauth_info\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\'\n\x07sec_dns\x18\x12 \x01(\x0b\x32\x16.epp.domain.SecDNSData\x12/\n\x0blaunch_info\x18\x13 \x01(\x0b\x32\x1a.epp.launch.LaunchInfoData\x12/\n\x0f\x64onuts_fee_data\x18\x14 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12:\n\x13verisign_whois_info\x18\x15 \x01(\x0b\x32\x1d.epp.domain.VerisignWhoisInfo\"\xb3\x03\n\x13\x44omainCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x12\n\nregistrant\x18\x03 \x01(\t\x12%\n\x08\x63ontacts\x18\x04 \x03(\x0b\x32\x13.epp.domain.Contact\x12+\n\x0bnameservers\x18\x05 \x03(\x0b\x32\x16.epp.domain.NameServer\x12\x11\n\tauth_info\x18\x06 \x01(\t\x12\'\n\x07sec_dns\x18\x07 \x01(\x0b\x32\x16.epp.domain.SecDNSData\x12-\n\x0blaunch_data\x18\x08 \x01(\x0b\x32\x18.epp.launch.LaunchCreate\x12\x33\n\rregistry_name\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\n \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x0b \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"\xc7\x02\n\x11\x44omainCreateReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x07 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\x06 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\t \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12+\n\x0blaunch_data\x18\x08 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x15\n\rregistry_name\x18\x05 \x01(\t\"\xbb\x01\n\x13\x44omainDeleteRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12+\n\x0blaunch_data\x18\x02 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x04 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"w\n\x11\x44omainDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\"\n\x08\x66\x65\x65_data\x18\x03 \x01(\x0b\x32\x10.epp.fee.FeeData\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x82\x05\n\x13\x44omainUpdateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x32\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32%.epp.domain.DomainUpdateRequest.Param\x12\x35\n\x06remove\x18\x03 \x03(\x0b\x32%.epp.domain.DomainUpdateRequest.Param\x12\x34\n\x0enew_registrant\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x33\n\rnew_auth_info\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07sec_dns\x18\x06 \x01(\x0b\x32\x1c.epp.domain.UpdateSecDNSData\x12+\n\x0blaunch_data\x18\x07 \x01(\x0b\x32\x16.epp.launch.LaunchData\x12\x33\n\rregistry_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\t \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\n \x01(\x0b\x32\x15.epp.fee.FeeAgreement\x1a\x91\x01\n\x05Param\x12,\n\nnameserver\x18\x01 \x01(\x0b\x32\x16.epp.domain.NameServerH\x00\x12&\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x13.epp.domain.ContactH\x00\x12)\n\x05state\x18\x03 \x01(\x0e\x32\x18.epp.domain.DomainStatusH\x00\x42\x07\n\x05param\"\xa8\x01\n\x11\x44omainUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\"\n\x08\x66\x65\x65_data\x18\x03 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x98\x02\n\x12\x44omainRenewRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x37\n\x13\x63urrent_expiry_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x06 \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"\xe6\x01\n\x10\x44omainRenewReply\x12\x0c\n\x04name\x18\x06 \x01(\t\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\x12/\n\x0b\x65xpiry_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\x04 \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x07 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x90\x01\n\x1a\x44omainTransferQueryRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xfc\x01\n\x1c\x44omainTransferRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x11\n\tauth_info\x18\x03 \x01(\t\x12\x33\n\rregistry_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x05 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12,\n\rfee_agreement\x18\x06 \x01(\x0b\x32\x15.epp.fee.FeeAgreement\"y\n!DomainTransferAcceptRejectRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x33\n\rregistry_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xab\x03\n\x13\x44omainTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x16\n\x0etransaction_id\x18\n \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x65xpiry_date\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\"\n\x08\x66\x65\x65_data\x18\t \x01(\x0b\x32\x10.epp.fee.FeeData\x12/\n\x0f\x64onuts_fee_data\x18\x0b \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\x12\x15\n\rregistry_name\x18\x08 \x01(\t\"\xa3\x01\n\nSecDNSData\x12\x31\n\x0cmax_sig_life\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x02 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x00\x12-\n\x08key_data\x18\x03 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x00\x42\x06\n\x04\x64\x61ta\"7\n\x0cSecDNSDSData\x12\'\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x19.epp.domain.SecDNSDSDatum\"\x86\x01\n\rSecDNSDSDatum\x12\x0f\n\x07key_tag\x18\x01 \x01(\r\x12\x11\n\talgorithm\x18\x02 \x01(\r\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\r\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x12,\n\x08key_data\x18\x05 \x01(\x0b\x32\x1a.epp.domain.SecDNSKeyDatum\"9\n\rSecDNSKeyData\x12(\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x1a.epp.domain.SecDNSKeyDatum\"X\n\x0eSecDNSKeyDatum\x12\r\n\x05\x66lags\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\r\x12\x11\n\talgorithm\x18\x03 \x01(\r\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xea\x02\n\x10UpdateSecDNSData\x12*\n\x06urgent\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x10new_max_sig_life\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12/\n\x0b\x61\x64\x64_ds_data\x18\x03 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x00\x12\x31\n\x0c\x61\x64\x64_key_data\x18\x04 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x00\x12\x14\n\nremove_all\x18\x05 \x01(\x08H\x01\x12\x32\n\x0eremove_ds_data\x18\x06 \x01(\x0b\x32\x18.epp.domain.SecDNSDSDataH\x01\x12\x34\n\x0fremove_key_data\x18\x07 \x01(\x0b\x32\x19.epp.domain.SecDNSKeyDataH\x01\x42\x05\n\x03\x61\x64\x64\x42\x08\n\x06remove\"\xb8\x01\n\x11VerisignWhoisInfo\x12\x11\n\tregistrar\x18\x01 \x01(\t\x12\x32\n\x0cwhois_server\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03url\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0biris_server\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xd2\x01\n\x0e\x44omainPANReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\x86\x03\n\x0c\x44omainStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x0e\n\nClientHold\x10\x01\x12\x19\n\x15\x43lientRenewProhibited\x10\x02\x12\x1c\n\x18\x43lientTransferProhibited\x10\x03\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x04\x12\x0c\n\x08Inactive\x10\x05\x12\x06\n\x02Ok\x10\x06\x12\x11\n\rPendingCreate\x10\x07\x12\x11\n\rPendingDelete\x10\x08\x12\x10\n\x0cPendingRenew\x10\t\x12\x13\n\x0fPendingTransfer\x10\n\x12\x11\n\rPendingUpdate\x10\x0b\x12\x1a\n\x16ServerDeleteProhibited\x10\x0c\x12\x0e\n\nServerHold\x10\r\x12\x19\n\x15ServerRenewProhibited\x10\x0e\x12\x1c\n\x18ServerTransferProhibited\x10\x0f\x12\x1a\n\x16ServerUpdateProhibited\x10\x10*D\n\x0f\x44omainHostsType\x12\x07\n\x03\x41ll\x10\x00\x12\r\n\tDelegated\x10\x01\x12\x0f\n\x0bSubordinate\x10\x02\x12\x08\n\x04None\x10\x03\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,rgp__pb2.DESCRIPTOR,fee__pb2.DESCRIPTOR,launch__pb2.DESCRIPTOR,])
 
@@ -125,12 +125,48 @@ _DOMAINSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=6505,
-  serialized_end=6895,
+  serialized_start=6851,
+  serialized_end=7241,
 )
 _sym_db.RegisterEnumDescriptor(_DOMAINSTATUS)
 
 DomainStatus = enum_type_wrapper.EnumTypeWrapper(_DOMAINSTATUS)
+_DOMAINHOSTSTYPE = _descriptor.EnumDescriptor(
+  name='DomainHostsType',
+  full_name='epp.domain.DomainHostsType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='All', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='Delegated', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='Subordinate', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='None', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=7243,
+  serialized_end=7311,
+)
+_sym_db.RegisterEnumDescriptor(_DOMAINHOSTSTYPE)
+
+DomainHostsType = enum_type_wrapper.EnumTypeWrapper(_DOMAINHOSTSTYPE)
 ClientDeleteProhibited = 0
 ClientHold = 1
 ClientRenewProhibited = 2
@@ -148,6 +184,10 @@ ServerHold = 13
 ServerRenewProhibited = 14
 ServerTransferProhibited = 15
 ServerUpdateProhibited = 16
+All = 0
+Delegated = 1
+Subordinate = 2
+globals()['None'] = 3
 
 
 
@@ -241,6 +281,38 @@ _NAMESERVER = _descriptor.Descriptor(
 )
 
 
+_DOMAINHOSTS = _descriptor.Descriptor(
+  name='DomainHosts',
+  full_name='epp.domain.DomainHosts',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='hosts', full_name='epp.domain.DomainHosts.hosts', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=287,
+  serialized_end=344,
+)
+
+
 _DOMAINCHECKREQUEST = _descriptor.Descriptor(
   name='DomainCheckRequest',
   full_name='epp.domain.DomainCheckRequest',
@@ -289,8 +361,8 @@ _DOMAINCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=288,
-  serialized_end=454,
+  serialized_start=347,
+  serialized_end=513,
 )
 
 
@@ -335,8 +407,8 @@ _DOMAINCLAIMSCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=457,
-  serialized_end=591,
+  serialized_start=516,
+  serialized_end=650,
 )
 
 
@@ -374,8 +446,8 @@ _DOMAINTRADEMARKCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=593,
-  serialized_end=689,
+  serialized_start=652,
+  serialized_end=748,
 )
 
 
@@ -434,8 +506,8 @@ _DOMAINCHECKREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=692,
-  serialized_end=890,
+  serialized_start=751,
+  serialized_end=949,
 )
 
 
@@ -480,8 +552,8 @@ _DOMAINCLAIMSCHECKREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=892,
-  serialized_end=999,
+  serialized_start=951,
+  serialized_end=1058,
 )
 
 
@@ -508,21 +580,28 @@ _DOMAININFOREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='launch_info', full_name='epp.domain.DomainInfoRequest.launch_info', index=2,
+      name='hosts', full_name='epp.domain.DomainInfoRequest.hosts', index=2,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='launch_info', full_name='epp.domain.DomainInfoRequest.launch_info', index=3,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='registry_name', full_name='epp.domain.DomainInfoRequest.registry_name', index=3,
+      name='registry_name', full_name='epp.domain.DomainInfoRequest.registry_name', index=4,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='donuts_fee_agreement', full_name='epp.domain.DomainInfoRequest.donuts_fee_agreement', index=4,
+      name='donuts_fee_agreement', full_name='epp.domain.DomainInfoRequest.donuts_fee_agreement', index=5,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -540,8 +619,8 @@ _DOMAININFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1002,
-  serialized_end=1236,
+  serialized_start=1061,
+  serialized_end=1335,
 )
 
 
@@ -693,6 +772,13 @@ _DOMAININFOREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='verisign_whois_info', full_name='epp.domain.DomainInfoReply.verisign_whois_info', index=20,
+      number=21, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -705,8 +791,8 @@ _DOMAININFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1239,
-  serialized_end=2049,
+  serialized_start=1338,
+  serialized_end=2208,
 )
 
 
@@ -807,8 +893,8 @@ _DOMAINCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2052,
-  serialized_end=2487,
+  serialized_start=2211,
+  serialized_end=2646,
 )
 
 
@@ -895,8 +981,8 @@ _DOMAINCREATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2490,
-  serialized_end=2817,
+  serialized_start=2649,
+  serialized_end=2976,
 )
 
 
@@ -948,8 +1034,8 @@ _DOMAINDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2820,
-  serialized_end=3007,
+  serialized_start=2979,
+  serialized_end=3166,
 )
 
 
@@ -1001,8 +1087,8 @@ _DOMAINDELETEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3009,
-  serialized_end=3128,
+  serialized_start=3168,
+  serialized_end=3287,
 )
 
 
@@ -1052,8 +1138,8 @@ _DOMAINUPDATEREQUEST_PARAM = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=3628,
-  serialized_end=3773,
+  serialized_start=3787,
+  serialized_end=3932,
 )
 
 _DOMAINUPDATEREQUEST = _descriptor.Descriptor(
@@ -1146,8 +1232,8 @@ _DOMAINUPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3131,
-  serialized_end=3773,
+  serialized_start=3290,
+  serialized_end=3932,
 )
 
 
@@ -1206,8 +1292,8 @@ _DOMAINUPDATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3776,
-  serialized_end=3944,
+  serialized_start=3935,
+  serialized_end=4103,
 )
 
 
@@ -1273,8 +1359,8 @@ _DOMAINRENEWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3947,
-  serialized_end=4227,
+  serialized_start=4106,
+  serialized_end=4386,
 )
 
 
@@ -1347,8 +1433,8 @@ _DOMAINRENEWREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4230,
-  serialized_end=4460,
+  serialized_start=4389,
+  serialized_end=4619,
 )
 
 
@@ -1393,8 +1479,8 @@ _DOMAINTRANSFERQUERYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4463,
-  serialized_end=4607,
+  serialized_start=4622,
+  serialized_end=4766,
 )
 
 
@@ -1460,8 +1546,8 @@ _DOMAINTRANSFERREQUESTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4610,
-  serialized_end=4862,
+  serialized_start=4769,
+  serialized_end=5021,
 )
 
 
@@ -1506,8 +1592,8 @@ _DOMAINTRANSFERACCEPTREJECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4864,
-  serialized_end=4985,
+  serialized_start=5023,
+  serialized_end=5144,
 )
 
 
@@ -1615,8 +1701,8 @@ _DOMAINTRANSFERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4988,
-  serialized_end=5415,
+  serialized_start=5147,
+  serialized_end=5574,
 )
 
 
@@ -1666,8 +1752,8 @@ _SECDNSDATA = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=5418,
-  serialized_end=5581,
+  serialized_start=5577,
+  serialized_end=5740,
 )
 
 
@@ -1698,8 +1784,8 @@ _SECDNSDSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5583,
-  serialized_end=5638,
+  serialized_start=5742,
+  serialized_end=5797,
 )
 
 
@@ -1758,8 +1844,8 @@ _SECDNSDSDATUM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5641,
-  serialized_end=5775,
+  serialized_start=5800,
+  serialized_end=5934,
 )
 
 
@@ -1790,8 +1876,8 @@ _SECDNSKEYDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5777,
-  serialized_end=5834,
+  serialized_start=5936,
+  serialized_end=5993,
 )
 
 
@@ -1843,8 +1929,8 @@ _SECDNSKEYDATUM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5836,
-  serialized_end=5924,
+  serialized_start=5995,
+  serialized_end=6083,
 )
 
 
@@ -1927,8 +2013,61 @@ _UPDATESECDNSDATA = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=5927,
-  serialized_end=6289,
+  serialized_start=6086,
+  serialized_end=6448,
+)
+
+
+_VERISIGNWHOISINFO = _descriptor.Descriptor(
+  name='VerisignWhoisInfo',
+  full_name='epp.domain.VerisignWhoisInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registrar', full_name='epp.domain.VerisignWhoisInfo.registrar', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='whois_server', full_name='epp.domain.VerisignWhoisInfo.whois_server', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='url', full_name='epp.domain.VerisignWhoisInfo.url', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='iris_server', full_name='epp.domain.VerisignWhoisInfo.iris_server', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6451,
+  serialized_end=6635,
 )
 
 
@@ -1987,8 +2126,8 @@ _DOMAINPANREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6292,
-  serialized_end=6502,
+  serialized_start=6638,
+  serialized_end=6848,
 )
 
 _NAMESERVER.fields_by_name['addresses'].message_type = common__pb2._IPADDRESS
@@ -1998,6 +2137,7 @@ _NAMESERVER.fields_by_name['host_obj'].containing_oneof = _NAMESERVER.oneofs_by_
 _NAMESERVER.oneofs_by_name['server'].fields.append(
   _NAMESERVER.fields_by_name['host_name'])
 _NAMESERVER.fields_by_name['host_name'].containing_oneof = _NAMESERVER.oneofs_by_name['server']
+_DOMAINHOSTS.fields_by_name['hosts'].enum_type = _DOMAINHOSTSTYPE
 _DOMAINCHECKREQUEST.fields_by_name['fee_check'].message_type = fee__pb2._FEECHECK
 _DOMAINCHECKREQUEST.fields_by_name['launch_check'].message_type = launch__pb2._PHASE
 _DOMAINCHECKREQUEST.fields_by_name['registry_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -2009,6 +2149,7 @@ _DOMAINCHECKREPLY.fields_by_name['fee_check'].message_type = fee__pb2._FEECHECKD
 _DOMAINCHECKREPLY.fields_by_name['donuts_fee_check'].message_type = fee__pb2._DONUTSFEEDATA
 _DOMAINCLAIMSCHECKREPLY.fields_by_name['claims_keys'].message_type = launch__pb2._CLAIMSKEY
 _DOMAININFOREQUEST.fields_by_name['auth_info'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_DOMAININFOREQUEST.fields_by_name['hosts'].message_type = _DOMAINHOSTS
 _DOMAININFOREQUEST.fields_by_name['launch_info'].message_type = launch__pb2._LAUNCHINFO
 _DOMAININFOREQUEST.fields_by_name['registry_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DOMAININFOREQUEST.fields_by_name['donuts_fee_agreement'].message_type = fee__pb2._DONUTSFEEDATA
@@ -2026,6 +2167,7 @@ _DOMAININFOREPLY.fields_by_name['auth_info'].message_type = google_dot_protobuf_
 _DOMAININFOREPLY.fields_by_name['sec_dns'].message_type = _SECDNSDATA
 _DOMAININFOREPLY.fields_by_name['launch_info'].message_type = launch__pb2._LAUNCHINFODATA
 _DOMAININFOREPLY.fields_by_name['donuts_fee_data'].message_type = fee__pb2._DONUTSFEEDATA
+_DOMAININFOREPLY.fields_by_name['verisign_whois_info'].message_type = _VERISIGNWHOISINFO
 _DOMAINCREATEREQUEST.fields_by_name['period'].message_type = common__pb2._PERIOD
 _DOMAINCREATEREQUEST.fields_by_name['contacts'].message_type = _CONTACT
 _DOMAINCREATEREQUEST.fields_by_name['nameservers'].message_type = _NAMESERVER
@@ -2121,11 +2263,15 @@ _UPDATESECDNSDATA.fields_by_name['remove_ds_data'].containing_oneof = _UPDATESEC
 _UPDATESECDNSDATA.oneofs_by_name['remove'].fields.append(
   _UPDATESECDNSDATA.fields_by_name['remove_key_data'])
 _UPDATESECDNSDATA.fields_by_name['remove_key_data'].containing_oneof = _UPDATESECDNSDATA.oneofs_by_name['remove']
+_VERISIGNWHOISINFO.fields_by_name['whois_server'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VERISIGNWHOISINFO.fields_by_name['url'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VERISIGNWHOISINFO.fields_by_name['iris_server'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DOMAINPANREPLY.fields_by_name['server_transaction_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DOMAINPANREPLY.fields_by_name['client_transaction_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DOMAINPANREPLY.fields_by_name['date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 DESCRIPTOR.message_types_by_name['Contact'] = _CONTACT
 DESCRIPTOR.message_types_by_name['NameServer'] = _NAMESERVER
+DESCRIPTOR.message_types_by_name['DomainHosts'] = _DOMAINHOSTS
 DESCRIPTOR.message_types_by_name['DomainCheckRequest'] = _DOMAINCHECKREQUEST
 DESCRIPTOR.message_types_by_name['DomainClaimsCheckRequest'] = _DOMAINCLAIMSCHECKREQUEST
 DESCRIPTOR.message_types_by_name['DomainTrademarkCheckRequest'] = _DOMAINTRADEMARKCHECKREQUEST
@@ -2151,8 +2297,10 @@ DESCRIPTOR.message_types_by_name['SecDNSDSDatum'] = _SECDNSDSDATUM
 DESCRIPTOR.message_types_by_name['SecDNSKeyData'] = _SECDNSKEYDATA
 DESCRIPTOR.message_types_by_name['SecDNSKeyDatum'] = _SECDNSKEYDATUM
 DESCRIPTOR.message_types_by_name['UpdateSecDNSData'] = _UPDATESECDNSDATA
+DESCRIPTOR.message_types_by_name['VerisignWhoisInfo'] = _VERISIGNWHOISINFO
 DESCRIPTOR.message_types_by_name['DomainPANReply'] = _DOMAINPANREPLY
 DESCRIPTOR.enum_types_by_name['DomainStatus'] = _DOMAINSTATUS
+DESCRIPTOR.enum_types_by_name['DomainHostsType'] = _DOMAINHOSTSTYPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Contact = _reflection.GeneratedProtocolMessageType('Contact', (_message.Message,), {
@@ -2168,6 +2316,13 @@ NameServer = _reflection.GeneratedProtocolMessageType('NameServer', (_message.Me
   # @@protoc_insertion_point(class_scope:epp.domain.NameServer)
   })
 _sym_db.RegisterMessage(NameServer)
+
+DomainHosts = _reflection.GeneratedProtocolMessageType('DomainHosts', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINHOSTS,
+  '__module__' : 'domain_pb2'
+  # @@protoc_insertion_point(class_scope:epp.domain.DomainHosts)
+  })
+_sym_db.RegisterMessage(DomainHosts)
 
 DomainCheckRequest = _reflection.GeneratedProtocolMessageType('DomainCheckRequest', (_message.Message,), {
   'DESCRIPTOR' : _DOMAINCHECKREQUEST,
@@ -2351,6 +2506,13 @@ UpdateSecDNSData = _reflection.GeneratedProtocolMessageType('UpdateSecDNSData', 
   # @@protoc_insertion_point(class_scope:epp.domain.UpdateSecDNSData)
   })
 _sym_db.RegisterMessage(UpdateSecDNSData)
+
+VerisignWhoisInfo = _reflection.GeneratedProtocolMessageType('VerisignWhoisInfo', (_message.Message,), {
+  'DESCRIPTOR' : _VERISIGNWHOISINFO,
+  '__module__' : 'domain_pb2'
+  # @@protoc_insertion_point(class_scope:epp.domain.VerisignWhoisInfo)
+  })
+_sym_db.RegisterMessage(VerisignWhoisInfo)
 
 DomainPANReply = _reflection.GeneratedProtocolMessageType('DomainPANReply', (_message.Message,), {
   'DESCRIPTOR' : _DOMAINPANREPLY,
