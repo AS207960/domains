@@ -1,10 +1,12 @@
 from django.db import models, InternalError
 from django.core import validators
+import django.contrib.postgres.fields
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 import phonenumbers
+import datetime
 import django_keycloak_auth.clients
 from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
@@ -594,6 +596,89 @@ class DomainRegistration(models.Model):
 
     def __str__(self):
         return self.domain
+
+
+class DomainPendingChange(models.Model):
+    id = as207960_utils.models.TypedUUIDField('domains_domainpendingchange', primary_key=True)
+    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE, related_name='pending_changes')
+    registry_id = models.CharField(max_length=255, blank=True, null=True)
+    new_registrant_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_pending_registrant')
+    new_admin_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_pending_admin')
+    new_billing_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_pending_billing')
+    new_tech_contact = models.ForeignKey(
+        Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domains_pending_tech')
+    rem_admin_contact = models.BooleanField(blank=True)
+    rem_billing_contact = models.BooleanField(blank=True)
+    rem_tech_contact = models.BooleanField(blank=True)
+    new_auth_info = models.CharField(max_length=255, blank=True, null=True)
+    add_host_objects = django.contrib.postgres.fields.ArrayField(models.CharField(max_length=255), blank=True)
+    rem_host_objects = django.contrib.postgres.fields.ArrayField(models.CharField(max_length=255), blank=True)
+    remove_dnssec = models.BooleanField(blank=True)
+    new_max_sig_life = models.DurationField(blank=True, null=True)
+    add_status = django.contrib.postgres.fields.ArrayField(models.PositiveSmallIntegerField(), blank=True)
+    rem_status = django.contrib.postgres.fields.ArrayField(models.PositiveSmallIntegerField(), blank=True)
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)
+
+    @property
+    def add_statuses(self):
+        return list(map(lambda s: apps.epp_api.DomainStatus(status=s), self.add_status))
+
+    @property
+    def rem_statuses(self):
+        return list(map(lambda s: apps.epp_api.DomainStatus(status=s), self.rem_status))
+
+
+class DomainPendingChangeHostName(models.Model):
+    ADD = "A"
+    REMOVE = "R"
+    OPERATIONS = (
+        (ADD, "Add"),
+        (REMOVE, "Remove")
+    )
+
+    id = as207960_utils.models.TypedUUIDField('domains_domainpendingchangehostname', primary_key=True)
+    domain_change = models.ForeignKey(DomainPendingChange, on_delete=models.CASCADE, related_name='host_names')
+    host_name = models.CharField(max_length=255)
+    addresses = django.contrib.postgres.fields.ArrayField(models.CharField(max_length=255))
+    operation = models.CharField(max_length=1, choices=OPERATIONS)
+
+
+class DomainPendingChangeDSData(models.Model):
+    ADD = "A"
+    REMOVE = "R"
+    OPERATIONS = (
+        (ADD, "Add"),
+        (REMOVE, "Remove")
+    )
+    id = as207960_utils.models.TypedUUIDField('domains_domainpendingchangedsdata', primary_key=True)
+    domain_change = models.ForeignKey(DomainPendingChange, on_delete=models.CASCADE, related_name='ds_data')
+    operation = models.CharField(max_length=1, choices=OPERATIONS)
+    key_tag = models.PositiveIntegerField()
+    algorithm = models.PositiveIntegerField()
+    digest_type = models.PositiveIntegerField()
+    digest = models.TextField()
+    flags = models.PositiveIntegerField(blank=True, null=True)
+    protocol = models.PositiveIntegerField(blank=True, null=True)
+    public_key = models.TextField(blank=True, null=True)
+
+
+class DomainPendingChangeKeyData(models.Model):
+    ADD = "A"
+    REMOVE = "R"
+    OPERATIONS = (
+        (ADD, "Add"),
+        (REMOVE, "Remove")
+    )
+    id = as207960_utils.models.TypedUUIDField('domains_domainpendingchangedsdata', primary_key=True)
+    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE, related_name='key_data')
+    operation = models.CharField(max_length=1, choices=OPERATIONS)
+    flags = models.PositiveIntegerField()
+    protocol = models.PositiveIntegerField()
+    algorithm = models.PositiveIntegerField()
+    public_key = models.TextField()
 
 
 class SimpleAbstractOrder(models.Model):

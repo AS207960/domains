@@ -44,3 +44,9 @@ class DomainRestoreOrderAdmin(admin.ModelAdmin):
 @admin.register(models.DomainTransferOrder)
 class DomainTransferOrderAdmin(admin.ModelAdmin):
     list_display = ('domain', 'state', 'price', 'off_session')
+
+
+admin.site.register(models.DomainPendingChange)
+admin.site.register(models.DomainPendingChangeHostName)
+admin.site.register(models.DomainPendingChangeDSData)
+admin.site.register(models.DomainPendingChangeKeyData)

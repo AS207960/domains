@@ -65,6 +65,64 @@
                 </div>
             </div>
         {% endif %}
+        {% if domain_obj.pending_changes.all %}
+            <div class="alert alert-info">
+                <h4 class="alert-heading">Pending changes</h4>
+                <p>
+                    This domain has pending changes not yet applied at the registry. They are detailed below.
+                </p>
+                <hr>
+                <ul>
+                    {% for pending_change in domain_obj.pending_changes.all %}
+                        {% if pending_change.new_registrant_contact %}
+                            <li>New registrant: <a href="{% url 'edit_contact' pending_change.new_registrant_contact.id %}">{{ pending_change.new_registrant_contact.description }}</a></li>
+                        {% endif %}
+                        {% if pending_change.new_admin_contact %}
+                            <li>New admin contact: <a href="{% url 'edit_contact' pending_change.new_admin_contact.id %}">{{ pending_change.new_admin_contact.description }}</a></li>
+                        {% endif %}
+                        {% if pending_change.rem_admin_contact %}
+                            <li>Remove admin contact</li>
+                        {% endif %}
+                        {% if pending_change.new_billing_contact %}
+                            <li>New billing contact: <a href="{% url 'edit_contact' pending_change.new_billing_contact.id %}">{{ pending_change.new_billing_contact.description }}</a></li>
+                        {% endif %}
+                        {% if pending_change.rem_billing_contact %}
+                            <li>Remove admin contact</li>
+                        {% endif %}
+                        {% if pending_change.new_tech_contact %}
+                            <li>New tech contact: <a href="{% url 'edit_contact' pending_change.new_tech_contact.id %}">{{ pending_change.new_tech_contact.description }}</a></li>
+                        {% endif %}
+                        {% if pending_change.rem_tech_contact %}
+                            <li>Remove admin contact</li>
+                        {% endif %}
+                        {% if pending_change.new_auth_info %}
+                            <li>New auth code</li>
+                        {% endif %}
+                        {% for host in pending_change.add_host_objects %}
+                            <li>Add nameserver: {{ host }}</li>
+                        {% endfor %}
+                        {% for host in pending_change.rem_host_objects %}
+                            <li>Remove nameserver: {{ host }}</li>
+                        {% endfor %}
+                        {% for host in pending_change.host_names.all %}
+                            <li>{{ host.get_operation_display }} nameserver: {{ host.host_name }} ({{ host.addresses|join:", " }})</li>
+                        {% endfor %}
+                        {% for status in pending_change.add_statuses %}
+                            <li>Add status: {{ status }}</li>
+                        {% endfor %}
+                        {% for status in pending_change.rem_statuses %}
+                            <li>Remove status: {{ status }}</li>
+                        {% endfor %}
+                        {% if pending_change.remove_dnssec %}
+                            <li>Disable DNSSEC</li>
+                        {% endif %}
+                        {% if pending_change.new_max_sig_life %}
+                            <li>New DNSSEC max signature life: {{ pending_change.new_max_sig_life }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col">
                 {% if registrant %}
