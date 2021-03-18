@@ -27,6 +27,7 @@ class PollClient:
         self._callback_exc = callback_exc
         self._exit = threading.Event()
         self._channel = None
+        self._t = None
 
     def __iter__(self):
         return self
@@ -66,8 +67,17 @@ class PollClient:
 
             time.sleep(60)
 
+    def _run_watcher(self):
+        while not self._exit.isSet():
+            if not self._t.is_alive():
+                self._t = threading.Thread(target=self._run_iter)
+                self._t.start()
+            time.sleep(5)
+
     def run(self):
-        t = threading.Thread(target=self._run_iter)
+        self._t = threading.Thread(target=self._run_iter)
+        t = threading.Thread(target=self._run_watcher)
+        self._t.start()
         t.start()
 
     def exit(self):
