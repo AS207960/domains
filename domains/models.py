@@ -21,6 +21,14 @@ import as207960_utils.models
 CONTACT_SEARCH = threading.Lock()
 NAME_SERVER_SEARCH = threading.Lock()
 
+PROTOCOL_EPP = "E"
+PROTOCOL_MANUAL = "M"
+
+PROTOCOLS = (
+    (PROTOCOL_EPP, "EPP"),
+    (PROTOCOL_MANUAL, "Manual"),
+)
+
 
 def make_secret():
     special = "!@#$%^*"
@@ -457,6 +465,7 @@ class NameServer(models.Model):
     name_server = models.CharField(max_length=255)
     registry_id = models.CharField(max_length=255)
     resource_id = models.UUIDField(null=True, db_index=True)
+    protocol = models.CharField(max_length=1, choices=PROTOCOLS, default=PROTOCOL_EPP)
 
     class Meta:
         ordering = ['name_server']
@@ -509,7 +518,7 @@ class NameServer(models.Model):
     def get_name_server(cls, name_server: str, registry_id: str, user):
         name_server = name_server.lower()
         with NAME_SERVER_SEARCH:
-            name_server_obj = cls.objects.filter(name_server=name_server, registry_id=registry_id).first()
+            name_server_obj = cls.objects.filter().first()
             if name_server_obj:
                 return name_server_obj
 
@@ -520,6 +529,36 @@ class NameServer(models.Model):
             )
             name_server_obj.save()
             return name_server_obj
+
+
+class NameServerAddress(models.Model):
+    ADDRESS_TYPES = (
+        (apps.epp_api.common_pb2.IPAddress.IPVersion.IPv4, "IPv4"),
+        (apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6, "IPv6"),
+    )
+
+    id = as207960_utils.models.TypedUUIDField('domains_nameserveraddress', primary_key=True)
+    name_server = models.ForeignKey(NameServer, on_delete=models.CASCADE, related_name='addresses')
+    address_type = models.PositiveSmallIntegerField(choices=ADDRESS_TYPES)
+    address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return f"{self.name_server}: {self.get_address_type_display()} {self.address}"
+
+
+class NameServerPendingAddress(models.Model):
+    ADDRESS_TYPES = (
+        (apps.epp_api.common_pb2.IPAddress.IPVersion.IPv4, "IPv4"),
+        (apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6, "IPv6"),
+    )
+
+    id = as207960_utils.models.TypedUUIDField('domains_nameserveraddress', primary_key=True)
+    name_server = models.ForeignKey(NameServer, on_delete=models.CASCADE, related_name='addresses')
+    address_type = models.PositiveSmallIntegerField(choices=ADDRESS_TYPES)
+    address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return f"{self.name_server}: {self.get_address_type_display()} {self.address}"
 
 
 class DomainRegistration(models.Model):
@@ -541,6 +580,7 @@ class DomainRegistration(models.Model):
     last_billed = models.DateTimeField(default=timezone.datetime.min)
     last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
     deleted_date = models.DateTimeField(blank=True, null=True)
+    registry_id = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']

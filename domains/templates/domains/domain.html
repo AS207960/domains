@@ -119,6 +119,24 @@
                         {% if pending_change.new_max_sig_life %}
                             <li>New DNSSEC max signature life: {{ pending_change.new_max_sig_life }}</li>
                         {% endif %}
+                        {% for ds_data in pending_change.ds_data.all %}
+                            <li>
+                                {{ ds_data.get_operation_display }} DS record:
+                                <pre><code>{{ ds_data.key_tag }} {{ ds_data.algorithm }} {{ ds_data.digest_type }} {{ ds_data.digest }}</code></pre>
+                            </li>
+                            {% if ds_data.public_key %}
+                                <li>
+                                    {{ ds_data.get_operation_display }} DNSKEY record:
+                                    <pre><code>{{ ds_data.flags }} {{ ds_data.protocol }} {{ ds_data.algorithm }} {{ ds_data.public_key }}</code></pre>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% for key_data in pending_change.key_data.all %}
+                            <li>
+                                {{ key_data.get_operation_display }} DNSKEY record:
+                                <pre><code>{{ key_data.flags }} {{ key_data.protocol }} {{ key_data.algorithm }} {{ key_data.public_key }}</code></pre>
+                            </li>
+                        {% endfor %}
                     {% endfor %}
                 </ul>
             </div>

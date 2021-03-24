@@ -27,24 +27,6 @@ class IPAddress:
             type=self.ip_type
         )
 
-    @property
-    def address_obj(self) -> typing.Union[ipaddress.IPv4Address, ipaddress.IPv6Address]:
-        if self.ip_type == 1:
-            return ipaddress.IPv4Address(self.address)
-        elif self.ip_type == 2:
-            return ipaddress.IPv6Address(self.address)
-        else:
-            raise Exception("Unknown IP address type")
-
-    @property
-    def ip_type_str(self) -> str:
-        if self.ip_type == 0:
-            return "Unknown"
-        elif self.ip_type == 1:
-            return "IPv4"
-        elif self.ip_type == 2:
-            return "IPv6"
-
     def __str__(self):
         return self.address
 
@@ -697,7 +679,7 @@ class Host:
     _app = None  # type: EPPClient
     name: str
     registry_id: str
-    statuses: typing.List[HostStatus]
+    statuses: typing.List[int]
     addresses: typing.List[IPAddress]
     client_id: str
     client_created_id: typing.Optional[str]
@@ -713,7 +695,7 @@ class Host:
         self._app = app
         self.name = resp.name
         self.registry_id = resp.registry_id
-        self.statuses = list(map(lambda s: HostStatus(status=s), resp.statuses))
+        self.statuses = list(resp.statuses)
         self.addresses = list(map(IPAddress.from_pb, resp.addresses))
         self.client_id = resp.client_id
         self.client_created_id = resp.client_created_id.value if resp.HasField("client_created_id") else None
@@ -723,13 +705,6 @@ class Host:
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
         self.registry_name = registry_name
         return self
-
-    @property
-    def unicode_name(self):
-        try:
-            return self.name.encode().decode('idna')
-        except UnicodeError:
-            return self.name
 
     def set_addresses(self, addresses: typing.List[IPAddress]) -> bool:
         rem_addrs = list(filter(lambda a: a not in addresses, self.addresses))
@@ -750,31 +725,6 @@ class Host:
             registry_name=self.registry_name
         ))
         return resp.pending
-
-    def add_addresses(self, addresses: typing.List[IPAddress]) -> bool:
-        resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
-            name=self.name,
-            add=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
-                address=a.to_pb()
-            ), addresses)),
-            remove=[],
-            new_name=None,
-            registry_name=self.registry_name
-        ))
-        return resp.pending
-
-    def remove_addresses(self, addresses: typing.List[IPAddress]) -> bool:
-        resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
-            name=self.name,
-            remove=list(map(lambda a: host_pb2.HostUpdateRequest.Param(
-                address=a.to_pb()
-            ), addresses)),
-            add=[],
-            new_name=None,
-            registry_name=self.registry_name
-        ))
-        return resp.pending
-
 
 @dataclasses.dataclass
 class Address:

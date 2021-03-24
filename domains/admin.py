@@ -1,7 +1,14 @@
 from django.contrib import admin
 from . import models, hooks
 
-admin.site.register(models.NameServer)
+
+class NameServerAddressInline(admin.TabularInline):
+    model = models.NameServerAddress
+
+
+@admin.register(models.NameServer)
+class NameServerAdmin(admin.ModelAdmin):
+    inlines = [NameServerAddressInline]
 
 
 @admin.register(models.ContactAddress)

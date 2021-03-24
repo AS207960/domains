@@ -8,7 +8,7 @@ import django_keycloak_auth.clients
 import ipaddress
 import urllib.parse
 from django.conf import settings
-from .. import models, apps, forms
+from .. import models, apps, forms, objects
 
 
 @login_required
@@ -22,13 +22,13 @@ def hosts(request):
             return {
                 "id": h.id,
                 "obj": h,
-                "host": apps.epp_client.get_host(h.name_server, h.registry_id)
+                "host": objects.host.NameServer.get_from_db_obj(h)
             }
-        except grpc.RpcError as rpc_error:
+        except objects.exceptions.ObjectError as e:
             return {
                 "id": h.id,
                 "obj": h,
-                "error": rpc_error.details()
+                "error": e.message
             }
 
     with ThreadPoolExecutor() as executor:
@@ -65,9 +65,9 @@ def host(request, host_id):
     host_data = None
 
     try:
-        host_data = apps.epp_client.get_host(user_host.name_server, user_host.registry_id)
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
+        host_data = objects.host.NameServer.get_from_db_obj(user_host)
+    except objects.exceptions.ObjectError as e:
+        error = e.message
 
     if request.method == "POST" and request.POST.get("type") == "host_create":
         address_form = forms.HostRegisterForm(request.POST)
