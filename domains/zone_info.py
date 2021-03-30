@@ -1054,8 +1054,13 @@ else:
         )),
         ('xyz', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
-            MarkupPrice(2142, transfer=2142, restore=18000, currency=None, display_currency='EUR', tld='xyz',
+            MarkupPrice(2502, transfer=2502, restore=18000, currency=None, display_currency='USD', tld='xyz',
                         markup=decimal.Decimal("1.5"))
+        )),
+        ('monster', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(2554, transfer=2554, restore=16800, currency=None, display_currency='USD', tld='monster',
+                        markup=decimal.Decimal("1.4"))
         )),
         ('de', DomainInfo(
             DomainInfo.REGISTRY_DENIC,

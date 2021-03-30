@@ -1574,15 +1574,15 @@ def domain_transfer_query(request):
                                     else:
                                         if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
                                             available = False
-                                            form.add_error('domain', "Domain not eligible for transfer")
+                                            form.add_error('domain', "Domain not eligible for transfer (check transfer lock)")
+                            else:
+                                form.add_error('domain', "Domain does not exist")
 
                             if available:
                                 if request.user.is_authenticated:
                                     return redirect('domain_transfer', domain_idna)
                                 else:
                                     return redirect('domain_transfer_search_success', domain_idna)
-                            else:
-                                form.add_error('domain', "Domain does not exist")
                 else:
                     form.add_error('domain', "Unsupported or invalid domain")
     else:
