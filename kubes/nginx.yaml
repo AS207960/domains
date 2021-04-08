@@ -161,4 +161,4 @@ spec:
           service:
             name: domains-nginx
             port:
-              namespace: 80
+              number: 80
