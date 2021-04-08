@@ -179,6 +179,27 @@ spec:
             - secretRef:
                 name: domains-rpc
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-django
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: django
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: domains
+          part: nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -193,6 +214,7 @@ spec:
             cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
           labels:
             app: domains
+            part-type: cronjob
             part: renewal
         spec:
           volumes:
@@ -268,6 +290,7 @@ spec:
             cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
           labels:
             app: domains
+            part-type: cronjob
             part: cds
         spec:
           volumes:
@@ -328,6 +351,18 @@ spec:
                 - secretRef:
                     name: domains-rpc
           restartPolicy: OnFailure
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-cronjob
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part-type: cronjob
+  policyTypes:
+  - Ingress
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -410,6 +445,18 @@ spec:
             - secretRef:
                 name: domains-rpc
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-celery
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: celery
+  policyTypes:
+  - Ingress
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -491,6 +538,31 @@ spec:
             - secretRef:
                 name: domains-rpc
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-django
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: whois
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: whois
+          part: django
+    - podSelector:
+        matchLabels:
+          app: whois
+          part: port43
+    ports:
+    - protocol: TCP
+      port: 50051
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -570,6 +642,18 @@ spec:
             - secretRef:
                 name: domains-rpc
 ---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-rpc
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: rpc
+  policyTypes:
+  - Ingress
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -648,6 +732,18 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-poll
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: poll
+  policyTypes:
+  - Ingress
 ---
 apiVersion: v1
 kind: Service
