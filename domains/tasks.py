@@ -545,6 +545,7 @@ def process_domain_transfer_paid(transfer_order_id):
         else:
             if transfer_data.status == 5:
                 gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
+                process_domain_transfer_complete.delay(domain_transfer_order.id)
                 logger.info(f"{domain_transfer_order.domain} successfully transferred")
             else:
                 gchat_bot.notify_transfer_pending.delay(domain_transfer_order.id, transfer_data.registry_name)
