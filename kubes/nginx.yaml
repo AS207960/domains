@@ -113,6 +113,7 @@ spec:
   - Ingress
   ingress:
   - from:
+    - podSelector: {}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: ingress-nginx
