@@ -82,7 +82,7 @@ def postal(request):
     message = email.parser.BytesParser(_class=email.message.EmailMessage, policy=email.policy.SMTPUTF8) \
         .parsebytes(msg_bytes)
 
-    if msg_from == "noreply@emailverification.info":
+    if msg_from in ("noreply@emailverification.info", "noreply@icann.glauca.digital"):
         msg_body = message.get_body(preferencelist=('plain',))
         if msg_body:
             msg_txt = msg_body.get_content()
