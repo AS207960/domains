@@ -121,7 +121,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
             "header": "Previous error",
             "widgets": [{
                 "textParagraph": {
-                    "text": f"```\n{domain_registration_order.last_error}\n```"
+                    "text": domain_registration_order.last_error
                 }
             }]
         })
@@ -280,7 +280,7 @@ def request_transfer(transfer_order_id, registry_id):
             "header": "Previous error",
             "widgets": [{
                 "textParagraph": {
-                    "text": f"```\n{domain_transfer_order.last_error}\n```"
+                    "text": domain_transfer_order.last_error
                 }
             }]
         })
