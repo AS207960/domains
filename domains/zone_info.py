@@ -455,6 +455,13 @@ class DomainInfo:
         )
 
     @property
+    def info_with_auth_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_VERISIGN,
+        )
+
+    @property
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,

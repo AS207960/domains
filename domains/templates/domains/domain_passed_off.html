@@ -1,9 +1,9 @@
 {% extends 'domains/base.html' %}
-{% block title %}Registration pending{% endblock %}
+{% block title %}Unexpected error{% endblock %}
 {% block content %}
     <div class="container my-3">
-        <h1>Domain pending</h1>
-        <h2>Sit tight whilst we sort out the magic &#x2728;</h2>
+        <h1>Unexpected error</h1>
+        <h2>Well this is embarrassing...</h2>
         <div class="row">
             <div class="col">
                 <b>Domain name: </b> {{ domain_name }}
@@ -11,8 +11,9 @@
         </div>
         <hr>
         <p>
-            Your domain registration has been submitted for further processing and possible approval by the registry.
-            We'll be in touch when we have more details, it should all be done in less than 24 hours.
+            We encountered an unexpected error whilst processing your order.
+            It has been passed onto a human for manual review.
+            Sit tight and we'll sort out the magic in the background.
         </p>
         <a href="{% url 'domains' %}" class="btn btn-primary">Continue</a>
     </div>

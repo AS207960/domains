@@ -78,85 +78,98 @@ def request_registration(registration_order_id, registry_id: str, period: str):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
     user = domain_registration_order.get_user()
+
+    sections = [{
+        "header": "Domain data",
+        "widgets": [{
+            "keyValue": {
+                "topLabel": "Domain name",
+                "content": domain_registration_order.domain
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Registry ID",
+                "content": registry_id
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Object ID",
+                "content": str(domain_registration_order.domain_id)
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Period",
+                "content": period
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Auth code",
+                "content": domain_registration_order.auth_info
+            }
+        }]
+    }, {
+        "header": "Contacts",
+        "widgets": [
+            make_contact(domain_registration_order.registrant_contact, "Registrant"),
+            make_contact(domain_registration_order.admin_contact, "Admin"),
+            make_contact(domain_registration_order.tech_contact, "Tech"),
+            make_contact(domain_registration_order.billing_contact, "Billing")
+        ]
+    }]
+    if domain_registration_order.last_error:
+        sections.append({
+            "header": "Previous error",
+            "widgets": [{
+                "textParagraph": f"```\n{domain_registration_order.last_error}\n```"
+            }]
+        })
+    sections.extend([make_user_data(user), {
+        "widgets": [{
+            "buttons": [{
+                "textButton": {
+                    "text": "Mark complete",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-registered",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_registration_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }, {
+                "textButton": {
+                    "text": "Mark failed",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-register-fail",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_registration_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }]
+        }]
+    }])
+
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
             threadKey=f"dm_{domain_registration_order.domain_id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"registration of {domain_registration_order.domain}",
+                        f"registration of {domain_registration_order.domain}" + (
+                            " which has errored" if domain_registration_order.last_error else ""
+                        ),
                 "cards": [{
                     "header": {
                         "title": "Domain registration request" if not settings.DEBUG
                         else "Domain registration request [TEST]",
                     },
-                    "sections": [{
-                        "header": "Domain data",
-                        "widgets": [{
-                            "keyValue": {
-                                "topLabel": "Domain name",
-                                "content": domain_registration_order.domain
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Registry ID",
-                                "content": registry_id
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Object ID",
-                                "content": str(domain_registration_order.domain_id)
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Period",
-                                "content": period
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Auth code",
-                                "content": domain_registration_order.auth_info
-                            }
-                        }]
-                    }, {
-                        "header": "Contacts",
-                        "widgets": [
-                            make_contact(domain_registration_order.registrant_contact, "Registrant"),
-                            make_contact(domain_registration_order.admin_contact, "Admin"),
-                            make_contact(domain_registration_order.tech_contact, "Tech"),
-                            make_contact(domain_registration_order.billing_contact, "Billing")
-                        ]
-                    }, make_user_data(user), {
-                        "widgets": [{
-                            "buttons": [{
-                                "textButton": {
-                                    "text": "Mark complete",
-                                    "onClick": {
-                                        "action": {
-                                            "actionMethodName": "mark-domain-registered",
-                                            "parameters": [{
-                                                "key": "domain_id",
-                                                "value": str(domain_registration_order.pk)
-                                            }]
-                                        }
-                                    }
-                                }
-                            }, {
-                                "textButton": {
-                                    "text": "Mark failed",
-                                    "onClick": {
-                                        "action": {
-                                            "actionMethodName": "mark-domain-register-fail",
-                                            "parameters": [{
-                                                "key": "domain_id",
-                                                "value": str(domain_registration_order.pk)
-                                            }]
-                                        }
-                                    }
-                                }
-                            }]
-                        }]
-                    }],
+                    "sections": sections,
                     "name": f"domain-register-{domain_registration_order.domain_id}"
                 }]
             }
@@ -227,80 +240,93 @@ def request_transfer(transfer_order_id, registry_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     user = domain_transfer_order.get_user()
+
+    sections = [{
+        "header": "Domain data",
+        "widgets": [{
+            "keyValue": {
+                "topLabel": "Domain name",
+                "content": domain_transfer_order.domain
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Registry ID",
+                "content": registry_id
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Object ID",
+                "content": str(domain_transfer_order.pk)
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Auth code",
+                "content": domain_transfer_order.auth_code
+            }
+        }]
+    }, {
+        "header": "Contacts",
+        "widgets": [
+            make_contact(domain_transfer_order.registrant_contact, "Registrant"),
+            make_contact(domain_transfer_order.admin_contact, "Admin"),
+            make_contact(domain_transfer_order.tech_contact, "Tech"),
+            make_contact(domain_transfer_order.billing_contact, "Billing")
+        ]
+    }]
+    if domain_transfer_order.last_error:
+        sections.append({
+            "header": "Previous error",
+            "widgets": [{
+                "textParagraph": f"```\n{domain_transfer_order.last_error}\n```"
+            }]
+        })
+    sections.extend([make_user_data(user), {
+        "widgets": [{
+            "buttons": [{
+                "textButton": {
+                    "text": "Mark complete",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-transferred",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_transfer_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }, {
+                "textButton": {
+                    "text": "Mark failed",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-transfer-fail",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_transfer_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }]
+        }]
+    }])
+
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
             threadKey=f"dm_{domain_transfer_order.domain_id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} "
-                        f"has requested the transfer of {domain_transfer_order.domain}",
+                        f"has requested the transfer of {domain_transfer_order.domain}" + (
+                            " which has errored" if domain_transfer_order.last_error else ""
+                        ),
                 "cards": [{
                     "header": {
                         "title": "Domain transfer request" if not settings.DEBUG
                         else "Domain transfer request [TEST]",
                     },
-                    "sections": [{
-                        "header": "Domain data",
-                        "widgets": [{
-                            "keyValue": {
-                                "topLabel": "Domain name",
-                                "content": domain_transfer_order.domain
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Registry ID",
-                                "content": registry_id
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Object ID",
-                                "content": str(domain_transfer_order.pk)
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Auth code",
-                                "content": domain_transfer_order.auth_code
-                            }
-                        }]
-                    }, {
-                        "header": "Contacts",
-                        "widgets": [
-                            make_contact(domain_transfer_order.registrant_contact, "Registrant"),
-                            make_contact(domain_transfer_order.admin_contact, "Admin"),
-                            make_contact(domain_transfer_order.tech_contact, "Tech"),
-                            make_contact(domain_transfer_order.billing_contact, "Billing")
-                        ]
-                    }, make_user_data(user), {
-                        "widgets": [{
-                            "buttons": [{
-                                "textButton": {
-                                    "text": "Mark complete",
-                                    "onClick": {
-                                        "action": {
-                                            "actionMethodName": "mark-domain-transferred",
-                                            "parameters": [{
-                                                "key": "domain_id",
-                                                "value": str(domain_transfer_order.pk)
-                                            }]
-                                        }
-                                    }
-                                }
-                            }, {
-                                "textButton": {
-                                    "text": "Mark failed",
-                                    "onClick": {
-                                        "action": {
-                                            "actionMethodName": "mark-domain-transfer-fail",
-                                            "parameters": [{
-                                                "key": "domain_id",
-                                                "value": str(domain_transfer_order.pk)
-                                            }]
-                                        }
-                                    }
-                                }
-                            }]
-                        }]
-                    }],
+                    "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}",
                 }]
             }

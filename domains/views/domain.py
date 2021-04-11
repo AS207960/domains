@@ -1213,7 +1213,7 @@ def domain_register(request, domain_name):
     })
 
 
-def confirm_order(request, order, pending_template):
+def confirm_order(request, order, pending_template, passed_off_template=None):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     referrer = reverse('domains')
 
@@ -1230,6 +1230,11 @@ def confirm_order(request, order, pending_template):
             })
         return redirect(order.redirect_uri)
     elif order.state == order.STATE_PENDING_APPROVAL:
+        if order.last_error and passed_off_template:
+            return render(request, passed_off_template, {
+                "domain_name": order.unicode_domain
+            })
+
         return render(request, pending_template, {
             "domain_name": order.unicode_domain
         })
@@ -1251,7 +1256,7 @@ def domain_register_confirm(request, order_id):
     registration_order = get_object_or_404(models.DomainRegistrationOrder, id=order_id)
 
     return confirm_order(
-        request, registration_order, "domains/domain_pending.html"
+        request, registration_order, "domains/domain_pending.html", "domains/domain_passed_off.html"
     )
 
 
@@ -1491,7 +1496,7 @@ def renew_domain(request, domain_id):
 def renew_domain_confirm(request, order_id):
     renew_order = get_object_or_404(models.DomainRenewOrder, id=order_id)
 
-    return confirm_order(request, renew_order, "domains/domain_pending.html")
+    return confirm_order(request, renew_order, "domains/domain_pending.html", "domains/domain_passed_off.html")
 
 
 @login_required
@@ -1535,7 +1540,9 @@ def restore_domain(request, domain_id):
 def restore_domain_confirm(request, order_id):
     restore_order = get_object_or_404(models.DomainRestoreOrder, id=order_id)
 
-    return confirm_order(request, restore_order, "domains/domain_restore_pending.html")
+    return confirm_order(
+        request, restore_order, "domains/domain_restore_pending.html", "domains/domain_passed_off.html"
+    )
 
 
 def domain_transfer_query(request):
@@ -1687,7 +1694,7 @@ def domain_transfer_confirm(request, order_id):
     transfer_order = get_object_or_404(models.DomainTransferOrder, id=order_id)
 
     return confirm_order(
-        request, transfer_order, "domains/domain_transfer_pending.html"
+        request, transfer_order, "domains/domain_transfer_pending.html", "domains/domain_passed_off.html"
     )
 
 

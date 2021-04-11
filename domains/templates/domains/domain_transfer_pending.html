@@ -2,7 +2,8 @@
 {% block title %}Transfer pending{% endblock %}
 {% block content %}
     <div class="container my-3">
-        <h1>Domain pending</h1>
+        <h1>Domain transfer pending</h1>
+        <h2>Internet bureaucracy in progress &#x1f4dc;</h2>
         <div class="row">
             <div class="col">
                 <b>Domain name: </b> {{ domain_name }}
@@ -11,6 +12,7 @@
         <hr>
         <p>
             Your domain transfer is pending further processing and approval. We'll be in touch when we hear more.
+            It should be released to us in about 7 days, but we'll be in touch if we expect it to take any longer.
         </p>
         <a href="{% url 'domains' %}" class="btn btn-primary">Continue</a>
     </div>

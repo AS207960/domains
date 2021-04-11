@@ -242,11 +242,12 @@ def process_domain_registration_paid(registration_order_id):
                 auth_info=domain_registration_order.auth_info,
             )
         except grpc.RpcError as rpc_error:
-            domain_registration_order.state = domain_registration_order.STATE_FAILED
+            domain_registration_order.state = domain_registration_order.STATE_PENDING_APPROVAL
             domain_registration_order.last_error = rpc_error.details()
             domain_registration_order.save()
-            billing.reverse_charge(domain_registration_order.id)
-            logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()}")
+            gchat_bot.request_registration.delay(domain_registration_order.id, registry_id, str(period))
+            logger.error(f"Failed to register {domain_registration_order.domain}: {rpc_error.details()},"
+                         f" passing off to human")
             return
     else:
         pending = True
@@ -538,10 +539,12 @@ def process_domain_transfer_paid(transfer_order_id):
                 domain_transfer_order.auth_code
             )
         except grpc.RpcError as rpc_error:
-            billing.reverse_charge(domain_transfer_order.id)
-            domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+            domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
             domain_transfer_order.last_error = rpc_error.details()
-            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
+            domain_transfer_order.save()
+            gchat_bot.request_transfer.delay(domain_transfer_order.id, "")
+            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()},"
+                         f" passing off to human")
         else:
             if transfer_data.status == 5:
                 gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
