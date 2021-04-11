@@ -120,7 +120,9 @@ def request_registration(registration_order_id, registry_id: str, period: str):
         sections.append({
             "header": "Previous error",
             "widgets": [{
-                "textParagraph": domain_registration_order.last_error
+                "textParagraph": {
+                    "text": f"```\n{domain_registration_order.last_error}\n```"
+                }
             }]
         })
     sections.extend([make_user_data(user), {
@@ -277,7 +279,9 @@ def request_transfer(transfer_order_id, registry_id):
         sections.append({
             "header": "Previous error",
             "widgets": [{
-                "textParagraph": domain_transfer_order.last_error,
+                "textParagraph": {
+                    "text": f"```\n{domain_transfer_order.last_error}\n```"
+                }
             }]
         })
     sections.extend([make_user_data(user), {
