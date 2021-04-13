@@ -868,8 +868,8 @@ else:
         )]))),
         ('me', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(2839, transfer=2839, currency=None, display_currency='EUR', tld='me',
-                        markup=decimal.Decimal("1.3"))
+            MarkupPrice(1760, transfer=1760, restore=14040, currency=None, display_currency='EUR', tld='me',
+                        markup=decimal.Decimal("1.6"))
         )),
         ('pw', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,

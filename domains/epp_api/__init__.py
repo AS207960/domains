@@ -1315,7 +1315,7 @@ class EPPClient:
         reason = resp.reason.value if resp.HasField("reason") else None
         return resp.available, reason, resp.registry_name
 
-    def get_domain(self, domain: str, auth_info: typing.Optional[str]) -> Domain:
+    def get_domain(self, domain: str, auth_info: typing.Optional[str] = None) -> Domain:
         resp = self.stub.DomainInfo(domain_pb2.DomainInfoRequest(name=domain))
         return Domain.from_pb(resp, self)
 
