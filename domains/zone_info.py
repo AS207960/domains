@@ -1069,6 +1069,16 @@ else:
             MarkupPrice(2554, transfer=2554, restore=16800, currency=None, display_currency='USD', tld='monster',
                         markup=decimal.Decimal("1.4"))
         )),
+        ('ink', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(4709, transfer=4709, restore=12960, currency=None, display_currency='USD', tld='ink',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('wiki', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(4709, transfer=4709, restore=12960, currency=None, display_currency='USD', tld='wiki',
+                        markup=decimal.Decimal("1.2"))
+        )),
         ('de', DomainInfo(
             DomainInfo.REGISTRY_DENIC,
             MarkupPrice(1596, transfer=1260, restore=5250, currency=None, display_currency='EUR', tld='de',
@@ -1104,6 +1114,11 @@ else:
         ('moe', DomainInfo(
             DomainInfo.REGISTRY_INTERLINK,
             MarkupPrice(3120, transfer=3120, restore=14040, currency=None, display_currency='USD', tld='moe',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('earth', DomainInfo(
+            DomainInfo.REGISTRY_INTERLINK,
+            MarkupPrice(4056, transfer=4056, restore=17160, currency=None, display_currency='USD', tld='earth',
                         markup=decimal.Decimal("1.3"))
         )),
         ('eu', DomainInfo(
