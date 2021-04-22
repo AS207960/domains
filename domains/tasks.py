@@ -141,7 +141,11 @@ def charge_order(
         )
         order.charge_state_id = charge_state.charge_state_id
         order.save()
-        if not charge_state.success:
+        if charge_state.immediate_completion:
+            order.state = order.STATE_PROCESSING
+            order.save()
+            success_func.delay(order.id)
+        else:
             if charge_state.redirect_uri:
                 order.state = order.STATE_NEEDS_PAYMENT
                 order.redirect_uri = charge_state.redirect_uri
@@ -152,10 +156,6 @@ def charge_order(
                 order.redirect_uri = None
                 order.save()
                 logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
-        elif charge_state.immediate_completion:
-            order.state = order.STATE_PROCESSING
-            order.save()
-            success_func.delay(order.id)
 
 
 @shared_task(
