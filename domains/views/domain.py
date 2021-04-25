@@ -1456,7 +1456,8 @@ def renew_domain(request, domain_id):
             )
 
             billing_value = zone_price.renewal(
-                request.country.iso_code, request.user.username, unit=period.unit, value=period.value
+                country=request.country.iso_code, username=request.user.username, sld=sld,
+                unit=period.unit, value=period.value
             ).amount
             if billing_value is None:
                 return render(request, "domains/error.html", {
