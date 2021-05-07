@@ -2019,6 +2019,11 @@ else:
             MarkupPrice(3529, transfer=3529, restore=14040, currency=None, display_currency='USD', tld='ninja',
                         markup=decimal.Decimal("1.3"))
         )),
+        ('observer', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(2256, transfer=2256, restore=48000, currency=None, display_currency='USD', tld='observer',
+                        markup=decimal.Decimal("1.6"))
+        )),
         ('partners', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='partners',
@@ -2162,6 +2167,11 @@ else:
         ('services', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='services',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('sexy', DomainInfo(
+            DomainInfo.REGISTRY_DONUTS,
+            MarkupPrice(5160, transfer=5160, restore=10800, currency=None, display_currency='USD', tld='sexy',
                         markup=decimal.Decimal("1.2"))
         )),
         ('shoes', DomainInfo(
@@ -2538,6 +2548,11 @@ else:
             DomainInfo.REGISTRY_NOMINET_RRPPROXY,
             MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='org.uk',
                         markup=decimal.Decimal("1.5"))
+        )),
+        ('garden', DomainInfo(
+            DomainInfo.REGISTRY_MINDS_MACHINES,
+            MarkupPrice(4288, transfer=4288, restore=3125, currency=None, display_currency='USD', tld='garden',
+                        markup=decimal.Decimal("1.25"))
         )),
         ('work', DomainInfo(
             DomainInfo.REGISTRY_MINDS_MACHINES,

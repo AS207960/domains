@@ -409,7 +409,7 @@ class DomainRegisterForm(forms.Form):
                 'tech'
             )
         )
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Proceed to payment', css_class="btn-block"))
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit order', css_class="btn-block"))
 
 
 class DomainTransferForm(forms.Form):
