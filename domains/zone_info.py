@@ -1175,7 +1175,7 @@ else:
         )),
         ('info', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(3132, transfer=3132, restore=15120, currency=None, display_currency='USD', tld='info',
+            MarkupPrice(2874, transfer=2874, restore=12600, currency=None, display_currency='USD', tld='info',
                         markup=decimal.Decimal("1.4"))
         )),
         ('online', DomainInfo(
@@ -2406,8 +2406,8 @@ else:
         )),
         ('re', DomainInfo(
             DomainInfo.REGISTRY_AFNIC,
-            MarkupPrice(2917, transfer=2917, restore=3120, currency=None, display_currency='EUR', tld='re',
-                        markup=decimal.Decimal("1.3"))
+            MarkupPrice(2618, transfer=2618, restore=2800, currency=None, display_currency='EUR', tld='re',
+                        markup=decimal.Decimal("1.4"))
         )),
         ('blog', DomainInfo(
             DomainInfo.REGISTRY_WHOIS_THERE,

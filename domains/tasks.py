@@ -434,11 +434,12 @@ def process_domain_restore_paid(restore_order_id):
             domain_restore_order.domain_obj.save()
             gchat_bot.notify_restore.delay(domain_restore_order.id)
         except grpc.RpcError as rpc_error:
-            domain_restore_order.state = domain_restore_order.STATE_FAILED
+            domain_restore_order.state = domain_restore_order.STATE_PENDING_APPROVAL
             domain_restore_order.last_error = rpc_error.details()
             domain_restore_order.save()
-            billing.reverse_charge(domain_restore_order.id)
-            logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()}")
+            gchat_bot.request_restore.delay(domain_restore_order.id, "")
+            logger.error(f"Failed to restore {domain_restore_order.domain}: {rpc_error.details()},"
+                         f" passing off to human")
             return
 
     else:
@@ -563,11 +564,12 @@ def process_domain_transfer_paid(transfer_order_id):
         try:
             _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
         except grpc.RpcError as rpc_error:
-            billing.reverse_charge(domain_transfer_order.id)
-            domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+            domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
             domain_transfer_order.last_error = rpc_error.details()
             domain_transfer_order.save()
-            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()}")
+            gchat_bot.request_transfer.delay(domain_transfer_order.id, "")
+            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()},"
+                         f" passing off to human")
             return
 
         gchat_bot.request_transfer.delay(domain_transfer_order.id, registry_id)
