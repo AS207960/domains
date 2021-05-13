@@ -620,6 +620,7 @@ class SimpleAbstractOrder(models.Model):
     redirect_uri = models.TextField(blank=True, null=True)
     last_error = models.TextField(blank=True, null=True)
     off_session = models.BooleanField(blank=True, default=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True

@@ -129,6 +129,9 @@ class Command(BaseCommand):
                     domain.save()
                     print(f"Deleted {domain.domain}")
                     insert_into_dict(deleted, user, email_data)
+                    renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain).order_by("-timestamp").first()
+                    if renew_order:
+                        billing.reverse_charge(renew_order.id)
 
                 else:
                     if (domain.last_billed + RENEW_INTERVAL) > now:
