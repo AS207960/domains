@@ -221,18 +221,19 @@ class Command(BaseCommand):
             cds_data_set = cds_values[0]
 
             if len(cds_data_set) == 1 and cds_data_set[0].algorithm == 0:
-                try:
-                    apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
-                        name=domain.domain,
-                        sec_dns=apps.epp_api.domain_pb2.UpdateSecDNSData(
-                            remove_all=True
-                        )
-                    ))
-                except grpc.RpcError as rpc_error:
-                    print(f"Can't remove DNSSEC for {domain.domain}: {rpc_error.details()}")
-                    continue
+                if domain_data.sec_dns:
+                    try:
+                        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+                            name=domain.domain,
+                            sec_dns=apps.epp_api.domain_pb2.UpdateSecDNSData(
+                                remove_all=True
+                            )
+                        ))
+                    except grpc.RpcError as rpc_error:
+                        print(f"Can't remove DNSSEC for {domain.domain}: {rpc_error.details()}")
+                        continue
 
-                mail_disabled(user, domain)
+                    mail_disabled(user, domain)
             else:
                 current_cds_set = []
                 if domain_data.sec_dns:
