@@ -96,9 +96,11 @@ class Command(BaseCommand):
 
             if (expiry_date - FAIL_INTERVAL) <= now:
                 if (domain.last_billed + RENEW_INTERVAL) > now:
+                    print(f"{domain_data.name} expiring soon, renewal already charged")
                     continue
 
             if (expiry_date - RENEW_INTERVAL) <= now:
+                print(f"{domain_data.name} expiring soon, renewing")
                 renewal_period = domain_info.pricing.periods[0]
 
                 try:
@@ -165,6 +167,7 @@ class Command(BaseCommand):
 
             elif (expiry_date - NOTIFY_INTERVAL) <= now:
                 if domain.last_renew_notify + NOTIFY_INTERVAL > now:
+                    print(f"{domain_data.name} expiring soon, already notified")
                     continue
 
                 print(f"{domain_data.name} expiring soon, notifying owner")
