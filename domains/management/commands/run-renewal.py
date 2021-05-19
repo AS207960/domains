@@ -155,7 +155,7 @@ class Command(BaseCommand):
                         descriptor=f"{domain.unicode_domain} automatic renewal",
                         charge_id=order.id,
                         return_uri=None,
-                        success_func=None,
+                        success_func=tasks.process_domain_auto_renew_paid,
                         notif_queue="domains_auto_renew_billing_notif"
                     )
                     domain.last_billed = now
