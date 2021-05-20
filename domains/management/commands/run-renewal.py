@@ -94,10 +94,6 @@ class Command(BaseCommand):
             }
             print(f"{domain_data.name} expiring on {expiry_date}")
 
-            if (domain.last_billed + RENEW_INTERVAL) >= now:
-                print(f"{domain_data.name} expiring soon, renewal already charged")
-                continue
-
             if (expiry_date - RENEW_INTERVAL) <= now:
                 print(f"{domain_data.name} expiring soon, renewing")
                 renewal_period = domain_info.pricing.periods[0]
@@ -116,6 +112,11 @@ class Command(BaseCommand):
                     continue
 
                 if (expiry_date - FAIL_INTERVAL) <= now:
+                    last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain).order_by("-timestamp").first()
+                    if last_renew_order.state = last_renew_order.STATE_COMPLETED:
+                        print(f"{domain_data.name} expiring soon, renewal already succeeded")
+                        continue
+
                     print(f"Deleting {domain.domain} due to billing failure")
                     try:
                         apps.epp_client.delete_domain(domain_data.name)
@@ -135,7 +136,8 @@ class Command(BaseCommand):
                         billing.reverse_charge(renew_order.id)
 
                 else:
-                    if (domain.last_billed + RENEW_INTERVAL) > now:
+                    if (domain.last_billed + RENEW_INTERVAL) >= now:
+                        print(f"{domain_data.name} expiring soon, renewal already charged")
                         continue
 
                     print(f"{domain_data.name} expiring soon, renewing for {renewal_price:.2f} GBP")

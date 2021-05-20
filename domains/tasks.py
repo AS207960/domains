@@ -797,10 +797,10 @@ def process_domain_auto_renew_paid(renew_order_id):
 
         gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
 
-        domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
-        domain_renewal_order.redirect_uri = None
-        domain_renewal_order.last_error = None
-        domain_renewal_order.save()
+   domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
+   domain_renewal_order.redirect_uri = None
+   domain_renewal_order.last_error = None
+   domain_renewal_order.save()
 
     emails.mail_auto_renew_success.delay(domain_renewal_order.id)
     logger.info(f"{domain_renewal_order.domain} successfully renewed")
