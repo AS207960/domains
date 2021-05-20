@@ -94,10 +94,9 @@ class Command(BaseCommand):
             }
             print(f"{domain_data.name} expiring on {expiry_date}")
 
-            if (expiry_date - FAIL_INTERVAL) <= now:
-                if (domain.last_billed + RENEW_INTERVAL) > now:
-                    print(f"{domain_data.name} expiring soon, renewal already charged")
-                    continue
+            if (domain.last_billed + RENEW_INTERVAL) >= now:
+                print(f"{domain_data.name} expiring soon, renewal already charged")
+                continue
 
             if (expiry_date - RENEW_INTERVAL) <= now:
                 print(f"{domain_data.name} expiring soon, renewing")
