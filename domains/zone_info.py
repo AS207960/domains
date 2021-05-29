@@ -2529,26 +2529,6 @@ else:
             MarkupPrice(3250, transfer=3250, restore=9750, currency=None, display_currency='USD', tld='vc',
                         markup=decimal.Decimal("1.3"))
         )),
-        ('uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
-            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='uk',
-                        markup=decimal.Decimal("1.5"))
-        )),
-        ('co.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
-            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='co.uk',
-                        markup=decimal.Decimal("1.5"))
-        )),
-        ('me.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
-            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='me.uk',
-                        markup=decimal.Decimal("1.5"))
-        )),
-        ('org.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET_RRPPROXY,
-            MarkupPrice(1769, transfer=0, restore=2880, currency=None, display_currency='GBP', tld='org.uk',
-                        markup=decimal.Decimal("1.5"))
-        )),
         ('garden', DomainInfo(
             DomainInfo.REGISTRY_MINDS_MACHINES,
             MarkupPrice(4288, transfer=4288, restore=3125, currency=None, display_currency='USD', tld='garden',
@@ -2564,26 +2544,30 @@ else:
             MarkupPrice(6820, transfer=6820, restore=18000, currency=None, display_currency='USD', tld='vip',
                         markup=decimal.Decimal("1.5"))
         )),
+        ('uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+        )),
+        ('co.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+        )),
+        ('me.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            notice="This TLD is restricted to natural persons."
+        )),
+        ('org.uk', DomainInfo(
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+        )),
         ('ltd.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
-                unit=0,
-                value=2
-            )]),
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to UK Limited Companies."
         )),
         ('plc.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
-                unit=0,
-                value=2
-            )]),
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917)
             notice="This TLD is restricted to UK Public Limited Companies."
         )),
         ('net.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(5760, periods=[apps.epp_api.Period(
-                unit=0,
-                value=2
-            )]),
-            notice="This TLD is restricted to businesses in the telecommunications sector in the UK."
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917)
+            notice="This TLD is restricted to businesses in the UK telecommunications sector."
         )),
         ('scot', DomainInfo(
             DomainInfo.REGISTRY_CORE,

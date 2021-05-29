@@ -113,7 +113,7 @@ class Command(BaseCommand):
 
                 if (expiry_date - FAIL_INTERVAL) <= now:
                     last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain).order_by("-timestamp").first()
-                    if last_renew_order.state = last_renew_order.STATE_COMPLETED:
+                    if last_renew_order.state == last_renew_order.STATE_COMPLETED:
                         print(f"{domain_data.name} expiring soon, renewal already succeeded")
                         continue
 
