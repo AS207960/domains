@@ -6,5 +6,5 @@ Please manually renew your domain from the domain control panel.
 
 The reason for this failure was: {{ error }}
 
-If the domain isn't renewed by one day before the expiry date, then our shark minions will shed a tear as they delete your domain.
+If the domain isn't renewed by 3 days before the expiry date, then our shark minions will shed a tear as they delete your domain.
 {% endblock content %}

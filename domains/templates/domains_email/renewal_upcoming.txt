@@ -1,8 +1,8 @@
 {% extends "domains_email/email_base.txt" %}
 {% block content %}
 The following domains are expiring soon.
-No further action is required on your part, and we'll renew them 7 days before the expiry date.
-If the renewal has not succeeded by 1 day before the expiry date these domains will be revoked.
+No further action is required on your part, and we'll renew them 30 days before the expiry date.
+If the renewal has not succeeded by 3 days before the expiry date these domains will be revoked.
 
 {% for domain in domains %}
 - {{ domain.domain.name }} (expiring: {{ domain.expiry_date }})
