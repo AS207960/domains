@@ -2562,11 +2562,11 @@ else:
             notice="This TLD is restricted to UK Limited Companies."
         )),
         ('plc.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917)
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to UK Public Limited Companies."
         )),
         ('net.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917)
+            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to businesses in the UK telecommunications sector."
         )),
         ('scot', DomainInfo(
