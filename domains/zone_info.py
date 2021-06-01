@@ -2404,6 +2404,31 @@ else:
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='zone',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('fr', DomainInfo(
+            DomainInfo.REGISTRY_AFNIC,
+            MarkupPrice(2055, transfer=2055, restore=3000, currency=None, display_currency='EUR', tld='fr',
+                        markup=decimal.Decimal("1.5"))
+        )),
+        ('wf', DomainInfo(
+            DomainInfo.REGISTRY_AFNIC,
+            MarkupPrice(2055, transfer=2055, restore=3000, currency=None, display_currency='EUR', tld='wf',
+                        markup=decimal.Decimal("1.5"))
+        )),
+        ('tf', DomainInfo(
+            DomainInfo.REGISTRY_AFNIC,
+            MarkupPrice(2055, transfer=2055, restore=3000, currency=None, display_currency='EUR', tld='tf',
+                        markup=decimal.Decimal("1.5"))
+        )),
+        ('pm', DomainInfo(
+            DomainInfo.REGISTRY_AFNIC,
+            MarkupPrice(2055, transfer=2055, restore=3000, currency=None, display_currency='EUR', tld='pm',
+                        markup=decimal.Decimal("1.5"))
+        )),
+        ('yt', DomainInfo(
+            DomainInfo.REGISTRY_AFNIC,
+            MarkupPrice(2055, transfer=2055, restore=3000, currency=None, display_currency='EUR', tld='yt',
+                        markup=decimal.Decimal("1.5"))
+        )),
         ('re', DomainInfo(
             DomainInfo.REGISTRY_AFNIC,
             MarkupPrice(2618, transfer=2618, restore=2800, currency=None, display_currency='EUR', tld='re',
