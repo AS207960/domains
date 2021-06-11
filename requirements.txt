@@ -1,4 +1,4 @@
-Django<3.2
+Django<3.2,>=2.2.21
 #git+https://github.com/TheEnbyperor/django-keycloak-auth@d0c11a4a5dec5dfc7730256b011bc86260dda5cf
 sentry-sdk
 psycopg2-binary

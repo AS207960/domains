@@ -387,6 +387,7 @@ class DomainInfo:
     REGISTRY_NIXI = "NIXI"
     REGISTRY_FDSRDDS = "FDSRDDS"
     REGISTRY_RNIDS = "RNIDS"
+    REGISTRY_NICAT = "NICAT"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -424,6 +425,8 @@ class DomainInfo:
             return datetime.timedelta(days=40)
         elif self.registry == self.REGISTRY_PIR:
             return datetime.timedelta(days=35)
+        elif self.registry == self.REGISTRY_NICAT:
+            return datetime.timedelta(days=59)
         elif self.registry == self.REGISTRY_AMNIC:
             return datetime.timedelta(days=15)
         elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDS):
@@ -501,6 +504,7 @@ class DomainInfo:
             self.REGISTRY_NIXI,
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
+            self.REGISTRY_NICAT,
         )
 
     @property
@@ -530,6 +534,7 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_DENIC,
             self.REGISTRY_DNSBELGIUM
+            self.REGISTRY_NICAT
         )
 
     @property
@@ -551,6 +556,7 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_KENIC,
+            self.REGISTRY_NICAT,
         )
 
     @property
@@ -631,6 +637,7 @@ class DomainInfo:
             self.REGISTRY_NIXI,
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
+            self.REGISTRY_NICAT,
         )
 
     @property
@@ -678,6 +685,7 @@ class DomainInfo:
             self.REGISTRY_NIXI,
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
+            self.REGISTRY_NICAT,
         )
 
     @property
@@ -727,6 +735,7 @@ class DomainInfo:
             self.REGISTRY_NIXI,
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
+            self.REGISTRY_NICAT,
         )
 
     @property
@@ -2686,6 +2695,16 @@ else:
             DomainInfo.REGISTRY_RNIDS,
             MarkupPrice(18295, transfer=8640, restore=8640, currency=None, display_currency='USD', tld='rs',
                         markup=decimal.Decimal("1.2"))
+        )),
+        ('at', DomainInfo(
+            DomainInfo.REGISTRY_NICAT,
+            MarkupPrice(
+                2205, transfer=0, restore=1875, currency=None, display_currency='EUR', tld='at',
+                markup=decimal.Decimal("1.5"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                )]
+            )
         )),
     )
 
