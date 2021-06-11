@@ -533,8 +533,8 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_DENIC,
-            self.REGISTRY_DNSBELGIUM
-            self.REGISTRY_NICAT
+            self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_NICAT,
         )
 
     @property
