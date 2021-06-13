@@ -383,11 +383,12 @@ class DomainInfo:
     REGISTRY_AKEP = "akep"
     REGISTRY_AMNIC = "amnic"
     REGISTRY_UNIREGISTRY = "uniregistry"
-    REGISTRY_AFMOF = "AFMOC"
-    REGISTRY_NIXI = "NIXI"
-    REGISTRY_FDSRDDS = "FDSRDDS"
-    REGISTRY_RNIDS = "RNIDS"
-    REGISTRY_NICAT = "NICAT"
+    REGISTRY_AFMOF = "afmoc"
+    REGISTRY_NIXI = "nixi"
+    REGISTRY_FDSRDDS = "fdsrdds"
+    REGISTRY_RNIDS = "rnids"
+    REGISTRY_NICAT = "nicat"
+    REGISTRY_CIRA = "cira"
 
     def __init__(self, registry, pricing, notice=None):
         self.registry = registry
@@ -505,6 +506,7 @@ class DomainInfo:
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
+            self.REGISTRY_CIRA,
         )
 
     @property
@@ -638,6 +640,7 @@ class DomainInfo:
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
+            self.REGISTRY_CIRA,
         )
 
     @property
@@ -686,6 +689,7 @@ class DomainInfo:
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
+            self.REGISTRY_CIRA,
         )
 
     @property
@@ -736,6 +740,7 @@ class DomainInfo:
             self.REGISTRY_FDSRDDS,
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
+            self.REGISTRY_CIRA,
         )
 
     @property
@@ -2608,19 +2613,25 @@ else:
             MarkupPrice(4752, transfer=4752, restore=18000, currency=None, display_currency='GBP', tld='scot',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('ca', DomainInfo(
+            DomainInfo.REGISTRY_CIRA,
+            MarkupPrice(2880, transfer=2880, restore=6400, currency=None, display_currency='CAD', tld='ca',
+                        markup=decimal.Decimal("1.6")),
+            notice="Registrants are required to meet CIRA's Canadian presence requirements"
+        )),
         ('io', DomainInfo(
             DomainInfo.REGISTRY_ICB,
-            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='io',
+            MarkupPrice(6062, transfer=6062, restore=8942, currency=None, display_currency='USD', tld='io',
                         markup=decimal.Decimal("1.2"))
         )),
         ('ac', DomainInfo(
             DomainInfo.REGISTRY_ICB,
-            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='ac',
+            MarkupPrice(6062, transfer=6062, restore=8942, currency=None, display_currency='USD', tld='ac',
                         markup=decimal.Decimal("1.2"))
         )),
         ('sh', DomainInfo(
             DomainInfo.REGISTRY_ICB,
-            MarkupPrice(7275, transfer=7275, restore=10731, currency=None, display_currency='USD', tld='sh',
+            MarkupPrice(6062, transfer=6062, restore=8942, currency=None, display_currency='USD', tld='sh',
                         markup=decimal.Decimal("1.2"))
         )),
         ('co', DomainInfo(
