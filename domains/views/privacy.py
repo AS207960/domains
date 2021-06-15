@@ -82,6 +82,7 @@ def postal(request):
     message = email.parser.BytesParser(_class=email.message.EmailMessage, policy=email.policy.SMTPUTF8) \
         .parsebytes(msg_bytes)
 
+    trigger_found = False
     if msg_from in ("noreply@emailverification.info", "noreply@icann.glauca.digital"):
         msg_body = message.get_body(preferencelist=('plain',))
         if msg_body:
@@ -100,6 +101,9 @@ def postal(request):
                         }
                     )
                     r.raise_for_status()
+                    trigger_found = True
+
+    if trigger_found:
         return HttpResponse(status=200)
 
     privacy_id = msg_to.split("@")[0]
