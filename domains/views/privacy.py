@@ -134,7 +134,6 @@ def postal(request):
     message['From'] = "AS207960 Domain Privacy <domain-privacy@as207960.net>"
     message['Reply-To'] = old_from
     message['Subject'] = f"[AS207960 Domain Privacy] {old_subject}"
-    print(message)
 
     new_msg_bytes = message.as_bytes()
 
