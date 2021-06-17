@@ -1,12 +1,15 @@
 import typing
 import datetime
+
+import google.protobuf.wrappers_pb2
 import grpc
 import decimal
 import dataclasses
 import ipaddress
 from google.protobuf.wrappers_pb2 import StringValue
 from google.protobuf.timestamp_pb2 import Timestamp
-from .epp_grpc import common_pb2, contact_pb2, domain_pb2, host_pb2, rgp_pb2, fee_pb2, epp_pb2, epp_pb2_grpc
+from .epp_grpc import common_pb2, contact_pb2, domain_pb2, host_pb2, rgp_pb2, fee_pb2, epp_pb2, epp_pb2_grpc, \
+    isnic_pb2, domain_common_pb2
 
 
 @dataclasses.dataclass
@@ -420,18 +423,18 @@ class Domain:
 
     @property
     def can_update(self):
-        return int(domain_pb2.ClientUpdateProhibited) not in self.statuses \
-               and int(domain_pb2.ServerUpdateProhibited) not in self.statuses
+        return int(domain_common_pb2.ClientUpdateProhibited) not in self.statuses \
+               and int(domain_common_pb2.ServerUpdateProhibited) not in self.statuses
 
     @property
     def can_renew(self):
-        return int(domain_pb2.ClientRenewProhibited) not in self.statuses \
-               and int(domain_pb2.ServerRenewProhibited) not in self.statuses
+        return int(domain_common_pb2.ClientRenewProhibited) not in self.statuses \
+               and int(domain_common_pb2.ServerRenewProhibited) not in self.statuses
 
     @property
     def can_delete(self):
-        return int(domain_pb2.ClientDeleteProhibited) not in self.statuses \
-               and int(domain_pb2.ServerDeleteProhibited) not in self.statuses
+        return int(domain_common_pb2.ClientDeleteProhibited) not in self.statuses \
+               and int(domain_common_pb2.ServerDeleteProhibited) not in self.statuses
 
     def set_auth_info(self, auth_info: str) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
@@ -485,10 +488,12 @@ class Domain:
     def set_tech(self, contact_id: typing.Union[str, None]) -> bool:
         return self.set_contact("tech", contact_id)
 
-    def add_host_objs(self, hosts: typing.List[str]) -> bool:
+    def add_host_objs(self, hosts: typing.List[str], replace: bool = False) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
-            remove=[],
+            remove=list(map(lambda n: domain_pb2.DomainUpdateRequest.Param(
+                nameserver=n.to_pb()
+            ), self.name_servers)),
             add=list(map(lambda h: domain_pb2.DomainUpdateRequest.Param(
                 nameserver=domain_pb2.NameServer(
                     host_obj=h
@@ -539,7 +544,7 @@ class Domain:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
-                remove_all=True
+                all=True
             )
         )).pending
 
@@ -547,7 +552,7 @@ class Domain:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
-                remove_ds_data=domain_pb2.SecDNSDSData(data=list(map(lambda d: d.to_pb(), data)))
+                rem_ds_data=domain_pb2.SecDNSDSData(data=list(map(lambda d: d.to_pb(), data)))
             )
         )).pending
 
@@ -555,7 +560,7 @@ class Domain:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
-                remove_key_data=domain_pb2.SecDNSKeyData(data=list(map(lambda d: d.to_pb(), data)))
+                rem_key_data=domain_pb2.SecDNSKeyData(data=list(map(lambda d: d.to_pb(), data)))
             )
         )).pending
 
@@ -775,6 +780,19 @@ class Host:
         ))
         return resp.pending
 
+    def set_isnic_zone_contact(self, contact_id: str) -> bool:
+        resp = self._app.stub.HostUpdate(host_pb2.HostUpdateRequest(
+            name=self.name,
+            remove=[],
+            add=[],
+            new_name=None,
+            isnic_info=isnic_pb2.HostInfo(
+                zone_contact=google.protobuf.wrappers_pb2.StringValue(value=contact_id)
+            ),
+            registry_name=self.registry_name
+        ))
+        return resp.pending
+
 
 @dataclasses.dataclass
 class Address:
@@ -827,14 +845,14 @@ class Phone:
     ext: typing.Optional[str]
 
     @classmethod
-    def from_pb(cls, resp: contact_pb2.Phone):
+    def from_pb(cls, resp: common_pb2.Phone):
         return cls(
             number=resp.number,
             ext=resp.extension.value if resp.HasField("extension") else None
         )
 
-    def to_pb(self) -> contact_pb2.Phone:
-        return contact_pb2.Phone(
+    def to_pb(self) -> common_pb2.Phone:
+        return common_pb2.Phone(
             number=self.number,
             extension=StringValue(value=self.ext) if self.ext else None
         )
@@ -976,6 +994,63 @@ class Disclosure:
         )
 
 
+@dataclasses.dataclass
+class ISNICContactStatus:
+    status: int
+
+    @property
+    def name(self):
+        if self.status == isnic_pb2.ContactStatus.Ok:
+            return "ok"
+        elif self.status == isnic_pb2.ContactStatus.OkUnconfirmed:
+            return "ok_unconfirmed"
+        elif self.status == isnic_pb2.ContactStatus.PendingCreate:
+            return "pending_create"
+        elif self.status == isnic_pb2.ContactStatus.ServerExpired:
+            return "server_expired"
+        elif self.status == isnic_pb2.ContactStatus.ServerSuspended:
+            return "server_suspended"
+
+    def __str__(self):
+        if self.status == isnic_pb2.ContactStatus.Ok:
+            return "OK"
+        elif self.status == isnic_pb2.ContactStatus.OkUnconfirmed:
+            return "OK (unconfirmed)"
+        elif self.status == isnic_pb2.ContactStatus.PendingCreate:
+            return "Pending create"
+        elif self.status == isnic_pb2.ContactStatus.ServerExpired:
+            return "Server expired"
+        elif self.status == isnic_pb2.ContactStatus.ServerSuspended:
+            return "Server suspended"
+
+    def __eq__(self, other):
+        if type(other) == int:
+            return self.status == other
+        elif type(other) == self.__class__:
+            return other.status == self.status
+        else:
+            return False
+
+
+@dataclasses.dataclass
+class ISNICContactInfo:
+    statuses: typing.List[ISNICContactStatus]
+    mobile: typing.Optional[Phone]
+    sid: typing.Optional[str]
+    auto_update_from_national_registry: bool
+    paper_invoices: bool
+
+    @classmethod
+    def from_pb(cls, resp: isnic_pb2.ContactInfo):
+        return cls(
+            statuses=list(map(lambda s: ISNICContactStatus(status=s), resp.statuses)),
+            mobile=Phone.from_pb(resp.mobile) if resp.HasField("mobile") else None,
+            sid=resp.sid.value if resp.HasField("sid") else None,
+            auto_update_from_national_registry=resp.auto_update_from_national_registry,
+            paper_invoices=resp.paper_invoices
+        )
+
+
 class Contact:
     _app = None  # type: EPPClient
     id: str
@@ -997,6 +1072,7 @@ class Contact:
     last_transfer_date: typing.Optional[datetime.datetime]
     auth_info: typing.Optional[str]
     disclosure: typing.Optional[Disclosure]
+    isnic_info: typing.Optional[ISNICContactInfo]
     registry_name: str
 
     @classmethod
@@ -1022,6 +1098,7 @@ class Contact:
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
         self.disclosure = Disclosure.from_pb(resp.disclosure)
+        self.isnic_info = ISNICContactInfo.from_pb(resp.isnic_info) if resp.HasField("isnic_info") else None
         self.registry_name = registry_name
         return self
 
@@ -1403,11 +1480,17 @@ class EPPClient:
         resp = self.stub.HostInfo(host_pb2.HostInfoRequest(name=host_name, registry_name=registry_name))
         return Host.from_pb(resp, self, registry_name)
 
-    def create_host(self, host_name: str, addresses: typing.List[IPAddress], registry_name: str) -> typing.Tuple[bool, datetime.datetime]:
+    def create_host(
+            self, host_name: str, addresses: typing.List[IPAddress], registry_name: str,
+            isnic_zone_contact: typing.Optional[str]
+    ) -> typing.Tuple[bool, datetime.datetime]:
         resp = self.stub.HostCreate(host_pb2.HostCreateRequest(
             name=host_name,
             addresses=list(map(lambda a: a.to_pb(), addresses)),
-            registry_name=registry_name
+            registry_name=registry_name,
+            isnic_info=isnic_pb2.HostInfo(
+                zone_contact=google.protobuf.wrappers_pb2.StringValue(value=isnic_zone_contact)
+            ) if isnic_zone_contact else None,
         ))
         return resp.pending, resp.creation_date.ToDatetime()
 
@@ -1437,7 +1520,7 @@ class EPPClient:
     def create_contact(
         self,
         contact_id: str,
-        local_address: Address,
+        local_address: typing.Optional[Address],
         int_address: typing.Optional[Address],
         phone: typing.Optional[Phone],
         fax: typing.Optional[Phone],

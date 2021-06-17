@@ -190,17 +190,12 @@ def process_domain_registration_paid(registration_order_id):
             for host in ('ns1.as207960.net', 'ns2.as207960.net'):
                 try:
                     host_available, _ = apps.epp_client.check_host(host, registry_id)
+
+                    if host_available:
+                        apps.epp_client.create_host(host, [], registry_id)
                 except grpc.RpcError as rpc_error:
                     logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
                     raise rpc_error
-
-                if host_available:
-                    try:
-                        apps.epp_client.create_host(host, [], registry_id)
-                    except grpc.RpcError as rpc_error:
-                        logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: "
-                                     f"{rpc_error.details()}")
-                        raise rpc_error
 
         try:
             contact_objs = []
@@ -352,38 +347,48 @@ def process_domain_registration_failed(registration_order_id):
 def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order = \
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
 
     period = apps.epp_api.Period(
         value=domain_renewal_order.period_value,
         unit=domain_renewal_order.period_unit
     )
-
     try:
         domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
         raise rpc_error
 
-    try:
-        _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-            domain_renewal_order.domain, period, domain_data.expiry_date
-        )
-    except grpc.RpcError as rpc_error:
-        domain_renewal_order.state = domain_renewal_order.STATE_FAILED
-        domain_renewal_order.last_error = rpc_error.details()
+    if zone.direct_renew_supported:
+        try:
+            _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
+                domain_renewal_order.domain, period, domain_data.expiry_date
+            )
+        except grpc.RpcError as rpc_error:
+            domain_renewal_order.state = process_domain_renewal.STATE_PENDING_APPROVAL
+            domain_renewal_order.last_error = rpc_error.details()
+            domain_renewal_order.save()
+            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
+            logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()},"
+                         f" passing off to human")
+            return
+
+        gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
+
+        domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
+        domain_renewal_order.redirect_uri = None
+        domain_renewal_order.last_error = None
         domain_renewal_order.save()
-        billing.reverse_charge(domain_renewal_order.id)
-        logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
-        return
 
-    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
+        logger.info(f"{domain_renewal_order.domain} successfully renewed")
 
-    domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
-    domain_renewal_order.redirect_uri = None
-    domain_renewal_order.last_error = None
-    domain_renewal_order.save()
+    else:
+        gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
 
-    logger.info(f"{domain_renewal_order.domain} successfully renewed")
+        domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
+        domain_renewal_order.save()
+
+        logger.info(f"{domain_renewal_order.domain} successfully requested renewal")
 
 
 @shared_task(
@@ -414,6 +419,34 @@ def process_domain_renewal(renewal_order_id):
         success_func=process_domain_renewal_paid,
         notif_queue="domains_renew_billing_notif"
     )
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_renewal_complete(renew_order_id):
+    domain_renew_order = \
+        models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+
+    domain_renew_order.state = domain_renew_order.STATE_COMPLETED
+    domain_renew_order.redirect_uri = None
+    domain_renew_order.last_error = None
+    domain_renew_order.save()
+    gchat_bot.notify_renew.delay(domain_renew_order.id)
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_renewal_failed(renew_order_id):
+    domain_renew_order = \
+        models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+
+    billing.reverse_charge(domain_renew_order.id)
+    domain_renew_order.state = domain_renew_order.STATE_FAILED
+    domain_renew_order.save()
 
 
 @shared_task(
@@ -771,31 +804,40 @@ def process_domain_auto_renew_paid(renew_order_id):
         models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainAutomaticRenewOrder
     zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
 
+    period = apps.epp_api.Period(
+        value=domain_renewal_order.period_value,
+        unit=domain_renewal_order.period_unit
+    )
+
+    try:
+        domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
+    except grpc.RpcError as rpc_error:
+        logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
+        raise rpc_error
+
     if zone.renew_supported:
-        period = apps.epp_api.Period(
-            value=domain_renewal_order.period_value,
-            unit=domain_renewal_order.period_unit
-        )
+        if zone.direct_renew_supported:
+            try:
+                _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
+                    domain_renewal_order.domain, period, domain_data.expiry_date
+                )
+            except grpc.RpcError as rpc_error:
+                domain_renewal_order.state = domain_renewal_order.STATE_FAILED
+                domain_renewal_order.last_error = rpc_error.details()
+                domain_renewal_order.save()
+                billing.reverse_charge(domain_renewal_order.id)
+                logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
+                return
+        else:
+            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period), auto=True)
 
-        try:
-            domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
-        except grpc.RpcError as rpc_error:
-            logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
-            raise rpc_error
-
-        try:
-            _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-                domain_renewal_order.domain, period, domain_data.expiry_date
-            )
-        except grpc.RpcError as rpc_error:
-            domain_renewal_order.state = domain_renewal_order.STATE_FAILED
-            domain_renewal_order.last_error = rpc_error.details()
+            domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
             domain_renewal_order.save()
-            billing.reverse_charge(domain_renewal_order.id)
-            logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
+
+            logger.info(f"{domain_renewal_order.domain} successfully requested renewal")
             return
 
-        gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
+    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
 
     domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
     domain_renewal_order.redirect_uri = None
@@ -804,3 +846,32 @@ def process_domain_auto_renew_paid(renew_order_id):
 
     emails.mail_auto_renew_success.delay(domain_renewal_order.id)
     logger.info(f"{domain_renewal_order.domain} successfully renewed")
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_auto_renew_complete(renew_order_id):
+    domain_renew_order = \
+        models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+
+    emails.mail_auto_renew_success.delay(domain_renew_order.id)
+
+    domain_renew_order.state = domain_renew_order.STATE_COMPLETED
+    domain_renew_order.redirect_uri = None
+    domain_renew_order.last_error = None
+    domain_renew_order.save()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_auto_renew_failed(renew_order_id):
+    domain_renew_order = \
+        models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+
+    billing.reverse_charge(domain_renew_order.id)
+    domain_renew_order.state = domain_renew_order.STATE_FAILED
+    domain_renew_order.save()

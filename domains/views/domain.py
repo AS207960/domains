@@ -260,28 +260,28 @@ def domain(request, domain_id):
                             return redirect('host_create', host)
 
         if domain_info.registrant_supported:
-            registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user)
+            registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user, domain_info)
             registrant_form.set_cur_id(cur_id=domain_data.registrant, registry_id=domain_data.registry_name)
         else:
             registrant = user_domain.registrant_contact
             registrant_form.fields['contact'].value = user_domain.registrant_contact.id
 
-        if domain_data.admin:
-            admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user)
+        if domain_data.admin and domain_info.admin_supported:
+            admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user, domain_info)
             admin_contact_form.set_cur_id(cur_id=domain_data.admin.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.admin_contact:
             admin = user_domain.admin_contact
             admin_contact_form.fields['contact'].value = user_domain.admin_contact.id
 
-        if domain_data.billing:
-            billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, request.user)
+        if domain_data.billing and domain_info.billing_supported:
+            billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, request.user, domain_info)
             billing_contact_form.set_cur_id(cur_id=domain_data.billing.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.billing_contact:
             billing = user_domain.billing_contact
             billing_contact_form.fields['contact'].value = user_domain.billing_contact.id
 
-        if domain_data.tech:
-            tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user)
+        if domain_data.tech and domain_info.tech_supported:
+            tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user, domain_info)
             tech_contact_form.set_cur_id(cur_id=domain_data.tech.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.admin_contact:
             tech = user_domain.tech_contact
@@ -394,7 +394,7 @@ def update_domain_contact(request, domain_id):
                     user_domain.admin_contact = contact
                     if domain_info.admin_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -402,7 +402,7 @@ def update_domain_contact(request, domain_id):
                     user_domain.tech_contact = contact
                     if domain_info.tech_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -410,7 +410,7 @@ def update_domain_contact(request, domain_id):
                     user_domain.billing_contact = contact
                     if domain_info.billing_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name)
+                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -418,7 +418,7 @@ def update_domain_contact(request, domain_id):
                 user_domain.save()
             elif domain_info.registrant_change_supported:
                 if domain_info.registrant_supported:
-                    contact_id = contact.get_registry_id(domain_data.registry_name)
+                    contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
                     domain_data.set_registrant(contact_id.registry_contact_id)
 
                 user_domain.registrant_contact = contact
@@ -604,6 +604,8 @@ def add_domain_host_obj(request, domain_id):
     if form_set.is_valid():
         hosts = []
 
+        action = request.POST.get("action")
+
         for form in form_set.forms:
             host_obj = form.cleaned_data.get('host')
             if host_obj:
@@ -617,6 +619,19 @@ def add_domain_host_obj(request, domain_id):
             for host_obj in hosts:
                 try:
                     host_available, _ = apps.epp_client.check_host(host_obj, domain_data.registry_name)
+
+                    if host_available:
+                        if domain_info.registry == domain_info.REGISTRY_ISNIC:
+                            if user_domain.tech_contact:
+                                zone_contact = user_domain.tech_contact
+                            else:
+                                zone_contact = user_domain.registrant_contact
+
+                            isnic_zone_contact = zone_contact.get_registry_id(domain_data.registry_name, domain_info)
+                        else:
+                            isnic_zone_contact = None
+
+                        apps.epp_client.create_host(host_obj, [], domain_data.registry_name, isnic_zone_contact.registry_contact_id)
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                     return render(request, "domains/error.html", {
@@ -624,18 +639,8 @@ def add_domain_host_obj(request, domain_id):
                         "back_url": referrer
                     })
 
-                if host_available:
-                    try:
-                        apps.epp_client.create_host(host_obj, [], domain_data.registry_name)
-                    except grpc.RpcError as rpc_error:
-                        error = rpc_error.details()
-                        return render(request, "domains/error.html", {
-                            "error": error,
-                            "back_url": referrer
-                        })
-
         try:
-            domain_data.add_host_objs(hosts)
+            domain_data.add_host_objs(hosts, replace=action=="Replace")
         except grpc.RpcError as rpc_error:
             error = rpc_error.details()
             return render(request, "domains/error.html", {
@@ -1235,8 +1240,11 @@ def confirm_order(request, order, pending_template, passed_off_template=None):
                 "domain_name": order.unicode_domain
             })
 
+        zone, sld = zone_info.get_domain_info(order.domain)
+
         return render(request, pending_template, {
-            "domain_name": order.unicode_domain
+            "domain_name": order.unicode_domain,
+            "zone": zone,
         })
     elif order.state == order.STATE_FAILED:
         return render(request, "domains/error.html", {
@@ -1665,7 +1673,7 @@ def domain_transfer(request, domain_name):
 
             order = models.DomainTransferOrder(
                 domain=domain_name,
-                auth_code=form.cleaned_data['auth_code'],
+                auth_code=form.cleaned_data['auth_code'] if zone.auth_code_for_transfer else "N/A",
                 registrant_contact=registrant,
                 admin_contact=admin_contact,
                 billing_contact=billing_contact,

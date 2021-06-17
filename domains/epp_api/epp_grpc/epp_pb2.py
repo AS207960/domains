@@ -19,6 +19,9 @@ from . import host_pb2 as host__pb2
 from . import rgp_pb2 as rgp__pb2
 from . import nominet_pb2 as nominet__pb2
 from . import traficom_pb2 as traficom__pb2
+from . import maintenance_pb2 as maintenance__pb2
+from . import eurid_pb2 as eurid__pb2
+from . import common_pb2 as common__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -27,9 +30,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\tepp.proto\x12\x03\x65pp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\rcontact.proto\x1a\x0c\x64omain.proto\x1a\nhost.proto\x1a\trgp.proto\x1a\rnominet.proto\x1a\x0etraficom.proto\"%\n\x0cRegistryInfo\x12\x15\n\rregistry_name\x18\x01 \x01(\t\"\x19\n\x07PollAck\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\"\xde\t\n\tPollReply\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12\x30\n\x0c\x65nqueue_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x32\n\x0b\x64omain_info\x18\x04 \x01(\x0b\x32\x1b.epp.domain.DomainInfoReplyH\x00\x12:\n\x0f\x64omain_transfer\x18\x06 \x01(\x0b\x32\x1f.epp.domain.DomainTransferReplyH\x00\x12\x36\n\rdomain_create\x18\x07 \x01(\x0b\x32\x1d.epp.domain.DomainCreateReplyH\x00\x12\x34\n\x0c\x64omain_renew\x18\x08 \x01(\x0b\x32\x1c.epp.domain.DomainRenewReplyH\x00\x12\x30\n\ndomain_pan\x18\t \x01(\x0b\x32\x1a.epp.domain.DomainPANReplyH\x00\x12\x35\n\x0c\x63ontact_info\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyH\x00\x12=\n\x10\x63ontact_transfer\x18\x14 \x01(\x0b\x32!.epp.contact.ContactTransferReplyH\x00\x12\x33\n\x0b\x63ontact_pan\x18\x15 \x01(\x0b\x32\x1c.epp.contact.ContactPANReplyH\x00\x12\x43\n\x1anominet_domain_cancel_data\x18\x0b \x01(\x0b\x32\x1d.epp.nominet.DomainCancelDataH\x00\x12\x45\n\x1bnominet_domain_release_data\x18\x0c \x01(\x0b\x32\x1e.epp.nominet.DomainReleaseDataH\x00\x12V\n$nominet_domain_registrar_change_data\x18\r \x01(\x0b\x32&.epp.nominet.DomainRegistrarChangeDataH\x00\x12?\n\x18nominet_host_cancel_data\x18\x0e \x01(\x0b\x32\x1b.epp.nominet.HostCancelDataH\x00\x12\x38\n\x14nominet_process_data\x18\x0f \x01(\x0b\x32\x18.epp.nominet.ProcessDataH\x00\x12\x38\n\x14nominet_suspend_data\x18\x10 \x01(\x0b\x32\x18.epp.nominet.SuspendDataH\x00\x12?\n\x18nominet_domain_fail_data\x18\x11 \x01(\x0b\x32\x1b.epp.nominet.DomainFailDataH\x00\x12O\n nominet_registrant_transfer_data\x18\x12 \x01(\x0b\x32#.epp.nominet.RegistrantTransferDataH\x00\x12\x32\n\x11traficom_trn_data\x18\x16 \x01(\x0b\x32\x15.epp.traficom.TrnDataH\x00\x12\x36\n\x19verisign_low_balance_data\x18\x13 \x01(\x0b\x32\x11.epp.BalanceReplyH\x00\x12$\n\x0b\x63hange_data\x18\n \x01(\x0b\x32\x0f.epp.ChangeDataB\x06\n\x04\x64\x61ta\"\xa2\x06\n\nChangeData\x12\x31\n\x0c\x63hange_state\x18\x01 \x01(\x0e\x32\x1b.epp.ChangeData.ChangeState\x12\x32\n\toperation\x18\x02 \x01(\x0b\x32\x1f.epp.ChangeData.ChangeOperation\x12(\n\x04\x64\x61te\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1d\n\x15server_transaction_id\x18\x04 \x01(\t\x12\x0b\n\x03who\x18\x05 \x01(\t\x12\'\n\x07\x63\x61se_id\x18\x06 \x01(\x0b\x32\x16.epp.ChangeData.CaseID\x12,\n\x06reason\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xab\x02\n\x0f\x43hangeOperation\x12K\n\x0eoperation_type\x18\x01 \x01(\x0e\x32\x33.epp.ChangeData.ChangeOperation.ChangeOperationType\x12/\n\toperation\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x99\x01\n\x13\x43hangeOperationType\x12\n\n\x06\x43ustom\x10\x00\x12\n\n\x06\x43reate\x10\x01\x12\n\n\x06\x44\x65lete\x10\x02\x12\t\n\x05Renew\x10\x03\x12\x0c\n\x08Transfer\x10\x04\x12\n\n\x06Update\x10\x05\x12\x0b\n\x07Restore\x10\x06\x12\r\n\tAutoRenew\x10\x07\x12\x0e\n\nAutoDelete\x10\x08\x12\r\n\tAutoPurge\x10\t\x1a\xab\x01\n\x06\x43\x61seID\x12\x37\n\x0c\x63\x61se_id_type\x18\x01 \x01(\x0e\x32!.epp.ChangeData.CaseID.CaseIDType\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07\x63\x61se_id\x18\x03 \x01(\t\"+\n\nCaseIDType\x12\n\n\x06\x43ustom\x10\x00\x12\x08\n\x04UDRP\x10\x01\x12\x07\n\x03URS\x10\x02\"$\n\x0b\x43hangeState\x12\t\n\x05\x41\x46TER\x10\x00\x12\n\n\x06\x42\x45\x46ORE\x10\x01\"\xb6\x02\n\x0c\x42\x61lanceReply\x12\x0f\n\x07\x62\x61lance\x18\x01 \x01(\t\x12\x10\n\x08\x63urrency\x18\x02 \x01(\t\x12\x32\n\x0c\x63redit_limit\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x36\n\x10\x61vailable_credit\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12>\n\x16\x66ixed_credit_threshold\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValueH\x00\x12\x43\n\x1bpercentage_credit_threshold\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueH\x00\x42\x12\n\x10\x63redit_threshold2\x9f\x14\n\x08\x45PPProxy\x12K\n\x0b\x44omainCheck\x12\x1e.epp.domain.DomainCheckRequest\x1a\x1c.epp.domain.DomainCheckReply\x12]\n\x11\x44omainClaimsCheck\x12$.epp.domain.DomainClaimsCheckRequest\x1a\".epp.domain.DomainClaimsCheckReply\x12\x63\n\x14\x44omainTrademarkCheck\x12\'.epp.domain.DomainTrademarkCheckRequest\x1a\".epp.domain.DomainClaimsCheckReply\x12H\n\nDomainInfo\x12\x1d.epp.domain.DomainInfoRequest\x1a\x1b.epp.domain.DomainInfoReply\x12N\n\x0c\x44omainCreate\x12\x1f.epp.domain.DomainCreateRequest\x1a\x1d.epp.domain.DomainCreateReply\x12N\n\x0c\x44omainDelete\x12\x1f.epp.domain.DomainDeleteRequest\x1a\x1d.epp.domain.DomainDeleteReply\x12N\n\x0c\x44omainUpdate\x12\x1f.epp.domain.DomainUpdateRequest\x1a\x1d.epp.domain.DomainUpdateReply\x12K\n\x0b\x44omainRenew\x12\x1e.epp.domain.DomainRenewRequest\x1a\x1c.epp.domain.DomainRenewReply\x12^\n\x13\x44omainTransferQuery\x12&.epp.domain.DomainTransferQueryRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x62\n\x15\x44omainTransferRequest\x12(.epp.domain.DomainTransferRequestRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferCancel\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferAccept\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferReject\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x46\n\x14\x44omainRestoreRequest\x12\x17.epp.rgp.RequestRequest\x1a\x15.epp.rgp.RestoreReply\x12\x41\n\tHostCheck\x12\x1a.epp.host.HostCheckRequest\x1a\x18.epp.host.HostCheckReply\x12>\n\x08HostInfo\x12\x19.epp.host.HostInfoRequest\x1a\x17.epp.host.HostInfoReply\x12\x44\n\nHostCreate\x12\x1b.epp.host.HostCreateRequest\x1a\x19.epp.host.HostCreateReply\x12\x44\n\nHostDelete\x12\x1b.epp.host.HostDeleteRequest\x1a\x19.epp.host.HostDeleteReply\x12\x44\n\nHostUpdate\x12\x1b.epp.host.HostUpdateRequest\x1a\x19.epp.host.HostUpdateReply\x12P\n\x0c\x43ontactCheck\x12 .epp.contact.ContactCheckRequest\x1a\x1e.epp.contact.ContactCheckReply\x12M\n\x0b\x43ontactInfo\x12\x1f.epp.contact.ContactInfoRequest\x1a\x1d.epp.contact.ContactInfoReply\x12S\n\rContactCreate\x12!.epp.contact.ContactCreateRequest\x1a\x1f.epp.contact.ContactCreateReply\x12S\n\rContactDelete\x12!.epp.contact.ContactDeleteRequest\x1a\x1f.epp.contact.ContactDeleteReply\x12S\n\rContactUpdate\x12!.epp.contact.ContactUpdateRequest\x1a\x1f.epp.contact.ContactUpdateReply\x12\x63\n\x14\x43ontactTransferQuery\x12(.epp.contact.ContactTransferQueryRequest\x1a!.epp.contact.ContactTransferReply\x12g\n\x16\x43ontactTransferRequest\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferAccept\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferReject\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12(\n\x04Poll\x12\x0c.epp.PollAck\x1a\x0e.epp.PollReply(\x01\x30\x01\x12\x45\n\x0eNominetTagList\x12\x11.epp.RegistryInfo\x1a .epp.nominet.NominetTagListReply\x12\x33\n\x0b\x42\x61lanceInfo\x12\x11.epp.RegistryInfo\x1a\x11.epp.BalanceReplyb\x06proto3'
+  serialized_pb=b'\n\tepp.proto\x12\x03\x65pp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\rcontact.proto\x1a\x0c\x64omain.proto\x1a\nhost.proto\x1a\trgp.proto\x1a\rnominet.proto\x1a\x0etraficom.proto\x1a\x11maintenance.proto\x1a\x0b\x65urid.proto\x1a\x0c\x63ommon.proto\"%\n\x0cRegistryInfo\x12\x15\n\rregistry_name\x18\x01 \x01(\t\"\x19\n\x07PollAck\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\"\xaa\n\n\tPollReply\x12\x0e\n\x06msg_id\x18\x01 \x01(\t\x12\x30\n\x0c\x65nqueue_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x32\n\x0b\x64omain_info\x18\x04 \x01(\x0b\x32\x1b.epp.domain.DomainInfoReplyH\x00\x12:\n\x0f\x64omain_transfer\x18\x06 \x01(\x0b\x32\x1f.epp.domain.DomainTransferReplyH\x00\x12\x36\n\rdomain_create\x18\x07 \x01(\x0b\x32\x1d.epp.domain.DomainCreateReplyH\x00\x12\x34\n\x0c\x64omain_renew\x18\x08 \x01(\x0b\x32\x1c.epp.domain.DomainRenewReplyH\x00\x12\x30\n\ndomain_pan\x18\t \x01(\x0b\x32\x1a.epp.domain.DomainPANReplyH\x00\x12\x35\n\x0c\x63ontact_info\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyH\x00\x12=\n\x10\x63ontact_transfer\x18\x14 \x01(\x0b\x32!.epp.contact.ContactTransferReplyH\x00\x12\x33\n\x0b\x63ontact_pan\x18\x15 \x01(\x0b\x32\x1c.epp.contact.ContactPANReplyH\x00\x12:\n\x15nominet_domain_cancel\x18\x0b \x01(\x0b\x32\x19.epp.nominet.DomainCancelH\x00\x12<\n\x16nominet_domain_release\x18\x0c \x01(\x0b\x32\x1a.epp.nominet.DomainReleaseH\x00\x12M\n\x1fnominet_domain_registrar_change\x18\r \x01(\x0b\x32\".epp.nominet.DomainRegistrarChangeH\x00\x12\x36\n\x13nominet_host_cancel\x18\x0e \x01(\x0b\x32\x17.epp.nominet.HostCancelH\x00\x12/\n\x0fnominet_process\x18\x0f \x01(\x0b\x32\x14.epp.nominet.ProcessH\x00\x12/\n\x0fnominet_suspend\x18\x10 \x01(\x0b\x32\x14.epp.nominet.SuspendH\x00\x12\x36\n\x13nominet_domain_fail\x18\x11 \x01(\x0b\x32\x17.epp.nominet.DomainFailH\x00\x12\x46\n\x1bnominet_registrant_transfer\x18\x12 \x01(\x0b\x32\x1f.epp.nominet.RegistrantTransferH\x00\x12-\n\x0ctraficom_trn\x18\x16 \x01(\x0b\x32\x15.epp.traficom.TrnDataH\x00\x12\x31\n\x14verisign_low_balance\x18\x13 \x01(\x0b\x32\x11.epp.BalanceReplyH\x00\x12\x41\n\x10maintenance_info\x18\x18 \x01(\x0b\x32%.epp.maintenance.MaintenanceInfoReplyH\x00\x12*\n\neurid_poll\x18\x19 \x01(\x0b\x32\x14.epp.eurid.PollReplyH\x00\x12$\n\x0b\x63hange_data\x18\n \x01(\x0b\x32\x0f.epp.ChangeData\x12-\n\x08\x63md_resp\x18\x17 \x01(\x0b\x32\x1b.epp.common.CommandResponseB\x06\n\x04\x64\x61ta\"\xa2\x06\n\nChangeData\x12\x31\n\x0c\x63hange_state\x18\x01 \x01(\x0e\x32\x1b.epp.ChangeData.ChangeState\x12\x32\n\toperation\x18\x02 \x01(\x0b\x32\x1f.epp.ChangeData.ChangeOperation\x12(\n\x04\x64\x61te\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1d\n\x15server_transaction_id\x18\x04 \x01(\t\x12\x0b\n\x03who\x18\x05 \x01(\t\x12\'\n\x07\x63\x61se_id\x18\x06 \x01(\x0b\x32\x16.epp.ChangeData.CaseID\x12,\n\x06reason\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xab\x02\n\x0f\x43hangeOperation\x12K\n\x0eoperation_type\x18\x01 \x01(\x0e\x32\x33.epp.ChangeData.ChangeOperation.ChangeOperationType\x12/\n\toperation\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x99\x01\n\x13\x43hangeOperationType\x12\n\n\x06\x43ustom\x10\x00\x12\n\n\x06\x43reate\x10\x01\x12\n\n\x06\x44\x65lete\x10\x02\x12\t\n\x05Renew\x10\x03\x12\x0c\n\x08Transfer\x10\x04\x12\n\n\x06Update\x10\x05\x12\x0b\n\x07Restore\x10\x06\x12\r\n\tAutoRenew\x10\x07\x12\x0e\n\nAutoDelete\x10\x08\x12\r\n\tAutoPurge\x10\t\x1a\xab\x01\n\x06\x43\x61seID\x12\x37\n\x0c\x63\x61se_id_type\x18\x01 \x01(\x0e\x32!.epp.ChangeData.CaseID.CaseIDType\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07\x63\x61se_id\x18\x03 \x01(\t\"+\n\nCaseIDType\x12\n\n\x06\x43ustom\x10\x00\x12\x08\n\x04UDRP\x10\x01\x12\x07\n\x03URS\x10\x02\"$\n\x0b\x43hangeState\x12\t\n\x05\x41\x46TER\x10\x00\x12\n\n\x06\x42\x45\x46ORE\x10\x01\"\xe5\x02\n\x0c\x42\x61lanceReply\x12\x0f\n\x07\x62\x61lance\x18\x01 \x01(\t\x12\x10\n\x08\x63urrency\x18\x02 \x01(\t\x12\x32\n\x0c\x63redit_limit\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x36\n\x10\x61vailable_credit\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12>\n\x16\x66ixed_credit_threshold\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValueH\x00\x12\x43\n\x1bpercentage_credit_threshold\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueH\x00\x12-\n\x08\x63md_resp\x18\x07 \x01(\x0b\x32\x1b.epp.common.CommandResponseB\x12\n\x10\x63redit_threshold2\xd6\x18\n\x08\x45PPProxy\x12K\n\x0b\x44omainCheck\x12\x1e.epp.domain.DomainCheckRequest\x1a\x1c.epp.domain.DomainCheckReply\x12]\n\x11\x44omainClaimsCheck\x12$.epp.domain.DomainClaimsCheckRequest\x1a\".epp.domain.DomainClaimsCheckReply\x12\x63\n\x14\x44omainTrademarkCheck\x12\'.epp.domain.DomainTrademarkCheckRequest\x1a\".epp.domain.DomainClaimsCheckReply\x12H\n\nDomainInfo\x12\x1d.epp.domain.DomainInfoRequest\x1a\x1b.epp.domain.DomainInfoReply\x12N\n\x0c\x44omainCreate\x12\x1f.epp.domain.DomainCreateRequest\x1a\x1d.epp.domain.DomainCreateReply\x12N\n\x0c\x44omainDelete\x12\x1f.epp.domain.DomainDeleteRequest\x1a\x1d.epp.domain.DomainDeleteReply\x12N\n\x0c\x44omainUpdate\x12\x1f.epp.domain.DomainUpdateRequest\x1a\x1d.epp.domain.DomainUpdateReply\x12K\n\x0b\x44omainRenew\x12\x1e.epp.domain.DomainRenewRequest\x1a\x1c.epp.domain.DomainRenewReply\x12^\n\x13\x44omainTransferQuery\x12&.epp.domain.DomainTransferQueryRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x62\n\x15\x44omainTransferRequest\x12(.epp.domain.DomainTransferRequestRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferCancel\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferAccept\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x66\n\x14\x44omainTransferReject\x12-.epp.domain.DomainTransferAcceptRejectRequest\x1a\x1f.epp.domain.DomainTransferReply\x12\x46\n\x14\x44omainRestoreRequest\x12\x17.epp.rgp.RequestRequest\x1a\x15.epp.rgp.RestoreReply\x12J\n\nDomainSync\x12\x1d.epp.domain.DomainSyncRequest\x1a\x1d.epp.domain.DomainUpdateReply\x12\x41\n\tHostCheck\x12\x1a.epp.host.HostCheckRequest\x1a\x18.epp.host.HostCheckReply\x12>\n\x08HostInfo\x12\x19.epp.host.HostInfoRequest\x1a\x17.epp.host.HostInfoReply\x12\x44\n\nHostCreate\x12\x1b.epp.host.HostCreateRequest\x1a\x19.epp.host.HostCreateReply\x12\x44\n\nHostDelete\x12\x1b.epp.host.HostDeleteRequest\x1a\x19.epp.host.HostDeleteReply\x12\x44\n\nHostUpdate\x12\x1b.epp.host.HostUpdateRequest\x1a\x19.epp.host.HostUpdateReply\x12P\n\x0c\x43ontactCheck\x12 .epp.contact.ContactCheckRequest\x1a\x1e.epp.contact.ContactCheckReply\x12M\n\x0b\x43ontactInfo\x12\x1f.epp.contact.ContactInfoRequest\x1a\x1d.epp.contact.ContactInfoReply\x12S\n\rContactCreate\x12!.epp.contact.ContactCreateRequest\x1a\x1f.epp.contact.ContactCreateReply\x12S\n\rContactDelete\x12!.epp.contact.ContactDeleteRequest\x1a\x1f.epp.contact.ContactDeleteReply\x12S\n\rContactUpdate\x12!.epp.contact.ContactUpdateRequest\x1a\x1f.epp.contact.ContactUpdateReply\x12\x63\n\x14\x43ontactTransferQuery\x12(.epp.contact.ContactTransferQueryRequest\x1a!.epp.contact.ContactTransferReply\x12g\n\x16\x43ontactTransferRequest\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferAccept\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12\x66\n\x15\x43ontactTransferReject\x12*.epp.contact.ContactTransferRequestRequest\x1a!.epp.contact.ContactTransferReply\x12K\n\x0fMaintenanceList\x12\x11.epp.RegistryInfo\x1a%.epp.maintenance.MaintenanceListReply\x12\x61\n\x0fMaintenanceInfo\x12\'.epp.maintenance.MaintenanceInfoRequest\x1a%.epp.maintenance.MaintenanceInfoReply\x12(\n\x04Poll\x12\x0c.epp.PollAck\x1a\x0e.epp.PollReply(\x01\x30\x01\x12\x45\n\x0eNominetTagList\x12\x11.epp.RegistryInfo\x1a .epp.nominet.NominetTagListReply\x12\x33\n\x0b\x42\x61lanceInfo\x12\x11.epp.RegistryInfo\x1a\x11.epp.BalanceReply\x12=\n\rHitPointsInfo\x12\x11.epp.RegistryInfo\x1a\x19.epp.eurid.HitPointsReply\x12M\n\x15RegistrationLimitInfo\x12\x11.epp.RegistryInfo\x1a!.epp.eurid.RegistrationLimitReply\x12J\n\x0e\x44NSQualityInfo\x12\x1c.epp.eurid.DNSQualityRequest\x1a\x1a.epp.eurid.DNSQualityReply\x12_\n\x15\x44NSSECEligibilityInfo\x12#.epp.eurid.DNSSECEligibilityRequest\x1a!.epp.eurid.DNSSECEligibilityReplyb\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,host__pb2.DESCRIPTOR,rgp__pb2.DESCRIPTOR,nominet__pb2.DESCRIPTOR,traficom__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,host__pb2.DESCRIPTOR,rgp__pb2.DESCRIPTOR,nominet__pb2.DESCRIPTOR,traficom__pb2.DESCRIPTOR,maintenance__pb2.DESCRIPTOR,eurid__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,])
 
 
 
@@ -93,8 +96,8 @@ _CHANGEDATA_CHANGEOPERATION_CHANGEOPERATIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1919,
-  serialized_end=2072,
+  serialized_start=2041,
+  serialized_end=2194,
 )
 _sym_db.RegisterEnumDescriptor(_CHANGEDATA_CHANGEOPERATION_CHANGEOPERATIONTYPE)
 
@@ -123,8 +126,8 @@ _CHANGEDATA_CASEID_CASEIDTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2203,
-  serialized_end=2246,
+  serialized_start=2325,
+  serialized_end=2368,
 )
 _sym_db.RegisterEnumDescriptor(_CHANGEDATA_CASEID_CASEIDTYPE)
 
@@ -148,8 +151,8 @@ _CHANGEDATA_CHANGESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2248,
-  serialized_end=2284,
+  serialized_start=2370,
+  serialized_end=2406,
 )
 _sym_db.RegisterEnumDescriptor(_CHANGEDATA_CHANGESTATE)
 
@@ -181,8 +184,8 @@ _REGISTRYINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=166,
-  serialized_end=203,
+  serialized_start=212,
+  serialized_end=249,
 )
 
 
@@ -213,8 +216,8 @@ _POLLACK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=205,
-  serialized_end=230,
+  serialized_start=251,
+  serialized_end=276,
 )
 
 
@@ -304,78 +307,99 @@ _POLLREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_domain_cancel_data', full_name='epp.PollReply.nominet_domain_cancel_data', index=11,
+      name='nominet_domain_cancel', full_name='epp.PollReply.nominet_domain_cancel', index=11,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_domain_release_data', full_name='epp.PollReply.nominet_domain_release_data', index=12,
+      name='nominet_domain_release', full_name='epp.PollReply.nominet_domain_release', index=12,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_domain_registrar_change_data', full_name='epp.PollReply.nominet_domain_registrar_change_data', index=13,
+      name='nominet_domain_registrar_change', full_name='epp.PollReply.nominet_domain_registrar_change', index=13,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_host_cancel_data', full_name='epp.PollReply.nominet_host_cancel_data', index=14,
+      name='nominet_host_cancel', full_name='epp.PollReply.nominet_host_cancel', index=14,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_process_data', full_name='epp.PollReply.nominet_process_data', index=15,
+      name='nominet_process', full_name='epp.PollReply.nominet_process', index=15,
       number=15, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_suspend_data', full_name='epp.PollReply.nominet_suspend_data', index=16,
+      name='nominet_suspend', full_name='epp.PollReply.nominet_suspend', index=16,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_domain_fail_data', full_name='epp.PollReply.nominet_domain_fail_data', index=17,
+      name='nominet_domain_fail', full_name='epp.PollReply.nominet_domain_fail', index=17,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='nominet_registrant_transfer_data', full_name='epp.PollReply.nominet_registrant_transfer_data', index=18,
+      name='nominet_registrant_transfer', full_name='epp.PollReply.nominet_registrant_transfer', index=18,
       number=18, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='traficom_trn_data', full_name='epp.PollReply.traficom_trn_data', index=19,
+      name='traficom_trn', full_name='epp.PollReply.traficom_trn', index=19,
       number=22, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='verisign_low_balance_data', full_name='epp.PollReply.verisign_low_balance_data', index=20,
+      name='verisign_low_balance', full_name='epp.PollReply.verisign_low_balance', index=20,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='change_data', full_name='epp.PollReply.change_data', index=21,
+      name='maintenance_info', full_name='epp.PollReply.maintenance_info', index=21,
+      number=24, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='eurid_poll', full_name='epp.PollReply.eurid_poll', index=22,
+      number=25, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='change_data', full_name='epp.PollReply.change_data', index=23,
       number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.PollReply.cmd_resp', index=24,
+      number=23, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -397,8 +421,8 @@ _POLLREPLY = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=233,
-  serialized_end=1479,
+  serialized_start=279,
+  serialized_end=1601,
 )
 
 
@@ -437,8 +461,8 @@ _CHANGEDATA_CHANGEOPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1773,
-  serialized_end=2072,
+  serialized_start=1895,
+  serialized_end=2194,
 )
 
 _CHANGEDATA_CASEID = _descriptor.Descriptor(
@@ -483,8 +507,8 @@ _CHANGEDATA_CASEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2075,
-  serialized_end=2246,
+  serialized_start=2197,
+  serialized_end=2368,
 )
 
 _CHANGEDATA = _descriptor.Descriptor(
@@ -557,8 +581,8 @@ _CHANGEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1482,
-  serialized_end=2284,
+  serialized_start=1604,
+  serialized_end=2406,
 )
 
 
@@ -612,6 +636,13 @@ _BALANCEREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.BalanceReply.cmd_resp', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -629,8 +660,8 @@ _BALANCEREPLY = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=2287,
-  serialized_end=2597,
+  serialized_start=2409,
+  serialized_end=2766,
 )
 
 _POLLREPLY.fields_by_name['enqueue_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -642,17 +673,20 @@ _POLLREPLY.fields_by_name['domain_pan'].message_type = domain__pb2._DOMAINPANREP
 _POLLREPLY.fields_by_name['contact_info'].message_type = contact__pb2._CONTACTINFOREPLY
 _POLLREPLY.fields_by_name['contact_transfer'].message_type = contact__pb2._CONTACTTRANSFERREPLY
 _POLLREPLY.fields_by_name['contact_pan'].message_type = contact__pb2._CONTACTPANREPLY
-_POLLREPLY.fields_by_name['nominet_domain_cancel_data'].message_type = nominet__pb2._DOMAINCANCELDATA
-_POLLREPLY.fields_by_name['nominet_domain_release_data'].message_type = nominet__pb2._DOMAINRELEASEDATA
-_POLLREPLY.fields_by_name['nominet_domain_registrar_change_data'].message_type = nominet__pb2._DOMAINREGISTRARCHANGEDATA
-_POLLREPLY.fields_by_name['nominet_host_cancel_data'].message_type = nominet__pb2._HOSTCANCELDATA
-_POLLREPLY.fields_by_name['nominet_process_data'].message_type = nominet__pb2._PROCESSDATA
-_POLLREPLY.fields_by_name['nominet_suspend_data'].message_type = nominet__pb2._SUSPENDDATA
-_POLLREPLY.fields_by_name['nominet_domain_fail_data'].message_type = nominet__pb2._DOMAINFAILDATA
-_POLLREPLY.fields_by_name['nominet_registrant_transfer_data'].message_type = nominet__pb2._REGISTRANTTRANSFERDATA
-_POLLREPLY.fields_by_name['traficom_trn_data'].message_type = traficom__pb2._TRNDATA
-_POLLREPLY.fields_by_name['verisign_low_balance_data'].message_type = _BALANCEREPLY
+_POLLREPLY.fields_by_name['nominet_domain_cancel'].message_type = nominet__pb2._DOMAINCANCEL
+_POLLREPLY.fields_by_name['nominet_domain_release'].message_type = nominet__pb2._DOMAINRELEASE
+_POLLREPLY.fields_by_name['nominet_domain_registrar_change'].message_type = nominet__pb2._DOMAINREGISTRARCHANGE
+_POLLREPLY.fields_by_name['nominet_host_cancel'].message_type = nominet__pb2._HOSTCANCEL
+_POLLREPLY.fields_by_name['nominet_process'].message_type = nominet__pb2._PROCESS
+_POLLREPLY.fields_by_name['nominet_suspend'].message_type = nominet__pb2._SUSPEND
+_POLLREPLY.fields_by_name['nominet_domain_fail'].message_type = nominet__pb2._DOMAINFAIL
+_POLLREPLY.fields_by_name['nominet_registrant_transfer'].message_type = nominet__pb2._REGISTRANTTRANSFER
+_POLLREPLY.fields_by_name['traficom_trn'].message_type = traficom__pb2._TRNDATA
+_POLLREPLY.fields_by_name['verisign_low_balance'].message_type = _BALANCEREPLY
+_POLLREPLY.fields_by_name['maintenance_info'].message_type = maintenance__pb2._MAINTENANCEINFOREPLY
+_POLLREPLY.fields_by_name['eurid_poll'].message_type = eurid__pb2._POLLREPLY
 _POLLREPLY.fields_by_name['change_data'].message_type = _CHANGEDATA
+_POLLREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _POLLREPLY.oneofs_by_name['data'].fields.append(
   _POLLREPLY.fields_by_name['domain_info'])
 _POLLREPLY.fields_by_name['domain_info'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
@@ -678,35 +712,41 @@ _POLLREPLY.oneofs_by_name['data'].fields.append(
   _POLLREPLY.fields_by_name['contact_pan'])
 _POLLREPLY.fields_by_name['contact_pan'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_domain_cancel_data'])
-_POLLREPLY.fields_by_name['nominet_domain_cancel_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_domain_cancel'])
+_POLLREPLY.fields_by_name['nominet_domain_cancel'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_domain_release_data'])
-_POLLREPLY.fields_by_name['nominet_domain_release_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_domain_release'])
+_POLLREPLY.fields_by_name['nominet_domain_release'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_domain_registrar_change_data'])
-_POLLREPLY.fields_by_name['nominet_domain_registrar_change_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_domain_registrar_change'])
+_POLLREPLY.fields_by_name['nominet_domain_registrar_change'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_host_cancel_data'])
-_POLLREPLY.fields_by_name['nominet_host_cancel_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_host_cancel'])
+_POLLREPLY.fields_by_name['nominet_host_cancel'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_process_data'])
-_POLLREPLY.fields_by_name['nominet_process_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_process'])
+_POLLREPLY.fields_by_name['nominet_process'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_suspend_data'])
-_POLLREPLY.fields_by_name['nominet_suspend_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_suspend'])
+_POLLREPLY.fields_by_name['nominet_suspend'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_domain_fail_data'])
-_POLLREPLY.fields_by_name['nominet_domain_fail_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_domain_fail'])
+_POLLREPLY.fields_by_name['nominet_domain_fail'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['nominet_registrant_transfer_data'])
-_POLLREPLY.fields_by_name['nominet_registrant_transfer_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['nominet_registrant_transfer'])
+_POLLREPLY.fields_by_name['nominet_registrant_transfer'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['traficom_trn_data'])
-_POLLREPLY.fields_by_name['traficom_trn_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['traficom_trn'])
+_POLLREPLY.fields_by_name['traficom_trn'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _POLLREPLY.oneofs_by_name['data'].fields.append(
-  _POLLREPLY.fields_by_name['verisign_low_balance_data'])
-_POLLREPLY.fields_by_name['verisign_low_balance_data'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+  _POLLREPLY.fields_by_name['verisign_low_balance'])
+_POLLREPLY.fields_by_name['verisign_low_balance'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+_POLLREPLY.oneofs_by_name['data'].fields.append(
+  _POLLREPLY.fields_by_name['maintenance_info'])
+_POLLREPLY.fields_by_name['maintenance_info'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
+_POLLREPLY.oneofs_by_name['data'].fields.append(
+  _POLLREPLY.fields_by_name['eurid_poll'])
+_POLLREPLY.fields_by_name['eurid_poll'].containing_oneof = _POLLREPLY.oneofs_by_name['data']
 _CHANGEDATA_CHANGEOPERATION.fields_by_name['operation_type'].enum_type = _CHANGEDATA_CHANGEOPERATION_CHANGEOPERATIONTYPE
 _CHANGEDATA_CHANGEOPERATION.fields_by_name['operation'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CHANGEDATA_CHANGEOPERATION.containing_type = _CHANGEDATA
@@ -725,6 +765,7 @@ _BALANCEREPLY.fields_by_name['credit_limit'].message_type = google_dot_protobuf_
 _BALANCEREPLY.fields_by_name['available_credit'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _BALANCEREPLY.fields_by_name['fixed_credit_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _BALANCEREPLY.fields_by_name['percentage_credit_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_BALANCEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _BALANCEREPLY.oneofs_by_name['credit_threshold'].fields.append(
   _BALANCEREPLY.fields_by_name['fixed_credit_threshold'])
 _BALANCEREPLY.fields_by_name['fixed_credit_threshold'].containing_oneof = _BALANCEREPLY.oneofs_by_name['credit_threshold']
@@ -798,8 +839,8 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=2600,
-  serialized_end=5191,
+  serialized_start=2769,
+  serialized_end=5927,
   methods=[
   _descriptor.MethodDescriptor(
     name='DomainCheck',
@@ -942,9 +983,19 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='DomainSync',
+    full_name='epp.EPPProxy.DomainSync',
+    index=14,
+    containing_service=None,
+    input_type=domain__pb2._DOMAINSYNCREQUEST,
+    output_type=domain__pb2._DOMAINUPDATEREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='HostCheck',
     full_name='epp.EPPProxy.HostCheck',
-    index=14,
+    index=15,
     containing_service=None,
     input_type=host__pb2._HOSTCHECKREQUEST,
     output_type=host__pb2._HOSTCHECKREPLY,
@@ -954,7 +1005,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='HostInfo',
     full_name='epp.EPPProxy.HostInfo',
-    index=15,
+    index=16,
     containing_service=None,
     input_type=host__pb2._HOSTINFOREQUEST,
     output_type=host__pb2._HOSTINFOREPLY,
@@ -964,7 +1015,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='HostCreate',
     full_name='epp.EPPProxy.HostCreate',
-    index=16,
+    index=17,
     containing_service=None,
     input_type=host__pb2._HOSTCREATEREQUEST,
     output_type=host__pb2._HOSTCREATEREPLY,
@@ -974,7 +1025,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='HostDelete',
     full_name='epp.EPPProxy.HostDelete',
-    index=17,
+    index=18,
     containing_service=None,
     input_type=host__pb2._HOSTDELETEREQUEST,
     output_type=host__pb2._HOSTDELETEREPLY,
@@ -984,7 +1035,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='HostUpdate',
     full_name='epp.EPPProxy.HostUpdate',
-    index=18,
+    index=19,
     containing_service=None,
     input_type=host__pb2._HOSTUPDATEREQUEST,
     output_type=host__pb2._HOSTUPDATEREPLY,
@@ -994,7 +1045,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactCheck',
     full_name='epp.EPPProxy.ContactCheck',
-    index=19,
+    index=20,
     containing_service=None,
     input_type=contact__pb2._CONTACTCHECKREQUEST,
     output_type=contact__pb2._CONTACTCHECKREPLY,
@@ -1004,7 +1055,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactInfo',
     full_name='epp.EPPProxy.ContactInfo',
-    index=20,
+    index=21,
     containing_service=None,
     input_type=contact__pb2._CONTACTINFOREQUEST,
     output_type=contact__pb2._CONTACTINFOREPLY,
@@ -1014,7 +1065,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactCreate',
     full_name='epp.EPPProxy.ContactCreate',
-    index=21,
+    index=22,
     containing_service=None,
     input_type=contact__pb2._CONTACTCREATEREQUEST,
     output_type=contact__pb2._CONTACTCREATEREPLY,
@@ -1024,7 +1075,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactDelete',
     full_name='epp.EPPProxy.ContactDelete',
-    index=22,
+    index=23,
     containing_service=None,
     input_type=contact__pb2._CONTACTDELETEREQUEST,
     output_type=contact__pb2._CONTACTDELETEREPLY,
@@ -1034,7 +1085,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactUpdate',
     full_name='epp.EPPProxy.ContactUpdate',
-    index=23,
+    index=24,
     containing_service=None,
     input_type=contact__pb2._CONTACTUPDATEREQUEST,
     output_type=contact__pb2._CONTACTUPDATEREPLY,
@@ -1044,7 +1095,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactTransferQuery',
     full_name='epp.EPPProxy.ContactTransferQuery',
-    index=24,
+    index=25,
     containing_service=None,
     input_type=contact__pb2._CONTACTTRANSFERQUERYREQUEST,
     output_type=contact__pb2._CONTACTTRANSFERREPLY,
@@ -1054,7 +1105,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactTransferRequest',
     full_name='epp.EPPProxy.ContactTransferRequest',
-    index=25,
+    index=26,
     containing_service=None,
     input_type=contact__pb2._CONTACTTRANSFERREQUESTREQUEST,
     output_type=contact__pb2._CONTACTTRANSFERREPLY,
@@ -1064,7 +1115,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactTransferAccept',
     full_name='epp.EPPProxy.ContactTransferAccept',
-    index=26,
+    index=27,
     containing_service=None,
     input_type=contact__pb2._CONTACTTRANSFERREQUESTREQUEST,
     output_type=contact__pb2._CONTACTTRANSFERREPLY,
@@ -1074,7 +1125,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ContactTransferReject',
     full_name='epp.EPPProxy.ContactTransferReject',
-    index=27,
+    index=28,
     containing_service=None,
     input_type=contact__pb2._CONTACTTRANSFERREQUESTREQUEST,
     output_type=contact__pb2._CONTACTTRANSFERREPLY,
@@ -1082,9 +1133,29 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='MaintenanceList',
+    full_name='epp.EPPProxy.MaintenanceList',
+    index=29,
+    containing_service=None,
+    input_type=_REGISTRYINFO,
+    output_type=maintenance__pb2._MAINTENANCELISTREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='MaintenanceInfo',
+    full_name='epp.EPPProxy.MaintenanceInfo',
+    index=30,
+    containing_service=None,
+    input_type=maintenance__pb2._MAINTENANCEINFOREQUEST,
+    output_type=maintenance__pb2._MAINTENANCEINFOREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='Poll',
     full_name='epp.EPPProxy.Poll',
-    index=28,
+    index=31,
     containing_service=None,
     input_type=_POLLACK,
     output_type=_POLLREPLY,
@@ -1094,7 +1165,7 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='NominetTagList',
     full_name='epp.EPPProxy.NominetTagList',
-    index=29,
+    index=32,
     containing_service=None,
     input_type=_REGISTRYINFO,
     output_type=nominet__pb2._NOMINETTAGLISTREPLY,
@@ -1104,10 +1175,50 @@ _EPPPROXY = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='BalanceInfo',
     full_name='epp.EPPProxy.BalanceInfo',
-    index=30,
+    index=33,
     containing_service=None,
     input_type=_REGISTRYINFO,
     output_type=_BALANCEREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='HitPointsInfo',
+    full_name='epp.EPPProxy.HitPointsInfo',
+    index=34,
+    containing_service=None,
+    input_type=_REGISTRYINFO,
+    output_type=eurid__pb2._HITPOINTSREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='RegistrationLimitInfo',
+    full_name='epp.EPPProxy.RegistrationLimitInfo',
+    index=35,
+    containing_service=None,
+    input_type=_REGISTRYINFO,
+    output_type=eurid__pb2._REGISTRATIONLIMITREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DNSQualityInfo',
+    full_name='epp.EPPProxy.DNSQualityInfo',
+    index=36,
+    containing_service=None,
+    input_type=eurid__pb2._DNSQUALITYREQUEST,
+    output_type=eurid__pb2._DNSQUALITYREPLY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DNSSECEligibilityInfo',
+    full_name='epp.EPPProxy.DNSSECEligibilityInfo',
+    index=37,
+    containing_service=None,
+    input_type=eurid__pb2._DNSSECELIGIBILITYREQUEST,
+    output_type=eurid__pb2._DNSSECELIGIBILITYREPLY,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

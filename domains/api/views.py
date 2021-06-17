@@ -290,7 +290,7 @@ class Domain(viewsets.ViewSet):
 
         with ThreadPoolExecutor() as executor:
             domains_data = list(executor.map(
-                lambda d: serializers.DomainSerializer.get_domain(d, request.user),
+                lambda d: serializers.DomainSerializer.get_domain(d, apps.epp_client.get_domain(d.domain), request.user),
                 domains
             ))
 
@@ -305,7 +305,8 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
-        domain_data = serializers.DomainSerializer.get_domain(domain, request.user)
+        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = serializers.DomainSerializer.get_domain(domain, domain_data, request.user)
 
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
         return Response(serializer.data)
@@ -565,7 +566,7 @@ class Domain(viewsets.ViewSet):
             period_unit = apps.epp_api.common_pb2.Period.Unit.Years if period['unit'] == "y" \
                 else apps.epp_api.common_pb2.Period.Unit.Months if period['unit'] == "m" else None
 
-            rice = zone.pricing.renew("GB", request.user.username, sld, unit=period_unit, value=period['value'])
+            price = zone.pricing.renew("GB", request.user.username, sld, unit=period_unit, value=period['value'])
 
             if price is None:
                 data = serializers.DomainCheck(

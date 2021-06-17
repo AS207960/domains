@@ -606,23 +606,23 @@ class DomainSerializer(serializers.Serializer):
     def get_domain(cls, d: models.DomainRegistration, domain: apps.epp_api.Domain, user):
         domain_info = zone_info.get_domain_info(d.domain)[0]
         if domain_info.registrant_supported:
-            registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user)
+            registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user, domain_info)
         else:
             registrant = d.registrant_contact
         if domain.admin:
-            admin = models.Contact.get_contact(domain.admin.contact_id, domain.registry_name, user)
+            admin = models.Contact.get_contact(domain.admin.contact_id, domain.registry_name, user, domain_info)
         elif d.admin_contact:
             admin = d.admin_contact
         else:
             admin = None
         if domain.billing:
-            billing = models.Contact.get_contact(domain.billing.contact_id, domain.registry_name, user)
+            billing = models.Contact.get_contact(domain.billing.contact_id, domain.registry_name, user, domain_info)
         elif d.billing_contact:
             billing = d.billing_contact
         else:
             billing = None
         if domain.tech:
-            tech = models.Contact.get_contact(domain.tech.contact_id, domain.registry_name, user)
+            tech = models.Contact.get_contact(domain.tech.contact_id, domain.registry_name, user, domain_info)
         elif d.tech_contact:
             tech = d.tech_contact
         else:
@@ -692,7 +692,7 @@ class DomainSerializer(serializers.Serializer):
             instance.registrant = validated_data['registrant']
             if domain_info.registrant_supported:
                 update_req.new_registrant.value = instance.registrant.get_registry_id(
-                    instance.domain_obj.registry_name
+                    instance.domain_obj.registry_name, domain_info,
                 ).registry_contact_id
             instance.domain_db_obj.registrant_contact = instance.registrant
 
@@ -716,7 +716,7 @@ class DomainSerializer(serializers.Serializer):
                         contact=apps.epp_api.domain_pb2.Contact(
                             type='admin',
                             id=instance.admin_contact.get_registry_id(
-                                instance.domain_obj.registry_name
+                                instance.domain_obj.registry_name, domain_info,
                             ).registry_contact_id
                         )
                     ))
@@ -742,7 +742,7 @@ class DomainSerializer(serializers.Serializer):
                         contact=apps.epp_api.domain_pb2.Contact(
                             type='billing',
                             id=instance.billing_contact.get_registry_id(
-                                instance.domain_obj.registry_name
+                                instance.domain_obj.registry_name, domain_info,
                             ).registry_contact_id
                         )
                     ))
@@ -768,7 +768,7 @@ class DomainSerializer(serializers.Serializer):
                         contact=apps.epp_api.domain_pb2.Contact(
                             type='tech',
                             id=instance.tech_contact.get_registry_id(
-                                instance.domain_obj.registry_name
+                                instance.domain_obj.registry_name, domain_info,
                             ).registry_contact_id
                         )
                     ))
@@ -787,7 +787,17 @@ class DomainSerializer(serializers.Serializer):
                     if domain_info.pre_create_host_objects:
                         host_available, _ = apps.epp_client.check_host(ns.host_object, instance.domain_obj.registry_name)
                         if host_available:
-                            apps.epp_client.create_host(ns.host_object, [], instance.domain_obj.registry_name)
+                            if domain_info.registry == domain_info.REGISTRY_ISNIC:
+                                if instance.domain_db_obj.tech_contact:
+                                    zone_contact = instance.domain_db_obj.tech_contact
+                                else:
+                                    zone_contact = instance.domain_db_obj.registrant_contact
+
+                                isnic_zone_contact = zone_contact.get_registry_id(instance.domain_obj.registry_name, domain_info)
+                            else:
+                                isnic_zone_contact = None
+
+                            apps.epp_client.create_host(ns.host_object, [], instance.domain_obj.registry_name, isnic_zone_contact.registry_contact_id)
                     update_req.add.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
                         nameserver=apps.epp_api.domain_pb2.NameServer(
                             host_obj=ns.host_object
@@ -864,29 +874,29 @@ class DomainSerializer(serializers.Serializer):
                 if add_ds_data:
                     update_req.sec_dns.add_ds_data.data.extend(list(map(lambda d: d.to_pb(), add_ds_data)))
                 if rem_ds_data:
-                    update_req.sec_dns.remove_ds_data.data.extend(list(map(lambda d: d.to_pb(), rem_ds_data)))
+                    update_req.sec_dns.rem_ds_data.data.extend(list(map(lambda d: d.to_pb(), rem_ds_data)))
                 if add_key_data:
                     update_req.sec_dns.add_key_data.data.extend(list(map(lambda d: d.to_pb(), add_key_data)))
                 if rem_key_data:
-                    update_req.sec_dns.remove_key_data.data.extend(list(map(lambda d: d.to_pb(), rem_key_data)))
+                    update_req.sec_dns.rem_key_data.data.extend(list(map(lambda d: d.to_pb(), rem_key_data)))
 
                 instance.sec_dns = new_sec_dns
 
         if 'block_transfer' in validated_data:
             if domain_info.transfer_lock_supported:
-                if apps.epp_api.domain_pb2.ClientTransferProhibited in instance.domain_obj.statuses \
+                if apps.epp_api.domain_common_pb2.ClientTransferProhibited in instance.domain_obj.statuses \
                         and not validated_data['block_transfer']:
                     update_req.remove.append(
                         apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-                            state=apps.epp_api.domain_pb2.ClientTransferProhibited
+                            state=apps.epp_api.domain_common_pb2.ClientTransferProhibited
                         )
                     )
                     instance.statuses.remove("client_transfer_prohibited")
-                elif apps.epp_api.domain_pb2.ClientTransferProhibited not in instance.domain_obj.statuses \
+                elif apps.epp_api.domain_common_pb2.ClientTransferProhibited not in instance.domain_obj.statuses \
                         and validated_data['block_transfer']:
                     update_req.add.append(
                         apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-                            state=apps.epp_api.domain_pb2.ClientTransferProhibited
+                            state=apps.epp_api.domain_common_pb2.ClientTransferProhibited
                         )
                     )
                     instance.statuses.append("client_transfer_prohibited")

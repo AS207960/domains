@@ -222,6 +222,8 @@ RABBITMQ_RPC_URL = os.getenv("RABBITMQ_RPC_URL")
 
 POSTAL_PUBLIC_KEY = os.getenv("POSTAL_PUBLIC_KEY")
 
+ISNIC_CONTACT_EMAIL = os.getenv("ISNIC_CONTACT_EMAIL") or "isnic-auto@as207960.ltd.uk"
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

@@ -560,7 +560,101 @@ def notify_restore(restore_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
-def notify_renew(domain_id, registry_id: str, period: str):
+def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = False):
+    domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+    user = domain_renew_order.get_user()
+
+    sections = [{
+        "header": "Domain data",
+        "widgets": [{
+            "keyValue": {
+                "topLabel": "Domain name",
+                "content": domain_renew_order.domain
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Registry ID",
+                "content": registry_id
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Object ID",
+                "content": str(domain_renew_order.domain_obj.id)
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Period",
+                "content": period
+            }
+        }]
+    }]
+    if domain_renew_order.last_error:
+        sections.append({
+            "header": "Previous error",
+            "widgets": [{
+                "textParagraph": {
+                    "text": domain_renew_order.last_error
+                }
+            }]
+        })
+    sections.extend([make_user_data(user), {
+        "widgets": [{
+            "buttons": [{
+                "textButton": {
+                    "text": "Mark complete",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-auto-renewed" if auto else "mark-domain-renewed",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_renew_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }, {
+                "textButton": {
+                    "text": "Mark failed",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-auto-renew-fail" if auto else "mark-domain-renew-fail",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_renew_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }]
+        }]
+    }])
+
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_renew_order.domain_obj.id}",
+            body={
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
+                        f"renewal of {domain_renew_order.domain}" +
+                        (" automatically" if auto else "") + (
+                            " which has errored" if domain_renew_order.last_error else ""
+                        ),
+                "cards": [{
+                    "header": {
+                        "title": "Domain renew request" if not settings.DEBUG
+                        else "Domain renew request [TEST]",
+                    },
+                    "sections": sections,
+                    "name": f"domain-renew-{domain_renew_order.domain_obj.id}"
+                }]
+            }
+        ).execute()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
     domain_obj = \
         models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
     user = domain_obj.get_user()
@@ -569,7 +663,8 @@ def notify_renew(domain_id, registry_id: str, period: str):
             parent=space.space_id,
             threadKey=f"dm_{domain_obj.pk}",
             body={
-                "text": f"{user.first_name} {user.last_name} has renewed {domain_obj.domain}",
+                "text": f"{user.first_name} {user.last_name} has renewed {domain_obj.domain}" +
+                        (" automatically" if auto else ""),
                 "cards": [{
                     "header": {
                         "title": "Domain renew notification" if not settings.DEBUG
@@ -1020,7 +1115,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-restore-fail":
-            tasks.process_domain_restore_complete.delay(domain_restore_order.id)
+            tasks.process_domain_restore_failed.delay(domain_restore_order.id)
 
             return {
                 "actionResponse": {
@@ -1041,11 +1136,93 @@ def card_clicked(event):
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_restore_order.id)
+                                "content": str(domain_restore_order.domain_obj.id)
                             }
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.id}"
+                }]
+            }
+
+    elif action_name in ("mark-domain-renewed", "mark-domain-renew-fail",
+                         "mark-domain-auto-renewed", "mark-domain-auto-renew-fail"):
+        is_auto = action_name in ("mark-domain-auto-renewed", "mark-domain-auto-renew-fail")
+        if is_auto:
+            domain_renew_order = models.DomainAutomaticRenewOrder.objects \
+                .filter(pk=domain_id).first()  # type: models.DomainAutomaticRenewOrder
+        else:
+            domain_renew_order = models.DomainRenewOrder.objects \
+                .filter(pk=domain_id).first()  # type: models.DomainRenewOrder
+        if not domain_renew_order:
+            return None
+
+        if not domain_renew_order.has_scope(account_access_token, 'edit'):
+            return {
+                "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
+            }
+
+        if action_name in ("mark-domain-renewed", "mark-domain-auto-renewed"):
+            if is_auto:
+                tasks.process_domain_auto_renew_complete.delay(domain_renew_order.id)
+            else:
+                tasks.process_domain_renewal_complete.delay(domain_renew_order.id)
+
+            return {
+                "actionResponse": {
+                    "type": "UPDATE_MESSAGE"
+                },
+                "text": f"Renewal of {domain_renew_order.domain} marked complete by <{user_id}>",
+                "cards": [{
+                    "header": {
+                        "title": "Domain renewal complete",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_renew_order.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_renew_order.domain_obj.id)
+                            }
+                        }]
+                    }],
+                    "name": f"domain-renew-{domain_renew_order.id}"
+                }]
+            }
+        elif action_name in ("mark-domain-renew-fail", "mark-domain-auto-renew-fail"):
+            if is_auto:
+                tasks.process_domain_auto_renew_failed.delay(domain_renew_order.id)
+            else:
+                tasks.process_domain_renewal_failed.delay(domain_renew_order.id)
+
+            return {
+                "actionResponse": {
+                    "type": "UPDATE_MESSAGE"
+                },
+                "text": f"Renewal of {domain_renew_order.domain} marked failed by <{user_id}>",
+                "cards": [{
+                    "header": {
+                        "title": "Domain renewal failed",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_renew_order.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_renew_order.domain_obj.id)
+                            }
+                        }]
+                    }],
+                    "name": f"domain-renew-{domain_renew_order.id}"
                 }]
             }
 

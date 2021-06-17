@@ -15,6 +15,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from . import domain_pb2 as domain__pb2
 from . import contact_pb2 as contact__pb2
+from . import common_pb2 as common__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,15 +24,15 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\"\xb2\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"4\n\x10\x44omainCancelData\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"t\n\x11\x44omainReleaseData\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xd3\x01\n\x19\x44omainRegistrarChangeData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"<\n\x0eHostCancelData\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xac\x02\n\x0bProcessData\x12\x34\n\x05stage\x18\x01 \x01(\x0e\x32%.epp.nominet.ProcessData.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"d\n\x0bSuspendData\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\"0\n\x0e\x44omainFailData\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xcd\x01\n\x16RegistrantTransferData\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
+  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\x1a\x0c\x63ommon.proto\"\xe1\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x12-\n\x08\x63md_resp\x18\x02 \x01(\x0b\x32\x1b.epp.common.CommandResponse\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"0\n\x0c\x44omainCancel\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"p\n\rDomainRelease\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xcf\x01\n\x15\x44omainRegistrarChange\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"8\n\nHostCancel\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xa4\x02\n\x07Process\x12\x30\n\x05stage\x18\x01 \x01(\x0e\x32!.epp.nominet.Process.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"`\n\x07Suspend\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\",\n\nDomainFail\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xc9\x01\n\x12RegistrantTransfer\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,])
 
 
 
-_PROCESSDATA_PROCESSSTAGE = _descriptor.EnumDescriptor(
+_PROCESS_PROCESSSTAGE = _descriptor.EnumDescriptor(
   name='ProcessStage',
-  full_name='epp.nominet.ProcessData.ProcessStage',
+  full_name='epp.nominet.Process.ProcessStage',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -49,10 +50,10 @@ _PROCESSDATA_PROCESSSTAGE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1014,
-  serialized_end=1054,
+  serialized_start=1051,
+  serialized_end=1091,
 )
-_sym_db.RegisterEnumDescriptor(_PROCESSDATA_PROCESSSTAGE)
+_sym_db.RegisterEnumDescriptor(_PROCESS_PROCESSSTAGE)
 
 
 _NOMINETTAGLISTREPLY_TAG = _descriptor.Descriptor(
@@ -103,8 +104,8 @@ _NOMINETTAGLISTREPLY_TAG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=200,
-  serialized_end=303,
+  serialized_start=261,
+  serialized_end=364,
 )
 
 _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
@@ -122,6 +123,13 @@ _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.nominet.NominetTagListReply.cmd_resp', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -134,28 +142,28 @@ _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=125,
-  serialized_end=303,
+  serialized_start=139,
+  serialized_end=364,
 )
 
 
-_DOMAINCANCELDATA = _descriptor.Descriptor(
-  name='DomainCancelData',
-  full_name='epp.nominet.DomainCancelData',
+_DOMAINCANCEL = _descriptor.Descriptor(
+  name='DomainCancel',
+  full_name='epp.nominet.DomainCancel',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='epp.nominet.DomainCancelData.name', index=0,
+      name='name', full_name='epp.nominet.DomainCancel.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='originator', full_name='epp.nominet.DomainCancelData.originator', index=1,
+      name='originator', full_name='epp.nominet.DomainCancel.originator', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -173,49 +181,49 @@ _DOMAINCANCELDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=305,
-  serialized_end=357,
+  serialized_start=366,
+  serialized_end=414,
 )
 
 
-_DOMAINRELEASEDATA = _descriptor.Descriptor(
-  name='DomainReleaseData',
-  full_name='epp.nominet.DomainReleaseData',
+_DOMAINRELEASE = _descriptor.Descriptor(
+  name='DomainRelease',
+  full_name='epp.nominet.DomainRelease',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='account_id', full_name='epp.nominet.DomainReleaseData.account_id', index=0,
+      name='account_id', full_name='epp.nominet.DomainRelease.account_id', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='account_moved', full_name='epp.nominet.DomainReleaseData.account_moved', index=1,
+      name='account_moved', full_name='epp.nominet.DomainRelease.account_moved', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='from', full_name='epp.nominet.DomainReleaseData.from', index=2,
+      name='from', full_name='epp.nominet.DomainRelease.from', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='registrar_tag', full_name='epp.nominet.DomainReleaseData.registrar_tag', index=3,
+      name='registrar_tag', full_name='epp.nominet.DomainRelease.registrar_tag', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domains', full_name='epp.nominet.DomainReleaseData.domains', index=4,
+      name='domains', full_name='epp.nominet.DomainRelease.domains', index=4,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -233,49 +241,49 @@ _DOMAINRELEASEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=359,
-  serialized_end=475,
+  serialized_start=416,
+  serialized_end=528,
 )
 
 
-_DOMAINREGISTRARCHANGEDATA = _descriptor.Descriptor(
-  name='DomainRegistrarChangeData',
-  full_name='epp.nominet.DomainRegistrarChangeData',
+_DOMAINREGISTRARCHANGE = _descriptor.Descriptor(
+  name='DomainRegistrarChange',
+  full_name='epp.nominet.DomainRegistrarChange',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='originator', full_name='epp.nominet.DomainRegistrarChangeData.originator', index=0,
+      name='originator', full_name='epp.nominet.DomainRegistrarChange.originator', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='registrar_tag', full_name='epp.nominet.DomainRegistrarChangeData.registrar_tag', index=1,
+      name='registrar_tag', full_name='epp.nominet.DomainRegistrarChange.registrar_tag', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='case_id', full_name='epp.nominet.DomainRegistrarChangeData.case_id', index=2,
+      name='case_id', full_name='epp.nominet.DomainRegistrarChange.case_id', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domains', full_name='epp.nominet.DomainRegistrarChangeData.domains', index=3,
+      name='domains', full_name='epp.nominet.DomainRegistrarChange.domains', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='contact', full_name='epp.nominet.DomainRegistrarChangeData.contact', index=4,
+      name='contact', full_name='epp.nominet.DomainRegistrarChange.contact', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -293,28 +301,28 @@ _DOMAINREGISTRARCHANGEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=478,
-  serialized_end=689,
+  serialized_start=531,
+  serialized_end=738,
 )
 
 
-_HOSTCANCELDATA = _descriptor.Descriptor(
-  name='HostCancelData',
-  full_name='epp.nominet.HostCancelData',
+_HOSTCANCEL = _descriptor.Descriptor(
+  name='HostCancel',
+  full_name='epp.nominet.HostCancel',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='host_objects', full_name='epp.nominet.HostCancelData.host_objects', index=0,
+      name='host_objects', full_name='epp.nominet.HostCancel.host_objects', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domain_names', full_name='epp.nominet.HostCancelData.domain_names', index=1,
+      name='domain_names', full_name='epp.nominet.HostCancel.domain_names', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -332,56 +340,56 @@ _HOSTCANCELDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=691,
-  serialized_end=751,
+  serialized_start=740,
+  serialized_end=796,
 )
 
 
-_PROCESSDATA = _descriptor.Descriptor(
-  name='ProcessData',
-  full_name='epp.nominet.ProcessData',
+_PROCESS = _descriptor.Descriptor(
+  name='Process',
+  full_name='epp.nominet.Process',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='stage', full_name='epp.nominet.ProcessData.stage', index=0,
+      name='stage', full_name='epp.nominet.Process.stage', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='contact', full_name='epp.nominet.ProcessData.contact', index=1,
+      name='contact', full_name='epp.nominet.Process.contact', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='process_type', full_name='epp.nominet.ProcessData.process_type', index=2,
+      name='process_type', full_name='epp.nominet.Process.process_type', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='suspend_date', full_name='epp.nominet.ProcessData.suspend_date', index=3,
+      name='suspend_date', full_name='epp.nominet.Process.suspend_date', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='cancel_date', full_name='epp.nominet.ProcessData.cancel_date', index=4,
+      name='cancel_date', full_name='epp.nominet.Process.cancel_date', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domain_names', full_name='epp.nominet.ProcessData.domain_names', index=5,
+      name='domain_names', full_name='epp.nominet.Process.domain_names', index=5,
       number=6, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -392,7 +400,7 @@ _PROCESSDATA = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _PROCESSDATA_PROCESSSTAGE,
+    _PROCESS_PROCESSSTAGE,
   ],
   serialized_options=None,
   is_extendable=False,
@@ -400,35 +408,35 @@ _PROCESSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=754,
-  serialized_end=1054,
+  serialized_start=799,
+  serialized_end=1091,
 )
 
 
-_SUSPENDDATA = _descriptor.Descriptor(
-  name='SuspendData',
-  full_name='epp.nominet.SuspendData',
+_SUSPEND = _descriptor.Descriptor(
+  name='Suspend',
+  full_name='epp.nominet.Suspend',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='reason', full_name='epp.nominet.SuspendData.reason', index=0,
+      name='reason', full_name='epp.nominet.Suspend.reason', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='cancel_date', full_name='epp.nominet.SuspendData.cancel_date', index=1,
+      name='cancel_date', full_name='epp.nominet.Suspend.cancel_date', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domain_names', full_name='epp.nominet.SuspendData.domain_names', index=2,
+      name='domain_names', full_name='epp.nominet.Suspend.domain_names', index=2,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -446,28 +454,28 @@ _SUSPENDDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1056,
-  serialized_end=1156,
+  serialized_start=1093,
+  serialized_end=1189,
 )
 
 
-_DOMAINFAILDATA = _descriptor.Descriptor(
-  name='DomainFailData',
-  full_name='epp.nominet.DomainFailData',
+_DOMAINFAIL = _descriptor.Descriptor(
+  name='DomainFail',
+  full_name='epp.nominet.DomainFail',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='domain', full_name='epp.nominet.DomainFailData.domain', index=0,
+      name='domain', full_name='epp.nominet.DomainFail.domain', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='reason', full_name='epp.nominet.DomainFailData.reason', index=1,
+      name='reason', full_name='epp.nominet.DomainFail.reason', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -485,56 +493,56 @@ _DOMAINFAILDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1158,
-  serialized_end=1206,
+  serialized_start=1191,
+  serialized_end=1235,
 )
 
 
-_REGISTRANTTRANSFERDATA = _descriptor.Descriptor(
-  name='RegistrantTransferData',
-  full_name='epp.nominet.RegistrantTransferData',
+_REGISTRANTTRANSFER = _descriptor.Descriptor(
+  name='RegistrantTransfer',
+  full_name='epp.nominet.RegistrantTransfer',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='originator', full_name='epp.nominet.RegistrantTransferData.originator', index=0,
+      name='originator', full_name='epp.nominet.RegistrantTransfer.originator', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='account_id', full_name='epp.nominet.RegistrantTransferData.account_id', index=1,
+      name='account_id', full_name='epp.nominet.RegistrantTransfer.account_id', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='old_account_id', full_name='epp.nominet.RegistrantTransferData.old_account_id', index=2,
+      name='old_account_id', full_name='epp.nominet.RegistrantTransfer.old_account_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='case_id', full_name='epp.nominet.RegistrantTransferData.case_id', index=3,
+      name='case_id', full_name='epp.nominet.RegistrantTransfer.case_id', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='domain_names', full_name='epp.nominet.RegistrantTransferData.domain_names', index=4,
+      name='domain_names', full_name='epp.nominet.RegistrantTransfer.domain_names', index=4,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='contact', full_name='epp.nominet.RegistrantTransferData.contact', index=5,
+      name='contact', full_name='epp.nominet.RegistrantTransfer.contact', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -552,33 +560,34 @@ _REGISTRANTTRANSFERDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1209,
-  serialized_end=1414,
+  serialized_start=1238,
+  serialized_end=1439,
 )
 
 _NOMINETTAGLISTREPLY_TAG.fields_by_name['trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _NOMINETTAGLISTREPLY_TAG.containing_type = _NOMINETTAGLISTREPLY
 _NOMINETTAGLISTREPLY.fields_by_name['tags'].message_type = _NOMINETTAGLISTREPLY_TAG
-_DOMAINREGISTRARCHANGEDATA.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
-_DOMAINREGISTRARCHANGEDATA.fields_by_name['domains'].message_type = domain__pb2._DOMAININFOREPLY
-_DOMAINREGISTRARCHANGEDATA.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
-_PROCESSDATA.fields_by_name['stage'].enum_type = _PROCESSDATA_PROCESSSTAGE
-_PROCESSDATA.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
-_PROCESSDATA.fields_by_name['suspend_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_PROCESSDATA.fields_by_name['cancel_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_PROCESSDATA_PROCESSSTAGE.containing_type = _PROCESSDATA
-_SUSPENDDATA.fields_by_name['cancel_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_REGISTRANTTRANSFERDATA.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
-_REGISTRANTTRANSFERDATA.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
+_NOMINETTAGLISTREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
+_DOMAINREGISTRARCHANGE.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_DOMAINREGISTRARCHANGE.fields_by_name['domains'].message_type = domain__pb2._DOMAININFOREPLY
+_DOMAINREGISTRARCHANGE.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
+_PROCESS.fields_by_name['stage'].enum_type = _PROCESS_PROCESSSTAGE
+_PROCESS.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
+_PROCESS.fields_by_name['suspend_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_PROCESS.fields_by_name['cancel_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_PROCESS_PROCESSSTAGE.containing_type = _PROCESS
+_SUSPEND.fields_by_name['cancel_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_REGISTRANTTRANSFER.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_REGISTRANTTRANSFER.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
 DESCRIPTOR.message_types_by_name['NominetTagListReply'] = _NOMINETTAGLISTREPLY
-DESCRIPTOR.message_types_by_name['DomainCancelData'] = _DOMAINCANCELDATA
-DESCRIPTOR.message_types_by_name['DomainReleaseData'] = _DOMAINRELEASEDATA
-DESCRIPTOR.message_types_by_name['DomainRegistrarChangeData'] = _DOMAINREGISTRARCHANGEDATA
-DESCRIPTOR.message_types_by_name['HostCancelData'] = _HOSTCANCELDATA
-DESCRIPTOR.message_types_by_name['ProcessData'] = _PROCESSDATA
-DESCRIPTOR.message_types_by_name['SuspendData'] = _SUSPENDDATA
-DESCRIPTOR.message_types_by_name['DomainFailData'] = _DOMAINFAILDATA
-DESCRIPTOR.message_types_by_name['RegistrantTransferData'] = _REGISTRANTTRANSFERDATA
+DESCRIPTOR.message_types_by_name['DomainCancel'] = _DOMAINCANCEL
+DESCRIPTOR.message_types_by_name['DomainRelease'] = _DOMAINRELEASE
+DESCRIPTOR.message_types_by_name['DomainRegistrarChange'] = _DOMAINREGISTRARCHANGE
+DESCRIPTOR.message_types_by_name['HostCancel'] = _HOSTCANCEL
+DESCRIPTOR.message_types_by_name['Process'] = _PROCESS
+DESCRIPTOR.message_types_by_name['Suspend'] = _SUSPEND
+DESCRIPTOR.message_types_by_name['DomainFail'] = _DOMAINFAIL
+DESCRIPTOR.message_types_by_name['RegistrantTransfer'] = _REGISTRANTTRANSFER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NominetTagListReply = _reflection.GeneratedProtocolMessageType('NominetTagListReply', (_message.Message,), {
@@ -596,61 +605,61 @@ NominetTagListReply = _reflection.GeneratedProtocolMessageType('NominetTagListRe
 _sym_db.RegisterMessage(NominetTagListReply)
 _sym_db.RegisterMessage(NominetTagListReply.Tag)
 
-DomainCancelData = _reflection.GeneratedProtocolMessageType('DomainCancelData', (_message.Message,), {
-  'DESCRIPTOR' : _DOMAINCANCELDATA,
+DomainCancel = _reflection.GeneratedProtocolMessageType('DomainCancel', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINCANCEL,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.DomainCancelData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.DomainCancel)
   })
-_sym_db.RegisterMessage(DomainCancelData)
+_sym_db.RegisterMessage(DomainCancel)
 
-DomainReleaseData = _reflection.GeneratedProtocolMessageType('DomainReleaseData', (_message.Message,), {
-  'DESCRIPTOR' : _DOMAINRELEASEDATA,
+DomainRelease = _reflection.GeneratedProtocolMessageType('DomainRelease', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINRELEASE,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.DomainReleaseData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.DomainRelease)
   })
-_sym_db.RegisterMessage(DomainReleaseData)
+_sym_db.RegisterMessage(DomainRelease)
 
-DomainRegistrarChangeData = _reflection.GeneratedProtocolMessageType('DomainRegistrarChangeData', (_message.Message,), {
-  'DESCRIPTOR' : _DOMAINREGISTRARCHANGEDATA,
+DomainRegistrarChange = _reflection.GeneratedProtocolMessageType('DomainRegistrarChange', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINREGISTRARCHANGE,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.DomainRegistrarChangeData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.DomainRegistrarChange)
   })
-_sym_db.RegisterMessage(DomainRegistrarChangeData)
+_sym_db.RegisterMessage(DomainRegistrarChange)
 
-HostCancelData = _reflection.GeneratedProtocolMessageType('HostCancelData', (_message.Message,), {
-  'DESCRIPTOR' : _HOSTCANCELDATA,
+HostCancel = _reflection.GeneratedProtocolMessageType('HostCancel', (_message.Message,), {
+  'DESCRIPTOR' : _HOSTCANCEL,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.HostCancelData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.HostCancel)
   })
-_sym_db.RegisterMessage(HostCancelData)
+_sym_db.RegisterMessage(HostCancel)
 
-ProcessData = _reflection.GeneratedProtocolMessageType('ProcessData', (_message.Message,), {
-  'DESCRIPTOR' : _PROCESSDATA,
+Process = _reflection.GeneratedProtocolMessageType('Process', (_message.Message,), {
+  'DESCRIPTOR' : _PROCESS,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.ProcessData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.Process)
   })
-_sym_db.RegisterMessage(ProcessData)
+_sym_db.RegisterMessage(Process)
 
-SuspendData = _reflection.GeneratedProtocolMessageType('SuspendData', (_message.Message,), {
-  'DESCRIPTOR' : _SUSPENDDATA,
+Suspend = _reflection.GeneratedProtocolMessageType('Suspend', (_message.Message,), {
+  'DESCRIPTOR' : _SUSPEND,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.SuspendData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.Suspend)
   })
-_sym_db.RegisterMessage(SuspendData)
+_sym_db.RegisterMessage(Suspend)
 
-DomainFailData = _reflection.GeneratedProtocolMessageType('DomainFailData', (_message.Message,), {
-  'DESCRIPTOR' : _DOMAINFAILDATA,
+DomainFail = _reflection.GeneratedProtocolMessageType('DomainFail', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINFAIL,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.DomainFailData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.DomainFail)
   })
-_sym_db.RegisterMessage(DomainFailData)
+_sym_db.RegisterMessage(DomainFail)
 
-RegistrantTransferData = _reflection.GeneratedProtocolMessageType('RegistrantTransferData', (_message.Message,), {
-  'DESCRIPTOR' : _REGISTRANTTRANSFERDATA,
+RegistrantTransfer = _reflection.GeneratedProtocolMessageType('RegistrantTransfer', (_message.Message,), {
+  'DESCRIPTOR' : _REGISTRANTTRANSFER,
   '__module__' : 'nominet_pb2'
-  # @@protoc_insertion_point(class_scope:epp.nominet.RegistrantTransferData)
+  # @@protoc_insertion_point(class_scope:epp.nominet.RegistrantTransfer)
   })
-_sym_db.RegisterMessage(RegistrantTransferData)
+_sym_db.RegisterMessage(RegistrantTransfer)
 
 
 # @@protoc_insertion_point(module_scope)

@@ -211,7 +211,8 @@ class BaseDomainHostObjectFormSet(forms.BaseFormSet):
             'host',
         )
 
-        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))
+        self.helper.add_input(crispy_forms.layout.Submit('action', 'Add', css_class="btn-block"))
+        self.helper.add_input(crispy_forms.layout.Submit('action', 'Replace', css_class="btn-block"))
 
     def get_form_kwargs(self, index):
         kwargs = self.form_kwargs.copy()
@@ -393,6 +394,8 @@ class DomainRegisterForm(forms.Form):
         self.fields['tech'].required = zone.tech_required
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.label_class = "mt-2"
+        self.helper.field_class = "mb-2"
         self.helper.layout = crispy_forms.layout.Layout(
             'period',
             crispy_forms.layout.HTML("<hr/>"),
@@ -430,10 +433,15 @@ class DomainTransferForm(forms.Form):
         self.fields['billing'].required = zone.billing_required
         self.fields['tech'].required = zone.tech_required
 
+        if not zone.auth_code_for_transfer:
+            del self.fields['auth_code']
+
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.label_class = "mt-2"
+        self.helper.field_class = "mb-2"
         self.helper.layout = crispy_forms.layout.Layout(
-            'auth_code',
-            crispy_forms.layout.HTML("<hr/>"),
+            'auth_code' if 'auth_code' in self.fields else None,
+            crispy_forms.layout.HTML("<hr/>") if 'auth_code' in self.fields else None,
             crispy_forms.layout.Fieldset(
                 'Domain contacts',
                 crispy_forms.layout.HTML("""
@@ -458,6 +466,8 @@ class DomainRenewForm(forms.Form):
         self.fields['period'].choices = map(map_period, zone_info.pricing.periods)
 
         self.helper = crispy_forms.helper.FormHelper()
+        self.helper.label_class = "mt-2"
+        self.helper.field_class = "mb-2"
         self.helper.layout = crispy_forms.layout.Layout(
             'period',
         )
@@ -565,6 +575,7 @@ class AdminContactCheckForm(forms.Form):
 class AdminContactGetIDForm(forms.Form):
     contact = forms.UUIDField(label="Contact ID", required=True)
     registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+    domain = forms.CharField(max_length=255, label="Domain", required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -576,7 +587,8 @@ class AdminContactGetIDForm(forms.Form):
         self.helper.field_class = 'col-lg-10 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'contact',
-            'registry_id'
+            'registry_id',
+            'domain'
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Get'))

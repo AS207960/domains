@@ -13,6 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 from . import fee_pb2 as fee__pb2
+from . import common_pb2 as common__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
@@ -22,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\trgp.proto\x12\x07\x65pp.rgp\x1a\tfee.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x89\x01\n\x0eRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x33\n\rregistry_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x03 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"\x94\x01\n\x0cRestoreReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x05 \x01(\t\x12 \n\x05state\x18\x02 \x03(\x0e\x32\x11.epp.rgp.RGPState\x12\"\n\x08\x66\x65\x65_data\x18\x04 \x01(\x0b\x32\x10.epp.fee.FeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t*\x9d\x01\n\x08RGPState\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tAddPeriod\x10\x01\x12\x13\n\x0f\x41utoRenewPeriod\x10\x02\x12\x0f\n\x0bRenewPeriod\x10\x03\x12\x12\n\x0eTransferPeriod\x10\x04\x12\x14\n\x10RedemptionPeriod\x10\x05\x12\x12\n\x0ePendingRestore\x10\x06\x12\x11\n\rPendingDelete\x10\x07\x62\x06proto3'
+  serialized_pb=b'\n\trgp.proto\x12\x07\x65pp.rgp\x1a\tfee.proto\x1a\x0c\x63ommon.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x89\x01\n\x0eRequestRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x33\n\rregistry_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x14\x64onuts_fee_agreement\x18\x03 \x01(\x0b\x32\x16.epp.fee.DonutsFeeData\"\xb1\x01\n\x0cRestoreReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12 \n\x05state\x18\x02 \x03(\x0e\x32\x11.epp.rgp.RGPState\x12\"\n\x08\x66\x65\x65_data\x18\x04 \x01(\x0b\x32\x10.epp.fee.FeeData\x12\x15\n\rregistry_name\x18\x03 \x01(\t\x12-\n\x08\x63md_resp\x18\x06 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x05\x10\x06*\x9d\x01\n\x08RGPState\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tAddPeriod\x10\x01\x12\x13\n\x0f\x41utoRenewPeriod\x10\x02\x12\x0f\n\x0bRenewPeriod\x10\x03\x12\x12\n\x0eTransferPeriod\x10\x04\x12\x14\n\x10RedemptionPeriod\x10\x05\x12\x12\n\x0ePendingRestore\x10\x06\x12\x11\n\rPendingDelete\x10\x07\x62\x06proto3'
   ,
-  dependencies=[fee__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
+  dependencies=[fee__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
 _RGPSTATE = _descriptor.EnumDescriptor(
   name='RGPState',
@@ -76,8 +77,8 @@ _RGPSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=357,
-  serialized_end=514,
+  serialized_start=400,
+  serialized_end=557,
 )
 _sym_db.RegisterEnumDescriptor(_RGPSTATE)
 
@@ -134,8 +135,8 @@ _REQUESTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=66,
-  serialized_end=203,
+  serialized_start=80,
+  serialized_end=217,
 )
 
 
@@ -155,30 +156,30 @@ _RESTOREREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.rgp.RestoreReply.transaction_id', index=1,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='state', full_name='epp.rgp.RestoreReply.state', index=2,
+      name='state', full_name='epp.rgp.RestoreReply.state', index=1,
       number=2, type=14, cpp_type=8, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='fee_data', full_name='epp.rgp.RestoreReply.fee_data', index=3,
+      name='fee_data', full_name='epp.rgp.RestoreReply.fee_data', index=2,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='registry_name', full_name='epp.rgp.RestoreReply.registry_name', index=4,
+      name='registry_name', full_name='epp.rgp.RestoreReply.registry_name', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.rgp.RestoreReply.cmd_resp', index=4,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -194,14 +195,15 @@ _RESTOREREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=206,
-  serialized_end=354,
+  serialized_start=220,
+  serialized_end=397,
 )
 
 _REQUESTREQUEST.fields_by_name['registry_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _REQUESTREQUEST.fields_by_name['donuts_fee_agreement'].message_type = fee__pb2._DONUTSFEEDATA
 _RESTOREREPLY.fields_by_name['state'].enum_type = _RGPSTATE
 _RESTOREREPLY.fields_by_name['fee_data'].message_type = fee__pb2._FEEDATA
+_RESTOREREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 DESCRIPTOR.message_types_by_name['RequestRequest'] = _REQUESTREQUEST
 DESCRIPTOR.message_types_by_name['RestoreReply'] = _RESTOREREPLY
 DESCRIPTOR.enum_types_by_name['RGPState'] = _RGPSTATE

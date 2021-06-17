@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0claunch.proto\x12\nepp.launch\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x97\x01\n\x06Status\x12+\n\x0bstatus_type\x18\x01 \x01(\x0e\x32\x16.epp.launch.StatusType\x12\x31\n\x0bstatus_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07message\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xb4\x01\n\x05Phase\x12/\n\nphase_type\x18\x01 \x01(\x0e\x32\x1b.epp.launch.Phase.PhaseType\x12\x30\n\nphase_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"H\n\tPhaseType\x12\x08\n\x04Open\x10\x00\x12\x0b\n\x07Sunrise\x10\x01\x12\x0c\n\x08Landrush\x10\x02\x12\n\n\x06\x43laims\x10\x03\x12\n\n\x06\x43ustom\x10\x04\"L\n\tClaimsKey\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x32\n\x0cvalidator_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"z\n\nLaunchInfo\x12\x14\n\x0cinclude_mark\x18\x01 \x01(\x08\x12 \n\x05phase\x18\x02 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xb8\x01\n\x0eLaunchInfoData\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\"\n\x06status\x18\x03 \x01(\x0b\x32\x12.epp.launch.Status\x12*\n\x04mark\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x93\x01\n\x08\x43odeMark\x12*\n\x04\x63ode\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tvalidator\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04mark\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xaf\x01\n\x06Notice\x12\x11\n\tnotice_id\x18\x01 \x01(\t\x12/\n\tvalidator\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tnot_after\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x32\n\x0e\x61\x63\x63\x65pted_after\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x9c\x02\n\x0cLaunchCreate\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\'\n\tcode_mark\x18\x02 \x03(\x0b\x32\x14.epp.launch.CodeMark\x12#\n\x07notices\x18\x05 \x03(\x0b\x32\x12.epp.launch.Notice\x12\x31\n\x0bsigned_mark\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x0b\x63reate_type\x18\x04 \x01(\x0e\x32#.epp.launch.LaunchCreate.CreateType\"/\n\nCreateType\x12\x10\n\x0cRegistration\x10\x00\x12\x0f\n\x0b\x41pplication\x10\x01\"d\n\nLaunchData\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_Id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue*\x7f\n\nStatusType\x12\n\n\x06\x43ustom\x10\x00\x12\x15\n\x11PendingValidation\x10\x01\x12\r\n\tValidated\x10\x02\x12\x0b\n\x07Invalid\x10\x03\x12\x15\n\x11PendingAllocation\x10\x04\x12\r\n\tAllocated\x10\x05\x12\x0c\n\x08Rejected\x10\x06\x62\x06proto3'
+  serialized_pb=b'\n\x0claunch.proto\x12\nepp.launch\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x97\x01\n\x06Status\x12+\n\x0bstatus_type\x18\x01 \x01(\x0e\x32\x16.epp.launch.StatusType\x12\x31\n\x0bstatus_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07message\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xb4\x01\n\x05Phase\x12/\n\nphase_type\x18\x01 \x01(\x0e\x32\x1b.epp.launch.Phase.PhaseType\x12\x30\n\nphase_name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"H\n\tPhaseType\x12\x08\n\x04Open\x10\x00\x12\x0b\n\x07Sunrise\x10\x01\x12\x0c\n\x08Landrush\x10\x02\x12\n\n\x06\x43laims\x10\x03\x12\n\n\x06\x43ustom\x10\x04\"L\n\tClaimsKey\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x32\n\x0cvalidator_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"z\n\nLaunchInfo\x12\x14\n\x0cinclude_mark\x18\x01 \x01(\x08\x12 \n\x05phase\x18\x02 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xb8\x01\n\x0eLaunchInfoData\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\"\n\x06status\x18\x03 \x01(\x0b\x32\x12.epp.launch.Status\x12*\n\x04mark\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x93\x01\n\x08\x43odeMark\x12*\n\x04\x63ode\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tvalidator\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04mark\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xaf\x01\n\x06Notice\x12\x11\n\tnotice_id\x18\x01 \x01(\t\x12/\n\tvalidator\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tnot_after\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x32\n\x0e\x61\x63\x63\x65pted_after\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xe1\x02\n\x0cLaunchCreate\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\'\n\tcode_mark\x18\x02 \x03(\x0b\x32\x14.epp.launch.CodeMark\x12#\n\x07notices\x18\x05 \x03(\x0b\x32\x12.epp.launch.Notice\x12\x31\n\x0bsigned_mark\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x0b\x63reate_type\x18\x04 \x01(\x0e\x32#.epp.launch.LaunchCreate.CreateType\x12\x43\n\x17\x63ore_nic_augmented_mark\x18\x06 \x03(\x0b\x32\".epp.launch.CoreNICApplicationInfo\"/\n\nCreateType\x12\x10\n\x0cRegistration\x10\x00\x12\x0f\n\x0b\x41pplication\x10\x01\"d\n\nLaunchData\x12 \n\x05phase\x18\x01 \x01(\x0b\x32\x11.epp.launch.Phase\x12\x34\n\x0e\x61pplication_Id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"W\n\x16\x43oreNICApplicationInfo\x12\x0c\n\x04info\x18\x01 \x01(\t\x12/\n\tinfo_type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue*\x7f\n\nStatusType\x12\n\n\x06\x43ustom\x10\x00\x12\x15\n\x11PendingValidation\x10\x01\x12\r\n\tValidated\x10\x02\x12\x0b\n\x07Invalid\x10\x03\x12\x15\n\x11PendingAllocation\x10\x04\x12\r\n\tAllocated\x10\x05\x12\x0c\n\x08Rejected\x10\x06\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -71,8 +71,8 @@ _STATUSTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1536,
-  serialized_end=1663,
+  serialized_start=1694,
+  serialized_end=1821,
 )
 _sym_db.RegisterEnumDescriptor(_STATUSTYPE)
 
@@ -146,8 +146,8 @@ _LAUNCHCREATE_CREATETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1385,
-  serialized_end=1432,
+  serialized_start=1454,
+  serialized_end=1501,
 )
 _sym_db.RegisterEnumDescriptor(_LAUNCHCREATE_CREATETYPE)
 
@@ -518,6 +518,13 @@ _LAUNCHCREATE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='core_nic_augmented_mark', full_name='epp.launch.LaunchCreate.core_nic_augmented_mark', index=5,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -532,7 +539,7 @@ _LAUNCHCREATE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1148,
-  serialized_end=1432,
+  serialized_end=1501,
 )
 
 
@@ -570,8 +577,47 @@ _LAUNCHDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1434,
-  serialized_end=1534,
+  serialized_start=1503,
+  serialized_end=1603,
+)
+
+
+_CORENICAPPLICATIONINFO = _descriptor.Descriptor(
+  name='CoreNICApplicationInfo',
+  full_name='epp.launch.CoreNICApplicationInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='info', full_name='epp.launch.CoreNICApplicationInfo.info', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='info_type', full_name='epp.launch.CoreNICApplicationInfo.info_type', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1605,
+  serialized_end=1692,
 )
 
 _STATUS.fields_by_name['status_type'].enum_type = _STATUSTYPE
@@ -598,9 +644,11 @@ _LAUNCHCREATE.fields_by_name['code_mark'].message_type = _CODEMARK
 _LAUNCHCREATE.fields_by_name['notices'].message_type = _NOTICE
 _LAUNCHCREATE.fields_by_name['signed_mark'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _LAUNCHCREATE.fields_by_name['create_type'].enum_type = _LAUNCHCREATE_CREATETYPE
+_LAUNCHCREATE.fields_by_name['core_nic_augmented_mark'].message_type = _CORENICAPPLICATIONINFO
 _LAUNCHCREATE_CREATETYPE.containing_type = _LAUNCHCREATE
 _LAUNCHDATA.fields_by_name['phase'].message_type = _PHASE
 _LAUNCHDATA.fields_by_name['application_Id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CORENICAPPLICATIONINFO.fields_by_name['info_type'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 DESCRIPTOR.message_types_by_name['Status'] = _STATUS
 DESCRIPTOR.message_types_by_name['Phase'] = _PHASE
 DESCRIPTOR.message_types_by_name['ClaimsKey'] = _CLAIMSKEY
@@ -610,6 +658,7 @@ DESCRIPTOR.message_types_by_name['CodeMark'] = _CODEMARK
 DESCRIPTOR.message_types_by_name['Notice'] = _NOTICE
 DESCRIPTOR.message_types_by_name['LaunchCreate'] = _LAUNCHCREATE
 DESCRIPTOR.message_types_by_name['LaunchData'] = _LAUNCHDATA
+DESCRIPTOR.message_types_by_name['CoreNICApplicationInfo'] = _CORENICAPPLICATIONINFO
 DESCRIPTOR.enum_types_by_name['StatusType'] = _STATUSTYPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -675,6 +724,13 @@ LaunchData = _reflection.GeneratedProtocolMessageType('LaunchData', (_message.Me
   # @@protoc_insertion_point(class_scope:epp.launch.LaunchData)
   })
 _sym_db.RegisterMessage(LaunchData)
+
+CoreNICApplicationInfo = _reflection.GeneratedProtocolMessageType('CoreNICApplicationInfo', (_message.Message,), {
+  'DESCRIPTOR' : _CORENICAPPLICATIONINFO,
+  '__module__' : 'launch_pb2'
+  # @@protoc_insertion_point(class_scope:epp.launch.CoreNICApplicationInfo)
+  })
+_sym_db.RegisterMessage(CoreNICApplicationInfo)
 
 
 # @@protoc_insertion_point(module_scope)

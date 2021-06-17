@@ -15,7 +15,10 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from . import common_pb2 as common__pb2
+from . import eurid_pb2 as eurid__pb2
+from . import qualified_lawyer_pb2 as qualified__lawyer__pb2
 from . import nominet_ext_pb2 as nominet__ext__pb2
+from . import isnic_pb2 as isnic__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -24,9 +27,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rcontact.proto\x12\x0b\x65pp.contact\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\x11nominet_ext.proto\"\xd0\x02\n\rPostalAddress\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0corganisation\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07streets\x18\x04 \x03(\t\x12\x0c\n\x04\x63ity\x18\x05 \x01(\t\x12.\n\x08province\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bpostal_code\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x63ountry_code\x18\x08 \x01(\t\x12\x35\n\x0fidentity_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nbirth_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"H\n\x05Phone\x12\x0e\n\x06number\x18\x01 \x01(\t\x12/\n\textension\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"8\n\x13\x43ontactCheckRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"T\n\x11\x43ontactCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"7\n\x12\x43ontactInfoRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\nDisclosure\x12/\n\ndisclosure\x18\x01 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\"\x85\x07\n\x10\x43ontactInfoReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12,\n\x08statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x31\n\rlocal_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x08 \x01(\t\x12\x11\n\tclient_id\x18\t \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x0b\x65ntity_type\x18\x0f \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\ndisclosure\x18\x12 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\x12/\n\tauth_info\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12:\n\x14nominet_data_quality\x18\x14 \x01(\x0b\x32\x1c.epp.nominet_ext.DataQuality\"\xd6\x03\n\x14\x43ontactCreateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x31\n\rlocal_address\x18\x02 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x03 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12!\n\x05phone\x18\x04 \x01(\x0b\x32\x12.epp.contact.Phone\x12\x1f\n\x03\x66\x61x\x18\x05 \x01(\x0b\x32\x12.epp.contact.Phone\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12,\n\x0b\x65ntity_type\x18\x07 \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\n \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\x0b \x01(\t\x12\x11\n\tauth_info\x18\x0c \x01(\t\"|\n\x12\x43ontactCreateReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"9\n\x14\x43ontactDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\x12\x43ontactDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"\x9d\x05\n\x14\x43ontactUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x0c\x61\x64\x64_statuses\x18\x02 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x33\n\x0fremove_statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x35\n\x11new_local_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12\x41\n\x1dnew_internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12%\n\tnew_phone\x18\x06 \x01(\x0b\x32\x12.epp.contact.Phone\x12#\n\x07new_fax\x18\x07 \x01(\x0b\x32\x12.epp.contact.Phone\x12/\n\tnew_email\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x30\n\x0fnew_entity_type\x18\t \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x36\n\x10new_trading_name\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x12new_company_number\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\x0c \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\r \x01(\t\x12\x33\n\rnew_auth_info\x18\x0e \x01(\x0b\x32\x1c.google.protobuf.StringValue\"=\n\x12\x43ontactUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"q\n\x1b\x43ontactTransferQueryRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"U\n\x1d\x43ontactTransferRequestRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x81\x02\n\x14\x43ontactTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x07 \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xd1\x01\n\x0f\x43ontactPANReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\xf3\x05\n\nEntityType\x12\n\n\x06NotSet\x10\x00\x12\x11\n\rUnknownEntity\x10\x01\x12\x14\n\x10UkLimitedCompany\x10\x02\x12\x1a\n\x16UkPublicLimitedCompany\x10\x03\x12\x11\n\rUkPartnership\x10\x04\x12\x10\n\x0cUkSoleTrader\x10\x05\x12!\n\x1dUkLimitedLiabilityPartnership\x10\x06\x12*\n&UkIndustrialProvidentRegisteredCompany\x10\x07\x12\x10\n\x0cUkIndividual\x10\x08\x12\x0c\n\x08UkSchool\x10\t\x12\x17\n\x13UkRegisteredCharity\x10\n\x12\x14\n\x10UkGovernmentBody\x10\x0b\x12\x1f\n\x1bUkCorporationByRoyalCharter\x10\x0c\x12\x13\n\x0fUkStatutoryBody\x10\r\x12\x14\n\x10UkPoliticalParty\x10\x1f\x12\x11\n\rOtherUkEntity\x10\x0e\x12\x15\n\x11\x46innishIndividual\x10\x0f\x12\x12\n\x0e\x46innishCompany\x10\x10\x12\x16\n\x12\x46innishAssociation\x10\x11\x12\x16\n\x12\x46innishInstitution\x10\x12\x12\x19\n\x15\x46innishPoliticalParty\x10\x13\x12\x17\n\x13\x46innishMunicipality\x10\x14\x12\x15\n\x11\x46innishGovernment\x10\x15\x12\x1a\n\x16\x46innishPublicCommunity\x10\x16\x12\x13\n\x0fOtherIndividual\x10\x17\x12\x10\n\x0cOtherCompany\x10\x18\x12\x14\n\x10OtherAssociation\x10\x19\x12\x14\n\x10OtherInstitution\x10\x1a\x12\x17\n\x13OtherPoliticalParty\x10\x1b\x12\x15\n\x11OtherMunicipality\x10\x1c\x12\x13\n\x0fOtherGovernment\x10\x1d\x12\x18\n\x14OtherPublicCommunity\x10\x1e*\xc3\x01\n\x0e\x44isclosureType\x12\r\n\tLocalName\x10\x00\x12\x19\n\x15InternationalisedName\x10\x01\x12\x15\n\x11LocalOrganisation\x10\x02\x12!\n\x1dInternationalisedOrganisation\x10\x03\x12\x10\n\x0cLocalAddress\x10\x04\x12\x1c\n\x18InternationalisedAddress\x10\x05\x12\t\n\x05Voice\x10\x06\x12\x07\n\x03\x46\x61x\x10\x07\x12\t\n\x05\x45mail\x10\x08*\x9d\x02\n\rContactStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1c\n\x18\x43lientTransferProhibited\x10\x01\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x02\x12\n\n\x06Linked\x10\x03\x12\x06\n\x02Ok\x10\x04\x12\x11\n\rPendingCreate\x10\x05\x12\x11\n\rPendingDelete\x10\x06\x12\x13\n\x0fPendingTransfer\x10\x07\x12\x11\n\rPendingUpdate\x10\x08\x12\x1a\n\x16ServerDeleteProhibited\x10\t\x12\x1c\n\x18ServerTransferProhibited\x10\n\x12\x1a\n\x16ServerUpdateProhibited\x10\x0b\x62\x06proto3'
+  serialized_pb=b'\n\rcontact.proto\x12\x0b\x65pp.contact\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\x0b\x65urid.proto\x1a\x16qualified_lawyer.proto\x1a\x11nominet_ext.proto\x1a\x0bisnic.proto\"\xd0\x02\n\rPostalAddress\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0corganisation\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07streets\x18\x04 \x03(\t\x12\x0c\n\x04\x63ity\x18\x05 \x01(\t\x12.\n\x08province\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0bpostal_code\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x63ountry_code\x18\x08 \x01(\t\x12\x35\n\x0fidentity_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nbirth_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"8\n\x13\x43ontactCheckRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x83\x01\n\x11\x43ontactCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponse\"7\n\x12\x43ontactInfoRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"=\n\nDisclosure\x12/\n\ndisclosure\x18\x01 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\"\xd8\x08\n\x10\x43ontactInfoReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12,\n\x08statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x31\n\rlocal_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12 \n\x05phone\x18\x06 \x01(\x0b\x32\x11.epp.common.Phone\x12\x1e\n\x03\x66\x61x\x18\x07 \x01(\x0b\x32\x11.epp.common.Phone\x12\r\n\x05\x65mail\x18\x08 \x01(\t\x12\x11\n\tclient_id\x18\t \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x0b\x65ntity_type\x18\x0f \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\x11 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\ndisclosure\x18\x12 \x03(\x0e\x32\x1b.epp.contact.DisclosureType\x12/\n\tauth_info\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12:\n\x14nominet_data_quality\x18\x14 \x01(\x0b\x32\x1c.epp.nominet_ext.DataQuality\x12/\n\neurid_info\x18\x16 \x01(\x0b\x32\x1b.epp.eurid.ContactExtension\x12-\n\x08\x63md_resp\x18\x15 \x01(\x0b\x32\x1b.epp.common.CommandResponse\x12G\n\x10qualified_lawyer\x18\x17 \x01(\x0b\x32-.epp.contact.qualified_lawyer.QualifiedLawyer\x12*\n\nisnic_info\x18\x18 \x01(\x0b\x32\x16.epp.isnic.ContactInfo\"\xfc\x04\n\x14\x43ontactCreateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x31\n\rlocal_address\x18\x02 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12=\n\x19internationalised_address\x18\x03 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12 \n\x05phone\x18\x04 \x01(\x0b\x32\x11.epp.common.Phone\x12\x1e\n\x03\x66\x61x\x18\x05 \x01(\x0b\x32\x11.epp.common.Phone\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12,\n\x0b\x65ntity_type\x18\x07 \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x32\n\x0ctrading_name\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x34\n\x0e\x63ompany_number\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\n \x01(\x0b\x32\x17.epp.contact.Disclosure\x12/\n\neurid_info\x18\r \x01(\x0b\x32\x1b.epp.eurid.ContactExtension\x12\x15\n\rregistry_name\x18\x0b \x01(\t\x12\x11\n\tauth_info\x18\x0c \x01(\t\x12G\n\x10qualified_lawyer\x18\x0e \x01(\x0b\x32-.epp.contact.qualified_lawyer.QualifiedLawyer\x12,\n\nisnic_info\x18\x0f \x01(\x0b\x32\x18.epp.isnic.ContactCreate\"\x99\x01\n\x12\x43ontactCreateReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\x08\x63md_resp\x18\x05 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x04\x10\x05\"9\n\x14\x43ontactDeleteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"Z\n\x12\x43ontactDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x02\x10\x03\"\xcd\x06\n\x14\x43ontactUpdateRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x0c\x61\x64\x64_statuses\x18\x02 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x33\n\x0fremove_statuses\x18\x03 \x03(\x0e\x32\x1a.epp.contact.ContactStatus\x12\x35\n\x11new_local_address\x18\x04 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12\x41\n\x1dnew_internationalised_address\x18\x05 \x01(\x0b\x32\x1a.epp.contact.PostalAddress\x12$\n\tnew_phone\x18\x06 \x01(\x0b\x32\x11.epp.common.Phone\x12\"\n\x07new_fax\x18\x07 \x01(\x0b\x32\x11.epp.common.Phone\x12/\n\tnew_email\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x30\n\x0fnew_entity_type\x18\t \x01(\x0e\x32\x17.epp.contact.EntityType\x12\x36\n\x10new_trading_name\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x38\n\x12new_company_number\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\ndisclosure\x18\x0c \x01(\x0b\x32\x17.epp.contact.Disclosure\x12\x15\n\rregistry_name\x18\r \x01(\t\x12\x33\n\rnew_auth_info\x18\x0e \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x39\n\x0enew_eurid_info\x18\x0f \x01(\x0b\x32!.epp.eurid.ContactUpdateExtension\x12G\n\x10qualified_lawyer\x18\x10 \x01(\x0b\x32-.epp.contact.qualified_lawyer.QualifiedLawyer\x12,\n\nisnic_info\x18\x11 \x01(\x0b\x32\x18.epp.isnic.ContactUpdate\"Z\n\x12\x43ontactUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x02\x10\x03\"q\n\x1b\x43ontactTransferQueryRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12/\n\tauth_info\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"U\n\x1d\x43ontactTransferRequestRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tauth_info\x18\x02 \x01(\t\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"\x9e\x02\n\x14\x43ontactTransferReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.epp.common.TransferStatus\x12\x1b\n\x13requested_client_id\x18\x03 \x01(\t\x12\x32\n\x0erequested_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x15\n\ract_client_id\x18\x05 \x01(\t\x12,\n\x08\x61\x63t_date\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\x08\x63md_resp\x18\x08 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x07\x10\x08\"\xd1\x01\n\x0f\x43ontactPANReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06result\x18\x02 \x01(\x08\x12;\n\x15server_transaction_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12;\n\x15\x63lient_transaction_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp*\xf3\x05\n\nEntityType\x12\n\n\x06NotSet\x10\x00\x12\x11\n\rUnknownEntity\x10\x01\x12\x14\n\x10UkLimitedCompany\x10\x02\x12\x1a\n\x16UkPublicLimitedCompany\x10\x03\x12\x11\n\rUkPartnership\x10\x04\x12\x10\n\x0cUkSoleTrader\x10\x05\x12!\n\x1dUkLimitedLiabilityPartnership\x10\x06\x12*\n&UkIndustrialProvidentRegisteredCompany\x10\x07\x12\x10\n\x0cUkIndividual\x10\x08\x12\x0c\n\x08UkSchool\x10\t\x12\x17\n\x13UkRegisteredCharity\x10\n\x12\x14\n\x10UkGovernmentBody\x10\x0b\x12\x1f\n\x1bUkCorporationByRoyalCharter\x10\x0c\x12\x13\n\x0fUkStatutoryBody\x10\r\x12\x14\n\x10UkPoliticalParty\x10\x1f\x12\x11\n\rOtherUkEntity\x10\x0e\x12\x15\n\x11\x46innishIndividual\x10\x0f\x12\x12\n\x0e\x46innishCompany\x10\x10\x12\x16\n\x12\x46innishAssociation\x10\x11\x12\x16\n\x12\x46innishInstitution\x10\x12\x12\x19\n\x15\x46innishPoliticalParty\x10\x13\x12\x17\n\x13\x46innishMunicipality\x10\x14\x12\x15\n\x11\x46innishGovernment\x10\x15\x12\x1a\n\x16\x46innishPublicCommunity\x10\x16\x12\x13\n\x0fOtherIndividual\x10\x17\x12\x10\n\x0cOtherCompany\x10\x18\x12\x14\n\x10OtherAssociation\x10\x19\x12\x14\n\x10OtherInstitution\x10\x1a\x12\x17\n\x13OtherPoliticalParty\x10\x1b\x12\x15\n\x11OtherMunicipality\x10\x1c\x12\x13\n\x0fOtherGovernment\x10\x1d\x12\x18\n\x14OtherPublicCommunity\x10\x1e*\xc3\x01\n\x0e\x44isclosureType\x12\r\n\tLocalName\x10\x00\x12\x19\n\x15InternationalisedName\x10\x01\x12\x15\n\x11LocalOrganisation\x10\x02\x12!\n\x1dInternationalisedOrganisation\x10\x03\x12\x10\n\x0cLocalAddress\x10\x04\x12\x1c\n\x18InternationalisedAddress\x10\x05\x12\t\n\x05Voice\x10\x06\x12\x07\n\x03\x46\x61x\x10\x07\x12\t\n\x05\x45mail\x10\x08*\x9d\x02\n\rContactStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1c\n\x18\x43lientTransferProhibited\x10\x01\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x02\x12\n\n\x06Linked\x10\x03\x12\x06\n\x02Ok\x10\x04\x12\x11\n\rPendingCreate\x10\x05\x12\x11\n\rPendingDelete\x10\x06\x12\x13\n\x0fPendingTransfer\x10\x07\x12\x11\n\rPendingUpdate\x10\x08\x12\x1a\n\x16ServerDeleteProhibited\x10\t\x12\x1c\n\x18ServerTransferProhibited\x10\n\x12\x1a\n\x16ServerUpdateProhibited\x10\x0b\x62\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,nominet__ext__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,eurid__pb2.DESCRIPTOR,qualified__lawyer__pb2.DESCRIPTOR,nominet__ext__pb2.DESCRIPTOR,isnic__pb2.DESCRIPTOR,])
 
 _ENTITYTYPE = _descriptor.EnumDescriptor(
   name='EntityType',
@@ -198,8 +201,8 @@ _ENTITYTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3840,
-  serialized_end=4595,
+  serialized_start=4534,
+  serialized_end=5289,
 )
 _sym_db.RegisterEnumDescriptor(_ENTITYTYPE)
 
@@ -259,8 +262,8 @@ _DISCLOSURETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4598,
-  serialized_end=4793,
+  serialized_start=5292,
+  serialized_end=5487,
 )
 _sym_db.RegisterEnumDescriptor(_DISCLOSURETYPE)
 
@@ -335,8 +338,8 @@ _CONTACTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4796,
-  serialized_end=5081,
+  serialized_start=5490,
+  serialized_end=5775,
 )
 _sym_db.RegisterEnumDescriptor(_CONTACTSTATUS)
 
@@ -480,47 +483,8 @@ _POSTALADDRESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=129,
-  serialized_end=465,
-)
-
-
-_PHONE = _descriptor.Descriptor(
-  name='Phone',
-  full_name='epp.contact.Phone',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='number', full_name='epp.contact.Phone.number', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='extension', full_name='epp.contact.Phone.extension', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=467,
-  serialized_end=539,
+  serialized_start=179,
+  serialized_end=515,
 )
 
 
@@ -558,8 +522,8 @@ _CONTACTCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=541,
-  serialized_end=597,
+  serialized_start=517,
+  serialized_end=573,
 )
 
 
@@ -585,6 +549,13 @@ _CONTACTCHECKREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.contact.ContactCheckReply.cmd_resp', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -597,8 +568,8 @@ _CONTACTCHECKREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=599,
-  serialized_end=683,
+  serialized_start=576,
+  serialized_end=707,
 )
 
 
@@ -636,8 +607,8 @@ _CONTACTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=685,
-  serialized_end=740,
+  serialized_start=709,
+  serialized_end=764,
 )
 
 
@@ -668,8 +639,8 @@ _DISCLOSURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=742,
-  serialized_end=803,
+  serialized_start=766,
+  serialized_end=827,
 )
 
 
@@ -821,6 +792,34 @@ _CONTACTINFOREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='eurid_info', full_name='epp.contact.ContactInfoReply.eurid_info', index=20,
+      number=22, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.contact.ContactInfoReply.cmd_resp', index=21,
+      number=21, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='qualified_lawyer', full_name='epp.contact.ContactInfoReply.qualified_lawyer', index=22,
+      number=23, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isnic_info', full_name='epp.contact.ContactInfoReply.isnic_info', index=23,
+      number=24, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -833,8 +832,8 @@ _CONTACTINFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=806,
-  serialized_end=1707,
+  serialized_start=830,
+  serialized_end=1942,
 )
 
 
@@ -917,16 +916,37 @@ _CONTACTCREATEREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='registry_name', full_name='epp.contact.ContactCreateRequest.registry_name', index=10,
+      name='eurid_info', full_name='epp.contact.ContactCreateRequest.eurid_info', index=10,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='registry_name', full_name='epp.contact.ContactCreateRequest.registry_name', index=11,
       number=11, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='auth_info', full_name='epp.contact.ContactCreateRequest.auth_info', index=11,
+      name='auth_info', full_name='epp.contact.ContactCreateRequest.auth_info', index=12,
       number=12, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='qualified_lawyer', full_name='epp.contact.ContactCreateRequest.qualified_lawyer', index=13,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isnic_info', full_name='epp.contact.ContactCreateRequest.isnic_info', index=14,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -942,8 +962,8 @@ _CONTACTCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1710,
-  serialized_end=2180,
+  serialized_start=1945,
+  serialized_end=2581,
 )
 
 
@@ -970,15 +990,15 @@ _CONTACTCREATEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.contact.ContactCreateReply.transaction_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='creation_date', full_name='epp.contact.ContactCreateReply.creation_date', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='creation_date', full_name='epp.contact.ContactCreateReply.creation_date', index=3,
-      number=3, type=11, cpp_type=10, label=1,
+      name='cmd_resp', full_name='epp.contact.ContactCreateReply.cmd_resp', index=3,
+      number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -995,8 +1015,8 @@ _CONTACTCREATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2182,
-  serialized_end=2306,
+  serialized_start=2584,
+  serialized_end=2737,
 )
 
 
@@ -1034,8 +1054,8 @@ _CONTACTDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2308,
-  serialized_end=2365,
+  serialized_start=2739,
+  serialized_end=2796,
 )
 
 
@@ -1055,9 +1075,9 @@ _CONTACTDELETEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.contact.ContactDeleteReply.transaction_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='cmd_resp', full_name='epp.contact.ContactDeleteReply.cmd_resp', index=1,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -1073,8 +1093,8 @@ _CONTACTDELETEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2367,
-  serialized_end=2428,
+  serialized_start=2798,
+  serialized_end=2888,
 )
 
 
@@ -1184,6 +1204,27 @@ _CONTACTUPDATEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='new_eurid_info', full_name='epp.contact.ContactUpdateRequest.new_eurid_info', index=14,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='qualified_lawyer', full_name='epp.contact.ContactUpdateRequest.qualified_lawyer', index=15,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isnic_info', full_name='epp.contact.ContactUpdateRequest.isnic_info', index=16,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -1196,8 +1237,8 @@ _CONTACTUPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2431,
-  serialized_end=3100,
+  serialized_start=2891,
+  serialized_end=3736,
 )
 
 
@@ -1217,9 +1258,9 @@ _CONTACTUPDATEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.contact.ContactUpdateReply.transaction_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='cmd_resp', full_name='epp.contact.ContactUpdateReply.cmd_resp', index=1,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -1235,8 +1276,8 @@ _CONTACTUPDATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3102,
-  serialized_end=3163,
+  serialized_start=3738,
+  serialized_end=3828,
 )
 
 
@@ -1281,8 +1322,8 @@ _CONTACTTRANSFERQUERYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3165,
-  serialized_end=3278,
+  serialized_start=3830,
+  serialized_end=3943,
 )
 
 
@@ -1327,8 +1368,8 @@ _CONTACTTRANSFERREQUESTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3280,
-  serialized_end=3365,
+  serialized_start=3945,
+  serialized_end=4030,
 )
 
 
@@ -1348,43 +1389,43 @@ _CONTACTTRANSFERREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.contact.ContactTransferReply.transaction_id', index=1,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='status', full_name='epp.contact.ContactTransferReply.status', index=2,
+      name='status', full_name='epp.contact.ContactTransferReply.status', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='requested_client_id', full_name='epp.contact.ContactTransferReply.requested_client_id', index=3,
+      name='requested_client_id', full_name='epp.contact.ContactTransferReply.requested_client_id', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='requested_date', full_name='epp.contact.ContactTransferReply.requested_date', index=4,
+      name='requested_date', full_name='epp.contact.ContactTransferReply.requested_date', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='act_client_id', full_name='epp.contact.ContactTransferReply.act_client_id', index=5,
+      name='act_client_id', full_name='epp.contact.ContactTransferReply.act_client_id', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='act_date', full_name='epp.contact.ContactTransferReply.act_date', index=6,
+      name='act_date', full_name='epp.contact.ContactTransferReply.act_date', index=5,
       number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.contact.ContactTransferReply.cmd_resp', index=6,
+      number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1401,8 +1442,8 @@ _CONTACTTRANSFERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3368,
-  serialized_end=3625,
+  serialized_start=4033,
+  serialized_end=4319,
 )
 
 
@@ -1461,8 +1502,8 @@ _CONTACTPANREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3628,
-  serialized_end=3837,
+  serialized_start=4322,
+  serialized_end=4531,
 )
 
 _POSTALADDRESS.fields_by_name['organisation'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -1470,14 +1511,14 @@ _POSTALADDRESS.fields_by_name['province'].message_type = google_dot_protobuf_dot
 _POSTALADDRESS.fields_by_name['postal_code'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _POSTALADDRESS.fields_by_name['identity_number'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _POSTALADDRESS.fields_by_name['birth_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_PHONE.fields_by_name['extension'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTCHECKREPLY.fields_by_name['reason'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CONTACTCHECKREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _DISCLOSURE.fields_by_name['disclosure'].enum_type = _DISCLOSURETYPE
 _CONTACTINFOREPLY.fields_by_name['statuses'].enum_type = _CONTACTSTATUS
 _CONTACTINFOREPLY.fields_by_name['local_address'].message_type = _POSTALADDRESS
 _CONTACTINFOREPLY.fields_by_name['internationalised_address'].message_type = _POSTALADDRESS
-_CONTACTINFOREPLY.fields_by_name['phone'].message_type = _PHONE
-_CONTACTINFOREPLY.fields_by_name['fax'].message_type = _PHONE
+_CONTACTINFOREPLY.fields_by_name['phone'].message_type = common__pb2._PHONE
+_CONTACTINFOREPLY.fields_by_name['fax'].message_type = common__pb2._PHONE
 _CONTACTINFOREPLY.fields_by_name['client_created_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTINFOREPLY.fields_by_name['creation_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _CONTACTINFOREPLY.fields_by_name['last_updated_client'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -1489,36 +1530,49 @@ _CONTACTINFOREPLY.fields_by_name['company_number'].message_type = google_dot_pro
 _CONTACTINFOREPLY.fields_by_name['disclosure'].enum_type = _DISCLOSURETYPE
 _CONTACTINFOREPLY.fields_by_name['auth_info'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTINFOREPLY.fields_by_name['nominet_data_quality'].message_type = nominet__ext__pb2._DATAQUALITY
+_CONTACTINFOREPLY.fields_by_name['eurid_info'].message_type = eurid__pb2._CONTACTEXTENSION
+_CONTACTINFOREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
+_CONTACTINFOREPLY.fields_by_name['qualified_lawyer'].message_type = qualified__lawyer__pb2._QUALIFIEDLAWYER
+_CONTACTINFOREPLY.fields_by_name['isnic_info'].message_type = isnic__pb2._CONTACTINFO
 _CONTACTCREATEREQUEST.fields_by_name['local_address'].message_type = _POSTALADDRESS
 _CONTACTCREATEREQUEST.fields_by_name['internationalised_address'].message_type = _POSTALADDRESS
-_CONTACTCREATEREQUEST.fields_by_name['phone'].message_type = _PHONE
-_CONTACTCREATEREQUEST.fields_by_name['fax'].message_type = _PHONE
+_CONTACTCREATEREQUEST.fields_by_name['phone'].message_type = common__pb2._PHONE
+_CONTACTCREATEREQUEST.fields_by_name['fax'].message_type = common__pb2._PHONE
 _CONTACTCREATEREQUEST.fields_by_name['entity_type'].enum_type = _ENTITYTYPE
 _CONTACTCREATEREQUEST.fields_by_name['trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTCREATEREQUEST.fields_by_name['company_number'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTCREATEREQUEST.fields_by_name['disclosure'].message_type = _DISCLOSURE
+_CONTACTCREATEREQUEST.fields_by_name['eurid_info'].message_type = eurid__pb2._CONTACTEXTENSION
+_CONTACTCREATEREQUEST.fields_by_name['qualified_lawyer'].message_type = qualified__lawyer__pb2._QUALIFIEDLAWYER
+_CONTACTCREATEREQUEST.fields_by_name['isnic_info'].message_type = isnic__pb2._CONTACTCREATE
 _CONTACTCREATEREPLY.fields_by_name['creation_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_CONTACTCREATEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
+_CONTACTDELETEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _CONTACTUPDATEREQUEST.fields_by_name['add_statuses'].enum_type = _CONTACTSTATUS
 _CONTACTUPDATEREQUEST.fields_by_name['remove_statuses'].enum_type = _CONTACTSTATUS
 _CONTACTUPDATEREQUEST.fields_by_name['new_local_address'].message_type = _POSTALADDRESS
 _CONTACTUPDATEREQUEST.fields_by_name['new_internationalised_address'].message_type = _POSTALADDRESS
-_CONTACTUPDATEREQUEST.fields_by_name['new_phone'].message_type = _PHONE
-_CONTACTUPDATEREQUEST.fields_by_name['new_fax'].message_type = _PHONE
+_CONTACTUPDATEREQUEST.fields_by_name['new_phone'].message_type = common__pb2._PHONE
+_CONTACTUPDATEREQUEST.fields_by_name['new_fax'].message_type = common__pb2._PHONE
 _CONTACTUPDATEREQUEST.fields_by_name['new_email'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTUPDATEREQUEST.fields_by_name['new_entity_type'].enum_type = _ENTITYTYPE
 _CONTACTUPDATEREQUEST.fields_by_name['new_trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTUPDATEREQUEST.fields_by_name['new_company_number'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTUPDATEREQUEST.fields_by_name['disclosure'].message_type = _DISCLOSURE
 _CONTACTUPDATEREQUEST.fields_by_name['new_auth_info'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_CONTACTUPDATEREQUEST.fields_by_name['new_eurid_info'].message_type = eurid__pb2._CONTACTUPDATEEXTENSION
+_CONTACTUPDATEREQUEST.fields_by_name['qualified_lawyer'].message_type = qualified__lawyer__pb2._QUALIFIEDLAWYER
+_CONTACTUPDATEREQUEST.fields_by_name['isnic_info'].message_type = isnic__pb2._CONTACTUPDATE
+_CONTACTUPDATEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _CONTACTTRANSFERQUERYREQUEST.fields_by_name['auth_info'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTTRANSFERREPLY.fields_by_name['status'].enum_type = common__pb2._TRANSFERSTATUS
 _CONTACTTRANSFERREPLY.fields_by_name['requested_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _CONTACTTRANSFERREPLY.fields_by_name['act_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_CONTACTTRANSFERREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _CONTACTPANREPLY.fields_by_name['server_transaction_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTPANREPLY.fields_by_name['client_transaction_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _CONTACTPANREPLY.fields_by_name['date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 DESCRIPTOR.message_types_by_name['PostalAddress'] = _POSTALADDRESS
-DESCRIPTOR.message_types_by_name['Phone'] = _PHONE
 DESCRIPTOR.message_types_by_name['ContactCheckRequest'] = _CONTACTCHECKREQUEST
 DESCRIPTOR.message_types_by_name['ContactCheckReply'] = _CONTACTCHECKREPLY
 DESCRIPTOR.message_types_by_name['ContactInfoRequest'] = _CONTACTINFOREQUEST
@@ -1545,13 +1599,6 @@ PostalAddress = _reflection.GeneratedProtocolMessageType('PostalAddress', (_mess
   # @@protoc_insertion_point(class_scope:epp.contact.PostalAddress)
   })
 _sym_db.RegisterMessage(PostalAddress)
-
-Phone = _reflection.GeneratedProtocolMessageType('Phone', (_message.Message,), {
-  'DESCRIPTOR' : _PHONE,
-  '__module__' : 'contact_pb2'
-  # @@protoc_insertion_point(class_scope:epp.contact.Phone)
-  })
-_sym_db.RegisterMessage(Phone)
 
 ContactCheckRequest = _reflection.GeneratedProtocolMessageType('ContactCheckRequest', (_message.Message,), {
   'DESCRIPTOR' : _CONTACTCHECKREQUEST,

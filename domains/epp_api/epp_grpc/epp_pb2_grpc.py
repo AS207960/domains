@@ -5,7 +5,9 @@ import grpc
 from . import contact_pb2 as contact__pb2
 from . import domain_pb2 as domain__pb2
 from . import epp_pb2 as epp__pb2
+from . import eurid_pb2 as eurid__pb2
 from . import host_pb2 as host__pb2
+from . import maintenance_pb2 as maintenance__pb2
 from . import nominet_pb2 as nominet__pb2
 from . import rgp_pb2 as rgp__pb2
 
@@ -89,6 +91,11 @@ class EPPProxyStub(object):
                 request_serializer=rgp__pb2.RequestRequest.SerializeToString,
                 response_deserializer=rgp__pb2.RestoreReply.FromString,
                 )
+        self.DomainSync = channel.unary_unary(
+                '/epp.EPPProxy/DomainSync',
+                request_serializer=domain__pb2.DomainSyncRequest.SerializeToString,
+                response_deserializer=domain__pb2.DomainUpdateReply.FromString,
+                )
         self.HostCheck = channel.unary_unary(
                 '/epp.EPPProxy/HostCheck',
                 request_serializer=host__pb2.HostCheckRequest.SerializeToString,
@@ -159,6 +166,16 @@ class EPPProxyStub(object):
                 request_serializer=contact__pb2.ContactTransferRequestRequest.SerializeToString,
                 response_deserializer=contact__pb2.ContactTransferReply.FromString,
                 )
+        self.MaintenanceList = channel.unary_unary(
+                '/epp.EPPProxy/MaintenanceList',
+                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                response_deserializer=maintenance__pb2.MaintenanceListReply.FromString,
+                )
+        self.MaintenanceInfo = channel.unary_unary(
+                '/epp.EPPProxy/MaintenanceInfo',
+                request_serializer=maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
+                response_deserializer=maintenance__pb2.MaintenanceInfoReply.FromString,
+                )
         self.Poll = channel.stream_stream(
                 '/epp.EPPProxy/Poll',
                 request_serializer=epp__pb2.PollAck.SerializeToString,
@@ -173,6 +190,26 @@ class EPPProxyStub(object):
                 '/epp.EPPProxy/BalanceInfo',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
                 response_deserializer=epp__pb2.BalanceReply.FromString,
+                )
+        self.HitPointsInfo = channel.unary_unary(
+                '/epp.EPPProxy/HitPointsInfo',
+                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                response_deserializer=eurid__pb2.HitPointsReply.FromString,
+                )
+        self.RegistrationLimitInfo = channel.unary_unary(
+                '/epp.EPPProxy/RegistrationLimitInfo',
+                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                response_deserializer=eurid__pb2.RegistrationLimitReply.FromString,
+                )
+        self.DNSQualityInfo = channel.unary_unary(
+                '/epp.EPPProxy/DNSQualityInfo',
+                request_serializer=eurid__pb2.DNSQualityRequest.SerializeToString,
+                response_deserializer=eurid__pb2.DNSQualityReply.FromString,
+                )
+        self.DNSSECEligibilityInfo = channel.unary_unary(
+                '/epp.EPPProxy/DNSSECEligibilityInfo',
+                request_serializer=eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
+                response_deserializer=eurid__pb2.DNSSECEligibilityReply.FromString,
                 )
 
 
@@ -263,6 +300,12 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DomainSync(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def HostCheck(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -347,6 +390,18 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def MaintenanceList(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def MaintenanceInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Poll(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -360,6 +415,30 @@ class EPPProxyServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def BalanceInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def HitPointsInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RegistrationLimitInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DNSQualityInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DNSSECEligibilityInfo(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -438,6 +517,11 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     request_deserializer=rgp__pb2.RequestRequest.FromString,
                     response_serializer=rgp__pb2.RestoreReply.SerializeToString,
             ),
+            'DomainSync': grpc.unary_unary_rpc_method_handler(
+                    servicer.DomainSync,
+                    request_deserializer=domain__pb2.DomainSyncRequest.FromString,
+                    response_serializer=domain__pb2.DomainUpdateReply.SerializeToString,
+            ),
             'HostCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.HostCheck,
                     request_deserializer=host__pb2.HostCheckRequest.FromString,
@@ -508,6 +592,16 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     request_deserializer=contact__pb2.ContactTransferRequestRequest.FromString,
                     response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
             ),
+            'MaintenanceList': grpc.unary_unary_rpc_method_handler(
+                    servicer.MaintenanceList,
+                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    response_serializer=maintenance__pb2.MaintenanceListReply.SerializeToString,
+            ),
+            'MaintenanceInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.MaintenanceInfo,
+                    request_deserializer=maintenance__pb2.MaintenanceInfoRequest.FromString,
+                    response_serializer=maintenance__pb2.MaintenanceInfoReply.SerializeToString,
+            ),
             'Poll': grpc.stream_stream_rpc_method_handler(
                     servicer.Poll,
                     request_deserializer=epp__pb2.PollAck.FromString,
@@ -522,6 +616,26 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     servicer.BalanceInfo,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
                     response_serializer=epp__pb2.BalanceReply.SerializeToString,
+            ),
+            'HitPointsInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.HitPointsInfo,
+                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    response_serializer=eurid__pb2.HitPointsReply.SerializeToString,
+            ),
+            'RegistrationLimitInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.RegistrationLimitInfo,
+                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    response_serializer=eurid__pb2.RegistrationLimitReply.SerializeToString,
+            ),
+            'DNSQualityInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.DNSQualityInfo,
+                    request_deserializer=eurid__pb2.DNSQualityRequest.FromString,
+                    response_serializer=eurid__pb2.DNSQualityReply.SerializeToString,
+            ),
+            'DNSSECEligibilityInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.DNSSECEligibilityInfo,
+                    request_deserializer=eurid__pb2.DNSSECEligibilityRequest.FromString,
+                    response_serializer=eurid__pb2.DNSSECEligibilityReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -772,6 +886,23 @@ class EPPProxy(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def DomainSync(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainSync',
+            domain__pb2.DomainSyncRequest.SerializeToString,
+            domain__pb2.DomainUpdateReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def HostCheck(request,
             target,
             options=(),
@@ -1010,6 +1141,40 @@ class EPPProxy(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def MaintenanceList(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/MaintenanceList',
+            epp__pb2.RegistryInfo.SerializeToString,
+            maintenance__pb2.MaintenanceListReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def MaintenanceInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/MaintenanceInfo',
+            maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
+            maintenance__pb2.MaintenanceInfoReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def Poll(request_iterator,
             target,
             options=(),
@@ -1057,5 +1222,73 @@ class EPPProxy(object):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/BalanceInfo',
             epp__pb2.RegistryInfo.SerializeToString,
             epp__pb2.BalanceReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def HitPointsInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HitPointsInfo',
+            epp__pb2.RegistryInfo.SerializeToString,
+            eurid__pb2.HitPointsReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def RegistrationLimitInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/RegistrationLimitInfo',
+            epp__pb2.RegistryInfo.SerializeToString,
+            eurid__pb2.RegistrationLimitReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DNSQualityInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DNSQualityInfo',
+            eurid__pb2.DNSQualityRequest.SerializeToString,
+            eurid__pb2.DNSQualityReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DNSSECEligibilityInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DNSSECEligibilityInfo',
+            eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
+            eurid__pb2.DNSSECEligibilityReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

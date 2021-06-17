@@ -15,6 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from . import common_pb2 as common__pb2
+from . import isnic_pb2 as isnic__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +24,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nhost.proto\x12\x08\x65pp.host\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\"7\n\x10HostCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"Q\n\x0eHostCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"6\n\x0fHostInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\xad\x03\n\rHostInfoReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12&\n\x08statuses\x18\x03 \x03(\x0e\x32\x14.epp.host.HostStatus\x12(\n\taddresses\x18\x04 \x03(\x0b\x32\x15.epp.common.IPAddress\x12\x11\n\tclient_id\x18\x05 \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"b\n\x11HostCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12(\n\taddresses\x18\x02 \x03(\x0b\x32\x15.epp.common.IPAddress\x12\x15\n\rregistry_name\x18\x03 \x01(\t\"{\n\x0fHostCreateReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x04 \x01(\t\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"8\n\x11HostDeleteRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\":\n\x0fHostDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t\"\xae\x02\n\x11HostUpdateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12.\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32!.epp.host.HostUpdateRequest.Param\x12\x31\n\x06remove\x18\x03 \x03(\x0b\x32!.epp.host.HostUpdateRequest.Param\x12.\n\x08new_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x05 \x01(\t\x1a\x61\n\x05Param\x12(\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0b\x32\x15.epp.common.IPAddressH\x00\x12%\n\x05state\x18\x02 \x01(\x0e\x32\x14.epp.host.HostStatusH\x00\x42\x07\n\x05param\":\n\x0fHostUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12\x16\n\x0etransaction_id\x18\x02 \x01(\t*\xde\x01\n\nHostStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x01\x12\n\n\x06Linked\x10\x02\x12\x06\n\x02Ok\x10\x03\x12\x11\n\rPendingCreate\x10\x04\x12\x11\n\rPendingDelete\x10\x05\x12\x13\n\x0fPendingTransfer\x10\x06\x12\x11\n\rPendingUpdate\x10\x07\x12\x1a\n\x16ServerDeleteProhibited\x10\x08\x12\x1a\n\x16ServerUpdateProhibited\x10\tb\x06proto3'
+  serialized_pb=b'\n\nhost.proto\x12\x08\x65pp.host\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x63ommon.proto\x1a\x0bisnic.proto\"7\n\x10HostCheckRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\x80\x01\n\x0eHostCheckReply\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponse\"6\n\x0fHostInfoRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"\xdc\x03\n\rHostInfoReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bregistry_id\x18\x02 \x01(\t\x12&\n\x08statuses\x18\x03 \x03(\x0e\x32\x14.epp.host.HostStatus\x12(\n\taddresses\x18\x04 \x03(\x0b\x32\x15.epp.common.IPAddress\x12\x11\n\tclient_id\x18\x05 \x01(\t\x12\x37\n\x11\x63lient_created_id\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\rcreation_date\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x39\n\x13last_updated_client\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x11last_updated_date\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12last_transfer_date\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\x08\x63md_resp\x18\x0b \x01(\x0b\x32\x1b.epp.common.CommandResponse\"\x8b\x01\n\x11HostCreateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12(\n\taddresses\x18\x02 \x03(\x0b\x32\x15.epp.common.IPAddress\x12\x15\n\rregistry_name\x18\x03 \x01(\t\x12\'\n\nisnic_info\x18\x04 \x01(\x0b\x32\x13.epp.isnic.HostInfo\"\x98\x01\n\x0fHostCreateReply\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07pending\x18\x02 \x01(\x08\x12\x31\n\rcreation_date\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\x08\x63md_resp\x18\x05 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x04\x10\x05\"8\n\x11HostDeleteRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rregistry_name\x18\x02 \x01(\t\"W\n\x0fHostDeleteReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x02\x10\x03\"\xd7\x02\n\x11HostUpdateRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12.\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32!.epp.host.HostUpdateRequest.Param\x12\x31\n\x06remove\x18\x03 \x03(\x0b\x32!.epp.host.HostUpdateRequest.Param\x12.\n\x08new_name\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x15\n\rregistry_name\x18\x05 \x01(\t\x12\'\n\nisnic_info\x18\x06 \x01(\x0b\x32\x13.epp.isnic.HostInfo\x1a\x61\n\x05Param\x12(\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0b\x32\x15.epp.common.IPAddressH\x00\x12%\n\x05state\x18\x02 \x01(\x0e\x32\x14.epp.host.HostStatusH\x00\x42\x07\n\x05param\"W\n\x0fHostUpdateReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponseJ\x04\x08\x02\x10\x03*\xde\x01\n\nHostStatus\x12\x1a\n\x16\x43lientDeleteProhibited\x10\x00\x12\x1a\n\x16\x43lientUpdateProhibited\x10\x01\x12\n\n\x06Linked\x10\x02\x12\x06\n\x02Ok\x10\x03\x12\x11\n\rPendingCreate\x10\x04\x12\x11\n\rPendingDelete\x10\x05\x12\x13\n\x0fPendingTransfer\x10\x06\x12\x11\n\rPendingUpdate\x10\x07\x12\x1a\n\x16ServerDeleteProhibited\x10\x08\x12\x1a\n\x16ServerUpdateProhibited\x10\tb\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,isnic__pb2.DESCRIPTOR,])
 
 _HOSTSTATUS = _descriptor.EnumDescriptor(
   name='HostStatus',
@@ -87,8 +88,8 @@ _HOSTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1440,
-  serialized_end=1662,
+  serialized_start=1719,
+  serialized_end=1941,
 )
 _sym_db.RegisterEnumDescriptor(_HOSTSTATUS)
 
@@ -140,8 +141,8 @@ _HOSTCHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=103,
-  serialized_end=158,
+  serialized_start=116,
+  serialized_end=171,
 )
 
 
@@ -167,6 +168,13 @@ _HOSTCHECKREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.host.HostCheckReply.cmd_resp', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -179,8 +187,8 @@ _HOSTCHECKREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=160,
-  serialized_end=241,
+  serialized_start=174,
+  serialized_end=302,
 )
 
 
@@ -218,8 +226,8 @@ _HOSTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=243,
-  serialized_end=297,
+  serialized_start=304,
+  serialized_end=358,
 )
 
 
@@ -301,6 +309,13 @@ _HOSTINFOREPLY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.host.HostInfoReply.cmd_resp', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -313,8 +328,8 @@ _HOSTINFOREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=300,
-  serialized_end=729,
+  serialized_start=361,
+  serialized_end=837,
 )
 
 
@@ -347,6 +362,13 @@ _HOSTCREATEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isnic_info', full_name='epp.host.HostCreateRequest.isnic_info', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -359,8 +381,8 @@ _HOSTCREATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=731,
-  serialized_end=829,
+  serialized_start=840,
+  serialized_end=979,
 )
 
 
@@ -387,15 +409,15 @@ _HOSTCREATEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.host.HostCreateReply.transaction_id', index=2,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='creation_date', full_name='epp.host.HostCreateReply.creation_date', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='creation_date', full_name='epp.host.HostCreateReply.creation_date', index=3,
-      number=3, type=11, cpp_type=10, label=1,
+      name='cmd_resp', full_name='epp.host.HostCreateReply.cmd_resp', index=3,
+      number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -412,8 +434,8 @@ _HOSTCREATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=831,
-  serialized_end=954,
+  serialized_start=982,
+  serialized_end=1134,
 )
 
 
@@ -451,8 +473,8 @@ _HOSTDELETEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=956,
-  serialized_end=1012,
+  serialized_start=1136,
+  serialized_end=1192,
 )
 
 
@@ -472,9 +494,9 @@ _HOSTDELETEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.host.HostDeleteReply.transaction_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='cmd_resp', full_name='epp.host.HostDeleteReply.cmd_resp', index=1,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -490,8 +512,8 @@ _HOSTDELETEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1014,
-  serialized_end=1072,
+  serialized_start=1194,
+  serialized_end=1281,
 )
 
 
@@ -534,8 +556,8 @@ _HOSTUPDATEREQUEST_PARAM = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=1280,
-  serialized_end=1377,
+  serialized_start=1530,
+  serialized_end=1627,
 )
 
 _HOSTUPDATEREQUEST = _descriptor.Descriptor(
@@ -581,6 +603,13 @@ _HOSTUPDATEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='isnic_info', full_name='epp.host.HostUpdateRequest.isnic_info', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -593,8 +622,8 @@ _HOSTUPDATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1075,
-  serialized_end=1377,
+  serialized_start=1284,
+  serialized_end=1627,
 )
 
 
@@ -614,9 +643,9 @@ _HOSTUPDATEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='transaction_id', full_name='epp.host.HostUpdateReply.transaction_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='cmd_resp', full_name='epp.host.HostUpdateReply.cmd_resp', index=1,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -632,11 +661,12 @@ _HOSTUPDATEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1379,
-  serialized_end=1437,
+  serialized_start=1629,
+  serialized_end=1716,
 )
 
 _HOSTCHECKREPLY.fields_by_name['reason'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_HOSTCHECKREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _HOSTINFOREPLY.fields_by_name['statuses'].enum_type = _HOSTSTATUS
 _HOSTINFOREPLY.fields_by_name['addresses'].message_type = common__pb2._IPADDRESS
 _HOSTINFOREPLY.fields_by_name['client_created_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
@@ -644,8 +674,12 @@ _HOSTINFOREPLY.fields_by_name['creation_date'].message_type = google_dot_protobu
 _HOSTINFOREPLY.fields_by_name['last_updated_client'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _HOSTINFOREPLY.fields_by_name['last_updated_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _HOSTINFOREPLY.fields_by_name['last_transfer_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_HOSTINFOREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _HOSTCREATEREQUEST.fields_by_name['addresses'].message_type = common__pb2._IPADDRESS
+_HOSTCREATEREQUEST.fields_by_name['isnic_info'].message_type = isnic__pb2._HOSTINFO
 _HOSTCREATEREPLY.fields_by_name['creation_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_HOSTCREATEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
+_HOSTDELETEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _HOSTUPDATEREQUEST_PARAM.fields_by_name['address'].message_type = common__pb2._IPADDRESS
 _HOSTUPDATEREQUEST_PARAM.fields_by_name['state'].enum_type = _HOSTSTATUS
 _HOSTUPDATEREQUEST_PARAM.containing_type = _HOSTUPDATEREQUEST
@@ -658,6 +692,8 @@ _HOSTUPDATEREQUEST_PARAM.fields_by_name['state'].containing_oneof = _HOSTUPDATER
 _HOSTUPDATEREQUEST.fields_by_name['add'].message_type = _HOSTUPDATEREQUEST_PARAM
 _HOSTUPDATEREQUEST.fields_by_name['remove'].message_type = _HOSTUPDATEREQUEST_PARAM
 _HOSTUPDATEREQUEST.fields_by_name['new_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_HOSTUPDATEREQUEST.fields_by_name['isnic_info'].message_type = isnic__pb2._HOSTINFO
+_HOSTUPDATEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 DESCRIPTOR.message_types_by_name['HostCheckRequest'] = _HOSTCHECKREQUEST
 DESCRIPTOR.message_types_by_name['HostCheckReply'] = _HOSTCHECKREPLY
 DESCRIPTOR.message_types_by_name['HostInfoRequest'] = _HOSTINFOREQUEST

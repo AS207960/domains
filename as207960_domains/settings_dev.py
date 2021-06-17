@@ -61,7 +61,7 @@ MIDDLEWARE = [
     "django_keycloak_auth.middleware.OIDCMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'domains.middleware.CountryMiddleware',
+    'domains.middleware.CountryDummyMiddleware',
 ]
 
 ROOT_URLCONF = 'as207960_domains.urls'
@@ -198,6 +198,8 @@ RABBITMQ_RPC_URL = "amqp://guest:guest@localhost:5672/rpc"
 POSTAL_PUBLIC_KEY = \
     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChELn1Fkauo6bduyGeXNca/z27OYNMd85JZMlNiycfFHaAXzgPd53OKVSbyzBuILFPYmzkfaF" \
     "uOCW2qgvFd8cAye6qLsUAqEetiuRTPpAysX3hss1TqIML51kb0ADTmylKi3Hr553qrDy9AEMFmvaKnTH8o0YFozGk0QtlmiLtXQIDAQAB"
+
+ISNIC_CONTACT_EMAIL = "isnic-auto-ote@as207960.ltd.uk"
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

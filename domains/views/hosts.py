@@ -8,7 +8,7 @@ import django_keycloak_auth.clients
 import ipaddress
 import urllib.parse
 from django.conf import settings
-from .. import models, apps, forms
+from .. import models, apps, forms, zone_info
 
 
 @login_required
@@ -176,6 +176,8 @@ def host_create(request, host_name: str):
             "back_url": referrer
         })
 
+    domain_info = zone_info.get_domain_info(domain.domain)[0]
+
     try:
         host_unicode = idna.decode(host_name, uts46=True)
     except idna.IDNAError:
@@ -200,10 +202,20 @@ def host_create(request, host_name: str):
                 elif address.version == 6:
                     ip_type = apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6
                 try:
+                    if domain_info.registry == domain_info.REGISTRY_ISNIC:
+                        if domain.tech_contact:
+                            zone_contact = domain.tech_contact
+                        else:
+                            zone_contact = domain.registrant_contact
+
+                        isnic_zone_contact = zone_contact.get_registry_id(domain_data.registry_name, domain_info)
+                    else:
+                        isnic_zone_contact = None
+
                     apps.epp_client.create_host(host_name, [apps.epp_api.IPAddress(
                         address=address.compressed,
                         ip_type=ip_type
-                    )], domain_data.registry_name)
+                    )], domain_data.registry_name, isnic_zone_contact.registry_contact_id)
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                 else:

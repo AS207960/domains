@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from .. import apps, forms, models
+from .. import apps, forms, models, zone_info
 from . import emails
 import grpc
 
@@ -221,7 +221,12 @@ def get_contact_id(request):
         form = forms.AdminContactGetIDForm(request.POST)
         if form.is_valid():
             contact = get_object_or_404(models.Contact, id=form.cleaned_data["contact"])
-            registry_id = contact.get_registry_id(form.cleaned_data["registry_id"])
+            domain = form.cleaned_data["domain"]
+            if domain:
+                zone = zone_info.get_domain_info(domain)[0]
+            else:
+                zone = None
+            registry_id = contact.get_registry_id(form.cleaned_data["registry_id"], zone_data=zone)
     else:
         form = forms.AdminContactGetIDForm()
 

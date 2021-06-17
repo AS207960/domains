@@ -8,9 +8,10 @@ import phonenumbers
 import django_keycloak_auth.clients
 from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
-from . import apps
+from . import apps, zone_info
 import uuid
 import grpc
+import time
 import secrets
 import typing
 import threading
@@ -265,25 +266,33 @@ class Contact(models.Model):
         as207960_utils.models.delete_resource(self.resource_id)
         super().delete(*args, **kwargs)
 
-    def get_registry_id(self, registry_id: str):
+    def get_registry_id(self, registry_id: str, zone_data: typing.Optional[zone_info.DomainInfo] = None):
+        is_isnic = zone_info and zone_data.registry == zone_data.REGISTRY_ISNIC
+
         with CONTACT_SEARCH:
             contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
                 .first()   # type: ContactRegistry
             if contact_registry:
+                if is_isnic:
+                    return contact_registry
+
                 if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
                     return contact_registry
                 else:
                     contact_registry.delete()
 
-            contact_id = make_id()
             auth_info = make_secret()
-            while not apps.epp_client.check_contact(contact_id, registry_id)[0]:
+            if is_isnic:
+                contact_id = "UNUSED"
+            else:
                 contact_id = make_id()
+                while not apps.epp_client.check_contact(contact_id, registry_id)[0]:
+                    contact_id = make_id()
 
             contact_id, _, _ = apps.epp_client.create_contact(
                 contact_id,
-                local_address=self.get_local_address(),
-                int_address=self.get_int_address(),
+                local_address=self.get_local_address() if not is_isnic else None,
+                int_address=self.get_int_address() if not is_isnic else self.get_local_address(),
                 phone=apps.epp_api.Phone(
                     number=f"+{self.phone.country_code}.{self.phone.national_number}",
                     ext=self.phone_ext
@@ -292,7 +301,7 @@ class Contact(models.Model):
                     number=f"+{self.fax.country_code}.{self.fax.national_number}",
                     ext=self.fax_ext
                 ) if self.fax else None,
-                email=self.get_public_email(),
+                email=self.get_public_email() if not is_isnic else settings.ISNIC_CONTACT_EMAIL,
                 entity_type=self.entity_type,
                 trading_name=self.trading_name,
                 company_number=self.company_number,
@@ -308,10 +317,25 @@ class Contact(models.Model):
                 auth_info=auth_info
             )
             contact_registry.save()
-            return contact_registry
+
+        if is_isnic:
+            count = 0
+            while True:
+                time.sleep(1)
+                contact_info = apps.epp_client.get_contact(contact_id, registry_id)
+                is_pending = apps.epp_api.isnic_pb2.ContactStatus.PendingCreate in contact_info.isnic_info.statuses
+                if not is_pending:
+                    break
+                count += 1
+                if count >= 5:
+                    break
+
+        return contact_registry
 
     @classmethod
-    def get_contact(cls, registry_contact_id: str, registry_id: str, user):
+    def get_contact(cls, registry_contact_id: str, registry_id: str, user, zone_data: typing.Optional[zone_info.DomainInfo] = None):
+        is_isnic = zone_info and zone_data.registry == zone_data.REGISTRY_ISNIC
+
         with CONTACT_SEARCH:
             contact_registry = ContactRegistry.objects\
                 .filter(registry_contact_id=registry_contact_id, registry_id=registry_id).first()
@@ -320,22 +344,23 @@ class Contact(models.Model):
 
             registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
 
-            local_streets = iter(registry_contact.local_address.streets)
+            local_address = registry_contact.local_address if not is_isnic else registry_contact.int_address
+            local_streets = iter(local_address.streets)
             local_address = ContactAddress(
-                description=registry_contact.local_address.name,
-                name=registry_contact.local_address.name,
-                organisation=registry_contact.local_address.organisation,
+                description=local_address.name,
+                name=local_address.name,
+                organisation=local_address.organisation,
                 street_1=next(local_streets, None),
                 street_2=next(local_streets, None),
                 street_3=next(local_streets, None),
-                city=registry_contact.local_address.city,
-                province=registry_contact.local_address.province,
-                postal_code=registry_contact.local_address.postal_code,
-                country_code=registry_contact.local_address.country_code,
+                city=local_address.city,
+                province=local_address.province,
+                postal_code=local_address.postal_code,
+                country_code=local_address.country_code,
                 user=user
             )
             local_address.save()
-            if registry_contact.int_address:
+            if registry_contact.int_address and not is_isnic:
                 int_streets = iter(registry_contact.int_address.streets)
                 int_address = ContactAddress(
                     description=registry_contact.int_address.name,
@@ -369,7 +394,7 @@ class Contact(models.Model):
                 fax = None
 
             contact = cls(
-                description=registry_contact.local_address.name,
+                description=local_address.name,
                 local_address=local_address,
                 int_address=int_address,
                 phone=phone,
@@ -389,9 +414,10 @@ class Contact(models.Model):
                 contact=contact,
                 registry_contact_id=registry_contact_id,
                 registry_id=registry_id,
-                auth_info=registry_contact.auth_info
+                auth_info=registry_contact.auth_info,
             ).save()
-            return contact
+
+        return contact
 
     def get_local_address(self) -> apps.epp_api.Address:
         return self.local_address.as_api_obj()
@@ -719,7 +745,7 @@ class DomainTransferOrder(AbstractOrder):
     id = as207960_utils.models.TypedUUIDField(f'domains_domaintransferorder', primary_key=True)
     domain = models.CharField(max_length=255)
     domain_id = as207960_utils.models.TypedUUIDField('domains_domainregistration')
-    auth_code = models.CharField(max_length=255)
+    auth_code = models.CharField(max_length=255, blank=True, null=True)
     registrant_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_registrant')
     admin_contact = models.ForeignKey(

@@ -389,11 +389,13 @@ class DomainInfo:
     REGISTRY_RNIDS = "rnids"
     REGISTRY_NICAT = "nicat"
     REGISTRY_CIRA = "cira"
+    REGISTRY_ISNIC = "isnic"
 
-    def __init__(self, registry, pricing, notice=None):
+    def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
         self.pricing = pricing
         self.notice = notice
+        self.transfer_instructions = transfer_instructions
 
     @property
     def supported_dnssec_algorithms(self):
@@ -403,6 +405,8 @@ class DomainInfo:
             return 8, 10, 13, 14, 15, 16
         elif self.registry == self.REGISTRY_VERISIGN:
             return 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
+        elif self.registry == self.REGISTRY_ISNIC:
+            return 3, 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
         else:
             return 5, 7, 8, 10, 13, 14, 15, 16
 
@@ -410,6 +414,8 @@ class DomainInfo:
     def supported_dnssec_digests(self):
         if self.registry == self.REGISTRY_SWITCH:
             return 2, 4
+        if self.registry == self.REGISTRY_ISNIC:
+            return 1, 2, 3, 4
         else:
             return 1, 2, 4
 
@@ -440,7 +446,7 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_VERISIGN,
-            self.REGISTRY_CENTRALNIC_CCTLD
+            self.REGISTRY_CENTRALNIC_CCTLD,
         )
 
     @property
@@ -453,12 +459,6 @@ class DomainInfo:
         )
 
     @property
-    def direct_restore_supported(self):
-        return self.registry in (
-            self.REGISTRY_SWITCH,
-        )
-
-    @property
     def info_with_auth_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
@@ -468,6 +468,7 @@ class DomainInfo:
     @property
     def transfer_supported(self):
         return self.registry in (
+            self.REGISTRY_NOMINET,
             self.REGISTRY_SWITCH,
             self.REGISTRY_DENIC,
             self.REGISTRY_AFNIC,
@@ -507,6 +508,7 @@ class DomainInfo:
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -516,7 +518,8 @@ class DomainInfo:
             self.REGISTRY_AFILIAS,
             self.REGISTRY_NOMINET,
             self.REGISTRY_TRAFICOM,
-            self.REGISTRY_CENTRALNIC_CCTLD
+            self.REGISTRY_CENTRALNIC_CCTLD,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -528,6 +531,15 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_AMNIC,
             self.REGISTRY_EURID,
+            self.REGISTRY_ISNIC,
+        )
+
+    @property
+    def auth_code_for_transfer(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_RRPPROXY,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -537,6 +549,12 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_NICAT,
+        )
+
+    @property
+    def direct_renew_supported(self):
+        return self.registry not in (
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -550,6 +568,13 @@ class DomainInfo:
         )
 
     @property
+    def direct_restore_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_ISNIC,
+        )
+
+    @property
     def transfer_lock_supported(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
@@ -559,6 +584,7 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_KENIC,
             self.REGISTRY_NICAT,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -566,7 +592,8 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_NOMINET,
-            self.REGISTRY_SWITCH
+            self.REGISTRY_SWITCH,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -600,6 +627,7 @@ class DomainInfo:
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -690,6 +718,7 @@ class DomainInfo:
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -699,7 +728,8 @@ class DomainInfo:
             self.REGISTRY_NOMINET,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
-            self.REGISTRY_DNSBELGIUM
+            self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_ISNIC,
         )
 
     @property
@@ -752,6 +782,7 @@ class DomainInfo:
             self.REGISTRY_AFILIAS,
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_VERISIGN,
+            self.REGISTRY_ISNIC,
         )
 
 
@@ -854,6 +885,15 @@ if settings.DEBUG:
             notice=".dev is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
                    ".dev domain."
         )),
+        ('is', DomainInfo(
+            DomainInfo.REGISTRY_ISNIC,
+            SimplePrice(3583, periods=[apps.epp_api.Period(
+                unit=0,
+                value=1
+            )]),
+            transfer_instructions="Make sure to change the admin and billing contact to AC396-IS at "
+                                  "your previous registrar."
+        )),
     )
 else:
     ZONES = (
@@ -880,6 +920,15 @@ else:
             unit=0,
             value=1
         )]))),
+        ('is', DomainInfo(
+            DomainInfo.REGISTRY_ISNIC,
+            SimplePrice(3583, periods=[apps.epp_api.Period(
+                unit=0,
+                value=1
+            )]),
+            transfer_instructions="Make sure to change the admin and billing contact to AC396-IS at "
+                                  "your previous registrar."
+        )),
         ('me', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
             MarkupPrice(1760, transfer=1760, restore=14040, currency=None, display_currency='EUR', tld='me',
@@ -2585,28 +2634,35 @@ else:
         )),
         ('uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('co.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('me.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            notice="This TLD is restricted to natural persons."
+            notice="This TLD is restricted to natural persons.",
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('org.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('ltd.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            notice="This TLD is restricted to UK Limited Companies."
+            notice="This TLD is restricted to UK Limited Companies.",
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('plc.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            notice="This TLD is restricted to UK Public Limited Companies."
+            notice="This TLD is restricted to UK Public Limited Companies.",
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('net.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            notice="This TLD is restricted to businesses in the UK telecommunications sector."
+            notice="This TLD is restricted to businesses in the UK telecommunications sector.",
+            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
         )),
         ('scot', DomainInfo(
             DomainInfo.REGISTRY_CORE,
