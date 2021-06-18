@@ -334,7 +334,7 @@ class Contact(models.Model):
 
     @classmethod
     def get_contact(cls, registry_contact_id: str, registry_id: str, user, zone_data: typing.Optional[zone_info.DomainInfo] = None):
-        is_isnic = zone_info and zone_data.registry == zone_data.REGISTRY_ISNIC
+        is_isnic = zone_data and zone_data.registry == zone_data.REGISTRY_ISNIC
 
         with CONTACT_SEARCH:
             contact_registry = ContactRegistry.objects\

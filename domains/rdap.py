@@ -8,8 +8,7 @@ import concurrent.futures
 from django.db.models import Q
 from .rdap_grpc import rdap_pb2
 from .rdap_grpc import rdap_pb2_grpc
-from . import models
-from . import apps
+from . import models, apps, zone_info
 
 
 def grpc_hook(server):
@@ -183,6 +182,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def domain_to_proto(self, domain_obj: models.DomainRegistration) -> rdap_pb2.Domain:
         domain_data = apps.epp_client.get_domain(domain_obj.domain)
+        zone_data = zone_info.get_domain_info(domain_data.name)[0]
 
         resp_data = rdap_pb2.Domain(
             handle=domain_data.registry_id,
@@ -263,25 +263,25 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
         user = domain_obj.get_user()
         if domain_data.registrant:
-            contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user)
+            contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user, zone_data)
             add_entity(domain_data.registrant, contact, rdap_pb2.RoleRegistrant)
         elif domain_obj.registrant_contact:
             add_entity(None, domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
 
         if domain_data.admin:
-            contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user)
+            contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user, zone_data)
             add_entity(domain_data.admin.contact_id, contact, rdap_pb2.RoleAdministrative)
         elif domain_obj.admin_contact:
             add_entity(None, domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
 
         if domain_data.billing:
-            contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user)
+            contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user, zone_data)
             add_entity(domain_data.billing.contact_id, contact, rdap_pb2.RoleBilling)
         elif domain_obj.billing_contact:
             add_entity(None, domain_obj.billing_contact, rdap_pb2.RoleBilling)
 
         if domain_data.tech:
-            contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user)
+            contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user, zone_data)
             add_entity(domain_data.tech.contact_id, contact, rdap_pb2.RoleTechnical)
         elif domain_obj.tech_contact:
             add_entity(None, domain_obj.tech_contact, rdap_pb2.RoleTechnical)
