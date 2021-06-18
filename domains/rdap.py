@@ -130,55 +130,55 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         return entity
 
     def domain_status_to_rdap(self, status: apps.epp_api.DomainStatus):
-        if status == apps.epp_api.domain_pb2.Ok:
+        if status == apps.epp_api.domain_common_pb2.DomainStatus.Ok:
             return rdap_pb2.StatusActive
-        elif status == apps.epp_api.domain_pb2.Inactive:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.Inactive:
             return rdap_pb2.StatusInactive
-        elif status == apps.epp_api.domain_pb2.ClientDeleteProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientDeleteProhibited:
             return rdap_pb2.StatusClientDeleteProhibited
-        elif status == apps.epp_api.domain_pb2.ClientHold:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientHold:
             return rdap_pb2.StatusClientHold
-        elif status == apps.epp_api.domain_pb2.ClientRenewProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientRenewProhibited:
             return rdap_pb2.StatusClientRenewProhibited
-        elif status == apps.epp_api.domain_pb2.ClientTransferProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatusClientTransferProhibited:
             return rdap_pb2.StatusClientTransferProhibited
-        elif status == apps.epp_api.domain_pb2.ClientUpdateProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientUpdateProhibited:
             return rdap_pb2.StatusClientUpdateProhibited
-        elif status == apps.epp_api.domain_pb2.PendingCreate:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.PendingCreate:
             return rdap_pb2.StatusPendingCreate
-        elif status == apps.epp_api.domain_pb2.PendingDelete:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.PendingDelete:
             return rdap_pb2.StatusPendingDelete
-        elif status == apps.epp_api.domain_pb2.PendingRenew:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.PendingRenew:
             return rdap_pb2.StatusPendingRenew
-        elif status == apps.epp_api.domain_pb2.PendingTransfer:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.PendingTransfer:
             return rdap_pb2.StatusPendingTransfer
-        elif status == apps.epp_api.domain_pb2.PendingUpdate:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.PendingUpdate:
             return rdap_pb2.StatusPendingUpdate
-        elif status == apps.epp_api.domain_pb2.ServerDeleteProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ServerDeleteProhibited:
             return rdap_pb2.StatusServerDeleteProhibited
-        elif status == apps.epp_api.domain_pb2.ServerHold:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ServerHold:
             return rdap_pb2.StatusServerHold
-        elif status == apps.epp_api.domain_pb2.ServerRenewProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ServerRenewProhibited:
             return rdap_pb2.StatusServerRenewProhibited
-        elif status == apps.epp_api.domain_pb2.ServerTransferProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ServerTransferProhibited:
             return rdap_pb2.StatusServerTransferProhibited
-        elif status == apps.epp_api.domain_pb2.ServerUpdateProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ServerUpdateProhibited:
             return rdap_pb2.StatusServerUpdateProhibited
 
     def rgp_status_to_rdap(self, status: apps.epp_api.RGPState):
-        if status == apps.epp_api.rgp_pb2.AddPeriod:
+        if status == apps.epp_api.rgp_pb2.RGPState.AddPeriod:
             return rdap_pb2.StatusAddPeriod
-        elif status == apps.epp_api.rgp_pb2.AutoRenewPeriod:
+        elif status == apps.epp_api.rgp_pb2.RGPState.AutoRenewPeriod:
             return rdap_pb2.StatusAutoRenewPeriod
-        elif status == apps.epp_api.rgp_pb2.RenewPeriod:
+        elif status == apps.epp_api.rgp_pb2.RGPState.RenewPeriod:
             return rdap_pb2.StatusRenewPeriod
-        elif status == apps.epp_api.rgp_pb2.TransferPeriod:
+        elif status == apps.epp_api.rgp_pb2.RGPState.TransferPeriod:
             return rdap_pb2.StatusTransferPeriod
-        elif status == apps.epp_api.rgp_pb2.RedemptionPeriod:
+        elif status == apps.epp_api.rgp_pb2.RGPState.RedemptionPeriod:
             return rdap_pb2.StatusRedemptionPeriod
-        elif status == apps.epp_api.rgp_pb2.PendingRestore:
+        elif status == apps.epp_api.rgp_pb2.RGPState.PendingRestore:
             return rdap_pb2.StatusPendingRestore
-        elif status == apps.epp_api.rgp_pb2.PendingDelete:
+        elif status == apps.epp_api.rgp_pb2.RGPState.PendingDelete:
             return rdap_pb2.StatusPendingDelete
 
     def domain_to_proto(self, domain_obj: models.DomainRegistration) -> rdap_pb2.Domain:

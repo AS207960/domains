@@ -891,7 +891,7 @@ if settings.DEBUG:
                 unit=0,
                 value=1
             )]),
-            transfer_instructions="Make sure to change the admin and billing contact to AC396-IS at "
+            transfer_instructions="Make sure to change the admin and billing contact to \"AC396-IS\" at "
                                   "your previous registrar."
         )),
     )
@@ -926,7 +926,7 @@ else:
                 unit=0,
                 value=1
             )]),
-            transfer_instructions="Make sure to change the admin and billing contact to AC396-IS at "
+            transfer_instructions="Make sure to change the admin and billing contact to \"AC396-IS\" at "
                                   "your previous registrar."
         )),
         ('me', DomainInfo(
@@ -2634,35 +2634,35 @@ else:
         )),
         ('uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('co.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('me.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to natural persons.",
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('org.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('ltd.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to UK Limited Companies.",
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('plc.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to UK Public Limited Companies.",
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('net.uk', DomainInfo(
             DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
             notice="This TLD is restricted to businesses in the UK telecommunications sector.",
-            transfer_instructions="Make sure to change the registrar tag to AS207960 at your previous registrar."
+            transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('scot', DomainInfo(
             DomainInfo.REGISTRY_CORE,
