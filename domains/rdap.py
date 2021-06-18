@@ -139,7 +139,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             return rdap_pb2.StatusClientHold
         elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientRenewProhibited:
             return rdap_pb2.StatusClientRenewProhibited
-        elif status == apps.epp_api.domain_common_pb2.DomainStatusClientTransferProhibited:
+        elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientTransferProhibited:
             return rdap_pb2.StatusClientTransferProhibited
         elif status == apps.epp_api.domain_common_pb2.DomainStatus.ClientUpdateProhibited:
             return rdap_pb2.StatusClientUpdateProhibited
