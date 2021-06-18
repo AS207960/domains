@@ -1,0 +1,23 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <table style="border-spacing: 0;width:100%;">
+        <tr>
+            <td style="padding-right: 10px;">
+                <img src="https://as207960.net/assets/img/shark-curl.png" height="100" alt=""/>
+            </td>
+            <td>
+                <p>
+                    We've noticed your order to transfer {{ domain }} to us hasn't progressed.
+                </p>
+                <p>
+                    Please make sure to change the registrar tag with your previous registrar to "AS207960".
+                    We won't be able to process your order otherwise.
+                </p>
+                <p>
+                    If you need any assistance or no longer want to transfer to us just reply to this email,
+                    we'll be happy to help!
+                </p>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

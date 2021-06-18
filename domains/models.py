@@ -755,6 +755,7 @@ class DomainTransferOrder(AbstractOrder):
     tech_contact = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_tech')
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+    last_transfer_notify = models.DateTimeField(default=timezone.datetime.min)
 
     class Meta:
         ordering = ['domain']

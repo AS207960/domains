@@ -1,0 +1,9 @@
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
+We've noticed your order to transfer {{ domain }} to us hasn't progressed.
+
+Please make sure to change the registrar tag with your previous registrar to "AS207960".
+We won't be able to process your order otherwise.
+
+If you need any assistance or no longer want to transfer to us just reply to this email, we'll be happy to help!
+{% endblock content %}
