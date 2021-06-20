@@ -229,7 +229,7 @@ class Contact(models.Model):
             urn="urn:as207960:domains:contact", super_save=super().save, view_name='edit_contact',
             args=args, kwargs=kwargs
         )
-    
+
     def __str__(self):
         return self.description
 
@@ -267,7 +267,7 @@ class Contact(models.Model):
         super().delete(*args, **kwargs)
 
     def get_registry_id(self, registry_id: str, zone_data: typing.Optional[zone_info.DomainInfo] = None):
-        is_isnic = zone_info and zone_data.registry == zone_data.REGISTRY_ISNIC
+        is_isnic = zone_data and zone_data.registry == zone_data.REGISTRY_ISNIC
 
         with CONTACT_SEARCH:
             contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\

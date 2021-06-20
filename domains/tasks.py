@@ -693,15 +693,15 @@ def process_domain_transfer_contacts(transfer_order_id):
         should_send = True
 
     if domain_transfer_order.tech_contact and zone.tech_supported:
-        tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(domain_data.registry_name)
+        tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(domain_data.registry_name, zone)
         _update_contact("tech", tech_contact_id.registry_contact_id)
 
     if domain_transfer_order.admin_contact and zone.admin_supported:
-        admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(domain_data.registry_name)
+        admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(domain_data.registry_name, zone)
         _update_contact("admin", admin_contact_id.registry_contact_id)
 
     if domain_transfer_order.billing_contact and zone.billing_supported:
-        billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name)
+        billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name, zone)
         _update_contact("billing", billing_contact_id.registry_contact_id)
 
     if should_send:
