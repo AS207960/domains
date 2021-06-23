@@ -42,8 +42,10 @@
             <div class="col mt-1">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Nominet tag list</h5>
-                        <a href="{% url 'admin_nominet_tags' %}" class="btn btn-primary mt-1">View</a>
+                        <h5 class="card-title">Nominet</h5>
+                        <a href="{% url 'admin_nominet_handshake_accept' %}" class="btn btn-primary mt-1">Handshake accept</a>
+                        <a href="{% url 'admin_nominet_handshake_reject' %}" class="btn btn-primary mt-1">Handshake reject</a>
+                        <a href="{% url 'admin_nominet_tags' %}" class="btn btn-primary mt-1">Tag list</a>
                     </div>
                 </div>
             </div>

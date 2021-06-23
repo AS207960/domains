@@ -186,6 +186,21 @@ class EPPProxyStub(object):
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
                 response_deserializer=nominet__pb2.NominetTagListReply.FromString,
                 )
+        self.NominetAccept = channel.unary_unary(
+                '/epp.EPPProxy/NominetAccept',
+                request_serializer=nominet__pb2.HandshakeAcceptRequest.SerializeToString,
+                response_deserializer=nominet__pb2.HandshakeReply.FromString,
+                )
+        self.NominetReject = channel.unary_unary(
+                '/epp.EPPProxy/NominetReject',
+                request_serializer=nominet__pb2.HandshakeRejectRequest.SerializeToString,
+                response_deserializer=nominet__pb2.HandshakeReply.FromString,
+                )
+        self.NominetRelease = channel.unary_unary(
+                '/epp.EPPProxy/NominetRelease',
+                request_serializer=nominet__pb2.ReleaseRequest.SerializeToString,
+                response_deserializer=nominet__pb2.ReleaseReply.FromString,
+                )
         self.BalanceInfo = channel.unary_unary(
                 '/epp.EPPProxy/BalanceInfo',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
@@ -414,6 +429,24 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def NominetAccept(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NominetReject(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NominetRelease(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def BalanceInfo(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -611,6 +644,21 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     servicer.NominetTagList,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
                     response_serializer=nominet__pb2.NominetTagListReply.SerializeToString,
+            ),
+            'NominetAccept': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetAccept,
+                    request_deserializer=nominet__pb2.HandshakeAcceptRequest.FromString,
+                    response_serializer=nominet__pb2.HandshakeReply.SerializeToString,
+            ),
+            'NominetReject': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetReject,
+                    request_deserializer=nominet__pb2.HandshakeRejectRequest.FromString,
+                    response_serializer=nominet__pb2.HandshakeReply.SerializeToString,
+            ),
+            'NominetRelease': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetRelease,
+                    request_deserializer=nominet__pb2.ReleaseRequest.FromString,
+                    response_serializer=nominet__pb2.ReleaseReply.SerializeToString,
             ),
             'BalanceInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.BalanceInfo,
@@ -1205,6 +1253,57 @@ class EPPProxy(object):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetTagList',
             epp__pb2.RegistryInfo.SerializeToString,
             nominet__pb2.NominetTagListReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetAccept(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetAccept',
+            nominet__pb2.HandshakeAcceptRequest.SerializeToString,
+            nominet__pb2.HandshakeReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetReject(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetReject',
+            nominet__pb2.HandshakeRejectRequest.SerializeToString,
+            nominet__pb2.HandshakeReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetRelease(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetRelease',
+            nominet__pb2.ReleaseRequest.SerializeToString,
+            nominet__pb2.ReleaseReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

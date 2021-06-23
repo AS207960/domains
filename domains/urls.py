@@ -75,4 +75,6 @@ urlpatterns = [
     path('epp_client/domain_transfer_request/', admin.domain_transfer_request, name='admin_domain_transfer_request'),
     path('epp_client/balance/<str:registry_name>/', admin.balance, name='admin_balance'),
     path('epp_client/nominet_tags/', admin.nominet_tags, name='admin_nominet_tags'),
+    path('epp_client/nominet_handshake_accept/', admin.nominet_handshake_accept, name='admin_nominet_handshake_accept'),
+    path('epp_client/nominet_handshake_reject/', admin.nominet_handshake_reject, name='admin_nominet_handshake_reject'),
 ]

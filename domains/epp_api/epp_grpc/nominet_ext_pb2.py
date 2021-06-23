@@ -22,10 +22,72 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11nominet_ext.proto\x12\x0f\x65pp.nominet_ext\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x9b\x02\n\x0b\x44\x61taQuality\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".epp.nominet_ext.DataQualityStatus\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0e\x64\x61te_commenced\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0f\x64\x61te_to_suspend\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n\x0clock_applied\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0f\n\x07\x64omains\x18\x06 \x03(\t*+\n\x11\x44\x61taQualityStatus\x12\x0b\n\x07Invalid\x10\x00\x12\t\n\x05Valid\x10\x01\x62\x06proto3'
+  serialized_pb=b'\n\x11nominet_ext.proto\x12\x0f\x65pp.nominet_ext\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xf3\x02\n\x0c\x44omainCreate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05notes\x18\x07 \x03(\t\x12.\n\x08reseller\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x91\x03\n\x0c\x44omainUpdate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x1c\n\x14renewal_not_required\x18\x07 \x01(\x08\x12\r\n\x05notes\x18\x08 \x03(\t\x12.\n\x08reseller\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"&\n\x0f\x44omainCheckInfo\x12\x13\n\x0b\x61\x62use_limit\x18\x01 \x01(\x04\"\xd1\x03\n\nDomainInfo\x12@\n\x13registration_status\x18\x01 \x01(\x0e\x32#.epp.nominet_ext.RegistrationStatus\x12-\n\nfirst_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x03 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x1c\n\x14renewal_not_required\x18\x08 \x01(\x08\x12\r\n\x05notes\x18\t \x03(\t\x12.\n\x08reseller\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x9b\x02\n\x0b\x44\x61taQuality\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".epp.nominet_ext.DataQualityStatus\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0e\x64\x61te_commenced\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0f\x64\x61te_to_suspend\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n\x0clock_applied\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0f\n\x07\x64omains\x18\x06 \x03(\t*@\n\x08\x42illType\x12\x0f\n\x0bUnspecified\x10\x00\x12\x11\n\rBillRegistrar\x10\x01\x12\x10\n\x0c\x42illCustomer\x10\x02*Z\n\x12RegistrationStatus\x12\x19\n\x15RegisteredUntilExpiry\x10\x00\x12\x13\n\x0fRenewalRequired\x10\x01\x12\x14\n\x10NoLongerRequired\x10\x02*+\n\x11\x44\x61taQualityStatus\x12\x0b\n\x07Invalid\x10\x00\x12\t\n\x05Valid\x10\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
+_BILLTYPE = _descriptor.EnumDescriptor(
+  name='BillType',
+  full_name='epp.nominet_ext.BillType',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='Unspecified', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='BillRegistrar', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='BillCustomer', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1675,
+  serialized_end=1739,
+)
+_sym_db.RegisterEnumDescriptor(_BILLTYPE)
+
+BillType = enum_type_wrapper.EnumTypeWrapper(_BILLTYPE)
+_REGISTRATIONSTATUS = _descriptor.EnumDescriptor(
+  name='RegistrationStatus',
+  full_name='epp.nominet_ext.RegistrationStatus',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='RegisteredUntilExpiry', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='RenewalRequired', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='NoLongerRequired', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1741,
+  serialized_end=1831,
+)
+_sym_db.RegisterEnumDescriptor(_REGISTRATIONSTATUS)
+
+RegistrationStatus = enum_type_wrapper.EnumTypeWrapper(_REGISTRATIONSTATUS)
 _DATAQUALITYSTATUS = _descriptor.EnumDescriptor(
   name='DataQualityStatus',
   full_name='epp.nominet_ext.DataQualityStatus',
@@ -46,15 +108,317 @@ _DATAQUALITYSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=389,
-  serialized_end=432,
+  serialized_start=1833,
+  serialized_end=1876,
 )
 _sym_db.RegisterEnumDescriptor(_DATAQUALITYSTATUS)
 
 DataQualityStatus = enum_type_wrapper.EnumTypeWrapper(_DATAQUALITYSTATUS)
+Unspecified = 0
+BillRegistrar = 1
+BillCustomer = 2
+RegisteredUntilExpiry = 0
+RenewalRequired = 1
+NoLongerRequired = 2
 Invalid = 0
 Valid = 1
 
+
+
+_DOMAINCREATE = _descriptor.Descriptor(
+  name='DomainCreate',
+  full_name='epp.nominet_ext.DomainCreate',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='first_bill', full_name='epp.nominet_ext.DomainCreate.first_bill', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='recur_bill', full_name='epp.nominet_ext.DomainCreate.recur_bill', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_bill', full_name='epp.nominet_ext.DomainCreate.auto_bill', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_bill', full_name='epp.nominet_ext.DomainCreate.next_bill', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_period', full_name='epp.nominet_ext.DomainCreate.auto_period', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_period', full_name='epp.nominet_ext.DomainCreate.next_period', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='notes', full_name='epp.nominet_ext.DomainCreate.notes', index=6,
+      number=7, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='reseller', full_name='epp.nominet_ext.DomainCreate.reseller', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=104,
+  serialized_end=475,
+)
+
+
+_DOMAINUPDATE = _descriptor.Descriptor(
+  name='DomainUpdate',
+  full_name='epp.nominet_ext.DomainUpdate',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='first_bill', full_name='epp.nominet_ext.DomainUpdate.first_bill', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='recur_bill', full_name='epp.nominet_ext.DomainUpdate.recur_bill', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_bill', full_name='epp.nominet_ext.DomainUpdate.auto_bill', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_bill', full_name='epp.nominet_ext.DomainUpdate.next_bill', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_period', full_name='epp.nominet_ext.DomainUpdate.auto_period', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_period', full_name='epp.nominet_ext.DomainUpdate.next_period', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='renewal_not_required', full_name='epp.nominet_ext.DomainUpdate.renewal_not_required', index=6,
+      number=7, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='notes', full_name='epp.nominet_ext.DomainUpdate.notes', index=7,
+      number=8, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='reseller', full_name='epp.nominet_ext.DomainUpdate.reseller', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=478,
+  serialized_end=879,
+)
+
+
+_DOMAINCHECKINFO = _descriptor.Descriptor(
+  name='DomainCheckInfo',
+  full_name='epp.nominet_ext.DomainCheckInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='abuse_limit', full_name='epp.nominet_ext.DomainCheckInfo.abuse_limit', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=881,
+  serialized_end=919,
+)
+
+
+_DOMAININFO = _descriptor.Descriptor(
+  name='DomainInfo',
+  full_name='epp.nominet_ext.DomainInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registration_status', full_name='epp.nominet_ext.DomainInfo.registration_status', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='first_bill', full_name='epp.nominet_ext.DomainInfo.first_bill', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='recur_bill', full_name='epp.nominet_ext.DomainInfo.recur_bill', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_bill', full_name='epp.nominet_ext.DomainInfo.auto_bill', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_bill', full_name='epp.nominet_ext.DomainInfo.next_bill', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='auto_period', full_name='epp.nominet_ext.DomainInfo.auto_period', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='next_period', full_name='epp.nominet_ext.DomainInfo.next_period', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='renewal_not_required', full_name='epp.nominet_ext.DomainInfo.renewal_not_required', index=7,
+      number=8, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='notes', full_name='epp.nominet_ext.DomainInfo.notes', index=8,
+      number=9, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='reseller', full_name='epp.nominet_ext.DomainInfo.reseller', index=9,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=922,
+  serialized_end=1387,
+)
 
 
 _DATAQUALITY = _descriptor.Descriptor(
@@ -119,18 +483,74 @@ _DATAQUALITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=104,
-  serialized_end=387,
+  serialized_start=1390,
+  serialized_end=1673,
 )
 
+_DOMAINCREATE.fields_by_name['first_bill'].enum_type = _BILLTYPE
+_DOMAINCREATE.fields_by_name['recur_bill'].enum_type = _BILLTYPE
+_DOMAINCREATE.fields_by_name['auto_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINCREATE.fields_by_name['next_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINCREATE.fields_by_name['auto_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINCREATE.fields_by_name['next_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINCREATE.fields_by_name['reseller'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_DOMAINUPDATE.fields_by_name['first_bill'].enum_type = _BILLTYPE
+_DOMAINUPDATE.fields_by_name['recur_bill'].enum_type = _BILLTYPE
+_DOMAINUPDATE.fields_by_name['auto_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINUPDATE.fields_by_name['next_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINUPDATE.fields_by_name['auto_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINUPDATE.fields_by_name['next_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAINUPDATE.fields_by_name['reseller'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_DOMAININFO.fields_by_name['registration_status'].enum_type = _REGISTRATIONSTATUS
+_DOMAININFO.fields_by_name['first_bill'].enum_type = _BILLTYPE
+_DOMAININFO.fields_by_name['recur_bill'].enum_type = _BILLTYPE
+_DOMAININFO.fields_by_name['auto_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAININFO.fields_by_name['next_bill'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAININFO.fields_by_name['auto_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAININFO.fields_by_name['next_period'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_DOMAININFO.fields_by_name['reseller'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DATAQUALITY.fields_by_name['status'].enum_type = _DATAQUALITYSTATUS
 _DATAQUALITY.fields_by_name['reason'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _DATAQUALITY.fields_by_name['date_commenced'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _DATAQUALITY.fields_by_name['date_to_suspend'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _DATAQUALITY.fields_by_name['lock_applied'].message_type = google_dot_protobuf_dot_wrappers__pb2._BOOLVALUE
+DESCRIPTOR.message_types_by_name['DomainCreate'] = _DOMAINCREATE
+DESCRIPTOR.message_types_by_name['DomainUpdate'] = _DOMAINUPDATE
+DESCRIPTOR.message_types_by_name['DomainCheckInfo'] = _DOMAINCHECKINFO
+DESCRIPTOR.message_types_by_name['DomainInfo'] = _DOMAININFO
 DESCRIPTOR.message_types_by_name['DataQuality'] = _DATAQUALITY
+DESCRIPTOR.enum_types_by_name['BillType'] = _BILLTYPE
+DESCRIPTOR.enum_types_by_name['RegistrationStatus'] = _REGISTRATIONSTATUS
 DESCRIPTOR.enum_types_by_name['DataQualityStatus'] = _DATAQUALITYSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+DomainCreate = _reflection.GeneratedProtocolMessageType('DomainCreate', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINCREATE,
+  '__module__' : 'nominet_ext_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet_ext.DomainCreate)
+  })
+_sym_db.RegisterMessage(DomainCreate)
+
+DomainUpdate = _reflection.GeneratedProtocolMessageType('DomainUpdate', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINUPDATE,
+  '__module__' : 'nominet_ext_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet_ext.DomainUpdate)
+  })
+_sym_db.RegisterMessage(DomainUpdate)
+
+DomainCheckInfo = _reflection.GeneratedProtocolMessageType('DomainCheckInfo', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAINCHECKINFO,
+  '__module__' : 'nominet_ext_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet_ext.DomainCheckInfo)
+  })
+_sym_db.RegisterMessage(DomainCheckInfo)
+
+DomainInfo = _reflection.GeneratedProtocolMessageType('DomainInfo', (_message.Message,), {
+  'DESCRIPTOR' : _DOMAININFO,
+  '__module__' : 'nominet_ext_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet_ext.DomainInfo)
+  })
+_sym_db.RegisterMessage(DomainInfo)
 
 DataQuality = _reflection.GeneratedProtocolMessageType('DataQuality', (_message.Message,), {
   'DESCRIPTOR' : _DATAQUALITY,

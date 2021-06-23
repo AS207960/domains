@@ -14,6 +14,30 @@ import typing_extensions
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor = ...
 
+global___BillType = BillType
+class _BillType(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[BillType.V], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor = ...
+    Unspecified = BillType.V(0)
+    BillRegistrar = BillType.V(1)
+    BillCustomer = BillType.V(2)
+class BillType(metaclass=_BillType):
+    V = typing.NewType('V', builtins.int)
+Unspecified = BillType.V(0)
+BillRegistrar = BillType.V(1)
+BillCustomer = BillType.V(2)
+
+global___RegistrationStatus = RegistrationStatus
+class _RegistrationStatus(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[RegistrationStatus.V], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor = ...
+    RegisteredUntilExpiry = RegistrationStatus.V(0)
+    RenewalRequired = RegistrationStatus.V(1)
+    NoLongerRequired = RegistrationStatus.V(2)
+class RegistrationStatus(metaclass=_RegistrationStatus):
+    V = typing.NewType('V', builtins.int)
+RegisteredUntilExpiry = RegistrationStatus.V(0)
+RenewalRequired = RegistrationStatus.V(1)
+NoLongerRequired = RegistrationStatus.V(2)
+
 global___DataQualityStatus = DataQualityStatus
 class _DataQualityStatus(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[DataQualityStatus.V], builtins.type):
     DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor = ...
@@ -23,6 +47,159 @@ class DataQualityStatus(metaclass=_DataQualityStatus):
     V = typing.NewType('V', builtins.int)
 Invalid = DataQualityStatus.V(0)
 Valid = DataQualityStatus.V(1)
+
+class DomainCreate(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
+    FIRST_BILL_FIELD_NUMBER: builtins.int
+    RECUR_BILL_FIELD_NUMBER: builtins.int
+    AUTO_BILL_FIELD_NUMBER: builtins.int
+    NEXT_BILL_FIELD_NUMBER: builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: builtins.int
+    NOTES_FIELD_NUMBER: builtins.int
+    RESELLER_FIELD_NUMBER: builtins.int
+    first_bill: global___BillType.V = ...
+    recur_bill: global___BillType.V = ...
+    notes: google.protobuf.internal.containers.RepeatedScalarFieldContainer[typing.Text] = ...
+
+    @property
+    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+
+    def __init__(self,
+        *,
+        first_bill : global___BillType.V = ...,
+        recur_bill : global___BillType.V = ...,
+        auto_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        auto_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        notes : typing.Optional[typing.Iterable[typing.Text]] = ...,
+        reseller : typing.Optional[google.protobuf.wrappers_pb2.StringValue] = ...,
+        ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"next_bill",b"next_bill",u"next_period",b"next_period",u"reseller",b"reseller"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"first_bill",b"first_bill",u"next_bill",b"next_bill",u"next_period",b"next_period",u"notes",b"notes",u"recur_bill",b"recur_bill",u"reseller",b"reseller"]) -> None: ...
+global___DomainCreate = DomainCreate
+
+class DomainUpdate(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
+    FIRST_BILL_FIELD_NUMBER: builtins.int
+    RECUR_BILL_FIELD_NUMBER: builtins.int
+    AUTO_BILL_FIELD_NUMBER: builtins.int
+    NEXT_BILL_FIELD_NUMBER: builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: builtins.int
+    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: builtins.int
+    NOTES_FIELD_NUMBER: builtins.int
+    RESELLER_FIELD_NUMBER: builtins.int
+    first_bill: global___BillType.V = ...
+    recur_bill: global___BillType.V = ...
+    renewal_not_required: builtins.bool = ...
+    notes: google.protobuf.internal.containers.RepeatedScalarFieldContainer[typing.Text] = ...
+
+    @property
+    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+
+    def __init__(self,
+        *,
+        first_bill : global___BillType.V = ...,
+        recur_bill : global___BillType.V = ...,
+        auto_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        auto_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        renewal_not_required : builtins.bool = ...,
+        notes : typing.Optional[typing.Iterable[typing.Text]] = ...,
+        reseller : typing.Optional[google.protobuf.wrappers_pb2.StringValue] = ...,
+        ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"next_bill",b"next_bill",u"next_period",b"next_period",u"reseller",b"reseller"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"first_bill",b"first_bill",u"next_bill",b"next_bill",u"next_period",b"next_period",u"notes",b"notes",u"recur_bill",b"recur_bill",u"renewal_not_required",b"renewal_not_required",u"reseller",b"reseller"]) -> None: ...
+global___DomainUpdate = DomainUpdate
+
+class DomainCheckInfo(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
+    ABUSE_LIMIT_FIELD_NUMBER: builtins.int
+    abuse_limit: builtins.int = ...
+
+    def __init__(self,
+        *,
+        abuse_limit : builtins.int = ...,
+        ) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal[u"abuse_limit",b"abuse_limit"]) -> None: ...
+global___DomainCheckInfo = DomainCheckInfo
+
+class DomainInfo(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
+    REGISTRATION_STATUS_FIELD_NUMBER: builtins.int
+    FIRST_BILL_FIELD_NUMBER: builtins.int
+    RECUR_BILL_FIELD_NUMBER: builtins.int
+    AUTO_BILL_FIELD_NUMBER: builtins.int
+    NEXT_BILL_FIELD_NUMBER: builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: builtins.int
+    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: builtins.int
+    NOTES_FIELD_NUMBER: builtins.int
+    RESELLER_FIELD_NUMBER: builtins.int
+    registration_status: global___RegistrationStatus.V = ...
+    first_bill: global___BillType.V = ...
+    recur_bill: global___BillType.V = ...
+    renewal_not_required: builtins.bool = ...
+    notes: google.protobuf.internal.containers.RepeatedScalarFieldContainer[typing.Text] = ...
+
+    @property
+    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+
+    @property
+    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+
+    def __init__(self,
+        *,
+        registration_status : global___RegistrationStatus.V = ...,
+        first_bill : global___BillType.V = ...,
+        recur_bill : global___BillType.V = ...,
+        auto_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_bill : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        auto_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        next_period : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
+        renewal_not_required : builtins.bool = ...,
+        notes : typing.Optional[typing.Iterable[typing.Text]] = ...,
+        reseller : typing.Optional[google.protobuf.wrappers_pb2.StringValue] = ...,
+        ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"next_bill",b"next_bill",u"next_period",b"next_period",u"reseller",b"reseller"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal[u"auto_bill",b"auto_bill",u"auto_period",b"auto_period",u"first_bill",b"first_bill",u"next_bill",b"next_bill",u"next_period",b"next_period",u"notes",b"notes",u"recur_bill",b"recur_bill",u"registration_status",b"registration_status",u"renewal_not_required",b"renewal_not_required",u"reseller",b"reseller"]) -> None: ...
+global___DomainInfo = DomainInfo
 
 class DataQuality(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...

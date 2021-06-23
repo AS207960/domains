@@ -594,6 +594,48 @@ class AdminContactGetIDForm(forms.Form):
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Get'))
 
 
+class AdminNominetHandshakeAcceptForm(forms.Form):
+    case_id = forms.CharField(max_length=255, label="Case ID", required=True)
+    registrant = forms.CharField(max_length=255, label="Registrant", required=False)
+    registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10 my-1'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'case_id',
+            'registrant',
+            'registry_id',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
+
+
+class AdminNominetHandshakeRejectForm(forms.Form):
+    case_id = forms.CharField(max_length=255, label="Case ID", required=True)
+    registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10 my-1'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'case_id',
+            'registry_id',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
+
+
 class HostSearchForm(forms.Form):
     host = forms.CharField(max_length=63, label="Host name", required=True, widget=forms.TextInput(
         attrs={'placeholder': 'ns1'}

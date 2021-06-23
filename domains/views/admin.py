@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .. import apps, forms, models, zone_info
 from . import emails
 import grpc
+import google.protobuf.text_format
+import google.protobuf.wrappers_pb2
 
 
 def catch_epp_error(fun):
@@ -272,4 +274,57 @@ def nominet_tags(request):
             "trading_name": t.trading_name.value if t.HasField("trading_name") else None,
             "handshake": t.handshake
         }, info.tags))
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def nominet_handshake_accept(request):
+    handshake_data = None
+
+    if request.method == "POST":
+        form = forms.AdminNominetHandshakeAcceptForm(request.POST)
+        if form.is_valid():
+            handshake_data = google.protobuf.text_format.MessageToString(
+                apps.epp_client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
+                    case_id=form.cleaned_data['case_id'],
+                    registrant=google.protobuf.wrappers_pb2.StringValue(
+                        value=form.cleaned_data['registrant']
+                    ) if form.cleaned_data['registrant'] else None,
+                    registry_name=form.cleaned_data['registry_id']
+                )),
+                indent=2, print_unknown_fields=True
+            )
+    else:
+        form = forms.AdminNominetHandshakeAcceptForm()
+
+    return render(request, "domains/admin/nominet_handshake_accept.html", {
+        "handshake_form": form,
+        "handshake_data": handshake_data
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
+def nominet_handshake_reject(request):
+    handshake_data = None
+
+    if request.method == "POST":
+        form = forms.AdminNominetHandshakeRejectForm(request.POST)
+        if form.is_valid():
+            handshake_data = google.protobuf.text_format.MessageToString(
+                apps.epp_client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
+                    case_id=form.cleaned_data['case_id'],
+                    registry_name=form.cleaned_data['registry_id']
+                )),
+                indent=2, print_unknown_fields=True
+            )
+    else:
+        form = forms.AdminNominetHandshakeRejectForm()
+
+    return render(request, "domains/admin/nominet_handshake_reject.html", {
+        "handshake_form": form,
+        "handshake_data": handshake_data
     })

@@ -9,7 +9,7 @@ import ipaddress
 from google.protobuf.wrappers_pb2 import StringValue
 from google.protobuf.timestamp_pb2 import Timestamp
 from .epp_grpc import common_pb2, contact_pb2, domain_pb2, host_pb2, rgp_pb2, fee_pb2, epp_pb2, epp_pb2_grpc, \
-    isnic_pb2, domain_common_pb2
+    isnic_pb2, domain_common_pb2, nominet_pb2, nominet_ext_pb2
 
 
 @dataclasses.dataclass

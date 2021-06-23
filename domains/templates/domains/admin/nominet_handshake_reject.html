@@ -1,0 +1,11 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Nominet handshake reject</h1>
+        {% crispy handshake_form handshake_form.helper %}
+        {% if handshake_data %}
+            <pre><code>{{ handshake_data }}</code></pre>
+        {% endif %}
+    </div>
+{% endblock %}

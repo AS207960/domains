@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\x1a\x0c\x63ommon.proto\"\xe1\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x12-\n\x08\x63md_resp\x18\x02 \x01(\x0b\x32\x1b.epp.common.CommandResponse\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"0\n\x0c\x44omainCancel\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"p\n\rDomainRelease\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xcf\x01\n\x15\x44omainRegistrarChange\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"8\n\nHostCancel\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xa4\x02\n\x07Process\x12\x30\n\x05stage\x18\x01 \x01(\x0e\x32!.epp.nominet.Process.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"`\n\x07Suspend\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\",\n\nDomainFail\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xc9\x01\n\x12RegistrantTransfer\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
+  serialized_pb=b'\n\rnominet.proto\x12\x0b\x65pp.nominet\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x0c\x64omain.proto\x1a\rcontact.proto\x1a\x0c\x63ommon.proto\"r\n\x16HandshakeAcceptRequest\x12\x15\n\rregistry_name\x18\x01 \x01(\t\x12\x0f\n\x07\x63\x61se_id\x18\x02 \x01(\t\x12\x30\n\nregistrant\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"@\n\x16HandshakeRejectRequest\x12\x15\n\rregistry_name\x18\x01 \x01(\t\x12\x0f\n\x07\x63\x61se_id\x18\x02 \x01(\t\"a\n\x0eHandshakeReply\x12\x0f\n\x07\x63\x61se_id\x18\x01 \x01(\t\x12\x0f\n\x07\x64omains\x18\x02 \x03(\t\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponse\"p\n\x0eReleaseRequest\x12\x15\n\rregistry_name\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12\x10\n\x06\x64omain\x18\x03 \x01(\tH\x00\x12\x14\n\nregistrant\x18\x04 \x01(\tH\x00\x42\x08\n\x06object\"}\n\x0cReleaseReply\x12\x0f\n\x07pending\x18\x01 \x01(\x08\x12-\n\x07message\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x08\x63md_resp\x18\x03 \x01(\x0b\x32\x1b.epp.common.CommandResponse\"\xe1\x01\n\x13NominetTagListReply\x12\x32\n\x04tags\x18\x01 \x03(\x0b\x32$.epp.nominet.NominetTagListReply.Tag\x12-\n\x08\x63md_resp\x18\x02 \x01(\x0b\x32\x1b.epp.common.CommandResponse\x1ag\n\x03Tag\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x32\n\x0ctrading_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x11\n\thandshake\x18\x04 \x01(\x08\"0\n\x0c\x44omainCancel\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\noriginator\x18\x02 \x01(\t\"p\n\rDomainRelease\x12\x12\n\naccount_id\x18\x01 \x01(\t\x12\x15\n\raccount_moved\x18\x02 \x01(\x08\x12\x0c\n\x04\x66rom\x18\x03 \x01(\t\x12\x15\n\rregistrar_tag\x18\x04 \x01(\t\x12\x0f\n\x07\x64omains\x18\x05 \x03(\t\"\xcf\x01\n\x15\x44omainRegistrarChange\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x15\n\rregistrar_tag\x18\x02 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x07\x64omains\x18\x04 \x03(\x0b\x32\x1b.epp.domain.DomainInfoReply\x12.\n\x07\x63ontact\x18\x05 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\"8\n\nHostCancel\x12\x14\n\x0chost_objects\x18\x01 \x03(\t\x12\x14\n\x0c\x64omain_names\x18\x02 \x03(\t\"\xa4\x02\n\x07Process\x12\x30\n\x05stage\x18\x01 \x01(\x0e\x32!.epp.nominet.Process.ProcessStage\x12.\n\x07\x63ontact\x18\x02 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReply\x12\x14\n\x0cprocess_type\x18\x03 \x01(\t\x12\x30\n\x0csuspend_date\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12/\n\x0b\x63\x61ncel_date\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x06 \x03(\t\"(\n\x0cProcessStage\x12\x0b\n\x07Initial\x10\x00\x12\x0b\n\x07Updated\x10\x01\"`\n\x07Suspend\x12\x0e\n\x06reason\x18\x01 \x01(\t\x12/\n\x0b\x63\x61ncel_date\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0c\x64omain_names\x18\x03 \x03(\t\",\n\nDomainFail\x12\x0e\n\x06\x64omain\x18\x01 \x01(\t\x12\x0e\n\x06reason\x18\x02 \x01(\t\"\xc9\x01\n\x12RegistrantTransfer\x12\x12\n\noriginator\x18\x01 \x01(\t\x12\x12\n\naccount_id\x18\x02 \x01(\t\x12\x16\n\x0eold_account_id\x18\x03 \x01(\t\x12-\n\x07\x63\x61se_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x14\n\x0c\x64omain_names\x18\x05 \x03(\t\x12.\n\x07\x63ontact\x18\x06 \x01(\x0b\x32\x1d.epp.contact.ContactInfoReplyb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,domain__pb2.DESCRIPTOR,contact__pb2.DESCRIPTOR,common__pb2.DESCRIPTOR,])
 
@@ -50,10 +50,245 @@ _PROCESS_PROCESSSTAGE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1051,
-  serialized_end=1091,
+  serialized_start=1573,
+  serialized_end=1613,
 )
 _sym_db.RegisterEnumDescriptor(_PROCESS_PROCESSSTAGE)
+
+
+_HANDSHAKEACCEPTREQUEST = _descriptor.Descriptor(
+  name='HandshakeAcceptRequest',
+  full_name='epp.nominet.HandshakeAcceptRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registry_name', full_name='epp.nominet.HandshakeAcceptRequest.registry_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='case_id', full_name='epp.nominet.HandshakeAcceptRequest.case_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='registrant', full_name='epp.nominet.HandshakeAcceptRequest.registrant', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=138,
+  serialized_end=252,
+)
+
+
+_HANDSHAKEREJECTREQUEST = _descriptor.Descriptor(
+  name='HandshakeRejectRequest',
+  full_name='epp.nominet.HandshakeRejectRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registry_name', full_name='epp.nominet.HandshakeRejectRequest.registry_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='case_id', full_name='epp.nominet.HandshakeRejectRequest.case_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=254,
+  serialized_end=318,
+)
+
+
+_HANDSHAKEREPLY = _descriptor.Descriptor(
+  name='HandshakeReply',
+  full_name='epp.nominet.HandshakeReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='case_id', full_name='epp.nominet.HandshakeReply.case_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='domains', full_name='epp.nominet.HandshakeReply.domains', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.nominet.HandshakeReply.cmd_resp', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=320,
+  serialized_end=417,
+)
+
+
+_RELEASEREQUEST = _descriptor.Descriptor(
+  name='ReleaseRequest',
+  full_name='epp.nominet.ReleaseRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='registry_name', full_name='epp.nominet.ReleaseRequest.registry_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='registrar_tag', full_name='epp.nominet.ReleaseRequest.registrar_tag', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='domain', full_name='epp.nominet.ReleaseRequest.domain', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='registrant', full_name='epp.nominet.ReleaseRequest.registrant', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='object', full_name='epp.nominet.ReleaseRequest.object',
+      index=0, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+  ],
+  serialized_start=419,
+  serialized_end=531,
+)
+
+
+_RELEASEREPLY = _descriptor.Descriptor(
+  name='ReleaseReply',
+  full_name='epp.nominet.ReleaseReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pending', full_name='epp.nominet.ReleaseReply.pending', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='message', full_name='epp.nominet.ReleaseReply.message', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='cmd_resp', full_name='epp.nominet.ReleaseReply.cmd_resp', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=533,
+  serialized_end=658,
+)
 
 
 _NOMINETTAGLISTREPLY_TAG = _descriptor.Descriptor(
@@ -104,8 +339,8 @@ _NOMINETTAGLISTREPLY_TAG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=261,
-  serialized_end=364,
+  serialized_start=783,
+  serialized_end=886,
 )
 
 _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
@@ -142,8 +377,8 @@ _NOMINETTAGLISTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=139,
-  serialized_end=364,
+  serialized_start=661,
+  serialized_end=886,
 )
 
 
@@ -181,8 +416,8 @@ _DOMAINCANCEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=366,
-  serialized_end=414,
+  serialized_start=888,
+  serialized_end=936,
 )
 
 
@@ -241,8 +476,8 @@ _DOMAINRELEASE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=416,
-  serialized_end=528,
+  serialized_start=938,
+  serialized_end=1050,
 )
 
 
@@ -301,8 +536,8 @@ _DOMAINREGISTRARCHANGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=531,
-  serialized_end=738,
+  serialized_start=1053,
+  serialized_end=1260,
 )
 
 
@@ -340,8 +575,8 @@ _HOSTCANCEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=740,
-  serialized_end=796,
+  serialized_start=1262,
+  serialized_end=1318,
 )
 
 
@@ -408,8 +643,8 @@ _PROCESS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=799,
-  serialized_end=1091,
+  serialized_start=1321,
+  serialized_end=1613,
 )
 
 
@@ -454,8 +689,8 @@ _SUSPEND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1093,
-  serialized_end=1189,
+  serialized_start=1615,
+  serialized_end=1711,
 )
 
 
@@ -493,8 +728,8 @@ _DOMAINFAIL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1191,
-  serialized_end=1235,
+  serialized_start=1713,
+  serialized_end=1757,
 )
 
 
@@ -560,10 +795,20 @@ _REGISTRANTTRANSFER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1238,
-  serialized_end=1439,
+  serialized_start=1760,
+  serialized_end=1961,
 )
 
+_HANDSHAKEACCEPTREQUEST.fields_by_name['registrant'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_HANDSHAKEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
+_RELEASEREQUEST.oneofs_by_name['object'].fields.append(
+  _RELEASEREQUEST.fields_by_name['domain'])
+_RELEASEREQUEST.fields_by_name['domain'].containing_oneof = _RELEASEREQUEST.oneofs_by_name['object']
+_RELEASEREQUEST.oneofs_by_name['object'].fields.append(
+  _RELEASEREQUEST.fields_by_name['registrant'])
+_RELEASEREQUEST.fields_by_name['registrant'].containing_oneof = _RELEASEREQUEST.oneofs_by_name['object']
+_RELEASEREPLY.fields_by_name['message'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_RELEASEREPLY.fields_by_name['cmd_resp'].message_type = common__pb2._COMMANDRESPONSE
 _NOMINETTAGLISTREPLY_TAG.fields_by_name['trading_name'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _NOMINETTAGLISTREPLY_TAG.containing_type = _NOMINETTAGLISTREPLY
 _NOMINETTAGLISTREPLY.fields_by_name['tags'].message_type = _NOMINETTAGLISTREPLY_TAG
@@ -579,6 +824,11 @@ _PROCESS_PROCESSSTAGE.containing_type = _PROCESS
 _SUSPEND.fields_by_name['cancel_date'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _REGISTRANTTRANSFER.fields_by_name['case_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _REGISTRANTTRANSFER.fields_by_name['contact'].message_type = contact__pb2._CONTACTINFOREPLY
+DESCRIPTOR.message_types_by_name['HandshakeAcceptRequest'] = _HANDSHAKEACCEPTREQUEST
+DESCRIPTOR.message_types_by_name['HandshakeRejectRequest'] = _HANDSHAKEREJECTREQUEST
+DESCRIPTOR.message_types_by_name['HandshakeReply'] = _HANDSHAKEREPLY
+DESCRIPTOR.message_types_by_name['ReleaseRequest'] = _RELEASEREQUEST
+DESCRIPTOR.message_types_by_name['ReleaseReply'] = _RELEASEREPLY
 DESCRIPTOR.message_types_by_name['NominetTagListReply'] = _NOMINETTAGLISTREPLY
 DESCRIPTOR.message_types_by_name['DomainCancel'] = _DOMAINCANCEL
 DESCRIPTOR.message_types_by_name['DomainRelease'] = _DOMAINRELEASE
@@ -589,6 +839,41 @@ DESCRIPTOR.message_types_by_name['Suspend'] = _SUSPEND
 DESCRIPTOR.message_types_by_name['DomainFail'] = _DOMAINFAIL
 DESCRIPTOR.message_types_by_name['RegistrantTransfer'] = _REGISTRANTTRANSFER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+HandshakeAcceptRequest = _reflection.GeneratedProtocolMessageType('HandshakeAcceptRequest', (_message.Message,), {
+  'DESCRIPTOR' : _HANDSHAKEACCEPTREQUEST,
+  '__module__' : 'nominet_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet.HandshakeAcceptRequest)
+  })
+_sym_db.RegisterMessage(HandshakeAcceptRequest)
+
+HandshakeRejectRequest = _reflection.GeneratedProtocolMessageType('HandshakeRejectRequest', (_message.Message,), {
+  'DESCRIPTOR' : _HANDSHAKEREJECTREQUEST,
+  '__module__' : 'nominet_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet.HandshakeRejectRequest)
+  })
+_sym_db.RegisterMessage(HandshakeRejectRequest)
+
+HandshakeReply = _reflection.GeneratedProtocolMessageType('HandshakeReply', (_message.Message,), {
+  'DESCRIPTOR' : _HANDSHAKEREPLY,
+  '__module__' : 'nominet_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet.HandshakeReply)
+  })
+_sym_db.RegisterMessage(HandshakeReply)
+
+ReleaseRequest = _reflection.GeneratedProtocolMessageType('ReleaseRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RELEASEREQUEST,
+  '__module__' : 'nominet_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet.ReleaseRequest)
+  })
+_sym_db.RegisterMessage(ReleaseRequest)
+
+ReleaseReply = _reflection.GeneratedProtocolMessageType('ReleaseReply', (_message.Message,), {
+  'DESCRIPTOR' : _RELEASEREPLY,
+  '__module__' : 'nominet_pb2'
+  # @@protoc_insertion_point(class_scope:epp.nominet.ReleaseReply)
+  })
+_sym_db.RegisterMessage(ReleaseReply)
 
 NominetTagListReply = _reflection.GeneratedProtocolMessageType('NominetTagListReply', (_message.Message,), {
 
