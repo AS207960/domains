@@ -89,7 +89,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
         }, {
             "keyValue": {
                 "topLabel": "Registry ID",
-                "content": registry_id
+                "content": registry_id if registry_id else "UNKNOWN"
             }
         }, {
             "keyValue": {
@@ -253,7 +253,7 @@ def request_transfer(transfer_order_id, registry_id):
         }, {
             "keyValue": {
                 "topLabel": "Registry ID",
-                "content": registry_id
+                "content": registry_id if registry_id else "UNKNOWN"
             }
         }, {
             "keyValue": {
@@ -366,7 +366,7 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {
@@ -409,7 +409,7 @@ def notify_transfer(transfer_order_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {
@@ -574,7 +574,7 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
         }, {
             "keyValue": {
                 "topLabel": "Registry ID",
-                "content": registry_id
+                "content": registry_id if registry_id else "UNKNOWN"
             }
         }, {
             "keyValue": {
@@ -680,7 +680,7 @@ def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {
@@ -740,7 +740,7 @@ def notify_delete(domain_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {
@@ -783,7 +783,7 @@ def request_transfer_accept(domain_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {
@@ -826,7 +826,7 @@ def request_transfer_reject(domain_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Registry ID",
-                                "content": registry_id
+                                "content": registry_id if registry_id else "UNKNOWN"
                             }
                         }, {
                             "keyValue": {

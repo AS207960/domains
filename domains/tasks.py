@@ -365,7 +365,7 @@ def process_domain_renewal_paid(renew_order_id):
                 domain_renewal_order.domain, period, domain_data.expiry_date
             )
         except grpc.RpcError as rpc_error:
-            domain_renewal_order.state = process_domain_renewal.STATE_PENDING_APPROVAL
+            domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
             domain_renewal_order.last_error = rpc_error.details()
             domain_renewal_order.save()
             gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
