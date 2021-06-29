@@ -429,11 +429,16 @@ def process_domain_renewal_complete(renew_order_id):
     domain_renew_order = \
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
+    period = apps.epp_api.Period(
+        value=domain_renewal_order.period_value,
+        unit=domain_renewal_order.period_unit
+    )
+
     domain_renew_order.state = domain_renew_order.STATE_COMPLETED
     domain_renew_order.redirect_uri = None
     domain_renew_order.last_error = None
     domain_renew_order.save()
-    gchat_bot.notify_renew.delay(domain_renew_order.id)
+    gchat_bot.notify_renew.delay(domain_renew_order.id, "N/A", str(period))
 
 
 @shared_task(
