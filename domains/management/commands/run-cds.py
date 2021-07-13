@@ -295,12 +295,12 @@ class Command(BaseCommand):
                     )
                     if domain_info.ds_data_supported:
                         if rem_cds_set:
-                            req.sec_dns.remove_ds_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
+                            req.sec_dns.rem_ds_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
                         if add_cds_set:
                             req.sec_dns.add_ds_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
                     else:
                         if rem_cds_set:
-                            req.sec_dns.remove_key_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
+                            req.sec_dns.rem_key_data.data.extend(map(lambda d: d.to_pb(), rem_cds_set))
                         if add_cds_set:
                             req.sec_dns.add_key_data.data.extend(map(lambda d: d.to_pb(), add_cds_set))
 
