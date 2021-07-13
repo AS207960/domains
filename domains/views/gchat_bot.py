@@ -853,7 +853,7 @@ def request_locking_update(domain_id, registry_id: str):
             parent=space.space_id,
             threadKey=f"dm_{domain_obj.id}",
             body={
-                "text": f"<users/all> {user.first_name} {user.last_name} has requested to change the registry lock"
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested to change the registry lock "
                         f"on {domain_obj.domain} to: {str(lock_status)}",
                 "cards": [{
                     "header": {
