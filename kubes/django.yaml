@@ -30,6 +30,7 @@ data:
   HOST: "domains.glauca.digital,domains-nginx"
   DJANGO_SETTINGS_MODULE: as207960_domains.settings
   EXTERNAL_URL: "https://domains.glauca.digital"
+  RP_ID: "domains.glauca.digital"
   SENTRY_ENVIRONMENT: "prod"
   KEYCLOAK_SERVER_URL: "https://sso.as207960.net"
   KEYCLOAK_REALM: master

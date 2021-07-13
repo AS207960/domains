@@ -30,6 +30,7 @@ data:
   HOST: "domains.test.glauca.digital,domains-test-nginx"
   DJANGO_SETTINGS_MODULE: as207960_domains.settings
   EXTERNAL_URL: "https://domains.test.glauca.digital"
+  RP_ID: "domains.test.glauca.digital"
   SENTRY_ENVIRONMENT: "test"
   KEYCLOAK_SERVER_URL: "https://sso.as207960.net"
   KEYCLOAK_REALM: test
