@@ -131,15 +131,15 @@ def update(request, domain_id):
     if action == "lock" and locking_status != models.RegistryLockState.Locked:
         user_domain.pending_registry_lock_status = models.RegistryLockState.Locked.value
         user_domain.save()
-        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
+        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_name)
     elif action == "unlock" and locking_status != models.RegistryLockState.Unlocked:
         user_domain.pending_registry_lock_status = models.RegistryLockState.Unlocked.value
         user_domain.save()
-        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
+        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_name)
     elif action == "temp_unlock" and locking_status == models.RegistryLockState.Locked:
         user_domain.pending_registry_lock_status = models.RegistryLockState.TempUnlock.value
         user_domain.save()
-        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
+        gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_name)
 
     return redirect('domain_registry_lock', user_domain.id)
 
