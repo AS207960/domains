@@ -366,3 +366,66 @@ def mail_auto_renew_success(order_id):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_locked(domain_id):
+    domain = models.DomainRegistration.objects.filter(pk=domain_id).first()  # type: models.DomainRegistration
+    user = domain.get_user()
+    if user:
+        feedback_url = get_feedback_url(
+            f"{domain.domain} registry lock", domain.id
+        )
+
+        context = {
+            "name": user.first_name,
+            "domain": domain.domain,
+            "feedback_url": feedback_url,
+            "subject": "Domain registry lock update success",
+        }
+        html_content = render_to_string("domains_email/locking_success.html", context)
+        txt_content = render_to_string("domains_email/locking_success.txt", context)
+
+        email = EmailMultiAlternatives(
+            subject= "Domain registry lock update success",
+            body=txt_content,
+            to=[user.email],
+            bcc=['email-log@as207960.net'],
+            reply_to=['Glauca Support <hello@glauca.digital>']
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_lock_failed(domain_id, reason: str = None):
+    domain = models.DomainRegistration.objects.filter(pk=domain_id).first()  # type: models.DomainRegistration
+    user = domain.get_user()
+    if user:
+        feedback_url = get_feedback_url(
+            f"{domain.domain} registry lock", domain.id
+        )
+
+        context = {
+            "name": user.first_name,
+            "domain": domain.domain,
+            "reason": reason,
+            "feedback_url": feedback_url,
+            "subject": "Domain registry lock update failure",
+        }
+        html_content = render_to_string("domains_email/locking_fail.html", context)
+        txt_content = render_to_string("domains_email/locking_fail.txt", context)
+
+        email = EmailMultiAlternatives(
+            subject="Domain registry lock update failure",
+            body=txt_content,
+            to=[user.email],
+            bcc=['email-log@as207960.net'],
+            reply_to=['Glauca Support <hello@glauca.digital>']
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()

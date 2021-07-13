@@ -565,6 +565,7 @@ class DomainRegistration(models.Model):
     last_billed = models.DateTimeField(default=timezone.datetime.min)
     last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
     deleted_date = models.DateTimeField(blank=True, null=True)
+    pending_registry_lock_status = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
@@ -620,6 +621,18 @@ class DomainRegistration(models.Model):
 
     def __str__(self):
         return self.domain
+
+
+class WebAuthNKey(models.Model):
+    id = as207960_utils.models.TypedUUIDField('domains_webauthnkey', primary_key=True)
+    domain = models.ForeignKey(DomainRegistration, on_delete=models.CASCADE, related_name='webauthn_keys')
+    aaguid = models.UUIDField(verbose_name="AAGUID")
+    name = models.CharField(max_length=255)
+    icon = models.TextField(blank=True, null=True)
+    pubkey = models.TextField(verbose_name="Public key")
+    pubkey_alg = models.SmallIntegerField()
+    key_id = models.TextField()
+    sign_count = models.PositiveSmallIntegerField(default=0)
 
 
 class SimpleAbstractOrder(models.Model):

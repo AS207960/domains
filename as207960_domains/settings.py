@@ -159,6 +159,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 EXTERNAL_URL_BASE = os.getenv("EXTERNAL_URL", f"https://{ALLOWED_HOSTS[0]}")
+RP_ID = os.getenv("RP_ID", ALLOWED_HOSTS[0])
 
 STATIC_URL = f"{EXTERNAL_URL_BASE}/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -181,6 +182,7 @@ XFF_NO_SPOOFING = True
 XFF_HEADER_REQUIRED = True
 
 REGISTRATION_ENABLED = True
+REGISTRY_LOCK_ENABLED = False
 EPP_PROXY_ADDR = os.getenv("EPP_PROXY_ADDR")
 EPP_PROXY_CA = os.getenv("EPP_PROXY_CA")
 

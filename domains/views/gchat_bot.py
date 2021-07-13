@@ -841,6 +841,84 @@ def request_transfer_reject(domain_id, registry_id: str):
         ).execute()
 
 
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_locking_update(domain_id, registry_id: str):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+    user = domain_obj.get_user()
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_obj.id}",
+            body={
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested to change the registry lock"
+                        f"on {domain_obj.domain} to: {str(domain_obj.pending_registry_lock_status)}",
+                "cards": [{
+                    "header": {
+                        "title": "Domain registry lock request" if not settings.DEBUG
+                        else "Domain registry lock request [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Registry ID",
+                                "content": registry_id if registry_id else "UNKNOWN"
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Locking state",
+                                "content": str(domain_obj.pending_registry_lock_status)
+                            }
+                        }]
+                    }, make_user_data(user), {
+                        "widgets": [{
+                            "buttons": [{
+                                "textButton": {
+                                    "text": "Mark complete",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-locked",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_obj.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }, {
+                                "textButton": {
+                                    "text": "Mark failed",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-lock-fail",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_obj.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }]
+                        }]
+                    }],
+                    "name": f"domain-locking-{domain_obj.pk}"
+                }]
+            }
+        ).execute()
+
+
 @csrf_exempt
 def webhook(request):
     auth_header = request.META.get("HTTP_AUTHORIZATION", "")
@@ -1307,5 +1385,87 @@ def card_clicked(event):
                         }]
                     }],
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
+                }]
+            }
+
+    elif action_name in ("mark-domain-locked", "mark-domain-lock-fail"):
+        domain_obj = models.DomainRegistration.objects \
+            .filter(pk=domain_id).first()  # type: models.DomainRegistration
+        if not domain_obj:
+            return None
+
+        if not domain_obj.has_scope(account_access_token, 'edit'):
+            return {
+                "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
+            }
+
+        to_state = str(domain_obj.pending_registry_lock_status)
+
+        if action_name == "mark-domain-locked":
+            tasks.process_domain_locking_complete.delay(domain_obj.id)
+
+            return {
+                "actionResponse": {
+                    "type": "UPDATE_MESSAGE"
+                },
+                "text": f"Locking update of {domain_obj.domain} completed by <{user_id}>",
+                "cards": [{
+                    "header": {
+                        "title": "Domain locking complete",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Locking state",
+                                "content": to_state
+                            }
+                        }]
+                    }],
+                    "name": f"domain-locking-{domain_obj.pk}"
+                }]
+            }
+        elif action_name == "mark-domain-lock-fail":
+            tasks.process_domain_locking_failed.delay(domain_obj.id)
+
+            return {
+                "actionResponse": {
+                    "type": "UPDATE_MESSAGE"
+                },
+                "text": f"Locking update of {domain_obj.domain} marked failed by <{user_id}>",
+                "cards": [{
+                    "header": {
+                        "title": "Domain locking failed",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_obj.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_obj.pk)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Locking state",
+                                "content": to_state
+                            }
+                        }]
+                    }],
+                    "name": f"domain-locking-{domain_obj.pk}"
                 }]
             }

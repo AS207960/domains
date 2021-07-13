@@ -1,0 +1,4 @@
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
+Your order to change the registry lock status of the domain {{ domain }} has succeeded.
+{% endblock content }

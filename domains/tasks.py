@@ -880,3 +880,31 @@ def process_domain_auto_renew_failed(renew_order_id):
     billing.reverse_charge(domain_renew_order.id)
     domain_renew_order.state = domain_renew_order.STATE_FAILED
     domain_renew_order.save()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_locking_complete(domain_id):
+    domain_obj = \
+        models.DomainTransferOrder.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    domain_obj.pending_registry_lock_status = None
+    domain_obj.save()
+
+    emails.mail_locked.delay(domain_obj.id)
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_locking_failed(domain_id):
+    domain_obj = \
+        models.DomainTransferOrder.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    domain_obj.pending_registry_lock_status = None
+    domain_obj.save()
+
+    emails.mail_lock_failed.delay(domain_obj.id)

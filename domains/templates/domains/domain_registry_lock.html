@@ -1,0 +1,224 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Registry lock - {{ domain.unicode_domain }}{% endblock %}
+{% block content %}
+    <section class="stripe ">
+        <div class="container py-3">
+            <div class="bg-light p-3 rounded my-0">
+                <h1 class="display-4">
+                    Registry lock
+                </h1>
+                <h1>
+                    {{ domain.unicode_domain }}
+                </h1>
+                {% if pending_locking_status %}
+                    <div class="alert alert-info my-3">
+                        This domain has a pending update on the registry lock status.
+                        No registry lock actions can be performed until it is complete.
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <b>State:</b> {{ locking_status }}
+                        {% if pending_locking_status %}
+                            <br/><b>Pending update to:</b> {{ pending_locking_status }}
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <form action="{% url 'domain_registry_lock_update' domain.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="btn-group" style="flex-wrap: wrap; gap: 5px 0;">
+                                <a href="{% url 'domain' domain.id %}" class="btn btn-info">Back to domain</a>
+                                {% if can_register %}
+                                    <button id="register-btn" class="btn btn-success" type="button">Register
+                                        authenticator
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-success" disabled type="button">Register authenticator
+                                    </button>
+                                {% endif %}
+                                {% if can_authenticate %}
+                                    <button id="authenticate-btn" class="btn btn-primary" type="button">Authenticate
+                                    </button>
+                                {% endif %}
+                                {% if not pending_locking_status %}
+                                    {% if authenticated %}
+                                        {% if locking_status != locking_status.Locked %}
+                                            <button class="btn btn-primary" type="submit" name="action" value="lock">
+                                                &#x1f510; Lock
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-primary" type="submit" name="action" value="unlock">
+                                                &#x1f513; Unlock
+                                            </button>
+                                            {% if locking_status != locking_status.TempUnlocked %}
+                                                <button class="btn btn-primary" type="submit" name="action" value="temp_unlock">
+                                                    &#x1f512; Temporary unlock
+                                                </button>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if locking_status != locking_status.Locked %}
+                                            <button class="btn btn-primary" type="button" disabled>&#x1f510; Lock</button>
+                                        {% else %}
+                                            <button class="btn btn-primary" type="button" disabled>&#x1f513; Unlock</button>
+                                            {% if locking_status != locking_status.TempUnlocked %}
+                                                <button class="btn btn-primary" type="button" disabled>&#x1f512; Temporary unlock</button>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <noscript>
+                    <div class="alert alert-danger my-3">JavaScript is required for this function.</div>
+                </noscript>
+                <div class="alert alert-danger my-3" id="error-elm" style="display: none;">
+                    Oh no! Something went wrong.
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container pt-3 pt-md-5">
+        <h2>Registered authenticators</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if not authenticators.count %}
+                    <tr>
+                        <td colspan="3">No authenticators</td>
+                    </tr>
+                {% else %}
+                    {% for key in authenticators.all %}
+                        <tr>
+                            <td>
+                                {% if key.icon %}
+                                    <img src="{{ key.icon }}" alt=""/>
+                                {% endif %}
+                                {{ key.name }}
+                            </td>
+                            <td>
+                                {% if authenticated %}
+                                    <form action="{% url 'domain_registry_lock_update_key' domain.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="key_id" value="{{ key.id }}">
+                                        <div class="btn-group">
+                                            <button class="btn btn-danger" type="submit" name="action"
+                                                    value="deregister">Deregister
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="btn-group">
+                                        <button class="btn btn-danger" disabled>Deregister</button>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script type="application/javascript">
+        var errorElm = document.getElementById("error-elm");
+
+        function b64decode(input) {
+            return Uint8Array.from(window.atob(input), function (c) {
+                return c.charCodeAt(0);
+            });
+        }
+
+        function b64encode(input) {
+            return window.btoa(String.fromCharCode.apply(null, new Uint8Array(input)));
+        }
+    </script>
+    {% if can_register %}
+        <form action="{% url 'domain_registry_lock_register_key' domain.id %}" method="post" id="data-create-form">
+            {% csrf_token %}
+            <input type="hidden" name="key_id" value="" id="input-create-key-id"/>
+            <input type="hidden" name="client_data" value="" id="input-create-data"/>
+            <input type="hidden" name="attestation" value="" id="input-create-attestation"/>
+        </form>
+        <script type="application/javascript">
+            var registerBtn = document.getElementById("register-btn");
+            var dataCreateForm = document.getElementById("data-create-form");
+            var inputCreateKeyId = document.getElementById("input-create-key-id");
+            var inputCreateData = document.getElementById("input-create-data");
+            var inputCreateAttestation = document.getElementById("input-create-attestation");
+
+            var createData = {{ registration_data | safe }};
+            createData.user.id = b64decode(createData.user.id);
+            createData.challenge = b64decode(createData.challenge);
+            createData.excludeCredentials = createData.excludeCredentials.map(function (cred) {
+                cred.id = b64decode(cred.id);
+                return cred;
+            })
+
+            registerBtn.addEventListener('click', function () {
+                errorElm.style.display = 'none';
+                navigator.credentials.create({
+                    publicKey: createData
+                }).then(function (res) {
+                    inputCreateKeyId.value = b64encode(res.rawId);
+                    inputCreateData.value = b64encode(res.response.clientDataJSON);
+                    inputCreateAttestation.value = b64encode(res.response.attestationObject);
+                    dataCreateForm.submit();
+                }).catch(function (err) {
+                    console.log(err);
+                    errorElm.style.display = 'block';
+                });
+            });
+        </script>
+    {% endif %}
+    {% if can_authenticate %}
+        <form action="{% url 'domain_registry_lock_authenticate' domain.id %}" method="post" id="data-get-form">
+            {% csrf_token %}
+            <input type="hidden" name="key_id" value="" id="input-get-key-id"/>
+            <input type="hidden" name="client_data" value="" id="input-get-data"/>
+            <input type="hidden" name="authenticator" value="" id="input-get-authenticator"/>
+            <input type="hidden" name="signature" value="" id="input-get-signature"/>
+        </form>
+        <script type="application/javascript">
+            var authenticateBtn = document.getElementById("authenticate-btn");
+            var dataGetForm = document.getElementById("data-get-form");
+            var inputGetKeyId = document.getElementById("input-get-key-id");
+            var inputGetData = document.getElementById("input-get-data");
+            var inputGetAuthenticator = document.getElementById("input-get-authenticator");
+            var inputGetSignature = document.getElementById("input-get-signature");
+
+            var getData = {{ authentication_data | safe }};
+            getData.challenge = b64decode(getData.challenge);
+            getData.allowCredentials = getData.allowCredentials.map(function (cred) {
+                cred.id = b64decode(cred.id);
+                return cred;
+            })
+
+            authenticateBtn.addEventListener('click', function () {
+                errorElm.style.display = 'none';
+                navigator.credentials.get({
+                    publicKey: getData,
+                    mediation: "required"
+                }).then(function (res) {
+                    inputGetKeyId.value = b64encode(res.rawId);
+                    inputGetData.value = b64encode(res.response.clientDataJSON);
+                    inputGetAuthenticator.value = b64encode(res.response.authenticatorData);
+                    inputGetSignature.value = b64encode(res.response.signature);
+                    dataGetForm.submit();
+                }).catch(function (err) {
+                    console.log(err);
+                    errorElm.style.display = 'block';
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

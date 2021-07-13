@@ -588,6 +588,12 @@ class DomainInfo:
         )
 
     @property
+    def registry_lock_supported(self):
+        return self.registry in (
+            self.REGISTRY_SWITCH,
+        )
+
+    @property
     def fee_supported(self):
         return self.registry not in (
             self.REGISTRY_TRAFICOM,

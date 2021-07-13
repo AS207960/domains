@@ -333,6 +333,7 @@ def domain(request, domain_id):
         "ds_form": ds_form,
         "dnskey_form": dnskey_form,
         "registration_enabled": settings.REGISTRATION_ENABLED,
+        "registry_lock_enabled": settings.REGISTRY_LOCK_ENABLED,
         "is_hexdns": is_hexdns,
         "sharing_uri": sharing_uri
     })

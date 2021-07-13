@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import domain, hosts, contacts, admin, gchat_bot, suggest, billing, privacy, isnic
+from .views import domain, hosts, contacts, admin, gchat_bot, suggest, billing, privacy, isnic, registry_lock
 
 urlpatterns = [
     path('', domain.index, name='index'),
@@ -40,7 +40,24 @@ urlpatterns = [
     path('domains/<str:domain_id>/block_transfer/', domain.domain_block_transfer, name='domain_block_transfer'),
     path('domains/<str:domain_id>/del_block_transfer/', domain.domain_del_block_transfer, name='domain_del_block_transfer'),
     path('domains/<str:domain_id>/regen_transfer_code/', domain.domain_regen_transfer_code, name='domain_regen_transfer_code'),
-    path('domains/<str:domain_id>/transfer_out/<str:transfer_action>', domain.transfer_out_domain, name='domain_transfer_out'),
+    path('domains/<str:domain_id>/transfer_out/<str:transfer_action>/', domain.transfer_out_domain, name='domain_transfer_out'),
+    path('domains/<str:domain_id>/registry_lock/', registry_lock.manage_registry_lock, name='domain_registry_lock'),
+    path(
+        'domains/<str:domain_id>/registry_lock/update/', registry_lock.update,
+        name='domain_registry_lock_update'
+    ),
+    path(
+        'domains/<str:domain_id>/registry_lock/register_key/', registry_lock.register_key,
+        name='domain_registry_lock_register_key'
+    ),
+    path(
+        'domains/<str:domain_id>/registry_lock/update_key/', registry_lock.update_key,
+        name='domain_registry_lock_update_key'
+    ),
+    path(
+        'domains/<str:domain_id>/registry_lock/authenticate/', registry_lock.authenticate,
+        name='domain_registry_lock_authenticate'
+    ),
     path('hosts/', hosts.hosts, name='hosts'),
     path('hosts/<str:host_id>/', hosts.host, name='host'),
     path('hosts/<str:host_id>/delete/', hosts.host_delete, name='host_delete'),

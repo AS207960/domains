@@ -146,6 +146,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 EXTERNAL_URL_BASE = "http://localhost:8000"
+RP_ID = "as207960-domains.eu.ngrok.io"
 
 PHONENUMBER_DEFAULT_REGION = "GB"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -178,6 +179,7 @@ OIDC_SCOPES = keycloak_conf["scopes"]
 VERISIGN_NS_API_KEY = verisign_ns_conf["key"]
 
 REGISTRATION_ENABLED = True
+REGISTRY_LOCK_ENABLED = True
 EPP_PROXY_ADDR = "q-station.cdf1.as207960.net:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 

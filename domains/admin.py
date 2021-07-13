@@ -21,9 +21,15 @@ class ContactRegistrationAdmin(admin.ModelAdmin):
     inlines = [ContactRegistryInline]
 
 
+class WebAuthNKeyInline(admin.StackedInline):
+    model = models.WebAuthNKey
+    extra = 0
+
+
 @admin.register(models.DomainRegistration)
 class DomainRegistrationAdmin(admin.ModelAdmin):
     list_display = ('domain', 'deleted', 'last_billed', 'last_renew_notify')
+    inlines = [WebAuthNKeyInline]
 
 
 @admin.register(models.DomainRegistrationOrder)
