@@ -887,8 +887,7 @@ def process_domain_auto_renew_failed(renew_order_id):
     ignore_result=True
 )
 def process_domain_locking_complete(domain_id):
-    domain_obj = \
-        models.DomainTransferOrder.objects.get(id=domain_id)  # type: models.DomainRegistration
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
 
     domain_obj.pending_registry_lock_status = None
     domain_obj.save()
@@ -901,8 +900,7 @@ def process_domain_locking_complete(domain_id):
     ignore_result=True
 )
 def process_domain_locking_failed(domain_id):
-    domain_obj = \
-        models.DomainTransferOrder.objects.get(id=domain_id)  # type: models.DomainRegistration
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
 
     domain_obj.pending_registry_lock_status = None
     domain_obj.save()
