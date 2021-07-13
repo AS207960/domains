@@ -847,13 +847,14 @@ def request_transfer_reject(domain_id, registry_id: str):
 def request_locking_update(domain_id, registry_id: str):
     domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
     user = domain_obj.get_user()
+    lock_status = models.RegistryLockState(domain_obj.pending_registry_lock_status)
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
             threadKey=f"dm_{domain_obj.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested to change the registry lock"
-                        f"on {domain_obj.domain} to: {str(domain_obj.pending_registry_lock_status)}",
+                        f"on {domain_obj.domain} to: {str(lock_status)}",
                 "cards": [{
                     "header": {
                         "title": "Domain registry lock request" if not settings.DEBUG
@@ -879,7 +880,7 @@ def request_locking_update(domain_id, registry_id: str):
                         }, {
                             "keyValue": {
                                 "topLabel": "Locking state",
-                                "content": str(domain_obj.pending_registry_lock_status)
+                                "content": str(lock_status)
                             }
                         }]
                     }, make_user_data(user), {
@@ -1399,7 +1400,7 @@ def card_clicked(event):
                 "text": f"Sowwy <{user_id}>, you don't have permwission to do that"
             }
 
-        to_state = str(domain_obj.pending_registry_lock_status)
+        to_state = str(models.RegistryLockState(domain_obj.pending_registry_lock_status))
 
         if action_name == "mark-domain-locked":
             tasks.process_domain_locking_complete.delay(domain_obj.id)

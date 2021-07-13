@@ -3,7 +3,6 @@ import json
 import cryptography.hazmat.primitives.serialization
 import webauthn
 import base64
-import enum
 
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.conf import settings
@@ -19,31 +18,6 @@ RP = webauthn.types.RelyingParty(
     icon="https://as207960.net/assets/img/logo.png"
 )
 FIDO_METADATA = webauthn.metadata.FIDOMetadata.from_metadata(webauthn.metadata.get_metadata())
-
-
-class RegistryLockState(enum.Enum):
-    Unlocked = 0
-    TempUnlock = 1
-    Locked = 2
-
-    @classmethod
-    def from_domain(cls, domain: apps.epp_api.Domain):
-        if int(apps.epp_api.domain_common_pb2.ServerDeleteProhibited) in domain.statuses \
-                and int(apps.epp_api.domain_common_pb2.ServerTransferProhibited) in domain.statuses:
-            if int(apps.epp_api.domain_common_pb2.ServerUpdateProhibited) in domain.statuses:
-                return cls.Locked
-            else:
-                return cls.TempUnlock
-        else:
-            return cls.Locked
-
-    def __str__(self):
-        if self == self.Unlocked:
-            return "Unlocked"
-        elif self == self.TempUnlock:
-            return "Temporarily unlocked"
-        elif self == self.Locked:
-            return "Locked"
 
 
 def get_user(domain: models.DomainRegistration) -> webauthn.types.User:
@@ -95,9 +69,9 @@ def manage_registry_lock(request, domain_id):
     authenticated = is_authenticated(request, user_domain, registering=False)
     can_authenticate = authenticators.count() != 0 and not authenticated
 
-    pending_locking_status = RegistryLockState(user_domain.pending_registry_lock_status) \
+    pending_locking_status = models.RegistryLockState(user_domain.pending_registry_lock_status) \
         if user_domain.pending_registry_lock_status is not None else None
-    locking_status = RegistryLockState.from_domain(domain)
+    locking_status = models.RegistryLockState.from_domain(domain)
 
     key_ids = list(map(lambda k: base64.b64decode(k.key_id), authenticators.all()))
 
@@ -152,18 +126,18 @@ def update(request, domain_id):
             "back_url": referrer
         })
 
-    locking_status = RegistryLockState.from_domain(domain)
+    locking_status = models.RegistryLockState.from_domain(domain)
 
-    if action == "lock" and locking_status != RegistryLockState.Locked:
-        user_domain.pending_registry_lock_status = RegistryLockState.Locked.value
+    if action == "lock" and locking_status != models.RegistryLockState.Locked:
+        user_domain.pending_registry_lock_status = models.RegistryLockState.Locked.value
         user_domain.save()
         gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
-    elif action == "unlock" and locking_status != RegistryLockState.Unlocked:
-        user_domain.pending_registry_lock_status = RegistryLockState.Unlocked.value
+    elif action == "unlock" and locking_status != models.RegistryLockState.Unlocked:
+        user_domain.pending_registry_lock_status = models.RegistryLockState.Unlocked.value
         user_domain.save()
         gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
-    elif action == "temp_unlock" and locking_status == RegistryLockState.Locked:
-        user_domain.pending_registry_lock_status = RegistryLockState.TempUnlock.value
+    elif action == "temp_unlock" and locking_status == models.RegistryLockState.Locked:
+        user_domain.pending_registry_lock_status = models.RegistryLockState.TempUnlock.value
         user_domain.save()
         gchat_bot.request_locking_update.delay(user_domain.pk, domain.registry_id)
 

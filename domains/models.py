@@ -15,10 +15,36 @@ import time
 import secrets
 import typing
 import threading
+import enum
 import as207960_utils.models
 
 CONTACT_SEARCH = threading.Lock()
 NAME_SERVER_SEARCH = threading.Lock()
+
+
+class RegistryLockState(enum.Enum):
+    Unlocked = 0
+    TempUnlock = 1
+    Locked = 2
+
+    @classmethod
+    def from_domain(cls, domain: apps.epp_api.Domain):
+        if int(apps.epp_api.domain_common_pb2.ServerDeleteProhibited) in domain.statuses \
+                and int(apps.epp_api.domain_common_pb2.ServerTransferProhibited) in domain.statuses:
+            if int(apps.epp_api.domain_common_pb2.ServerUpdateProhibited) in domain.statuses:
+                return cls.Locked
+            else:
+                return cls.TempUnlock
+        else:
+            return cls.Unlocked
+
+    def __str__(self):
+        if self == self.Unlocked:
+            return "Unlocked"
+        elif self == self.TempUnlock:
+            return "Temporarily unlocked"
+        elif self == self.Locked:
+            return "Locked"
 
 
 def make_secret():
