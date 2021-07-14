@@ -36,7 +36,7 @@ class Price:
 
 def convert_currency(
         amount: decimal.Decimal, source_currency: str, username: typing.Optional[str], remote_ip: typing.Optional[str],
-        selected_country: typing.Optional[str]
+        selected_country: typing.Optional[str], timeout=0,
 ) -> Price:
     msg = billing_pb2.BillingRequest(
         convert_currency=billing_pb2.ConvertCurrencyRequest(
@@ -55,7 +55,7 @@ def convert_currency(
         )
     )
     msg_response = billing_pb2.ConvertCurrencyResponse()
-    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString()))
+    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString(), timeout=timeout))
 
     amount = (decimal.Decimal(msg_response.amount) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
     amount_inc_vat = (decimal.Decimal(msg_response.amount_inc_vat) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))

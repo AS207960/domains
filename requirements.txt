@@ -24,6 +24,6 @@ cryptography
 dnspython
 django-cockroachdb==3.1.*
 PyCrypto
-git+https://github.com/AS207960/python-utils@4d441c9749c057687d5a33dc4972a1421a570f9
+git+https://github.com/AS207960/python-utils@36558b0907b51e6ab15f38b65a5030e7216d597b
 pika
 py-webauthn>=0.0.3
