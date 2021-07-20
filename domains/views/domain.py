@@ -316,7 +316,7 @@ def domain(request, domain_id):
     expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
     paid_up_until = None
     if expiry_date - datetime.timedelta(days=30) <= now:
-        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain) \
+        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=user_domain) \
             .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
         if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
                 last_renew_order.timestamp + datetime.timedelta(days=60) >= now:
