@@ -312,6 +312,20 @@ def domain(request, domain_id):
             "back_url": referrer
         })
 
+    now = timezone.now()
+    paid_up_until = None
+    if domain_data.expiry_date - datetime.timedelta(days=30) <= now:
+        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain) \
+            .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
+        if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
+                last_renew_order.timestamp + datetime.timedelta(days=60) >= now:
+            if last_renew_order.period_unit == apps.epp_api.common_pb2.Period.Months:
+                renew_period = datetime.timedelta(weeks=4 * last_renew_order.period_value)
+            else:
+                renew_period = datetime.timedelta(weeks=52 * last_renew_order.period_value)
+
+            paid_up_until = domain_data.expiry_date + renew_period
+
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
         "domain_info": domain_info,
@@ -335,7 +349,8 @@ def domain(request, domain_id):
         "registration_enabled": settings.REGISTRATION_ENABLED,
         "registry_lock_enabled": settings.REGISTRY_LOCK_ENABLED,
         "is_hexdns": is_hexdns,
-        "sharing_uri": sharing_uri
+        "sharing_uri": sharing_uri,
+        "paid_up_until": paid_up_until,
     })
 
 
