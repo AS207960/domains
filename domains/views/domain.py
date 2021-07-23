@@ -1739,12 +1739,11 @@ def internal_check_price(request):
         price = domain_info.pricing.registration(
             request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld
         )
-        currency = "GBP"
     else:
         return HttpResponseBadRequest()
 
     return HttpResponse(json.dumps({
-        "price": float(price),
-        "currency": currency,
+        "price": float(price.amount_inc_vat),
+        "currency": price.currency,
         "message": domain_info.notice
     }), content_type="application/json")
