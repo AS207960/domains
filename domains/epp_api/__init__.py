@@ -1417,7 +1417,7 @@ class EPPClient:
 
     def delete_domain(self, domain: str) -> typing.Tuple[bool, str, str, typing.Optional[FeeData]]:
         resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(name=domain))
-        return resp.pending, resp.registry_name, resp.transaction_id,\
+        return resp.pending, resp.registry_name, resp.cmd_resp.server,\
                FeeData.from_pb(resp.fee_data) if resp.HasField("fee_data") else None
 
     def restore_domain(self, domain: str) -> typing.Tuple[bool, str]:
