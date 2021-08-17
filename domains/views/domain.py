@@ -648,7 +648,10 @@ def add_domain_host_obj(request, domain_id):
                         else:
                             isnic_zone_contact = None
 
-                        apps.epp_client.create_host(host_obj, [], domain_data.registry_name, isnic_zone_contact.registry_contact_id)
+                        apps.epp_client.create_host(
+                            host_obj, [], domain_data.registry_name,
+                            isnic_zone_contact.registry_contact_id if isnic_zone_contact else None
+                        )
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                     return render(request, "domains/error.html", {
