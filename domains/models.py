@@ -1,5 +1,6 @@
 from django.db import models, InternalError
 from django.core import validators
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
@@ -154,11 +155,11 @@ class ContactAddress(models.Model):
 
 class Contact(models.Model):
     ENTITY_TYPES = (
-        (0, "Not set"),
-        (1, "Unknown entity"),
-        (2, "UK Limited Company"),
-        (3, "UK Public Limited Company"),
-        (4, "UK Partnership"),
+        (apps.epp_api.contact_pb2.NotSet, "Not set"),
+        (apps.epp_api.contact_pb2.UnknownEntity, "Unknown entity"),
+        (apps.epp_api.contact_pb2.UkLimitedCompany, "UK Limited Company"),
+        (apps.epp_api.contact_pb2.UkPublicLimitedCompany, "UK Public Limited Company"),
+        (apps.epp_api.contact_pb2.UkPartnership, "UK Partnership"),
         (5, "UK Sole Trader"),
         (6, "UK Limited Liability Partnership"),
         (7, "UK Industrial Provident Registered Company"),
@@ -258,6 +259,28 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.description
+
+    def clean(self):
+        if self.entity_type in (
+                apps.epp_api.contact_pb2.UkIndividual, apps.epp_api.contact_pb2.FinnishIndividual,
+                apps.epp_api.contact_pb2.OtherIndividual
+        ) and self.trading_name:
+            raise ValidationError({
+                "trading_name": "Individuals cannot have a trading name"
+            })
+        if self.entity_type in (
+                apps.epp_api.contact_pb2.UkLimitedCompany, apps.epp_api.contact_pb2.UkPublicLimitedCompany,
+                apps.epp_api.contact_pb2.UkLimitedLiabilityPartnership
+        ) and not self.company_number:
+            raise ValidationError({
+                "company_number": "Company number required for UK companies"
+            })
+        if self.entity_type in (
+                apps.epp_api.contact_pb2.UkSchool,
+        ) and not self.company_number:
+            raise ValidationError({
+                "company_number": "DfES number required for UK schools"
+            })
 
     def can_delete(self):
         if self.domains_registrant.count() or self.domains_admin.count() or \
