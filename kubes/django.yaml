@@ -202,7 +202,7 @@ spec:
     - protocol: TCP
       port: 8000
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: domains-run-renewal
@@ -278,7 +278,7 @@ spec:
                     name: domains-rpc
           restartPolicy: OnFailure
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: domains-run-cds
@@ -354,7 +354,7 @@ spec:
                     name: domains-rpc
           restartPolicy: OnFailure
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: domains-run-remind-push-transfer
