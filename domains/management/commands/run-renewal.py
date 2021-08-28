@@ -84,6 +84,10 @@ class Command(BaseCommand):
                 print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
                 continue
 
+            if apps.epp_api.domain_common_pb2.PendingDelete in domain_data.statuses:
+                print(f"{domain_data.name} is already pending delete, not touching")
+                continue
+
             user = domain.get_user()
 
             expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
@@ -120,6 +124,8 @@ class Command(BaseCommand):
                         continue
 
                     print(f"Deleting {domain.domain} due to billing failure")
+                    print(f"Reversing charge just to be sure")
+                    billing.reverse_charge(last_renew_order.id)
                     try:
                         apps.epp_client.delete_domain(domain_data.name)
                     except grpc.RpcError as rpc_error:
