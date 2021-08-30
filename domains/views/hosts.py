@@ -215,7 +215,7 @@ def host_create(request, host_name: str):
                     apps.epp_client.create_host(host_name, [apps.epp_api.IPAddress(
                         address=address.compressed,
                         ip_type=ip_type
-                    )], domain_data.registry_name, isnic_zone_contact.registry_contact_id)
+                    )], domain_data.registry_name, isnic_zone_contact.registry_contact_id if isnic_zone_contact else None)
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                 else:
