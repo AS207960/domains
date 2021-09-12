@@ -491,9 +491,7 @@ class Domain:
     def add_host_objs(self, hosts: typing.List[str], replace: bool = False) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
-            remove=list(map(lambda n: domain_pb2.DomainUpdateRequest.Param(
-                nameserver=n.to_pb()
-            ), self.name_servers)),
+            remove=[],
             add=list(map(lambda h: domain_pb2.DomainUpdateRequest.Param(
                 nameserver=domain_pb2.NameServer(
                     host_obj=h

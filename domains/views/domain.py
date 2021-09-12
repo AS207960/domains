@@ -674,7 +674,7 @@ def add_domain_host_obj(request, domain_id):
                     })
 
         try:
-            domain_data.add_host_objs(hosts, replace=action=="Replace")
+            domain_data.add_host_objs(hosts, replace=action == "Replace")
         except grpc.RpcError as rpc_error:
             error = rpc_error.details()
             return render(request, "domains/error.html", {
