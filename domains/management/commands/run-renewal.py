@@ -115,17 +115,24 @@ class Command(BaseCommand):
                     print(f"No renewal price available for {domain.domain}")
                     continue
 
-                if (expiry_date - FAIL_INTERVAL) <= now:
+                if (expiry_date - FAIL_INTERVAL) <= now and domain_info.renews_if_not_deleted:
                     last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain)\
                         .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
                     if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
                             last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
                         print(f"{domain_data.name} expiring soon, renewal already succeeded")
                         continue
+                    last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True)\
+                        .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
+                    if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
+                            last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
+                        print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded")
+                        continue
 
                     print(f"Deleting {domain.domain} due to billing failure")
-                    print(f"Reversing charge just to be sure")
-                    billing.reverse_charge(last_renew_order.id)
+                    if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                        print(f"Reversing charge just to be sure")
+                        billing.reverse_charge(last_renew_order.id)
                     try:
                         apps.epp_client.delete_domain(domain_data.name)
                     except grpc.RpcError as rpc_error:
@@ -139,10 +146,6 @@ class Command(BaseCommand):
                     domain.save()
                     print(f"Deleted {domain.domain}")
                     insert_into_dict(deleted, user, email_data)
-                    renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain)\
-                        .order_by("-timestamp").first()
-                    if renew_order and renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                        billing.reverse_charge(renew_order.id)
 
                 else:
                     if (domain.last_billed + RENEW_INTERVAL) >= now:

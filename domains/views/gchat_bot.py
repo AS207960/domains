@@ -450,7 +450,8 @@ def request_restore(restore_order_id):
             threadKey=f"dm_{domain_restore_order.domain_obj.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"restoration of {domain_restore_order.domain}",
+                        f"restoration of {domain_restore_order.domain}"
+                        f'{"; with renewal" if domain_restore_order.should_renew else ""}',
                 "cards": [{
                     "header": {
                         "title": "Domain restore request" if not settings.DEBUG
@@ -467,6 +468,11 @@ def request_restore(restore_order_id):
                             "keyValue": {
                                 "topLabel": "Object ID",
                                 "content": str(domain_restore_order.domain_obj.id)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Should renew",
+                                "content": str(domain_restore_order.should_renew)
                             }
                         }]
                     }, make_user_data(user), {
@@ -501,6 +507,80 @@ def request_restore(restore_order_id):
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.domain_obj.id}",
+                }]
+            }
+        ).execute()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def request_restore_renew(restore_order_id, period: str):
+    domain_restore_order = models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
+    user = domain_restore_order.get_user()
+
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_restore_order.domain_obj.id}",
+            body={
+                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
+                        f"renewal of {domain_restore_order.domain} following restore",
+                "cards": [{
+                    "header": {
+                        "title": "Domain restore renew request" if not settings.DEBUG
+                        else "Domain restore renew request [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_restore_order.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_restore_order.domain_obj.id)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Period",
+                                "content": period
+                            }
+                        }]
+                    }, make_user_data(user), {
+                        "widgets": [{
+                            "buttons": [{
+                                "textButton": {
+                                    "text": "Mark complete",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-restored",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_restore_order.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }, {
+                                "textButton": {
+                                    "text": "Mark failed",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-restore-fail",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_restore_order.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }]
+                        }]
+                    }],
+                    "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
                 }]
             }
         ).execute()

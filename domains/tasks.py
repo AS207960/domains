@@ -430,8 +430,8 @@ def process_domain_renewal_complete(renew_order_id):
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
     period = apps.epp_api.Period(
-        value=domain_renewal_order.period_value,
-        unit=domain_renewal_order.period_unit
+        value=domain_renew_order.period_value,
+        unit=domain_renew_order.period_unit
     )
 
     domain_renew_order.state = domain_renew_order.STATE_COMPLETED
@@ -464,6 +464,12 @@ def process_domain_restore_paid(restore_order_id):
 
     zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
 
+    try:
+        domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
+    except grpc.RpcError as rpc_error:
+        logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
+        raise rpc_error
+
     if zone.direct_restore_supported:
         try:
             pending, registry_id = apps.epp_client.restore_domain(domain_restore_order.domain)
@@ -480,6 +486,28 @@ def process_domain_restore_paid(restore_order_id):
                          f" passing off to human")
             return
 
+        if domain_restore_order.should_renew and zone.renew_supported:
+            period = apps.epp_api.Period(
+                value=domain_restore_order.period_value,
+                unit=domain_restore_order.period_unit
+            )
+
+            if zone.direct_renew_supported:
+                try:
+                    _pending, _new_expiry, _registry_id = apps.epp_client.renew_domain(
+                        domain_restore_order.domain, period, domain_data.expiry_date
+                    )
+                except grpc.RpcError as rpc_error:
+                    logger.error(f"Failed to renew {domain_restore_order.domain}: {rpc_error.details()}")
+                    return
+            else:
+                gchat_bot.request_restore_renew.delay(domain_restore_order.id, str(period))
+
+                domain_restore_order.state = domain_restore_order.STATE_PENDING_APPROVAL
+                domain_restore_order.save()
+
+                logger.info(f"{domain_restore_order.domain} successfully requested renewal following restore")
+                return
     else:
         gchat_bot.request_restore.delay(domain_restore_order.id)
         pending = True

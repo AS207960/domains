@@ -442,6 +442,12 @@ class DomainInfo:
             return datetime.timedelta(days=30)
 
     @property
+    def renews_if_not_deleted(self):
+        return self.registry not in (
+            self.REGISTRY_NOMINET,
+        )
+
+    @property
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,

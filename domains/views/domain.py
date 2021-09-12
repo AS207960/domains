@@ -17,6 +17,9 @@ from .. import models, apps, forms, zone_info, tasks
 from . import gchat_bot
 
 
+RENEW_INTERVAL = datetime.timedelta(days=30)
+
+
 def index(request):
     form = forms.DomainSearchForm()
     tlds = list(map(lambda z: z[0], sorted(zone_info.ZONES, key=lambda z: z[0])))
@@ -315,7 +318,7 @@ def domain(request, domain_id):
     now = timezone.now()
     expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
     paid_up_until = None
-    if expiry_date - datetime.timedelta(days=30) <= now:
+    if expiry_date - RENEW_INTERVAL <= now:
         last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=user_domain) \
             .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
         if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
@@ -326,6 +329,17 @@ def domain(request, domain_id):
                 renew_period = datetime.timedelta(weeks=52 * last_renew_order.period_value)
 
             paid_up_until = expiry_date + renew_period
+        else:
+            last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=user_domain, should_renew=True)\
+                        .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
+            if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
+                    last_restore_order.timestamp + datetime.timedelta(days=60) >= now:
+                if last_restore_order.period_unit == apps.epp_api.common_pb2.Period.Months:
+                    renew_period = datetime.timedelta(weeks=4 * last_restore_order.period_value)
+                else:
+                    renew_period = datetime.timedelta(weeks=52 * last_restore_order.period_value)
+
+                paid_up_until = expiry_date + renew_period
 
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
@@ -1381,7 +1395,7 @@ def transfer_out_domain(request, domain_id, transfer_action):
 
     if request.method == "POST" and request.POST.get("confirm") == "true":
         if transfer_action == "approve":
-            if domain_info.direct_restore_supported:
+            if domain_info.direct_transfer_supported:
                 try:
                     transfer_obj = apps.epp_client.transfer_accept_domain(user_domain.domain, "")
                 except grpc.RpcError as rpc_error:
@@ -1404,7 +1418,7 @@ def transfer_out_domain(request, domain_id, transfer_action):
                     "back_url": reverse('domains')
                 })
         elif transfer_action == "reject":
-            if domain_info.direct_restore_supported:
+            if domain_info.direct_transfer_supported:
                 try:
                     transfer_obj = apps.epp_client.transfer_reject_domain(user_domain.domain, "")
                 except grpc.RpcError as rpc_error:
@@ -1549,8 +1563,25 @@ def restore_domain(request, domain_id):
             "back_url": referrer
         })
 
+    try:
+        domain_data = apps.epp_client.get_domain(user_domain.domain)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
     zone_price, _ = zone.pricing, zone.registry
+    renewal_period = zone_price.periods[0]
     billing_value = zone_price.restore(request.country.iso_code, request.user.username, sld).amount
+    should_renew = False
+    if (expiry_date - RENEW_INTERVAL) <= timezone.now():
+        should_renew = True
+        billing_value += zone_price.renewal(
+            request.country.iso_code, request.user.username, sld, unit=renewal_period.unit, value=renewal_period.value
+        ).amount
 
     order = models.DomainRestoreOrder(
         domain=user_domain.domain,
@@ -1558,6 +1589,9 @@ def restore_domain(request, domain_id):
         price=billing_value,
         user=request.user,
         off_session=False,
+        period_unit=renewal_period.unit,
+        period_value=renewal_period.value,
+        should_renew=should_renew
     )
     order.save()
     tasks.process_domain_restore.delay(order.id)

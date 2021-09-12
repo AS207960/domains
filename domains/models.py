@@ -887,6 +887,9 @@ class DomainRestoreOrder(AbstractOrder):
     id = as207960_utils.models.TypedUUIDField(f'domains_domainrestoreorder', primary_key=True)
     domain = models.CharField(max_length=255)
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+    should_renew = models.BooleanField(blank=True, default=False)
+    period_unit = models.PositiveSmallIntegerField(blank=True, null=True)
+    period_value = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
