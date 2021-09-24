@@ -1,3 +1,4 @@
+import pytz
 import decimal
 import dataclasses
 import typing
@@ -6,6 +7,7 @@ import google.protobuf.wrappers_pb2
 from .proto import billing_pb2
 from concurrent.futures import ThreadPoolExecutor
 from django.conf import settings
+from django.utils import timezone
 import domains.views.billing
 
 from . import apps
@@ -91,6 +93,88 @@ class SimplePrice:
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
+        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+
+
+class Nominet2021PromotionalPrice:
+    def __init__(self, price: int):
+        self.price = price
+        self._renewal = price
+        self.periods = list(map(lambda i: apps.epp_api.Period(
+            unit=0,
+            value=i
+        ), range(1, 11)))
+        self.default_value = self.periods[0].value
+        self.default_unit = self.periods[0].unit
+        self._start = datetime.datetime(2021, 10, 1, 0, 0, 0, tzinfo=pytz.timezone("Europe/London"))
+        self._end = datetime.datetime(2021, 11, 30, 23, 59, 59, tzinfo=pytz.timezone("Europe/London"))
+
+    @property
+    def currency(self):
+        return "GBP"
+
+    def representative_registration(self):
+        now = timezone.now()
+        if now >= self._start and now <= self._end:
+            return decimal.Decimal("2.09")
+        else:
+            return decimal.Decimal(self.price) / decimal.Decimal(100)
+
+    def representative_renewal(self):
+        return decimal.Decimal(self._renewal) / decimal.Decimal(100) if self._renewal is not None else None
+
+    def representative_restore(self):
+        return None
+
+    def representative_transfer(self):
+        return decimal.Decimal(0)
+
+    def fees(self, country: str, username, sld):
+        return {
+            "periods": list(map(lambda p: {
+                "period": p,
+                "create": self.registration(country, username, sld, p.value, p.unit),
+                "renew": self.renewal(country, username, sld, p.value, p.unit),
+            }, self.periods)),
+            "restore": self.restore(country, username, sld),
+            "transfer": self.transfer(country, username, sld),
+        }
+
+    def registration(self, country: str, username, sld: str, value=None, unit=None):
+        if value is None:
+            value = self.default_value
+        if unit is None:
+            unit = self.default_unit
+        if apps.epp_api.Period(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+
+        now = timezone.now()
+        if now >= self._start and now <= self._end and unit == 0:
+            fee = decimal.Decimal("2.09")
+            value -= 1
+        else:
+            fee = decimal.Decimal(0)
+
+        fee += (decimal.Decimal(self.price) / decimal.Decimal(100)) * _mul(value, unit)
+        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+
+    def renewal(self, country: str, username, sld: str, value=1, unit=0):
+        if apps.epp_api.Period(
+                unit=unit,
+                value=value
+        ) not in self.periods:
+            return None
+        fee = (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
+        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+
+    def restore(self, country: str, username, sld: str):
+        return None
+
+    def transfer(self,  country: str, username, sld: str, value=1, unit=0):
+        fee = decimal.Decimal(0)
         return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
 
 
@@ -800,22 +884,10 @@ class DomainInfo:
 
 if settings.DEBUG:
     ZONES = (
-        ('uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
-            unit=0,
-            value=2
-        )]))),
-        ('co.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
-            unit=0,
-            value=2
-        )]))),
-        ('org.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
-            unit=0,
-            value=2
-        )]))),
-        ('me.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
-            unit=0,
-            value=2
-        )]))),
+        ('uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
+        ('co.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
+        ('org.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
+        ('me.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
         ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
             unit=0,
             value=2
@@ -2645,20 +2717,20 @@ else:
                         markup=decimal.Decimal("1.5"))
         )),
         ('uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917),
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('co.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917),
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('me.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917),
             notice="This TLD is restricted to natural persons.",
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('org.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917),
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('ltd.uk', DomainInfo(
