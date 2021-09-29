@@ -146,7 +146,10 @@ def charge_order(
             order.save()
             success_func.delay(order.id)
         else:
-            if charge_state.redirect_uri:
+            if charge_state.success:
+                order.state = order.STATE_NEEDS_PAYMENT
+                order.save()
+            elif charge_state.redirect_uri:
                 order.state = order.STATE_NEEDS_PAYMENT
                 order.redirect_uri = charge_state.redirect_uri
                 order.save()
