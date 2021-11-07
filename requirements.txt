@@ -26,4 +26,4 @@ django-cockroachdb==3.1.*
 PyCrypto
 git+https://github.com/AS207960/python-utils@778ad35b5cc6b428a7bc143323fe2fec80e8ff47
 pika
-py-webauthn>=0.0.3
+py-webauthn>=0.0.4
