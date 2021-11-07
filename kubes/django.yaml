@@ -44,8 +44,7 @@ data:
   PAT_URL: "http://oauth-nginx"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
-  EMAIL_HOST: "mx.postal.as207960.net"
-  EMAIL_HOST_USER: "apikey"
+  EMAIL_HOST: "smime-relay.as207960.ltd.uk"
   EMAIL_PORT: "25"
   EMAIL_FROM: "Glauca Domains <domains@glauca.digital>"
   GCHAT_PROJECT_ID: "226795660453"
@@ -123,9 +122,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
@@ -166,9 +165,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
@@ -262,9 +261,9 @@ spec:
                 - secretRef:
                     name: domains-keycloak
                   prefix: "KEYCLOAK_"
-                - secretRef:
-                    name: domains-email
-                  prefix: "EMAIL_"
+#                - secretRef:
+#                    name: domains-email
+#                  prefix: "EMAIL_"
                 - secretRef:
                     name: domains-celery
                   prefix: "CELERY_"
@@ -338,9 +337,9 @@ spec:
                 - secretRef:
                     name: domains-keycloak
                   prefix: "KEYCLOAK_"
-                - secretRef:
-                    name: domains-email
-                  prefix: "EMAIL_"
+#                - secretRef:
+#                    name: domains-email
+#                  prefix: "EMAIL_"
                 - secretRef:
                     name: domains-celery
                   prefix: "CELERY_"
@@ -414,9 +413,9 @@ spec:
                 - secretRef:
                     name: domains-keycloak
                   prefix: "KEYCLOAK_"
-                - secretRef:
-                    name: domains-email
-                  prefix: "EMAIL_"
+#                - secretRef:
+#                    name: domains-email
+#                  prefix: "EMAIL_"
                 - secretRef:
                     name: domains-celery
                   prefix: "CELERY_"
@@ -508,9 +507,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
@@ -601,9 +600,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
@@ -705,9 +704,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
@@ -796,9 +795,9 @@ spec:
             - secretRef:
                 name: domains-keycloak
               prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-email
-              prefix: "EMAIL_"
+#            - secretRef:
+#                name: domains-email
+#              prefix: "EMAIL_"
             - secretRef:
                 name: domains-celery
               prefix: "CELERY_"
