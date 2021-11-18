@@ -468,9 +468,9 @@ def process_domain_restore_paid(restore_order_id):
     zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
 
     try:
-        domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
+        domain_data = apps.epp_client.get_domain(domain_restore_order.domain)
     except grpc.RpcError as rpc_error:
-        logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
+        logger.warn(f"Failed to load data of {domain_restore_order.domain}: {rpc_error.details()}")
         raise rpc_error
 
     if zone.direct_restore_supported:
