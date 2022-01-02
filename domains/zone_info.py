@@ -474,6 +474,7 @@ class DomainInfo:
     REGISTRY_NICAT = "nicat"
     REGISTRY_CIRA = "cira"
     REGISTRY_ISNIC = "isnic"
+    REGISTRY_GODADDY = "godaddy"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -599,6 +600,7 @@ class DomainInfo:
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_GODADDY,
         )
 
     @property
@@ -765,6 +767,7 @@ class DomainInfo:
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
+            self.REGISTRY_GODADDY,
         )
 
     @property
@@ -815,6 +818,7 @@ class DomainInfo:
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_GODADDY,
         )
 
     @property
@@ -867,6 +871,7 @@ class DomainInfo:
             self.REGISTRY_RNIDS,
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
+            self.REGISTRY_GODADDY,
         )
 
     @property
@@ -990,6 +995,11 @@ else:
             DomainInfo.REGISTRY_VERISIGN_COMNET,
             MarkupPrice(3009, transfer=3009, restore=15120, currency=None, display_currency='USD', tld='net',
                         markup=decimal.Decimal("1.4"))
+        )),
+        ('name', DomainInfo(
+            DomainInfo.REGISTRY_VERISIGN_COMNET,
+            MarkupPrice(2002, transfer=2002, restore=14400, currency=None, display_currency='USD', tld='name',
+                        markup=decimal.Decimal("1.6"))
         )),
         ('org', DomainInfo(
             DomainInfo.REGISTRY_PIR,
@@ -1324,6 +1334,11 @@ else:
             DomainInfo.REGISTRY_AFILIAS,
             MarkupPrice(2874, transfer=2874, restore=12600, currency=None, display_currency='USD', tld='info',
                         markup=decimal.Decimal("1.4"))
+        )),
+        ('pet', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3097, transfer=3097, restore=12150, currency=None, display_currency='USD', tld='pet',
+                        markup=decimal.Decimal("1.35"))
         )),
         ('online', DomainInfo(
             DomainInfo.REGISTRY_RADIX,
@@ -2856,6 +2871,11 @@ else:
                     value=1
                 )]
             )
+        )),
+        ('horse', DomainInfo(
+            DomainInfo.REGISTRY_GODADDY,
+            MarkupPrice(4498, transfer=4498, restore=3250, currency=None, display_currency='USD', tld='horse',
+                        markup=decimal.Decimal("1.3"))
         )),
     )
 
