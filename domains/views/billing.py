@@ -32,11 +32,12 @@ class Price:
     taxable: bool
     country: str
     currency: str
+    available: bool = True
 
 
 def convert_currency(
         amount: decimal.Decimal, source_currency: str, username: typing.Optional[str], remote_ip: typing.Optional[str],
-        selected_country: typing.Optional[str], timeout=0,
+        selected_country: typing.Optional[str], timeout=0, available=True,
 ) -> Price:
     msg = billing_pb2.BillingRequest(
         convert_currency=billing_pb2.ConvertCurrencyRequest(
@@ -64,7 +65,8 @@ def convert_currency(
         amount_inc_vat=amount_inc_vat,
         taxable=msg_response.taxable,
         country=msg_response.used_country,
-        currency="GBP"
+        currency="GBP",
+        available=available
     )
 
 

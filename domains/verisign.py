@@ -10,6 +10,7 @@ import requests
 from django.conf import settings
 
 from . import zone_info, apps
+from .views import billing
 
 if settings.DEBUG:
     NS_API_BASE = "https://ote-sugapi.verisign-grs.com/ns-api/2.0"
@@ -44,7 +45,7 @@ class Availability(enum.Enum):
 class SuggestedDomain:
     name: str
     availability: Availability
-    price: decimal.Decimal
+    price: billing.Price
     currency: str
 
     @classmethod
@@ -69,14 +70,19 @@ class SuggestedDomain:
         else:
             availability = Availability.UNKNOWN
 
-        zone, sld = zone_info.get_domain_info(res["name"])
-        if not zone:
-            price_decimal = None
-        else:
-            try:
-                price_decimal = zone.pricing.registration(iso_code, username, sld)
-            except grpc.RpcError:
+        if availability in (Availability.AVAILABLE, Availability.PREMIUM, Availability.UNKNOWN):
+            zone, sld = zone_info.get_domain_info(res["name"])
+            if not zone:
                 price_decimal = None
+            else:
+                try:
+                    price_decimal = zone.pricing.registration(iso_code, username, sld)
+                    if not price_decimal.available:
+                        availability = Availability.REGISTERED
+                except grpc.RpcError:
+                    price_decimal = None
+        else:
+            price_decimal = None
 
         return cls(
             name=res["name"],

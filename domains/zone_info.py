@@ -375,7 +375,7 @@ class MarkupPrice:
             "transfer": self._convert_fee(transfer_command, country, username) if transfer_command else None,
         }
 
-    def _convert_fee(self, command, country, username):
+    def _convert_fee(self, command, country, username, available=True):
         total_fee = decimal.Decimal(0)
         for fee in command.fees:
             total_fee += decimal.Decimal(fee.value)
@@ -383,7 +383,7 @@ class MarkupPrice:
             total_fee += decimal.Decimal(credit.value)
 
         final_fee = total_fee * self._markup
-        return domains.views.billing.convert_currency(final_fee, command.currency, username, None, country)
+        return domains.views.billing.convert_currency(final_fee, command.currency, username, None, country, available=available)
 
     def _get_fee(self, sld, value, unit, command, country, username):
         domain = f"{sld}.{self._tld}"
@@ -411,7 +411,7 @@ class MarkupPrice:
             return None
         command = resp.fee_check.commands[0]
 
-        return self._convert_fee(command, country, username)
+        return self._convert_fee(command, country, username, available=resp.available)
 
     def registration(self, country: str, username, sld: str, value=1, unit=0):
         return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Create, country=country, username=username)
