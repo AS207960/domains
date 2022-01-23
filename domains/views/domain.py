@@ -1152,7 +1152,8 @@ def domain_search_success(request, domain_name):
         })
 
     price_decimal = zone.pricing.registration(
-        request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld
+        request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld,
+        local_currency=True
     )
 
     return render(request, "domains/domain_search_success.html", {
@@ -1240,7 +1241,7 @@ def domain_register(request, domain_name):
             user=request.user
         )
 
-    price_decimal = zone_price.registration(request.country.iso_code, request.user.username, sld)
+    price_decimal = zone_price.registration(request.country.iso_code, request.user.username, sld, local_currency=True)
 
     return render(request, "domains/domain_form.html", {
         "domain_form": form,
@@ -1523,7 +1524,7 @@ def renew_domain(request, domain_id):
     else:
         form = forms.DomainRenewForm(zone_info=zone)
 
-    price_decimal = zone_price.renewal(request.country.iso_code, request.user.username, sld)
+    price_decimal = zone_price.renewal(request.country.iso_code, request.user.username, sld, local_currency=True)
 
     return render(request, "domains/renew_domain.html", {
         "domain": user_domain,
@@ -1708,7 +1709,8 @@ def domain_transfer(request, domain_name):
 
     zone_price, registry_name = zone.pricing, zone.registry
     try:
-        price_decimal = zone_price.transfer(request.country.iso_code, request.user.username, sld)
+        price_decimal = zone_price.transfer(request.country.iso_code, request.user.username, sld, local_currency=True)
+        billing_value = zone_price.transfer(request.country.iso_code, request.user.username, sld)
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1732,7 +1734,7 @@ def domain_transfer(request, domain_name):
                 admin_contact=admin_contact,
                 billing_contact=billing_contact,
                 tech_contact=tech_contact,
-                price=price_decimal.amount,
+                price=billing_value.amount,
                 user=request.user,
                 off_session=False,
             )
@@ -1774,7 +1776,8 @@ def internal_check_price(request):
 
     if search_action == "register":
         price = domain_info.pricing.registration(
-            request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld
+            request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld,
+            local_currency=True
         )
     else:
         return HttpResponseBadRequest()

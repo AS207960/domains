@@ -37,12 +37,12 @@ class Price:
 
 def convert_currency(
         amount: decimal.Decimal, source_currency: str, username: typing.Optional[str], remote_ip: typing.Optional[str],
-        selected_country: typing.Optional[str], timeout=0, available=True,
+        selected_country: typing.Optional[str], timeout=0, available=True, local_currency=False
 ) -> Price:
     msg = billing_pb2.BillingRequest(
         convert_currency=billing_pb2.ConvertCurrencyRequest(
             from_currency=source_currency,
-            to_currency="GBP",
+            to_currency="" if local_currency else "GBP",
             amount=int(round(amount * decimal.Decimal(100))),
             username=google.protobuf.wrappers_pb2.StringValue(
                 value=username
@@ -65,7 +65,7 @@ def convert_currency(
         amount_inc_vat=amount_inc_vat,
         taxable=msg_response.taxable,
         country=msg_response.used_country,
-        currency="GBP",
+        currency=msg_response.currency,
         available=available
     )
 

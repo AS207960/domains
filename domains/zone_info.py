@@ -53,14 +53,14 @@ class SimplePrice:
         return {
             "periods": list(map(lambda p: {
                 "period": p,
-                "create": self.registration(country, username, sld, p.value, p.unit),
-                "renew": self.renewal(country, username, sld, p.value, p.unit),
+                "create": self.registration(country, username, sld, p.value, p.unit, local_currency=True),
+                "renew": self.renewal(country, username, sld, p.value, p.unit, local_currency=True),
             }, self.periods)),
-            "restore": self.restore(country, username, sld),
-            "transfer": self.transfer(country, username, sld),
+            "restore": self.restore(country, username, sld, local_currency=True),
+            "transfer": self.transfer(country, username, sld, local_currency=True),
         }
 
-    def registration(self, country: str, username, sld: str, value=None, unit=None):
+    def registration(self, country: str, username, sld: str, value=None, unit=None, local_currency=False):
         if value is None:
             value = self.default_value
         if unit is None:
@@ -71,29 +71,37 @@ class SimplePrice:
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self.price) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def renewal(self, country: str, username, sld: str, value=1, unit=0):
+    def renewal(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def restore(self, country: str, username, sld: str):
+    def restore(self, country: str, username, sld: str, local_currency=False):
         fee = decimal.Decimal(self._restore) / decimal.Decimal(100)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def transfer(self,  country: str, username, sld: str, value=1, unit=0):
+    def transfer(self,  country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
 
 class Nominet2021PromotionalPrice:
@@ -133,14 +141,14 @@ class Nominet2021PromotionalPrice:
         return {
             "periods": list(map(lambda p: {
                 "period": p,
-                "create": self.registration(country, username, sld, p.value, p.unit),
-                "renew": self.renewal(country, username, sld, p.value, p.unit),
+                "create": self.registration(country, username, sld, p.value, p.unit, local_currency=True),
+                "renew": self.renewal(country, username, sld, p.value, p.unit, local_currency=True),
             }, self.periods)),
-            "restore": self.restore(country, username, sld),
-            "transfer": self.transfer(country, username, sld),
+            "restore": self.restore(country, username, sld, local_currency=True),
+            "transfer": self.transfer(country, username, sld, local_currency=True),
         }
 
-    def registration(self, country: str, username, sld: str, value=None, unit=None):
+    def registration(self, country: str, username, sld: str, value=None, unit=None, local_currency=False):
         if value is None:
             value = self.default_value
         if unit is None:
@@ -159,23 +167,29 @@ class Nominet2021PromotionalPrice:
             fee = decimal.Decimal(0)
 
         fee += (decimal.Decimal(self.price) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def renewal(self, country: str, username, sld: str, value=1, unit=0):
+    def renewal(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def restore(self, country: str, username, sld: str):
+    def restore(self, country: str, username, sld: str, local_currency=False):
         return None
 
-    def transfer(self,  country: str, username, sld: str, value=1, unit=0):
+    def transfer(self,  country: str, username, sld: str, value=1, unit=0, local_currency=False):
         fee = decimal.Decimal(0)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
 
 class LengthPrice:
@@ -210,14 +224,14 @@ class LengthPrice:
         return {
             "periods": list(map(lambda p: {
                 "period": p,
-                "create": self.registration(country, username, sld, p.value, p.unit),
-                "renew": self.renewal(country, username,sld, p.value, p.unit),
+                "create": self.registration(country, username, sld, p.value, p.unit, local_currency=True),
+                "renew": self.renewal(country, username,sld, p.value, p.unit, local_currency=True),
             }, self.periods)),
-            "restore": self.restore(country, username, sld),
-            "transfer": self.transfer(country, username, sld),
+            "restore": self.restore(country, username, sld, local_currency=True),
+            "transfer": self.transfer(country, username, sld, local_currency=True),
         }
 
-    def registration(self, country: str, username, sld: str, value=1, unit=0):
+    def registration(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
@@ -226,29 +240,37 @@ class LengthPrice:
         fee = (decimal.Decimal(
             self.lengths.get(len(sld), self.standard_price)
         ) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def renewal(self, country: str, username, sld: str, value=1, unit=0):
+    def renewal(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._renewal) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def restore(self, country: str, username, sld: str):
+    def restore(self, country: str, username, sld: str, local_currency=False):
         fee = decimal.Decimal(self._restore) / decimal.Decimal(100)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
-    def transfer(self, country: str, username, sld: str, value=1, unit=0):
+    def transfer(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
         ) not in self.periods:
             return None
         fee = (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
-        return domains.views.billing.convert_currency(fee, "GBP", username, None, country)
+        return domains.views.billing.convert_currency(
+            fee, "GBP", username, None, country, local_currency=local_currency
+        )
 
 
 class MarkupPrice:
@@ -340,7 +362,7 @@ class MarkupPrice:
             period = apps.epp_api.Period.from_pb(f.period)
             return {
                 "period": period,
-                "fee": self._convert_fee(f, country, username)
+                "fee": self._convert_fee(f, country, username, True)
             }
 
         with ThreadPoolExecutor() as e:
@@ -371,11 +393,11 @@ class MarkupPrice:
 
         return {
             "periods": periods,
-            "restore": self._convert_fee(restore_command, country, username) if restore_command else None,
-            "transfer": self._convert_fee(transfer_command, country, username) if transfer_command else None,
+            "restore": self._convert_fee(restore_command, country, username, True) if restore_command else None,
+            "transfer": self._convert_fee(transfer_command, country, username, True) if transfer_command else None,
         }
 
-    def _convert_fee(self, command, country, username, available=True):
+    def _convert_fee(self, command, country, username, local_currency, available=True):
         total_fee = decimal.Decimal(0)
         for fee in command.fees:
             total_fee += decimal.Decimal(fee.value)
@@ -383,9 +405,11 @@ class MarkupPrice:
             total_fee += decimal.Decimal(credit.value)
 
         final_fee = total_fee * self._markup
-        return domains.views.billing.convert_currency(final_fee, command.currency, username, None, country, available=available)
+        return domains.views.billing.convert_currency(
+            final_fee, command.currency, username, None, country, available=available, local_currency=local_currency
+        )
 
-    def _get_fee(self, sld, value, unit, command, country, username):
+    def _get_fee(self, sld, value, unit, command, country, username, local_currency):
         domain = f"{sld}.{self._tld}"
         if unit is not None:
             period = apps.epp_api.Period(
@@ -411,23 +435,35 @@ class MarkupPrice:
             return None
         command = resp.fee_check.commands[0]
 
-        return self._convert_fee(command, country, username, available=resp.available)
+        return self._convert_fee(command, country, username, local_currency, available=resp.available)
 
-    def registration(self, country: str, username, sld: str, value=1, unit=0):
-        return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Create, country=country, username=username)
+    def registration(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
+        return self._get_fee(
+            sld, value, unit, apps.epp_api.fee_pb2.Create, country=country, username=username,
+            local_currency=local_currency
+        )
 
-    def renewal(self, country: str, username, sld: str, value=None, unit=None):
-        return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Renew, country=country, username=username)
+    def renewal(self, country: str, username, sld: str, value=None, unit=None, local_currency=False):
+        return self._get_fee(
+            sld, value, unit, apps.epp_api.fee_pb2.Renew, country=country, username=username,
+            local_currency=local_currency
+        )
 
-    def restore(self, country: str, username, sld: str):
-        fee = self._get_fee(sld, None, None, apps.epp_api.fee_pb2.Restore, country=country, username=username)
+    def restore(self, country: str, username, sld: str, local_currency=False):
+        fee = self._get_fee(
+            sld, None, None, apps.epp_api.fee_pb2.Restore, country=country, username=username,
+            local_currency=local_currency
+        )
         if not fee:
             return self.representative_restore()
         else:
             return fee
 
-    def transfer(self, country: str, username, sld: str, value=None, unit=None):
-        return self._get_fee(sld, value, unit, apps.epp_api.fee_pb2.Transfer, country=country, username=username)
+    def transfer(self, country: str, username, sld: str, value=None, unit=None, local_currency=False):
+        return self._get_fee(
+            sld, value, unit, apps.epp_api.fee_pb2.Transfer, country=country, username=username,
+            local_currency=local_currency
+        )
 
 
 class DomainInfo:
