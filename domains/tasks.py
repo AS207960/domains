@@ -700,7 +700,7 @@ def process_domain_transfer_contacts(transfer_order_id):
         name=domain_data.name,
     )
     should_send = False
-    if zone.registrant_supported:
+    if zone.registrant_supported and zone.registrant_change_supported:
         registrant_id = domain_transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
         if domain_data.registrant != registrant_id.registry_contact_id:
             update_req.new_registrant.value = registrant_id.registry_contact_id

@@ -468,6 +468,7 @@ class MarkupPrice:
 
 class DomainInfo:
     REGISTRY_NOMINET = "nominet"
+    REGISTRY_NOMINET_SPECIAL = "nominet-special"
     REGISTRY_NOMINET_RRPPROXY = "nominet-rrpproxy"
     REGISTRY_SWITCH = "switch"
     REGISTRY_TRAFICOM = "traficom"
@@ -566,6 +567,7 @@ class DomainInfo:
     def renews_if_not_deleted(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
         )
 
     @property
@@ -596,6 +598,7 @@ class DomainInfo:
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_DENIC,
             self.REGISTRY_AFNIC,
@@ -645,6 +648,7 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_AFILIAS,
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_ISNIC,
@@ -654,6 +658,7 @@ class DomainInfo:
     def standard_auth_code_procedure(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_DENIC,
@@ -666,6 +671,7 @@ class DomainInfo:
     def auth_code_for_transfer(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_ISNIC,
         )
@@ -689,6 +695,7 @@ class DomainInfo:
     def restore_supported(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_NOMINET_RRPPROXY,
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
@@ -706,6 +713,7 @@ class DomainInfo:
     def transfer_lock_supported(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_EURID,
@@ -726,6 +734,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_ISNIC,
         )
@@ -744,6 +753,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
+            self.REGISTRY_NOMINET_SPECIAL,
         )
 
     @property
@@ -758,6 +768,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_DNSBELGIUM,
@@ -810,6 +821,7 @@ class DomainInfo:
     def tech_supported(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
         )
@@ -862,6 +874,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_DNSBELGIUM,
@@ -914,6 +927,7 @@ class DomainInfo:
     def pre_create_host_objects(self):
         return self.registry in (
             self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_AFILIAS,
@@ -929,15 +943,15 @@ if settings.DEBUG:
         ('co.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
         ('org.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
         ('me.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, Nominet2021PromotionalPrice(917))),
-        ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
+        ('ltd.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(8000, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
-        ('plc.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
+        ('plc.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(8000, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
-        ('net.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET, SimplePrice(8000, periods=[apps.epp_api.Period(
+        ('net.uk', DomainInfo(DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(8000, periods=[apps.epp_api.Period(
             unit=0,
             value=2
         )]))),
@@ -2785,17 +2799,17 @@ else:
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('ltd.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(917),
             notice="This TLD is restricted to UK Limited Companies.",
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('plc.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(917),
             notice="This TLD is restricted to UK Public Limited Companies.",
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
         ('net.uk', DomainInfo(
-            DomainInfo.REGISTRY_NOMINET, SimplePrice(917),
+            DomainInfo.REGISTRY_NOMINET_SPECIAL, SimplePrice(917),
             notice="This TLD is restricted to businesses in the UK telecommunications sector.",
             transfer_instructions="Make sure to change the registrar tag to \"AS207960\" at your previous registrar."
         )),
