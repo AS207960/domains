@@ -576,6 +576,8 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_CENTRALNIC_CCTLD,
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
         )
 
     @property
