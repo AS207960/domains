@@ -4,9 +4,13 @@ import crispy_forms.bootstrap
 import crispy_forms.helper
 import crispy_forms.layout
 import django_keycloak_auth.clients
+from phonenumber_field.formfields import PhoneNumberField
 from django import forms
 from django.urls import reverse
+from django.core import validators
+from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
+from django.utils import timezone
 
 from . import models, apps, zone_info
 
@@ -15,6 +19,20 @@ class ContactForm(forms.ModelForm):
     def __init__(self, *args, user, **kwargs):
         super().__init__(*args, **kwargs)
         access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=user.oidc_profile)
+        self.fields['description'].help_text = "Something descriptive of the contact so you can find it later"
+        self.fields['local_address'].help_text = "The address in the local format, usually the only one required"
+        self.fields['int_address'].help_text = "The Latinised version of the address, usually not required"
+        self.fields['phone'].help_text = \
+            "A phone number the contact can be reached at, in international format (i.e. +44 29 2010 2455 etc)"
+        self.fields['phone_ext'].help_text = \
+            "If the contact is on an internal extension of the contact number, please provide it here"
+        self.fields['fax'].help_text =\
+            "A phone number for the contact's fax machine, in international format (i.e. +44 29 2010 2455 etc)"
+        self.fields['phone_ext'].help_text = \
+            "If the contact's fax machine is on an internal extension of the fax number, please provide it here"
+        self.fields['entity_type'].help_text = "What legal form does the contact have?"
+        self.fields['trading_name'].help_text = "Only required for entities conducting business"
+        self.fields['company_number'].help_text = "Only required for legal entities on a government register"
         self.fields['local_address'].queryset = models.ContactAddress.get_object_list(access_token)
         self.fields['int_address'].queryset = models.ContactAddress.get_object_list(access_token)
         self.helper = crispy_forms.helper.FormHelper()
@@ -77,24 +95,29 @@ class ContactForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, show_fi=True, **kwargs):
         super().__init__(*args, **kwargs)
         this_year = datetime.date.today().year
+        self.fields['description'].help_text = "Something descriptive of the address so you can find it later"
+        self.fields['name'].help_text = \
+            "Your own name if acting as an individual, or the representative's name from the organisation"
         self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.use_custom_control = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3'
         self.helper.field_class = 'col-lg-9 my-1'
-        self.helper.layout = crispy_forms.layout.Layout(
+        layout = [
             'description',
             crispy_forms.layout.HTML("<hr/>"),
             crispy_forms.layout.Fieldset(
                 'Contact information',
                 'name',
                 'organisation',
-            ),
-            crispy_forms.layout.Fieldset(
+            )
+        ]
+        if show_fi:
+            layout.append(crispy_forms.layout.Fieldset(
                 'Personal information',
                 crispy_forms.layout.HTML("""
                     <div class="alert alert-info" role="alert">
@@ -104,7 +127,9 @@ class AddressForm(forms.ModelForm):
                 """),
                 'birthday',
                 'identity_number',
-            ),
+            ))
+
+        layout.extend([
             crispy_forms.layout.HTML("<hr/>"),
             crispy_forms.layout.Fieldset(
                 'Address',
@@ -120,14 +145,16 @@ class AddressForm(forms.ModelForm):
                 'WHOIS Disclosure',
                 crispy_forms.layout.HTML("""
                     <div class="alert alert-info" role="alert">
-                        More info <a href="https://docs.glauca.digital/domains/email-privacy/" class="alert-link">here</a>
+                        More info <a href="https://docs.glauca.digital/domains/email-privacy/" target="_blank" class="alert-link">here</a>
                     </div>
                 """),
                 'disclose_name',
                 'disclose_organisation',
                 'disclose_address'
             )
-        )
+        ])
+
+        self.helper.layout = crispy_forms.layout.Layout(*layout)
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
 
@@ -145,6 +172,156 @@ class AddressForm(forms.ModelForm):
             """
         )}
         exclude = ("id", "resource_id")
+
+
+class ContactAndAddressForm(forms.Form):
+    description = forms.CharField(
+        max_length=255, help_text="Something descriptive of the contact so you can find it later"
+    )
+    name = forms.CharField(
+        max_length=255, validators=[validators.MinLengthValidator(4)],
+        help_text="Your own name if acting as an individual, or the representative's name from the organisation"
+    )
+    birthday = forms.DateField(required=False)
+    identity_number = forms.CharField(max_length=255, required=False, label="National identity number")
+    organisation = forms.CharField(max_length=255, required=False)
+    street_1 = forms.CharField(max_length=255, label="Address line 1")
+    street_2 = forms.CharField(max_length=255, required=False, label="Address line 2")
+    street_3 = forms.CharField(max_length=255, required=False, label="Address line 3")
+    city = forms.CharField(max_length=255)
+    province = forms.CharField(max_length=255, required=False)
+    postal_code = forms.CharField(max_length=255)
+    country_code = CountryField().formfield(label="Country", widget=CountrySelectWidget(
+        layout="""
+            <div class="input-group input-group-sm">
+                {widget}
+                    <span class="input-group-text">
+                        <img class="country-select-flag" id="{flag_id}" src="{country.flag}">
+                    </span>
+            </div>
+            """
+    ))
+    phone = PhoneNumberField(
+        help_text="A phone number the contact can be reached at, in international format (i.e. +44 29 2010 2455 etc)"
+    )
+    phone_ext = forms.CharField(
+        max_length=64, required=False, label="Phone extension",
+        help_text="If the contact is on an internal extension of the contact number, please provide it here"
+    )
+    fax = PhoneNumberField(
+        required=False,
+        help_text="A phone number for the contact's fax machine, in international format (i.e. +44 29 2010 2455 etc)"
+    )
+    fax_ext = forms.CharField(
+        max_length=64, required=False, label="Fax extension",
+        help_text="If the contact's fax machine is on an internal extension of the fax number, please provide it here"
+    )
+    email = forms.EmailField()
+    entity_type = forms.IntegerField(
+        widget=forms.Select(choices=models.Contact.ENTITY_TYPES),
+        help_text="What legal form does the contact have?"
+    )
+    trading_name = forms.CharField(
+        max_length=255, required=False, help_text="Only required for entities conducting business"
+    )
+    company_number = forms.CharField(
+        max_length=255, required=False, help_text="Only required for legal entities on a government register"
+    )
+    disclose_name = forms.BooleanField(required=False)
+    disclose_organisation = forms.BooleanField(required=False)
+    disclose_address = forms.BooleanField(required=False)
+    disclose_phone = forms.BooleanField(required=False)
+    disclose_fax = forms.BooleanField(required=False)
+    disclose_email = forms.BooleanField(required=False)
+
+    def __init__(self, *args, show_fi=True, **kwargs):
+        super().__init__(*args, **kwargs)
+        this_year = datetime.date.today().year
+        self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-9 my-1'
+        layout = [
+            'description',
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Contact information',
+                'name',
+                'organisation',
+            )
+        ]
+        if show_fi:
+            layout.append(crispy_forms.layout.Fieldset(
+                'Personal information',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        Birthday is required for foreign personal registrants under the .fi domain<br/>
+                        National identity number is required for Finnish registrants under the .fi domain<br/>
+                    </div>
+                """),
+                'birthday',
+                'identity_number',
+            ))
+
+        layout.extend([
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Address',
+                'street_1',
+                'street_2',
+                'street_3',
+                'city',
+                'province',
+                'postal_code',
+                'country_code'
+            ),
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Voice phone number',
+                'phone',
+                'phone_ext'
+            ),
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Fax phone number',
+                'fax',
+                'fax_ext'
+            ),
+            crispy_forms.layout.HTML("<hr/>"),
+            'email',
+            crispy_forms.layout.HTML("<hr/>"),
+            crispy_forms.layout.Fieldset(
+                'Entity information',
+                'entity_type',
+                'trading_name',
+                'company_number'
+            ),
+            crispy_forms.layout.Fieldset(
+                'WHOIS Disclosure',
+                crispy_forms.layout.HTML("""
+                    <div class="alert alert-info" role="alert">
+                        More info <a href="https://docs.glauca.digital/domains/email-privacy/" target="_blank" class="alert-link">here</a>
+                    </div>
+                """),
+                'disclose_name',
+                'disclose_organisation',
+                'disclose_address',
+                'disclose_phone',
+                'disclose_fax',
+                'disclose_email'
+            )
+        ])
+
+        self.helper.layout = crispy_forms.layout.Layout(*layout)
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
+
+    class Meta:
+        model = models.Contact
+        fields = "__all__"
+        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email")
 
 
 class DomainContactForm(forms.Form):

@@ -1179,6 +1179,7 @@ def domain_register(request, domain_name):
     user_contacts = models.ContactAddress.get_object_list(access_token)
     if not user_contacts.count() or not user_addresses.count():
         request.session["after_setup_uri"] = request.get_full_path()
+        request.session["setup_domain"] = domain_name
         return render(request, "domains/domain_create_contact.html")
 
     error = None
@@ -1198,6 +1199,9 @@ def domain_register(request, domain_name):
     zone_price, registry_name, zone_notice = zone.pricing, zone.registry, zone.notice
 
     if request.method == "POST":
+        if "new_contact" in request.session:
+            del request.session["new_contact"]
+
         form = forms.DomainRegisterForm(
             request.POST,
             zone=zone,
@@ -1240,6 +1244,11 @@ def domain_register(request, domain_name):
             zone=zone,
             user=request.user
         )
+        if "new_contact" in request.session:
+            form.fields['registrant'].initial = request.session["new_contact"]
+            form.fields['admin'].initial = request.session["new_contact"]
+            form.fields['tech'].initial = request.session["new_contact"]
+            form.fields['billing'].initial = request.session["new_contact"]
 
     price_decimal = zone_price.registration(request.country.iso_code, request.user.username, sld, local_currency=True)
 
@@ -1684,20 +1693,21 @@ def domain_transfer(request, domain_name):
             "back_url": referrer
         })
 
-    user_addresses = models.Contact.get_object_list(access_token)
-    user_contacts = models.ContactAddress.get_object_list(access_token)
-    if not user_contacts.count() or not user_addresses.count():
-        request.session["after_setup_uri"] = request.get_full_path()
-        return render(request, "domains/domain_create_contact.html")
-
-    error = None
-
     zone, sld = zone_info.get_domain_info(domain_name)
     if not zone or not zone.transfer_supported:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
         })
+
+    user_addresses = models.Contact.get_object_list(access_token)
+    user_contacts = models.ContactAddress.get_object_list(access_token)
+    if not user_contacts.count() or not user_addresses.count():
+        request.session["after_setup_uri"] = request.get_full_path()
+        request.session["setup_domain"] = domain_name
+        return render(request, "domains/domain_create_contact.html")
+
+    error = None
 
     try:
         domain_unicode = idna.decode(domain_name, uts46=True)
@@ -1719,6 +1729,9 @@ def domain_transfer(request, domain_name):
         })
 
     if request.method == "POST":
+        if "new_contact" in request.session:
+            del request.session["new_contact"]
+
         form = forms.DomainTransferForm(request.POST, zone=zone, user=request.user)
 
         if form.is_valid():
@@ -1744,6 +1757,11 @@ def domain_transfer(request, domain_name):
             return redirect('domain_transfer_confirm', order.id)
     else:
         form = forms.DomainTransferForm(zone=zone, user=request.user)
+        if "new_contact" in request.session:
+            form.fields['registrant'].initial = request.session["new_contact"]
+            form.fields['admin'].initial = request.session["new_contact"]
+            form.fields['tech'].initial = request.session["new_contact"]
+            form.fields['billing'].initial = request.session["new_contact"]
 
     return render(request, "domains/domain_transfer.html", {
         "domain_form": form,

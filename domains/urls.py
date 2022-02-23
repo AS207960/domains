@@ -65,6 +65,7 @@ urlpatterns = [
     path('contacts/', contacts.contacts, name='contacts'),
     path('contacts/setup/', contacts.setup_contacts, name='setup_contacts'),
     path('contacts/new/', contacts.new_contact, name='new_contact'),
+    path('contacts/new_with_address/', contacts.new_contact_and_address, name='new_contact_and_address'),
     path('contacts/<str:contact_id>/', contacts.edit_contact, name='edit_contact'),
     path('contacts/<str:contact_id>/delete/', contacts.delete_contact, name='delete_contact'),
     path('addresses/', contacts.addresses, name='addresses'),

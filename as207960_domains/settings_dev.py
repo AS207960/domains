@@ -61,7 +61,7 @@ MIDDLEWARE = [
     "django_keycloak_auth.middleware.OIDCMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'domains.middleware.CountryDummyMiddleware',
+    # 'domains.middleware.CountryDummyMiddleware',
 ]
 
 ROOT_URLCONF = 'as207960_domains.urls'
@@ -180,7 +180,7 @@ VERISIGN_NS_API_KEY = verisign_ns_conf["key"]
 
 REGISTRATION_ENABLED = True
 REGISTRY_LOCK_ENABLED = True
-EPP_PROXY_ADDR = "q-station.cdf1.as207960.net:50052"
+EPP_PROXY_ADDR = "q-station.abdn.y-cwmwl.co.uk:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"
