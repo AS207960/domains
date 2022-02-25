@@ -173,7 +173,7 @@ class Command(BaseCommand):
                     )
                     domain.last_billed = now
                     domain.save()
-                    if order.state == order.STATE_NEEDS_PAYMENT:
+                    if order.state == order.STATE_NEEDS_PAYMENT and order.redirect_uri:
                         emails.mail_auto_renew_redirect.delay(order.id)
                     elif order.state == order.STATE_FAILED:
                         emails.mail_auto_renew_failed.delay(order.id)
