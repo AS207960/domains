@@ -512,6 +512,8 @@ class DomainInfo:
     REGISTRY_CIRA = "cira"
     REGISTRY_ISNIC = "isnic"
     REGISTRY_GODADDY = "godaddy"
+    REGISTRY_MNI = "mni"
+    REGISTRY_US = "us"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -558,7 +560,7 @@ class DomainInfo:
             return datetime.timedelta(days=59)
         elif self.registry == self.REGISTRY_AMNIC:
             return datetime.timedelta(days=15)
-        elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDS):
+        elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDS, self.REGISTRY_MNI):
             return datetime.timedelta(days=28)
         else:
             return datetime.timedelta(days=30)
@@ -644,6 +646,8 @@ class DomainInfo:
             self.REGISTRY_CIRA,
             self.REGISTRY_ISNIC,
             self.REGISTRY_GODADDY,
+            self.REGISTRY_MNI,
+            self.REGISTRY_US,
         )
 
     @property
@@ -819,6 +823,8 @@ class DomainInfo:
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
             self.REGISTRY_GODADDY,
+            self.REGISTRY_MNI,
+            self.REGISTRY_US,
         )
 
     @property
@@ -871,6 +877,8 @@ class DomainInfo:
             self.REGISTRY_CIRA,
             self.REGISTRY_ISNIC,
             self.REGISTRY_GODADDY,
+            self.REGISTRY_MNI,
+            self.REGISTRY_US,
         )
 
     @property
@@ -925,6 +933,8 @@ class DomainInfo:
             self.REGISTRY_NICAT,
             self.REGISTRY_CIRA,
             self.REGISTRY_GODADDY,
+            self.REGISTRY_MNI,
+            self.REGISTRY_US,
         )
 
     @property
@@ -1311,6 +1321,13 @@ else:
                 unit=0,
                 value=i
             ), range(1, 6)))
+        )),
+        ('ms', DomainInfo(
+            DomainInfo.REGISTRY_MNI,
+            MarkupPrice(4663, transfer=4663, restore=3125 currency=None, periods=map(lambda i: apps.epp_api.Period(
+                unit=0,
+                value=i
+            ), range(1, 6)), display_currency='USD', tld='ms', markup=decimal.Decimal("1.25"))
         )),
         ('cymru', DomainInfo(
             DomainInfo.REGISTRY_NOMINET_GTLD,
@@ -2930,6 +2947,11 @@ else:
             DomainInfo.REGISTRY_GODADDY,
             MarkupPrice(4498, transfer=4498, restore=3250, currency=None, display_currency='USD', tld='horse',
                         markup=decimal.Decimal("1.3"))
+        )),
+        ('us', DomainInfo(
+            DomainInfo.REGISTRY_US,
+            MarkupPrice(2045, transfer=2045, restore=14400, currency=None, display_currency='USD', tld='us',
+                        markup=decimal.Decimal("1.6"))
         )),
     )
 
