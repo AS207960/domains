@@ -568,6 +568,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
+            self.REGISTRY_TRAFICOM,
         )
 
     @property
@@ -602,6 +603,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
+            self.REGISTRY_TRAFICOM,
             self.REGISTRY_DENIC,
             self.REGISTRY_AFNIC,
             self.REGISTRY_VERISIGN_COMNET,
