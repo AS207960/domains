@@ -1324,7 +1324,7 @@ else:
         )),
         ('ms', DomainInfo(
             DomainInfo.REGISTRY_MNI,
-            MarkupPrice(4663, transfer=4663, restore=3125 currency=None, periods=map(lambda i: apps.epp_api.Period(
+            MarkupPrice(4663, transfer=4663, restore=3125, currency=None, periods=map(lambda i: apps.epp_api.Period(
                 unit=0,
                 value=i
             ), range(1, 6)), display_currency='USD', tld='ms', markup=decimal.Decimal("1.25"))
