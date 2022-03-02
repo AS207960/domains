@@ -514,6 +514,7 @@ class DomainInfo:
     REGISTRY_GODADDY = "godaddy"
     REGISTRY_MNI = "mni"
     REGISTRY_US = "us"
+    REGISTRY_NASK = "nask"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -560,6 +561,8 @@ class DomainInfo:
             return datetime.timedelta(days=59)
         elif self.registry == self.REGISTRY_AMNIC:
             return datetime.timedelta(days=15)
+        elif self.registry == self.REGISTRY_NASK:
+            return datetime.timedelta(days=0)
         elif self.registry in (self.REGISTRY_AFMOF, self.REGISTRY_FDSRDDS, self.REGISTRY_MNI):
             return datetime.timedelta(days=28)
         else:
@@ -648,6 +651,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY,
             self.REGISTRY_MNI,
             self.REGISTRY_US,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -708,6 +712,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_AKEP,
             self.REGISTRY_RNIDS,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -729,6 +734,7 @@ class DomainInfo:
             self.REGISTRY_KENIC,
             self.REGISTRY_NICAT,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -825,6 +831,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY,
             self.REGISTRY_MNI,
             self.REGISTRY_US,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -879,6 +886,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY,
             self.REGISTRY_MNI,
             self.REGISTRY_US,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -935,6 +943,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY,
             self.REGISTRY_MNI,
             self.REGISTRY_US,
+            self.REGISTRY_NASK,
         )
 
     @property
@@ -2952,6 +2961,46 @@ else:
             DomainInfo.REGISTRY_US,
             MarkupPrice(2045, transfer=2045, restore=14400, currency=None, display_currency='USD', tld='us',
                         markup=decimal.Decimal("1.6"))
+        )),
+        ('pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(15600, transfer=0, restore=10400, currency=None, display_currency='PLN', tld='pl',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('biz.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='biz.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('com.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='com.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('edu.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='edu.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('info.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='info.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('net.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='net.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('org.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(12825, transfer=0, restore=10800, currency=None, display_currency='PLN', tld='org.pl',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('waw.pl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(11116, transfer=0, restore=11200, currency=None, display_currency='PLN', tld='waw.pl',
+                        markup=decimal.Decimal("1.4"))
         )),
     )
 
