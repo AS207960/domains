@@ -532,6 +532,8 @@ class DomainInfo:
             return 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
         elif self.registry == self.REGISTRY_ISNIC:
             return 3, 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
+        elif self.registry == self.REGISTRY_MNI:
+            return ()
         else:
             return 5, 7, 8, 10, 13, 14, 15, 16
 
@@ -541,6 +543,8 @@ class DomainInfo:
             return 2, 4
         if self.registry == self.REGISTRY_ISNIC:
             return 1, 2, 3, 4
+        if self.registry == self.REGISTRY_MNI:
+            return ()
         else:
             return 1, 2, 4
 
