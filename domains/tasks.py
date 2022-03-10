@@ -257,7 +257,7 @@ def process_domain_registration_paid(registration_order_id):
             gchat_bot.request_registration.delay(domain_registration_order.id, registry_id, str(period))
             logger.info(f"{domain_registration_order.domain} registration successfully requested")
         else:
-            gchat_bot.notify_registration.delay(domain_registration_order.id, str(period))
+            gchat_bot.notify_registration_pending.delay(domain_registration_order.id, str(period))
             logger.info(f"{domain_registration_order.domain} registration successfully submitted")
     else:
         process_domain_registration_complete.delay(domain_registration_order.id)

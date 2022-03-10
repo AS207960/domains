@@ -238,6 +238,80 @@ def notify_registration(registration_order_id, period: str):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
+def notify_registration_pending(registration_order_id, period: str):
+    domain_registration_order = \
+        models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+
+    user = domain_registration_order.get_user()
+    for space in models.HangoutsSpaces.objects.all():
+        CHAT_API.spaces().messages().create(
+            parent=space.space_id,
+            threadKey=f"dm_{domain_registration_order.domain_id}",
+            body={
+                "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}, which is pending",
+                "cards": [{
+                    "header": {
+                        "title": "Pending domain registration notification" if not settings.DEBUG
+                        else "Pending domain registration notification [TEST]",
+                    },
+                    "sections": [{
+                        "header": "Domain data",
+                        "widgets": [{
+                            "keyValue": {
+                                "topLabel": "Domain name",
+                                "content": domain_registration_order.domain
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Object ID",
+                                "content": str(domain_registration_order.domain_id)
+                            }
+                        }, {
+                            "keyValue": {
+                                "topLabel": "Period",
+                                "content": period
+                            }
+                        }]
+                    }, make_user_data(user), {
+                        "widgets": [{
+                            "buttons": [{
+                                "textButton": {
+                                    "text": "Mark complete",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-registered",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_registration_order.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }, {
+                                "textButton": {
+                                    "text": "Mark failed",
+                                    "onClick": {
+                                        "action": {
+                                            "actionMethodName": "mark-domain-register-fail",
+                                            "parameters": [{
+                                                "key": "domain_id",
+                                                "value": str(domain_registration_order.pk)
+                                            }]
+                                        }
+                                    }
+                                }
+                            }]
+                        }]
+                    }],
+                    "name": f"domain-register-{domain_registration_order.domain_id}"
+                }]
+            }
+        ).execute()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
 def request_transfer(transfer_order_id, registry_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
