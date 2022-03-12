@@ -261,6 +261,7 @@ class Command(BaseCommand):
                     print(f"{domain.domain} failed validation with presented CDS set")
                     continue
 
+                invalid_algo_digest = False
                 for cds in cds_set:
                     if not (
                             cds.algorithm in domain_info.supported_dnssec_algorithms or cds.algorithm == 0
@@ -268,7 +269,11 @@ class Command(BaseCommand):
                             cds.digest_type in domain_info.supported_dnssec_digests or cds.digest_type == 0
                     ):
                         print(f"{domain.domain} CDS uses invalid algorithm/digest")
-                        continue
+                        invalid_algo_digest = True
+                        break
+
+                if invalid_aglo_digest:
+                    continue
 
                 if domain_info.ds_data_supported:
                     cds_data_set = list(map(lambda r: apps.epp_api.SecDNSDSData(
