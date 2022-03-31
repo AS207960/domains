@@ -67,7 +67,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
             out = []
             for domain in serializer.validated_data["domains"]:
                 domain_obj = models.DomainRegistration.objects\
-                    .filter(domain=domain["domain"], former_domain=False).first()
+                    .filter(domain__iexact=domain["domain"], former_domain=False).first()
                 if not domain_obj:
                     access = None
                 else:
