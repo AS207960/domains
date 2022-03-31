@@ -515,6 +515,7 @@ class DomainInfo:
     REGISTRY_MNI = "mni"
     REGISTRY_US = "us"
     REGISTRY_NASK = "nask"
+    REGISTRY_PLAN_BEE = "plan-bee"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -656,6 +657,7 @@ class DomainInfo:
             self.REGISTRY_MNI,
             self.REGISTRY_US,
             self.REGISTRY_NASK,
+            self.REGISTRY_PLAN_BEE,
         )
 
     @property
@@ -836,6 +838,7 @@ class DomainInfo:
             self.REGISTRY_MNI,
             self.REGISTRY_US,
             self.REGISTRY_NASK,
+            self.REGISTRY_PLAN_BEE,
         )
 
     @property
@@ -891,6 +894,7 @@ class DomainInfo:
             self.REGISTRY_MNI,
             self.REGISTRY_US,
             self.REGISTRY_NASK,
+            self.REGISTRY_PLAN_BEE,
         )
 
     @property
@@ -948,6 +952,7 @@ class DomainInfo:
             self.REGISTRY_MNI,
             self.REGISTRY_US,
             self.REGISTRY_NASK,
+            self.REGISTRY_PLAN_BEE,
         )
 
     @property
@@ -1567,6 +1572,11 @@ else:
         ('botique', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='academy',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('build', DomainInfo(
+            DomainInfo.REGISTRY_PLAN_BEE,
+            MarkupPrice(10080, transfer=10080, restore=18000, currency=None, display_currency='USD', tld='build',
                         markup=decimal.Decimal("1.2"))
         )),
         ('builders', DomainInfo(
