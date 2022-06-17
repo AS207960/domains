@@ -31,7 +31,7 @@
                     </div>
                     <div class="col">
                         <b>Expiry date:</b><br/>
-                        {% if domain.expiry_date %}{{ domain.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                        {% if domain.expiry_date %}{{ expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
                         {% if paid_up_until %}
                             <br/>
                             <b>Paid up until:</b><br/>

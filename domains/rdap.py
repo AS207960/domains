@@ -298,7 +298,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             ))
         if domain_data.expiry_date:
             date = google.protobuf.timestamp_pb2.Timestamp()
-            date.FromDatetime(domain_data.expiry_date)
+            date.FromDatetime(domain_data.expiry_date + zone_data.expiry_offset)
             resp_data.events.append(rdap_pb2.Event(
                 action=rdap_pb2.EventExpiration,
                 date=date

@@ -90,7 +90,7 @@ class Command(BaseCommand):
 
             user = domain.get_user()
 
-            expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
+            expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
             email_data = {
                 "obj": domain,
                 "domain": domain_data,

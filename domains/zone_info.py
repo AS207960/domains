@@ -574,11 +574,19 @@ class DomainInfo:
             return datetime.timedelta(days=30)
 
     @property
+    def expiry_offset(self):
+        if self.registry == self.REGISTRY_KENIC:
+            return datetime.timedelta(days=-21)
+        else:
+            return datetime.timedelta(days=0)
+
+    @property
     def renews_if_not_deleted(self):
         return self.registry not in (
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
+            self.REGISTRY_KENIC,
         )
 
     @property

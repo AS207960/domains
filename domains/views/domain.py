@@ -316,7 +316,7 @@ def domain(request, domain_id):
         })
 
     now = timezone.now()
-    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
+    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
     paid_up_until = None
     if expiry_date - RENEW_INTERVAL <= now:
         last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=user_domain) \
@@ -366,6 +366,7 @@ def domain(request, domain_id):
         "is_hexdns": is_hexdns,
         "sharing_uri": sharing_uri,
         "paid_up_until": paid_up_until,
+        "expiry_date": expiry_date
     })
 
 
@@ -1582,7 +1583,7 @@ def restore_domain(request, domain_id):
             "back_url": referrer
         })
 
-    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc)
+    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + zone.expiry_offset
     zone_price, _ = zone.pricing, zone.registry
     renewal_period = zone_price.periods[0]
     billing_value = zone_price.restore(request.country.iso_code, request.user.username, sld).amount
