@@ -195,7 +195,7 @@ def process_domain_registration_paid(registration_order_id):
                     host_available, _ = apps.epp_client.check_host(host, registry_id)
 
                     if host_available:
-                        apps.epp_client.create_host(host, [], registry_id)
+                        apps.epp_client.create_host(host, [], registry_id, None)
                 except grpc.RpcError as rpc_error:
                     logger.error(f"Failed to setup hosts for {domain_registration_order.domain}: {rpc_error.details()}")
                     raise rpc_error
@@ -814,7 +814,7 @@ def set_dns_to_own(domain_id):
             host_available, _ = apps.epp_client.check_host(host, domain_data.registry_name)
 
             if host_available:
-                apps.epp_client.create_host(host, [], domain_data.registry_name)
+                apps.epp_client.create_host(host, [], domain_data.registry_name, None)
 
     apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
         name=domain_data.name,
