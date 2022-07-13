@@ -3,18 +3,19 @@
 isort:skip_file
 """
 import builtins
-import common_pb2
-import contact_pb2
-import domain_pb2
-import eurid_pb2
+import common.common_pb2
+import contact.contact_pb2
+import domain.domain_pb2
+import eurid.eurid_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 import google.protobuf.timestamp_pb2
 import google.protobuf.wrappers_pb2
-import maintenance_pb2
-import nominet_pb2
-import traficom_pb2
+import host.host_pb2
+import maintenance.maintenance_pb2
+import nominet.nominet_pb2
+import traficom.traficom_pb2
 import typing
 import typing_extensions
 
@@ -69,6 +70,7 @@ class PollReply(google.protobuf.message.Message):
     VERISIGN_LOW_BALANCE_FIELD_NUMBER: builtins.int
     MAINTENANCE_INFO_FIELD_NUMBER: builtins.int
     EURID_POLL_FIELD_NUMBER: builtins.int
+    HOST_INFO_FIELD_NUMBER: builtins.int
     CHANGE_DATA_FIELD_NUMBER: builtins.int
     CMD_RESP_FIELD_NUMBER: builtins.int
     msg_id: typing.Text = ...
@@ -78,102 +80,106 @@ class PollReply(google.protobuf.message.Message):
     def enqueue_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
 
     @property
-    def domain_info(self) -> domain_pb2.DomainInfoReply: ...
+    def domain_info(self) -> domain.domain_pb2.DomainInfoReply: ...
 
     @property
-    def domain_transfer(self) -> domain_pb2.DomainTransferReply: ...
+    def domain_transfer(self) -> domain.domain_pb2.DomainTransferReply: ...
 
     @property
-    def domain_create(self) -> domain_pb2.DomainCreateReply: ...
+    def domain_create(self) -> domain.domain_pb2.DomainCreateReply: ...
 
     @property
-    def domain_renew(self) -> domain_pb2.DomainRenewReply: ...
+    def domain_renew(self) -> domain.domain_pb2.DomainRenewReply: ...
 
     @property
-    def domain_pan(self) -> domain_pb2.DomainPANReply: ...
+    def domain_pan(self) -> domain.domain_pb2.DomainPANReply: ...
 
     @property
-    def contact_info(self) -> contact_pb2.ContactInfoReply: ...
+    def contact_info(self) -> contact.contact_pb2.ContactInfoReply: ...
 
     @property
-    def contact_transfer(self) -> contact_pb2.ContactTransferReply: ...
+    def contact_transfer(self) -> contact.contact_pb2.ContactTransferReply: ...
 
     @property
-    def contact_pan(self) -> contact_pb2.ContactPANReply: ...
+    def contact_pan(self) -> contact.contact_pb2.ContactPANReply: ...
 
     @property
-    def nominet_domain_cancel(self) -> nominet_pb2.DomainCancel: ...
+    def nominet_domain_cancel(self) -> nominet.nominet_pb2.DomainCancel: ...
 
     @property
-    def nominet_domain_release(self) -> nominet_pb2.DomainRelease: ...
+    def nominet_domain_release(self) -> nominet.nominet_pb2.DomainRelease: ...
 
     @property
-    def nominet_domain_registrar_change(self) -> nominet_pb2.DomainRegistrarChange: ...
+    def nominet_domain_registrar_change(self) -> nominet.nominet_pb2.DomainRegistrarChange: ...
 
     @property
-    def nominet_host_cancel(self) -> nominet_pb2.HostCancel: ...
+    def nominet_host_cancel(self) -> nominet.nominet_pb2.HostCancel: ...
 
     @property
-    def nominet_process(self) -> nominet_pb2.Process: ...
+    def nominet_process(self) -> nominet.nominet_pb2.Process: ...
 
     @property
-    def nominet_suspend(self) -> nominet_pb2.Suspend: ...
+    def nominet_suspend(self) -> nominet.nominet_pb2.Suspend: ...
 
     @property
-    def nominet_domain_fail(self) -> nominet_pb2.DomainFail: ...
+    def nominet_domain_fail(self) -> nominet.nominet_pb2.DomainFail: ...
 
     @property
-    def nominet_registrant_transfer(self) -> nominet_pb2.RegistrantTransfer: ...
+    def nominet_registrant_transfer(self) -> nominet.nominet_pb2.RegistrantTransfer: ...
 
     @property
-    def traficom_trn(self) -> traficom_pb2.TrnData: ...
+    def traficom_trn(self) -> traficom.traficom_pb2.TrnData: ...
 
     @property
     def verisign_low_balance(self) -> global___BalanceReply: ...
 
     @property
-    def maintenance_info(self) -> maintenance_pb2.MaintenanceInfoReply: ...
+    def maintenance_info(self) -> maintenance.maintenance_pb2.MaintenanceInfoReply: ...
 
     @property
-    def eurid_poll(self) -> eurid_pb2.PollReply: ...
+    def eurid_poll(self) -> eurid.eurid_pb2.PollReply: ...
+
+    @property
+    def host_info(self) -> host.host_pb2.HostInfoReply: ...
 
     @property
     def change_data(self) -> global___ChangeData: ...
 
     @property
-    def cmd_resp(self) -> common_pb2.CommandResponse: ...
+    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
 
     def __init__(self,
         *,
         msg_id : typing.Text = ...,
         enqueue_date : typing.Optional[google.protobuf.timestamp_pb2.Timestamp] = ...,
         message : typing.Text = ...,
-        domain_info : typing.Optional[domain_pb2.DomainInfoReply] = ...,
-        domain_transfer : typing.Optional[domain_pb2.DomainTransferReply] = ...,
-        domain_create : typing.Optional[domain_pb2.DomainCreateReply] = ...,
-        domain_renew : typing.Optional[domain_pb2.DomainRenewReply] = ...,
-        domain_pan : typing.Optional[domain_pb2.DomainPANReply] = ...,
-        contact_info : typing.Optional[contact_pb2.ContactInfoReply] = ...,
-        contact_transfer : typing.Optional[contact_pb2.ContactTransferReply] = ...,
-        contact_pan : typing.Optional[contact_pb2.ContactPANReply] = ...,
-        nominet_domain_cancel : typing.Optional[nominet_pb2.DomainCancel] = ...,
-        nominet_domain_release : typing.Optional[nominet_pb2.DomainRelease] = ...,
-        nominet_domain_registrar_change : typing.Optional[nominet_pb2.DomainRegistrarChange] = ...,
-        nominet_host_cancel : typing.Optional[nominet_pb2.HostCancel] = ...,
-        nominet_process : typing.Optional[nominet_pb2.Process] = ...,
-        nominet_suspend : typing.Optional[nominet_pb2.Suspend] = ...,
-        nominet_domain_fail : typing.Optional[nominet_pb2.DomainFail] = ...,
-        nominet_registrant_transfer : typing.Optional[nominet_pb2.RegistrantTransfer] = ...,
-        traficom_trn : typing.Optional[traficom_pb2.TrnData] = ...,
+        domain_info : typing.Optional[domain.domain_pb2.DomainInfoReply] = ...,
+        domain_transfer : typing.Optional[domain.domain_pb2.DomainTransferReply] = ...,
+        domain_create : typing.Optional[domain.domain_pb2.DomainCreateReply] = ...,
+        domain_renew : typing.Optional[domain.domain_pb2.DomainRenewReply] = ...,
+        domain_pan : typing.Optional[domain.domain_pb2.DomainPANReply] = ...,
+        contact_info : typing.Optional[contact.contact_pb2.ContactInfoReply] = ...,
+        contact_transfer : typing.Optional[contact.contact_pb2.ContactTransferReply] = ...,
+        contact_pan : typing.Optional[contact.contact_pb2.ContactPANReply] = ...,
+        nominet_domain_cancel : typing.Optional[nominet.nominet_pb2.DomainCancel] = ...,
+        nominet_domain_release : typing.Optional[nominet.nominet_pb2.DomainRelease] = ...,
+        nominet_domain_registrar_change : typing.Optional[nominet.nominet_pb2.DomainRegistrarChange] = ...,
+        nominet_host_cancel : typing.Optional[nominet.nominet_pb2.HostCancel] = ...,
+        nominet_process : typing.Optional[nominet.nominet_pb2.Process] = ...,
+        nominet_suspend : typing.Optional[nominet.nominet_pb2.Suspend] = ...,
+        nominet_domain_fail : typing.Optional[nominet.nominet_pb2.DomainFail] = ...,
+        nominet_registrant_transfer : typing.Optional[nominet.nominet_pb2.RegistrantTransfer] = ...,
+        traficom_trn : typing.Optional[traficom.traficom_pb2.TrnData] = ...,
         verisign_low_balance : typing.Optional[global___BalanceReply] = ...,
-        maintenance_info : typing.Optional[maintenance_pb2.MaintenanceInfoReply] = ...,
-        eurid_poll : typing.Optional[eurid_pb2.PollReply] = ...,
+        maintenance_info : typing.Optional[maintenance.maintenance_pb2.MaintenanceInfoReply] = ...,
+        eurid_poll : typing.Optional[eurid.eurid_pb2.PollReply] = ...,
+        host_info : typing.Optional[host.host_pb2.HostInfoReply] = ...,
         change_data : typing.Optional[global___ChangeData] = ...,
-        cmd_resp : typing.Optional[common_pb2.CommandResponse] = ...,
+        cmd_resp : typing.Optional[common.common_pb2.CommandResponse] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal[u"change_data",b"change_data",u"cmd_resp",b"cmd_resp",u"contact_info",b"contact_info",u"contact_pan",b"contact_pan",u"contact_transfer",b"contact_transfer",u"data",b"data",u"domain_create",b"domain_create",u"domain_info",b"domain_info",u"domain_pan",b"domain_pan",u"domain_renew",b"domain_renew",u"domain_transfer",b"domain_transfer",u"enqueue_date",b"enqueue_date",u"eurid_poll",b"eurid_poll",u"maintenance_info",b"maintenance_info",u"nominet_domain_cancel",b"nominet_domain_cancel",u"nominet_domain_fail",b"nominet_domain_fail",u"nominet_domain_registrar_change",b"nominet_domain_registrar_change",u"nominet_domain_release",b"nominet_domain_release",u"nominet_host_cancel",b"nominet_host_cancel",u"nominet_process",b"nominet_process",u"nominet_registrant_transfer",b"nominet_registrant_transfer",u"nominet_suspend",b"nominet_suspend",u"traficom_trn",b"traficom_trn",u"verisign_low_balance",b"verisign_low_balance"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal[u"change_data",b"change_data",u"cmd_resp",b"cmd_resp",u"contact_info",b"contact_info",u"contact_pan",b"contact_pan",u"contact_transfer",b"contact_transfer",u"data",b"data",u"domain_create",b"domain_create",u"domain_info",b"domain_info",u"domain_pan",b"domain_pan",u"domain_renew",b"domain_renew",u"domain_transfer",b"domain_transfer",u"enqueue_date",b"enqueue_date",u"eurid_poll",b"eurid_poll",u"maintenance_info",b"maintenance_info",u"message",b"message",u"msg_id",b"msg_id",u"nominet_domain_cancel",b"nominet_domain_cancel",u"nominet_domain_fail",b"nominet_domain_fail",u"nominet_domain_registrar_change",b"nominet_domain_registrar_change",u"nominet_domain_release",b"nominet_domain_release",u"nominet_host_cancel",b"nominet_host_cancel",u"nominet_process",b"nominet_process",u"nominet_registrant_transfer",b"nominet_registrant_transfer",u"nominet_suspend",b"nominet_suspend",u"traficom_trn",b"traficom_trn",u"verisign_low_balance",b"verisign_low_balance"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal[u"data",b"data"]) -> typing_extensions.Literal["domain_info","domain_transfer","domain_create","domain_renew","domain_pan","contact_info","contact_transfer","contact_pan","nominet_domain_cancel","nominet_domain_release","nominet_domain_registrar_change","nominet_host_cancel","nominet_process","nominet_suspend","nominet_domain_fail","nominet_registrant_transfer","traficom_trn","verisign_low_balance","maintenance_info","eurid_poll"]: ...
+    def HasField(self, field_name: typing_extensions.Literal[u"change_data",b"change_data",u"cmd_resp",b"cmd_resp",u"contact_info",b"contact_info",u"contact_pan",b"contact_pan",u"contact_transfer",b"contact_transfer",u"data",b"data",u"domain_create",b"domain_create",u"domain_info",b"domain_info",u"domain_pan",b"domain_pan",u"domain_renew",b"domain_renew",u"domain_transfer",b"domain_transfer",u"enqueue_date",b"enqueue_date",u"eurid_poll",b"eurid_poll",u"host_info",b"host_info",u"maintenance_info",b"maintenance_info",u"nominet_domain_cancel",b"nominet_domain_cancel",u"nominet_domain_fail",b"nominet_domain_fail",u"nominet_domain_registrar_change",b"nominet_domain_registrar_change",u"nominet_domain_release",b"nominet_domain_release",u"nominet_host_cancel",b"nominet_host_cancel",u"nominet_process",b"nominet_process",u"nominet_registrant_transfer",b"nominet_registrant_transfer",u"nominet_suspend",b"nominet_suspend",u"traficom_trn",b"traficom_trn",u"verisign_low_balance",b"verisign_low_balance"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal[u"change_data",b"change_data",u"cmd_resp",b"cmd_resp",u"contact_info",b"contact_info",u"contact_pan",b"contact_pan",u"contact_transfer",b"contact_transfer",u"data",b"data",u"domain_create",b"domain_create",u"domain_info",b"domain_info",u"domain_pan",b"domain_pan",u"domain_renew",b"domain_renew",u"domain_transfer",b"domain_transfer",u"enqueue_date",b"enqueue_date",u"eurid_poll",b"eurid_poll",u"host_info",b"host_info",u"maintenance_info",b"maintenance_info",u"message",b"message",u"msg_id",b"msg_id",u"nominet_domain_cancel",b"nominet_domain_cancel",u"nominet_domain_fail",b"nominet_domain_fail",u"nominet_domain_registrar_change",b"nominet_domain_registrar_change",u"nominet_domain_release",b"nominet_domain_release",u"nominet_host_cancel",b"nominet_host_cancel",u"nominet_process",b"nominet_process",u"nominet_registrant_transfer",b"nominet_registrant_transfer",u"nominet_suspend",b"nominet_suspend",u"traficom_trn",b"traficom_trn",u"verisign_low_balance",b"verisign_low_balance"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing_extensions.Literal[u"data",b"data"]) -> typing_extensions.Literal["domain_info","domain_transfer","domain_create","domain_renew","domain_pan","contact_info","contact_transfer","contact_pan","nominet_domain_cancel","nominet_domain_release","nominet_domain_registrar_change","nominet_host_cancel","nominet_process","nominet_suspend","nominet_domain_fail","nominet_registrant_transfer","traficom_trn","verisign_low_balance","maintenance_info","eurid_poll","host_info"]: ...
 global___PollReply = PollReply
 
 class ChangeData(google.protobuf.message.Message):
@@ -322,7 +328,7 @@ class BalanceReply(google.protobuf.message.Message):
     def percentage_credit_threshold(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
 
     @property
-    def cmd_resp(self) -> common_pb2.CommandResponse: ...
+    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
 
     def __init__(self,
         *,
@@ -332,7 +338,7 @@ class BalanceReply(google.protobuf.message.Message):
         available_credit : typing.Optional[google.protobuf.wrappers_pb2.StringValue] = ...,
         fixed_credit_threshold : typing.Optional[google.protobuf.wrappers_pb2.StringValue] = ...,
         percentage_credit_threshold : typing.Optional[google.protobuf.wrappers_pb2.UInt32Value] = ...,
-        cmd_resp : typing.Optional[common_pb2.CommandResponse] = ...,
+        cmd_resp : typing.Optional[common.common_pb2.CommandResponse] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal[u"available_credit",b"available_credit",u"cmd_resp",b"cmd_resp",u"credit_limit",b"credit_limit",u"credit_threshold",b"credit_threshold",u"fixed_credit_threshold",b"fixed_credit_threshold",u"percentage_credit_threshold",b"percentage_credit_threshold"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal[u"available_credit",b"available_credit",u"balance",b"balance",u"cmd_resp",b"cmd_resp",u"credit_limit",b"credit_limit",u"credit_threshold",b"credit_threshold",u"currency",b"currency",u"fixed_credit_threshold",b"fixed_credit_threshold",u"percentage_credit_threshold",b"percentage_credit_threshold"]) -> None: ...

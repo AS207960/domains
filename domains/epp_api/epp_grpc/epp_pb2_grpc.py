@@ -2,14 +2,16 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from . import contact_pb2 as contact__pb2
-from . import domain_pb2 as domain__pb2
-from . import epp_pb2 as epp__pb2
-from . import eurid_pb2 as eurid__pb2
-from . import host_pb2 as host__pb2
-from . import maintenance_pb2 as maintenance__pb2
-from . import nominet_pb2 as nominet__pb2
-from . import rgp_pb2 as rgp__pb2
+from contact import contact_pb2 as contact_dot_contact__pb2
+from dac import dac_pb2 as dac_dot_dac__pb2
+from domain import domain_pb2 as domain_dot_domain__pb2
+import epp_pb2 as epp__pb2
+from eurid import eurid_pb2 as eurid_dot_eurid__pb2
+from host import host_pb2 as host_dot_host__pb2
+from maintenance import maintenance_pb2 as maintenance_dot_maintenance__pb2
+from nominet import nominet_pb2 as nominet_dot_nominet__pb2
+from rgp import rgp_pb2 as rgp_dot_rgp__pb2
+from tmch import tmch_pb2 as tmch_dot_tmch__pb2
 
 
 class EPPProxyStub(object):
@@ -23,158 +25,163 @@ class EPPProxyStub(object):
         """
         self.DomainCheck = channel.unary_unary(
                 '/epp.EPPProxy/DomainCheck',
-                request_serializer=domain__pb2.DomainCheckRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainCheckReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainCheckRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainCheckReply.FromString,
                 )
         self.DomainClaimsCheck = channel.unary_unary(
                 '/epp.EPPProxy/DomainClaimsCheck',
-                request_serializer=domain__pb2.DomainClaimsCheckRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainClaimsCheckReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainClaimsCheckRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainClaimsCheckReply.FromString,
                 )
         self.DomainTrademarkCheck = channel.unary_unary(
                 '/epp.EPPProxy/DomainTrademarkCheck',
-                request_serializer=domain__pb2.DomainTrademarkCheckRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainClaimsCheckReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTrademarkCheckRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainClaimsCheckReply.FromString,
                 )
         self.DomainInfo = channel.unary_unary(
                 '/epp.EPPProxy/DomainInfo',
-                request_serializer=domain__pb2.DomainInfoRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainInfoReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainInfoRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainInfoReply.FromString,
                 )
         self.DomainCreate = channel.unary_unary(
                 '/epp.EPPProxy/DomainCreate',
-                request_serializer=domain__pb2.DomainCreateRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainCreateReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainCreateRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainCreateReply.FromString,
                 )
         self.DomainDelete = channel.unary_unary(
                 '/epp.EPPProxy/DomainDelete',
-                request_serializer=domain__pb2.DomainDeleteRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainDeleteReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainDeleteRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainDeleteReply.FromString,
                 )
         self.DomainUpdate = channel.unary_unary(
                 '/epp.EPPProxy/DomainUpdate',
-                request_serializer=domain__pb2.DomainUpdateRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainUpdateReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainUpdateRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainUpdateReply.FromString,
                 )
         self.DomainRenew = channel.unary_unary(
                 '/epp.EPPProxy/DomainRenew',
-                request_serializer=domain__pb2.DomainRenewRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainRenewReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainRenewRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainRenewReply.FromString,
                 )
         self.DomainTransferQuery = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferQuery',
-                request_serializer=domain__pb2.DomainTransferQueryRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTransferQueryRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainTransferReply.FromString,
                 )
         self.DomainTransferRequest = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferRequest',
-                request_serializer=domain__pb2.DomainTransferRequestRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTransferRequestRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainTransferReply.FromString,
                 )
         self.DomainTransferCancel = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferCancel',
-                request_serializer=domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainTransferReply.FromString,
                 )
         self.DomainTransferAccept = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferAccept',
-                request_serializer=domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainTransferReply.FromString,
                 )
         self.DomainTransferReject = channel.unary_unary(
                 '/epp.EPPProxy/DomainTransferReject',
-                request_serializer=domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainTransferReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainTransferReply.FromString,
                 )
         self.DomainRestoreRequest = channel.unary_unary(
                 '/epp.EPPProxy/DomainRestoreRequest',
-                request_serializer=rgp__pb2.RequestRequest.SerializeToString,
-                response_deserializer=rgp__pb2.RestoreReply.FromString,
+                request_serializer=rgp_dot_rgp__pb2.RequestRequest.SerializeToString,
+                response_deserializer=rgp_dot_rgp__pb2.RestoreReply.FromString,
+                )
+        self.DomainRestoreReport = channel.unary_unary(
+                '/epp.EPPProxy/DomainRestoreReport',
+                request_serializer=rgp_dot_rgp__pb2.ReportRequest.SerializeToString,
+                response_deserializer=rgp_dot_rgp__pb2.ReportReply.FromString,
                 )
         self.DomainSync = channel.unary_unary(
                 '/epp.EPPProxy/DomainSync',
-                request_serializer=domain__pb2.DomainSyncRequest.SerializeToString,
-                response_deserializer=domain__pb2.DomainUpdateReply.FromString,
+                request_serializer=domain_dot_domain__pb2.DomainSyncRequest.SerializeToString,
+                response_deserializer=domain_dot_domain__pb2.DomainUpdateReply.FromString,
                 )
         self.HostCheck = channel.unary_unary(
                 '/epp.EPPProxy/HostCheck',
-                request_serializer=host__pb2.HostCheckRequest.SerializeToString,
-                response_deserializer=host__pb2.HostCheckReply.FromString,
+                request_serializer=host_dot_host__pb2.HostCheckRequest.SerializeToString,
+                response_deserializer=host_dot_host__pb2.HostCheckReply.FromString,
                 )
         self.HostInfo = channel.unary_unary(
                 '/epp.EPPProxy/HostInfo',
-                request_serializer=host__pb2.HostInfoRequest.SerializeToString,
-                response_deserializer=host__pb2.HostInfoReply.FromString,
+                request_serializer=host_dot_host__pb2.HostInfoRequest.SerializeToString,
+                response_deserializer=host_dot_host__pb2.HostInfoReply.FromString,
                 )
         self.HostCreate = channel.unary_unary(
                 '/epp.EPPProxy/HostCreate',
-                request_serializer=host__pb2.HostCreateRequest.SerializeToString,
-                response_deserializer=host__pb2.HostCreateReply.FromString,
+                request_serializer=host_dot_host__pb2.HostCreateRequest.SerializeToString,
+                response_deserializer=host_dot_host__pb2.HostCreateReply.FromString,
                 )
         self.HostDelete = channel.unary_unary(
                 '/epp.EPPProxy/HostDelete',
-                request_serializer=host__pb2.HostDeleteRequest.SerializeToString,
-                response_deserializer=host__pb2.HostDeleteReply.FromString,
+                request_serializer=host_dot_host__pb2.HostDeleteRequest.SerializeToString,
+                response_deserializer=host_dot_host__pb2.HostDeleteReply.FromString,
                 )
         self.HostUpdate = channel.unary_unary(
                 '/epp.EPPProxy/HostUpdate',
-                request_serializer=host__pb2.HostUpdateRequest.SerializeToString,
-                response_deserializer=host__pb2.HostUpdateReply.FromString,
+                request_serializer=host_dot_host__pb2.HostUpdateRequest.SerializeToString,
+                response_deserializer=host_dot_host__pb2.HostUpdateReply.FromString,
                 )
         self.ContactCheck = channel.unary_unary(
                 '/epp.EPPProxy/ContactCheck',
-                request_serializer=contact__pb2.ContactCheckRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactCheckReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactCheckRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactCheckReply.FromString,
                 )
         self.ContactInfo = channel.unary_unary(
                 '/epp.EPPProxy/ContactInfo',
-                request_serializer=contact__pb2.ContactInfoRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactInfoReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactInfoRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactInfoReply.FromString,
                 )
         self.ContactCreate = channel.unary_unary(
                 '/epp.EPPProxy/ContactCreate',
-                request_serializer=contact__pb2.ContactCreateRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactCreateReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactCreateRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactCreateReply.FromString,
                 )
         self.ContactDelete = channel.unary_unary(
                 '/epp.EPPProxy/ContactDelete',
-                request_serializer=contact__pb2.ContactDeleteRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactDeleteReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactDeleteRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactDeleteReply.FromString,
                 )
         self.ContactUpdate = channel.unary_unary(
                 '/epp.EPPProxy/ContactUpdate',
-                request_serializer=contact__pb2.ContactUpdateRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactUpdateReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactUpdateRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactUpdateReply.FromString,
                 )
         self.ContactTransferQuery = channel.unary_unary(
                 '/epp.EPPProxy/ContactTransferQuery',
-                request_serializer=contact__pb2.ContactTransferQueryRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactTransferReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactTransferQueryRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactTransferReply.FromString,
                 )
         self.ContactTransferRequest = channel.unary_unary(
                 '/epp.EPPProxy/ContactTransferRequest',
-                request_serializer=contact__pb2.ContactTransferRequestRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactTransferReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactTransferReply.FromString,
                 )
         self.ContactTransferAccept = channel.unary_unary(
                 '/epp.EPPProxy/ContactTransferAccept',
-                request_serializer=contact__pb2.ContactTransferRequestRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactTransferReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactTransferReply.FromString,
                 )
         self.ContactTransferReject = channel.unary_unary(
                 '/epp.EPPProxy/ContactTransferReject',
-                request_serializer=contact__pb2.ContactTransferRequestRequest.SerializeToString,
-                response_deserializer=contact__pb2.ContactTransferReply.FromString,
+                request_serializer=contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+                response_deserializer=contact_dot_contact__pb2.ContactTransferReply.FromString,
                 )
         self.MaintenanceList = channel.unary_unary(
                 '/epp.EPPProxy/MaintenanceList',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
-                response_deserializer=maintenance__pb2.MaintenanceListReply.FromString,
+                response_deserializer=maintenance_dot_maintenance__pb2.MaintenanceListReply.FromString,
                 )
         self.MaintenanceInfo = channel.unary_unary(
                 '/epp.EPPProxy/MaintenanceInfo',
-                request_serializer=maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
-                response_deserializer=maintenance__pb2.MaintenanceInfoReply.FromString,
+                request_serializer=maintenance_dot_maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
+                response_deserializer=maintenance_dot_maintenance__pb2.MaintenanceInfoReply.FromString,
                 )
         self.Poll = channel.stream_stream(
                 '/epp.EPPProxy/Poll',
@@ -184,22 +191,37 @@ class EPPProxyStub(object):
         self.NominetTagList = channel.unary_unary(
                 '/epp.EPPProxy/NominetTagList',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
-                response_deserializer=nominet__pb2.NominetTagListReply.FromString,
+                response_deserializer=nominet_dot_nominet__pb2.NominetTagListReply.FromString,
                 )
         self.NominetAccept = channel.unary_unary(
                 '/epp.EPPProxy/NominetAccept',
-                request_serializer=nominet__pb2.HandshakeAcceptRequest.SerializeToString,
-                response_deserializer=nominet__pb2.HandshakeReply.FromString,
+                request_serializer=nominet_dot_nominet__pb2.HandshakeAcceptRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.HandshakeReply.FromString,
                 )
         self.NominetReject = channel.unary_unary(
                 '/epp.EPPProxy/NominetReject',
-                request_serializer=nominet__pb2.HandshakeRejectRequest.SerializeToString,
-                response_deserializer=nominet__pb2.HandshakeReply.FromString,
+                request_serializer=nominet_dot_nominet__pb2.HandshakeRejectRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.HandshakeReply.FromString,
                 )
         self.NominetRelease = channel.unary_unary(
                 '/epp.EPPProxy/NominetRelease',
-                request_serializer=nominet__pb2.ReleaseRequest.SerializeToString,
-                response_deserializer=nominet__pb2.ReleaseReply.FromString,
+                request_serializer=nominet_dot_nominet__pb2.ReleaseRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.ReleaseReply.FromString,
+                )
+        self.NominetContactValidate = channel.unary_unary(
+                '/epp.EPPProxy/NominetContactValidate',
+                request_serializer=nominet_dot_nominet__pb2.ContactValidateRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.ContactValidateReply.FromString,
+                )
+        self.NominetLock = channel.unary_unary(
+                '/epp.EPPProxy/NominetLock',
+                request_serializer=nominet_dot_nominet__pb2.LockRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.LockReply.FromString,
+                )
+        self.NominetUnlock = channel.unary_unary(
+                '/epp.EPPProxy/NominetUnlock',
+                request_serializer=nominet_dot_nominet__pb2.LockRequest.SerializeToString,
+                response_deserializer=nominet_dot_nominet__pb2.LockReply.FromString,
                 )
         self.BalanceInfo = channel.unary_unary(
                 '/epp.EPPProxy/BalanceInfo',
@@ -209,22 +231,87 @@ class EPPProxyStub(object):
         self.HitPointsInfo = channel.unary_unary(
                 '/epp.EPPProxy/HitPointsInfo',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
-                response_deserializer=eurid__pb2.HitPointsReply.FromString,
+                response_deserializer=eurid_dot_eurid__pb2.HitPointsReply.FromString,
                 )
         self.RegistrationLimitInfo = channel.unary_unary(
                 '/epp.EPPProxy/RegistrationLimitInfo',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
-                response_deserializer=eurid__pb2.RegistrationLimitReply.FromString,
+                response_deserializer=eurid_dot_eurid__pb2.RegistrationLimitReply.FromString,
                 )
         self.DNSQualityInfo = channel.unary_unary(
                 '/epp.EPPProxy/DNSQualityInfo',
-                request_serializer=eurid__pb2.DNSQualityRequest.SerializeToString,
-                response_deserializer=eurid__pb2.DNSQualityReply.FromString,
+                request_serializer=eurid_dot_eurid__pb2.DNSQualityRequest.SerializeToString,
+                response_deserializer=eurid_dot_eurid__pb2.DNSQualityReply.FromString,
                 )
         self.DNSSECEligibilityInfo = channel.unary_unary(
                 '/epp.EPPProxy/DNSSECEligibilityInfo',
-                request_serializer=eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
-                response_deserializer=eurid__pb2.DNSSECEligibilityReply.FromString,
+                request_serializer=eurid_dot_eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
+                response_deserializer=eurid_dot_eurid__pb2.DNSSECEligibilityReply.FromString,
+                )
+        self.TMCHMarkCheck = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkCheck',
+                request_serializer=tmch_dot_tmch__pb2.MarkCheckRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkCheckResponse.FromString,
+                )
+        self.TMCHMarkCreate = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkCreate',
+                request_serializer=tmch_dot_tmch__pb2.MarkCreateRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkCreateResponse.FromString,
+                )
+        self.TMCHMarkInfo = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkInfo',
+                request_serializer=tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkInfoResponse.FromString,
+                )
+        self.TMCHMarkSMDInfo = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkSMDInfo',
+                request_serializer=tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+                )
+        self.TMCHMarkEncodedSMDInfo = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkEncodedSMDInfo',
+                request_serializer=tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+                )
+        self.TMCHMarkFileInfo = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkFileInfo',
+                request_serializer=tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+                )
+        self.TMCHMarkUpdate = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkUpdate',
+                request_serializer=tmch_dot_tmch__pb2.MarkUpdateRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkUpdateResponse.FromString,
+                )
+        self.TMCHMarkRenew = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkRenew',
+                request_serializer=tmch_dot_tmch__pb2.MarkRenewRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkRenewResponse.FromString,
+                )
+        self.TMCHMarkTransferInitiate = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkTransferInitiate',
+                request_serializer=tmch_dot_tmch__pb2.MarkTransferInitiateRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkTransferInitiateResponse.FromString,
+                )
+        self.TMCHMarkTransfer = channel.unary_unary(
+                '/epp.EPPProxy/TMCHMarkTransfer',
+                request_serializer=tmch_dot_tmch__pb2.MarkTransferRequest.SerializeToString,
+                response_deserializer=tmch_dot_tmch__pb2.MarkTransferResponse.FromString,
+                )
+        self.DACDomain = channel.unary_unary(
+                '/epp.EPPProxy/DACDomain',
+                request_serializer=dac_dot_dac__pb2.DomainRequest.SerializeToString,
+                response_deserializer=dac_dot_dac__pb2.DomainResponse.FromString,
+                )
+        self.DACUsage = channel.unary_unary(
+                '/epp.EPPProxy/DACUsage',
+                request_serializer=dac_dot_dac__pb2.UsageRequest.SerializeToString,
+                response_deserializer=dac_dot_dac__pb2.UsageResponse.FromString,
+                )
+        self.DACLimits = channel.unary_unary(
+                '/epp.EPPProxy/DACLimits',
+                request_serializer=dac_dot_dac__pb2.UsageRequest.SerializeToString,
+                response_deserializer=dac_dot_dac__pb2.UsageResponse.FromString,
                 )
 
 
@@ -310,6 +397,12 @@ class EPPProxyServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def DomainRestoreRequest(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DomainRestoreReport(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -447,6 +540,24 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def NominetContactValidate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NominetLock(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def NominetUnlock(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def BalanceInfo(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -477,163 +588,246 @@ class EPPProxyServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def TMCHMarkCheck(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkCreate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkSMDInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkEncodedSMDInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkFileInfo(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkUpdate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkRenew(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkTransferInitiate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def TMCHMarkTransfer(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DACDomain(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DACUsage(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DACLimits(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EPPProxyServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'DomainCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainCheck,
-                    request_deserializer=domain__pb2.DomainCheckRequest.FromString,
-                    response_serializer=domain__pb2.DomainCheckReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainCheckRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainCheckReply.SerializeToString,
             ),
             'DomainClaimsCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainClaimsCheck,
-                    request_deserializer=domain__pb2.DomainClaimsCheckRequest.FromString,
-                    response_serializer=domain__pb2.DomainClaimsCheckReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainClaimsCheckRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainClaimsCheckReply.SerializeToString,
             ),
             'DomainTrademarkCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTrademarkCheck,
-                    request_deserializer=domain__pb2.DomainTrademarkCheckRequest.FromString,
-                    response_serializer=domain__pb2.DomainClaimsCheckReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTrademarkCheckRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainClaimsCheckReply.SerializeToString,
             ),
             'DomainInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainInfo,
-                    request_deserializer=domain__pb2.DomainInfoRequest.FromString,
-                    response_serializer=domain__pb2.DomainInfoReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainInfoRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainInfoReply.SerializeToString,
             ),
             'DomainCreate': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainCreate,
-                    request_deserializer=domain__pb2.DomainCreateRequest.FromString,
-                    response_serializer=domain__pb2.DomainCreateReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainCreateRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainCreateReply.SerializeToString,
             ),
             'DomainDelete': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainDelete,
-                    request_deserializer=domain__pb2.DomainDeleteRequest.FromString,
-                    response_serializer=domain__pb2.DomainDeleteReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainDeleteRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainDeleteReply.SerializeToString,
             ),
             'DomainUpdate': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainUpdate,
-                    request_deserializer=domain__pb2.DomainUpdateRequest.FromString,
-                    response_serializer=domain__pb2.DomainUpdateReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainUpdateRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainUpdateReply.SerializeToString,
             ),
             'DomainRenew': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainRenew,
-                    request_deserializer=domain__pb2.DomainRenewRequest.FromString,
-                    response_serializer=domain__pb2.DomainRenewReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainRenewRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainRenewReply.SerializeToString,
             ),
             'DomainTransferQuery': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferQuery,
-                    request_deserializer=domain__pb2.DomainTransferQueryRequest.FromString,
-                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTransferQueryRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainTransferRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferRequest,
-                    request_deserializer=domain__pb2.DomainTransferRequestRequest.FromString,
-                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTransferRequestRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainTransferCancel': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferCancel,
-                    request_deserializer=domain__pb2.DomainTransferAcceptRejectRequest.FromString,
-                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainTransferAccept': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferAccept,
-                    request_deserializer=domain__pb2.DomainTransferAcceptRejectRequest.FromString,
-                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainTransferReject': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainTransferReject,
-                    request_deserializer=domain__pb2.DomainTransferAcceptRejectRequest.FromString,
-                    response_serializer=domain__pb2.DomainTransferReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainTransferReply.SerializeToString,
             ),
             'DomainRestoreRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainRestoreRequest,
-                    request_deserializer=rgp__pb2.RequestRequest.FromString,
-                    response_serializer=rgp__pb2.RestoreReply.SerializeToString,
+                    request_deserializer=rgp_dot_rgp__pb2.RequestRequest.FromString,
+                    response_serializer=rgp_dot_rgp__pb2.RestoreReply.SerializeToString,
+            ),
+            'DomainRestoreReport': grpc.unary_unary_rpc_method_handler(
+                    servicer.DomainRestoreReport,
+                    request_deserializer=rgp_dot_rgp__pb2.ReportRequest.FromString,
+                    response_serializer=rgp_dot_rgp__pb2.ReportReply.SerializeToString,
             ),
             'DomainSync': grpc.unary_unary_rpc_method_handler(
                     servicer.DomainSync,
-                    request_deserializer=domain__pb2.DomainSyncRequest.FromString,
-                    response_serializer=domain__pb2.DomainUpdateReply.SerializeToString,
+                    request_deserializer=domain_dot_domain__pb2.DomainSyncRequest.FromString,
+                    response_serializer=domain_dot_domain__pb2.DomainUpdateReply.SerializeToString,
             ),
             'HostCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.HostCheck,
-                    request_deserializer=host__pb2.HostCheckRequest.FromString,
-                    response_serializer=host__pb2.HostCheckReply.SerializeToString,
+                    request_deserializer=host_dot_host__pb2.HostCheckRequest.FromString,
+                    response_serializer=host_dot_host__pb2.HostCheckReply.SerializeToString,
             ),
             'HostInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.HostInfo,
-                    request_deserializer=host__pb2.HostInfoRequest.FromString,
-                    response_serializer=host__pb2.HostInfoReply.SerializeToString,
+                    request_deserializer=host_dot_host__pb2.HostInfoRequest.FromString,
+                    response_serializer=host_dot_host__pb2.HostInfoReply.SerializeToString,
             ),
             'HostCreate': grpc.unary_unary_rpc_method_handler(
                     servicer.HostCreate,
-                    request_deserializer=host__pb2.HostCreateRequest.FromString,
-                    response_serializer=host__pb2.HostCreateReply.SerializeToString,
+                    request_deserializer=host_dot_host__pb2.HostCreateRequest.FromString,
+                    response_serializer=host_dot_host__pb2.HostCreateReply.SerializeToString,
             ),
             'HostDelete': grpc.unary_unary_rpc_method_handler(
                     servicer.HostDelete,
-                    request_deserializer=host__pb2.HostDeleteRequest.FromString,
-                    response_serializer=host__pb2.HostDeleteReply.SerializeToString,
+                    request_deserializer=host_dot_host__pb2.HostDeleteRequest.FromString,
+                    response_serializer=host_dot_host__pb2.HostDeleteReply.SerializeToString,
             ),
             'HostUpdate': grpc.unary_unary_rpc_method_handler(
                     servicer.HostUpdate,
-                    request_deserializer=host__pb2.HostUpdateRequest.FromString,
-                    response_serializer=host__pb2.HostUpdateReply.SerializeToString,
+                    request_deserializer=host_dot_host__pb2.HostUpdateRequest.FromString,
+                    response_serializer=host_dot_host__pb2.HostUpdateReply.SerializeToString,
             ),
             'ContactCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactCheck,
-                    request_deserializer=contact__pb2.ContactCheckRequest.FromString,
-                    response_serializer=contact__pb2.ContactCheckReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactCheckRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactCheckReply.SerializeToString,
             ),
             'ContactInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactInfo,
-                    request_deserializer=contact__pb2.ContactInfoRequest.FromString,
-                    response_serializer=contact__pb2.ContactInfoReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactInfoRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactInfoReply.SerializeToString,
             ),
             'ContactCreate': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactCreate,
-                    request_deserializer=contact__pb2.ContactCreateRequest.FromString,
-                    response_serializer=contact__pb2.ContactCreateReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactCreateRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactCreateReply.SerializeToString,
             ),
             'ContactDelete': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactDelete,
-                    request_deserializer=contact__pb2.ContactDeleteRequest.FromString,
-                    response_serializer=contact__pb2.ContactDeleteReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactDeleteRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactDeleteReply.SerializeToString,
             ),
             'ContactUpdate': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactUpdate,
-                    request_deserializer=contact__pb2.ContactUpdateRequest.FromString,
-                    response_serializer=contact__pb2.ContactUpdateReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactUpdateRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactUpdateReply.SerializeToString,
             ),
             'ContactTransferQuery': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactTransferQuery,
-                    request_deserializer=contact__pb2.ContactTransferQueryRequest.FromString,
-                    response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactTransferQueryRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactTransferReply.SerializeToString,
             ),
             'ContactTransferRequest': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactTransferRequest,
-                    request_deserializer=contact__pb2.ContactTransferRequestRequest.FromString,
-                    response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactTransferRequestRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactTransferReply.SerializeToString,
             ),
             'ContactTransferAccept': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactTransferAccept,
-                    request_deserializer=contact__pb2.ContactTransferRequestRequest.FromString,
-                    response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactTransferRequestRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactTransferReply.SerializeToString,
             ),
             'ContactTransferReject': grpc.unary_unary_rpc_method_handler(
                     servicer.ContactTransferReject,
-                    request_deserializer=contact__pb2.ContactTransferRequestRequest.FromString,
-                    response_serializer=contact__pb2.ContactTransferReply.SerializeToString,
+                    request_deserializer=contact_dot_contact__pb2.ContactTransferRequestRequest.FromString,
+                    response_serializer=contact_dot_contact__pb2.ContactTransferReply.SerializeToString,
             ),
             'MaintenanceList': grpc.unary_unary_rpc_method_handler(
                     servicer.MaintenanceList,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
-                    response_serializer=maintenance__pb2.MaintenanceListReply.SerializeToString,
+                    response_serializer=maintenance_dot_maintenance__pb2.MaintenanceListReply.SerializeToString,
             ),
             'MaintenanceInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.MaintenanceInfo,
-                    request_deserializer=maintenance__pb2.MaintenanceInfoRequest.FromString,
-                    response_serializer=maintenance__pb2.MaintenanceInfoReply.SerializeToString,
+                    request_deserializer=maintenance_dot_maintenance__pb2.MaintenanceInfoRequest.FromString,
+                    response_serializer=maintenance_dot_maintenance__pb2.MaintenanceInfoReply.SerializeToString,
             ),
             'Poll': grpc.stream_stream_rpc_method_handler(
                     servicer.Poll,
@@ -643,22 +837,37 @@ def add_EPPProxyServicer_to_server(servicer, server):
             'NominetTagList': grpc.unary_unary_rpc_method_handler(
                     servicer.NominetTagList,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
-                    response_serializer=nominet__pb2.NominetTagListReply.SerializeToString,
+                    response_serializer=nominet_dot_nominet__pb2.NominetTagListReply.SerializeToString,
             ),
             'NominetAccept': grpc.unary_unary_rpc_method_handler(
                     servicer.NominetAccept,
-                    request_deserializer=nominet__pb2.HandshakeAcceptRequest.FromString,
-                    response_serializer=nominet__pb2.HandshakeReply.SerializeToString,
+                    request_deserializer=nominet_dot_nominet__pb2.HandshakeAcceptRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.HandshakeReply.SerializeToString,
             ),
             'NominetReject': grpc.unary_unary_rpc_method_handler(
                     servicer.NominetReject,
-                    request_deserializer=nominet__pb2.HandshakeRejectRequest.FromString,
-                    response_serializer=nominet__pb2.HandshakeReply.SerializeToString,
+                    request_deserializer=nominet_dot_nominet__pb2.HandshakeRejectRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.HandshakeReply.SerializeToString,
             ),
             'NominetRelease': grpc.unary_unary_rpc_method_handler(
                     servicer.NominetRelease,
-                    request_deserializer=nominet__pb2.ReleaseRequest.FromString,
-                    response_serializer=nominet__pb2.ReleaseReply.SerializeToString,
+                    request_deserializer=nominet_dot_nominet__pb2.ReleaseRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.ReleaseReply.SerializeToString,
+            ),
+            'NominetContactValidate': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetContactValidate,
+                    request_deserializer=nominet_dot_nominet__pb2.ContactValidateRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.ContactValidateReply.SerializeToString,
+            ),
+            'NominetLock': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetLock,
+                    request_deserializer=nominet_dot_nominet__pb2.LockRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.LockReply.SerializeToString,
+            ),
+            'NominetUnlock': grpc.unary_unary_rpc_method_handler(
+                    servicer.NominetUnlock,
+                    request_deserializer=nominet_dot_nominet__pb2.LockRequest.FromString,
+                    response_serializer=nominet_dot_nominet__pb2.LockReply.SerializeToString,
             ),
             'BalanceInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.BalanceInfo,
@@ -668,22 +877,87 @@ def add_EPPProxyServicer_to_server(servicer, server):
             'HitPointsInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.HitPointsInfo,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
-                    response_serializer=eurid__pb2.HitPointsReply.SerializeToString,
+                    response_serializer=eurid_dot_eurid__pb2.HitPointsReply.SerializeToString,
             ),
             'RegistrationLimitInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.RegistrationLimitInfo,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
-                    response_serializer=eurid__pb2.RegistrationLimitReply.SerializeToString,
+                    response_serializer=eurid_dot_eurid__pb2.RegistrationLimitReply.SerializeToString,
             ),
             'DNSQualityInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.DNSQualityInfo,
-                    request_deserializer=eurid__pb2.DNSQualityRequest.FromString,
-                    response_serializer=eurid__pb2.DNSQualityReply.SerializeToString,
+                    request_deserializer=eurid_dot_eurid__pb2.DNSQualityRequest.FromString,
+                    response_serializer=eurid_dot_eurid__pb2.DNSQualityReply.SerializeToString,
             ),
             'DNSSECEligibilityInfo': grpc.unary_unary_rpc_method_handler(
                     servicer.DNSSECEligibilityInfo,
-                    request_deserializer=eurid__pb2.DNSSECEligibilityRequest.FromString,
-                    response_serializer=eurid__pb2.DNSSECEligibilityReply.SerializeToString,
+                    request_deserializer=eurid_dot_eurid__pb2.DNSSECEligibilityRequest.FromString,
+                    response_serializer=eurid_dot_eurid__pb2.DNSSECEligibilityReply.SerializeToString,
+            ),
+            'TMCHMarkCheck': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkCheck,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkCheckRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkCheckResponse.SerializeToString,
+            ),
+            'TMCHMarkCreate': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkCreate,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkCreateRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkCreateResponse.SerializeToString,
+            ),
+            'TMCHMarkInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkInfo,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkInfoRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkInfoResponse.SerializeToString,
+            ),
+            'TMCHMarkSMDInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkSMDInfo,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkInfoRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.SerializeToString,
+            ),
+            'TMCHMarkEncodedSMDInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkEncodedSMDInfo,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkInfoRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.SerializeToString,
+            ),
+            'TMCHMarkFileInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkFileInfo,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkInfoRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkSMDInfoResponse.SerializeToString,
+            ),
+            'TMCHMarkUpdate': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkUpdate,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkUpdateRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkUpdateResponse.SerializeToString,
+            ),
+            'TMCHMarkRenew': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkRenew,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkRenewRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkRenewResponse.SerializeToString,
+            ),
+            'TMCHMarkTransferInitiate': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkTransferInitiate,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkTransferInitiateRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkTransferInitiateResponse.SerializeToString,
+            ),
+            'TMCHMarkTransfer': grpc.unary_unary_rpc_method_handler(
+                    servicer.TMCHMarkTransfer,
+                    request_deserializer=tmch_dot_tmch__pb2.MarkTransferRequest.FromString,
+                    response_serializer=tmch_dot_tmch__pb2.MarkTransferResponse.SerializeToString,
+            ),
+            'DACDomain': grpc.unary_unary_rpc_method_handler(
+                    servicer.DACDomain,
+                    request_deserializer=dac_dot_dac__pb2.DomainRequest.FromString,
+                    response_serializer=dac_dot_dac__pb2.DomainResponse.SerializeToString,
+            ),
+            'DACUsage': grpc.unary_unary_rpc_method_handler(
+                    servicer.DACUsage,
+                    request_deserializer=dac_dot_dac__pb2.UsageRequest.FromString,
+                    response_serializer=dac_dot_dac__pb2.UsageResponse.SerializeToString,
+            ),
+            'DACLimits': grpc.unary_unary_rpc_method_handler(
+                    servicer.DACLimits,
+                    request_deserializer=dac_dot_dac__pb2.UsageRequest.FromString,
+                    response_serializer=dac_dot_dac__pb2.UsageResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -707,8 +981,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainCheck',
-            domain__pb2.DomainCheckRequest.SerializeToString,
-            domain__pb2.DomainCheckReply.FromString,
+            domain_dot_domain__pb2.DomainCheckRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainCheckReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -724,8 +998,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainClaimsCheck',
-            domain__pb2.DomainClaimsCheckRequest.SerializeToString,
-            domain__pb2.DomainClaimsCheckReply.FromString,
+            domain_dot_domain__pb2.DomainClaimsCheckRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainClaimsCheckReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -741,8 +1015,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTrademarkCheck',
-            domain__pb2.DomainTrademarkCheckRequest.SerializeToString,
-            domain__pb2.DomainClaimsCheckReply.FromString,
+            domain_dot_domain__pb2.DomainTrademarkCheckRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainClaimsCheckReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -758,8 +1032,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainInfo',
-            domain__pb2.DomainInfoRequest.SerializeToString,
-            domain__pb2.DomainInfoReply.FromString,
+            domain_dot_domain__pb2.DomainInfoRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainInfoReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -775,8 +1049,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainCreate',
-            domain__pb2.DomainCreateRequest.SerializeToString,
-            domain__pb2.DomainCreateReply.FromString,
+            domain_dot_domain__pb2.DomainCreateRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainCreateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -792,8 +1066,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainDelete',
-            domain__pb2.DomainDeleteRequest.SerializeToString,
-            domain__pb2.DomainDeleteReply.FromString,
+            domain_dot_domain__pb2.DomainDeleteRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainDeleteReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -809,8 +1083,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainUpdate',
-            domain__pb2.DomainUpdateRequest.SerializeToString,
-            domain__pb2.DomainUpdateReply.FromString,
+            domain_dot_domain__pb2.DomainUpdateRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainUpdateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -826,8 +1100,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainRenew',
-            domain__pb2.DomainRenewRequest.SerializeToString,
-            domain__pb2.DomainRenewReply.FromString,
+            domain_dot_domain__pb2.DomainRenewRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainRenewReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -843,8 +1117,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferQuery',
-            domain__pb2.DomainTransferQueryRequest.SerializeToString,
-            domain__pb2.DomainTransferReply.FromString,
+            domain_dot_domain__pb2.DomainTransferQueryRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -860,8 +1134,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferRequest',
-            domain__pb2.DomainTransferRequestRequest.SerializeToString,
-            domain__pb2.DomainTransferReply.FromString,
+            domain_dot_domain__pb2.DomainTransferRequestRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -877,8 +1151,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferCancel',
-            domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-            domain__pb2.DomainTransferReply.FromString,
+            domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -894,8 +1168,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferAccept',
-            domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-            domain__pb2.DomainTransferReply.FromString,
+            domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -911,8 +1185,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainTransferReject',
-            domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
-            domain__pb2.DomainTransferReply.FromString,
+            domain_dot_domain__pb2.DomainTransferAcceptRejectRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -928,8 +1202,25 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainRestoreRequest',
-            rgp__pb2.RequestRequest.SerializeToString,
-            rgp__pb2.RestoreReply.FromString,
+            rgp_dot_rgp__pb2.RequestRequest.SerializeToString,
+            rgp_dot_rgp__pb2.RestoreReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DomainRestoreReport(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainRestoreReport',
+            rgp_dot_rgp__pb2.ReportRequest.SerializeToString,
+            rgp_dot_rgp__pb2.ReportReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -945,8 +1236,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DomainSync',
-            domain__pb2.DomainSyncRequest.SerializeToString,
-            domain__pb2.DomainUpdateReply.FromString,
+            domain_dot_domain__pb2.DomainSyncRequest.SerializeToString,
+            domain_dot_domain__pb2.DomainUpdateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -962,8 +1253,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HostCheck',
-            host__pb2.HostCheckRequest.SerializeToString,
-            host__pb2.HostCheckReply.FromString,
+            host_dot_host__pb2.HostCheckRequest.SerializeToString,
+            host_dot_host__pb2.HostCheckReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -979,8 +1270,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HostInfo',
-            host__pb2.HostInfoRequest.SerializeToString,
-            host__pb2.HostInfoReply.FromString,
+            host_dot_host__pb2.HostInfoRequest.SerializeToString,
+            host_dot_host__pb2.HostInfoReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -996,8 +1287,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HostCreate',
-            host__pb2.HostCreateRequest.SerializeToString,
-            host__pb2.HostCreateReply.FromString,
+            host_dot_host__pb2.HostCreateRequest.SerializeToString,
+            host_dot_host__pb2.HostCreateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1013,8 +1304,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HostDelete',
-            host__pb2.HostDeleteRequest.SerializeToString,
-            host__pb2.HostDeleteReply.FromString,
+            host_dot_host__pb2.HostDeleteRequest.SerializeToString,
+            host_dot_host__pb2.HostDeleteReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1030,8 +1321,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HostUpdate',
-            host__pb2.HostUpdateRequest.SerializeToString,
-            host__pb2.HostUpdateReply.FromString,
+            host_dot_host__pb2.HostUpdateRequest.SerializeToString,
+            host_dot_host__pb2.HostUpdateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1047,8 +1338,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactCheck',
-            contact__pb2.ContactCheckRequest.SerializeToString,
-            contact__pb2.ContactCheckReply.FromString,
+            contact_dot_contact__pb2.ContactCheckRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactCheckReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1064,8 +1355,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactInfo',
-            contact__pb2.ContactInfoRequest.SerializeToString,
-            contact__pb2.ContactInfoReply.FromString,
+            contact_dot_contact__pb2.ContactInfoRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactInfoReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1081,8 +1372,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactCreate',
-            contact__pb2.ContactCreateRequest.SerializeToString,
-            contact__pb2.ContactCreateReply.FromString,
+            contact_dot_contact__pb2.ContactCreateRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactCreateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1098,8 +1389,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactDelete',
-            contact__pb2.ContactDeleteRequest.SerializeToString,
-            contact__pb2.ContactDeleteReply.FromString,
+            contact_dot_contact__pb2.ContactDeleteRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactDeleteReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1115,8 +1406,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactUpdate',
-            contact__pb2.ContactUpdateRequest.SerializeToString,
-            contact__pb2.ContactUpdateReply.FromString,
+            contact_dot_contact__pb2.ContactUpdateRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactUpdateReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1132,8 +1423,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactTransferQuery',
-            contact__pb2.ContactTransferQueryRequest.SerializeToString,
-            contact__pb2.ContactTransferReply.FromString,
+            contact_dot_contact__pb2.ContactTransferQueryRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1149,8 +1440,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactTransferRequest',
-            contact__pb2.ContactTransferRequestRequest.SerializeToString,
-            contact__pb2.ContactTransferReply.FromString,
+            contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1166,8 +1457,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactTransferAccept',
-            contact__pb2.ContactTransferRequestRequest.SerializeToString,
-            contact__pb2.ContactTransferReply.FromString,
+            contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1183,8 +1474,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/ContactTransferReject',
-            contact__pb2.ContactTransferRequestRequest.SerializeToString,
-            contact__pb2.ContactTransferReply.FromString,
+            contact_dot_contact__pb2.ContactTransferRequestRequest.SerializeToString,
+            contact_dot_contact__pb2.ContactTransferReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1201,7 +1492,7 @@ class EPPProxy(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/MaintenanceList',
             epp__pb2.RegistryInfo.SerializeToString,
-            maintenance__pb2.MaintenanceListReply.FromString,
+            maintenance_dot_maintenance__pb2.MaintenanceListReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1217,8 +1508,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/MaintenanceInfo',
-            maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
-            maintenance__pb2.MaintenanceInfoReply.FromString,
+            maintenance_dot_maintenance__pb2.MaintenanceInfoRequest.SerializeToString,
+            maintenance_dot_maintenance__pb2.MaintenanceInfoReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1252,7 +1543,7 @@ class EPPProxy(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetTagList',
             epp__pb2.RegistryInfo.SerializeToString,
-            nominet__pb2.NominetTagListReply.FromString,
+            nominet_dot_nominet__pb2.NominetTagListReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1268,8 +1559,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetAccept',
-            nominet__pb2.HandshakeAcceptRequest.SerializeToString,
-            nominet__pb2.HandshakeReply.FromString,
+            nominet_dot_nominet__pb2.HandshakeAcceptRequest.SerializeToString,
+            nominet_dot_nominet__pb2.HandshakeReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1285,8 +1576,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetReject',
-            nominet__pb2.HandshakeRejectRequest.SerializeToString,
-            nominet__pb2.HandshakeReply.FromString,
+            nominet_dot_nominet__pb2.HandshakeRejectRequest.SerializeToString,
+            nominet_dot_nominet__pb2.HandshakeReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1302,8 +1593,59 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetRelease',
-            nominet__pb2.ReleaseRequest.SerializeToString,
-            nominet__pb2.ReleaseReply.FromString,
+            nominet_dot_nominet__pb2.ReleaseRequest.SerializeToString,
+            nominet_dot_nominet__pb2.ReleaseReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetContactValidate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetContactValidate',
+            nominet_dot_nominet__pb2.ContactValidateRequest.SerializeToString,
+            nominet_dot_nominet__pb2.ContactValidateReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetLock(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetLock',
+            nominet_dot_nominet__pb2.LockRequest.SerializeToString,
+            nominet_dot_nominet__pb2.LockReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def NominetUnlock(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/NominetUnlock',
+            nominet_dot_nominet__pb2.LockRequest.SerializeToString,
+            nominet_dot_nominet__pb2.LockReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1337,7 +1679,7 @@ class EPPProxy(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/HitPointsInfo',
             epp__pb2.RegistryInfo.SerializeToString,
-            eurid__pb2.HitPointsReply.FromString,
+            eurid_dot_eurid__pb2.HitPointsReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1354,7 +1696,7 @@ class EPPProxy(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/RegistrationLimitInfo',
             epp__pb2.RegistryInfo.SerializeToString,
-            eurid__pb2.RegistrationLimitReply.FromString,
+            eurid_dot_eurid__pb2.RegistrationLimitReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1370,8 +1712,8 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DNSQualityInfo',
-            eurid__pb2.DNSQualityRequest.SerializeToString,
-            eurid__pb2.DNSQualityReply.FromString,
+            eurid_dot_eurid__pb2.DNSQualityRequest.SerializeToString,
+            eurid_dot_eurid__pb2.DNSQualityReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1387,7 +1729,228 @@ class EPPProxy(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DNSSECEligibilityInfo',
-            eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
-            eurid__pb2.DNSSECEligibilityReply.FromString,
+            eurid_dot_eurid__pb2.DNSSECEligibilityRequest.SerializeToString,
+            eurid_dot_eurid__pb2.DNSSECEligibilityReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkCheck(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkCheck',
+            tmch_dot_tmch__pb2.MarkCheckRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkCheckResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkCreate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkCreate',
+            tmch_dot_tmch__pb2.MarkCreateRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkCreateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkInfo',
+            tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkSMDInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkSMDInfo',
+            tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkEncodedSMDInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkEncodedSMDInfo',
+            tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkFileInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkFileInfo',
+            tmch_dot_tmch__pb2.MarkInfoRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkSMDInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkUpdate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkUpdate',
+            tmch_dot_tmch__pb2.MarkUpdateRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkUpdateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkRenew(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkRenew',
+            tmch_dot_tmch__pb2.MarkRenewRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkRenewResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkTransferInitiate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkTransferInitiate',
+            tmch_dot_tmch__pb2.MarkTransferInitiateRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkTransferInitiateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TMCHMarkTransfer(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/TMCHMarkTransfer',
+            tmch_dot_tmch__pb2.MarkTransferRequest.SerializeToString,
+            tmch_dot_tmch__pb2.MarkTransferResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DACDomain(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DACDomain',
+            dac_dot_dac__pb2.DomainRequest.SerializeToString,
+            dac_dot_dac__pb2.DomainResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DACUsage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DACUsage',
+            dac_dot_dac__pb2.UsageRequest.SerializeToString,
+            dac_dot_dac__pb2.UsageResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DACLimits(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/epp.EPPProxy/DACLimits',
+            dac_dot_dac__pb2.UsageRequest.SerializeToString,
+            dac_dot_dac__pb2.UsageResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

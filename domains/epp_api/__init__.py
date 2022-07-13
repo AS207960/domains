@@ -8,8 +8,17 @@ import dataclasses
 import ipaddress
 from google.protobuf.wrappers_pb2 import StringValue
 from google.protobuf.timestamp_pb2 import Timestamp
-from .epp_grpc import common_pb2, contact_pb2, domain_pb2, host_pb2, rgp_pb2, fee_pb2, epp_pb2, epp_pb2_grpc, \
-    isnic_pb2, domain_common_pb2, nominet_pb2, nominet_ext_pb2
+from .epp_grpc.common import common_pb2
+from .epp_grpc.contact import contact_pb2
+from .epp_grpc.domain import domain_pb2
+from .epp_grpc.host import host_pb2
+from .epp_grpc.rgp import rgp_pb2
+from .epp_grpc.fee import fee_pb2
+from .epp_grpc.isnic import isnic_pb2
+from .epp_grpc.domain_common import domain_common_pb2
+from .epp_grpc.nominet import nominet_pb2
+from .epp_grpc.nominet_ext import nominet_ext_pb2
+from .epp_grpc import epp_pb2, epp_pb2_grpc
 
 
 @dataclasses.dataclass
