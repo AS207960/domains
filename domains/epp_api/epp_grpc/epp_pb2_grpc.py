@@ -2,16 +2,16 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from contact import contact_pb2 as contact_dot_contact__pb2
-from dac import dac_pb2 as dac_dot_dac__pb2
-from domain import domain_pb2 as domain_dot_domain__pb2
-import epp_pb2 as epp__pb2
-from eurid import eurid_pb2 as eurid_dot_eurid__pb2
-from host import host_pb2 as host_dot_host__pb2
-from maintenance import maintenance_pb2 as maintenance_dot_maintenance__pb2
-from nominet import nominet_pb2 as nominet_dot_nominet__pb2
-from rgp import rgp_pb2 as rgp_dot_rgp__pb2
-from tmch import tmch_pb2 as tmch_dot_tmch__pb2
+from .contact import contact_pb2 as contact_dot_contact__pb2
+from .dac import dac_pb2 as dac_dot_dac__pb2
+from .domain import domain_pb2 as domain_dot_domain__pb2
+from . import epp_pb2 as epp__pb2
+from .eurid import eurid_pb2 as eurid_dot_eurid__pb2
+from .host import host_pb2 as host_dot_host__pb2
+from .maintenance import maintenance_pb2 as maintenance_dot_maintenance__pb2
+from .nominet import nominet_pb2 as nominet_dot_nominet__pb2
+from .rgp import rgp_pb2 as rgp_dot_rgp__pb2
+from .tmch import tmch_pb2 as tmch_dot_tmch__pb2
 
 
 class EPPProxyStub(object):
