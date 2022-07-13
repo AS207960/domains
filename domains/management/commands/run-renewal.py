@@ -84,8 +84,14 @@ class Command(BaseCommand):
                 print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
                 continue
 
-            if apps.epp_api.domain_common_pb2.PendingDelete in domain_data.statuses:
+            if apps.epp_api.domain_common_pb2.PendingDelete in domain_data.statuses or \
+               apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state or \
+               apps.epp_api.rgp_pb2.PendingDelete in domain_data.rgp_state:
                 print(f"{domain_data.name} is already pending delete, not touching")
+                continue
+
+            if not domain_data.expiry_date:
+                print(f"{domain_data.name} has no expiry date, not touching")
                 continue
 
             user = domain.get_user()
@@ -133,15 +139,16 @@ class Command(BaseCommand):
                     if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
                         print(f"Reversing charge just to be sure")
                         billing.reverse_charge(last_renew_order.id)
-                    try:
-                        apps.epp_client.delete_domain(domain_data.name)
-                    except grpc.RpcError as rpc_error:
-                        print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
-                        billing.charge_account(
-                            user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
-                            f"dm_auto_renew_{domain.id}", can_reject=False
-                        )
-                        continue
+
+                        try:
+                            apps.epp_client.delete_domain(domain_data.name)
+                        except grpc.RpcError as rpc_error:
+                            print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
+                            billing.charge_account(
+                                user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
+                                f"dm_auto_renew_{domain.id}", can_reject=False
+                            )
+                            continue
                     domain.former_domain = True
                     domain.save()
                     print(f"Deleted {domain.domain}")
