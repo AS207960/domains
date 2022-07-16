@@ -272,7 +272,7 @@ class Command(BaseCommand):
                         invalid_algo_digest = True
                         break
 
-                if invalid_aglo_digest:
+                if invalid_algo_digest:
                     continue
 
                 if domain_info.ds_data_supported:
