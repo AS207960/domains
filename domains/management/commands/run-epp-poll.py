@@ -57,7 +57,7 @@ class PollClient:
             except grpc.RpcError as e:
                 if e.code() == grpc.StatusCode.CANCELLED:
                     return
-                elif e.code() == grpc.StatusCode.UNAVAILABLE:
+                elif e.code() in (grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED):
                     pass
                 else:
                     try:
