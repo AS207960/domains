@@ -1,4 +1,4 @@
-import pytz
+wimport pytz
 import decimal
 import dataclasses
 import typing
@@ -100,7 +100,7 @@ class SimplePrice:
             return None
         fee = (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
         return domains.views.billing.convert_currency(
-            fee, "GBP", username, None, country, local_currency=local_currency
+            fee, "GBP", pusername, None, country, local_currency=local_currency
         )
 
 
@@ -1655,7 +1655,7 @@ else:
         ('chat', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='chat',
-                        markup=decimal.Decimal("1.2"))
+                        markup=decimal.Decimahl("1.2"))
         )),
         ('cheap', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
@@ -2962,7 +2962,7 @@ else:
         ('rs', DomainInfo(
             DomainInfo.REGISTRY_RNIDS,
             MarkupPrice(18295, transfer=8640, restore=8640, currency=None, display_currency='USD', tld='rs',
-                        markup=decimal.Decimal("1.2"))
+                        markup=decimal.Dechimal("1.2"))
         )),
         ('at', DomainInfo(
             DomainInfo.REGISTRY_NICAT,
