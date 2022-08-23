@@ -1416,11 +1416,10 @@ def transfer_out_domain(request, domain_id, transfer_action):
                         "back_url": referrer
                     })
 
-                if not transfer_obj.pending:
-                    user_domain.transfer_out_pending = False
-                    user_domain.former_domain = True
-                    user_domain.save()
-                    return redirect('domains')
+                user_domain.transfer_out_pending = False
+                user_domain.former_domain = True
+                user_domain.save()
+                return redirect('domains')
             else:
                 gchat_bot.request_transfer_accept.delay(user_domain.id, domain_data.registry_name)
                 return render(request, "domains/transfer_out_domain_pending.html", {
@@ -1439,11 +1438,10 @@ def transfer_out_domain(request, domain_id, transfer_action):
                         "back_url": referrer
                     })
 
-                if not transfer_obj.pending:
-                    user_domain.transfer_out_pending = False
-                    user_domain.former_domain = False
-                    user_domain.save()
-                    return redirect('domain', user_domain.id)
+                user_domain.transfer_out_pending = False
+                user_domain.former_domain = False
+                user_domain.save()
+                return redirect('domain', user_domain.id)
             else:
                 gchat_bot.request_transfer_reject.delay(user_domain.id, domain_data.registry_name)
                 return render(request, "domains/transfer_out_domain_pending.html", {
