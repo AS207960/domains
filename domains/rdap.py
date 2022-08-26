@@ -5,6 +5,8 @@ import re
 import django.core.exceptions
 import datetime
 import concurrent.futures
+import traceback
+import sys
 from django.db.models import Q
 from .rdap_grpc import rdap_pb2
 from .rdap_grpc import rdap_pb2_grpc
@@ -453,6 +455,15 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 description=e.details()
             ))
             return response
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
+            ))
+            return response
 
         response = rdap_pb2.DomainResponse(success=resp_data)
         return response
@@ -482,6 +493,15 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 description=e.details()
             ))
             return response
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
+            ))
+            return response
 
         response = rdap_pb2.DomainSearchResponse(success=rdap_pb2.DomainSearchResponse.Domains(
             data=resp_data
@@ -509,7 +529,18 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 return response
             contact_obj = registry_contact_obj.contact
 
-        entity = self.contact_to_card(request.query, [], contact_obj)
+        try:
+            entity = self.contact_to_card(request.query, [], contact_obj)
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
+            ))
+            return response
+
         response = rdap_pb2.EntityResponse(success=entity)
         return response
 
@@ -554,8 +585,18 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             return response
 
         resp_data = []
-        for handle, contact_obj in entities.items():
-            resp_data.append(self.contact_to_card(handle, [], contact_obj))
+        try:
+            for handle, contact_obj in entities.items():
+                resp_data.append(self.contact_to_card(handle, [], contact_obj))
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
+            ))
+            return response
 
         response = rdap_pb2.EntitySearchResponse(success=rdap_pb2.EntitySearchResponse.Entities(
             data=resp_data
@@ -581,6 +622,15 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 error_code=500,
                 title="Internal Server Error",
                 description=e.details()
+            ))
+            return response
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
             ))
             return response
 
@@ -609,6 +659,15 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 error_code=500,
                 title="Internal Server Error",
                 description=e.details()
+            ))
+            return response
+        except Exception as e:
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
+                error_code=500,
+                title="Internal Server Error"
             ))
             return response
 
