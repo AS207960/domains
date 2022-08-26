@@ -391,7 +391,7 @@ class Domain:
         self._app = app
         self.name = resp.name
         self.registry_id = (
-            resp.keysys.roid if resp.keysys.HasField("roid") else resp.registry_id
+            resp.keysys.roid.value if resp.keysys.HasField("roid") else resp.registry_id
         ) if resp.HasField("keysys") else resp.registry_id
         self.statuses = list(map(lambda s: DomainStatus(status=s), resp.statuses))
         self.registrant = resp.registrant
