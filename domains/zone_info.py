@@ -616,6 +616,12 @@ class DomainInfo:
         )
 
     @property
+    def keysys_de(self):
+        return self.registry in (
+            self.REGISTRY_DENIC
+        )
+
+    @property
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_NOMINET,
@@ -3027,7 +3033,7 @@ else:
     )
 
 
-def get_domain_info(domain: str) -> (typing.Optional[DomainInfo], str):
+def get_domain_info(domain: str) -> typing.Tuple[typing.Optional[DomainInfo], str]:
     parts = domain.rstrip(".").split(".", maxsplit=1)
     if len(parts) != 2:
         return None, domain

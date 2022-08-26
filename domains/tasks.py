@@ -6,7 +6,7 @@ from . import models, zone_info, apps
 from .views import billing, gchat_bot, emails
 import grpc
 import typing
-from .proto import billing_pb2
+import google.protobuf.wrappers_pb2
 
 logger = get_task_logger(__name__)
 
@@ -221,6 +221,17 @@ def process_domain_registration_paid(registration_order_id):
                         registry_id).registry_contact_id
                 ))
 
+            if zone.keysys_de:
+                keysys = apps.epp_api.keysys_pb2.DomainCreate(
+                    renewal_mode=apps.epp_api.keysys_pb2.AutoRenew,
+                    de=apps.epp_api.keysys_pb2.DomainInfoDE(
+                        abuse_contact=google.protobuf.wrappers_pb2.StringValue(value="https://as207960.net/contact"),
+                        general_contact=google.protobuf.wrappers_pb2.StringValue(value="https://as207960.net/contact"),
+                    ),
+                )
+            else:
+                keysys = None
+
             pending, _, _, _ = apps.epp_client.create_domain(
                 domain=domain_registration_order.domain,
                 period=period,
@@ -238,6 +249,7 @@ def process_domain_registration_paid(registration_order_id):
                     address=[]
                 )],
                 auth_info=domain_registration_order.auth_info,
+                keysys=keysys
             )
         except grpc.RpcError as rpc_error:
             domain_registration_order.state = domain_registration_order.STATE_PENDING_APPROVAL
@@ -739,6 +751,11 @@ def process_domain_transfer_contacts(transfer_order_id):
     if domain_transfer_order.billing_contact and zone.billing_supported:
         billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name, zone)
         _update_contact("billing", billing_contact_id.registry_contact_id)
+
+    if zone.keysys_de:
+        update_req.keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
+        update_req.keysys.de.abuse_contact.value = "https://as207960.net/contact"
+        update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
 
     if should_send:
         apps.epp_client.stub.DomainUpdate(update_req)

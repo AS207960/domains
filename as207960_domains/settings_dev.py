@@ -180,7 +180,7 @@ VERISIGN_NS_API_KEY = verisign_ns_conf["key"]
 
 REGISTRATION_ENABLED = True
 REGISTRY_LOCK_ENABLED = True
-EPP_PROXY_ADDR = "q-station.abdn.y-cwmwl.co.uk:50052"
+EPP_PROXY_ADDR = "localhost:50052"
 EPP_PROXY_CA = "../epp-proxy/priv/secrets/grpc.pem"
 
 BILLING_URL = "http://localhost:8001"

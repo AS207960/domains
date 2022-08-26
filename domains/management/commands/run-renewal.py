@@ -72,7 +72,7 @@ class Command(BaseCommand):
                 d[key].append(value)
 
         for domain in domains:
-            domain_info, sld = zone_info.get_domain_info(domain.domain)
+            domain_info, sld = zone_info.get_domain_info(domain.domain) # type: zone_info.DomainInfo, str
 
             if not domain_info:
                 print(f"Can't renew {domain.domain}: unknown zone")
@@ -90,13 +90,17 @@ class Command(BaseCommand):
                 print(f"{domain_data.name} is already pending delete, not touching")
                 continue
 
-            if not domain_data.expiry_date:
+            if not domain_data.expiry_date or not domain_data.renewal_date:
                 print(f"{domain_data.name} has no expiry date, not touching")
                 continue
 
             user = domain.get_user()
 
-            expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
+            if domain_data.renewal_date:
+                expiry_date = domain_data.renewal_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
+            else:
+                expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
+
             email_data = {
                 "obj": domain,
                 "domain": domain_data,
@@ -141,7 +145,10 @@ class Command(BaseCommand):
                         billing.reverse_charge(last_renew_order.id)
 
                         try:
-                            apps.epp_client.delete_domain(domain_data.name)
+                            if domain_info.keysys_de:
+                                apps.epp_client.delete_domain(domain.domain, keysys_target="TRANSIT")
+                            else:
+                                apps.epp_client.delete_domain(domain_data.name)
                         except grpc.RpcError as rpc_error:
                             print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
                             billing.charge_account(

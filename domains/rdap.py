@@ -212,10 +212,10 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 )],
                 phones=[rdap_pb2.JSCard.Resource(
                     type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
-                    value="tel:+44-29-2010-2455"
+                    value="tel:+44-33-33-408418"
                 ), rdap_pb2.JSCard.Resource(
                     type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
-                    value="tel:+44-29-2010-2455"
+                    value="tel:+44-33-33-408418"
                 )],
                 emails=[rdap_pb2.JSCard.Resource(
                     value="hello@glauca.digital"
@@ -301,6 +301,13 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             date.FromDatetime(domain_data.expiry_date + zone_data.expiry_offset)
             resp_data.events.append(rdap_pb2.Event(
                 action=rdap_pb2.EventExpiration,
+                date=date
+            ))
+        if domain_data.renewal_date:
+            date = google.protobuf.timestamp_pb2.Timestamp()
+            date.FromDatetime(domain_data.renewal_date)
+            resp_data.events.append(rdap_pb2.Event(
+                action=rdap_pb2.EventRegistrarExpiration,
                 date=date
             ))
         if domain_data.last_updated_date:

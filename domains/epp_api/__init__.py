@@ -18,6 +18,7 @@ from .epp_grpc.isnic import isnic_pb2
 from .epp_grpc.domain_common import domain_common_pb2
 from .epp_grpc.nominet import nominet_pb2
 from .epp_grpc.nominet_ext import nominet_ext_pb2
+from .epp_grpc.keysys import keysys_pb2
 from .epp_grpc import epp_pb2, epp_pb2_grpc
 
 
@@ -375,6 +376,7 @@ class Domain:
     client_created_id: typing.Optional[str]
     creation_date: typing.Optional[datetime.datetime]
     expiry_date: typing.Optional[datetime.datetime]
+    renewal_date: typing.Optional[datetime.datetime]
     last_updated_client: typing.Optional[str]
     last_updated_date: typing.Optional[datetime.datetime]
     last_transfer_date: typing.Optional[datetime.datetime]
@@ -388,7 +390,9 @@ class Domain:
         self = cls()
         self._app = app
         self.name = resp.name
-        self.registry_id = resp.registry_id
+        self.registry_id = (
+            resp.keysys.roid if resp.keysys.HasField("roid") else resp.registry_id
+        ) if resp.HasField("keysys") else resp.registry_id
         self.statuses = list(map(lambda s: DomainStatus(status=s), resp.statuses))
         self.registrant = resp.registrant
         self.contacts = list(map(DomainContact.from_pb, resp.contacts))
@@ -398,6 +402,9 @@ class Domain:
         self.client_created_id = resp.client_created_id.value if resp.HasField("client_created_id") else None
         self.creation_date = resp.creation_date.ToDatetime() if resp.HasField("creation_date") else None
         self.expiry_date = resp.expiry_date.ToDatetime() if resp.HasField("expiry_date") else None
+        self.renewal_date = (
+            resp.keysys.renewal_date.ToDatetime() if resp.keysys.HasField("renewal_date") else None
+        ) if resp.HasField("keysys") else None
         self.last_updated_client = resp.last_updated_client.value if resp.HasField("last_updated_client") else None
         self.last_updated_date = resp.last_updated_date.ToDatetime() if resp.HasField("last_updated_date") else None
         self.last_transfer_date = resp.last_transfer_date.ToDatetime() if resp.HasField("last_transfer_date") else None
@@ -1404,13 +1411,14 @@ class EPPClient:
         return Domain.from_pb(resp, self)
 
     def create_domain(
-        self,
-        domain: str,
-        period: Period,
-        registrant: str,
-        contacts: typing.List[DomainContact],
-        name_servers: typing.List[DomainNameServer],
-        auth_info: str
+            self,
+            domain: str,
+            period: Period,
+            registrant: str,
+            contacts: typing.List[DomainContact],
+            name_servers: typing.List[DomainNameServer],
+            auth_info: str,
+            keysys: typing.Optional[keysys_pb2.DomainCreate]
     ) -> typing.Tuple[bool, datetime.datetime, datetime.datetime, str]:
         resp = self.stub.DomainCreate(domain_pb2.DomainCreateRequest(
             name=domain,
@@ -1418,12 +1426,22 @@ class EPPClient:
             registrant=registrant,
             contacts=list(map(lambda c: c.to_pb(), contacts)),
             nameservers=list(map(lambda n: n.to_pb(), name_servers)),
-            auth_info=auth_info
+            auth_info=auth_info,
+            keysys=keysys
         ))
         return resp.pending, resp.creation_date.ToDatetime(), resp.expiry_date.ToDatetime(), resp.registry_name
 
-    def delete_domain(self, domain: str) -> typing.Tuple[bool, str, str, typing.Optional[FeeData]]:
+    def delete_domain(
+            self, domain: str, keysys_target: typing.Optional[str] = None
+    ) -> typing.Tuple[bool, str, str, typing.Optional[FeeData]]:
         resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(name=domain))
+
+        if keysys_target:
+            resp.keysys = keysys_pb2.DomainDelete(
+                target=keysys_target,
+                action=keysys_pb2.Push
+            )
+
         return resp.pending, resp.registry_name, resp.cmd_resp.server,\
                FeeData.from_pb(resp.fee_data) if resp.HasField("fee_data") else None
 

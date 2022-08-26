@@ -65,7 +65,15 @@
                                     {% endif %}
                                 </th>
                                 <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                                <td>{% if domain.domain.expiry_date %}{{ domain.domain.expiry_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td>
+                                    {% if domain.renewal_date %}
+                                        {{ domain.renewal_date|date:"N jS Y P" }}
+                                    {% elif domain.domain.expiry_date %}
+                                        {{ domain.domain.expiry_date|date:"N jS Y P" }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
                                 <td>{% if domain.domain.last_updated_date %}{{ domain.domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td><a href="{% url 'domain' domain.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>
                             </tr>
