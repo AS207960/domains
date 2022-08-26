@@ -377,6 +377,7 @@ class Domain:
     creation_date: typing.Optional[datetime.datetime]
     expiry_date: typing.Optional[datetime.datetime]
     renewal_date: typing.Optional[datetime.datetime]
+    paid_until_date: typing.Optional[datetime.datetime]
     last_updated_client: typing.Optional[str]
     last_updated_date: typing.Optional[datetime.datetime]
     last_transfer_date: typing.Optional[datetime.datetime]
@@ -404,6 +405,9 @@ class Domain:
         self.expiry_date = resp.expiry_date.ToDatetime() if resp.HasField("expiry_date") else None
         self.renewal_date = (
             resp.keysys.renewal_date.ToDatetime() if resp.keysys.HasField("renewal_date") else None
+        ) if resp.HasField("keysys") else None
+        self.paid_until_date = (
+            resp.keysys.paid_until_date.ToDatetime() if resp.keysys.HasField("paid_until_date") else None
         ) if resp.HasField("keysys") else None
         self.last_updated_client = resp.last_updated_client.value if resp.HasField("last_updated_client") else None
         self.last_updated_date = resp.last_updated_date.ToDatetime() if resp.HasField("last_updated_date") else None

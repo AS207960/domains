@@ -90,14 +90,14 @@ class Command(BaseCommand):
                 print(f"{domain_data.name} is already pending delete, not touching")
                 continue
 
-            if not domain_data.expiry_date or not domain_data.renewal_date:
+            if not domain_data.expiry_date or not domain_data.paid_until_date:
                 print(f"{domain_data.name} has no expiry date, not touching")
                 continue
 
             user = domain.get_user()
 
-            if domain_data.renewal_date:
-                expiry_date = domain_data.renewal_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
+            if domain_data.paid_until_date:
+                expiry_date = domain_data.paid_until_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
             else:
                 expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
 

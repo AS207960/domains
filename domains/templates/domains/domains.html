@@ -66,8 +66,8 @@
                                 </th>
                                 <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td>
-                                    {% if domain.renewal_date %}
-                                        {{ domain.renewal_date|date:"N jS Y P" }}
+                                    {% if domain.paid_until_date %}
+                                        {{ domain.paid_until_date|date:"N jS Y P" }}
                                     {% elif domain.domain.expiry_date %}
                                         {{ domain.domain.expiry_date|date:"N jS Y P" }}
                                     {% else %}

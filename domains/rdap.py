@@ -305,9 +305,9 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 action=rdap_pb2.EventExpiration,
                 date=date
             ))
-        if domain_data.renewal_date:
+        if domain_data.paid_until_date:
             date = google.protobuf.timestamp_pb2.Timestamp()
-            date.FromDatetime(domain_data.renewal_date)
+            date.FromDatetime(domain_data.paid_until_date)
             resp_data.events.append(rdap_pb2.Event(
                 action=rdap_pb2.EventRegistrarExpiration,
                 date=date
