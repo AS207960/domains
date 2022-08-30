@@ -406,7 +406,8 @@ class MarkupPrice:
 
         final_fee = total_fee * self._markup
         return domains.views.billing.convert_currency(
-            final_fee, command.currency, username, None, country, available=available, local_currency=local_currency
+            final_fee, command.currency, username, None, country, available=available, local_currency=local_currency,
+            timeout=3
         )
 
     def _get_fee(self, sld, value, unit, command, country, username, local_currency):
