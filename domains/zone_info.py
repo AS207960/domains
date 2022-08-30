@@ -514,6 +514,7 @@ class DomainInfo:
     REGISTRY_US = "us"
     REGISTRY_NASK = "nask"
     REGISTRY_PLAN_BEE = "plan-bee"
+    REGISTRY_REDES = "redes"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -670,6 +671,7 @@ class DomainInfo:
             self.REGISTRY_US,
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -695,6 +697,7 @@ class DomainInfo:
             self.REGISTRY_AMNIC,
             self.REGISTRY_EURID,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -753,6 +756,7 @@ class DomainInfo:
             self.REGISTRY_NICAT,
             self.REGISTRY_ISNIC,
             self.REGISTRY_NASK,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -786,6 +790,7 @@ class DomainInfo:
             self.REGISTRY_AKEP,
             self.REGISTRY_AMNIC,
             self.REGISTRY_NOMINET_SPECIAL,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -851,6 +856,7 @@ class DomainInfo:
             self.REGISTRY_US,
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -907,6 +913,7 @@ class DomainInfo:
             self.REGISTRY_US,
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -965,6 +972,7 @@ class DomainInfo:
             self.REGISTRY_US,
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
+            self.REGISTRY_REDES,
         )
 
     @property
@@ -3027,6 +3035,105 @@ else:
             DomainInfo.REGISTRY_NASK,
             MarkupPrice(11116, transfer=0, restore=11200, currency=None, display_currency='PLN', tld='waw.pl',
                         markup=decimal.Decimal("1.4"))
+        )),
+        ('es', DomainInfo(
+            DomainInfo.REGISTRY_REDES,
+            MarkupPrice(
+                2235, transfer=0, restore=3000, currency=None, display_currency='EUR', tld='es',
+                markup=decimal.Decimal("1.5"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=2
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=3
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=4
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=5
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=10
+                )]
+            )
+        )),
+        ('org.es', DomainInfo(
+            DomainInfo.REGISTRY_REDES,
+            MarkupPrice(2235, transfer=0, restore=3000, currency=None, display_currency='EUR', tld='org.es',
+                        markup=decimal.Decimal("1.5"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=2
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=3
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=4
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=5
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=10
+                )]
+            )
+        )),
+        ('nom.es', DomainInfo(
+            DomainInfo.REGISTRY_REDES,
+            MarkupPrice(
+                2235, transfer=0, restore=3000, currency=None, display_currency='EUR', tld='nom.es',
+                markup=decimal.Decimal("1.5"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=2
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=3
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=4
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=5
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=10
+                )]
+            )
+        )),
+        ('com.es', DomainInfo(
+            DomainInfo.REGISTRY_REDES,
+            MarkupPrice(
+                2235, transfer=0, restore=3000, currency=None, display_currency='EUR', tld='com.es',
+                markup=decimal.Decimal("1.5"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=2
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=3
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=4
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=5
+                ), apps.epp_api.Period(
+                    unit=0,
+                    value=10
+                )]
+            )
         )),
     )
 
