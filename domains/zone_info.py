@@ -97,7 +97,7 @@ class SimplePrice:
             return None
         fee = (decimal.Decimal(self._transfer) / decimal.Decimal(100)) * _mul(value, unit)
         return domains.views.billing.convert_currency(
-            fee, "GBP", pusername, None, country, local_currency=local_currency
+            fee, "GBP", username, None, country, local_currency=local_currency
         )
 
 
