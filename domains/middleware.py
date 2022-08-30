@@ -41,6 +41,8 @@ class CountryMiddleware:
             except as207960_utils.rpc.TimeoutError:
                 selected_country = "GB"
 
+            request.session["selected_billing_country"] = selected_country
+
         request.country = map_country(selected_country)
         response = self.get_response(request)
 
