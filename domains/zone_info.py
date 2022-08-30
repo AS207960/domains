@@ -398,7 +398,7 @@ class MarkupPrice:
         if hasattr(apps.rpc_client.storage, "client"):
             print(
                 apps.rpc_client.storage.client.should_exit.is_set(),
-                apps.rpc_client.storage.parent_thread,
+                apps.rpc_client.storage.client.parent_thread,
                 apps.rpc_client.storage.client.thread
             )
         else:
