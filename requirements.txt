@@ -25,6 +25,6 @@ dnspython
 django-cockroachdb==3.1.*
 pika
 py-webauthn>=0.0.4
-git+https://github.com/AS207960/python-utils@8483c9accd4b343fa29157518871e1acdc679d33
+git+https://github.com/AS207960/python-utils@6e4de55e40f6e46713310c642f370cd133b1a34c
 git+https://github.com/TheEnbyperor/oscrypto@macos-fix
 
