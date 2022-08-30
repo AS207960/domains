@@ -1,6 +1,9 @@
+import threading
+
 import pytz
 import decimal
 import dataclasses
+import threading
 import typing
 import datetime
 import google.protobuf.wrappers_pb2
@@ -391,12 +394,16 @@ class MarkupPrice:
                     "renew": renew_period["fee"]
                 })
 
+        print(threading.current_thread())
         if hasattr(apps.rpc_client.storage, "client"):
             print(
                 apps.rpc_client.storage.client.should_exit.is_set(),
                 apps.rpc_client.storage.parent_thread,
                 apps.rpc_client.storage.client.thread
             )
+        else:
+            print("No client")
+        print(country, username, restore_command)
         return {
             "periods": periods,
             "restore": self._convert_fee(restore_command, country, username, True) if restore_command else None,
