@@ -17,6 +17,7 @@ import secrets
 import typing
 import threading
 import enum
+import requests
 import as207960_utils.models
 
 CONTACT_SEARCH = threading.Lock()
@@ -366,6 +367,19 @@ class Contact(models.Model):
                 auth_info=auth_info
             )
             contact_registry.save()
+
+        if registry_id == "rrpproxy":
+            r = requests.get(
+                "https://api.rrpproxy.net/api/call",
+                params={
+                    "s_login": settings.RRPPROXY_USER,
+                    "s_pw": settings.RRPPROXY_PASS,
+                    "command": "RequesToken",
+                    "type": "ContactDisclosure",
+                    "contact": contact_id
+                }
+            )
+            r.raise_for_status()
 
         if is_isnic:
             count = 0
