@@ -25,7 +25,8 @@ def update_contact(contact_registry_id):
         contact = apps.epp_client.get_contact(contact_obj.registry_contact_id, contact_obj.registry_id)
         contact.update(
             local_address=instance.local_address.as_api_obj(),
-            int_address=instance.int_address.as_api_obj() if instance.int_address else None,
+            int_address=instance.int_address.as_api_obj() \
+                if instance.int_address and contact_obj.registry_id != "rrpproxy" else None,
             phone=apps.epp_api.Phone(
                 number=f"+{instance.phone.country_code}.{instance.phone.national_number}",
                 ext=instance.phone_ext
