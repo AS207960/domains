@@ -510,6 +510,7 @@ class DomainInfo:
     REGISTRY_CIRA = "cira"
     REGISTRY_ISNIC = "isnic"
     REGISTRY_GODADDY = "godaddy"
+    REGISTRY_GODADDY_CCTLD = "godaddy-cctld"
     REGISTRY_MNI = "mni"
     REGISTRY_US = "us"
     REGISTRY_NASK = "nask"
@@ -596,6 +597,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -604,7 +606,8 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_DENIC,
             self.REGISTRY_CENTRALNIC_CCTLD,
-            self.REGISTRY_VERISIGN
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -612,6 +615,7 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_VERISIGN,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -672,6 +676,7 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -684,6 +689,7 @@ class DomainInfo:
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -857,6 +863,7 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -914,6 +921,7 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
     @property
@@ -986,6 +994,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_GODADDY_CCTLD,
         )
 
 
@@ -2829,6 +2838,11 @@ else:
             DomainInfo.REGISTRY_AFILIAS,
             MarkupPrice(3250, transfer=3250, restore=9750, currency=None, display_currency='USD', tld='vc',
                         markup=decimal.Decimal("1.3"))
+        )),
+        ('llc', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(4550, transfer=4550, restore=10800, currency=None, display_currency='USD', tld='llc',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('garden', DomainInfo(
             DomainInfo.REGISTRY_MINDS_MACHINES,
