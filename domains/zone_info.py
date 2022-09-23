@@ -516,6 +516,7 @@ class DomainInfo:
     REGISTRY_NASK = "nask"
     REGISTRY_PLAN_BEE = "plan-bee"
     REGISTRY_REDES = "redes"
+    REGISTRY_SIDN = "sidn"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -677,6 +678,7 @@ class DomainInfo:
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -722,6 +724,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_NICAT,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -763,6 +766,7 @@ class DomainInfo:
             self.REGISTRY_ISNIC,
             self.REGISTRY_NASK,
             self.REGISTRY_REDES,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -864,6 +868,7 @@ class DomainInfo:
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -922,6 +927,7 @@ class DomainInfo:
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -981,6 +987,7 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -3148,6 +3155,11 @@ else:
                     value=10
                 )]
             )
+        )),
+        ('nl', DomainInfo(
+            DomainInfo.REGISTRY_NASK,
+            MarkupPrice(1904, transfer=0, restore=1904, currency=None, display_currency='EUR', tld='nl',
+                        markup=decimal.Decimal("1.6"))
         )),
     )
 
