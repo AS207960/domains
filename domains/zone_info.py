@@ -3158,8 +3158,13 @@ else:
         )),
         ('nl', DomainInfo(
             DomainInfo.REGISTRY_NASK,
-            MarkupPrice(1904, transfer=0, restore=1904, currency=None, display_currency='EUR', tld='nl',
+            MarkupPrice(1904, restore=1904, currency=None, display_currency='EUR', tld='nl',
                         markup=decimal.Decimal("1.6"))
+        )),
+        ('tel', DomainInfo(
+            DomainInfo.REGISTRY_GODADDY,
+            MarkupPrice(2363, restore=2363, currency=None, display_currency='USD', tld='tel',
+                        markup=decimal.Decimal("1.4"))
         )),
     )
 
