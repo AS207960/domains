@@ -18,6 +18,7 @@ logger = get_task_logger(__name__)
 def update_contact(contact_registry_id):
     contact_obj = models.ContactRegistry.objects.filter(id=contact_registry_id).first()  # type: models.ContactRegistry
     if not contact_obj:
+        return
 
     instance = contact_obj.contact
     try:
