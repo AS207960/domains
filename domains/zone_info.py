@@ -626,6 +626,12 @@ class DomainInfo:
         )
 
     @property
+    def disclosure_supported(self):
+        return self.registry not in (
+            self.REGISTRY_AFILIAS
+        )
+
+    @property
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_NOMINET,

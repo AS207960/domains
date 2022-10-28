@@ -356,7 +356,7 @@ class Contact(models.Model):
                 trading_name=self.trading_name,
                 company_number=self.company_number,
                 auth_info=auth_info,
-                disclosure=self.get_disclosure(),
+                disclosure=self.get_disclosure(zone_data),
                 registry_name=registry_id
             )
 
@@ -488,7 +488,10 @@ class Contact(models.Model):
     def get_int_address(self) -> typing.Optional[apps.epp_api.Address]:
         return self.int_address.as_api_obj() if self.int_address else None
 
-    def get_disclosure(self) -> apps.epp_api.Disclosure:
+    def get_disclosure(self, zone_data: typing.Optional[zone_info.DomainInfo] = None) -> apps.epp_api.Disclosure:
+        if zone_data and not zone_data.disclosure_supported:
+            return apps.epp_api.Disclosure(items=[])
+
         disclosure = apps.epp_api.Disclosure(items=[
             apps.epp_api.DisclosureItem(item=apps.epp_api.contact_pb2.DisclosureType.Email)
         ])

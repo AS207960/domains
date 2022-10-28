@@ -18,7 +18,6 @@ logger = get_task_logger(__name__)
 def update_contact(contact_registry_id):
     contact_obj = models.ContactRegistry.objects.filter(id=contact_registry_id).first()  # type: models.ContactRegistry
     if not contact_obj:
-        return
 
     instance = contact_obj.contact
     try:
@@ -39,7 +38,7 @@ def update_contact(contact_registry_id):
             entity_type=instance.entity_type,
             trading_name=instance.trading_name,
             company_number=instance.company_number,
-            disclosure=instance.get_disclosure(),
+            disclosure=instance.get_disclosure() if contact_obj.registry_id != "afilias" else None,
             auth_info=None
         )
     except grpc.RpcError as rpc_error:
