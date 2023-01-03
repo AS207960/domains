@@ -454,7 +454,7 @@ def process_domain_renewal_complete(renew_order_id):
     domain_renew_order.redirect_uri = None
     domain_renew_order.last_error = None
     domain_renew_order.save()
-    gchat_bot.notify_renew.delay(domain_renew_order.id, "N/A", str(period))
+    gchat_bot.notify_renew.delay(domain_renew_order.domain_obj_id, "N/A", str(period))
 
 
 @shared_task(

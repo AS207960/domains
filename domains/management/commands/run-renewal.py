@@ -90,7 +90,7 @@ class Command(BaseCommand):
                 print(f"{domain_data.name} is already pending delete, not touching")
                 continue
 
-            if not domain_data.expiry_date or not domain_data.paid_until_date:
+            if not domain_data.expiry_date and not domain_data.paid_until_date:
                 print(f"{domain_data.name} has no expiry date, not touching")
                 continue
 
