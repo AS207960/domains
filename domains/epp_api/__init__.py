@@ -1446,7 +1446,7 @@ class EPPClient:
                 action=keysys_pb2.Push
             )
 
-        return resp.pending, resp.registry_name, resp.cmd_resp.server,\
+        return resp.pending, resp.registry_name, resp.cmd_resp.transaction_id.server,\
                FeeData.from_pb(resp.fee_data) if resp.HasField("fee_data") else None
 
     def restore_domain(self, domain: str) -> typing.Tuple[bool, str]:

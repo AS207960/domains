@@ -370,7 +370,7 @@ class Domain(viewsets.ViewSet):
         if not domain_data.can_delete:
             raise PermissionDenied
 
-        _pending = apps.epp_client.delete_domain(domain.domain)
+        apps.epp_client.delete_domain(domain.domain)
         domain_info, sld = zone_info.get_domain_info(domain.domain)
         if not domain_info.restore_supported:
             domain.former_domain = True
