@@ -1472,6 +1472,11 @@ else:
             MarkupPrice(3097, transfer=3097, restore=12150, currency=None, display_currency='USD', tld='pet',
                         markup=decimal.Decimal("1.35"))
         )),
+        ('pink', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3192, transfer=3192, restore=117, currency=None, display_currency='USD', tld='pink',
+                        markup=decimal.Decimal("1.30"))
+        )),
         ('online', DomainInfo(
             DomainInfo.REGISTRY_RADIX,
             MarkupPrice(6178, transfer=6178, restore=15840, currency=None, display_currency='USD', tld='online',
