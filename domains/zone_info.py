@@ -517,6 +517,7 @@ class DomainInfo:
     REGISTRY_PLAN_BEE = "plan-bee"
     REGISTRY_REDES = "redes"
     REGISTRY_SIDN = "sidn"
+    REGISTRY_MDMA = "mdma"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -686,6 +687,7 @@ class DomainInfo:
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
+            self.REGISTRY_MDMA,
         )
 
     @property
@@ -876,6 +878,7 @@ class DomainInfo:
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
+            self.REGISTRY_MDMA,
         )
 
     @property
@@ -935,6 +938,7 @@ class DomainInfo:
             self.REGISTRY_REDES,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
+            self.REGISTRY_MDMA,
         )
 
     @property
@@ -995,6 +999,7 @@ class DomainInfo:
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
             self.REGISTRY_SIDN,
+            self.REGISTRY_MDMA,
         )
 
     @property
@@ -3177,6 +3182,11 @@ else:
             DomainInfo.REGISTRY_GODADDY,
             MarkupPrice(2363, restore=2363, currency=None, display_currency='USD', tld='tel',
                         markup=decimal.Decimal("1.4"))
+        )),
+        ('museum', DomainInfo(
+            DomainInfo.REGISTRY_MDMA,
+            MarkupPrice(7248, restore=3000, currency=None, display_currency='EUR', tld='museum',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
