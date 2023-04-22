@@ -617,9 +617,15 @@ def process_domain_transfer_paid(transfer_order_id):
 
     if zone.direct_transfer_supported:
         try:
+            if zone.period_required_for_transfer:
+                period = zone.pricing.periods[0]
+            else:
+                period = None
+
             transfer_data = apps.epp_client.transfer_request_domain(
                 domain_transfer_order.domain,
-                domain_transfer_order.auth_code
+                domain_transfer_order.auth_code,
+                period=period
             )
         except grpc.RpcError as rpc_error:
             domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL

@@ -1016,6 +1016,12 @@ class DomainInfo:
             self.REGISTRY_GODADDY_CCTLD,
         )
 
+    @property
+    def period_required_for_transfer(self):
+        return self.registry in (
+            self.REGISTRY_GODADDY_CCTLD,
+        )
+
 
 if settings.DEBUG:
     ZONES = (
