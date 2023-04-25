@@ -144,7 +144,7 @@ kind: Ingress
 metadata:
   name: domains-ingress-test
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    cert-manager.io/cluster-issuer: "gts"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
   tls:

@@ -518,6 +518,7 @@ class DomainInfo:
     REGISTRY_REDES = "redes"
     REGISTRY_SIDN = "sidn"
     REGISTRY_MDMA = "mdma"
+    REGISTRY_COCCA = "cocca"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -688,6 +689,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
+            self.REGISTRY_COCCA,
         )
 
     @property
@@ -879,6 +881,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
+            self.REGISTRY_COCCA,
         )
 
     @property
@@ -939,6 +942,7 @@ class DomainInfo:
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
+            self.REGISTRY_COCCA,
         )
 
     @property
@@ -1000,6 +1004,7 @@ class DomainInfo:
             self.REGISTRY_REDES,
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
+            self.REGISTRY_COCCA,
         )
 
     @property
@@ -3192,6 +3197,11 @@ else:
         ('museum', DomainInfo(
             DomainInfo.REGISTRY_MDMA,
             MarkupPrice(7248, restore=3000, currency=None, display_currency='EUR', tld='museum',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('nf', DomainInfo(
+            DomainInfo.REGISTRY_COCCA,
+            MarkupPrice(17400, restore=4800, currency=None, display_currency='USD', tld='nf',
                         markup=decimal.Decimal("1.2"))
         )),
     )
