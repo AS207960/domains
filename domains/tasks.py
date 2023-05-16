@@ -882,11 +882,12 @@ def process_domain_auto_renew_paid(renew_order_id):
                     domain_renewal_order.domain, period, domain_data.expiry_date
                 )
             except grpc.RpcError as rpc_error:
-                domain_renewal_order.state = domain_renewal_order.STATE_FAILED
+                domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
                 domain_renewal_order.last_error = rpc_error.details()
                 domain_renewal_order.save()
-                billing.reverse_charge(domain_renewal_order.id)
-                logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()}")
+                gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period), auto=True)
+                logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()},"
+                             f" passing off to human")
                 return
         else:
             gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period), auto=True)
