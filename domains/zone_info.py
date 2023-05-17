@@ -3204,6 +3204,51 @@ else:
             MarkupPrice(17400, restore=4800, currency=None, display_currency='USD', tld='nf',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('blue', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3192, restore=11700, currency=None, display_currency='USD', tld='blue',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('foo', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='foo',
+                        markup=decimal.Decimal("1.4"))
+        )),
+        ('zip', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='zip',
+                        markup=decimal.Decimal("1.4"))
+        )),
+        ('mov', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='mov',
+                        markup=decimal.Decimal("1.4"))
+        )),
+        ('nexus', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='nexus',
+                        markup=decimal.Decimal("1.4"))
+        )),
+        ('dad', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='dad',
+                        markup=decimal.Decimal("1.4"))
+        )),
+        ('phd', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(4511, restore=13000, currency=None, display_currency='USD', tld='phd',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('prof', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(4511, restore=13000, currency=None, display_currency='USD', tld='prof',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('esq', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(4511, restore=13000, currency=None, display_currency='USD', tld='esq',
+                        markup=decimal.Decimal("1.3"))
+        )),
     )
 
 
