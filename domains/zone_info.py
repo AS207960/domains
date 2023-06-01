@@ -273,7 +273,7 @@ class LengthPrice:
 class MarkupPrice:
     def __init__(
             self, price: int, markup: decimal.Decimal, tld: str, currency: typing.Optional[str], display_currency=None,
-            periods=None, restore=0, renewal=None, transfer=0
+            periods=None, restore=0, renewal=None, transfer=0, phase=None, sub_phase=None
     ):
         self.price = price
         self._tld = tld
@@ -283,6 +283,8 @@ class MarkupPrice:
         self._renewal = renewal if renewal else price
         self._restore = restore
         self._transfer = transfer
+        self._phase = phase
+        self._sub_phase = sub_phase
         self.periods = list(periods) if periods else list(map(lambda i: apps.epp_api.Period(
             unit=0,
             value=i
@@ -309,19 +311,27 @@ class MarkupPrice:
 
         commands_split = [[apps.epp_api.fee_pb2.FeeCommand(
             command=apps.epp_api.fee_pb2.Transfer,
-            period=None
+            period=None,
+            phase=apps.epp_api.StringValue(value=self._phase) if self._phase else None,
+            sub_phase=apps.epp_api.StringValue(value=self._sub_phase) if self._sub_phase else None,
         ), apps.epp_api.fee_pb2.FeeCommand(
             command=apps.epp_api.fee_pb2.Restore,
-            period=None
+            period=None,
+            phase=apps.epp_api.StringValue(value=self._phase) if self._phase else None,
+            sub_phase=apps.epp_api.StringValue(value=self._sub_phase) if self._sub_phase else None,
         )]]
 
         for period in self.periods:
             commands_split.append([apps.epp_api.fee_pb2.FeeCommand(
                 command=apps.epp_api.fee_pb2.Create,
-                period=period.to_pb()
+                period=period.to_pb(),
+                phase=apps.epp_api.StringValue(value=self._phase) if self._phase else None,
+                sub_phase=apps.epp_api.StringValue(value=self._sub_phase) if self._sub_phase else None,
             ), apps.epp_api.fee_pb2.FeeCommand(
                 command=apps.epp_api.fee_pb2.Renew,
-                period=period.to_pb()
+                period=period.to_pb(),
+                phase=apps.epp_api.StringValue(value=self._phase) if self._phase else None,
+                sub_phase=apps.epp_api.StringValue(value=self._sub_phase) if self._sub_phase else None,
             )])
 
         commands_resp = []
@@ -1104,8 +1114,8 @@ if settings.DEBUG:
                         markup=decimal.Decimal("1.5"))
         )),
         ('tv', DomainInfo(
-            DomainInfo.REGISTRY_VERISIGN,
-            MarkupPrice(2566, restore=4000, currency='USD', tld='tv', markup=decimal.Decimal("1.25"))
+            DomainInfo.REGISTRY_GODADDY_CCTLD,
+            MarkupPrice(2566, restore=4000, currency='USD', tld='tv', markup=decimal.Decimal("1.25"), phase="open")
         )),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(825, restore=4000))),
         ('dev', DomainInfo(

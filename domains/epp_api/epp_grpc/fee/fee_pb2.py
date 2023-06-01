@@ -17,7 +17,7 @@ from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb
 from ..common import common_pb2 as common_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rfee/fee.proto\x12\x07\x65pp.fee\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x13\x63ommon/common.proto\"\xce\x01\n\x03\x46\x65\x65\x12\r\n\x05value\x18\x01 \x01(\t\x12\x31\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nrefundable\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x32\n\x0cgrace_period\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12!\n\x07\x61pplied\x18\x05 \x01(\x0e\x32\x10.epp.fee.Applied\"J\n\x06\x43redit\x12\r\n\x05value\x18\x01 \x01(\t\x12\x31\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"a\n\x08\x46\x65\x65\x43heck\x12.\n\x08\x63urrency\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x08\x63ommands\x18\x02 \x03(\x0b\x32\x13.epp.fee.FeeCommand\"Z\n\x0c\x46\x65\x65\x41greement\x12.\n\x08\x63urrency\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x1a\n\x04\x66\x65\x65s\x18\x02 \x03(\x0b\x32\x0c.epp.fee.Fee\"S\n\nFeeCommand\x12!\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x10.epp.fee.Command\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\"\xb2\x03\n\x0c\x46\x65\x65\x43heckData\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12\x32\n\x08\x63ommands\x18\x02 \x03(\x0b\x32 .epp.fee.FeeCheckData.FeeCommand\x12,\n\x06reason\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xac\x02\n\nFeeCommand\x12!\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x10.epp.fee.Command\x12,\n\x08standard\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\"\n\x06period\x18\x03 \x01(\x0b\x32\x12.epp.common.Period\x12\x10\n\x08\x63urrency\x18\x04 \x01(\t\x12\x1a\n\x04\x66\x65\x65s\x18\x05 \x03(\x0b\x32\x0c.epp.fee.Fee\x12 \n\x07\x63redits\x18\x06 \x03(\x0b\x32\x0f.epp.fee.Credit\x12+\n\x05\x63lass\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x06reason\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xe0\x01\n\x07\x46\x65\x65\x44\x61ta\x12\x10\n\x08\x63urrency\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x1a\n\x04\x66\x65\x65s\x18\x03 \x03(\x0b\x32\x0c.epp.fee.Fee\x12 \n\x07\x63redits\x18\x04 \x03(\x0b\x32\x0f.epp.fee.Credit\x12-\n\x07\x62\x61lance\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x63redit_limit\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"K\n\x0e\x44onutsCategory\x12\r\n\x05value\x18\x01 \x01(\t\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"l\n\x0c\x44onutsAmount\x12\r\n\x05value\x18\x01 \x01(\t\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12!\n\x07\x63ommand\x18\x03 \x01(\x0e\x32\x10.epp.fee.Command\"\x9a\x01\n\rDonutsFeeType\x12\x31\n\x08\x66\x65\x65_type\x18\x01 \x01(\x0e\x32\x1f.epp.fee.DonutsFeeType.FeeTypes\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"*\n\x08\x46\x65\x65Types\x12\n\n\x06\x43ustom\x10\x00\x12\x07\n\x03\x46\x65\x65\x10\x01\x12\t\n\x05Price\x10\x02\"\x88\x01\n\x0c\x44onutsFeeSet\x12#\n\x04\x66\x65\x65s\x18\x01 \x03(\x0b\x32\x15.epp.fee.DonutsAmount\x12(\n\x08\x66\x65\x65_type\x18\x02 \x01(\x0b\x32\x16.epp.fee.DonutsFeeType\x12)\n\x08\x63\x61tegory\x18\x03 \x01(\x0b\x32\x17.epp.fee.DonutsCategory\"4\n\rDonutsFeeData\x12#\n\x04\x66\x65\x65s\x18\x01 \x03(\x0b\x32\x15.epp.fee.DonutsFeeSet*t\n\x07\x43ommand\x12\n\n\x06\x43reate\x10\x00\x12\t\n\x05Renew\x10\x01\x12\x0c\n\x08Transfer\x10\x02\x12\n\n\x06\x44\x65lete\x10\x04\x12\x0b\n\x07Restore\x10\x03\x12\n\n\x06Update\x10\x05\x12\t\n\x05\x43heck\x10\x06\x12\x08\n\x04Info\x10\x07\x12\n\n\x06\x43ustom\x10\x08*6\n\x07\x41pplied\x12\r\n\tImmediate\x10\x00\x12\x0b\n\x07\x44\x65layed\x10\x01\x12\x0f\n\x0bUnspecified\x10\x02\x42.Z,github.com/as207960/epp-proxy/gen/go/epp/feeb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rfee/fee.proto\x12\x07\x65pp.fee\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x13\x63ommon/common.proto\"\xce\x01\n\x03\x46\x65\x65\x12\r\n\x05value\x18\x01 \x01(\t\x12\x31\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\nrefundable\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x32\n\x0cgrace_period\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12!\n\x07\x61pplied\x18\x05 \x01(\x0e\x32\x10.epp.fee.Applied\"J\n\x06\x43redit\x12\r\n\x05value\x18\x01 \x01(\t\x12\x31\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"a\n\x08\x46\x65\x65\x43heck\x12.\n\x08\x63urrency\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x08\x63ommands\x18\x02 \x03(\x0b\x32\x13.epp.fee.FeeCommand\"Z\n\x0c\x46\x65\x65\x41greement\x12.\n\x08\x63urrency\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x1a\n\x04\x66\x65\x65s\x18\x02 \x03(\x0b\x32\x0c.epp.fee.Fee\"\xe4\x01\n\nFeeCommand\x12!\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x10.epp.fee.Command\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x31\n\x0b\x63ustom_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05phase\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsub_phase\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xb2\x03\n\x0c\x46\x65\x65\x43heckData\x12\x11\n\tavailable\x18\x01 \x01(\x08\x12\x32\n\x08\x63ommands\x18\x02 \x03(\x0b\x32 .epp.fee.FeeCheckData.FeeCommand\x12,\n\x06reason\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xac\x02\n\nFeeCommand\x12!\n\x07\x63ommand\x18\x01 \x01(\x0e\x32\x10.epp.fee.Command\x12,\n\x08standard\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\"\n\x06period\x18\x03 \x01(\x0b\x32\x12.epp.common.Period\x12\x10\n\x08\x63urrency\x18\x04 \x01(\t\x12\x1a\n\x04\x66\x65\x65s\x18\x05 \x03(\x0b\x32\x0c.epp.fee.Fee\x12 \n\x07\x63redits\x18\x06 \x03(\x0b\x32\x0f.epp.fee.Credit\x12+\n\x05\x63lass\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x06reason\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xe0\x01\n\x07\x46\x65\x65\x44\x61ta\x12\x10\n\x08\x63urrency\x18\x01 \x01(\t\x12\"\n\x06period\x18\x02 \x01(\x0b\x32\x12.epp.common.Period\x12\x1a\n\x04\x66\x65\x65s\x18\x03 \x03(\x0b\x32\x0c.epp.fee.Fee\x12 \n\x07\x63redits\x18\x04 \x03(\x0b\x32\x0f.epp.fee.Credit\x12-\n\x07\x62\x61lance\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x63redit_limit\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"K\n\x0e\x44onutsCategory\x12\r\n\x05value\x18\x01 \x01(\t\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"l\n\x0c\x44onutsAmount\x12\r\n\x05value\x18\x01 \x01(\t\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12!\n\x07\x63ommand\x18\x03 \x01(\x0e\x32\x10.epp.fee.Command\"\x9a\x01\n\rDonutsFeeType\x12\x31\n\x08\x66\x65\x65_type\x18\x01 \x01(\x0e\x32\x1f.epp.fee.DonutsFeeType.FeeTypes\x12*\n\x04name\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"*\n\x08\x46\x65\x65Types\x12\n\n\x06\x43ustom\x10\x00\x12\x07\n\x03\x46\x65\x65\x10\x01\x12\t\n\x05Price\x10\x02\"\x88\x01\n\x0c\x44onutsFeeSet\x12#\n\x04\x66\x65\x65s\x18\x01 \x03(\x0b\x32\x15.epp.fee.DonutsAmount\x12(\n\x08\x66\x65\x65_type\x18\x02 \x01(\x0b\x32\x16.epp.fee.DonutsFeeType\x12)\n\x08\x63\x61tegory\x18\x03 \x01(\x0b\x32\x17.epp.fee.DonutsCategory\"4\n\rDonutsFeeData\x12#\n\x04\x66\x65\x65s\x18\x01 \x03(\x0b\x32\x15.epp.fee.DonutsFeeSet*t\n\x07\x43ommand\x12\n\n\x06\x43reate\x10\x00\x12\t\n\x05Renew\x10\x01\x12\x0c\n\x08Transfer\x10\x02\x12\n\n\x06\x44\x65lete\x10\x04\x12\x0b\n\x07Restore\x10\x03\x12\n\n\x06Update\x10\x05\x12\t\n\x05\x43heck\x10\x06\x12\x08\n\x04Info\x10\x07\x12\n\n\x06\x43ustom\x10\x08*6\n\x07\x41pplied\x12\r\n\tImmediate\x10\x00\x12\x0b\n\x07\x44\x65layed\x10\x01\x12\x0f\n\x0bUnspecified\x10\x02\x42.Z,github.com/as207960/epp-proxy/gen/go/epp/feeb\x06proto3')
 
 _COMMAND = DESCRIPTOR.enum_types_by_name['Command']
 Command = enum_type_wrapper.EnumTypeWrapper(_COMMAND)
@@ -147,10 +147,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z,github.com/as207960/epp-proxy/gen/go/epp/fee'
-  _COMMAND._serialized_start=1841
-  _COMMAND._serialized_end=1957
-  _APPLIED._serialized_start=1959
-  _APPLIED._serialized_end=2013
+  _COMMAND._serialized_start=1987
+  _COMMAND._serialized_end=2103
+  _APPLIED._serialized_start=2105
+  _APPLIED._serialized_end=2159
   _FEE._serialized_start=80
   _FEE._serialized_end=286
   _CREDIT._serialized_start=288
@@ -159,24 +159,24 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _FEECHECK._serialized_end=461
   _FEEAGREEMENT._serialized_start=463
   _FEEAGREEMENT._serialized_end=553
-  _FEECOMMAND._serialized_start=555
-  _FEECOMMAND._serialized_end=638
-  _FEECHECKDATA._serialized_start=641
-  _FEECHECKDATA._serialized_end=1075
-  _FEECHECKDATA_FEECOMMAND._serialized_start=775
-  _FEECHECKDATA_FEECOMMAND._serialized_end=1075
-  _FEEDATA._serialized_start=1078
-  _FEEDATA._serialized_end=1302
-  _DONUTSCATEGORY._serialized_start=1304
-  _DONUTSCATEGORY._serialized_end=1379
-  _DONUTSAMOUNT._serialized_start=1381
-  _DONUTSAMOUNT._serialized_end=1489
-  _DONUTSFEETYPE._serialized_start=1492
-  _DONUTSFEETYPE._serialized_end=1646
-  _DONUTSFEETYPE_FEETYPES._serialized_start=1604
-  _DONUTSFEETYPE_FEETYPES._serialized_end=1646
-  _DONUTSFEESET._serialized_start=1649
-  _DONUTSFEESET._serialized_end=1785
-  _DONUTSFEEDATA._serialized_start=1787
-  _DONUTSFEEDATA._serialized_end=1839
+  _FEECOMMAND._serialized_start=556
+  _FEECOMMAND._serialized_end=784
+  _FEECHECKDATA._serialized_start=787
+  _FEECHECKDATA._serialized_end=1221
+  _FEECHECKDATA_FEECOMMAND._serialized_start=921
+  _FEECHECKDATA_FEECOMMAND._serialized_end=1221
+  _FEEDATA._serialized_start=1224
+  _FEEDATA._serialized_end=1448
+  _DONUTSCATEGORY._serialized_start=1450
+  _DONUTSCATEGORY._serialized_end=1525
+  _DONUTSAMOUNT._serialized_start=1527
+  _DONUTSAMOUNT._serialized_end=1635
+  _DONUTSFEETYPE._serialized_start=1638
+  _DONUTSFEETYPE._serialized_end=1792
+  _DONUTSFEETYPE_FEETYPES._serialized_start=1750
+  _DONUTSFEETYPE_FEETYPES._serialized_end=1792
+  _DONUTSFEESET._serialized_start=1795
+  _DONUTSFEESET._serialized_end=1931
+  _DONUTSFEEDATA._serialized_start=1933
+  _DONUTSFEEDATA._serialized_end=1985
 # @@protoc_insertion_point(module_scope)
