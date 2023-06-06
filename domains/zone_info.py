@@ -647,6 +647,12 @@ class DomainInfo:
         )
 
     @property
+    def internationalized_address_required(self):
+        return self.registry not in (
+            self.REGISTRY_GODADDY_CCTLD,
+        )
+
+    @property
     def transfer_supported(self):
         return self.registry in (
             self.REGISTRY_NOMINET,

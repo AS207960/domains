@@ -342,7 +342,8 @@ class Contact(models.Model):
             contact_id, _, _ = apps.epp_client.create_contact(
                 contact_id,
                 local_address=self.get_local_address() if not is_isnic else None,
-                int_address=self.get_int_address() if not is_isnic else self.get_local_address(),
+                int_address=self.get_int_address(zone_data.internationalized_address_required)
+                if not is_isnic else self.get_local_address(),
                 phone=apps.epp_api.Phone(
                     number=f"+{self.phone.country_code}.{self.phone.national_number}",
                     ext=self.phone_ext
@@ -485,8 +486,10 @@ class Contact(models.Model):
     def get_local_address(self) -> apps.epp_api.Address:
         return self.local_address.as_api_obj()
 
-    def get_int_address(self) -> typing.Optional[apps.epp_api.Address]:
-        return self.int_address.as_api_obj() if self.int_address else None
+    def get_int_address(self, required=False) -> typing.Optional[apps.epp_api.Address]:
+        return self.int_address.as_api_obj() if self.int_address else (
+            self.local_address.as_api_obj() if required else None
+        )
 
     def get_disclosure(self, zone_data: typing.Optional[zone_info.DomainInfo] = None) -> apps.epp_api.Disclosure:
         if zone_data and not zone_data.disclosure_supported:
