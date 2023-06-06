@@ -433,7 +433,9 @@ class MarkupPrice:
                 currency=apps.epp_api.StringValue(value=self._currency) if self._currency else None,
                 commands=[apps.epp_api.fee_pb2.FeeCommand(
                     command=command,
-                    period=period.to_pb() if unit is not None else None
+                    period=period.to_pb() if unit is not None else None,
+                    phase=apps.epp_api.StringValue(value=self._phase) if self._phase else None,
+                    sub_phase=apps.epp_api.StringValue(value=self._sub_phase) if self._sub_phase else None,
                 )]
             )
         ))
