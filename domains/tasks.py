@@ -207,19 +207,22 @@ def process_domain_registration_paid(registration_order_id):
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="admin",
                     contact_id=domain_registration_order.admin_contact.get_registry_id(
-                        registry_id).registry_contact_id
+                        registry_id, zone
+                    ).registry_contact_id
                 ))
             if zone.billing_supported and domain_registration_order.billing_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="billing",
                     contact_id=domain_registration_order.billing_contact.get_registry_id(
-                        registry_id).registry_contact_id
+                        registry_id, zone
+                    ).registry_contact_id
                 ))
             if zone.tech_supported and domain_registration_order.tech_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="tech",
                     contact_id=domain_registration_order.tech_contact.get_registry_id(
-                        registry_id).registry_contact_id
+                        registry_id, zone
+                    ).registry_contact_id
                 ))
 
             if zone.keysys_de:
@@ -237,7 +240,8 @@ def process_domain_registration_paid(registration_order_id):
                 domain=domain_registration_order.domain,
                 period=period,
                 registrant=domain_registration_order.registrant_contact.get_registry_id(
-                    registry_id).registry_contact_id
+                    registry_id, zone
+                ).registry_contact_id
                 if zone.registrant_supported else 'NONE',
                 contacts=contact_objs,
                 name_servers=[apps.epp_api.DomainNameServer(
@@ -720,7 +724,9 @@ def process_domain_transfer_contacts(transfer_order_id):
     )
     should_send = False
     if zone.registrant_supported and zone.registrant_change_supported:
-        registrant_id = domain_transfer_order.registrant_contact.get_registry_id(domain_data.registry_name)
+        registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
+            domain_data.registry_name, zone
+        )
         if domain_data.registrant != registrant_id.registry_contact_id:
             update_req.new_registrant.value = registrant_id.registry_contact_id
             should_send = True
