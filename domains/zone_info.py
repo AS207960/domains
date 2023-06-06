@@ -1482,7 +1482,7 @@ else:
         )),
         ('tv', DomainInfo(
             DomainInfo.REGISTRY_GODADDY_CCTLD,
-            MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"))
+            MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"), phase="open")
         )),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(1299, transfer=1299, restore=6500))),
         ('icu', DomainInfo(
