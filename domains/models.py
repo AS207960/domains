@@ -318,6 +318,7 @@ class Contact(models.Model):
 
     def get_registry_id(self, registry_id: str, zone_data: typing.Optional[zone_info.DomainInfo] = None):
         is_isnic = zone_data and zone_data.registry == zone_data.REGISTRY_ISNIC
+        internationalized_address_required = zone_data.internationalized_address_required if zone_data else False
 
         with CONTACT_SEARCH:
             contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
@@ -342,7 +343,7 @@ class Contact(models.Model):
             contact_id, _, _ = apps.epp_client.create_contact(
                 contact_id,
                 local_address=self.get_local_address() if not is_isnic else None,
-                int_address=self.get_int_address(zone_data.internationalized_address_required)
+                int_address=self.get_int_address(internationalized_address_required)
                 if not is_isnic else self.get_local_address(),
                 phone=apps.epp_api.Phone(
                     number=f"+{self.phone.country_code}.{self.phone.national_number}",
