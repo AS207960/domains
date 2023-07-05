@@ -78,6 +78,7 @@ class Command(BaseCommand):
                 domains.proto.billing_pb2.PROCESSING
         ):
             order.state = order.STATE_NEEDS_PAYMENT
+            order.redirect_url = msg.redirect_url
             order.save()
 
     def domains_registration_callback(self, channel, method, properties, body):
