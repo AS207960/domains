@@ -135,7 +135,7 @@ class ContactAddress(models.Model):
     def can_delete(self):
         return self.local_contacts.count() + self.int_contacts.count() == 0
 
-    def as_api_obj(self):
+    def as_api_obj(self, eurid_role: apps.epp_api.ContactRole = None):
         streets = [self.street_1]
         if self.street_2:
             streets.append(self.street_2)
@@ -144,7 +144,11 @@ class ContactAddress(models.Model):
 
         return apps.epp_api.Address(
             name=self.name,
-            organisation=self.organisation,
+            organisation=self.organisation if self.organisation else (
+                self.name if eurid_role in (
+                    apps.epp_api.ContactRole.Billing, apps.epp_api.ContactRole.Tech
+                ) else None
+            ),
             streets=streets,
             city=self.city,
             province=self.province,
@@ -318,15 +322,25 @@ class Contact(models.Model):
         as207960_utils.models.delete_resource(self.resource_id)
         super().delete(*args, **kwargs)
 
-    def get_registry_id(self, registry_id: str, zone_data: typing.Optional[zone_info.DomainInfo] = None):
-        is_isnic = zone_data and zone_data.registry == zone_data.REGISTRY_ISNIC
+    def get_registry_id(
+            self, registry_id: str,
+            zone_data: typing.Optional[zone_info.DomainInfo] = None,
+            role: apps.epp_api.ContactRole = None
+    ):
+        is_isnic = zone_data and zone_data.is_isnic
+        is_eurid = zone_data and zone_data.is_eurid
+        internationalized_address_supported = zone_data.internationalized_address_supported if zone_data else False
         internationalized_address_required = zone_data.internationalized_address_required if zone_data else False
 
         with CONTACT_SEARCH:
-            contact_registry = ContactRegistry.objects.filter(contact=self, registry_id=registry_id)\
-                .first()   # type: ContactRegistry
+            contacts_registry = ContactRegistry.objects.filter(
+                contact=self, registry_id=registry_id,
+            )
+            if is_eurid and role:
+                contacts_registry = contacts_registry.filter(eurid_role=str(role))
+            contact_registry = contacts_registry.first()   # type: ContactRegistry
             if contact_registry:
-                if is_isnic:
+                if is_isnic or is_eurid:
                     return contact_registry
 
                 if not apps.epp_client.check_contact(contact_registry.registry_contact_id, registry_id)[0]:
@@ -335,7 +349,7 @@ class Contact(models.Model):
                     contact_registry.delete()
 
             auth_info = make_secret()
-            if is_isnic:
+            if is_isnic or is_eurid:
                 contact_id = "UNUSED"
             else:
                 contact_id = self.handle
@@ -344,9 +358,13 @@ class Contact(models.Model):
 
             contact_id, _, _ = apps.epp_client.create_contact(
                 contact_id,
-                local_address=self.get_local_address() if not is_isnic else None,
-                int_address=self.get_int_address(internationalized_address_required)
-                if not is_isnic else self.get_local_address(),
+                local_address=self.get_local_address(
+                    eurid_role=role if is_eurid else None
+                ) if not is_isnic else None,
+                int_address=(
+                    self.get_int_address(internationalized_address_required)
+                    if not is_isnic else self.get_local_address()
+                ) if internationalized_address_supported else None,
                 phone=apps.epp_api.Phone(
                     number=f"+{self.phone.country_code}.{self.phone.national_number}",
                     ext=self.phone_ext
@@ -355,12 +373,21 @@ class Contact(models.Model):
                     number=f"+{self.fax.country_code}.{self.fax.national_number}",
                     ext=self.fax_ext
                 ) if self.fax else None,
-                email=self.get_public_email() if not is_isnic else settings.ISNIC_CONTACT_EMAIL,
+                email=(
+                    self.get_public_email() if not is_isnic else settings.ISNIC_CONTACT_EMAIL
+                ) if not is_eurid else self.email,
                 entity_type=self.entity_type,
                 trading_name=self.trading_name,
                 company_number=self.company_number,
                 auth_info=auth_info,
                 disclosure=self.get_disclosure(zone_data),
+                eurid=apps.epp_api.EURIDContact(
+                    contact_type=role if role else apps.epp_api.ContactRole.Registrant,
+                    whois_email=self.private_whois_email if not self.disclose_email else None,
+                    vat_number=None,
+                    language="en",
+                    country_of_citizenship=None,
+                ) if is_eurid else None,
                 registry_name=registry_id
             )
 
@@ -368,7 +395,9 @@ class Contact(models.Model):
                 contact=self,
                 registry_id=registry_id,
                 registry_contact_id=contact_id,
-                auth_info=auth_info
+                auth_info=auth_info,
+                zone_data=zone_data,
+                role=str(role) if role else None,
             )
             contact_registry.save()
 
@@ -400,7 +429,10 @@ class Contact(models.Model):
         return contact_registry
 
     @classmethod
-    def get_contact(cls, registry_contact_id: str, registry_id: str, user, zone_data: typing.Optional[zone_info.DomainInfo] = None):
+    def get_contact(
+            cls, registry_contact_id: str, registry_id: str, user,
+            zone_data: typing.Optional[zone_info.DomainInfo] = None
+    ):
         is_isnic = zone_data and zone_data.registry == zone_data.REGISTRY_ISNIC
 
         with CONTACT_SEARCH:
@@ -482,16 +514,18 @@ class Contact(models.Model):
                 registry_contact_id=registry_contact_id,
                 registry_id=registry_id,
                 auth_info=registry_contact.auth_info,
+                registry=zone_data.registry if zone_data else None,
+                role=str(registry_contact.eurid.contact_type) if registry_contact.eurid else None,
             ).save()
 
         return contact
 
-    def get_local_address(self) -> apps.epp_api.Address:
-        return self.local_address.as_api_obj()
+    def get_local_address(self, eurid_role: apps.epp_api.ContactRole = None) -> apps.epp_api.Address:
+        return self.local_address.as_api_obj(eurid_role=eurid_role)
 
-    def get_int_address(self, required=False) -> typing.Optional[apps.epp_api.Address]:
-        return self.int_address.as_api_obj() if self.int_address else (
-            self.local_address.as_api_obj() if required else None
+    def get_int_address(self, required=False, eurid_role: apps.epp_api.ContactRole = None) -> typing.Optional[apps.epp_api.Address]:
+        return self.int_address.as_api_obj(eurid_role=eurid_role) if self.int_address else (
+            self.local_address.as_api_obj(eurid_role=eurid_role) if required else None
         )
 
     def get_disclosure(self, zone_data: typing.Optional[zone_info.DomainInfo] = None) -> apps.epp_api.Disclosure:
@@ -531,7 +565,11 @@ class Contact(models.Model):
         if self.disclose_email:
             return self.email
         else:
-            return f"{self.privacy_email.hex}@owowhosth.is"
+            return self.private_whois_email
+
+    @property
+    def private_whois_email(self):
+        return f"{self.privacy_email.hex}@owowhosth.is"
 
 
 class ContactRegistry(models.Model):
@@ -539,6 +577,8 @@ class ContactRegistry(models.Model):
     registry_contact_id = models.CharField(max_length=16, default=make_id)
     registry_id = models.CharField(max_length=255)
     auth_info = models.CharField(max_length=255, blank=True, null=True)
+    registry = models.CharField(max_length=255, blank=True, null=True)
+    role = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Contact registries"

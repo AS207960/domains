@@ -20,13 +20,32 @@ def update_contact(contact_registry_id):
     if not contact_obj:
         return
 
+    if contact_obj.registry:
+        zone_data = zone_info.DomainInfo(contact_obj.registry, None)
+    else:
+        zone_data = None
+
+    if contact_obj.role:
+        role = apps.epp_api.ContactRole(contact_obj.role)
+    else:
+        role = None
+
+    is_isnic = zone_data and zone_data.is_isnic
+    is_eurid = zone_data and zone_data.is_eurid
+    internationalized_address_supported = zone_data.internationalized_address_supported if zone_data else False
+    internationalized_address_required = zone_data.internationalized_address_required if zone_data else False
+
     instance = contact_obj.contact
     try:
         contact = apps.epp_client.get_contact(contact_obj.registry_contact_id, contact_obj.registry_id)
         contact.update(
-            local_address=instance.local_address.as_api_obj(),
-            int_address=instance.int_address.as_api_obj() \
-                if instance.int_address and contact_obj.registry_id != "rrpproxy" else None,
+            local_address=instance.get_local_address(
+                eurid_role=role if is_eurid else None
+            ) if not is_isnic else None,
+            int_address=(
+                instance.get_int_address(internationalized_address_required)
+                if not is_isnic else instance.get_local_address()
+            ) if internationalized_address_supported else None,
             phone=apps.epp_api.Phone(
                 number=f"+{instance.phone.country_code}.{instance.phone.national_number}",
                 ext=instance.phone_ext
@@ -35,11 +54,19 @@ def update_contact(contact_registry_id):
                 number=f"+{instance.fax.country_code}.{instance.fax.national_number}",
                 ext=instance.fax_ext
             ) if instance.fax else None,
-            email=instance.get_public_email(),
+            email=(
+                instance.get_public_email() if not is_isnic else settings.ISNIC_CONTACT_EMAIL
+            ) if not is_eurid else instance.email,
             entity_type=instance.entity_type,
             trading_name=instance.trading_name,
             company_number=instance.company_number,
-            disclosure=instance.get_disclosure() if contact_obj.registry_id != "afilias" else None,
+            disclosure=instance.get_disclosure(zone_data),
+            eurid=apps.epp_api.EURIDContactUpdate(
+                whois_email=instance.private_whois_email if not instance.disclose_email else None,
+                vat_number=None,
+                language="en",
+                country_of_citizenship=None,
+            ) if is_eurid else None,
             auth_info=None
         )
     except grpc.RpcError as rpc_error:

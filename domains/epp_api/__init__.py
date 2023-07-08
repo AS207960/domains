@@ -1,3 +1,4 @@
+import enum
 import typing
 import datetime
 
@@ -19,6 +20,7 @@ from .epp_grpc.domain_common import domain_common_pb2
 from .epp_grpc.nominet import nominet_pb2
 from .epp_grpc.nominet_ext import nominet_ext_pb2
 from .epp_grpc.keysys import keysys_pb2
+from .epp_grpc.eurid import eurid_pb2
 from .epp_grpc import epp_pb2, epp_pb2_grpc
 
 
@@ -1069,6 +1071,98 @@ class ISNICContactInfo:
         )
 
 
+class ContactRole(enum.Enum):
+    Registrant = "registrant"
+    Admin = "admin"
+    Billing = "billing"
+    Tech = "tech"
+    OnSite = "on-site"
+    Reseller = "reseller"
+
+    @classmethod
+    def from_eurid_pb(cls, resp: eurid_pb2.ContactType):
+        if resp == eurid_pb2.ContactType.Registrant:
+            return cls.Registrant
+        elif resp == eurid_pb2.ContactType.Billing:
+            return cls.Billing
+        elif resp == eurid_pb2.ContactType.Tech:
+            return cls.Tech
+        elif resp == eurid_pb2.ContactType.OnSite:
+            return cls.OnSite
+        elif resp == eurid_pb2.ContactType.Reseller:
+            return cls.Reseller
+
+    def to_eurid_pb(self) -> eurid_pb2.ContactType:
+        if self == self.Registrant:
+            return eurid_pb2.ContactType.Registrant
+        elif self == self.Admin:
+            raise ValueError("Admin contact is not supported by EURid")
+        elif self == self.Billing:
+            return eurid_pb2.ContactType.Billing
+        elif self == self.Tech:
+            return eurid_pb2.ContactType.Tech
+        elif self == self.OnSite:
+            return eurid_pb2.ContactType.OnSite
+        elif self == self.Reseller:
+            return eurid_pb2.ContactType.Reseller
+
+
+@dataclasses.dataclass
+class EURIDContact:
+    contact_type: ContactRole
+    whois_email: typing.Optional[str]
+    vat_number: typing.Optional[str]
+    language: str
+    country_of_citizenship: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: eurid_pb2.ContactExtension):
+        return cls(
+            contact_type=ContactRole.from_eurid_pb(resp.contact_type),
+            whois_email=resp.whois_email.value if resp.HasField("whois_email") else None,
+            language=resp.language,
+            country_of_citizenship=resp.citizenship_country.value if resp.HasField("citizenship_country") else None,
+            vat_number=resp.vat.value if resp.HasField("vat") else None,
+        )
+
+    def to_pb(self) -> eurid_pb2.ContactExtension:
+        return eurid_pb2.ContactExtension(
+            contact_type=self.contact_type.to_eurid_pb(),
+            whois_email=google.protobuf.wrappers_pb2.StringValue(
+                value=self.whois_email
+            ) if self.whois_email else None,
+            language=self.language,
+            citizenship_country=google.protobuf.wrappers_pb2.StringValue(
+                value=self.country_of_citizenship
+            ) if self.country_of_citizenship else None,
+            vat=google.protobuf.wrappers_pb2.StringValue(
+                value=self.vat_number
+            ) if self.vat_number else None,
+        )
+
+
+@dataclasses.dataclass
+class EURIDContactUpdate:
+    whois_email: typing.Optional[str]
+    vat_number: typing.Optional[str]
+    language: typing.Optional[str]
+    country_of_citizenship: typing.Optional[str]
+
+    def to_pb(self) -> eurid_pb2.ContactUpdateExtension:
+        return eurid_pb2.ContactUpdateExtension(
+            new_whois_email=google.protobuf.wrappers_pb2.StringValue(
+                value=self.whois_email
+            ) if self.whois_email else None,
+            new_language=self.language,
+            new_citizenship_country=google.protobuf.wrappers_pb2.StringValue(
+                value=self.country_of_citizenship
+            ) if self.country_of_citizenship else None,
+            new_vat=google.protobuf.wrappers_pb2.StringValue(
+                value=self.vat_number
+            ) if self.vat_number else None,
+        )
+
+
 class Contact:
     _app = None  # type: EPPClient
     id: str
@@ -1091,6 +1185,7 @@ class Contact:
     auth_info: typing.Optional[str]
     disclosure: typing.Optional[Disclosure]
     isnic_info: typing.Optional[ISNICContactInfo]
+    eurid: typing.Optional[EURIDContact]
     registry_name: str
 
     @classmethod
@@ -1117,6 +1212,7 @@ class Contact:
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
         self.disclosure = Disclosure.from_pb(resp.disclosure)
         self.isnic_info = ISNICContactInfo.from_pb(resp.isnic_info) if resp.HasField("isnic_info") else None
+        self.eurid = EURIDContact.from_pb(resp.eurid_info) if resp.HasField("eurid_info") else None
         self.registry_name = registry_name
         return self
 
@@ -1132,6 +1228,7 @@ class Contact:
             company_number: typing.Optional[str] = None,
             auth_info: typing.Optional[str] = None,
             disclosure: typing.Optional[Disclosure] = None,
+            eurid: typing.Optional[EURIDContactUpdate] = None,
     ) -> bool:
         resp = self._app.stub.ContactUpdate(contact_pb2.ContactUpdateRequest(
             id=self.id,
@@ -1147,6 +1244,7 @@ class Contact:
             if company_number and company_number != self.company_number else None,
             new_auth_info=StringValue(value=auth_info) if auth_info and auth_info != self.auth_info else None,
             disclosure=disclosure.to_pb() if disclosure else None,
+            new_eurid_info=eurid.to_pb() if eurid else None,
             registry_name=self.registry_name
         ))
         return resp.pending
@@ -1559,6 +1657,7 @@ class EPPClient:
         company_number: typing.Optional[str],
         auth_info: str,
         disclosure: typing.Optional[Disclosure],
+        eurid: typing.Optional[EURIDContact],
         registry_name: str,
     ) -> typing.Tuple[str, bool, datetime.datetime]:
         resp = self.stub.ContactCreate(contact_pb2.ContactCreateRequest(
@@ -1573,6 +1672,7 @@ class EPPClient:
             company_number=StringValue(value=company_number) if company_number else None,
             auth_info=auth_info,
             disclosure=disclosure.to_pb() if disclosure else None,
+            eurid_info=eurid.to_pb() if eurid else None,
             registry_name=registry_name
         ))
         return resp.id, resp.pending, resp.creation_date.ToDatetime()

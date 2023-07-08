@@ -495,6 +495,7 @@ class DomainInfo:
     REGISTRY_DNSBELGIUM = "dnsbelgium"
     REGISTRY_INTERLINK = "interlink"
     REGISTRY_EURID = "eurid"
+    REGISTRY_EURID_RRPPROXY = "eurid-rrpproxy"
     REGISTRY_GOOGLE = "google"
     REGISTRY_SHORTDOT = "shortdot"
     REGISTRY_RADIX = "radix"
@@ -573,7 +574,7 @@ class DomainInfo:
 
     @property
     def redemption_period(self):
-        if self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID):
+        if self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID, self.REGISTRY_EURID_RRPPROXY):
             return datetime.timedelta(days=40)
         elif self.registry == self.REGISTRY_PIR:
             return datetime.timedelta(days=35)
@@ -644,12 +645,19 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_AFILIAS,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_EURID,
         )
 
     @property
     def internationalized_address_required(self):
-        return self.registry not in (
+        return self.registry in (
             self.REGISTRY_GODADDY_CCTLD,
+        )
+
+    @property
+    def internationalized_address_supported(self):
+        return self.registry not in (
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -679,6 +687,7 @@ class DomainInfo:
             self.REGISTRY_WHOIS_THERE,
             self.REGISTRY_CORE,
             self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_CLUB_DOMAINS,
             self.REGISTRY_AFILIAS,
@@ -733,6 +742,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_AMNIC,
             self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_ISNIC,
             self.REGISTRY_REDES,
         )
@@ -789,6 +799,7 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_KENIC,
             self.REGISTRY_NICAT,
@@ -837,6 +848,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_DENIC,
             self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
         )
 
     @property
@@ -849,6 +861,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -861,7 +874,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
-            self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_AFNIC,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
@@ -922,6 +935,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_AFNIC,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
@@ -985,7 +999,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_NOMINET_GTLD,
-            self.REGISTRY_EURID,
+            self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_AFNIC,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_GOOGLE,
@@ -1044,6 +1058,14 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_GODADDY_CCTLD,
         )
+
+    @property
+    def is_isnic(self):
+        return self.registry == self.REGISTRY_ISNIC
+
+    @property
+    def is_eurid(self):
+        return self.registry == self.REGISTRY_EURID
 
 
 if settings.DEBUG:
@@ -1142,6 +1164,9 @@ if settings.DEBUG:
             transfer_instructions="Make sure to change the admin and billing contact to \"AC396-IS\" at "
                                   "your previous registrar."
         )),
+        ('eu', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(825, restore=4000))),
+        ('xn--e1a4c', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(825, restore=4000))),
+        ('xn--qxa6a', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(825, restore=4000))),
     )
 else:
     ZONES = (
@@ -1445,7 +1470,7 @@ else:
                         markup=decimal.Decimal("1.3"))
         )),
         ('eu', DomainInfo(
-            DomainInfo.REGISTRY_EURID,
+            DomainInfo.REGISTRY_EURID_RRPPROXY,
             MarkupPrice(1728, transfer=1728, restore=2880, currency=None, display_currency='EUR', tld='eu',
                         markup=decimal.Decimal("1.6"))
         )),
