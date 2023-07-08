@@ -90,7 +90,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'as207960_domains.wsgi.application'
 
 GRPCSERVER = {
-    'servicers': ['domains.whois.grpc_hook', 'domains.rdap.grpc_hook'],
+    'servicers': ['domains.rdap.grpc_hook'],
     'maximum_concurrent_rpcs': None,
 }
 
@@ -202,6 +202,7 @@ POSTAL_PUBLIC_KEY = \
     "uOCW2qgvFd8cAye6qLsUAqEetiuRTPpAysX3hss1TqIML51kb0ADTmylKi3Hr553qrDy9AEMFmvaKnTH8o0YFozGk0QtlmiLtXQIDAQAB"
 
 ISNIC_CONTACT_EMAIL = "isnic-auto-ote@as207960.ltd.uk"
+RDAP_OBJECT_TAG = "GLAUCA"
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

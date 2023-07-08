@@ -14,6 +14,7 @@ import uuid
 import grpc
 import time
 import secrets
+import base32_crockford
 import typing
 import threading
 import enum
@@ -67,7 +68,7 @@ def make_secret():
 
 
 def make_id():
-    return secrets.token_urlsafe(12)[:16].upper()
+    return f"{base32_crockford.encode(secrets.randbits(45))}-{settings.RDAP_OBJECT_TAG}"
 
 
 class ContactAddress(models.Model):
@@ -191,6 +192,7 @@ class Contact(models.Model):
     )
 
     id = as207960_utils.models.TypedUUIDField('domains_contact', primary_key=True)
+    handle = models.CharField(max_length=255, unique=True, default=make_id)
     description = models.CharField(max_length=255)
     local_address = models.ForeignKey(
         ContactAddress,
@@ -336,7 +338,7 @@ class Contact(models.Model):
             if is_isnic:
                 contact_id = "UNUSED"
             else:
-                contact_id = make_id()
+                contact_id = self.handle
                 while not apps.epp_client.check_contact(contact_id, registry_id)[0]:
                     contact_id = make_id()
 
@@ -376,7 +378,7 @@ class Contact(models.Model):
                 params={
                     "s_login": settings.RRPPROXY_USER,
                     "s_pw": settings.RRPPROXY_PASS,
-                    "command": "RequesToken",
+                    "command": "RequestToken",
                     "type": "ContactDisclosure",
                     "contact": contact_id
                 }

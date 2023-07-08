@@ -18,17 +18,22 @@ def grpc_hook(server):
 
 
 class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
-    def contact_to_card(self, handle: str, roles, contact: models.Contact) -> rdap_pb2.Entity:
+    def contact_to_card(self, roles, contact: models.Contact) -> rdap_pb2.Entity:
+        created_date = google.protobuf.timestamp_pb2.Timestamp()
+        created_date.FromDatetime(contact.created_date)
+
         entity = rdap_pb2.Entity(
-            handle=handle,
+            handle=contact.handle,
             roles=roles,
+            port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net"),
             js_card=rdap_pb2.JSCard(
-                uid=str(contact.id),
+                uid=contact.handle,
                 full_name=rdap_pb2.JSCard.LocalisedString(
                     value=contact.local_address.name if contact.local_address.disclose_name else "REDACTED",
                 )
-            )
+            ),
         )
+
         if contact.local_address.organisation:
             entity.js_card.organisation.append(rdap_pb2.JSCard.LocalisedString(
                 value=contact.local_address.organisation if contact.local_address.disclose_organisation else "REDACTED",
@@ -200,6 +205,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         resp_data.entities.append(rdap_pb2.Entity(
             handle=domain_data.client_id,
             roles=[rdap_pb2.RoleRegistrar],
+            port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net"),
             js_card=rdap_pb2.JSCard(
                 uid=domain_data.client_id,
                 kind=google.protobuf.wrappers_pb2.StringValue(value="org"),
@@ -250,46 +256,43 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
         entities = {}
 
-        def add_entity(handle, obj, role):
+        def add_entity(obj, role):
             obj_id = str(obj.id)
             if obj_id not in entities:
                 entities[obj_id] = {
-                    "handle": handle,
                     "contact": obj,
                     "roles": [role]
                 }
             else:
                 entities[obj_id]["roles"].append(role)
-                if not entities[obj_id]["handle"]:
-                    entities[obj_id]["handle"] = handle
 
         user = domain_obj.get_user()
         if domain_data.registrant:
             contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user, zone_data)
-            add_entity(domain_data.registrant, contact, rdap_pb2.RoleRegistrant)
+            add_entity(contact, rdap_pb2.RoleRegistrant)
         elif domain_obj.registrant_contact:
-            add_entity(None, domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
+            add_entity(domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
 
         if domain_data.admin:
             contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(domain_data.admin.contact_id, contact, rdap_pb2.RoleAdministrative)
+            add_entity(contact, rdap_pb2.RoleAdministrative)
         elif domain_obj.admin_contact:
-            add_entity(None, domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
+            add_entity(domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
 
         if domain_data.billing:
             contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(domain_data.billing.contact_id, contact, rdap_pb2.RoleBilling)
+            add_entity(contact, rdap_pb2.RoleBilling)
         elif domain_obj.billing_contact:
-            add_entity(None, domain_obj.billing_contact, rdap_pb2.RoleBilling)
+            add_entity(domain_obj.billing_contact, rdap_pb2.RoleBilling)
 
         if domain_data.tech:
             contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(domain_data.tech.contact_id, contact, rdap_pb2.RoleTechnical)
+            add_entity(contact, rdap_pb2.RoleTechnical)
         elif domain_obj.tech_contact:
-            add_entity(None, domain_obj.tech_contact, rdap_pb2.RoleTechnical)
+            add_entity(domain_obj.tech_contact, rdap_pb2.RoleTechnical)
 
         for c in entities.values():
-            resp_data.entities.append(self.contact_to_card(c["handle"], c["roles"], c["contact"]))
+            resp_data.entities.append(self.contact_to_card(c["roles"], c["contact"]))
 
         if domain_data.creation_date:
             date = google.protobuf.timestamp_pb2.Timestamp()
@@ -511,7 +514,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
     def EntityLookup(self, request: rdap_pb2.LookupRequest, context):
         try:
             contact_obj = models.Contact.objects.filter(
-                id__iexact=request.query
+                handle__iexact=request.query
             ).first()  # type: models.Contact
         except django.core.exceptions.ValidationError:
             contact_obj = None
@@ -530,7 +533,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             contact_obj = registry_contact_obj.contact
 
         try:
-            entity = self.contact_to_card(request.query, [], contact_obj)
+            entity = self.contact_to_card([], contact_obj)
         except Exception as e:
             traceback.print_exc()
             sys.stdout.flush()
@@ -563,7 +566,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.handle).replace("*", ".*")
             try:
                 contact_objs = list(models.Contact.objects.filter(
-                    id__regex=f"^{regex}$"
+                    handle__iregex=f"^{regex}$"
                 ))
                 for contact_obj in contact_objs:
                     if contact_obj.id not in entities:
@@ -574,8 +577,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 registry_contact_id__iregex=f"^{regex}$"
             )
             for registry_contact_obj in registry_contact_objs:
-                if registry_contact_obj.registry_contact_id not in entities:
-                    entities[registry_contact_obj.registry_contact_id] = registry_contact_obj.contact
+                if registry_contact_obj.contact_id not in entities:
+                    entities[registry_contact_obj.contact_id] = registry_contact_obj.contact
         else:
             response = rdap_pb2.DomainResponse(error=rdap_pb2.ErrorResponse(
                 error_code=400,
@@ -586,8 +589,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
         resp_data = []
         try:
-            for handle, contact_obj in entities.items():
-                resp_data.append(self.contact_to_card(handle, [], contact_obj))
+            for contact_obj in entities.values():
+                resp_data.append(self.contact_to_card([], contact_obj))
         except Exception as e:
             traceback.print_exc()
             sys.stdout.flush()
