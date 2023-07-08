@@ -8,6 +8,7 @@ import dns.rdataclass
 import dns.rdatatype
 import dns.exception
 import dns.rdtypes
+import dns.dnssec
 import base64
 import grpc
 import socket
