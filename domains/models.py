@@ -396,7 +396,7 @@ class Contact(models.Model):
                 registry_id=registry_id,
                 registry_contact_id=contact_id,
                 auth_info=auth_info,
-                zone_data=zone_data,
+                registry=zone_data.registry if zone_data else None,
                 role=str(role) if role else None,
             )
             contact_registry.save()
