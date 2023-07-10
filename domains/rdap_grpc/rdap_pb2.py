@@ -17,7 +17,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"R\n\x13\x44omainSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x11\n\x07ns_name\x18\x02 \x01(\tH\x00\x12\x0f\n\x05ns_ip\x18\x03 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x13\x45ntitySearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x10\n\x06handle\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x17NameServerSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd2\x01\n\x14\x44omainSearchResponse\x12\x35\n\x07success\x18\x01 \x01(\x0b\x32\".rdap.DomainSearchResponse.DomainsH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a%\n\x07\x44omains\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.DomainB\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd4\x01\n\x14\x45ntitySearchResponse\x12\x36\n\x07success\x18\x01 \x01(\x0b\x32#.rdap.EntitySearchResponse.EntitiesH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a&\n\x08\x45ntities\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.EntityB\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xe6\x01\n\x18NameServerSearchResponse\x12=\n\x07success\x18\x01 \x01(\x0b\x32*.rdap.NameServerSearchResponse.NameServersH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a-\n\x0bNameServers\x12\x1e\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x10.rdap.NameServerB\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x8f\x13\n\x06JSCard\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12+\n\x07updated\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12*\n\x04kind\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tfull_name\x18\x04 \x01(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12\x32\n\x0corganisation\x18\x05 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12/\n\tjob_title\x18\x06 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12*\n\x04role\x18\x07 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12%\n\x06\x65mails\x18\x08 \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12%\n\x06phones\x18\t \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12%\n\x06online\x18\n \x03(\x0b\x32\x15.rdap.JSCard.Resource\x12>\n\x18preferred_contact_method\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12P\n\x1bpreferred_contact_languages\x18\x0c \x03(\x0b\x32+.rdap.JSCard.PreferredContactLanguagesEntry\x12\'\n\taddresses\x18\r \x03(\x0b\x32\x14.rdap.JSCard.Address\x12/\n\ranniversaries\x18\x0e \x03(\x0b\x32\x18.rdap.JSCard.Anniversary\x12\x30\n\rpersonal_info\x18\x0f \x03(\x0b\x32\x19.rdap.JSCard.PersonalInfo\x12+\n\x05notes\x18\x10 \x03(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12\x12\n\ncategories\x18\x11 \x03(\t\x1a\xce\x01\n\x0fLocalisedString\x12\r\n\x05value\x18\x01 \x01(\t\x12.\n\x08language\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x46\n\rlocalisations\x18\x03 \x03(\x0b\x32/.rdap.JSCard.LocalisedString.LocalisationsEntry\x1a\x34\n\x12LocalisationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\xe5\x01\n\x08Resource\x12-\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\r\n\x05value\x18\x03 \x01(\t\x12\x30\n\nmedia_type\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tpreferred\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0e\n\x06labels\x18\x06 \x03(\t\x1a\xc4\x01\n\x10\x43ontactLanguages\x12@\n\tlanguages\x18\x01 \x03(\x0b\x32-.rdap.JSCard.ContactLanguages.ContactLanguage\x1an\n\x0f\x43ontactLanguage\x12*\n\x04type\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\npreference\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xb3\x05\n\x07\x41\x64\x64ress\x12-\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05label\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x66ull_address\x18\x03 \x01(\x0b\x32\x1c.rdap.JSCard.LocalisedString\x12,\n\x06street\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\textension\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\x08locality\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x06region\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\x07\x63ountry\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x0fpost_office_box\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tpost_code\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0c\x63ountry_code\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x63oordinates\x18\x0c \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\x08timezone\x18\r \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12-\n\tpreferred\x18\x0e \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\x97\x01\n\x0b\x41nniversary\x12\x0c\n\x04type\x18\x01 \x01(\t\x12+\n\x05label\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12(\n\x04\x64\x61te\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x05place\x18\x04 \x01(\x0b\x32\x14.rdap.JSCard.Address\x1aX\n\x0cPersonalInfo\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12+\n\x05level\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a_\n\x1ePreferredContactLanguagesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.rdap.JSCard.ContactLanguages:\x02\x38\x01\"\xac\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x1d\n\x07js_card\x18\n \x01(\x0b\x32\x0c.rdap.JSCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValueJ\x04\x08\x02\x10\x03\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\xa0\x03\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponse\x12\x45\n\x0c\x44omainSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.DomainSearchResponse\x12\x45\n\x0c\x45ntitySearch\x12\x19.rdap.EntitySearchRequest\x1a\x1a.rdap.EntitySearchResponse\x12Q\n\x10NameServerSearch\x12\x1d.rdap.NameServerSearchRequest\x1a\x1e.rdap.NameServerSearchResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nrdap.proto\x12\x04rdap\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x1e\n\rLookupRequest\x12\r\n\x05query\x18\x01 \x01(\t\"R\n\x13\x44omainSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x11\n\x07ns_name\x18\x02 \x01(\tH\x00\x12\x0f\n\x05ns_ip\x18\x03 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x13\x45ntitySearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x10\n\x06handle\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"@\n\x17NameServerSearchRequest\x12\x0e\n\x04name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x42\x07\n\x05query\"G\n\rErrorResponse\x12\x12\n\nerror_code\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"4\n\x10RedirectResponse\x12\x10\n\x08rdap_uri\x18\x01 \x01(\t\x12\x0e\n\x06port43\x18\x02 \x01(\t\"\x8f\x01\n\x0e\x44omainResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.DomainH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd2\x01\n\x14\x44omainSearchResponse\x12\x35\n\x07success\x18\x01 \x01(\x0b\x32\".rdap.DomainSearchResponse.DomainsH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a%\n\x07\x44omains\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.DomainB\n\n\x08response\"\x8f\x01\n\x0e\x45ntityResponse\x12\x1f\n\x07success\x18\x01 \x01(\x0b\x32\x0c.rdap.EntityH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xd4\x01\n\x14\x45ntitySearchResponse\x12\x36\n\x07success\x18\x01 \x01(\x0b\x32#.rdap.EntitySearchResponse.EntitiesH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a&\n\x08\x45ntities\x12\x1a\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x0c.rdap.EntityB\n\n\x08response\"\x97\x01\n\x12NameServerResponse\x12#\n\x07success\x18\x01 \x01(\x0b\x32\x10.rdap.NameServerH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x42\n\n\x08response\"\xe6\x01\n\x18NameServerSearchResponse\x12=\n\x07success\x18\x01 \x01(\x0b\x32*.rdap.NameServerSearchResponse.NameServersH\x00\x12*\n\x08redirect\x18\x02 \x01(\x0b\x32\x16.rdap.RedirectResponseH\x00\x12$\n\x05\x65rror\x18\x03 \x01(\x0b\x32\x13.rdap.ErrorResponseH\x00\x1a-\n\x0bNameServers\x12\x1e\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x10.rdap.NameServerB\n\n\x08response\"\x81\x01\n\x05\x45vent\x12!\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x11.rdap.EventAction\x12(\n\x04\x64\x61te\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x05\x61\x63tor\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\",\n\x08PublicID\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x12\n\nidentifier\x18\x02 \x01(\t\"v\n\x06Remark\x12+\n\x05title\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"\x90>\n\x06JSCard\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12+\n\x07\x63reated\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07updated\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1f\n\x04kind\x18\x04 \x01(\x0e\x32\x11.rdap.JSCard.Kind\x12.\n\x08language\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x0f\n\x07members\x18\x06 \x03(\t\x12\x30\n\nproduct_id\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x1f\n\x04name\x18\x08 \x01(\x0b\x32\x11.rdap.JSCard.Name\x12/\n\nnick_names\x18\t \x03(\x0b\x32\x1b.rdap.JSCard.NickNamesEntry\x12\x36\n\rorganisations\x18\n \x03(\x0b\x32\x1f.rdap.JSCard.OrganisationsEntry\x12+\n\x0bspeak_to_as\x18\x0b \x01(\x0b\x32\x16.rdap.JSCard.SpeakToAs\x12(\n\x06titles\x18\x0c \x03(\x0b\x32\x18.rdap.JSCard.TitlesEntry\x12(\n\x06\x65mails\x18\r \x03(\x0b\x32\x18.rdap.JSCard.EmailsEntry\x12\x39\n\x0fonline_services\x18\x0e \x03(\x0b\x32 .rdap.JSCard.OnlineServicesEntry\x12(\n\x06phones\x18\x0f \x03(\x0b\x32\x18.rdap.JSCard.PhonesEntry\x12\x41\n\x13preferred_languages\x18\x10 \x03(\x0b\x32$.rdap.JSCard.PreferredLanguagesEntry\x12.\n\tcalendars\x18\x11 \x03(\x0b\x32\x1b.rdap.JSCard.CalendarsEntry\x12\x43\n\x14scheduling_addresses\x18\x12 \x03(\x0b\x32%.rdap.JSCard.SchedulingAddressesEntry\x12.\n\taddresses\x18\x13 \x03(\x0b\x32\x1b.rdap.JSCard.AddressesEntry\x12\x31\n\x0b\x63rypto_keys\x18\x14 \x03(\x0b\x32\x1c.rdap.JSCard.CryptoKeysEntry\x12\x32\n\x0b\x64irectories\x18\x15 \x03(\x0b\x32\x1d.rdap.JSCard.DirectoriesEntry\x12&\n\x05links\x18\x16 \x03(\x0b\x32\x17.rdap.JSCard.LinksEntry\x12&\n\x05media\x18\x17 \x03(\x0b\x32\x17.rdap.JSCard.MediaEntry\x12\x36\n\ranniversaries\x18\x18 \x03(\x0b\x32\x1f.rdap.JSCard.AnniversariesEntry\x12\x10\n\x08keywords\x18\x19 \x03(\t\x12&\n\x05notes\x18\x1a \x03(\x0b\x32\x17.rdap.JSCard.NotesEntry\x12\x35\n\rpersonal_info\x18\x1b \x03(\x0b\x32\x1e.rdap.JSCard.PersonalInfoEntry\x1a\xcf\x01\n\x08Resource\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12\x30\n\nmedia_type\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1az\n\tPronounce\x12\x11\n\tphonetics\x18\x01 \x01(\t\x12,\n\x06script\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12,\n\x06system\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1aK\n\x07\x43ontext\x12\x0f\n\x07private\x18\x01 \x01(\x08\x12\x0c\n\x04work\x18\x02 \x01(\x08\x12\x0f\n\x07\x62illing\x18\x03 \x01(\x08\x12\x10\n\x08\x64\x65livery\x18\x04 \x01(\x08\x1a\xc4\x03\n\x04Name\x12\x33\n\ncomponents\x18\x01 \x03(\x0b\x32\x1f.rdap.JSCard.Name.NameComponent\x12\x37\n\x11\x64\x65\x66\x61ult_separator\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tfull_name\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\tpronounce\x18\x04 \x01(\x0b\x32\x16.rdap.JSCard.Pronounce\x1a\xf1\x01\n\rNameComponent\x12\r\n\x05value\x18\x01 \x01(\t\x12\x32\n\x04kind\x18\x02 \x01(\x0e\x32$.rdap.JSCard.Name.NameComponent.Kind\x12)\n\tpronounce\x18\x03 \x01(\x0b\x32\x16.rdap.JSCard.Pronounce\"r\n\x04Kind\x12\t\n\x05Given\x10\x00\x12\n\n\x06Middle\x10\x01\x12\x0b\n\x07Surname\x10\x02\x12\x0c\n\x08Surname2\x10\x03\x12\t\n\x05Title\x10\x04\x12\x0e\n\nCredential\x10\x05\x12\x0e\n\nGeneration\x10\x06\x12\r\n\tSeparator\x10\x07\x1aq\n\x08NickName\x12\x0c\n\x04name\x18\x01 \x01(\t\x12%\n\x07\x63ontext\x18\x02 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x9c\x02\n\x0cOrganisation\x12*\n\x04name\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x39\n\x05units\x18\x02 \x03(\x0b\x32*.rdap.JSCard.Organisation.OrganisationUnit\x12-\n\x07sort_as\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x07\x63ontext\x18\x04 \x01(\x0b\x32\x14.rdap.JSCard.Context\x1aO\n\x10OrganisationUnit\x12\x0c\n\x04name\x18\x01 \x01(\t\x12-\n\x07sort_as\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xc4\x03\n\tSpeakToAs\x12\x44\n\x12grammatical_gender\x18\x01 \x01(\x0e\x32(.rdap.JSCard.SpeakToAs.GrammaticalGender\x12\x36\n\x08pronouns\x18\x02 \x03(\x0b\x32$.rdap.JSCard.SpeakToAs.PronounsEntry\x1au\n\x08Pronouns\x12\x10\n\x08pronouns\x18\x01 \x01(\t\x12%\n\x07\x63ontext\x18\x02 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1aP\n\rPronounsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12.\n\x05value\x18\x02 \x01(\x0b\x32\x1f.rdap.JSCard.SpeakToAs.Pronouns:\x02\x38\x01\"p\n\x11GrammaticalGender\x12\n\n\x06NotSet\x10\x00\x12\n\n\x06\x43ommon\x10\x01\x12\x0b\n\x07\x41nimate\x10\x02\x12\r\n\tInanimate\x10\x03\x12\x0c\n\x08\x46\x65minine\x10\x04\x12\r\n\tMasculine\x10\x05\x12\n\n\x06Neuter\x10\x06\x1a\x8d\x01\n\x05Title\x12\x0c\n\x04name\x18\x01 \x01(\t\x12%\n\x04kind\x18\x02 \x01(\x0e\x32\x17.rdap.JSCard.Title.Kind\x12\x32\n\x0corganization\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x1b\n\x04Kind\x12\t\n\x05Title\x10\x00\x12\x08\n\x04Role\x10\x01\x1a\x9c\x01\n\x05\x45mail\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12%\n\x07\x63ontext\x18\x02 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\x9b\x02\n\rOnlineService\x12-\n\x07service\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03uri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04user\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x07\x63ontext\x18\x04 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xb5\x02\n\x05Phone\x12\x0e\n\x06number\x18\x01 \x01(\t\x12,\n\x08\x66\x65\x61tures\x18\x02 \x03(\x0e\x32\x1a.rdap.JSCard.Phone.Feature\x12%\n\x07\x63ontext\x18\x03 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"h\n\x07\x46\x65\x61ture\x12\n\n\x06Mobile\x10\x00\x12\t\n\x05Voice\x10\x01\x12\x08\n\x04Text\x10\x02\x12\t\n\x05Video\x10\x03\x12\x0e\n\nMainNumber\x10\x04\x12\r\n\tTextphone\x10\x05\x12\x07\n\x03\x46\x61x\x10\x06\x12\t\n\x05Pager\x10\x07\x1a\xce\x01\n\x13LanguagePreferences\x12H\n\x0bpreferences\x18\x01 \x03(\x0b\x32\x33.rdap.JSCard.LanguagePreferences.LanguagePreference\x1am\n\x12LanguagePreference\x12%\n\x07\x63ontext\x18\x01 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x81\x01\n\x08\x43\x61lendar\x12\'\n\x08resource\x18\x01 \x01(\x0b\x32\x15.rdap.JSCard.Resource\x12(\n\x04kind\x18\x02 \x01(\x0e\x32\x1a.rdap.JSCard.Calendar.Kind\"\"\n\x04Kind\x12\x0c\n\x08\x43\x61lendar\x10\x00\x12\x0c\n\x08\x46reeBusy\x10\x01\x1a\xa6\x01\n\x11SchedulingAddress\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12%\n\x07\x63ontext\x18\x02 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12\x30\n\npreference\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xbc\x06\n\x07\x41\x64\x64ress\x12\x39\n\ncomponents\x18\x01 \x03(\x0b\x32%.rdap.JSCard.Address.AddressComponent\x12\x32\n\x0c\x63ountry_code\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x63oordinates\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12.\n\x08timezone\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12%\n\x07\x63ontext\x18\x05 \x01(\x0b\x32\x14.rdap.JSCard.Context\x12*\n\x04\x66ull\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12)\n\tpronounce\x18\x07 \x01(\x0b\x32\x16.rdap.JSCard.Pronounce\x12\x37\n\x11\x64\x65\x66\x61ult_seperator\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x30\n\npreference\x18\t \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\xf5\x02\n\x10\x41\x64\x64ressComponent\x12\r\n\x05value\x18\x01 \x01(\t\x12\x38\n\x04kind\x18\x02 \x01(\x0e\x32*.rdap.JSCard.Address.AddressComponent.Kind\x12)\n\tpronounce\x18\x03 \x01(\x0b\x32\x16.rdap.JSCard.Pronounce\"\xec\x01\n\x04Kind\x12\x08\n\x04Room\x10\x00\x12\r\n\tApartment\x10\x01\x12\t\n\x05\x46loor\x10\x02\x12\x0c\n\x08\x42uilding\x10\x03\x12\n\n\x06Number\x10\x04\x12\x08\n\x04Name\x10\x05\x12\t\n\x05\x42lock\x10\x06\x12\x0f\n\x0bSubDistrict\x10\x07\x12\x0c\n\x08\x44istrict\x10\x08\x12\x0c\n\x08Locality\x10\t\x12\n\n\x06Region\x10\n\x12\x0c\n\x08Postcode\x10\x0b\x12\x0b\n\x07\x43ountry\x10\x0c\x12\r\n\tDirection\x10\r\x12\x0c\n\x08Landmark\x10\x0e\x12\x11\n\rPostOfficeBox\x10\x0f\x12\r\n\tSeparator\x10\x10\x1a\xb0\x01\n\tDirectory\x12\'\n\x08resource\x18\x01 \x01(\x0b\x32\x15.rdap.JSCard.Resource\x12)\n\x04kind\x18\x02 \x01(\x0e\x32\x1b.rdap.JSCard.Directory.Kind\x12-\n\x07list_as\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\" \n\x04Kind\x12\r\n\tDirectory\x10\x00\x12\t\n\x05\x45ntry\x10\x01\x1aj\n\x04Link\x12\'\n\x08resource\x18\x01 \x01(\x0b\x32\x15.rdap.JSCard.Resource\x12$\n\x04kind\x18\x02 \x01(\x0e\x32\x16.rdap.JSCard.Link.Kind\"\x13\n\x04Kind\x12\x0b\n\x07\x43ontact\x10\x00\x1a\x7f\n\x05Media\x12\'\n\x08resource\x18\x01 \x01(\x0b\x32\x15.rdap.JSCard.Resource\x12%\n\x04kind\x18\x02 \x01(\x0e\x32\x17.rdap.JSCard.Media.Kind\"&\n\x04Kind\x12\t\n\x05Photo\x10\x00\x12\t\n\x05Sound\x10\x01\x12\x08\n\x04Logo\x10\x02\x1a\xcb\x03\n\x0b\x41nniversary\x12+\n\x04kind\x18\x01 \x01(\x0e\x32\x1d.rdap.JSCard.Anniversary.Kind\x12/\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x12<\n\x0cpartial_date\x18\x03 \x01(\x0b\x32$.rdap.JSCard.Anniversary.PartialDateH\x00\x12#\n\x05place\x18\x04 \x01(\x0b\x32\x14.rdap.JSCard.Address\x1a\xc7\x01\n\x0bPartialDate\x12*\n\x04year\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05month\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12)\n\x03\x64\x61y\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x34\n\x0e\x63\x61lendar_scale\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\")\n\x04Kind\x12\t\n\x05\x42irth\x10\x00\x12\t\n\x05\x44\x65\x61th\x10\x01\x12\x0b\n\x07Wedding\x10\x02\x42\x06\n\x04\x64\x61te\x1a\xcc\x01\n\x04Note\x12\x0c\n\x04note\x18\x01 \x01(\t\x12+\n\x07\x63reated\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12(\n\x06\x61uthor\x18\x03 \x01(\x0b\x32\x18.rdap.JSCard.Note.Author\x1a_\n\x06\x41uthor\x12*\n\x04name\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03uri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x1a\xbb\x02\n\x0cPersonalInfo\x12,\n\x04kind\x18\x01 \x01(\x0e\x32\x1e.rdap.JSCard.PersonalInfo.Kind\x12\r\n\x05value\x18\x02 \x01(\t\x12.\n\x05level\x18\x03 \x01(\x0e\x32\x1f.rdap.JSCard.PersonalInfo.Level\x12-\n\x07list_as\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12+\n\x05label\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\".\n\x04Kind\x12\r\n\tExpertise\x10\x00\x12\t\n\x05Hobby\x10\x01\x12\x0c\n\x08Interest\x10\x02\"2\n\x05Level\x12\n\n\x06NotSet\x10\x00\x12\x08\n\x04High\x10\x01\x12\n\n\x06Medium\x10\x02\x12\x07\n\x03Low\x10\x03\x1aG\n\x0eNickNamesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.rdap.JSCard.NickName:\x02\x38\x01\x1aO\n\x12OrganisationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x05value\x18\x02 \x01(\x0b\x32\x19.rdap.JSCard.Organisation:\x02\x38\x01\x1a\x41\n\x0bTitlesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.rdap.JSCard.Title:\x02\x38\x01\x1a\x41\n\x0b\x45mailsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.rdap.JSCard.Email:\x02\x38\x01\x1aQ\n\x13OnlineServicesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12)\n\x05value\x18\x02 \x01(\x0b\x32\x1a.rdap.JSCard.OnlineService:\x02\x38\x01\x1a\x41\n\x0bPhonesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.rdap.JSCard.Phone:\x02\x38\x01\x1a[\n\x17PreferredLanguagesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .rdap.JSCard.LanguagePreferences:\x02\x38\x01\x1aG\n\x0e\x43\x61lendarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.rdap.JSCard.Calendar:\x02\x38\x01\x1aZ\n\x18SchedulingAddressesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12-\n\x05value\x18\x02 \x01(\x0b\x32\x1e.rdap.JSCard.SchedulingAddress:\x02\x38\x01\x1a\x46\n\x0e\x41\x64\x64ressesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.rdap.JSCard.Address:\x02\x38\x01\x1aH\n\x0f\x43ryptoKeysEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.rdap.JSCard.Resource:\x02\x38\x01\x1aJ\n\x10\x44irectoriesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.rdap.JSCard.Directory:\x02\x38\x01\x1a?\n\nLinksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.rdap.JSCard.Link:\x02\x38\x01\x1a@\n\nMediaEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12!\n\x05value\x18\x02 \x01(\x0b\x32\x12.rdap.JSCard.Media:\x02\x38\x01\x1aN\n\x12\x41nniversariesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\'\n\x05value\x18\x02 \x01(\x0b\x32\x18.rdap.JSCard.Anniversary:\x02\x38\x01\x1a?\n\nNotesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.rdap.JSCard.Note:\x02\x38\x01\x1aN\n\x11PersonalInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12(\n\x05value\x18\x02 \x01(\x0b\x32\x19.rdap.JSCard.PersonalInfo:\x02\x38\x01\"a\n\x04Kind\x12\n\n\x06NotSet\x10\x00\x12\x0e\n\nIndividual\x10\x01\x12\t\n\x05Group\x10\x02\x12\x07\n\x03Org\x10\x03\x12\x0c\n\x08Location\x10\x04\x12\n\n\x06\x44\x65vice\x10\x05\x12\x0f\n\x0b\x41pplication\x10\x06\"\xac\x02\n\x06\x45ntity\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x1d\n\x07js_card\x18\n \x01(\x0b\x32\x0c.rdap.JSCard\x12\x1f\n\x05roles\x18\x03 \x03(\x0e\x32\x10.rdap.EntityRole\x12\"\n\npublic_ids\x18\x04 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1d\n\x07remarks\x18\x06 \x03(\x0b\x32\x0c.rdap.Remark\x12\x1b\n\x06\x65vents\x18\x07 \x03(\x0b\x32\x0b.rdap.Event\x12\x1e\n\x08statuses\x18\x08 \x03(\x0e\x32\x0c.rdap.Status\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValueJ\x04\x08\x02\x10\x03\"\xea\x05\n\x06\x44omain\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12&\n\x0cname_servers\x18\x04 \x03(\x0b\x32\x10.rdap.NameServer\x12\"\n\npublic_ids\x18\x05 \x03(\x0b\x32\x0e.rdap.PublicID\x12\x1e\n\x08\x65ntities\x18\x06 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x07 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x08 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12$\n\x07sec_dns\x18\n \x01(\x0b\x32\x13.rdap.Domain.SecDNS\x1a\xa5\x03\n\x06SecDNS\x12/\n\x0bzone_signed\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x35\n\x11\x64\x65legation_signed\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x31\n\x0cmax_sig_life\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12+\n\x07\x64s_data\x18\x04 \x03(\x0b\x32\x1a.rdap.Domain.SecDNS.DSData\x12-\n\x08key_data\x18\x05 \x03(\x0b\x32\x1b.rdap.Domain.SecDNS.KeyData\x1aQ\n\x06\x44SData\x12\x0f\n\x07key_tag\x18\x01 \x01(\x05\x12\x11\n\talgorithm\x18\x02 \x01(\x05\x12\x13\n\x0b\x64igest_type\x18\x03 \x01(\x05\x12\x0e\n\x06\x64igest\x18\x04 \x01(\t\x1aQ\n\x07KeyData\x12\r\n\x05\x66lags\x18\x01 \x01(\x05\x12\x10\n\x08protocol\x18\x02 \x01(\x05\x12\x11\n\talgorithm\x18\x03 \x01(\x05\x12\x12\n\npublic_key\x18\x04 \x01(\t\"\xfd\x01\n\nNameServer\x12\x0e\n\x06handle\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x1b\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x0b.rdap.Event\x12\'\n\x0cip_addresses\x18\x04 \x01(\x0b\x32\x11.rdap.IpAddresses\x12\x1e\n\x08\x65ntities\x18\x05 \x03(\x0b\x32\x0c.rdap.Entity\x12\x1e\n\x08statuses\x18\x06 \x03(\x0e\x32\x0c.rdap.Status\x12\x1d\n\x07remarks\x18\x07 \x03(\x0b\x32\x0c.rdap.Remark\x12,\n\x06port43\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"%\n\x0bIpAddresses\x12\n\n\x02v4\x18\x01 \x03(\t\x12\n\n\x02v6\x18\x02 \x03(\t*\x85\x02\n\x0b\x45ventAction\x12\x15\n\x11\x45ventRegistration\x10\x00\x12\x17\n\x13\x45ventReregistration\x10\x01\x12\x14\n\x10\x45ventLastChanged\x10\x02\x12\x13\n\x0f\x45ventExpiration\x10\x03\x12\x11\n\rEventDeletion\x10\x04\x12\x18\n\x14\x45ventReinstantiation\x10\x05\x12\x11\n\rEventTransfer\x10\x06\x12\x0f\n\x0b\x45ventLocked\x10\x07\x12\x11\n\rEventUnlocked\x10\x08\x12\x1c\n\x18\x45ventRegistrarExpiration\x10\t\x12\x19\n\x15\x45ventLastUpdateOfRDAP\x10\n*\xd4\x01\n\nEntityRole\x12\x12\n\x0eRoleRegistrant\x10\x00\x12\x11\n\rRoleTechnical\x10\x01\x12\x16\n\x12RoleAdministrative\x10\x02\x12\r\n\tRoleAbuse\x10\x03\x12\x0f\n\x0bRoleBilling\x10\x04\x12\x11\n\rRoleRegistrar\x10\x05\x12\x10\n\x0cRoleReseller\x10\x06\x12\x0f\n\x0bRoleSponsor\x10\x07\x12\r\n\tRoleProxy\x10\x08\x12\x15\n\x11RoleNotifications\x10\t\x12\x0b\n\x07RoleNOC\x10\n*\xfa\x06\n\x06Status\x12\x10\n\x0cStatusActive\x10\x00\x12\x13\n\x0fStatusValidated\x10\x01\x12\x19\n\x15StatusRenewProhibited\x10\x02\x12\x1a\n\x16StatusUpdateProhibited\x10\x03\x12\x1c\n\x18StatusTransferProhibited\x10\x04\x12\x1a\n\x16StatusDeleteProhibited\x10\x05\x12\x0f\n\x0bStatusProxy\x10\x06\x12\x11\n\rStatusPrivate\x10\x07\x12\x11\n\rStatusRemoved\x10\x08\x12\x12\n\x0eStatusObscured\x10\t\x12\x14\n\x10StatusAssociated\x10\n\x12\x12\n\x0eStatusInactive\x10\x0b\x12\x10\n\x0cStatusLocked\x10\x0c\x12\x17\n\x13StatusPendingCreate\x10\r\x12\x16\n\x12StatusPendingRenew\x10\x0e\x12\x19\n\x15StatusPendingTransfer\x10\x0f\x12\x17\n\x13StatusPendingUpdate\x10\x10\x12\x17\n\x13StatusPendingDelete\x10\x11\x12\x18\n\x14StatusPendingRestore\x10\x12\x12\x13\n\x0fStatusAddPeriod\x10\x13\x12\x19\n\x15StatusAutoRenewPeriod\x10\x14\x12\x15\n\x11StatusRenewPeriod\x10\x15\x12\x1a\n\x16StatusRedemptionPeriod\x10\x16\x12\x18\n\x14StatusTransferPeriod\x10\x17\x12\x1f\n\x1bStatusClientRenewProhibited\x10\x18\x12 \n\x1cStatusClientUpdateProhibited\x10\x19\x12\"\n\x1eStatusClientTransferProhibited\x10\x1a\x12 \n\x1cStatusClientDeleteProhibited\x10\x1b\x12\x14\n\x10StatusClientHold\x10\x1c\x12\x1f\n\x1bStatusServerRenewProhibited\x10\x1d\x12 \n\x1cStatusServerUpdateProhibited\x10\x1e\x12\"\n\x1eStatusServerTransferProhibited\x10\x1f\x12 \n\x1cStatusServerDeleteProhibited\x10 \x12\x14\n\x10StatusServerHold\x10!2\xa0\x03\n\x04RDAP\x12\x39\n\x0c\x44omainLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.DomainResponse\x12\x39\n\x0c\x45ntityLookup\x12\x13.rdap.LookupRequest\x1a\x14.rdap.EntityResponse\x12\x41\n\x10NameServerLookup\x12\x13.rdap.LookupRequest\x1a\x18.rdap.NameServerResponse\x12\x45\n\x0c\x44omainSearch\x12\x19.rdap.DomainSearchRequest\x1a\x1a.rdap.DomainSearchResponse\x12\x45\n\x0c\x45ntitySearch\x12\x19.rdap.EntitySearchRequest\x1a\x1a.rdap.EntitySearchResponse\x12Q\n\x10NameServerSearch\x12\x1d.rdap.NameServerSearchRequest\x1a\x1e.rdap.NameServerSearchResponseb\x06proto3')
 
 _EVENTACTION = DESCRIPTOR.enum_types_by_name['EventAction']
 EventAction = enum_type_wrapper.EnumTypeWrapper(_EVENTACTION)
@@ -102,15 +102,52 @@ _EVENT = DESCRIPTOR.message_types_by_name['Event']
 _PUBLICID = DESCRIPTOR.message_types_by_name['PublicID']
 _REMARK = DESCRIPTOR.message_types_by_name['Remark']
 _JSCARD = DESCRIPTOR.message_types_by_name['JSCard']
-_JSCARD_LOCALISEDSTRING = _JSCARD.nested_types_by_name['LocalisedString']
-_JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY = _JSCARD_LOCALISEDSTRING.nested_types_by_name['LocalisationsEntry']
 _JSCARD_RESOURCE = _JSCARD.nested_types_by_name['Resource']
-_JSCARD_CONTACTLANGUAGES = _JSCARD.nested_types_by_name['ContactLanguages']
-_JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE = _JSCARD_CONTACTLANGUAGES.nested_types_by_name['ContactLanguage']
+_JSCARD_PRONOUNCE = _JSCARD.nested_types_by_name['Pronounce']
+_JSCARD_CONTEXT = _JSCARD.nested_types_by_name['Context']
+_JSCARD_NAME = _JSCARD.nested_types_by_name['Name']
+_JSCARD_NAME_NAMECOMPONENT = _JSCARD_NAME.nested_types_by_name['NameComponent']
+_JSCARD_NICKNAME = _JSCARD.nested_types_by_name['NickName']
+_JSCARD_ORGANISATION = _JSCARD.nested_types_by_name['Organisation']
+_JSCARD_ORGANISATION_ORGANISATIONUNIT = _JSCARD_ORGANISATION.nested_types_by_name['OrganisationUnit']
+_JSCARD_SPEAKTOAS = _JSCARD.nested_types_by_name['SpeakToAs']
+_JSCARD_SPEAKTOAS_PRONOUNS = _JSCARD_SPEAKTOAS.nested_types_by_name['Pronouns']
+_JSCARD_SPEAKTOAS_PRONOUNSENTRY = _JSCARD_SPEAKTOAS.nested_types_by_name['PronounsEntry']
+_JSCARD_TITLE = _JSCARD.nested_types_by_name['Title']
+_JSCARD_EMAIL = _JSCARD.nested_types_by_name['Email']
+_JSCARD_ONLINESERVICE = _JSCARD.nested_types_by_name['OnlineService']
+_JSCARD_PHONE = _JSCARD.nested_types_by_name['Phone']
+_JSCARD_LANGUAGEPREFERENCES = _JSCARD.nested_types_by_name['LanguagePreferences']
+_JSCARD_LANGUAGEPREFERENCES_LANGUAGEPREFERENCE = _JSCARD_LANGUAGEPREFERENCES.nested_types_by_name['LanguagePreference']
+_JSCARD_CALENDAR = _JSCARD.nested_types_by_name['Calendar']
+_JSCARD_SCHEDULINGADDRESS = _JSCARD.nested_types_by_name['SchedulingAddress']
 _JSCARD_ADDRESS = _JSCARD.nested_types_by_name['Address']
+_JSCARD_ADDRESS_ADDRESSCOMPONENT = _JSCARD_ADDRESS.nested_types_by_name['AddressComponent']
+_JSCARD_DIRECTORY = _JSCARD.nested_types_by_name['Directory']
+_JSCARD_LINK = _JSCARD.nested_types_by_name['Link']
+_JSCARD_MEDIA = _JSCARD.nested_types_by_name['Media']
 _JSCARD_ANNIVERSARY = _JSCARD.nested_types_by_name['Anniversary']
+_JSCARD_ANNIVERSARY_PARTIALDATE = _JSCARD_ANNIVERSARY.nested_types_by_name['PartialDate']
+_JSCARD_NOTE = _JSCARD.nested_types_by_name['Note']
+_JSCARD_NOTE_AUTHOR = _JSCARD_NOTE.nested_types_by_name['Author']
 _JSCARD_PERSONALINFO = _JSCARD.nested_types_by_name['PersonalInfo']
-_JSCARD_PREFERREDCONTACTLANGUAGESENTRY = _JSCARD.nested_types_by_name['PreferredContactLanguagesEntry']
+_JSCARD_NICKNAMESENTRY = _JSCARD.nested_types_by_name['NickNamesEntry']
+_JSCARD_ORGANISATIONSENTRY = _JSCARD.nested_types_by_name['OrganisationsEntry']
+_JSCARD_TITLESENTRY = _JSCARD.nested_types_by_name['TitlesEntry']
+_JSCARD_EMAILSENTRY = _JSCARD.nested_types_by_name['EmailsEntry']
+_JSCARD_ONLINESERVICESENTRY = _JSCARD.nested_types_by_name['OnlineServicesEntry']
+_JSCARD_PHONESENTRY = _JSCARD.nested_types_by_name['PhonesEntry']
+_JSCARD_PREFERREDLANGUAGESENTRY = _JSCARD.nested_types_by_name['PreferredLanguagesEntry']
+_JSCARD_CALENDARSENTRY = _JSCARD.nested_types_by_name['CalendarsEntry']
+_JSCARD_SCHEDULINGADDRESSESENTRY = _JSCARD.nested_types_by_name['SchedulingAddressesEntry']
+_JSCARD_ADDRESSESENTRY = _JSCARD.nested_types_by_name['AddressesEntry']
+_JSCARD_CRYPTOKEYSENTRY = _JSCARD.nested_types_by_name['CryptoKeysEntry']
+_JSCARD_DIRECTORIESENTRY = _JSCARD.nested_types_by_name['DirectoriesEntry']
+_JSCARD_LINKSENTRY = _JSCARD.nested_types_by_name['LinksEntry']
+_JSCARD_MEDIAENTRY = _JSCARD.nested_types_by_name['MediaEntry']
+_JSCARD_ANNIVERSARIESENTRY = _JSCARD.nested_types_by_name['AnniversariesEntry']
+_JSCARD_NOTESENTRY = _JSCARD.nested_types_by_name['NotesEntry']
+_JSCARD_PERSONALINFOENTRY = _JSCARD.nested_types_by_name['PersonalInfoEntry']
 _ENTITY = DESCRIPTOR.message_types_by_name['Entity']
 _DOMAIN = DESCRIPTOR.message_types_by_name['Domain']
 _DOMAIN_SECDNS = _DOMAIN.nested_types_by_name['SecDNS']
@@ -118,6 +155,19 @@ _DOMAIN_SECDNS_DSDATA = _DOMAIN_SECDNS.nested_types_by_name['DSData']
 _DOMAIN_SECDNS_KEYDATA = _DOMAIN_SECDNS.nested_types_by_name['KeyData']
 _NAMESERVER = DESCRIPTOR.message_types_by_name['NameServer']
 _IPADDRESSES = DESCRIPTOR.message_types_by_name['IpAddresses']
+_JSCARD_NAME_NAMECOMPONENT_KIND = _JSCARD_NAME_NAMECOMPONENT.enum_types_by_name['Kind']
+_JSCARD_SPEAKTOAS_GRAMMATICALGENDER = _JSCARD_SPEAKTOAS.enum_types_by_name['GrammaticalGender']
+_JSCARD_TITLE_KIND = _JSCARD_TITLE.enum_types_by_name['Kind']
+_JSCARD_PHONE_FEATURE = _JSCARD_PHONE.enum_types_by_name['Feature']
+_JSCARD_CALENDAR_KIND = _JSCARD_CALENDAR.enum_types_by_name['Kind']
+_JSCARD_ADDRESS_ADDRESSCOMPONENT_KIND = _JSCARD_ADDRESS_ADDRESSCOMPONENT.enum_types_by_name['Kind']
+_JSCARD_DIRECTORY_KIND = _JSCARD_DIRECTORY.enum_types_by_name['Kind']
+_JSCARD_LINK_KIND = _JSCARD_LINK.enum_types_by_name['Kind']
+_JSCARD_MEDIA_KIND = _JSCARD_MEDIA.enum_types_by_name['Kind']
+_JSCARD_ANNIVERSARY_KIND = _JSCARD_ANNIVERSARY.enum_types_by_name['Kind']
+_JSCARD_PERSONALINFO_KIND = _JSCARD_PERSONALINFO.enum_types_by_name['Kind']
+_JSCARD_PERSONALINFO_LEVEL = _JSCARD_PERSONALINFO.enum_types_by_name['Level']
+_JSCARD_KIND = _JSCARD.enum_types_by_name['Kind']
 LookupRequest = _reflection.GeneratedProtocolMessageType('LookupRequest', (_message.Message,), {
   'DESCRIPTOR' : _LOOKUPREQUEST,
   '__module__' : 'rdap_pb2'
@@ -249,20 +299,6 @@ _sym_db.RegisterMessage(Remark)
 
 JSCard = _reflection.GeneratedProtocolMessageType('JSCard', (_message.Message,), {
 
-  'LocalisedString' : _reflection.GeneratedProtocolMessageType('LocalisedString', (_message.Message,), {
-
-    'LocalisationsEntry' : _reflection.GeneratedProtocolMessageType('LocalisationsEntry', (_message.Message,), {
-      'DESCRIPTOR' : _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY,
-      '__module__' : 'rdap_pb2'
-      # @@protoc_insertion_point(class_scope:rdap.JSCard.LocalisedString.LocalisationsEntry)
-      })
-    ,
-    'DESCRIPTOR' : _JSCARD_LOCALISEDSTRING,
-    '__module__' : 'rdap_pb2'
-    # @@protoc_insertion_point(class_scope:rdap.JSCard.LocalisedString)
-    })
-  ,
-
   'Resource' : _reflection.GeneratedProtocolMessageType('Resource', (_message.Message,), {
     'DESCRIPTOR' : _JSCARD_RESOURCE,
     '__module__' : 'rdap_pb2'
@@ -270,31 +306,192 @@ JSCard = _reflection.GeneratedProtocolMessageType('JSCard', (_message.Message,),
     })
   ,
 
-  'ContactLanguages' : _reflection.GeneratedProtocolMessageType('ContactLanguages', (_message.Message,), {
+  'Pronounce' : _reflection.GeneratedProtocolMessageType('Pronounce', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PRONOUNCE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Pronounce)
+    })
+  ,
 
-    'ContactLanguage' : _reflection.GeneratedProtocolMessageType('ContactLanguage', (_message.Message,), {
-      'DESCRIPTOR' : _JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE,
+  'Context' : _reflection.GeneratedProtocolMessageType('Context', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_CONTEXT,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Context)
+    })
+  ,
+
+  'Name' : _reflection.GeneratedProtocolMessageType('Name', (_message.Message,), {
+
+    'NameComponent' : _reflection.GeneratedProtocolMessageType('NameComponent', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_NAME_NAMECOMPONENT,
       '__module__' : 'rdap_pb2'
-      # @@protoc_insertion_point(class_scope:rdap.JSCard.ContactLanguages.ContactLanguage)
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.Name.NameComponent)
       })
     ,
-    'DESCRIPTOR' : _JSCARD_CONTACTLANGUAGES,
+    'DESCRIPTOR' : _JSCARD_NAME,
     '__module__' : 'rdap_pb2'
-    # @@protoc_insertion_point(class_scope:rdap.JSCard.ContactLanguages)
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Name)
+    })
+  ,
+
+  'NickName' : _reflection.GeneratedProtocolMessageType('NickName', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_NICKNAME,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.NickName)
+    })
+  ,
+
+  'Organisation' : _reflection.GeneratedProtocolMessageType('Organisation', (_message.Message,), {
+
+    'OrganisationUnit' : _reflection.GeneratedProtocolMessageType('OrganisationUnit', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_ORGANISATION_ORGANISATIONUNIT,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.Organisation.OrganisationUnit)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_ORGANISATION,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Organisation)
+    })
+  ,
+
+  'SpeakToAs' : _reflection.GeneratedProtocolMessageType('SpeakToAs', (_message.Message,), {
+
+    'Pronouns' : _reflection.GeneratedProtocolMessageType('Pronouns', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_SPEAKTOAS_PRONOUNS,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.SpeakToAs.Pronouns)
+      })
+    ,
+
+    'PronounsEntry' : _reflection.GeneratedProtocolMessageType('PronounsEntry', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_SPEAKTOAS_PRONOUNSENTRY,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.SpeakToAs.PronounsEntry)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_SPEAKTOAS,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.SpeakToAs)
+    })
+  ,
+
+  'Title' : _reflection.GeneratedProtocolMessageType('Title', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_TITLE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Title)
+    })
+  ,
+
+  'Email' : _reflection.GeneratedProtocolMessageType('Email', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_EMAIL,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Email)
+    })
+  ,
+
+  'OnlineService' : _reflection.GeneratedProtocolMessageType('OnlineService', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ONLINESERVICE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.OnlineService)
+    })
+  ,
+
+  'Phone' : _reflection.GeneratedProtocolMessageType('Phone', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PHONE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Phone)
+    })
+  ,
+
+  'LanguagePreferences' : _reflection.GeneratedProtocolMessageType('LanguagePreferences', (_message.Message,), {
+
+    'LanguagePreference' : _reflection.GeneratedProtocolMessageType('LanguagePreference', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_LANGUAGEPREFERENCES_LANGUAGEPREFERENCE,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.LanguagePreferences.LanguagePreference)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_LANGUAGEPREFERENCES,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.LanguagePreferences)
+    })
+  ,
+
+  'Calendar' : _reflection.GeneratedProtocolMessageType('Calendar', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_CALENDAR,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Calendar)
+    })
+  ,
+
+  'SchedulingAddress' : _reflection.GeneratedProtocolMessageType('SchedulingAddress', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_SCHEDULINGADDRESS,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.SchedulingAddress)
     })
   ,
 
   'Address' : _reflection.GeneratedProtocolMessageType('Address', (_message.Message,), {
+
+    'AddressComponent' : _reflection.GeneratedProtocolMessageType('AddressComponent', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_ADDRESS_ADDRESSCOMPONENT,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.Address.AddressComponent)
+      })
+    ,
     'DESCRIPTOR' : _JSCARD_ADDRESS,
     '__module__' : 'rdap_pb2'
     # @@protoc_insertion_point(class_scope:rdap.JSCard.Address)
     })
   ,
 
+  'Directory' : _reflection.GeneratedProtocolMessageType('Directory', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_DIRECTORY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Directory)
+    })
+  ,
+
+  'Link' : _reflection.GeneratedProtocolMessageType('Link', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_LINK,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Link)
+    })
+  ,
+
+  'Media' : _reflection.GeneratedProtocolMessageType('Media', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_MEDIA,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Media)
+    })
+  ,
+
   'Anniversary' : _reflection.GeneratedProtocolMessageType('Anniversary', (_message.Message,), {
+
+    'PartialDate' : _reflection.GeneratedProtocolMessageType('PartialDate', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_ANNIVERSARY_PARTIALDATE,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.Anniversary.PartialDate)
+      })
+    ,
     'DESCRIPTOR' : _JSCARD_ANNIVERSARY,
     '__module__' : 'rdap_pb2'
     # @@protoc_insertion_point(class_scope:rdap.JSCard.Anniversary)
+    })
+  ,
+
+  'Note' : _reflection.GeneratedProtocolMessageType('Note', (_message.Message,), {
+
+    'Author' : _reflection.GeneratedProtocolMessageType('Author', (_message.Message,), {
+      'DESCRIPTOR' : _JSCARD_NOTE_AUTHOR,
+      '__module__' : 'rdap_pb2'
+      # @@protoc_insertion_point(class_scope:rdap.JSCard.Note.Author)
+      })
+    ,
+    'DESCRIPTOR' : _JSCARD_NOTE,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.Note)
     })
   ,
 
@@ -305,10 +502,122 @@ JSCard = _reflection.GeneratedProtocolMessageType('JSCard', (_message.Message,),
     })
   ,
 
-  'PreferredContactLanguagesEntry' : _reflection.GeneratedProtocolMessageType('PreferredContactLanguagesEntry', (_message.Message,), {
-    'DESCRIPTOR' : _JSCARD_PREFERREDCONTACTLANGUAGESENTRY,
+  'NickNamesEntry' : _reflection.GeneratedProtocolMessageType('NickNamesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_NICKNAMESENTRY,
     '__module__' : 'rdap_pb2'
-    # @@protoc_insertion_point(class_scope:rdap.JSCard.PreferredContactLanguagesEntry)
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.NickNamesEntry)
+    })
+  ,
+
+  'OrganisationsEntry' : _reflection.GeneratedProtocolMessageType('OrganisationsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ORGANISATIONSENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.OrganisationsEntry)
+    })
+  ,
+
+  'TitlesEntry' : _reflection.GeneratedProtocolMessageType('TitlesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_TITLESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.TitlesEntry)
+    })
+  ,
+
+  'EmailsEntry' : _reflection.GeneratedProtocolMessageType('EmailsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_EMAILSENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.EmailsEntry)
+    })
+  ,
+
+  'OnlineServicesEntry' : _reflection.GeneratedProtocolMessageType('OnlineServicesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ONLINESERVICESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.OnlineServicesEntry)
+    })
+  ,
+
+  'PhonesEntry' : _reflection.GeneratedProtocolMessageType('PhonesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PHONESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.PhonesEntry)
+    })
+  ,
+
+  'PreferredLanguagesEntry' : _reflection.GeneratedProtocolMessageType('PreferredLanguagesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PREFERREDLANGUAGESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.PreferredLanguagesEntry)
+    })
+  ,
+
+  'CalendarsEntry' : _reflection.GeneratedProtocolMessageType('CalendarsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_CALENDARSENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.CalendarsEntry)
+    })
+  ,
+
+  'SchedulingAddressesEntry' : _reflection.GeneratedProtocolMessageType('SchedulingAddressesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_SCHEDULINGADDRESSESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.SchedulingAddressesEntry)
+    })
+  ,
+
+  'AddressesEntry' : _reflection.GeneratedProtocolMessageType('AddressesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ADDRESSESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.AddressesEntry)
+    })
+  ,
+
+  'CryptoKeysEntry' : _reflection.GeneratedProtocolMessageType('CryptoKeysEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_CRYPTOKEYSENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.CryptoKeysEntry)
+    })
+  ,
+
+  'DirectoriesEntry' : _reflection.GeneratedProtocolMessageType('DirectoriesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_DIRECTORIESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.DirectoriesEntry)
+    })
+  ,
+
+  'LinksEntry' : _reflection.GeneratedProtocolMessageType('LinksEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_LINKSENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.LinksEntry)
+    })
+  ,
+
+  'MediaEntry' : _reflection.GeneratedProtocolMessageType('MediaEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_MEDIAENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.MediaEntry)
+    })
+  ,
+
+  'AnniversariesEntry' : _reflection.GeneratedProtocolMessageType('AnniversariesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_ANNIVERSARIESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.AnniversariesEntry)
+    })
+  ,
+
+  'NotesEntry' : _reflection.GeneratedProtocolMessageType('NotesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_NOTESENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.NotesEntry)
+    })
+  ,
+
+  'PersonalInfoEntry' : _reflection.GeneratedProtocolMessageType('PersonalInfoEntry', (_message.Message,), {
+    'DESCRIPTOR' : _JSCARD_PERSONALINFOENTRY,
+    '__module__' : 'rdap_pb2'
+    # @@protoc_insertion_point(class_scope:rdap.JSCard.PersonalInfoEntry)
     })
   ,
   'DESCRIPTOR' : _JSCARD,
@@ -316,15 +625,52 @@ JSCard = _reflection.GeneratedProtocolMessageType('JSCard', (_message.Message,),
   # @@protoc_insertion_point(class_scope:rdap.JSCard)
   })
 _sym_db.RegisterMessage(JSCard)
-_sym_db.RegisterMessage(JSCard.LocalisedString)
-_sym_db.RegisterMessage(JSCard.LocalisedString.LocalisationsEntry)
 _sym_db.RegisterMessage(JSCard.Resource)
-_sym_db.RegisterMessage(JSCard.ContactLanguages)
-_sym_db.RegisterMessage(JSCard.ContactLanguages.ContactLanguage)
+_sym_db.RegisterMessage(JSCard.Pronounce)
+_sym_db.RegisterMessage(JSCard.Context)
+_sym_db.RegisterMessage(JSCard.Name)
+_sym_db.RegisterMessage(JSCard.Name.NameComponent)
+_sym_db.RegisterMessage(JSCard.NickName)
+_sym_db.RegisterMessage(JSCard.Organisation)
+_sym_db.RegisterMessage(JSCard.Organisation.OrganisationUnit)
+_sym_db.RegisterMessage(JSCard.SpeakToAs)
+_sym_db.RegisterMessage(JSCard.SpeakToAs.Pronouns)
+_sym_db.RegisterMessage(JSCard.SpeakToAs.PronounsEntry)
+_sym_db.RegisterMessage(JSCard.Title)
+_sym_db.RegisterMessage(JSCard.Email)
+_sym_db.RegisterMessage(JSCard.OnlineService)
+_sym_db.RegisterMessage(JSCard.Phone)
+_sym_db.RegisterMessage(JSCard.LanguagePreferences)
+_sym_db.RegisterMessage(JSCard.LanguagePreferences.LanguagePreference)
+_sym_db.RegisterMessage(JSCard.Calendar)
+_sym_db.RegisterMessage(JSCard.SchedulingAddress)
 _sym_db.RegisterMessage(JSCard.Address)
+_sym_db.RegisterMessage(JSCard.Address.AddressComponent)
+_sym_db.RegisterMessage(JSCard.Directory)
+_sym_db.RegisterMessage(JSCard.Link)
+_sym_db.RegisterMessage(JSCard.Media)
 _sym_db.RegisterMessage(JSCard.Anniversary)
+_sym_db.RegisterMessage(JSCard.Anniversary.PartialDate)
+_sym_db.RegisterMessage(JSCard.Note)
+_sym_db.RegisterMessage(JSCard.Note.Author)
 _sym_db.RegisterMessage(JSCard.PersonalInfo)
-_sym_db.RegisterMessage(JSCard.PreferredContactLanguagesEntry)
+_sym_db.RegisterMessage(JSCard.NickNamesEntry)
+_sym_db.RegisterMessage(JSCard.OrganisationsEntry)
+_sym_db.RegisterMessage(JSCard.TitlesEntry)
+_sym_db.RegisterMessage(JSCard.EmailsEntry)
+_sym_db.RegisterMessage(JSCard.OnlineServicesEntry)
+_sym_db.RegisterMessage(JSCard.PhonesEntry)
+_sym_db.RegisterMessage(JSCard.PreferredLanguagesEntry)
+_sym_db.RegisterMessage(JSCard.CalendarsEntry)
+_sym_db.RegisterMessage(JSCard.SchedulingAddressesEntry)
+_sym_db.RegisterMessage(JSCard.AddressesEntry)
+_sym_db.RegisterMessage(JSCard.CryptoKeysEntry)
+_sym_db.RegisterMessage(JSCard.DirectoriesEntry)
+_sym_db.RegisterMessage(JSCard.LinksEntry)
+_sym_db.RegisterMessage(JSCard.MediaEntry)
+_sym_db.RegisterMessage(JSCard.AnniversariesEntry)
+_sym_db.RegisterMessage(JSCard.NotesEntry)
+_sym_db.RegisterMessage(JSCard.PersonalInfoEntry)
 
 Entity = _reflection.GeneratedProtocolMessageType('Entity', (_message.Message,), {
   'DESCRIPTOR' : _ENTITY,
@@ -382,16 +728,48 @@ _RDAP = DESCRIPTOR.services_by_name['RDAP']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY._options = None
-  _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY._serialized_options = b'8\001'
-  _JSCARD_PREFERREDCONTACTLANGUAGESENTRY._options = None
-  _JSCARD_PREFERREDCONTACTLANGUAGESENTRY._serialized_options = b'8\001'
-  _EVENTACTION._serialized_start=5663
-  _EVENTACTION._serialized_end=5924
-  _ENTITYROLE._serialized_start=5927
-  _ENTITYROLE._serialized_end=6139
-  _STATUS._serialized_start=6142
-  _STATUS._serialized_end=7032
+  _JSCARD_SPEAKTOAS_PRONOUNSENTRY._options = None
+  _JSCARD_SPEAKTOAS_PRONOUNSENTRY._serialized_options = b'8\001'
+  _JSCARD_NICKNAMESENTRY._options = None
+  _JSCARD_NICKNAMESENTRY._serialized_options = b'8\001'
+  _JSCARD_ORGANISATIONSENTRY._options = None
+  _JSCARD_ORGANISATIONSENTRY._serialized_options = b'8\001'
+  _JSCARD_TITLESENTRY._options = None
+  _JSCARD_TITLESENTRY._serialized_options = b'8\001'
+  _JSCARD_EMAILSENTRY._options = None
+  _JSCARD_EMAILSENTRY._serialized_options = b'8\001'
+  _JSCARD_ONLINESERVICESENTRY._options = None
+  _JSCARD_ONLINESERVICESENTRY._serialized_options = b'8\001'
+  _JSCARD_PHONESENTRY._options = None
+  _JSCARD_PHONESENTRY._serialized_options = b'8\001'
+  _JSCARD_PREFERREDLANGUAGESENTRY._options = None
+  _JSCARD_PREFERREDLANGUAGESENTRY._serialized_options = b'8\001'
+  _JSCARD_CALENDARSENTRY._options = None
+  _JSCARD_CALENDARSENTRY._serialized_options = b'8\001'
+  _JSCARD_SCHEDULINGADDRESSESENTRY._options = None
+  _JSCARD_SCHEDULINGADDRESSESENTRY._serialized_options = b'8\001'
+  _JSCARD_ADDRESSESENTRY._options = None
+  _JSCARD_ADDRESSESENTRY._serialized_options = b'8\001'
+  _JSCARD_CRYPTOKEYSENTRY._options = None
+  _JSCARD_CRYPTOKEYSENTRY._serialized_options = b'8\001'
+  _JSCARD_DIRECTORIESENTRY._options = None
+  _JSCARD_DIRECTORIESENTRY._serialized_options = b'8\001'
+  _JSCARD_LINKSENTRY._options = None
+  _JSCARD_LINKSENTRY._serialized_options = b'8\001'
+  _JSCARD_MEDIAENTRY._options = None
+  _JSCARD_MEDIAENTRY._serialized_options = b'8\001'
+  _JSCARD_ANNIVERSARIESENTRY._options = None
+  _JSCARD_ANNIVERSARIESENTRY._serialized_options = b'8\001'
+  _JSCARD_NOTESENTRY._options = None
+  _JSCARD_NOTESENTRY._serialized_options = b'8\001'
+  _JSCARD_PERSONALINFOENTRY._options = None
+  _JSCARD_PERSONALINFOENTRY._serialized_options = b'8\001'
+  _EVENTACTION._serialized_start=11168
+  _EVENTACTION._serialized_end=11429
+  _ENTITYROLE._serialized_start=11432
+  _ENTITYROLE._serialized_end=11644
+  _STATUS._serialized_start=11647
+  _STATUS._serialized_end=12537
   _LOOKUPREQUEST._serialized_start=85
   _LOOKUPREQUEST._serialized_end=115
   _DOMAINSEARCHREQUEST._serialized_start=117
@@ -429,39 +807,139 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _REMARK._serialized_start=1745
   _REMARK._serialized_end=1863
   _JSCARD._serialized_start=1866
-  _JSCARD._serialized_end=4313
-  _JSCARD_LOCALISEDSTRING._serialized_start=2641
-  _JSCARD_LOCALISEDSTRING._serialized_end=2847
-  _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY._serialized_start=2795
-  _JSCARD_LOCALISEDSTRING_LOCALISATIONSENTRY._serialized_end=2847
-  _JSCARD_RESOURCE._serialized_start=2850
-  _JSCARD_RESOURCE._serialized_end=3079
-  _JSCARD_CONTACTLANGUAGES._serialized_start=3082
-  _JSCARD_CONTACTLANGUAGES._serialized_end=3278
-  _JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE._serialized_start=3168
-  _JSCARD_CONTACTLANGUAGES_CONTACTLANGUAGE._serialized_end=3278
-  _JSCARD_ADDRESS._serialized_start=3281
-  _JSCARD_ADDRESS._serialized_end=3972
-  _JSCARD_ANNIVERSARY._serialized_start=3975
-  _JSCARD_ANNIVERSARY._serialized_end=4126
-  _JSCARD_PERSONALINFO._serialized_start=4128
-  _JSCARD_PERSONALINFO._serialized_end=4216
-  _JSCARD_PREFERREDCONTACTLANGUAGESENTRY._serialized_start=4218
-  _JSCARD_PREFERREDCONTACTLANGUAGESENTRY._serialized_end=4313
-  _ENTITY._serialized_start=4316
-  _ENTITY._serialized_end=4616
-  _DOMAIN._serialized_start=4619
-  _DOMAIN._serialized_end=5365
-  _DOMAIN_SECDNS._serialized_start=4944
-  _DOMAIN_SECDNS._serialized_end=5365
-  _DOMAIN_SECDNS_DSDATA._serialized_start=5201
-  _DOMAIN_SECDNS_DSDATA._serialized_end=5282
-  _DOMAIN_SECDNS_KEYDATA._serialized_start=5284
-  _DOMAIN_SECDNS_KEYDATA._serialized_end=5365
-  _NAMESERVER._serialized_start=5368
-  _NAMESERVER._serialized_end=5621
-  _IPADDRESSES._serialized_start=5623
-  _IPADDRESSES._serialized_end=5660
-  _RDAP._serialized_start=7035
-  _RDAP._serialized_end=7451
+  _JSCARD._serialized_end=9818
+  _JSCARD_RESOURCE._serialized_start=3080
+  _JSCARD_RESOURCE._serialized_end=3287
+  _JSCARD_PRONOUNCE._serialized_start=3289
+  _JSCARD_PRONOUNCE._serialized_end=3411
+  _JSCARD_CONTEXT._serialized_start=3413
+  _JSCARD_CONTEXT._serialized_end=3488
+  _JSCARD_NAME._serialized_start=3491
+  _JSCARD_NAME._serialized_end=3943
+  _JSCARD_NAME_NAMECOMPONENT._serialized_start=3702
+  _JSCARD_NAME_NAMECOMPONENT._serialized_end=3943
+  _JSCARD_NAME_NAMECOMPONENT_KIND._serialized_start=3829
+  _JSCARD_NAME_NAMECOMPONENT_KIND._serialized_end=3943
+  _JSCARD_NICKNAME._serialized_start=3945
+  _JSCARD_NICKNAME._serialized_end=4058
+  _JSCARD_ORGANISATION._serialized_start=4061
+  _JSCARD_ORGANISATION._serialized_end=4345
+  _JSCARD_ORGANISATION_ORGANISATIONUNIT._serialized_start=4266
+  _JSCARD_ORGANISATION_ORGANISATIONUNIT._serialized_end=4345
+  _JSCARD_SPEAKTOAS._serialized_start=4348
+  _JSCARD_SPEAKTOAS._serialized_end=4800
+  _JSCARD_SPEAKTOAS_PRONOUNS._serialized_start=4487
+  _JSCARD_SPEAKTOAS_PRONOUNS._serialized_end=4604
+  _JSCARD_SPEAKTOAS_PRONOUNSENTRY._serialized_start=4606
+  _JSCARD_SPEAKTOAS_PRONOUNSENTRY._serialized_end=4686
+  _JSCARD_SPEAKTOAS_GRAMMATICALGENDER._serialized_start=4688
+  _JSCARD_SPEAKTOAS_GRAMMATICALGENDER._serialized_end=4800
+  _JSCARD_TITLE._serialized_start=4803
+  _JSCARD_TITLE._serialized_end=4944
+  _JSCARD_TITLE_KIND._serialized_start=4917
+  _JSCARD_TITLE_KIND._serialized_end=4944
+  _JSCARD_EMAIL._serialized_start=4947
+  _JSCARD_EMAIL._serialized_end=5103
+  _JSCARD_ONLINESERVICE._serialized_start=5106
+  _JSCARD_ONLINESERVICE._serialized_end=5389
+  _JSCARD_PHONE._serialized_start=5392
+  _JSCARD_PHONE._serialized_end=5701
+  _JSCARD_PHONE_FEATURE._serialized_start=5597
+  _JSCARD_PHONE_FEATURE._serialized_end=5701
+  _JSCARD_LANGUAGEPREFERENCES._serialized_start=5704
+  _JSCARD_LANGUAGEPREFERENCES._serialized_end=5910
+  _JSCARD_LANGUAGEPREFERENCES_LANGUAGEPREFERENCE._serialized_start=5801
+  _JSCARD_LANGUAGEPREFERENCES_LANGUAGEPREFERENCE._serialized_end=5910
+  _JSCARD_CALENDAR._serialized_start=5913
+  _JSCARD_CALENDAR._serialized_end=6042
+  _JSCARD_CALENDAR_KIND._serialized_start=6008
+  _JSCARD_CALENDAR_KIND._serialized_end=6042
+  _JSCARD_SCHEDULINGADDRESS._serialized_start=6045
+  _JSCARD_SCHEDULINGADDRESS._serialized_end=6211
+  _JSCARD_ADDRESS._serialized_start=6214
+  _JSCARD_ADDRESS._serialized_end=7042
+  _JSCARD_ADDRESS_ADDRESSCOMPONENT._serialized_start=6669
+  _JSCARD_ADDRESS_ADDRESSCOMPONENT._serialized_end=7042
+  _JSCARD_ADDRESS_ADDRESSCOMPONENT_KIND._serialized_start=6806
+  _JSCARD_ADDRESS_ADDRESSCOMPONENT_KIND._serialized_end=7042
+  _JSCARD_DIRECTORY._serialized_start=7045
+  _JSCARD_DIRECTORY._serialized_end=7221
+  _JSCARD_DIRECTORY_KIND._serialized_start=7189
+  _JSCARD_DIRECTORY_KIND._serialized_end=7221
+  _JSCARD_LINK._serialized_start=7223
+  _JSCARD_LINK._serialized_end=7329
+  _JSCARD_LINK_KIND._serialized_start=7310
+  _JSCARD_LINK_KIND._serialized_end=7329
+  _JSCARD_MEDIA._serialized_start=7331
+  _JSCARD_MEDIA._serialized_end=7458
+  _JSCARD_MEDIA_KIND._serialized_start=7420
+  _JSCARD_MEDIA_KIND._serialized_end=7458
+  _JSCARD_ANNIVERSARY._serialized_start=7461
+  _JSCARD_ANNIVERSARY._serialized_end=7920
+  _JSCARD_ANNIVERSARY_PARTIALDATE._serialized_start=7670
+  _JSCARD_ANNIVERSARY_PARTIALDATE._serialized_end=7869
+  _JSCARD_ANNIVERSARY_KIND._serialized_start=7871
+  _JSCARD_ANNIVERSARY_KIND._serialized_end=7912
+  _JSCARD_NOTE._serialized_start=7923
+  _JSCARD_NOTE._serialized_end=8127
+  _JSCARD_NOTE_AUTHOR._serialized_start=8032
+  _JSCARD_NOTE_AUTHOR._serialized_end=8127
+  _JSCARD_PERSONALINFO._serialized_start=8130
+  _JSCARD_PERSONALINFO._serialized_end=8445
+  _JSCARD_PERSONALINFO_KIND._serialized_start=8347
+  _JSCARD_PERSONALINFO_KIND._serialized_end=8393
+  _JSCARD_PERSONALINFO_LEVEL._serialized_start=8395
+  _JSCARD_PERSONALINFO_LEVEL._serialized_end=8445
+  _JSCARD_NICKNAMESENTRY._serialized_start=8447
+  _JSCARD_NICKNAMESENTRY._serialized_end=8518
+  _JSCARD_ORGANISATIONSENTRY._serialized_start=8520
+  _JSCARD_ORGANISATIONSENTRY._serialized_end=8599
+  _JSCARD_TITLESENTRY._serialized_start=8601
+  _JSCARD_TITLESENTRY._serialized_end=8666
+  _JSCARD_EMAILSENTRY._serialized_start=8668
+  _JSCARD_EMAILSENTRY._serialized_end=8733
+  _JSCARD_ONLINESERVICESENTRY._serialized_start=8735
+  _JSCARD_ONLINESERVICESENTRY._serialized_end=8816
+  _JSCARD_PHONESENTRY._serialized_start=8818
+  _JSCARD_PHONESENTRY._serialized_end=8883
+  _JSCARD_PREFERREDLANGUAGESENTRY._serialized_start=8885
+  _JSCARD_PREFERREDLANGUAGESENTRY._serialized_end=8976
+  _JSCARD_CALENDARSENTRY._serialized_start=8978
+  _JSCARD_CALENDARSENTRY._serialized_end=9049
+  _JSCARD_SCHEDULINGADDRESSESENTRY._serialized_start=9051
+  _JSCARD_SCHEDULINGADDRESSESENTRY._serialized_end=9141
+  _JSCARD_ADDRESSESENTRY._serialized_start=9143
+  _JSCARD_ADDRESSESENTRY._serialized_end=9213
+  _JSCARD_CRYPTOKEYSENTRY._serialized_start=9215
+  _JSCARD_CRYPTOKEYSENTRY._serialized_end=9287
+  _JSCARD_DIRECTORIESENTRY._serialized_start=9289
+  _JSCARD_DIRECTORIESENTRY._serialized_end=9363
+  _JSCARD_LINKSENTRY._serialized_start=9365
+  _JSCARD_LINKSENTRY._serialized_end=9428
+  _JSCARD_MEDIAENTRY._serialized_start=9430
+  _JSCARD_MEDIAENTRY._serialized_end=9494
+  _JSCARD_ANNIVERSARIESENTRY._serialized_start=9496
+  _JSCARD_ANNIVERSARIESENTRY._serialized_end=9574
+  _JSCARD_NOTESENTRY._serialized_start=9576
+  _JSCARD_NOTESENTRY._serialized_end=9639
+  _JSCARD_PERSONALINFOENTRY._serialized_start=9641
+  _JSCARD_PERSONALINFOENTRY._serialized_end=9719
+  _JSCARD_KIND._serialized_start=9721
+  _JSCARD_KIND._serialized_end=9818
+  _ENTITY._serialized_start=9821
+  _ENTITY._serialized_end=10121
+  _DOMAIN._serialized_start=10124
+  _DOMAIN._serialized_end=10870
+  _DOMAIN_SECDNS._serialized_start=10449
+  _DOMAIN_SECDNS._serialized_end=10870
+  _DOMAIN_SECDNS_DSDATA._serialized_start=10706
+  _DOMAIN_SECDNS_DSDATA._serialized_end=10787
+  _DOMAIN_SECDNS_KEYDATA._serialized_start=10789
+  _DOMAIN_SECDNS_KEYDATA._serialized_end=10870
+  _NAMESERVER._serialized_start=10873
+  _NAMESERVER._serialized_end=11126
+  _IPADDRESSES._serialized_start=11128
+  _IPADDRESSES._serialized_end=11165
+  _RDAP._serialized_start=12540
+  _RDAP._serialized_end=12956
 # @@protoc_insertion_point(module_scope)

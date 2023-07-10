@@ -550,149 +550,641 @@ global___Remark = Remark
 class JSCard(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-    @typing_extensions.final
-    class LocalisedString(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    class _Kind:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
 
-        @typing_extensions.final
-        class LocalisationsEntry(google.protobuf.message.Message):
-            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard._Kind.ValueType], builtins.type):  # noqa: F821
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        NotSet: JSCard._Kind.ValueType  # 0
+        Individual: JSCard._Kind.ValueType  # 1
+        Group: JSCard._Kind.ValueType  # 2
+        Org: JSCard._Kind.ValueType  # 3
+        Location: JSCard._Kind.ValueType  # 4
+        Device: JSCard._Kind.ValueType  # 5
+        Application: JSCard._Kind.ValueType  # 6
 
-            KEY_FIELD_NUMBER: builtins.int
-            VALUE_FIELD_NUMBER: builtins.int
-            key: builtins.str
-            value: builtins.str
-            def __init__(
-                self,
-                *,
-                key: builtins.str = ...,
-                value: builtins.str = ...,
-            ) -> None: ...
-            def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
-
-        VALUE_FIELD_NUMBER: builtins.int
-        LANGUAGE_FIELD_NUMBER: builtins.int
-        LOCALISATIONS_FIELD_NUMBER: builtins.int
-        value: builtins.str
-        @property
-        def language(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def localisations(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]: ...
-        def __init__(
-            self,
-            *,
-            value: builtins.str = ...,
-            language: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            localisations: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
-        ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["language", b"language"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["language", b"language", "localisations", b"localisations", "value", b"value"]) -> None: ...
+    class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+    NotSet: JSCard.Kind.ValueType  # 0
+    Individual: JSCard.Kind.ValueType  # 1
+    Group: JSCard.Kind.ValueType  # 2
+    Org: JSCard.Kind.ValueType  # 3
+    Location: JSCard.Kind.ValueType  # 4
+    Device: JSCard.Kind.ValueType  # 5
+    Application: JSCard.Kind.ValueType  # 6
 
     @typing_extensions.final
     class Resource(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-        CONTEXT_FIELD_NUMBER: builtins.int
-        TYPE_FIELD_NUMBER: builtins.int
-        VALUE_FIELD_NUMBER: builtins.int
+        URI_FIELD_NUMBER: builtins.int
         MEDIA_TYPE_FIELD_NUMBER: builtins.int
-        PREFERRED_FIELD_NUMBER: builtins.int
-        LABELS_FIELD_NUMBER: builtins.int
-        @property
-        def context(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def type(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        value: builtins.str
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        uri: builtins.str
         @property
         def media_type(self) -> google.protobuf.wrappers_pb2.StringValue: ...
         @property
-        def preferred(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
+        def context(self) -> global___JSCard.Context: ...
         @property
-        def labels(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            context: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            type: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            value: builtins.str = ...,
+            uri: builtins.str = ...,
             media_type: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            preferred: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-            labels: collections.abc.Iterable[builtins.str] | None = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "media_type", b"media_type", "preferred", b"preferred", "type", b"type"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "labels", b"labels", "media_type", b"media_type", "preferred", b"preferred", "type", b"type", "value", b"value"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "media_type", b"media_type", "preference", b"preference"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "media_type", b"media_type", "preference", b"preference", "uri", b"uri"]) -> None: ...
 
     @typing_extensions.final
-    class ContactLanguages(google.protobuf.message.Message):
+    class Pronounce(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        PHONETICS_FIELD_NUMBER: builtins.int
+        SCRIPT_FIELD_NUMBER: builtins.int
+        SYSTEM_FIELD_NUMBER: builtins.int
+        phonetics: builtins.str
+        @property
+        def script(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def system(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            phonetics: builtins.str = ...,
+            script: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            system: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["script", b"script", "system", b"system"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["phonetics", b"phonetics", "script", b"script", "system", b"system"]) -> None: ...
+
+    @typing_extensions.final
+    class Context(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        PRIVATE_FIELD_NUMBER: builtins.int
+        WORK_FIELD_NUMBER: builtins.int
+        BILLING_FIELD_NUMBER: builtins.int
+        DELIVERY_FIELD_NUMBER: builtins.int
+        private: builtins.bool
+        work: builtins.bool
+        billing: builtins.bool
+        delivery: builtins.bool
+        def __init__(
+            self,
+            *,
+            private: builtins.bool = ...,
+            work: builtins.bool = ...,
+            billing: builtins.bool = ...,
+            delivery: builtins.bool = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing_extensions.Literal["billing", b"billing", "delivery", b"delivery", "private", b"private", "work", b"work"]) -> None: ...
+
+    @typing_extensions.final
+    class Name(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
         @typing_extensions.final
-        class ContactLanguage(google.protobuf.message.Message):
+        class NameComponent(google.protobuf.message.Message):
             DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-            TYPE_FIELD_NUMBER: builtins.int
-            PREFERENCE_FIELD_NUMBER: builtins.int
+            class _Kind:
+                ValueType = typing.NewType("ValueType", builtins.int)
+                V: typing_extensions.TypeAlias = ValueType
+
+            class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Name.NameComponent._Kind.ValueType], builtins.type):  # noqa: F821
+                DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+                Given: JSCard.Name.NameComponent._Kind.ValueType  # 0
+                Middle: JSCard.Name.NameComponent._Kind.ValueType  # 1
+                Surname: JSCard.Name.NameComponent._Kind.ValueType  # 2
+                Surname2: JSCard.Name.NameComponent._Kind.ValueType  # 3
+                Title: JSCard.Name.NameComponent._Kind.ValueType  # 4
+                Credential: JSCard.Name.NameComponent._Kind.ValueType  # 5
+                Generation: JSCard.Name.NameComponent._Kind.ValueType  # 6
+                Separator: JSCard.Name.NameComponent._Kind.ValueType  # 7
+
+            class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+            Given: JSCard.Name.NameComponent.Kind.ValueType  # 0
+            Middle: JSCard.Name.NameComponent.Kind.ValueType  # 1
+            Surname: JSCard.Name.NameComponent.Kind.ValueType  # 2
+            Surname2: JSCard.Name.NameComponent.Kind.ValueType  # 3
+            Title: JSCard.Name.NameComponent.Kind.ValueType  # 4
+            Credential: JSCard.Name.NameComponent.Kind.ValueType  # 5
+            Generation: JSCard.Name.NameComponent.Kind.ValueType  # 6
+            Separator: JSCard.Name.NameComponent.Kind.ValueType  # 7
+
+            VALUE_FIELD_NUMBER: builtins.int
+            KIND_FIELD_NUMBER: builtins.int
+            PRONOUNCE_FIELD_NUMBER: builtins.int
+            value: builtins.str
+            kind: global___JSCard.Name.NameComponent.Kind.ValueType
             @property
-            def type(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-            @property
-            def preference(self) -> google.protobuf.wrappers_pb2.Int32Value: ...
+            def pronounce(self) -> global___JSCard.Pronounce: ...
             def __init__(
                 self,
                 *,
-                type: google.protobuf.wrappers_pb2.StringValue | None = ...,
-                preference: google.protobuf.wrappers_pb2.Int32Value | None = ...,
+                value: builtins.str = ...,
+                kind: global___JSCard.Name.NameComponent.Kind.ValueType = ...,
+                pronounce: global___JSCard.Pronounce | None = ...,
             ) -> None: ...
-            def HasField(self, field_name: typing_extensions.Literal["preference", b"preference", "type", b"type"]) -> builtins.bool: ...
-            def ClearField(self, field_name: typing_extensions.Literal["preference", b"preference", "type", b"type"]) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["pronounce", b"pronounce"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "pronounce", b"pronounce", "value", b"value"]) -> None: ...
 
-        LANGUAGES_FIELD_NUMBER: builtins.int
+        COMPONENTS_FIELD_NUMBER: builtins.int
+        DEFAULT_SEPARATOR_FIELD_NUMBER: builtins.int
+        FULL_NAME_FIELD_NUMBER: builtins.int
+        PRONOUNCE_FIELD_NUMBER: builtins.int
         @property
-        def languages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.ContactLanguages.ContactLanguage]: ...
+        def components(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Name.NameComponent]: ...
+        @property
+        def default_separator(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def full_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def pronounce(self) -> global___JSCard.Pronounce: ...
         def __init__(
             self,
             *,
-            languages: collections.abc.Iterable[global___JSCard.ContactLanguages.ContactLanguage] | None = ...,
+            components: collections.abc.Iterable[global___JSCard.Name.NameComponent] | None = ...,
+            default_separator: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            full_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            pronounce: global___JSCard.Pronounce | None = ...,
         ) -> None: ...
-        def ClearField(self, field_name: typing_extensions.Literal["languages", b"languages"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["default_separator", b"default_separator", "full_name", b"full_name", "pronounce", b"pronounce"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["components", b"components", "default_separator", b"default_separator", "full_name", b"full_name", "pronounce", b"pronounce"]) -> None: ...
+
+    @typing_extensions.final
+    class NickName(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        NAME_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        name: builtins.str
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        def __init__(
+            self,
+            *,
+            name: builtins.str = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "preference", b"preference"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "name", b"name", "preference", b"preference"]) -> None: ...
+
+    @typing_extensions.final
+    class Organisation(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        @typing_extensions.final
+        class OrganisationUnit(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            NAME_FIELD_NUMBER: builtins.int
+            SORT_AS_FIELD_NUMBER: builtins.int
+            name: builtins.str
+            @property
+            def sort_as(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+            def __init__(
+                self,
+                *,
+                name: builtins.str = ...,
+                sort_as: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["sort_as", b"sort_as"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["name", b"name", "sort_as", b"sort_as"]) -> None: ...
+
+        NAME_FIELD_NUMBER: builtins.int
+        UNITS_FIELD_NUMBER: builtins.int
+        SORT_AS_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        @property
+        def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def units(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Organisation.OrganisationUnit]: ...
+        @property
+        def sort_as(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        def __init__(
+            self,
+            *,
+            name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            units: collections.abc.Iterable[global___JSCard.Organisation.OrganisationUnit] | None = ...,
+            sort_as: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            context: global___JSCard.Context | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "name", b"name", "sort_as", b"sort_as"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "name", b"name", "sort_as", b"sort_as", "units", b"units"]) -> None: ...
+
+    @typing_extensions.final
+    class SpeakToAs(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _GrammaticalGender:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _GrammaticalGenderEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.SpeakToAs._GrammaticalGender.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            NotSet: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 0
+            Common: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 1
+            Animate: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 2
+            Inanimate: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 3
+            Feminine: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 4
+            Masculine: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 5
+            Neuter: JSCard.SpeakToAs._GrammaticalGender.ValueType  # 6
+
+        class GrammaticalGender(_GrammaticalGender, metaclass=_GrammaticalGenderEnumTypeWrapper): ...
+        NotSet: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 0
+        Common: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 1
+        Animate: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 2
+        Inanimate: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 3
+        Feminine: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 4
+        Masculine: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 5
+        Neuter: JSCard.SpeakToAs.GrammaticalGender.ValueType  # 6
+
+        @typing_extensions.final
+        class Pronouns(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            PRONOUNS_FIELD_NUMBER: builtins.int
+            CONTEXT_FIELD_NUMBER: builtins.int
+            PREFERENCE_FIELD_NUMBER: builtins.int
+            pronouns: builtins.str
+            @property
+            def context(self) -> global___JSCard.Context: ...
+            @property
+            def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+            def __init__(
+                self,
+                *,
+                pronouns: builtins.str = ...,
+                context: global___JSCard.Context | None = ...,
+                preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["context", b"context", "preference", b"preference"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "preference", b"preference", "pronouns", b"pronouns"]) -> None: ...
+
+        @typing_extensions.final
+        class PronounsEntry(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            KEY_FIELD_NUMBER: builtins.int
+            VALUE_FIELD_NUMBER: builtins.int
+            key: builtins.str
+            @property
+            def value(self) -> global___JSCard.SpeakToAs.Pronouns: ...
+            def __init__(
+                self,
+                *,
+                key: builtins.str = ...,
+                value: global___JSCard.SpeakToAs.Pronouns | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+        GRAMMATICAL_GENDER_FIELD_NUMBER: builtins.int
+        PRONOUNS_FIELD_NUMBER: builtins.int
+        grammatical_gender: global___JSCard.SpeakToAs.GrammaticalGender.ValueType
+        @property
+        def pronouns(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.SpeakToAs.Pronouns]: ...
+        def __init__(
+            self,
+            *,
+            grammatical_gender: global___JSCard.SpeakToAs.GrammaticalGender.ValueType = ...,
+            pronouns: collections.abc.Mapping[builtins.str, global___JSCard.SpeakToAs.Pronouns] | None = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing_extensions.Literal["grammatical_gender", b"grammatical_gender", "pronouns", b"pronouns"]) -> None: ...
+
+    @typing_extensions.final
+    class Title(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Title._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Title: JSCard.Title._Kind.ValueType  # 0
+            Role: JSCard.Title._Kind.ValueType  # 1
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Title: JSCard.Title.Kind.ValueType  # 0
+        Role: JSCard.Title.Kind.ValueType  # 1
+
+        NAME_FIELD_NUMBER: builtins.int
+        KIND_FIELD_NUMBER: builtins.int
+        ORGANIZATION_FIELD_NUMBER: builtins.int
+        name: builtins.str
+        kind: global___JSCard.Title.Kind.ValueType
+        @property
+        def organization(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            name: builtins.str = ...,
+            kind: global___JSCard.Title.Kind.ValueType = ...,
+            organization: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["organization", b"organization"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "name", b"name", "organization", b"organization"]) -> None: ...
+
+    @typing_extensions.final
+    class Email(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        EMAIL_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        email: builtins.str
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            email: builtins.str = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "email", b"email", "label", b"label", "preference", b"preference"]) -> None: ...
+
+    @typing_extensions.final
+    class OnlineService(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        SERVICE_FIELD_NUMBER: builtins.int
+        URI_FIELD_NUMBER: builtins.int
+        USER_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        @property
+        def service(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def uri(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def user(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            service: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            uri: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            user: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference", "service", b"service", "uri", b"uri", "user", b"user"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference", "service", b"service", "uri", b"uri", "user", b"user"]) -> None: ...
+
+    @typing_extensions.final
+    class Phone(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Feature:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _FeatureEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Phone._Feature.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Mobile: JSCard.Phone._Feature.ValueType  # 0
+            Voice: JSCard.Phone._Feature.ValueType  # 1
+            Text: JSCard.Phone._Feature.ValueType  # 2
+            Video: JSCard.Phone._Feature.ValueType  # 3
+            MainNumber: JSCard.Phone._Feature.ValueType  # 4
+            Textphone: JSCard.Phone._Feature.ValueType  # 5
+            Fax: JSCard.Phone._Feature.ValueType  # 6
+            Pager: JSCard.Phone._Feature.ValueType  # 7
+
+        class Feature(_Feature, metaclass=_FeatureEnumTypeWrapper): ...
+        Mobile: JSCard.Phone.Feature.ValueType  # 0
+        Voice: JSCard.Phone.Feature.ValueType  # 1
+        Text: JSCard.Phone.Feature.ValueType  # 2
+        Video: JSCard.Phone.Feature.ValueType  # 3
+        MainNumber: JSCard.Phone.Feature.ValueType  # 4
+        Textphone: JSCard.Phone.Feature.ValueType  # 5
+        Fax: JSCard.Phone.Feature.ValueType  # 6
+        Pager: JSCard.Phone.Feature.ValueType  # 7
+
+        NUMBER_FIELD_NUMBER: builtins.int
+        FEATURES_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        number: builtins.str
+        @property
+        def features(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[global___JSCard.Phone.Feature.ValueType]: ...
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            number: builtins.str = ...,
+            features: collections.abc.Iterable[global___JSCard.Phone.Feature.ValueType] | None = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "features", b"features", "label", b"label", "number", b"number", "preference", b"preference"]) -> None: ...
+
+    @typing_extensions.final
+    class LanguagePreferences(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        @typing_extensions.final
+        class LanguagePreference(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            CONTEXT_FIELD_NUMBER: builtins.int
+            PREFERENCE_FIELD_NUMBER: builtins.int
+            @property
+            def context(self) -> global___JSCard.Context: ...
+            @property
+            def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+            def __init__(
+                self,
+                *,
+                context: global___JSCard.Context | None = ...,
+                preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["context", b"context", "preference", b"preference"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "preference", b"preference"]) -> None: ...
+
+        PREFERENCES_FIELD_NUMBER: builtins.int
+        @property
+        def preferences(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.LanguagePreferences.LanguagePreference]: ...
+        def __init__(
+            self,
+            *,
+            preferences: collections.abc.Iterable[global___JSCard.LanguagePreferences.LanguagePreference] | None = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing_extensions.Literal["preferences", b"preferences"]) -> None: ...
+
+    @typing_extensions.final
+    class Calendar(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Calendar._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Calendar: JSCard.Calendar._Kind.ValueType  # 0
+            FreeBusy: JSCard.Calendar._Kind.ValueType  # 1
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Calendar: JSCard.Calendar.Kind.ValueType  # 0
+        FreeBusy: JSCard.Calendar.Kind.ValueType  # 1
+
+        RESOURCE_FIELD_NUMBER: builtins.int
+        KIND_FIELD_NUMBER: builtins.int
+        @property
+        def resource(self) -> global___JSCard.Resource: ...
+        kind: global___JSCard.Calendar.Kind.ValueType
+        def __init__(
+            self,
+            *,
+            resource: global___JSCard.Resource | None = ...,
+            kind: global___JSCard.Calendar.Kind.ValueType = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["resource", b"resource"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "resource", b"resource"]) -> None: ...
+
+    @typing_extensions.final
+    class SchedulingAddress(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        URI_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        uri: builtins.str
+        @property
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def __init__(
+            self,
+            *,
+            uri: builtins.str = ...,
+            context: global___JSCard.Context | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "label", b"label", "preference", b"preference", "uri", b"uri"]) -> None: ...
 
     @typing_extensions.final
     class Address(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-        CONTEXT_FIELD_NUMBER: builtins.int
-        LABEL_FIELD_NUMBER: builtins.int
-        FULL_ADDRESS_FIELD_NUMBER: builtins.int
-        STREET_FIELD_NUMBER: builtins.int
-        EXTENSION_FIELD_NUMBER: builtins.int
-        LOCALITY_FIELD_NUMBER: builtins.int
-        REGION_FIELD_NUMBER: builtins.int
-        COUNTRY_FIELD_NUMBER: builtins.int
-        POST_OFFICE_BOX_FIELD_NUMBER: builtins.int
-        POST_CODE_FIELD_NUMBER: builtins.int
+        @typing_extensions.final
+        class AddressComponent(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            class _Kind:
+                ValueType = typing.NewType("ValueType", builtins.int)
+                V: typing_extensions.TypeAlias = ValueType
+
+            class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Address.AddressComponent._Kind.ValueType], builtins.type):  # noqa: F821
+                DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+                Room: JSCard.Address.AddressComponent._Kind.ValueType  # 0
+                Apartment: JSCard.Address.AddressComponent._Kind.ValueType  # 1
+                Floor: JSCard.Address.AddressComponent._Kind.ValueType  # 2
+                Building: JSCard.Address.AddressComponent._Kind.ValueType  # 3
+                Number: JSCard.Address.AddressComponent._Kind.ValueType  # 4
+                Block: JSCard.Address.AddressComponent._Kind.ValueType  # 6
+                SubDistrict: JSCard.Address.AddressComponent._Kind.ValueType  # 7
+                District: JSCard.Address.AddressComponent._Kind.ValueType  # 8
+                Locality: JSCard.Address.AddressComponent._Kind.ValueType  # 9
+                Region: JSCard.Address.AddressComponent._Kind.ValueType  # 10
+                Postcode: JSCard.Address.AddressComponent._Kind.ValueType  # 11
+                Country: JSCard.Address.AddressComponent._Kind.ValueType  # 12
+                Direction: JSCard.Address.AddressComponent._Kind.ValueType  # 13
+                Landmark: JSCard.Address.AddressComponent._Kind.ValueType  # 14
+                PostOfficeBox: JSCard.Address.AddressComponent._Kind.ValueType  # 15
+                Separator: JSCard.Address.AddressComponent._Kind.ValueType  # 16
+
+            class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+            Room: JSCard.Address.AddressComponent.Kind.ValueType  # 0
+            Apartment: JSCard.Address.AddressComponent.Kind.ValueType  # 1
+            Floor: JSCard.Address.AddressComponent.Kind.ValueType  # 2
+            Building: JSCard.Address.AddressComponent.Kind.ValueType  # 3
+            Number: JSCard.Address.AddressComponent.Kind.ValueType  # 4
+            Name: JSCard.Address.AddressComponent.Kind.ValueType  # 5
+            Block: JSCard.Address.AddressComponent.Kind.ValueType  # 6
+            SubDistrict: JSCard.Address.AddressComponent.Kind.ValueType  # 7
+            District: JSCard.Address.AddressComponent.Kind.ValueType  # 8
+            Locality: JSCard.Address.AddressComponent.Kind.ValueType  # 9
+            Region: JSCard.Address.AddressComponent.Kind.ValueType  # 10
+            Postcode: JSCard.Address.AddressComponent.Kind.ValueType  # 11
+            Country: JSCard.Address.AddressComponent.Kind.ValueType  # 12
+            Direction: JSCard.Address.AddressComponent.Kind.ValueType  # 13
+            Landmark: JSCard.Address.AddressComponent.Kind.ValueType  # 14
+            PostOfficeBox: JSCard.Address.AddressComponent.Kind.ValueType  # 15
+            Separator: JSCard.Address.AddressComponent.Kind.ValueType  # 16
+
+            VALUE_FIELD_NUMBER: builtins.int
+            KIND_FIELD_NUMBER: builtins.int
+            PRONOUNCE_FIELD_NUMBER: builtins.int
+            value: builtins.str
+            kind: global___JSCard.Address.AddressComponent.Kind.ValueType
+            @property
+            def pronounce(self) -> global___JSCard.Pronounce: ...
+            def __init__(
+                self,
+                *,
+                value: builtins.str = ...,
+                kind: global___JSCard.Address.AddressComponent.Kind.ValueType = ...,
+                pronounce: global___JSCard.Pronounce | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["pronounce", b"pronounce"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "pronounce", b"pronounce", "value", b"value"]) -> None: ...
+
+        COMPONENTS_FIELD_NUMBER: builtins.int
         COUNTRY_CODE_FIELD_NUMBER: builtins.int
         COORDINATES_FIELD_NUMBER: builtins.int
         TIMEZONE_FIELD_NUMBER: builtins.int
-        PREFERRED_FIELD_NUMBER: builtins.int
+        CONTEXT_FIELD_NUMBER: builtins.int
+        FULL_FIELD_NUMBER: builtins.int
+        PRONOUNCE_FIELD_NUMBER: builtins.int
+        DEFAULT_SEPERATOR_FIELD_NUMBER: builtins.int
+        PREFERENCE_FIELD_NUMBER: builtins.int
         @property
-        def context(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def full_address(self) -> global___JSCard.LocalisedString: ...
-        @property
-        def street(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def extension(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def locality(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def region(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def country(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def post_office_box(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def post_code(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def components(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Address.AddressComponent]: ...
         @property
         def country_code(self) -> google.protobuf.wrappers_pb2.StringValue: ...
         @property
@@ -700,166 +1192,716 @@ class JSCard(google.protobuf.message.Message):
         @property
         def timezone(self) -> google.protobuf.wrappers_pb2.StringValue: ...
         @property
-        def preferred(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
+        def context(self) -> global___JSCard.Context: ...
+        @property
+        def full(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def pronounce(self) -> global___JSCard.Pronounce: ...
+        @property
+        def default_seperator(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        @property
+        def preference(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
         def __init__(
             self,
             *,
-            context: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            full_address: global___JSCard.LocalisedString | None = ...,
-            street: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            extension: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            locality: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            region: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            country: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            post_office_box: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            post_code: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            components: collections.abc.Iterable[global___JSCard.Address.AddressComponent] | None = ...,
             country_code: google.protobuf.wrappers_pb2.StringValue | None = ...,
             coordinates: google.protobuf.wrappers_pb2.StringValue | None = ...,
             timezone: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            preferred: google.protobuf.wrappers_pb2.BoolValue | None = ...,
+            context: global___JSCard.Context | None = ...,
+            full: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            pronounce: global___JSCard.Pronounce | None = ...,
+            default_seperator: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            preference: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "coordinates", b"coordinates", "country", b"country", "country_code", b"country_code", "extension", b"extension", "full_address", b"full_address", "label", b"label", "locality", b"locality", "post_code", b"post_code", "post_office_box", b"post_office_box", "preferred", b"preferred", "region", b"region", "street", b"street", "timezone", b"timezone"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["context", b"context", "coordinates", b"coordinates", "country", b"country", "country_code", b"country_code", "extension", b"extension", "full_address", b"full_address", "label", b"label", "locality", b"locality", "post_code", b"post_code", "post_office_box", b"post_office_box", "preferred", b"preferred", "region", b"region", "street", b"street", "timezone", b"timezone"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["context", b"context", "coordinates", b"coordinates", "country_code", b"country_code", "default_seperator", b"default_seperator", "full", b"full", "preference", b"preference", "pronounce", b"pronounce", "timezone", b"timezone"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["components", b"components", "context", b"context", "coordinates", b"coordinates", "country_code", b"country_code", "default_seperator", b"default_seperator", "full", b"full", "preference", b"preference", "pronounce", b"pronounce", "timezone", b"timezone"]) -> None: ...
+
+    @typing_extensions.final
+    class Directory(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Directory._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Directory: JSCard.Directory._Kind.ValueType  # 0
+            Entry: JSCard.Directory._Kind.ValueType  # 1
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Directory: JSCard.Directory.Kind.ValueType  # 0
+        Entry: JSCard.Directory.Kind.ValueType  # 1
+
+        RESOURCE_FIELD_NUMBER: builtins.int
+        KIND_FIELD_NUMBER: builtins.int
+        LIST_AS_FIELD_NUMBER: builtins.int
+        @property
+        def resource(self) -> global___JSCard.Resource: ...
+        kind: global___JSCard.Directory.Kind.ValueType
+        @property
+        def list_as(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        def __init__(
+            self,
+            *,
+            resource: global___JSCard.Resource | None = ...,
+            kind: global___JSCard.Directory.Kind.ValueType = ...,
+            list_as: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["list_as", b"list_as", "resource", b"resource"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "list_as", b"list_as", "resource", b"resource"]) -> None: ...
+
+    @typing_extensions.final
+    class Link(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Link._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Contact: JSCard.Link._Kind.ValueType  # 0
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Contact: JSCard.Link.Kind.ValueType  # 0
+
+        RESOURCE_FIELD_NUMBER: builtins.int
+        KIND_FIELD_NUMBER: builtins.int
+        @property
+        def resource(self) -> global___JSCard.Resource: ...
+        kind: global___JSCard.Link.Kind.ValueType
+        def __init__(
+            self,
+            *,
+            resource: global___JSCard.Resource | None = ...,
+            kind: global___JSCard.Link.Kind.ValueType = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["resource", b"resource"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "resource", b"resource"]) -> None: ...
+
+    @typing_extensions.final
+    class Media(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Media._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Photo: JSCard.Media._Kind.ValueType  # 0
+            Sound: JSCard.Media._Kind.ValueType  # 1
+            Logo: JSCard.Media._Kind.ValueType  # 2
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Photo: JSCard.Media.Kind.ValueType  # 0
+        Sound: JSCard.Media.Kind.ValueType  # 1
+        Logo: JSCard.Media.Kind.ValueType  # 2
+
+        RESOURCE_FIELD_NUMBER: builtins.int
+        KIND_FIELD_NUMBER: builtins.int
+        @property
+        def resource(self) -> global___JSCard.Resource: ...
+        kind: global___JSCard.Media.Kind.ValueType
+        def __init__(
+            self,
+            *,
+            resource: global___JSCard.Resource | None = ...,
+            kind: global___JSCard.Media.Kind.ValueType = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["resource", b"resource"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "resource", b"resource"]) -> None: ...
 
     @typing_extensions.final
     class Anniversary(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-        TYPE_FIELD_NUMBER: builtins.int
-        LABEL_FIELD_NUMBER: builtins.int
-        DATE_FIELD_NUMBER: builtins.int
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.Anniversary._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Birth: JSCard.Anniversary._Kind.ValueType  # 0
+            Death: JSCard.Anniversary._Kind.ValueType  # 1
+            Wedding: JSCard.Anniversary._Kind.ValueType  # 2
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Birth: JSCard.Anniversary.Kind.ValueType  # 0
+        Death: JSCard.Anniversary.Kind.ValueType  # 1
+        Wedding: JSCard.Anniversary.Kind.ValueType  # 2
+
+        @typing_extensions.final
+        class PartialDate(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            YEAR_FIELD_NUMBER: builtins.int
+            MONTH_FIELD_NUMBER: builtins.int
+            DAY_FIELD_NUMBER: builtins.int
+            CALENDAR_SCALE_FIELD_NUMBER: builtins.int
+            @property
+            def year(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+            @property
+            def month(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+            @property
+            def day(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+            @property
+            def calendar_scale(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+            def __init__(
+                self,
+                *,
+                year: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+                month: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+                day: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+                calendar_scale: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["calendar_scale", b"calendar_scale", "day", b"day", "month", b"month", "year", b"year"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["calendar_scale", b"calendar_scale", "day", b"day", "month", b"month", "year", b"year"]) -> None: ...
+
+        KIND_FIELD_NUMBER: builtins.int
+        TIMESTAMP_FIELD_NUMBER: builtins.int
+        PARTIAL_DATE_FIELD_NUMBER: builtins.int
         PLACE_FIELD_NUMBER: builtins.int
-        type: builtins.str
+        kind: global___JSCard.Anniversary.Kind.ValueType
         @property
-        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def timestamp(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
         @property
-        def date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+        def partial_date(self) -> global___JSCard.Anniversary.PartialDate: ...
         @property
         def place(self) -> global___JSCard.Address: ...
         def __init__(
             self,
             *,
-            type: builtins.str = ...,
-            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+            kind: global___JSCard.Anniversary.Kind.ValueType = ...,
+            timestamp: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+            partial_date: global___JSCard.Anniversary.PartialDate | None = ...,
             place: global___JSCard.Address | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["date", b"date", "label", b"label", "place", b"place"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["date", b"date", "label", b"label", "place", b"place", "type", b"type"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["date", b"date", "partial_date", b"partial_date", "place", b"place", "timestamp", b"timestamp"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["date", b"date", "kind", b"kind", "partial_date", b"partial_date", "place", b"place", "timestamp", b"timestamp"]) -> None: ...
+        def WhichOneof(self, oneof_group: typing_extensions.Literal["date", b"date"]) -> typing_extensions.Literal["timestamp", "partial_date"] | None: ...
+
+    @typing_extensions.final
+    class Note(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        @typing_extensions.final
+        class Author(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            NAME_FIELD_NUMBER: builtins.int
+            URI_FIELD_NUMBER: builtins.int
+            @property
+            def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+            @property
+            def uri(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+            def __init__(
+                self,
+                *,
+                name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+                uri: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing_extensions.Literal["name", b"name", "uri", b"uri"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing_extensions.Literal["name", b"name", "uri", b"uri"]) -> None: ...
+
+        NOTE_FIELD_NUMBER: builtins.int
+        CREATED_FIELD_NUMBER: builtins.int
+        AUTHOR_FIELD_NUMBER: builtins.int
+        note: builtins.str
+        @property
+        def created(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+        @property
+        def author(self) -> global___JSCard.Note.Author: ...
+        def __init__(
+            self,
+            *,
+            note: builtins.str = ...,
+            created: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+            author: global___JSCard.Note.Author | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["author", b"author", "created", b"created"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["author", b"author", "created", b"created", "note", b"note"]) -> None: ...
 
     @typing_extensions.final
     class PersonalInfo(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-        TYPE_FIELD_NUMBER: builtins.int
+        class _Kind:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _KindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.PersonalInfo._Kind.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            Expertise: JSCard.PersonalInfo._Kind.ValueType  # 0
+            Hobby: JSCard.PersonalInfo._Kind.ValueType  # 1
+            Interest: JSCard.PersonalInfo._Kind.ValueType  # 2
+
+        class Kind(_Kind, metaclass=_KindEnumTypeWrapper): ...
+        Expertise: JSCard.PersonalInfo.Kind.ValueType  # 0
+        Hobby: JSCard.PersonalInfo.Kind.ValueType  # 1
+        Interest: JSCard.PersonalInfo.Kind.ValueType  # 2
+
+        class _Level:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _LevelEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[JSCard.PersonalInfo._Level.ValueType], builtins.type):  # noqa: F821
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            NotSet: JSCard.PersonalInfo._Level.ValueType  # 0
+            High: JSCard.PersonalInfo._Level.ValueType  # 1
+            Medium: JSCard.PersonalInfo._Level.ValueType  # 2
+            Low: JSCard.PersonalInfo._Level.ValueType  # 3
+
+        class Level(_Level, metaclass=_LevelEnumTypeWrapper): ...
+        NotSet: JSCard.PersonalInfo.Level.ValueType  # 0
+        High: JSCard.PersonalInfo.Level.ValueType  # 1
+        Medium: JSCard.PersonalInfo.Level.ValueType  # 2
+        Low: JSCard.PersonalInfo.Level.ValueType  # 3
+
+        KIND_FIELD_NUMBER: builtins.int
         VALUE_FIELD_NUMBER: builtins.int
         LEVEL_FIELD_NUMBER: builtins.int
-        type: builtins.str
+        LIST_AS_FIELD_NUMBER: builtins.int
+        LABEL_FIELD_NUMBER: builtins.int
+        kind: global___JSCard.PersonalInfo.Kind.ValueType
         value: builtins.str
+        level: global___JSCard.PersonalInfo.Level.ValueType
         @property
-        def level(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        def list_as(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+        @property
+        def label(self) -> google.protobuf.wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            type: builtins.str = ...,
+            kind: global___JSCard.PersonalInfo.Kind.ValueType = ...,
             value: builtins.str = ...,
-            level: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            level: global___JSCard.PersonalInfo.Level.ValueType = ...,
+            list_as: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+            label: google.protobuf.wrappers_pb2.StringValue | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["level", b"level"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["level", b"level", "type", b"type", "value", b"value"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["label", b"label", "list_as", b"list_as"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["kind", b"kind", "label", b"label", "level", b"level", "list_as", b"list_as", "value", b"value"]) -> None: ...
 
     @typing_extensions.final
-    class PreferredContactLanguagesEntry(google.protobuf.message.Message):
+    class NickNamesEntry(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
         KEY_FIELD_NUMBER: builtins.int
         VALUE_FIELD_NUMBER: builtins.int
         key: builtins.str
         @property
-        def value(self) -> global___JSCard.ContactLanguages: ...
+        def value(self) -> global___JSCard.NickName: ...
         def __init__(
             self,
             *,
             key: builtins.str = ...,
-            value: global___JSCard.ContactLanguages | None = ...,
+            value: global___JSCard.NickName | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class OrganisationsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Organisation: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Organisation | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class TitlesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Title: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Title | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class EmailsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Email: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Email | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class OnlineServicesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.OnlineService: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.OnlineService | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class PhonesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Phone: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Phone | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class PreferredLanguagesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.LanguagePreferences: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.LanguagePreferences | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class CalendarsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Calendar: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Calendar | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class SchedulingAddressesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.SchedulingAddress: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.SchedulingAddress | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class AddressesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Address: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Address | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class CryptoKeysEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Resource: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Resource | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class DirectoriesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Directory: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Directory | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class LinksEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Link: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Link | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class MediaEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Media: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Media | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class AnniversariesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Anniversary: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Anniversary | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class NotesEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.Note: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.Note | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing_extensions.final
+    class PersonalInfoEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        @property
+        def value(self) -> global___JSCard.PersonalInfo: ...
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: global___JSCard.PersonalInfo | None = ...,
         ) -> None: ...
         def HasField(self, field_name: typing_extensions.Literal["value", b"value"]) -> builtins.bool: ...
         def ClearField(self, field_name: typing_extensions.Literal["key", b"key", "value", b"value"]) -> None: ...
 
     UID_FIELD_NUMBER: builtins.int
+    CREATED_FIELD_NUMBER: builtins.int
     UPDATED_FIELD_NUMBER: builtins.int
     KIND_FIELD_NUMBER: builtins.int
-    FULL_NAME_FIELD_NUMBER: builtins.int
-    ORGANISATION_FIELD_NUMBER: builtins.int
-    JOB_TITLE_FIELD_NUMBER: builtins.int
-    ROLE_FIELD_NUMBER: builtins.int
+    LANGUAGE_FIELD_NUMBER: builtins.int
+    MEMBERS_FIELD_NUMBER: builtins.int
+    PRODUCT_ID_FIELD_NUMBER: builtins.int
+    NAME_FIELD_NUMBER: builtins.int
+    NICK_NAMES_FIELD_NUMBER: builtins.int
+    ORGANISATIONS_FIELD_NUMBER: builtins.int
+    SPEAK_TO_AS_FIELD_NUMBER: builtins.int
+    TITLES_FIELD_NUMBER: builtins.int
     EMAILS_FIELD_NUMBER: builtins.int
+    ONLINE_SERVICES_FIELD_NUMBER: builtins.int
     PHONES_FIELD_NUMBER: builtins.int
-    ONLINE_FIELD_NUMBER: builtins.int
-    PREFERRED_CONTACT_METHOD_FIELD_NUMBER: builtins.int
-    PREFERRED_CONTACT_LANGUAGES_FIELD_NUMBER: builtins.int
+    PREFERRED_LANGUAGES_FIELD_NUMBER: builtins.int
+    CALENDARS_FIELD_NUMBER: builtins.int
+    SCHEDULING_ADDRESSES_FIELD_NUMBER: builtins.int
     ADDRESSES_FIELD_NUMBER: builtins.int
+    CRYPTO_KEYS_FIELD_NUMBER: builtins.int
+    DIRECTORIES_FIELD_NUMBER: builtins.int
+    LINKS_FIELD_NUMBER: builtins.int
+    MEDIA_FIELD_NUMBER: builtins.int
     ANNIVERSARIES_FIELD_NUMBER: builtins.int
-    PERSONAL_INFO_FIELD_NUMBER: builtins.int
+    KEYWORDS_FIELD_NUMBER: builtins.int
     NOTES_FIELD_NUMBER: builtins.int
-    CATEGORIES_FIELD_NUMBER: builtins.int
+    PERSONAL_INFO_FIELD_NUMBER: builtins.int
     uid: builtins.str
     @property
+    def created(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    @property
     def updated(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    kind: global___JSCard.Kind.ValueType
     @property
-    def kind(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    def language(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
-    def full_name(self) -> global___JSCard.LocalisedString: ...
+    def members(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     @property
-    def organisation(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.LocalisedString]: ...
+    def product_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
-    def job_title(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.LocalisedString]: ...
+    def name(self) -> global___JSCard.Name: ...
     @property
-    def role(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.LocalisedString]: ...
+    def nick_names(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.NickName]: ...
     @property
-    def emails(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Resource]: ...
+    def organisations(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Organisation]: ...
     @property
-    def phones(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Resource]: ...
+    def speak_to_as(self) -> global___JSCard.SpeakToAs: ...
     @property
-    def online(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Resource]: ...
+    def titles(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Title]: ...
     @property
-    def preferred_contact_method(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    def emails(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Email]: ...
     @property
-    def preferred_contact_languages(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.ContactLanguages]: ...
+    def online_services(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.OnlineService]: ...
     @property
-    def addresses(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Address]: ...
+    def phones(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Phone]: ...
     @property
-    def anniversaries(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.Anniversary]: ...
+    def preferred_languages(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.LanguagePreferences]: ...
     @property
-    def personal_info(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.PersonalInfo]: ...
+    def calendars(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Calendar]: ...
     @property
-    def notes(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___JSCard.LocalisedString]: ...
+    def scheduling_addresses(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.SchedulingAddress]: ...
     @property
-    def categories(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    def addresses(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Address]: ...
+    @property
+    def crypto_keys(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Resource]: ...
+    @property
+    def directories(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Directory]: ...
+    @property
+    def links(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Link]: ...
+    @property
+    def media(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Media]: ...
+    @property
+    def anniversaries(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Anniversary]: ...
+    @property
+    def keywords(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    @property
+    def notes(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.Note]: ...
+    @property
+    def personal_info(self) -> google.protobuf.internal.containers.MessageMap[builtins.str, global___JSCard.PersonalInfo]: ...
     def __init__(
         self,
         *,
         uid: builtins.str = ...,
+        created: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         updated: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        kind: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        full_name: global___JSCard.LocalisedString | None = ...,
-        organisation: collections.abc.Iterable[global___JSCard.LocalisedString] | None = ...,
-        job_title: collections.abc.Iterable[global___JSCard.LocalisedString] | None = ...,
-        role: collections.abc.Iterable[global___JSCard.LocalisedString] | None = ...,
-        emails: collections.abc.Iterable[global___JSCard.Resource] | None = ...,
-        phones: collections.abc.Iterable[global___JSCard.Resource] | None = ...,
-        online: collections.abc.Iterable[global___JSCard.Resource] | None = ...,
-        preferred_contact_method: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        preferred_contact_languages: collections.abc.Mapping[builtins.str, global___JSCard.ContactLanguages] | None = ...,
-        addresses: collections.abc.Iterable[global___JSCard.Address] | None = ...,
-        anniversaries: collections.abc.Iterable[global___JSCard.Anniversary] | None = ...,
-        personal_info: collections.abc.Iterable[global___JSCard.PersonalInfo] | None = ...,
-        notes: collections.abc.Iterable[global___JSCard.LocalisedString] | None = ...,
-        categories: collections.abc.Iterable[builtins.str] | None = ...,
+        kind: global___JSCard.Kind.ValueType = ...,
+        language: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        members: collections.abc.Iterable[builtins.str] | None = ...,
+        product_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: global___JSCard.Name | None = ...,
+        nick_names: collections.abc.Mapping[builtins.str, global___JSCard.NickName] | None = ...,
+        organisations: collections.abc.Mapping[builtins.str, global___JSCard.Organisation] | None = ...,
+        speak_to_as: global___JSCard.SpeakToAs | None = ...,
+        titles: collections.abc.Mapping[builtins.str, global___JSCard.Title] | None = ...,
+        emails: collections.abc.Mapping[builtins.str, global___JSCard.Email] | None = ...,
+        online_services: collections.abc.Mapping[builtins.str, global___JSCard.OnlineService] | None = ...,
+        phones: collections.abc.Mapping[builtins.str, global___JSCard.Phone] | None = ...,
+        preferred_languages: collections.abc.Mapping[builtins.str, global___JSCard.LanguagePreferences] | None = ...,
+        calendars: collections.abc.Mapping[builtins.str, global___JSCard.Calendar] | None = ...,
+        scheduling_addresses: collections.abc.Mapping[builtins.str, global___JSCard.SchedulingAddress] | None = ...,
+        addresses: collections.abc.Mapping[builtins.str, global___JSCard.Address] | None = ...,
+        crypto_keys: collections.abc.Mapping[builtins.str, global___JSCard.Resource] | None = ...,
+        directories: collections.abc.Mapping[builtins.str, global___JSCard.Directory] | None = ...,
+        links: collections.abc.Mapping[builtins.str, global___JSCard.Link] | None = ...,
+        media: collections.abc.Mapping[builtins.str, global___JSCard.Media] | None = ...,
+        anniversaries: collections.abc.Mapping[builtins.str, global___JSCard.Anniversary] | None = ...,
+        keywords: collections.abc.Iterable[builtins.str] | None = ...,
+        notes: collections.abc.Mapping[builtins.str, global___JSCard.Note] | None = ...,
+        personal_info: collections.abc.Mapping[builtins.str, global___JSCard.PersonalInfo] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["full_name", b"full_name", "kind", b"kind", "preferred_contact_method", b"preferred_contact_method", "updated", b"updated"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["addresses", b"addresses", "anniversaries", b"anniversaries", "categories", b"categories", "emails", b"emails", "full_name", b"full_name", "job_title", b"job_title", "kind", b"kind", "notes", b"notes", "online", b"online", "organisation", b"organisation", "personal_info", b"personal_info", "phones", b"phones", "preferred_contact_languages", b"preferred_contact_languages", "preferred_contact_method", b"preferred_contact_method", "role", b"role", "uid", b"uid", "updated", b"updated"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["created", b"created", "language", b"language", "name", b"name", "product_id", b"product_id", "speak_to_as", b"speak_to_as", "updated", b"updated"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["addresses", b"addresses", "anniversaries", b"anniversaries", "calendars", b"calendars", "created", b"created", "crypto_keys", b"crypto_keys", "directories", b"directories", "emails", b"emails", "keywords", b"keywords", "kind", b"kind", "language", b"language", "links", b"links", "media", b"media", "members", b"members", "name", b"name", "nick_names", b"nick_names", "notes", b"notes", "online_services", b"online_services", "organisations", b"organisations", "personal_info", b"personal_info", "phones", b"phones", "preferred_languages", b"preferred_languages", "product_id", b"product_id", "scheduling_addresses", b"scheduling_addresses", "speak_to_as", b"speak_to_as", "titles", b"titles", "uid", b"uid", "updated", b"updated"]) -> None: ...
 
 global___JSCard = JSCard
 

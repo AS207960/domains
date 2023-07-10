@@ -28,74 +28,161 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net"),
             js_card=rdap_pb2.JSCard(
                 uid=contact.handle,
-                full_name=rdap_pb2.JSCard.LocalisedString(
-                    value=contact.local_address.name if contact.local_address.disclose_name else "REDACTED",
-                )
+                name=rdap_pb2.JSCard.Name(
+                    full_name=google.protobuf.wrappers_pb2.StringValue(
+                        value=contact.local_address.name if contact.local_address.disclose_name else "REDACTED",
+                    )
+                ),
+                addresses={
+                    "a": rdap_pb2.JSCard.Address(
+                        country_code=google.protobuf.wrappers_pb2.StringValue(
+                            value=contact.local_address.country_code.code
+                        ),
+                        default_seperator=google.protobuf.wrappers_pb2.StringValue(
+                            value="\n"
+                        ),
+                    )
+                },
+                emails={
+                    "e": rdap_pb2.JSCard.Email(
+                        email=contact.get_public_email()
+                    )
+                }
             ),
         )
 
         if contact.local_address.organisation:
-            entity.js_card.organisation.append(rdap_pb2.JSCard.LocalisedString(
-                value=contact.local_address.organisation if contact.local_address.disclose_organisation else "REDACTED",
+            entity.js_card.organisations["o"].CopyFrom(rdap_pb2.JSCard.Organisation(
+                name=google.protobuf.wrappers_pb2.StringValue(
+                    value=contact.local_address.organisation if contact.local_address.disclose_organisation else "REDACTED",
+                )
             ))
-        entity.js_card.addresses.append(rdap_pb2.JSCard.Address(
-            street=google.protobuf.wrappers_pb2.StringValue(
-                value=(
-                    contact.local_address.street_1
-                    + (("\n" + contact.local_address.street_2) if contact.local_address.street_2 else "")
-                    + (("\n" + contact.local_address.street_3) if contact.local_address.street_3 else "")
-                ) if contact.local_address.disclose_address else "REDACTED",
-            ),
-            locality=google.protobuf.wrappers_pb2.StringValue(value=contact.local_address.city),
-            region=google.protobuf.wrappers_pb2.StringValue(
-                value=contact.local_address.province
-            ) if contact.local_address.province else None,
-            post_code=google.protobuf.wrappers_pb2.StringValue(
-                value=contact.local_address.postal_code if contact.local_address.disclose_address else "REDACTED"
-            ),
-            country=google.protobuf.wrappers_pb2.StringValue(
-                value=contact.local_address.country_code.name
-            ),
-            country_code=google.protobuf.wrappers_pb2.StringValue(
-                value=contact.local_address.country_code.code
+
+        if contact.local_address.disclose_address:
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Name,
+                    value=contact.local_address.street_1
+                )
             )
-        ))
+            if contact.local_address.street_2:
+                entity.js_card.addresses["a"].components.append(
+                    rdap_pb2.JSCard.Address.AddressComponent(
+                        kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                        value="\n"
+                    )
+                )
+                entity.js_card.addresses["a"].components.append(
+                    rdap_pb2.JSCard.Address.AddressComponent(
+                        kind=rdap_pb2.JSCard.Address.AddressComponent.Name,
+                        value=contact.local_address.street_2
+                    )
+                )
+            if contact.local_address.street_3:
+                entity.js_card.addresses["a"].components.append(
+                    rdap_pb2.JSCard.Address.AddressComponent(
+                        kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                        value="\n"
+                    )
+                )
+                entity.js_card.addresses["a"].components.append(
+                    rdap_pb2.JSCard.Address.AddressComponent(
+                        kind=rdap_pb2.JSCard.Address.AddressComponent.Name,
+                        value=contact.local_address.street_3
+                    )
+                )
+        else:
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Name,
+                    value="REDACTED"
+                )
+            )
+
+        entity.js_card.addresses["a"].components.append(
+            rdap_pb2.JSCard.Address.AddressComponent(
+                kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                value="\n"
+            )
+        )
+        entity.js_card.addresses["a"].components.append(
+            rdap_pb2.JSCard.Address.AddressComponent(
+                kind=rdap_pb2.JSCard.Address.AddressComponent.Locality,
+                value=contact.local_address.city
+            )
+        )
+        if contact.local_address.province:
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                    value="\n"
+                )
+            )
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Region,
+                    value=contact.local_address.province
+                )
+            )
+        if contact.local_address.postal_code:
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                    value="\n"
+                )
+            )
+            entity.js_card.addresses["a"].components.append(
+                rdap_pb2.JSCard.Address.AddressComponent(
+                    kind=rdap_pb2.JSCard.Address.AddressComponent.Postcode,
+                    value=contact.local_address.postal_code
+                )
+            )
+
+        entity.js_card.addresses["a"].components.append(
+            rdap_pb2.JSCard.Address.AddressComponent(
+                kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                value="\n"
+            )
+        )
+        entity.js_card.addresses["a"].components.append(
+            rdap_pb2.JSCard.Address.AddressComponent(
+                kind=rdap_pb2.JSCard.Address.AddressComponent.Country,
+                value=contact.local_address.country_code.name
+            )
+        )
+
         if contact.disclose_phone:
             contact.phone.extension = contact.phone_ext
-            entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
-                type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
-                value=contact.phone.as_rfc3966
+            entity.js_card.phones["p"].CopyFrom(rdap_pb2.JSCard.Phone(
+                number=contact.phone.as_rfc3966,
+                features=[rdap_pb2.JSCard.Phone.Voice]
             ))
         else:
-            entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
-                type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
-                value="REDACTED"
+            entity.js_card.phones["p"].CopyFrom(rdap_pb2.JSCard.Phone(
+                number="REDACTED",
+                features=[rdap_pb2.JSCard.Phone.Voice]
             ))
         if contact.disclose_fax:
             if contact.fax:
                 contact.fax.extension = contact.fax_ext
-                entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
-                    type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
-                    value=contact.fax.as_rfc3966
+                entity.js_card.phones["f"].CopyFrom(rdap_pb2.JSCard.Phone(
+                    number=contact.phone.as_rfc3966,
+                    features=[rdap_pb2.JSCard.Phone.Fax]
                 ))
         else:
-            entity.js_card.phones.append(rdap_pb2.JSCard.Resource(
-                type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
-                value="REDACTED"
+            entity.js_card.phones["f"].CopyFrom(rdap_pb2.JSCard.Phone(
+                number="REDACTED",
+                features=[rdap_pb2.JSCard.Phone.Fax]
             ))
 
-        entity.js_card.emails.append(rdap_pb2.JSCard.Resource(
-            value=contact.get_public_email()
-        ))
-
         if contact.trading_name:
-            entity.js_card.notes.append(rdap_pb2.JSCard.LocalisedString(
-                value=f"Trading name: {contact.trading_name}"
+            entity.js_card.notes["tn"].CopyFrom(rdap_pb2.JSCard.Note(
+                note=f"Trading name: {contact.trading_name}"
             ))
 
         if contact.company_number:
-            entity.js_card.notes.append(rdap_pb2.JSCard.LocalisedString(
-                value=f"Company number: {contact.company_number}"
+            entity.js_card.notes["cn"].CopyFrom(rdap_pb2.JSCard.Note(
+                note=f"Company number: {contact.company_number}"
             ))
 
         if contact.created_date:
@@ -105,6 +192,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 action=rdap_pb2.EventRegistration,
                 date=date
             ))
+            entity.js_card.created.MergeFrom(date)
 
         if contact.updated_date:
             date = google.protobuf.timestamp_pb2.Timestamp()
@@ -208,48 +296,102 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net"),
             js_card=rdap_pb2.JSCard(
                 uid=domain_data.client_id,
-                kind=google.protobuf.wrappers_pb2.StringValue(value="org"),
-                full_name=rdap_pb2.JSCard.LocalisedString(value="AS207960 Cyfyngedig"),
-                addresses=[rdap_pb2.JSCard.Address(
-                    street=google.protobuf.wrappers_pb2.StringValue(value="13 Pen-y-lan Terrace"),
-                    locality=google.protobuf.wrappers_pb2.StringValue(value="Caerdydd"),
-                    region=google.protobuf.wrappers_pb2.StringValue(value="Cymru"),
-                    post_code=google.protobuf.wrappers_pb2.StringValue(value="CF23 9EU"),
-                    country=google.protobuf.wrappers_pb2.StringValue(value="United Kingdom"),
-                    country_code=google.protobuf.wrappers_pb2.StringValue(value="GB"),
-                )],
-                phones=[rdap_pb2.JSCard.Resource(
-                    type=google.protobuf.wrappers_pb2.StringValue(value="voice"),
-                    value="tel:+44-33-33-408418"
-                ), rdap_pb2.JSCard.Resource(
-                    type=google.protobuf.wrappers_pb2.StringValue(value="fax"),
-                    value="tel:+44-33-33-408418"
-                )],
-                emails=[rdap_pb2.JSCard.Resource(
-                    value="hello@glauca.digital"
-                )],
-                online=[rdap_pb2.JSCard.Resource(
-                    type=google.protobuf.wrappers_pb2.StringValue(value="uri"),
-                    value="https://glauca.digital"
-                )]
+                kind=rdap_pb2.JSCard.Kind.Org,
+                organisations={
+                    "o": rdap_pb2.JSCard.Organisation(
+                        name=google.protobuf.wrappers_pb2.StringValue(value="AS207960 Cyfyngedig"),
+                    )
+                },
+                addresses={
+                    "a": rdap_pb2.JSCard.Address(
+                        components=[rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Number,
+                            value="13"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                            value=" "
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Name,
+                            value="Pen-y-lan Terrace"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                            value="\n"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Locality,
+                            value="Caerdydd"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                            value="\n"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Region,
+                            value="Cymru"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                            value="\n"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Postcode,
+                            value="CF23 9EU"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
+                            value="\n"
+                        ), rdap_pb2.JSCard.Address.AddressComponent(
+                            kind=rdap_pb2.JSCard.Address.AddressComponent.Country,
+                            value="United Kingdom"
+                        )],
+                        country_code=google.protobuf.wrappers_pb2.StringValue(value="GB"),
+                        timezone=google.protobuf.wrappers_pb2.StringValue(value="Europe/London"),
+                    )
+                },
+                phones={
+                    "p": rdap_pb2.JSCard.Phone(
+                        number="tel:+44-33-33-408418",
+                        features=[rdap_pb2.JSCard.Phone.Voice, rdap_pb2.JSCard.Phone.Fax]
+                    )
+                },
+                emails={
+                    "e": rdap_pb2.JSCard.Email(
+                        email="hello@glauca.digital"
+                    )
+                },
+                online_services={
+                    "w": rdap_pb2.JSCard.OnlineService(
+                        service=google.protobuf.wrappers_pb2.StringValue(value="Website"),
+                        uri=google.protobuf.wrappers_pb2.StringValue(value="https://glauca.digital"),
+                    ),
+                    "m": rdap_pb2.JSCard.OnlineService(
+                        service=google.protobuf.wrappers_pb2.StringValue(value="Mastodon"),
+                        uri=google.protobuf.wrappers_pb2.StringValue(value="https://glauca.space/@glauca"),
+                        user=google.protobuf.wrappers_pb2.StringValue(value="@glauca@glauca.space"),
+                    )
+                }
             ),
             entities=[rdap_pb2.Entity(
                 handle=domain_data.client_id,
                 roles=[rdap_pb2.RoleAbuse],
                 js_card=rdap_pb2.JSCard(
                     uid=domain_data.client_id,
-                    kind=google.protobuf.wrappers_pb2.StringValue(value="org"),
-                    full_name=rdap_pb2.JSCard.LocalisedString(value="AS207960 Cyfyngedig Abuse Department"),
-                    organisation=[rdap_pb2.JSCard.LocalisedString(
-                        value="AS207960 Cyfyngedig"
-                    )],
-                    emails=[rdap_pb2.JSCard.Resource(
-                        value="abuse@as207960.net"
-                    )],
-                    online=[rdap_pb2.JSCard.Resource(
-                        type=google.protobuf.wrappers_pb2.StringValue(value="uri"),
-                        value="https://as207960.net/contact"
-                    )]
+                    kind=rdap_pb2.JSCard.Kind.Org,
+                    organisations={
+                        "o": rdap_pb2.JSCard.Organisation(
+                            name=google.protobuf.wrappers_pb2.StringValue(value="AS207960 Cyfyngedig"),
+                            units=[rdap_pb2.JSCard.Organisation.OrganisationUnit(
+                                name="Abuse Department"
+                            )]
+                        )
+                    },
+                    emails={
+                        "e": rdap_pb2.JSCard.Email(
+                            email="abuse@as207960.net"
+                        )
+                    },
+                    links={
+                        "c": rdap_pb2.JSCard.Link(
+                            resource=rdap_pb2.JSCard.Resource(
+                                uri="https://as207960.net/contact"
+                            ),
+                            kind=rdap_pb2.JSCard.Link.Kind.Contact,
+                        )
+                    }
                 ),
             )]
         ))
