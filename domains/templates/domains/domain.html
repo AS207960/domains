@@ -97,7 +97,7 @@
             </div>
             <div class="col">
                 <p>
-                <div class="btn-group">
+                <div class="btn-group" style="flex-wrap: wrap; gap: 5px 0;">
                     <a href="{{ sharing_uri }}" class="btn btn-primary">&#x1f91d; Share</a>
                     {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
                         <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
