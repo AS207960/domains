@@ -692,7 +692,7 @@ class DomainSerializer(serializers.Serializer):
             instance.registrant = validated_data['registrant']
             if domain_info.registrant_supported:
                 update_req.new_registrant.value = instance.registrant.get_registry_id(
-                    instance.domain_obj.registry_name, domain_info,
+                    instance.domain_obj.registry_name, domain_info, role=apps.epp_api.ContactRole.Registrant
                 ).registry_contact_id
             instance.domain_db_obj.registrant_contact = instance.registrant
 
@@ -717,6 +717,7 @@ class DomainSerializer(serializers.Serializer):
                             type='admin',
                             id=instance.admin_contact.get_registry_id(
                                 instance.domain_obj.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Admin
                             ).registry_contact_id
                         )
                     ))
@@ -743,6 +744,7 @@ class DomainSerializer(serializers.Serializer):
                             type='billing',
                             id=instance.billing_contact.get_registry_id(
                                 instance.domain_obj.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Billing
                             ).registry_contact_id
                         )
                     ))
@@ -769,6 +771,7 @@ class DomainSerializer(serializers.Serializer):
                             type='tech',
                             id=instance.tech_contact.get_registry_id(
                                 instance.domain_obj.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Tech
                             ).registry_contact_id
                         )
                     ))
@@ -793,7 +796,9 @@ class DomainSerializer(serializers.Serializer):
                                 else:
                                     zone_contact = instance.domain_db_obj.registrant_contact
 
-                                isnic_zone_contact = zone_contact.get_registry_id(instance.domain_obj.registry_name, domain_info)
+                                isnic_zone_contact = zone_contact.get_registry_id(
+                                    instance.domain_obj.registry_name, domain_info, role=apps.epp_api.ContactRole.Tech
+                                )
                             else:
                                 isnic_zone_contact = None
 

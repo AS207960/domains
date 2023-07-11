@@ -224,11 +224,14 @@ def get_contact_id(request):
         if form.is_valid():
             contact = get_object_or_404(models.Contact, id=form.cleaned_data["contact"])
             domain = form.cleaned_data["domain"]
+            role = form.cleaned_data["role"]
             if domain:
                 zone = zone_info.get_domain_info(domain)[0]
             else:
                 zone = None
-            registry_id = contact.get_registry_id(form.cleaned_data["registry_id"], zone_data=zone)
+            registry_id = contact.get_registry_id(
+                form.cleaned_data["registry_id"], zone_data=zone, role=role
+            )
     else:
         form = forms.AdminContactGetIDForm()
 

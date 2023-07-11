@@ -426,7 +426,10 @@ def update_domain_contact(request, domain_id):
                     user_domain.admin_contact = contact
                     if domain_info.admin_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
+                            contact_id = contact.get_registry_id(
+                                domain_data.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Admin
+                            )
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -434,7 +437,10 @@ def update_domain_contact(request, domain_id):
                     user_domain.tech_contact = contact
                     if domain_info.tech_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
+                            contact_id = contact.get_registry_id(
+                                domain_data.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Tech
+                            )
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -442,7 +448,10 @@ def update_domain_contact(request, domain_id):
                     user_domain.billing_contact = contact
                     if domain_info.billing_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
+                            contact_id = contact.get_registry_id(
+                                domain_data.registry_name, domain_info,
+                                role=apps.epp_api.ContactRole.Billing
+                            )
                             domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
@@ -450,7 +459,10 @@ def update_domain_contact(request, domain_id):
                 user_domain.save()
             elif domain_info.registrant_change_supported:
                 if domain_info.registrant_supported:
-                    contact_id = contact.get_registry_id(domain_data.registry_name, domain_info)
+                    contact_id = contact.get_registry_id(
+                        domain_data.registry_name, domain_info,
+                        role=apps.epp_api.ContactRole.Registrant
+                    )
                     domain_data.set_registrant(contact_id.registry_contact_id)
 
                 user_domain.registrant_contact = contact

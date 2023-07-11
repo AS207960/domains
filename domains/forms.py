@@ -753,6 +753,14 @@ class AdminContactGetIDForm(forms.Form):
     contact = forms.UUIDField(label="Contact ID", required=True)
     registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
     domain = forms.CharField(max_length=255, label="Domain", required=False)
+    role = forms.TypedChoiceField(choices=[
+        (apps.epp_api.ContactRole.Registrant.value, "Registrant"),
+        (apps.epp_api.ContactRole.Admin.value, "Admin"),
+        (apps.epp_api.ContactRole.Tech.value, "Tech"),
+        (apps.epp_api.ContactRole.Billing.value, "Billing"),
+        (apps.epp_api.ContactRole.Reseller.value, "Reseller"),
+        (apps.epp_api.ContactRole.OnSite.value, "OnSite"),
+    ], coerce=apps.epp_api.ContactRole, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -765,7 +773,8 @@ class AdminContactGetIDForm(forms.Form):
         self.helper.layout = crispy_forms.layout.Layout(
             'contact',
             'registry_id',
-            'domain'
+            'domain',
+            'role',
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Get'))

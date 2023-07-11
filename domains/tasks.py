@@ -234,21 +234,21 @@ def process_domain_registration_paid(registration_order_id):
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="admin",
                     contact_id=domain_registration_order.admin_contact.get_registry_id(
-                        registry_id, zone
+                        registry_id, zone, role=apps.epp_api.ContactRole.Admin
                     ).registry_contact_id
                 ))
             if zone.billing_supported and domain_registration_order.billing_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="billing",
                     contact_id=domain_registration_order.billing_contact.get_registry_id(
-                        registry_id, zone
+                        registry_id, zone, role=apps.epp_api.ContactRole.Billing
                     ).registry_contact_id
                 ))
             if zone.tech_supported and domain_registration_order.tech_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="tech",
                     contact_id=domain_registration_order.tech_contact.get_registry_id(
-                        registry_id, zone
+                        registry_id, zone, role=apps.epp_api.ContactRole.Tech
                     ).registry_contact_id
                 ))
 
@@ -267,7 +267,7 @@ def process_domain_registration_paid(registration_order_id):
                 domain=domain_registration_order.domain,
                 period=period,
                 registrant=domain_registration_order.registrant_contact.get_registry_id(
-                    registry_id, zone
+                    registry_id, zone, role=apps.epp_api.ContactRole.Registrant
                 ).registry_contact_id
                 if zone.registrant_supported else 'NONE',
                 contacts=contact_objs,
@@ -752,7 +752,7 @@ def process_domain_transfer_contacts(transfer_order_id):
     should_send = False
     if zone.registrant_supported and zone.registrant_change_supported:
         registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
-            domain_data.registry_name, zone
+            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
         )
         if domain_data.registrant != registrant_id.registry_contact_id:
             update_req.new_registrant.value = registrant_id.registry_contact_id
@@ -781,15 +781,21 @@ def process_domain_transfer_contacts(transfer_order_id):
         should_send = True
 
     if domain_transfer_order.tech_contact and zone.tech_supported:
-        tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(domain_data.registry_name, zone)
+        tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(
+            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Tech
+        )
         _update_contact("tech", tech_contact_id.registry_contact_id)
 
     if domain_transfer_order.admin_contact and zone.admin_supported:
-        admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(domain_data.registry_name, zone)
+        admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(
+            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Admin
+        )
         _update_contact("admin", admin_contact_id.registry_contact_id)
 
     if domain_transfer_order.billing_contact and zone.billing_supported:
-        billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(domain_data.registry_name, zone)
+        billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(
+            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Billing
+        )
         _update_contact("billing", billing_contact_id.registry_contact_id)
 
     if zone.keysys_de:
