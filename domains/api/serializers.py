@@ -604,26 +604,16 @@ class DomainSerializer(serializers.Serializer):
 
     @classmethod
     def get_domain(cls, d: models.DomainRegistration, domain: apps.epp_api.Domain, user):
-        domain_info = zone_info.get_domain_info(d.domain)[0]
-        if domain_info.registrant_supported:
-            registrant = models.Contact.get_contact(domain.registrant, domain.registry_name, user, domain_info)
-        else:
-            registrant = d.registrant_contact
-        if domain.admin:
-            admin = models.Contact.get_contact(domain.admin.contact_id, domain.registry_name, user, domain_info)
-        elif d.admin_contact:
+        registrant = d.registrant_contact
+        if d.admin_contact:
             admin = d.admin_contact
         else:
             admin = None
-        if domain.billing:
-            billing = models.Contact.get_contact(domain.billing.contact_id, domain.registry_name, user, domain_info)
-        elif d.billing_contact:
+        if d.billing_contact:
             billing = d.billing_contact
         else:
             billing = None
-        if domain.tech:
-            tech = models.Contact.get_contact(domain.tech.contact_id, domain.registry_name, user, domain_info)
-        elif d.tech_contact:
+        if d.tech_contact:
             tech = d.tech_contact
         else:
             tech = None
@@ -691,9 +681,13 @@ class DomainSerializer(serializers.Serializer):
                 and domain_info.registrant_change_supported:
             instance.registrant = validated_data['registrant']
             if domain_info.registrant_supported:
-                update_req.new_registrant.value = instance.registrant.get_registry_id(
-                    instance.domain_obj.registry_name, domain_info, role=apps.epp_api.ContactRole.Registrant
-                ).registry_contact_id
+                proxy_contact = domain_info.registrant_proxy(instance.registrant)
+                if proxy_contact:
+                    update_req.new_registrant.value = proxy_contact
+                else:
+                    update_req.new_registrant.value = instance.registrant.get_registry_id(
+                        instance.domain_obj.registry_name, domain_info, role=apps.epp_api.ContactRole.Registrant
+                    ).registry_contact_id
             instance.domain_db_obj.registrant_contact = instance.registrant
 
         if 'admin_contact' in validated_data and validated_data['admin_contact'] != instance.admin_contact:

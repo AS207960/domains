@@ -263,13 +263,15 @@ def process_domain_registration_paid(registration_order_id):
             else:
                 keysys = None
 
+            registrant_contact = zone.registrant_proxy(domain_registration_order.registrant_contact)
+            if not registrant_contact:
+                registrant_contact = domain_registration_order.registrant_contact.get_registry_id(
+                    registry_id, zone, role=apps.epp_api.ContactRole.Registrant
+                ).registry_contact_id if zone.registrant_supported else 'NONE'
             pending, _, _, _ = apps.epp_client.create_domain(
                 domain=domain_registration_order.domain,
                 period=period,
-                registrant=domain_registration_order.registrant_contact.get_registry_id(
-                    registry_id, zone, role=apps.epp_api.ContactRole.Registrant
-                ).registry_contact_id
-                if zone.registrant_supported else 'NONE',
+                registrant=registrant_contact,
                 contacts=contact_objs,
                 name_servers=[apps.epp_api.DomainNameServer(
                     host_obj='ns1.as207960.net',
@@ -751,9 +753,11 @@ def process_domain_transfer_contacts(transfer_order_id):
     )
     should_send = False
     if zone.registrant_supported and zone.registrant_change_supported:
-        registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
-            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
-        )
+        registrant_id = zone.registrant_proxy(domain_transfer_order.registrant_contact)
+        if not registrant_id:
+            registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
+                domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
+            )
         if domain_data.registrant != registrant_id.registry_contact_id:
             update_req.new_registrant.value = registrant_id.registry_contact_id
             should_send = True

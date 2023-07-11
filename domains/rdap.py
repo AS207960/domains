@@ -408,29 +408,16 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             else:
                 entities[obj_id]["roles"].append(role)
 
-        user = domain_obj.get_user()
-        if domain_data.registrant:
-            contact = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, user, zone_data)
-            add_entity(contact, rdap_pb2.RoleRegistrant)
-        elif domain_obj.registrant_contact:
+        if domain_obj.registrant_contact:
             add_entity(domain_obj.registrant_contact, rdap_pb2.RoleRegistrant)
 
-        if domain_data.admin:
-            contact = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(contact, rdap_pb2.RoleAdministrative)
-        elif domain_obj.admin_contact:
+        if domain_obj.admin_contact:
             add_entity(domain_obj.admin_contact, rdap_pb2.RoleAdministrative)
 
-        if domain_data.billing:
-            contact = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(contact, rdap_pb2.RoleBilling)
-        elif domain_obj.billing_contact:
+        if domain_obj.billing_contact:
             add_entity(domain_obj.billing_contact, rdap_pb2.RoleBilling)
 
-        if domain_data.tech:
-            contact = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, user, zone_data)
-            add_entity(contact, rdap_pb2.RoleTechnical)
-        elif domain_obj.tech_contact:
+        if domain_obj.tech_contact:
             add_entity(domain_obj.tech_contact, rdap_pb2.RoleTechnical)
 
         for c in entities.values():

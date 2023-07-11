@@ -459,10 +459,12 @@ def update_domain_contact(request, domain_id):
                 user_domain.save()
             elif domain_info.registrant_change_supported:
                 if domain_info.registrant_supported:
-                    contact_id = contact.get_registry_id(
-                        domain_data.registry_name, domain_info,
-                        role=apps.epp_api.ContactRole.Registrant
-                    )
+                    contact_id = domain_info.registrant_proxy(contact)
+                    if not contact_id:
+                        contact_id = contact.get_registry_id(
+                            domain_data.registry_name, domain_info,
+                            role=apps.epp_api.ContactRole.Registrant
+                        )
                     domain_data.set_registrant(contact_id.registry_contact_id)
 
                 user_domain.registrant_contact = contact

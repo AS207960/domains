@@ -6,8 +6,20 @@ from concurrent.futures import ThreadPoolExecutor
 from django.conf import settings
 from django.utils import timezone
 import domains.views.billing
-
 from . import apps
+
+
+AFNIC_PERMITTED_COUNTRIES = [
+    "AT", "AX", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
+    "FR", "GF", "GP", "GR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", "LV",
+    "MQ", "MT", "NC", "NL", "NO", "PF", "PL", "PM", "PT", "RE", "RO", "SE",
+    "SI", "SK", "TF", "WF", "YT"
+]
+EURID_PERMITTED_COUNTRIES = [
+    "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR",
+    "HU", "IE", "IT", "LI", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
+    "SE", "SK", "SI", "HR"
+]
 
 
 def _mul(value, unit):
@@ -1066,6 +1078,16 @@ class DomainInfo:
     @property
     def is_eurid(self):
         return self.registry == self.REGISTRY_EURID
+
+    def registrant_proxy(self, contact) -> typing.Optional[str]:
+        if self.registry == self.REGISTRY_EURID:
+            if contact.local_address.country_code.code not in EURID_PERMITTED_COUNTRIES:
+                return settings.EURID_PROXY_CONTACT
+        elif self.registry == self.REGISTRY_AFNIC:
+            if contact.local_address.country_code.code not in AFNIC_PERMITTED_COUNTRIES:
+                return settings.AFNIC_PROXY_CONTACT
+
+        return None
 
 
 if settings.DEBUG:
