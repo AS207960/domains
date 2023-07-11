@@ -754,13 +754,14 @@ class AdminContactGetIDForm(forms.Form):
     registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
     domain = forms.CharField(max_length=255, label="Domain", required=False)
     role = forms.TypedChoiceField(choices=[
+        ("", "---"),
         (apps.epp_api.ContactRole.Registrant.value, "Registrant"),
         (apps.epp_api.ContactRole.Admin.value, "Admin"),
         (apps.epp_api.ContactRole.Tech.value, "Tech"),
         (apps.epp_api.ContactRole.Billing.value, "Billing"),
         (apps.epp_api.ContactRole.Reseller.value, "Reseller"),
         (apps.epp_api.ContactRole.OnSite.value, "OnSite"),
-    ], coerce=apps.epp_api.ContactRole, required=False)
+    ], coerce=apps.epp_api.ContactRole, empty_value=None, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
