@@ -833,6 +833,7 @@ class DomainInfo:
     def registry_lock_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
+            self.REGISTRY_EURID,
         )
 
     @property
