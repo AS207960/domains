@@ -389,7 +389,9 @@ class NameServerSerializer(serializers.Serializer):
         if not domain:
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         available, _ = apps.epp_client.check_host(host, domain_data.registry_name)
         if not available:
             raise ObjectExists()

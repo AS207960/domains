@@ -290,7 +290,11 @@ class Domain(viewsets.ViewSet):
 
         with ThreadPoolExecutor() as executor:
             domains_data = list(executor.map(
-                lambda d: serializers.DomainSerializer.get_domain(d, apps.epp_client.get_domain(d.domain), request.user),
+                lambda d: serializers.DomainSerializer.get_domain(
+                    d, apps.epp_client.get_domain(
+                        d.domain, registry_id=d.registry_id
+                    ), request.user
+                ),
                 domains
             ))
 
@@ -305,7 +309,9 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.domain
+        )
         domain_data = serializers.DomainSerializer.get_domain(domain, domain_data, request.user)
 
         serializer = serializers.DomainSerializer(domain_data, context={'request': request})
@@ -319,7 +325,9 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         if not domain_data.can_update:
             raise PermissionDenied
 
@@ -342,7 +350,9 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         if not domain_data.can_update:
             raise PermissionDenied
 
@@ -366,11 +376,15 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'delete') or domain.deleted:
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         if not domain_data.can_delete:
             raise PermissionDenied
 
-        apps.epp_client.delete_domain(domain.domain)
+        apps.epp_client.delete_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         domain_info, sld = zone_info.get_domain_info(domain.domain)
         if not domain_info.restore_supported:
             domain.former_domain = True
@@ -413,7 +427,9 @@ class Domain(viewsets.ViewSet):
                 or not domain.has_scope(request.auth.token, 'edit') or domain.deleted:
             raise PermissionDenied
 
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         if not domain_data.can_renew:
             raise PermissionDenied
 

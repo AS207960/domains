@@ -79,7 +79,9 @@ class Command(BaseCommand):
                 continue
 
             try:
-                domain_data = apps.epp_client.get_domain(domain.domain)
+                domain_data = apps.epp_client.get_domain(
+                    domain.domain, registry_id=domain.registry_id
+                )
             except grpc.RpcError as rpc_error:
                 print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
                 continue
@@ -146,9 +148,15 @@ class Command(BaseCommand):
 
                         try:
                             if domain_info.keysys_de:
-                                apps.epp_client.delete_domain(domain.domain, keysys_target="TRANSIT")
+                                apps.epp_client.delete_domain(
+                                    domain.domain, keysys_target="TRANSIT",
+                                    registry_id=domain.registry_id
+                                )
                             else:
-                                apps.epp_client.delete_domain(domain_data.name)
+                                apps.epp_client.delete_domain(
+                                    domain_data.name,
+                                    registry_id=domain.registry_id
+                                )
                         except grpc.RpcError as rpc_error:
                             print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
                             billing.charge_account(

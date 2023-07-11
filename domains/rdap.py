@@ -276,7 +276,9 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             return rdap_pb2.StatusPendingDelete
 
     def domain_to_proto(self, domain_obj: models.DomainRegistration) -> rdap_pb2.Domain:
-        domain_data = apps.epp_client.get_domain(domain_obj.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain_obj.domain, registry_id=domain_obj.registry_id
+        )
         zone_data = zone_info.get_domain_info(domain_data.name.lower())[0]
 
         resp_data = rdap_pb2.Domain(

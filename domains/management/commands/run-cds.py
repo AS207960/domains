@@ -80,7 +80,9 @@ class Command(BaseCommand):
                 continue
 
             try:
-                domain_data = apps.epp_client.get_domain(domain.domain)
+                domain_data = apps.epp_client.get_domain(
+                    domain.domain, registry_id=domain.registry_id
+                )
             except grpc.RpcError as rpc_error:
                 print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
                 continue

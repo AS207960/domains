@@ -184,7 +184,9 @@ def host_create(request, host_name: str):
         host_unicode = host_name
 
     try:
-        domain_data = apps.epp_client.get_domain(domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
         available, _ = apps.epp_client.check_host(host_name, domain_data.registry_name)
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()

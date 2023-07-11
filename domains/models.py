@@ -678,6 +678,7 @@ class DomainRegistration(models.Model):
     last_renew_notify = models.DateTimeField(default=timezone.datetime.min)
     deleted_date = models.DateTimeField(blank=True, null=True)
     pending_registry_lock_status = models.PositiveSmallIntegerField(blank=True, null=True)
+    registry_id = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
@@ -847,6 +848,7 @@ class DomainRegistrationOrder(AbstractOrder):
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
+    registry_id = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
@@ -881,6 +883,7 @@ class DomainTransferOrder(AbstractOrder):
         Contact, blank=True, null=True, on_delete=models.PROTECT, related_name='domain_transfer_orders_tech')
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
     last_transfer_notify = models.DateTimeField(default=timezone.datetime.min)
+    registry_id = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']

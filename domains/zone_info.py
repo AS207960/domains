@@ -17,8 +17,9 @@ AFNIC_PERMITTED_COUNTRIES = [
 ]
 EURID_PERMITTED_COUNTRIES = [
     "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR",
-    "HU", "IE", "IT", "LI", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
-    "SE", "SK", "SI", "HR"
+    "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
+    "SE", "SI", "SK", "AX", "GF", "GP", "GI", "MF", "MQ", "RE", "YT", "IS",
+    "LI", "NO"
 ]
 
 
@@ -615,6 +616,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_KENIC,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -626,6 +628,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -636,6 +639,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -644,6 +648,7 @@ class DomainInfo:
             self.REGISTRY_SWITCH,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -742,6 +747,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_ISNIC,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -782,6 +788,7 @@ class DomainInfo:
     def direct_renew_supported(self):
         return self.registry not in (
             self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID_RRPPROXY,
         )
 
     @property
@@ -794,6 +801,7 @@ class DomainInfo:
             self.REGISTRY_AKEP,
             self.REGISTRY_RNIDS,
             self.REGISTRY_NASK,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -835,6 +843,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID,
         )
 
     @property
@@ -1491,11 +1500,9 @@ else:
             MarkupPrice(4056, transfer=4056, restore=17160, currency=None, display_currency='USD', tld='earth',
                         markup=decimal.Decimal("1.3"))
         )),
-        ('eu', DomainInfo(
-            DomainInfo.REGISTRY_EURID_RRPPROXY,
-            MarkupPrice(1728, transfer=1728, restore=2880, currency=None, display_currency='EUR', tld='eu',
-                        markup=decimal.Decimal("1.6"))
-        )),
+        ('eu', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
+        ('xn--e1a4c', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
+        ('xn--qxa6a', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
         ('soy', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(4478, transfer=4478, restore=21600, currency=None, display_currency='USD', tld='soy',

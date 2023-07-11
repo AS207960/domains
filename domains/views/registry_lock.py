@@ -53,7 +53,9 @@ def is_authenticated(request, domain: models.DomainRegistration, registering=Fal
 def manage_registry_lock(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
-    domain = apps.epp_client.get_domain(user_domain.domain)
+    domain = apps.epp_client.get_domain(
+        user_domain.domain, registry_id=user_domain.registry_id
+    )
     domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain)[0]
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
@@ -111,7 +113,9 @@ def manage_registry_lock(request, domain_id):
 def update(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
-    domain = apps.epp_client.get_domain(user_domain.domain)
+    domain = apps.epp_client.get_domain(
+        user_domain.domain, registry_id=user_domain.registry_id
+    )
     domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain)[0]
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')

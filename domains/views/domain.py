@@ -103,7 +103,9 @@ def domains(request):
             deleted_domains.append(d)
         else:
             try:
-                domain_data = apps.epp_client.get_domain(d.domain)
+                domain_data = apps.epp_client.get_domain(
+                    d.domain, registry_id=d.registry_id
+                )
                 if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
                     d.deleted = True
                     d.deleted_date = timezone.now()
@@ -229,7 +231,9 @@ def domain(request, domain_id):
     ))
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
 
         if apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state:
             user_domain.deleted = True
@@ -387,7 +391,9 @@ def update_domain_contact(request, domain_id):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -496,7 +502,9 @@ def domain_block_transfer(request, domain_id):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -540,7 +548,9 @@ def domain_del_block_transfer(request, domain_id):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -581,7 +591,9 @@ def domain_regen_transfer_code(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -629,7 +641,9 @@ def add_domain_host_obj(request, domain_id):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -715,7 +729,9 @@ def add_domain_host_addr(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -776,7 +792,9 @@ def add_domain_ds_data(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -828,7 +846,9 @@ def delete_domain_ds_data(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -875,7 +895,9 @@ def add_domain_dnskey_data(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -926,7 +948,9 @@ def delete_domain_dnskey_data(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -971,7 +995,9 @@ def delete_domain_sec_dns(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1011,7 +1037,9 @@ def delete_domain_host_obj(request, domain_id, host_name):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1343,7 +1371,9 @@ def delete_domain(request, domain_id):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1356,7 +1386,9 @@ def delete_domain(request, domain_id):
     if request.method == "POST":
         if can_delete and request.POST.get("delete") == "true":
             try:
-                pending, registry_name, _transaction_id, _fee_data = apps.epp_client.delete_domain(user_domain.domain)
+                pending, registry_name, _transaction_id, _fee_data = apps.epp_client.delete_domain(
+                    user_domain.domain, registry_id=user_domain.registry_id
+                )
             except grpc.RpcError as rpc_error:
                 error = rpc_error.details()
                 return render(request, "domains/error.html", {
@@ -1410,7 +1442,9 @@ def transfer_out_domain(request, domain_id, transfer_action):
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1422,7 +1456,10 @@ def transfer_out_domain(request, domain_id, transfer_action):
         if transfer_action == "approve":
             if domain_info.direct_transfer_supported:
                 try:
-                    transfer_obj = apps.epp_client.transfer_accept_domain(user_domain.domain, "")
+                    _ = apps.epp_client.transfer_accept_domain(
+                        user_domain.domain, "",
+                        registry_id=user_domain.registry_id
+                    )
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                     return render(request, "domains/error.html", {
@@ -1444,7 +1481,10 @@ def transfer_out_domain(request, domain_id, transfer_action):
         elif transfer_action == "reject":
             if domain_info.direct_transfer_supported:
                 try:
-                    transfer_obj = apps.epp_client.transfer_reject_domain(user_domain.domain, "")
+                    _ = apps.epp_client.transfer_reject_domain(
+                        user_domain.domain, "",
+                        registry_id=user_domain.registry_id
+                    )
                 except grpc.RpcError as rpc_error:
                     error = rpc_error.details()
                     return render(request, "domains/error.html", {
@@ -1490,7 +1530,9 @@ def renew_domain(request, domain_id):
         raise Http404
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -1587,7 +1629,9 @@ def restore_domain(request, domain_id):
         })
 
     try:
-        domain_data = apps.epp_client.get_domain(user_domain.domain)
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {

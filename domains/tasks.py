@@ -209,6 +209,8 @@ def process_domain_registration_paid(registration_order_id):
         logger.warn(f"Failed to check availability of {domain_registration_order.domain}: {rpc_error.details()}")
         raise rpc_error
 
+    domain_registration_order.registry_id = registry_id
+
     if not available:
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "Domain no longer available to purchase."
@@ -218,7 +220,7 @@ def process_domain_registration_paid(registration_order_id):
 
     if zone.direct_registration_supported:
         if zone.pre_create_host_objects:
-            for host in ('ns1.as207960.net', 'ns2.as207960.net'):
+            for host in ('ns1.as207960.net', 'ns2.as207960.net', 'ns3.as207960.net', 'ns4.as207960.net'):
                 try:
                     host_available, _ = apps.epp_client.check_host(host, registry_id)
 
@@ -283,7 +285,8 @@ def process_domain_registration_paid(registration_order_id):
                     address=[]
                 )],
                 auth_info=domain_registration_order.auth_info,
-                keysys=keysys
+                keysys=keysys,
+                registry_id=domain_registration_order.registry_id
             )
         except grpc.RpcError as rpc_error:
             domain_registration_order.state = domain_registration_order.STATE_PENDING_APPROVAL
@@ -306,6 +309,7 @@ def process_domain_registration_paid(registration_order_id):
             gchat_bot.notify_registration_pending.delay(domain_registration_order.id, str(period))
             logger.info(f"{domain_registration_order.domain} registration successfully submitted")
     else:
+        domain_registration_order.save()
         process_domain_registration_complete.delay(domain_registration_order.id)
         logger.info(f"{domain_registration_order.domain} registered successfully")
 
@@ -360,7 +364,8 @@ def process_domain_registration_complete(registration_order_id):
         registrant_contact=domain_registration_order.registrant_contact,
         admin_contact=domain_registration_order.admin_contact,
         tech_contact=domain_registration_order.tech_contact,
-        billing_contact=domain_registration_order.billing_contact
+        billing_contact=domain_registration_order.billing_contact,
+        registry_id=domain_registration_order.registry_id
     )
     domain_obj.save()
 
@@ -403,7 +408,9 @@ def process_domain_renewal_paid(renew_order_id):
         unit=domain_renewal_order.period_unit
     )
     try:
-        domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id
+        )
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
         raise rpc_error
@@ -411,7 +418,8 @@ def process_domain_renewal_paid(renew_order_id):
     if zone.direct_renew_supported:
         try:
             _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-                domain_renewal_order.domain, period, domain_data.expiry_date
+                domain_renewal_order.domain, period, domain_data.expiry_date,
+                registry_id=domain_renewal_order.domain_obj.registry_id
             )
         except grpc.RpcError as rpc_error:
             domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
@@ -514,14 +522,19 @@ def process_domain_restore_paid(restore_order_id):
     zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
 
     try:
-        domain_data = apps.epp_client.get_domain(domain_restore_order.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain_restore_order.domain, registry_id=domain_restore_order.domain_obj.registry_id
+        )
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_restore_order.domain}: {rpc_error.details()}")
         raise rpc_error
 
     if zone.direct_restore_supported:
         try:
-            pending, registry_id = apps.epp_client.restore_domain(domain_restore_order.domain)
+            pending, registry_id = apps.epp_client.restore_domain(
+                domain_restore_order.domain,
+                registry_id=domain_restore_order.domain_obj.registry_id
+            )
             domain_restore_order.domain_obj.deleted = pending
             domain_restore_order.domain_obj.pending = pending
             domain_restore_order.domain_obj.save()
@@ -544,7 +557,8 @@ def process_domain_restore_paid(restore_order_id):
             if zone.direct_renew_supported:
                 try:
                     _pending, _new_expiry, _registry_id = apps.epp_client.renew_domain(
-                        domain_restore_order.domain, period, domain_data.expiry_date
+                        domain_restore_order.domain, period, domain_data.expiry_date,
+                        registry_id=domain_restore_order.domain_obj.registry_id
                     )
                 except grpc.RpcError as rpc_error:
                     logger.error(f"Failed to renew {domain_restore_order.domain}: {rpc_error.details()}")
@@ -658,7 +672,8 @@ def process_domain_transfer_paid(transfer_order_id):
             transfer_data = apps.epp_client.transfer_request_domain(
                 domain_transfer_order.domain,
                 domain_transfer_order.auth_code,
-                period=period
+                period=period,
+                registry_id=domain_transfer_order.registry_id,
             )
         except grpc.RpcError as rpc_error:
             domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
@@ -668,17 +683,20 @@ def process_domain_transfer_paid(transfer_order_id):
             logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()},"
                          f" passing off to human")
         else:
+            domain_transfer_order.registry_id = transfer_data.registry_name
+
             if transfer_data.status == 5:
+                domain_transfer_order.save()
                 gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
                 process_domain_transfer_complete.delay(domain_transfer_order.id)
                 logger.info(f"{domain_transfer_order.domain} successfully transferred")
             else:
-                gchat_bot.notify_transfer_pending.delay(domain_transfer_order.id, transfer_data.registry_name)
-
                 domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
                 domain_transfer_order.redirect_uri = None
                 domain_transfer_order.last_error = None
                 domain_transfer_order.save()
+
+                gchat_bot.notify_transfer_pending.delay(domain_transfer_order.id, transfer_data.registry_name)
 
                 logger.info(f"{domain_transfer_order.domain} transfer successfully submitted")
     else:
@@ -695,6 +713,7 @@ def process_domain_transfer_paid(transfer_order_id):
 
         gchat_bot.request_transfer.delay(domain_transfer_order.id, registry_id)
 
+        domain_transfer_order.registry_id = registry_id
         domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
         domain_transfer_order.redirect_uri = None
         domain_transfer_order.last_error = None
@@ -746,7 +765,9 @@ def process_domain_transfer_contacts(transfer_order_id):
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
         return
 
-    domain_data = apps.epp_client.get_domain(domain_transfer_order.domain)
+    domain_data = apps.epp_client.get_domain(
+        domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id
+    )
 
     update_req = apps.epp_api.domain_pb2.DomainUpdateRequest(
         name=domain_data.name,
@@ -862,7 +883,9 @@ def process_domain_transfer_failed(transfer_order_id):
 )
 def set_dns_to_own(domain_id):
     domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
-    domain_data = apps.epp_client.get_domain(domain.domain)
+    domain_data = apps.epp_client.get_domain(
+        domain.domain, registry_id=domain.registry_id
+    )
 
     domain_info = zone_info.get_domain_info(domain.domain)[0]
 
@@ -913,7 +936,9 @@ def process_domain_auto_renew_paid(renew_order_id):
     )
 
     try:
-        domain_data = apps.epp_client.get_domain(domain_renewal_order.domain)
+        domain_data = apps.epp_client.get_domain(
+            domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id
+        )
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
         raise rpc_error
@@ -921,8 +946,9 @@ def process_domain_auto_renew_paid(renew_order_id):
     if zone.renew_supported:
         if zone.direct_renew_supported:
             try:
-                _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-                    domain_renewal_order.domain, period, domain_data.expiry_date
+                _pending, _new_expiry, _ = apps.epp_client.renew_domain(
+                    domain_renewal_order.domain, period, domain_data.expiry_date,
+                    registry_id=domain_renewal_order.domain_obj.registry_id
                 )
             except grpc.RpcError as rpc_error:
                 domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL

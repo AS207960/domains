@@ -492,13 +492,15 @@ class Domain:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             remove=rem,
-            add=add
+            add=add,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def set_registrant(self, contact_id: str) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
-            new_registrant=StringValue(value=contact_id)
+            new_registrant=StringValue(value=contact_id),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def set_admin(self, contact_id: typing.Union[str, None]) -> bool:
@@ -518,7 +520,8 @@ class Domain:
                 nameserver=domain_pb2.NameServer(
                     host_obj=h
                 )
-            ), hosts))
+            ), hosts)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def add_host_addrs(self, hosts: typing.List[typing.Tuple[str, typing.List[IPAddress]]]) -> bool:
@@ -530,7 +533,8 @@ class Domain:
                     host_name=h[0],
                     addresses=list(map(lambda a: a.to_pb(), h[1]))
                 )
-            ), hosts))
+            ), hosts)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def add_ds_data(self, data: typing.List[SecDNSDSData]) -> bool:
@@ -538,7 +542,8 @@ class Domain:
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
                 add_ds_data=domain_pb2.SecDNSDSData(data=list(map(lambda d: d.to_pb(), data)))
-            )
+            ),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def add_dnskey_data(self, data: typing.List[SecDNSKeyData]) -> bool:
@@ -546,7 +551,8 @@ class Domain:
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
                 add_key_data=domain_pb2.SecDNSKeyData(data=list(map(lambda d: d.to_pb(), data)))
-            )
+            ),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def del_host_objs(self, hosts: typing.List[str]) -> bool:
@@ -557,7 +563,8 @@ class Domain:
                 nameserver=domain_pb2.NameServer(
                     host_obj=h
                 )
-            ), hosts))
+            ), hosts)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def del_secdns_all(self) -> bool:
@@ -565,7 +572,8 @@ class Domain:
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
                 all=True
-            )
+            ),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def del_ds_data(self, data: typing.List[SecDNSDSData]) -> bool:
@@ -573,7 +581,8 @@ class Domain:
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
                 rem_ds_data=domain_pb2.SecDNSDSData(data=list(map(lambda d: d.to_pb(), data)))
-            )
+            ),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def del_dnskey_data(self, data: typing.List[SecDNSKeyData]) -> bool:
@@ -581,7 +590,8 @@ class Domain:
             name=self.name,
             sec_dns=domain_pb2.UpdateSecDNSData(
                 rem_key_data=domain_pb2.SecDNSKeyData(data=list(map(lambda d: d.to_pb(), data)))
-            )
+            ),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def add_states(self, data: typing.List[DomainStatus]) -> bool:
@@ -589,7 +599,8 @@ class Domain:
             name=self.name,
             add=list(map(lambda s: domain_pb2.DomainUpdateRequest.Param(
                 state=s.status
-            ), data))
+            ), data)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
     def del_states(self, data: typing.List[DomainStatus]) -> bool:
@@ -597,7 +608,8 @@ class Domain:
             name=self.name,
             remove=list(map(lambda s: domain_pb2.DomainUpdateRequest.Param(
                 state=s.status
-            ), data))
+            ), data)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
 
@@ -1508,8 +1520,18 @@ class EPPClient:
         reason = resp.reason.value if resp.HasField("reason") else None
         return resp.available, reason, resp.registry_name
 
-    def get_domain(self, domain: str, auth_info: typing.Optional[str] = None) -> Domain:
-        resp = self.stub.DomainInfo(domain_pb2.DomainInfoRequest(name=domain))
+    def get_domain(
+            self,
+            domain: str,
+            auth_info: typing.Optional[str] = None,
+            registry_id: typing.Optional[str] = None,
+    ) -> Domain:
+        resp = self.stub.DomainInfo(domain_pb2.DomainInfoRequest(
+            name=domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
+        ))
         return Domain.from_pb(resp, self)
 
     def create_domain(
@@ -1520,7 +1542,8 @@ class EPPClient:
             contacts: typing.List[DomainContact],
             name_servers: typing.List[DomainNameServer],
             auth_info: str,
-            keysys: typing.Optional[keysys_pb2.DomainCreate]
+            keysys: typing.Optional[keysys_pb2.DomainCreate] = None,
+            registry_id: typing.Optional[str] = None,
     ) -> typing.Tuple[bool, datetime.datetime, datetime.datetime, str]:
         resp = self.stub.DomainCreate(domain_pb2.DomainCreateRequest(
             name=domain,
@@ -1529,69 +1552,126 @@ class EPPClient:
             contacts=list(map(lambda c: c.to_pb(), contacts)),
             nameservers=list(map(lambda n: n.to_pb(), name_servers)),
             auth_info=auth_info,
-            keysys=keysys
+            keysys=keysys,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return resp.pending, resp.creation_date.ToDatetime(), resp.expiry_date.ToDatetime(), resp.registry_name
 
     def delete_domain(
-            self, domain: str, keysys_target: typing.Optional[str] = None
+            self,
+            domain: str,
+            keysys_target: typing.Optional[str] = None,
+            registry_id: typing.Optional[str] = None,
     ) -> typing.Tuple[bool, str, str, typing.Optional[FeeData]]:
-        resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(name=domain))
+        resp = self.stub.DomainDelete(domain_pb2.DomainDeleteRequest(
+            name=domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
+        ))
 
         if keysys_target:
-            resp.keysys = keysys_pb2.DomainDelete(
+            resp.keysys.CopyFrom(keysys_pb2.DomainDelete(
                 target=keysys_target,
                 action=keysys_pb2.Push
-            )
+            ))
 
         return resp.pending, resp.registry_name, resp.cmd_resp.transaction_id.server,\
                FeeData.from_pb(resp.fee_data) if resp.HasField("fee_data") else None
 
-    def restore_domain(self, domain: str) -> typing.Tuple[bool, str]:
-        resp = self.stub.DomainRestoreRequest(rgp_pb2.RequestRequest(name=domain))
+    def restore_domain(
+            self,
+            domain: str,
+            registry_id: typing.Optional[str] = None,
+    ) -> typing.Tuple[bool, str]:
+        resp = self.stub.DomainRestoreRequest(rgp_pb2.RequestRequest(
+            name=domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
+        ))
         return resp.pending, resp.registry_name
 
-    def renew_domain(self, domain: str, period: Period, cur_expiry: datetime.datetime) -> \
-            typing.Tuple[bool, datetime.datetime, str]:
+    def renew_domain(
+            self,
+            domain: str,
+            period: Period,
+            cur_expiry: datetime.datetime,
+            registry_id: typing.Optional[str] = None,
+    ) -> typing.Tuple[bool, datetime.datetime, str]:
         exp = Timestamp()
         exp.FromDatetime(cur_expiry)
         resp = self.stub.DomainRenew(domain_pb2.DomainRenewRequest(
             name=domain,
             period=period.to_pb(),
-            current_expiry_date=exp
+            current_expiry_date=exp,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return resp.pending, resp.expiry_date.ToDatetime(), resp.registry_name
 
-    def transfer_query_domain(self, domain: str, auth_info: typing.Optional[str] = None) -> \
-            DomainTransfer:
+    def transfer_query_domain(
+            self,
+            domain: str,
+            auth_info: typing.Optional[str] = None,
+            registry_id: typing.Optional[str] = None,
+    ) -> DomainTransfer:
         resp = self.stub.DomainTransferQuery(domain_pb2.DomainTransferQueryRequest(
             name=domain,
-            auth_info=StringValue(value=auth_info) if auth_info else None
+            auth_info=StringValue(value=auth_info) if auth_info else None,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return DomainTransfer.from_pb(resp)
 
-    def transfer_request_domain(self, domain: str, auth_info: str, period: typing.Optional[Period] = None) -> \
-            DomainTransfer:
+    def transfer_request_domain(
+            self,
+            domain: str,
+            auth_info: str,
+            period: typing.Optional[Period] = None,
+            registry_id: typing.Optional[str] = None,
+    ) -> DomainTransfer:
         resp = self.stub.DomainTransferRequest(domain_pb2.DomainTransferRequestRequest(
             name=domain,
             period=period.to_pb() if period else None,
-            auth_info=auth_info
+            auth_info=auth_info,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return DomainTransfer.from_pb(resp)
 
-    def transfer_accept_domain(self, domain: str, auth_info: str) -> \
-            DomainTransfer:
+    def transfer_accept_domain(
+            self,
+            domain: str,
+            auth_info: str,
+            registry_id: typing.Optional[str] = None,
+    ) -> DomainTransfer:
         resp = self.stub.DomainTransferAccept(domain_pb2.DomainTransferAcceptRejectRequest(
             name=domain,
-            auth_info=auth_info
+            auth_info=auth_info,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return DomainTransfer.from_pb(resp)
 
-    def transfer_reject_domain(self, domain: str, auth_info: str) -> \
-            DomainTransfer:
+    def transfer_reject_domain(
+            self,
+            domain: str,
+            auth_info: str,
+            registry_id: typing.Optional[str] = None,
+    ) -> DomainTransfer:
         resp = self.stub.DomainTransferReject(domain_pb2.DomainTransferAcceptRejectRequest(
             name=domain,
-            auth_info=auth_info
+            auth_info=auth_info,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         return DomainTransfer.from_pb(resp)
 
