@@ -161,8 +161,8 @@ class ContactAddress(models.Model):
 
 class Contact(models.Model):
     ENTITY_TYPES = (
-        (apps.epp_api.contact_pb2.NotSet, "Not set"),
-        (apps.epp_api.contact_pb2.UnknownEntity, "Unknown entity"),
+        #(apps.epp_api.contact_pb2.NotSet, "Not set"),
+        #(apps.epp_api.contact_pb2.UnknownEntity, "Unknown entity"),
         (apps.epp_api.contact_pb2.UkLimitedCompany, "UK Limited Company"),
         (apps.epp_api.contact_pb2.UkPublicLimitedCompany, "UK Public Limited Company"),
         (apps.epp_api.contact_pb2.UkPartnership, "UK Partnership"),
@@ -337,7 +337,7 @@ class Contact(models.Model):
                 contact=self, registry_id=registry_id,
             )
             if is_eurid and role:
-                contacts_registry = contacts_registry.filter(eurid_role=str(role))
+                contacts_registry = contacts_registry.filter(role=str(role))
             contact_registry = contacts_registry.first()   # type: ContactRegistry
             if contact_registry:
                 if is_isnic or is_eurid:
