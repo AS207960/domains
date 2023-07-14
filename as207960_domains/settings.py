@@ -164,35 +164,20 @@ RP_ID = os.getenv("RP_ID", ALLOWED_HOSTS[0])
 
 STATIC_URL = os.getenv("STATIC_URL", f"{EXTERNAL_URL_BASE}/static/")
 MEDIA_URL = os.getenv("MEDIA_URL", f"{EXTERNAL_URL_BASE}/media/")
+
 AWS_S3_CUSTOM_DOMAIN = os.getenv("S3_CUSTOM_DOMAIN", "")
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_REGION_NAME = os.getenv("S3_REGION", "")
+AWS_S3_ENDPOINT_URL = os.getenv("S3_ENDPOINT", "")
+AWS_STORAGE_BUCKET_NAME = os.getenv("S3_BUCKET", "")
+AWS_S3_ACCESS_KEY_ID = os.getenv("S3_ACCESS_KEY_ID", "")
+AWS_S3_SECRET_ACCESS_KEY = os.getenv("S3_SECRET_ACCESS_KEY", "")
+AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
 
 STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
-            "AWS_QUERYSTRING_AUTH": False,
-            "AWS_S3_REGION_NAME": os.getenv("S3_REGION", ""),
-            "AWS_S3_ENDPOINT_URL": os.getenv("S3_ENDPOINT", ""),
-            "AWS_STORAGE_BUCKET_NAME": os.getenv("S3_MEDIA_BUCKET", ""),
-            "AWS_S3_ACCESS_KEY_ID": os.getenv("S3_ACCESS_KEY_ID", ""),
-            "AWS_S3_SECRET_ACCESS_KEY": os.getenv("S3_SECRET_ACCESS_KEY", ""),
-            "AWS_S3_ADDRESSING_STYLE": "virtual",
-            "AWS_S3_SIGNATURE_VERSION": "s3v4",
-        }
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3boto3.S3ManifestStaticStorage",
-        "OPTIONS": {
-            "AWS_QUERYSTRING_AUTH": False,
-            "AWS_S3_REGION_NAME": os.getenv("S3_REGION", ""),
-            "AWS_S3_ENDPOINT_URL": os.getenv("S3_ENDPOINT", ""),
-            "AWS_STORAGE_BUCKET_NAME": os.getenv("S3_STATIC_BUCKET", ""),
-            "AWS_S3_ACCESS_KEY_ID": os.getenv("S3_ACCESS_KEY_ID", ""),
-            "AWS_S3_SECRET_ACCESS_KEY": os.getenv("S3_SECRET_ACCESS_KEY", ""),
-            "AWS_S3_ADDRESSING_STYLE": "virtual",
-            "AWS_S3_SIGNATURE_VERSION": "s3v4",
-        }
-    }
+    "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+    "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3ManifestStaticStorage"}
 }
 
 KEYCLOAK_SERVER_URL = os.getenv("KEYCLOAK_SERVER_URL")
