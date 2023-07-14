@@ -3,11 +3,12 @@ from django.conf import settings
 import grpc
 import ipaddress
 import as207960_utils.rpc
-import django_keycloak_auth.clients
 from . import epp_api
 
 
 def get_call_creds(_context, callback):
+    import django_keycloak_auth.clients
+
     token = django_keycloak_auth.clients.get_access_token()
     metadata = (('authorization', 'Bearer {}'.format(token)),)
     callback(metadata, None)

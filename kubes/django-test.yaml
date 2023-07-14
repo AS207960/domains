@@ -1,27 +1,3 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: domains-django-test-static
-spec:
-  storageClassName: standard
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: domains-django-test-media
-spec:
-  storageClassName: standard
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -56,6 +32,11 @@ data:
     MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChELn1Fkauo6bduyGeXNca/z27OYNMd85JZMlNiycfFHaAXzgPd53OKVSbyzBuILFPYmzkfaF
     uOCW2qgvFd8cAye6qLsUAqEetiuRTPpAysX3hss1TqIML51kb0ADTmylKi3Hr553qrDy9AEMFmvaKnTH8o0YFozGk0QtlmiLtXQIDAQAB
   ISNIC_CONTACT_EMAIL: isnic-auto-ote@as207960.ltd.uk
+  S3_ENDPOINT: "https://s3.as207960.net"
+  S3_REGION: "garage"
+  S3_MEDIA_BUCKET: "domains-django-test-media"
+  S3_STATIC_BUCKET: "domains-django-test-static"
+  S3_ACCESS_KEY_ID: "GK6831f7679a35963ee5dc1a4a"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -79,12 +60,6 @@ spec:
         part: django
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-test-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-test-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -100,10 +75,6 @@ spec:
           imagePullPolicy: Always
           command: ["sh", "-c", "python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -129,6 +100,8 @@ spec:
               prefix: "CELERY_"
             - secretRef:
                 name: domains-test-rpc
+            - secretRef:
+                name: domains-test-s3
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -137,10 +110,6 @@ spec:
           ports:
             - containerPort: 8000
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -166,6 +135,8 @@ spec:
               prefix: "CELERY_"
             - secretRef:
                 name: domains-test-rpc
+            - secretRef:
+                name: domains-test-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -210,12 +181,6 @@ spec:
         part: celery
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-test-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-test-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -231,10 +196,6 @@ spec:
           imagePullPolicy: Always
           command: ["celery", "-A", "as207960_domains", "worker", "--loglevel=INFO", "-c", "32"]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -260,6 +221,8 @@ spec:
               prefix: "CELERY_"
             - secretRef:
                 name: domains-test-rpc
+            - secretRef:
+                name: domains-test-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -295,12 +258,6 @@ spec:
         part: rpc
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-test-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-test-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -316,10 +273,6 @@ spec:
           imagePullPolicy: Always
           command: ["sh", "-c", "python3 manage.py run-rpc"]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -345,6 +298,8 @@ spec:
               prefix: "CELERY_"
             - secretRef:
                 name: domains-test-rpc
+            - secretRef:
+                name: domains-test-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

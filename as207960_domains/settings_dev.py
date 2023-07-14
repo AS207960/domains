@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_countries',
     'django_grpc',
     'rest_framework',
+    'crispy_bootstrap4',
     'domains'
 ]
 
@@ -61,7 +62,7 @@ MIDDLEWARE = [
     "django_keycloak_auth.middleware.OIDCMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'domains.middleware.CountryDummyMiddleware',
+    'domains.middleware.CountryDummyMiddleware',
 ]
 
 ROOT_URLCONF = 'as207960_domains.urls'
@@ -251,3 +252,5 @@ LOGGING = {
         }
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
