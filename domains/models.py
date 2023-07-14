@@ -383,7 +383,8 @@ class Contact(models.Model):
                 disclosure=self.get_disclosure(zone_data),
                 eurid=apps.epp_api.EURIDContact(
                     contact_type=role if role else apps.epp_api.ContactRole.Registrant,
-                    whois_email=self.private_whois_email if not self.disclose_email else None,
+                    whois_email=self.private_whois_email if
+                    (not self.disclose_email) and role == apps.epp_api.ContactRole.Registrant else None,
                     vat_number=None,
                     language="en",
                     country_of_citizenship=None,
