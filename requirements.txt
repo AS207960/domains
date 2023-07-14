@@ -31,3 +31,4 @@ git+https://github.com/TheEnbyperor/oscrypto@macos-fix
 mypy-protobuf
 base32-crockford
 django-storages
+boto3

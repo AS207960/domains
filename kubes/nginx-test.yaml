@@ -159,6 +159,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: domains-nginx-test
+            name: domains-django-test
             port:
-              number: 80
+              number: 8000
