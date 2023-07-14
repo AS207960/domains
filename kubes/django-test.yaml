@@ -37,6 +37,9 @@ data:
   S3_BUCKET: "domains-django-test"
   S3_STATIC_BUCKET: "domains-django-test-static"
   S3_ACCESS_KEY_ID: "GK6831f7679a35963ee5dc1a4a"
+  S3_CUSTOM_DOMAIN: "domains-django-test.content.as207960.net"
+  STATIC_URL: "https://domains-django-test.content.as207960.net/"
+  MEDIA_URL: "https://domains-django-test.content.as207960.net/"
 ---
 apiVersion: apps/v1
 kind: Deployment
