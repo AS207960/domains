@@ -365,6 +365,29 @@ class SecDNSData:
         )
 
 
+@dataclasses.dataclass
+class DomainEURIDInfo:
+    on_hold: bool
+    quarantined: bool
+    suspended: bool
+    delayed: bool
+    seized: bool
+    on_site: typing.Optional[str]
+    reseller: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: eurid_pb2.DomainInfo):
+        return cls(
+            on_hold=resp.on_hold,
+            quarantined=resp.quarantined,
+            suspended=resp.suspended,
+            delayed=resp.delayed,
+            seized=resp.seized,
+            on_site=resp.on_site,
+            reseller=resp.reseller,
+        )
+
+
 class Domain:
     _app = None  # type: EPPClient
     name: str
@@ -386,6 +409,7 @@ class Domain:
     rgp_state: typing.List[RGPState]
     auth_info: typing.Optional[str]
     sec_dns: typing.Optional[SecDNSData]
+    eurid: typing.Optional[DomainEURIDInfo]
     registry_name: str
 
     @classmethod
@@ -417,6 +441,7 @@ class Domain:
         self.rgp_state = list(map(lambda s: RGPState(state=s), resp.rgp_state))
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
         self.sec_dns = SecDNSData.from_pb(resp.sec_dns) if resp.HasField("sec_dns") else None
+        self.eurid = DomainEURIDInfo.from_pb(resp.eurid_data) if resp.HasField("eurid_data") else None
         self.registry_name = resp.registry_name
         return self
 
@@ -1543,6 +1568,7 @@ class EPPClient:
             name_servers: typing.List[DomainNameServer],
             auth_info: str,
             keysys: typing.Optional[keysys_pb2.DomainCreate] = None,
+            eurid: typing.Optional[eurid_pb2.DomainCreateExtension] = None,
             registry_id: typing.Optional[str] = None,
     ) -> typing.Tuple[bool, datetime.datetime, datetime.datetime, str]:
         resp = self.stub.DomainCreate(domain_pb2.DomainCreateRequest(
@@ -1553,6 +1579,7 @@ class EPPClient:
             nameservers=list(map(lambda n: n.to_pb(), name_servers)),
             auth_info=auth_info,
             keysys=keysys,
+            eurid_data=eurid,
             registry_name=google.protobuf.wrappers_pb2.StringValue(
                 value=registry_id
             ) if registry_id else None

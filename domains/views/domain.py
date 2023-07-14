@@ -12,6 +12,7 @@ import jwt
 import json
 import urllib.parse
 import datetime
+import google.protobuf.wrappers_pb2
 from concurrent.futures import ThreadPoolExecutor
 from .. import models, apps, forms, zone_info, tasks
 from . import gchat_bot
@@ -443,11 +444,27 @@ def update_domain_contact(request, domain_id):
                     user_domain.tech_contact = contact
                     if domain_info.tech_supported:
                         if contact:
-                            contact_id = contact.get_registry_id(
-                                domain_data.registry_name, domain_info,
-                                role=apps.epp_api.ContactRole.Tech
-                            )
-                            domain_data.set_contact(contact_type, contact_id.registry_contact_id)
+                            if domain_info.is_eurid:
+                                if domain_data.eurid:
+                                    contact_id = contact.get_registry_id(
+                                        domain_data.registry_name, domain_info,
+                                        role=apps.epp_api.ContactRole.OnSite
+                                    )
+                                    if contact_id.registry_contact_id != domain_data.eurid.on_site:
+                                        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+                                            name=domain_data.name,
+                                            registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain_data.registry_name),
+                                            eurid_data=apps.epp_api.eurid_pb2.DomainUpdateExtension(
+                                                remove_on_site=domain_data.eurid.on_site,
+                                                add_on_site=contact_id.registry_contact_id
+                                            )
+                                        ))
+                            else:
+                                contact_id = contact.get_registry_id(
+                                    domain_data.registry_name, domain_info,
+                                    role=apps.epp_api.ContactRole.Tech
+                                )
+                                domain_data.set_contact(contact_type, contact_id.registry_contact_id)
                         else:
                             domain_data.set_contact(contact_type, None)
                 elif contact_type == 'billing':

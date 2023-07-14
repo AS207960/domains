@@ -231,6 +231,7 @@ def process_domain_registration_paid(registration_order_id):
                     raise rpc_error
 
         try:
+            eurid = None
             contact_objs = []
             if zone.admin_supported and domain_registration_order.admin_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
@@ -247,12 +248,19 @@ def process_domain_registration_paid(registration_order_id):
                     ).registry_contact_id
                 ))
             if zone.tech_supported and domain_registration_order.tech_contact:
-                contact_objs.append(apps.epp_api.DomainContact(
-                    contact_type="tech",
-                    contact_id=domain_registration_order.tech_contact.get_registry_id(
-                        registry_id, zone, role=apps.epp_api.ContactRole.Tech
-                    ).registry_contact_id
-                ))
+                if zone.is_eurid:
+                    eurid = apps.epp_api.eurid_pb2.DomainCreateExtension(
+                       on_site=domain_registration_order.tech_contact.get_registry_id(
+                           registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                       ).registry_contact_id
+                    )
+                else:
+                    contact_objs.append(apps.epp_api.DomainContact(
+                        contact_type="tech",
+                        contact_id=domain_registration_order.tech_contact.get_registry_id(
+                            registry_id, zone, role=apps.epp_api.ContactRole.Tech
+                        ).registry_contact_id
+                    ))
 
             if zone.keysys_de:
                 keysys = apps.epp_api.keysys_pb2.DomainCreate(
@@ -286,6 +294,7 @@ def process_domain_registration_paid(registration_order_id):
                 )],
                 auth_info=domain_registration_order.auth_info,
                 keysys=keysys,
+                eurid=eurid,
                 registry_id=domain_registration_order.registry_id
             )
         except grpc.RpcError as rpc_error:
@@ -763,6 +772,9 @@ def process_domain_transfer_contacts(transfer_order_id):
     zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
     if not zone:
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
+        return
+
+    if zone.is_eurid:
         return
 
     domain_data = apps.epp_client.get_domain(

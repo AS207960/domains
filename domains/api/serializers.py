@@ -753,24 +753,35 @@ class DomainSerializer(serializers.Serializer):
             if instance.tech_contact != instance.domain_db_obj.user:
                 raise PermissionDenied
             if domain_info.tech_supported:
-                old_contact = instance.domain_obj.get_contact('tech')
-                if old_contact:
-                    update_req.remove.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-                        contact=apps.epp_api.domain_pb2.Contact(
-                            type='tech',
-                            id=old_contact.contact_id
-                        )
-                    ))
-                if instance.tech_contact:
-                    update_req.add.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-                        contact=apps.epp_api.domain_pb2.Contact(
-                            type='tech',
-                            id=instance.tech_contact.get_registry_id(
-                                instance.domain_obj.registry_name, domain_info,
-                                role=apps.epp_api.ContactRole.Tech
-                            ).registry_contact_id
-                        )
-                    ))
+                if domain_info.is_eurid:
+                    old_contact = instance.domain_obj.eurid.on_site if instance.domain_obj.eurid else None
+                    if old_contact:
+                        update_req.eurid_data.remove_on_site.value = old_contact
+
+                    update_req.eurid_data.add_on_site.value = instance.tech_contact.get_registry_id(
+                        instance.domain_obj.registry_name, domain_info,
+                        role=apps.epp_api.ContactRole.OnSite
+                    ).registry_contact_id
+
+                else:
+                    old_contact = instance.domain_obj.get_contact('tech')
+                    if old_contact:
+                        update_req.remove.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+                            contact=apps.epp_api.domain_pb2.Contact(
+                                type='tech',
+                                id=old_contact.contact_id
+                            )
+                        ))
+                    if instance.tech_contact:
+                        update_req.add.append(apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+                            contact=apps.epp_api.domain_pb2.Contact(
+                                type='tech',
+                                id=instance.tech_contact.get_registry_id(
+                                    instance.domain_obj.registry_name, domain_info,
+                                    role=apps.epp_api.ContactRole.Tech
+                                ).registry_contact_id
+                            )
+                        ))
             instance.domain_db_obj.tech_contact = instance.tech_contact
 
         if 'name_servers' in validated_data:
