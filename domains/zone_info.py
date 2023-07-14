@@ -1009,6 +1009,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID,
         )
 
     @property
