@@ -5,10 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () {
+                (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.async = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "59fbkb4ktb");
     </script>
     <title>{% block title %}{% endblock %} | Glauca Domains</title>
@@ -36,7 +41,8 @@
                 <img src="https://as207960.net/assets/img/logo.svg" height="75" alt="">
                 <span class="navbar-brand mb-0 h1">Glauca</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -106,9 +112,10 @@
         position: relative;
         height: 200px;
     }
+
     .cyber::after {
         content: " ";
-        background-image: url(/static/domains/img/cyber_plain.png);
+        background-image: url({% static 'domains/img/cyber_plain.png' %});
         background-repeat: repeat-x;
         background-size: contain;
         height: 100px;
@@ -121,6 +128,7 @@
         left: -5px;
         position: absolute;
     }
+
     @media (prefers-reduced-motion) {
         .cyber::after {
             animation: none;
@@ -145,11 +153,12 @@
                             <label for="country_update">Change country</label>
                         </div>
                         <div class="input-group col-md-8 col-12">
-                        <select name="country_update" id="country_update" class="form-control custom-select">
-                            {% for country in countries %}
-                                <option value="{{ country.code }}"{% if country.code == request.country.iso_code %} selected{% endif %}>{{ country.name }}</option>
-                            {% endfor %}
-                        </select>
+                            <select name="country_update" id="country_update" class="form-control custom-select">
+                                {% for country in countries %}
+                                    <option value="{{ country.code }}"{% if country.code == request.country.iso_code %}
+                                            selected{% endif %}>{{ country.name }}</option>
+                                {% endfor %}
+                            </select>
                             <button class="btn btn-secondary btn-sm" type="submit">Update</button>
                         </div>
                     </div>
@@ -158,29 +167,48 @@
         </div>
         <div class="row">
             <div class="col">
-<p>
-            <span class="text-muted"><a href="https://glauca.digital/">Our homepage</a></span> |
-            <span class="text-muted"><a href="https://glauca.digital/contact/">Contact Us</a></span>
-        </p>
-        <p>
-            AS207960 Cyfyngedig, trading as Glauca Digital, is:
-        </p>
-        <ul>
-            <li>
-                a limited company registered in Wales (&#x2116
-                <a href="https://find-and-update.company-information.service.gov.uk/company/12417574">12417574</a>)
-            </li>
-            <li>
-                a registered data controller with the Information Commissioner's Office (&#x2116
-                <a href="https://as207960.net/assets/docs/ico_registration.pdf">ZA782876</a>)
-            </li>
-            <li>
-                registered for VAT in the UK (&#x2116 GB378323867)
-            </li>
-            <li>
-                registered for VAT in the EU (&#x2116 EU372013983)
-            </li>
-        </ul>
+                <p>
+                    <span class="text-muted"><a href="https://glauca.digital/">Our homepage</a></span> |
+                    <span class="text-muted"><a href="https://glauca.digital/contact/">Contact Us</a></span>
+                </p>
+                <p>
+                    AS207960 Cyfyngedig, trading as Glauca Digital, is:
+                </p>
+                <ul>
+                    <li>
+                        a limited company registered in Wales (&#x2116
+                        <a href="https://find-and-update.company-information.service.gov.uk/company/12417574">12417574</a>,
+                        LEI 875500FXNCJPAPF3PD10)
+                    </li>
+                    <li>
+                        a registered data controller with the Information Commissioner's Office (&#x2116
+                        <a href="https://ico.org.uk/ESDWebPages/Entry/ZA782876">ZA782876</a>)
+                    </li>
+                    <li>
+                        registered for VAT in the UK (&#x2116 GB378323867)
+                    </li>
+                    <li>
+                        registered for VAT in the EU (&#x2116 EU372013983)
+                    </li>
+                    <li>
+                        registered for VAT in Turkey (&#x2116 0861333524)
+                    </li>
+                    <li>
+                        registered for VAT in South Korea (&#x2116 522-80-03080)
+                    </li>
+                </ul>
+                <p>
+                    AS207960 Ewrop OÜ, trading as Glauca Digital, is:
+                </p>
+                <ul>
+                    <li>
+                        a limited company registered in Estonia (&#x2116 <a
+                            href="https://ariregister.rik.ee/eng/company/16755226/AS207960-Ewrop-OÜ">16755226</a>)
+                    </li>
+                    <li>
+                        registered for VAT in Estonia (&#x2116 EE102625532)
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -202,7 +230,8 @@
 <script src="https://nsw-service.verisign.com/1.0/webcomponentsjs/webcomponents-loader.js"></script>
 <script type="module" crossorigin src="https://nsw-service.verisign.com/1.0/name-studio.js"></script>
 <script nomodule crossorigin src="https://nsw-service.verisign.com/1.0/name-studio.js"></script>
-<script defer data-api="https://s.as207960.net/api/event" data-domain="domains.glauca.digital" src="https://s.as207960.net/js/script.js"></script>
+<script defer data-api="https://s.as207960.net/api/event" data-domain="domains.glauca.digital"
+        src="https://s.as207960.net/js/script.js"></script>
 {% block scripts %}
 {% endblock %}
 </body>
