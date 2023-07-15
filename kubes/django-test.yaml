@@ -35,7 +35,6 @@ data:
   S3_ENDPOINT: "https://s3.as207960.net"
   S3_REGION: "garage"
   S3_BUCKET: "domains-django-test"
-  S3_STATIC_BUCKET: "domains-django-test-static"
   S3_ACCESS_KEY_ID: "GK6831f7679a35963ee5dc1a4a"
   S3_CUSTOM_DOMAIN: "domains-django-test.content.as207960.net"
   STATIC_URL: "https://domains-django-test.content.as207960.net/"
@@ -332,3 +331,27 @@ spec:
   ports:
     - port: 8000
       targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: domains-ingress-test
+  annotations:
+    cert-manager.io/cluster-issuer: "gts"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  tls:
+    - hosts:
+        - domains.test.glauca.digital
+      secretName: domains-test-tls
+  rules:
+    - host: domains.test.glauca.digital
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: domains-django-test
+                port:
+                  number: 8000

@@ -1,27 +1,3 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: domains-django-static
-spec:
-  storageClassName: standard
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: domains-django-media
-spec:
-  storageClassName: standard
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -58,6 +34,13 @@ data:
     MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChELn1Fkauo6bduyGeXNca/z27OYNMd85JZMlNiycfFHaAXzgPd53OKVSbyzBuILFPYmzkfaF
     uOCW2qgvFd8cAye6qLsUAqEetiuRTPpAysX3hss1TqIML51kb0ADTmylKi3Hr553qrDy9AEMFmvaKnTH8o0YFozGk0QtlmiLtXQIDAQAB
   ISNIC_CONTACT_EMAIL: isnic-auto@as207960.ltd.uk
+  S3_ENDPOINT: "https://s3.as207960.net"
+  S3_REGION: "garage"
+  S3_BUCKET: "domains-django"
+  S3_ACCESS_KEY_ID: "GKe2b478cf06ab7638ab97beb4"
+  S3_CUSTOM_DOMAIN: "domains-django.content.as207960.net"
+  STATIC_URL: "https://domains-django.content.as207960.net/"
+  MEDIA_URL: "https://domains-django.content.as207960.net/"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,12 +64,6 @@ spec:
         part: django
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -102,10 +79,6 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -137,6 +110,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -145,10 +120,6 @@ spec:
           ports:
             - containerPort: 8000
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -180,6 +151,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -194,10 +167,12 @@ spec:
   - Ingress
   ingress:
   - from:
-    - podSelector:
+    - namespaceSelector:
         matchLabels:
-          app: domains
-          part: nginx
+          app.kubernetes.io/name: ingress-nginx
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
     ports:
     - protocol: TCP
       port: 8000
@@ -220,12 +195,6 @@ spec:
             part: renewal
         spec:
           volumes:
-            - name: static
-              persistentVolumeClaim:
-                claimName: domains-django-static
-            - name: media
-              persistentVolumeClaim:
-                claimName: domains-django-media
             - name: ca-cert
               configMap:
                 name: epp-ca
@@ -241,10 +210,6 @@ spec:
               imagePullPolicy: IfNotPresent
               command: ["sh", "-c", "python3 manage.py run-renewal"]
               volumeMounts:
-                - mountPath: "/app/static/"
-                  name: static
-                - mountPath: "/app/media/"
-                  name: media
                 - mountPath: "/ca-cert/"
                   name: ca-cert
                 - mountPath: "/google-creds/"
@@ -276,6 +241,8 @@ spec:
                   prefix: "RRPPROXY_"
                 - secretRef:
                     name: domains-rpc
+                - secretRef:
+                    name: domains-s3
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -296,12 +263,6 @@ spec:
             part: cds
         spec:
           volumes:
-            - name: static
-              persistentVolumeClaim:
-                claimName: domains-django-static
-            - name: media
-              persistentVolumeClaim:
-                claimName: domains-django-media
             - name: ca-cert
               configMap:
                 name: epp-ca
@@ -317,10 +278,6 @@ spec:
               imagePullPolicy: IfNotPresent
               command: ["sh", "-c", "python3 manage.py run-cds"]
               volumeMounts:
-                - mountPath: "/app/static/"
-                  name: static
-                - mountPath: "/app/media/"
-                  name: media
                 - mountPath: "/ca-cert/"
                   name: ca-cert
                 - mountPath: "/google-creds/"
@@ -352,6 +309,8 @@ spec:
                   prefix: "RRPPROXY_"
                 - secretRef:
                     name: domains-rpc
+                - secretRef:
+                    name: domains-s3
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -372,12 +331,6 @@ spec:
             part: cds
         spec:
           volumes:
-            - name: static
-              persistentVolumeClaim:
-                claimName: domains-django-static
-            - name: media
-              persistentVolumeClaim:
-                claimName: domains-django-media
             - name: ca-cert
               configMap:
                 name: epp-ca
@@ -393,10 +346,6 @@ spec:
               imagePullPolicy: IfNotPresent
               command: ["sh", "-c", "python3 manage.py run-remind-push-transfer"]
               volumeMounts:
-                - mountPath: "/app/static/"
-                  name: static
-                - mountPath: "/app/media/"
-                  name: media
                 - mountPath: "/ca-cert/"
                   name: ca-cert
                 - mountPath: "/google-creds/"
@@ -428,6 +377,8 @@ spec:
                   prefix: "RRPPROXY_"
                 - secretRef:
                     name: domains-rpc
+                - secretRef:
+                    name: domains-s3
           restartPolicy: OnFailure
 ---
 apiVersion: networking.k8s.io/v1
@@ -464,12 +415,6 @@ spec:
         part: celery
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -487,10 +432,6 @@ spec:
           ports:
             - containerPort: 50051
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -522,6 +463,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -557,12 +500,6 @@ spec:
         part: whois
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -580,10 +517,6 @@ spec:
           ports:
             - containerPort: 50051
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -615,6 +548,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -663,12 +598,6 @@ spec:
         part: rpc
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -684,10 +613,6 @@ spec:
           imagePullPolicy: IfNotPresent
           command: [ "sh", "-c", "python3 manage.py run-rpc" ]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -719,6 +644,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -754,12 +681,6 @@ spec:
         part: poll
     spec:
       volumes:
-        - name: static
-          persistentVolumeClaim:
-            claimName: domains-django-static
-        - name: media
-          persistentVolumeClaim:
-            claimName: domains-django-media
         - name: ca-cert
           configMap:
             name: epp-ca
@@ -775,10 +696,6 @@ spec:
           imagePullPolicy: IfNotPresent
           command: [ "sh", "-c", "python3 manage.py run-epp-poll afilias centralnic nominet rrpproxy switch traficom verisign-cc" ]
           volumeMounts:
-            - mountPath: "/app/static/"
-              name: static
-            - mountPath: "/app/media/"
-              name: media
             - mountPath: "/ca-cert/"
               name: ca-cert
             - mountPath: "/google-creds/"
@@ -810,6 +727,8 @@ spec:
               prefix: "RRPPROXY_"
             - secretRef:
                 name: domains-rpc
+            - secretRef:
+                name: domains-s3
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -852,3 +771,27 @@ spec:
   ports:
     - port: 50051
       targetPort: 50051
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: domains-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "gts"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  tls:
+    - hosts:
+        - domains.glauca.digital
+      secretName: domains-tls
+  rules:
+    - host: domains.glauca.digital
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: domains-django
+                port:
+                  number: 8000
