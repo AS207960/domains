@@ -229,7 +229,7 @@ class Command(BaseCommand):
                         apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
                             name=domain.domain,
                             sec_dns=apps.epp_api.domain_pb2.UpdateSecDNSData(
-                                remove_all=True
+                                all=True
                             )
                         ))
                     except grpc.RpcError as rpc_error:

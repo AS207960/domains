@@ -871,6 +871,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_EURID,
             self.REGISTRY_EURID_RRPPROXY,
+            self.REGISTRY_SIDN,
         )
 
     @property
