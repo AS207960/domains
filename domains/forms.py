@@ -424,7 +424,7 @@ class DomainHostAddrForm(forms.Form):
         self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'host',
-            'v4_address'
+            'v4_address',
             'v6_address'
         )
 
