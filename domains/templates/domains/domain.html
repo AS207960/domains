@@ -110,12 +110,13 @@
                         {% if domain.can_delete %}
                             <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
                         {% endif %}
-                        {% if domain.can_update %}
-                            <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">Regenerate
-                                transfer code</a>
+                        {% if domain.can_update and domain_info.standard_auth_code_procedure %}
+                            <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">
+                                Regenerate transfer code
+                            </a>
                         {% endif %}
                         {% if registry_lock_enabled and domain_info.registry_lock_supported %}
-                                <a href="{% url 'domain_registry_lock' domain_id %}" class="btn btn-primary">Registry lock</a>
+                            <a href="{% url 'domain_registry_lock' domain_id %}" class="btn btn-primary">Registry lock</a>
                         {% endif %}
                     {% endif %}
                 </div>
