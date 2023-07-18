@@ -295,19 +295,33 @@
                                 </td>
                             </tr>
                         {% elif ns.host_name %}
-                            {% for addr in ns.addresses %}
+                            {% if ns.address %}
+                                {% for addr in ns.addresses %}
+                                    <tr>
+                                        <th>{{ ns.unicode_host_name }}</th>
+                                        <td>{{ addr.address }}</td>
+                                        <td>{{ addr.ip_type }}</td>
+                                        <td>
+                                            {% if domain.can_update %}
+                                                <a href="{% url 'delete_domain_host_addr' domain_id ns.host_name %}"
+                                                   class="btn btn-danger btn-sm">&#x1f5d1; Delete</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
                                 <tr>
                                     <th>{{ ns.unicode_host_name }}</th>
-                                    <td>{{ addr.address }}</td>
-                                    <td>{{ addr.ip_type }}</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
                                     <td>
                                         {% if domain.can_update %}
-                                            <a href="{% url 'delete_domain_host_addr' domain_id ns.host_obj %}"
+                                            <a href="{% url 'delete_domain_host_addr' domain_id ns.host_name %}"
                                                class="btn btn-danger btn-sm">&#x1f5d1; Delete</a>
                                         {% endif %}
                                     </td>
                                 </tr>
-                            {% endfor %}
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% else %}
