@@ -36,6 +36,7 @@ urlpatterns = [
     path('domains/<str:domain_id>/delete_dnskey_data/', domain.delete_domain_dnskey_data, name='delete_domain_dnskey_data'),
     path('domains/<str:domain_id>/delete_sec_dns/', domain.delete_domain_sec_dns, name='delete_domain_sec_dns'),
     path('domains/<str:domain_id>/del_host_obj/<str:host_name>/', domain.delete_domain_host_obj, name='delete_domain_host_obj'),
+    path('domains/<str:domain_id>/del_host_addr/<str:host_name>/', domain.delete_domain_host_addr, name='delete_domain_host_addr'),
     path('domains/<str:domain_id>/setup_hexdns/', domain.domain_hexdns, name='setup_domain_hexdns'),
     path('domains/<str:domain_id>/block_transfer/', domain.domain_block_transfer, name='domain_block_transfer'),
     path('domains/<str:domain_id>/del_block_transfer/', domain.domain_del_block_transfer, name='domain_del_block_transfer'),

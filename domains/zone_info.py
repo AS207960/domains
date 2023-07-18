@@ -1084,6 +1084,12 @@ class DomainInfo:
         )
 
     @property
+    def host_object_supported(self):
+        return self.registry not in (
+            self.REGISTRY_EURID,
+        )
+
+    @property
     def is_isnic(self):
         return self.registry == self.REGISTRY_ISNIC
 

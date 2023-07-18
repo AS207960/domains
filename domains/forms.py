@@ -406,9 +406,12 @@ class DomainHostAddrForm(forms.Form):
     host = forms.CharField(max_length=63, label="Host name", required=True, widget=forms.TextInput(
         attrs={'placeholder': 'ns1.example.com'}
     ))
-    address = forms.GenericIPAddressField(label="IP Address", required=False, widget=forms.TextInput(
+    v4_address = forms.GenericIPAddressField(label="IPv4 Address", required=False, widget=forms.TextInput(
+        attrs={'placeholder': '192.0.2.2'}
+    ), help_text="Only required for glue records", protocol="ipv4")
+    v6_address = forms.GenericIPAddressField(label="IPv6 Address", required=False, widget=forms.TextInput(
         attrs={'placeholder': '2001:db8:8:4::2'}
-    ))
+    ), help_text="Only required for glue records", protocol="ipv6")
 
     def __init__(self, *args, domain_id, **kwargs):
         super().__init__(*args, **kwargs)
@@ -421,7 +424,8 @@ class DomainHostAddrForm(forms.Form):
         self.helper.field_class = 'col-lg-9 my-1'
         self.helper.layout = crispy_forms.layout.Layout(
             'host',
-            'address'
+            'v4_address'
+            'v6_address'
         )
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Add', css_class="btn-block"))

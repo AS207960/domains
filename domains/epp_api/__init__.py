@@ -549,6 +549,18 @@ class Domain:
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
+    def del_host_objs(self, hosts: typing.List[str]) -> bool:
+        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
+            name=self.name,
+            add=[],
+            remove=list(map(lambda h: domain_pb2.DomainUpdateRequest.Param(
+                nameserver=domain_pb2.NameServer(
+                    host_obj=h
+                )
+            ), hosts)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
+        )).pending
+
     def add_host_addrs(self, hosts: typing.List[typing.Tuple[str, typing.List[IPAddress]]]) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
@@ -557,6 +569,18 @@ class Domain:
                 nameserver=domain_pb2.NameServer(
                     host_name=h[0],
                     addresses=list(map(lambda a: a.to_pb(), h[1]))
+                )
+            ), hosts)),
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
+        )).pending
+
+    def del_host_name(self, hosts: typing.List[str]) -> bool:
+        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
+            name=self.name,
+            add=[],
+            remove=list(map(lambda h: domain_pb2.DomainUpdateRequest.Param(
+                nameserver=domain_pb2.NameServer(
+                    host_name=h
                 )
             ), hosts)),
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
@@ -577,18 +601,6 @@ class Domain:
             sec_dns=domain_pb2.UpdateSecDNSData(
                 add_key_data=domain_pb2.SecDNSKeyData(data=list(map(lambda d: d.to_pb(), data)))
             ),
-            registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
-        )).pending
-
-    def del_host_objs(self, hosts: typing.List[str]) -> bool:
-        return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
-            name=self.name,
-            add=[],
-            remove=list(map(lambda h: domain_pb2.DomainUpdateRequest.Param(
-                nameserver=domain_pb2.NameServer(
-                    host_obj=h
-                )
-            ), hosts)),
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 

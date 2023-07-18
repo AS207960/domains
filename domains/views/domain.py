@@ -657,6 +657,12 @@ def add_domain_host_obj(request, domain_id):
 
     domain_info = zone_info.get_domain_info(user_domain.domain)[0]
 
+    if not domain_info.host_object_supported:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
     try:
         domain_data = apps.epp_client.get_domain(
             user_domain.domain, registry_id=user_domain.registry_id
@@ -732,6 +738,64 @@ def add_domain_host_obj(request, domain_id):
 
 
 @login_required
+def delete_domain_host_obj(request, domain_id, host_name):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    if not domain_info.host_object_supported:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    if host_name == "all":
+        host_objs = []
+        for ns in domain_data.name_servers:
+            if ns.host_obj:
+                host_objs.append(ns.host_obj)
+    else:
+        host_objs = [host_name]
+
+    try:
+        domain_data.del_host_objs(host_objs)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    return redirect(referrer)
+
+
+@login_required
 @require_POST
 def add_domain_host_addr(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
@@ -740,6 +804,14 @@ def add_domain_host_addr(request, domain_id):
     referrer = referrer if referrer else reverse('domains')
 
     if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    if domain_info.host_object_supported:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",
             "back_url": referrer
@@ -768,20 +840,21 @@ def add_domain_host_addr(request, domain_id):
     )
     if form.is_valid():
         host_name = form.cleaned_data['host']
-        host_addr = form.cleaned_data['address']
-        if host_addr:
-            address = ipaddress.ip_address(host_addr)
-            ip_type = apps.epp_api.common_pb2.IPAddress.IPVersion.UNKNOWN
-            if address.version == 4:
-                ip_type = apps.epp_api.common_pb2.IPAddress.IPVersion.IPv4
-            elif address.version == 6:
-                ip_type = apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6
-            addrs = [apps.epp_qapi.IPAddress(
+        host_v4_addr = form.cleaned_data['v4_address']
+        host_v6_addr = form.cleaned_data['v6_address']
+        addrs = []
+        if host_v4_addr:
+            address = ipaddress.IPv4Address(host_v4_addr)
+            addrs.append(apps.epp_api.IPAddress(
                 address=address.compressed,
-                ip_type=ip_type
-            )]
-        else:
-            addrs = []
+                ip_type=apps.epp_api.common_pb2.IPAddress.IPVersion.IPv4
+            ))
+        if host_v6_addr:
+            address = ipaddress.IPv6Address(host_v6_addr)
+            addrs.append(apps.epp_api.IPAddress(
+                address=address.compressed,
+                ip_type=apps.epp_api.common_pb2.IPAddress.IPVersion.IPv6
+            ))
         try:
             domain_data.add_host_addrs([(host_name, addrs)])
         except grpc.RpcError as rpc_error:
@@ -790,6 +863,64 @@ def add_domain_host_addr(request, domain_id):
                 "error": error,
                 "back_url": referrer
             })
+
+    return redirect(referrer)
+
+
+@login_required
+def delete_domain_host_addr(request, domain_id, host_name):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    if domain_info.host_object_supported:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    if not domain_data.can_update:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    if host_name == "all":
+        host_objs = []
+        for ns in domain_data.name_servers:
+            if ns.host_name:
+                host_objs.append(ns.host_name)
+    else:
+        host_objs = [host_name]
+
+    try:
+        domain_data.del_host_name(host_objs)
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
 
     return redirect(referrer)
 
@@ -1038,57 +1169,6 @@ def delete_domain_sec_dns(request, domain_id):
         })
 
     return redirect(referrer)
-
-
-@login_required
-def delete_domain_host_obj(request, domain_id, host_name):
-    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
-    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
-    referrer = request.META.get("HTTP_REFERER")
-    referrer = referrer if referrer else reverse('domains')
-
-    if not user_domain.has_scope(access_token, 'edit'):
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
-    try:
-        domain_data = apps.epp_client.get_domain(
-            user_domain.domain, registry_id=user_domain.registry_id
-        )
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
-            "back_url": referrer
-        })
-    
-    if not domain_data.can_update:
-        return render(request, "domains/error.html", {
-            "error": "You don't have permission to perform this action",
-            "back_url": referrer
-        })
-
-    if host_name == "all":
-        host_objs = []
-        for ns in domain_data.name_servers:
-            if ns.host_obj:
-                host_objs.append(ns.host_obj)
-    else:
-        host_objs = [host_name]
-
-    try:
-        domain_data.del_host_objs(host_objs)
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
-            "back_url": referrer
-        })
-
-    return redirect(referrer)
-
 
 @login_required
 def domain_hexdns(request, domain_id):

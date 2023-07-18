@@ -243,9 +243,15 @@
                 <div class="col my-2">
                     <div class="btn-group">
                         {% if domain.can_update %}
-                            <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
-                                &#x1f5d1; Delete all
-                            </a>
+                            {% if domain_info.host_object_supported %}
+                                <a href="{% url 'delete_domain_host_obj' domain_id "all" %}" class="btn btn-danger btn-sm">
+                                    &#x1f5d1; Delete all
+                                </a>
+                            {% else %}
+                                <a href="{% url 'delete_domain_host_addr' domain_id "all" %}" class="btn btn-danger btn-sm">
+                                    &#x1f5d1; Delete all
+                                </a>
+                            {% endif %}
                         {% endif %}
                         {% if not is_hexdns %}
                             {% if domain.can_update %}
@@ -293,7 +299,12 @@
                                     <th>{{ ns.unicode_host_name }}</th>
                                     <td>{{ addr.address }}</td>
                                     <td>{{ addr.ip_type }}</td>
-                                    <td></td>
+                                    <td>
+                                        {% if domain.can_update %}
+                                            <a href="{% url 'delete_domain_host_addr' domain_id ns.host_obj %}"
+                                               class="btn btn-danger btn-sm">&#x1f5d1; Delete</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -309,50 +320,55 @@
         {% if domain.can_update %}
             {% if domain.sec_dns %}
                 <div class="alert alert-warning" role="alert">
-                    <p>Make sure to check that DNSSEC is setup correctly for any new nameservers before adding them.</p><hr>
+                    <p>Make sure to check that DNSSEC is set up correctly for any new nameservers before adding them.</p><hr>
                     <p>As a basic option instead of managing a key rollover you can use the below button to disable DNSSEC completely;</p>
                     <a href="{% url 'delete_domain_sec_dns' domain_id %}" class="btn btn-danger btn-sm">&#x1f5d1; Disable DNSSEC</a>
                 </div>
             {% endif %}
             <div class="row">
-                <div class="col">
-                    <h2>Add DNS server</h2>
-                    {% crispy host_object_form_set host_object_form_set.helper %}
-                </div>
-                {#            <div class="col">#}
-                {#                <h2>Add server directly</h2>#}
-                {#                {% crispy host_addr_form host_addr_form.helper %}#}
-                {#            </div>#}
+                {% if domain_info.host_object_supported %}
+                    <div class="col">
+                        <h2>Add DNS server</h2>
+                        {% crispy host_object_form_set host_object_form_set.helper %}
+                    </div>
+                {% else %}
+                    <div class="col">
+                        <h2>Add DNS server</h2>
+                        {% crispy host_addr_form host_addr_form.helper %}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
-        <hr>
-        <h2>Associated host objects (glue records)</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                <tr>
-                    <th>Host</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if hosts %}
-                    {% for host in hosts %}
-                        <tr>
-                            <th>{{ host.unicode_name_server }}</th>
-                            <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">Edit</a></td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
+        {% if domain_info.host_object_supported %}
+            <hr>
+            <h2>Associated host objects (glue records)</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
                     <tr>
-                        <td colspan="2">No hosts</td>
+                        <th>Host</th>
+                        <th></th>
                     </tr>
-                {% endif %}
-                </tbody>
-            </table>
-        </div>
-        <h3>Create a new host object</h3>
-        {% crispy new_host_form new_host_form.helper %}
+                    </thead>
+                    <tbody>
+                    {% if hosts %}
+                        {% for host in hosts %}
+                            <tr>
+                                <th>{{ host.unicode_name_server }}</th>
+                                <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">Edit</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="2">No hosts</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <h3>Create a new host object</h3>
+            {% crispy new_host_form new_host_form.helper %}
+        {% endif %}
         <hr>
         <h2>DNSSEC data</h2>
         {% if domain.sec_dns %}
