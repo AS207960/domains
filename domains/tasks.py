@@ -284,12 +284,12 @@ def process_domain_registration_paid(registration_order_id):
                 registrant=registrant_contact,
                 contacts=contact_objs,
                 name_servers=[apps.epp_api.DomainNameServer(
-                    host_obj='ns1.as207960.net',
-                    host_name=None,
+                    host_obj='ns1.as207960.net' if zone.host_object_supported else None,
+                    host_name='ns1.as207960.net' if not zone.host_object_supported else None,
                     address=[]
                 ), apps.epp_api.DomainNameServer(
-                    host_obj='ns2.as207960.net',
-                    host_name=None,
+                    host_obj='ns2.as207960.net' if zone.host_object_supported else None,
+                    host_name='ns2.as207960.net' if not zone.host_object_supported else None,
                     address=[]
                 )],
                 auth_info=domain_registration_order.auth_info,
@@ -903,7 +903,10 @@ def set_dns_to_own(domain_id):
 
     hosts = ["ns1.as207960.net", "ns2.as207960.net"]
 
-    cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
+    if domain_info.host_object_supported:
+        cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
+    else:
+        cur_ns = list(map(lambda ns: ns.host_name.lower(), domain_data.name_servers))
 
     rem_hosts = list(filter(lambda a: a not in hosts, cur_ns))
     add_hosts = list(filter(lambda a: a not in cur_ns, hosts))
@@ -922,12 +925,14 @@ def set_dns_to_own(domain_id):
         name=domain_data.name,
         remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
             nameserver=apps.epp_api.domain_pb2.NameServer(
-                host_obj=h
+                host_obj=h if domain_info.host_object_supported else None,
+                host_name=h if not domain_info.host_object_supported else None,
             )
         ), rem_hosts)),
         add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
             nameserver=apps.epp_api.domain_pb2.NameServer(
-                host_obj=h
+                host_obj=h if domain_info.host_object_supported else None,
+                host_name=h if not domain_info.host_object_supported else None,
             )
         ), add_hosts))
     ))
