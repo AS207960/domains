@@ -545,6 +545,7 @@ class DomainInfo:
     REGISTRY_SIDN = "sidn"
     REGISTRY_MDMA = "mdma"
     REGISTRY_COCCA = "cocca"
+    REGISTRY_EIF = "eif"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -587,7 +588,9 @@ class DomainInfo:
 
     @property
     def redemption_period(self):
-        if self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID, self.REGISTRY_EURID_RRPPROXY):
+        if self.registry == self.REGISTRY_EURID_RRPPROXY:
+            return datetime.timedelta(days=45)
+        elif self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID, self.REGISTRY_EURID_RRPPROXY):
             return datetime.timedelta(days=40)
         elif self.registry == self.REGISTRY_PIR:
             return datetime.timedelta(days=35)
@@ -734,6 +737,7 @@ class DomainInfo:
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
+            self.REGISTRY_EIF,
         )
 
     @property
@@ -827,6 +831,7 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_REDES,
             self.REGISTRY_SIDN,
+            self.REGISTRY_EIF,
         )
 
     @property
@@ -936,6 +941,7 @@ class DomainInfo:
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
+            self.REGISTRY_EIF,
         )
 
     @property
@@ -998,6 +1004,7 @@ class DomainInfo:
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
+            self.REGISTRY_EIF,
         )
 
     @property
@@ -1061,6 +1068,7 @@ class DomainInfo:
             self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
+            self.REGISTRY_EIF,
         )
 
     @property
@@ -3329,6 +3337,11 @@ else:
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(4511, restore=13000, currency=None, display_currency='USD', tld='esq',
                         markup=decimal.Decimal("1.3"))
+        )),
+        ('ee', DomainInfo(
+            DomainInfo.REGISTRY_EIF,
+            MarkupPrice(1860, restore=3750, currency=None, display_currency='EUR', tld='ee',
+                        markup=decimal.Decimal("1.5"))
         )),
     )
 
