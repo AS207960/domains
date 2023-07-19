@@ -546,6 +546,8 @@ class DomainInfo:
     REGISTRY_MDMA = "mdma"
     REGISTRY_COCCA = "cocca"
     REGISTRY_EIF = "eif"
+    REGISTRY_REGISTER_SI = "register-si"
+    REGISTRY_INTERNET_STIFTELSEN = "internet-stiftelsen"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -738,6 +740,8 @@ class DomainInfo:
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
             self.REGISTRY_EIF,
+            self.REGISTRY_REGISTER_SI,
+            self.REGISTRY_INTERNET_STIFTELSEN,
         )
 
     @property
@@ -942,6 +946,8 @@ class DomainInfo:
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
             self.REGISTRY_EIF,
+            self.REGISTRY_REGISTER_SI,
+            self.REGISTRY_INTERNET_STIFTELSEN,
         )
 
     @property
@@ -1005,6 +1011,8 @@ class DomainInfo:
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
             self.REGISTRY_EIF,
+            self.REGISTRY_REGISTER_SI,
+            self.REGISTRY_INTERNET_STIFTELSEN,
         )
 
     @property
@@ -1069,6 +1077,8 @@ class DomainInfo:
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
             self.REGISTRY_EIF,
+            self.REGISTRY_REGISTER_SI,
+            self.REGISTRY_INTERNET_STIFTELSEN,
         )
 
     @property
@@ -3342,6 +3352,211 @@ else:
             DomainInfo.REGISTRY_EIF,
             MarkupPrice(1860, restore=3750, currency=None, display_currency='EUR', tld='ee',
                         markup=decimal.Decimal("1.5"))
+        )),
+        ('si', DomainInfo(
+            DomainInfo.REGISTRY_REGISTER_SI,
+            MarkupPrice(3250, restore=5850, currency=None, display_currency='EUR', tld='si',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('a.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('ac.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('b.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('bd.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('brand.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('c.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('d.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('e.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('f.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('fh.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('fhsk.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('fhv.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('g.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('h.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('i.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('k.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('komforb.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('kommunalforbund.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('komvux.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('l.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('lanbib.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('m.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('n.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('naturbruksgymn.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('o.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('org.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('p.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('parti.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('pp.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('press.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('r.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('s.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('t.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('tm.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('u.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('w.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('x.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('y.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('z.se', DomainInfo(
+            DomainInfo.REGISTRY_INTERNET_STIFTELSEN,
+            MarkupPrice(45323, restore=22800, currency=None, display_currency='SEK', tld='a.se',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
