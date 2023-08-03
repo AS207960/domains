@@ -1267,8 +1267,7 @@ else:
         )),
         ('me', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1760, transfer=1760, restore=14040, currency=None, display_currency='EUR', tld='me',
-                        markup=decimal.Decimal("1.6"))
+            SimplePrice(1665, transfer=1665, restore=5416)
         )),
         ('pw', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
@@ -2870,108 +2869,87 @@ else:
         )),
         ('ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(9000, transfer=9000, restore=9000, currency=None, display_currency='USD', tld='ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(7083, transfer=7083, restore=7083)
         )),
         ('com.ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='com.ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(4750, transfer=4750, restore=7083)
         )),
         ('net.ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='net.ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(4750, transfer=4750, restore=7083)
         )),
         ('org.ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='org.ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(4750, transfer=4750, restore=7083)
         )),
         ('nom.ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='nom.ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(4750, transfer=4750, restore=7083)
         )),
         ('co.ag', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(6000, transfer=6000, restore=9000, currency=None, display_currency='USD', tld='co.ag',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(4750, transfer=4750, restore=7083)
         )),
         ('bz', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(2400, transfer=2400, restore=11250, currency=None, display_currency='USD', tld='bz',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1896, transfer=1896, restore=7083)
         )),
         ('com.bz', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='com.bz',
-                        markup=decimal.Decimal("1.3"))
+            SimplePrice(3583, transfer=3583, restore=7083)
         )),
         ('net.bz', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='net.bz',
-                        markup=decimal.Decimal("1.3"))
+            SimplePrice(3583, transfer=3583, restore=7083)
         )),
         ('co.bz', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(4550, transfer=4550, restore=9750, currency=None, display_currency='USD', tld='co.bz',
-                        markup=decimal.Decimal("1.3"))
+            SimplePrice(3583, transfer=3583, restore=7083)
         )),
         ('lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(2700, transfer=2700, restore=11250, currency=None, display_currency='USD', tld='lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(2083, transfer=2083, restore=7083)
         )),
         ('com.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='com.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('net.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='net.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('org.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='org.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('co.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='co.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('p.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='p.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('l.lc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(1950, transfer=1950, restore=11250, currency=None, display_currency='USD', tld='l.lc',
-                        markup=decimal.Decimal("1.5"))
+            SimplePrice(1583, transfer=1583, restore=7083)
         )),
         ('mn', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(4550, transfer=4550, restore=5200, currency=None, display_currency='USD', tld='mn',
-                        markup=decimal.Decimal("1.3"))
+            SimplePrice(3583, transfer=3583, restore=4166)
         )),
         ('pr', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(120000, transfer=120000, restore=12000, currency=None, display_currency='USD', tld='pr',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(120000, transfer=120000, restore=12000)
         )),
         ('sc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(9000, transfer=9000, restore=9000, currency=None, display_currency='USD', tld='sc',
-                        markup=decimal.Decimal("1.2"))
+            SimplePrice(7083, transfer=7083, restore=7083)
         )),
         ('vc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(3250, transfer=3250, restore=9750, currency=None, display_currency='USD', tld='vc',
-                        markup=decimal.Decimal("1.3"))
+            SimplePrice(2583, transfer=2583, restore=7916)
         )),
         ('llc', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
