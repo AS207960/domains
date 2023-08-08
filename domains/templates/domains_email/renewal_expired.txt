@@ -1,0 +1,12 @@
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
+The following domains on your account have now expired.
+There's still time to renew them manually, but if you don't renew them soon,
+they will be deleted from your account.
+
+Login to your account now to renew them: https://domains.glauca.digitol
+
+{% for domain in domains %}
+- {{ domain.domain.name }}
+{% endfor %}
+{% endblock content %}

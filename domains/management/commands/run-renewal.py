@@ -54,6 +54,26 @@ def mail_deleted(user, domains):
     email.send()
 
 
+def mail_expired(user, domains):
+    context = {
+        "name": user.first_name,
+        "domains": domains,
+        "subject": "Your domain has expired"
+    }
+    html_content = render_to_string("domains_email/renewal_expired.html", context)
+    txt_content = render_to_string("domains_email/renewal_expired.txt", context)
+
+    email = EmailMultiAlternatives(
+        subject='Your domain has expired',
+        body=txt_content,
+        to=[user.email],
+        bcc=['email-log@as207960.net'],
+        reply_to=['Glauca Support <hello@glauca.digital>']
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
 class Command(BaseCommand):
     help = 'Automatically renews all eligible domains'
 
@@ -64,6 +84,7 @@ class Command(BaseCommand):
 
         notifications = {}
         deleted = {}
+        expired = {}
 
         def insert_into_dict(d, key, value):
             if key not in d:
@@ -76,6 +97,20 @@ class Command(BaseCommand):
 
             if not domain_info:
                 print(f"Can't renew {domain.domain}: unknown zone")
+                continue
+
+            try:
+                domain_available, _, _ = apps.epp_client.check_domain(
+                    domain.domain, registry_id=domain.registry_id
+                )
+            except grpc.RpcError as rpc_error:
+                print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
+                continue
+
+            if domain_available:
+                print(f"{domain.domain} is available for registration, marking as deleted")
+                domain.former_domain = True
+                domain.save()
                 continue
 
             try:
@@ -127,47 +162,51 @@ class Command(BaseCommand):
                     print(f"No renewal price available for {domain.domain}")
                     continue
 
-                if (expiry_date - FAIL_INTERVAL) <= now and domain_info.renews_if_not_deleted:
-                    last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain)\
-                        .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
-                    if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
-                            last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                        print(f"{domain_data.name} expiring soon, renewal already succeeded")
-                        continue
-                    last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True)\
-                        .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
-                    if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
-                            last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
-                        print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded")
-                        continue
-
-                    print(f"Deleting {domain.domain} due to billing failure")
-                    if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                        print(f"Reversing charge just to be sure")
-                        billing.reverse_charge(last_renew_order.id)
-
-                        try:
-                            if domain_info.keysys_de:
-                                apps.epp_client.delete_domain(
-                                    domain.domain, keysys_target="TRANSIT",
-                                    registry_id=domain.registry_id
-                                )
-                            else:
-                                apps.epp_client.delete_domain(
-                                    domain_data.name,
-                                    registry_id=domain.registry_id
-                                )
-                        except grpc.RpcError as rpc_error:
-                            print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
-                            billing.charge_account(
-                                user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
-                                f"dm_auto_renew_{domain.id}", can_reject=False
-                            )
+                if (expiry_date - FAIL_INTERVAL) <= now:
+                    if domain_info.renews_if_not_deleted:
+                        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain)\
+                            .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
+                        if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
+                                last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                            print(f"{domain_data.name} expiring soon, renewal already succeeded")
                             continue
-                    domain.former_domain = True
-                    domain.save()
-                    print(f"Deleted {domain.domain}")
-                    insert_into_dict(deleted, user, email_data)
+                        last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True)\
+                            .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
+                        if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
+                                last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
+                            print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded")
+                            continue
+
+                        print(f"Deleting {domain.domain} due to billing failure")
+                        if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                            print(f"Reversing charge just to be sure")
+                            billing.reverse_charge(last_renew_order.id)
+
+                            try:
+                                if domain_info.keysys_de:
+                                    apps.epp_client.delete_domain(
+                                        domain.domain, keysys_target="TRANSIT",
+                                        registry_id=domain.registry_id
+                                    )
+                                else:
+                                    apps.epp_client.delete_domain(
+                                        domain_data.name,
+                                        registry_id=domain.registry_id
+                                    )
+                            except grpc.RpcError as rpc_error:
+                                print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
+                                billing.charge_account(
+                                    user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
+                                    f"dm_auto_renew_{domain.id}", can_reject=False
+                                )
+                                continue
+                        domain.former_domain = True
+                        domain.save()
+                        print(f"Deleted {domain.domain}")
+                        insert_into_dict(deleted, user, email_data)
+                    else:
+                        print(f"{domain.domain} expired, sending reminder")
+                        insert_into_dict(expired, user, email_data)
 
                 else:
                     if (domain.last_billed + RENEW_INTERVAL) >= now:
@@ -218,6 +257,9 @@ class Command(BaseCommand):
 
         for user, domains in deleted.items():
             mail_deleted(user, domains)
+
+        for user, domains in expired.items():
+            mail_expired(user, domains)
 
         for domain in deleted_domains:
             domain_info, sld = zone_info.get_domain_info(domain.domain)
