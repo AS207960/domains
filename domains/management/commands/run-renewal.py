@@ -113,6 +113,10 @@ class Command(BaseCommand):
                 domain.save()
                 continue
 
+            if domain.not_required:
+                print(f"{domain.domain} is not required, skipping")
+                continue
+
             try:
                 domain_data = apps.epp_client.get_domain(
                     domain.domain, registry_id=domain.registry_id

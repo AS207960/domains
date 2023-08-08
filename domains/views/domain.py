@@ -1511,6 +1511,90 @@ def delete_domain(request, domain_id):
 
 
 @login_required
+def mark_domain_not_required(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    if not domain_info.nominet_mark_not_required:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+            name=user_domain.domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=user_domain.registry_id),
+            nominet_ext=apps.epp_api.nominet_ext_pb2.DomainUpdate(
+                renewal_not_required=google.protobuf.wrappers_pb2.BoolValue(value=True)
+            )
+        ))
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    user_domain.not_required = True
+    user_domain.save()
+
+    return redirect(referrer)
+
+
+@login_required
+def mark_domain_required(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'delete'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+
+    if not domain_info.nominet_mark_not_required:
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    try:
+        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+            name=user_domain.domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=user_domain.registry_id),
+            nominet_ext=apps.epp_api.nominet_ext_pb2.DomainUpdate(
+                renewal_not_required=google.protobuf.wrappers_pb2.BoolValue(value=False)
+            )
+        ))
+    except grpc.RpcError as rpc_error:
+        error = rpc_error.details()
+        return render(request, "domains/error.html", {
+            "error": error,
+            "back_url": referrer
+        })
+
+    user_domain.not_required = False
+    user_domain.save()
+
+    return redirect(referrer)
+
+
+@login_required
 def transfer_out_domain(request, domain_id, transfer_action):
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')

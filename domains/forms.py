@@ -785,6 +785,28 @@ class AdminContactGetIDForm(forms.Form):
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Get'))
 
 
+class AdminNominetReleaseForm(forms.Form):
+    domain_name = forms.CharField(max_length=255, label="Domain name", required=True)
+    registrar_tag = forms.CharField(max_length=255, label="Registrar TAG", required=False)
+    registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10 my-1'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'domain_name',
+            'registrar_tag',
+            'registry_id',
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
+
+
 class AdminNominetHandshakeAcceptForm(forms.Form):
     case_id = forms.CharField(max_length=255, label="Case ID", required=True)
     registrant = forms.CharField(max_length=255, label="Registrant", required=False)

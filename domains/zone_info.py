@@ -672,6 +672,13 @@ class DomainInfo:
         )
 
     @property
+    def nominet_mark_not_required(self):
+        return self.registry in (
+                self.REGISTRY_NOMINET,
+                self.REGISTRY_NOMINET_SPECIAL,
+        )
+
+    @property
     def direct_registration_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,

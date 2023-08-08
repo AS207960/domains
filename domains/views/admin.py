@@ -283,6 +283,34 @@ def nominet_tags(request):
 @login_required
 @permission_required('domains.access_eppclient', raise_exception=True)
 @catch_epp_error
+def nominet_release(request):
+    release_data = None
+
+    if request.method == "POST":
+        form = forms.AdminNominetReleaseForm(request.POST)
+        if form.is_valid():
+            release_data = google.protobuf.text_format.MessageToString(
+                apps.epp_client.stub.NominetRelease(apps.epp_api.nominet_pb2.ReleaseRequest(
+                    registrar_tag=form.cleaned_data['registrar_tag'],
+                    object=apps.epp_api.nominet_pb2.Object(
+                        domain=form.cleaned_data['domain_name'],
+                    ),
+                    registry_name=form.cleaned_data['registry_id']
+                )),
+                indent=2, print_unknown_fields=True
+            )
+    else:
+        form = forms.AdminNominetHandshakeAcceptForm()
+
+    return render(request, "domains/admin/nominet_release.html", {
+        "release_form": form,
+        "release_data": release_data
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
 def nominet_handshake_accept(request):
     handshake_data = None
 

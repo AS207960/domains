@@ -52,7 +52,7 @@ class IPAddress(google.protobuf.message.Message):
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _IPVersionEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[IPAddress._IPVersion.ValueType], builtins.type):  # noqa: F821
+    class _IPVersionEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[IPAddress._IPVersion.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
         UNKNOWN: IPAddress._IPVersion.ValueType  # 0
         IPv4: IPAddress._IPVersion.ValueType  # 1
@@ -85,7 +85,7 @@ class Period(google.protobuf.message.Message):
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _UnitEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Period._Unit.ValueType], builtins.type):  # noqa: F821
+    class _UnitEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Period._Unit.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
         Years: Period._Unit.ValueType  # 0
         Months: Period._Unit.ValueType  # 1

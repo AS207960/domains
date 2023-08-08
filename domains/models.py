@@ -680,6 +680,7 @@ class DomainRegistration(models.Model):
     deleted_date = models.DateTimeField(blank=True, null=True)
     pending_registry_lock_status = models.PositiveSmallIntegerField(blank=True, null=True)
     registry_id = models.CharField(max_length=255, blank=True, null=True)
+    not_required = models.BooleanField(default=False, blank=True)
 
     class Meta:
         ordering = ['domain']

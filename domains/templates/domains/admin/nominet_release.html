@@ -1,0 +1,11 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>Nominet release</h1>
+        {% crispy release_form release_form.helper %}
+        {% if release_data %}
+            <pre><code>{{ release_data }}</code></pre>
+        {% endif %}
+    </div>
+{% endblock %}

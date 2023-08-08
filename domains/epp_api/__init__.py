@@ -388,6 +388,21 @@ class DomainEURIDInfo:
         )
 
 
+@dataclasses.dataclass
+class DomainNominetInfo:
+    renewal_not_required: bool
+    notes: typing.List[str]
+    reseller: typing.Optional[str]
+
+    @classmethod
+    def from_pb(cls, resp: nominet_ext_pb2.DomainInfo):
+        return cls(
+            renewal_not_required=resp.renewal_not_required,
+            notes=resp.notes,
+            reseller=resp.reseller,
+        )
+
+
 class Domain:
     _app = None  # type: EPPClient
     name: str
@@ -410,6 +425,7 @@ class Domain:
     auth_info: typing.Optional[str]
     sec_dns: typing.Optional[SecDNSData]
     eurid: typing.Optional[DomainEURIDInfo]
+    nominet: typing.Optional[DomainNominetInfo]
     registry_name: str
 
     @classmethod
@@ -442,6 +458,7 @@ class Domain:
         self.auth_info = resp.auth_info.value if resp.HasField("auth_info") else None
         self.sec_dns = SecDNSData.from_pb(resp.sec_dns) if resp.HasField("sec_dns") else None
         self.eurid = DomainEURIDInfo.from_pb(resp.eurid_data) if resp.HasField("eurid_data") else None
+        self.nominet = DomainNominetInfo.from_pb(resp.nominet_ext) if resp.HasField("nominet_ext") else None
         self.registry_name = resp.registry_name
         return self
 

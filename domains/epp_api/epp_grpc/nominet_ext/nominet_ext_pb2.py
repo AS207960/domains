@@ -17,7 +17,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dnominet_ext/nominet_ext.proto\x12\x0f\x65pp.nominet_ext\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xf3\x02\n\x0c\x44omainCreate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05notes\x18\x07 \x03(\t\x12.\n\x08reseller\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x91\x03\n\x0c\x44omainUpdate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x1c\n\x14renewal_not_required\x18\x07 \x01(\x08\x12\r\n\x05notes\x18\x08 \x03(\t\x12.\n\x08reseller\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"&\n\x0f\x44omainCheckInfo\x12\x13\n\x0b\x61\x62use_limit\x18\x01 \x01(\x04\"\xd1\x03\n\nDomainInfo\x12@\n\x13registration_status\x18\x01 \x01(\x0e\x32#.epp.nominet_ext.RegistrationStatus\x12-\n\nfirst_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x03 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x1c\n\x14renewal_not_required\x18\x08 \x01(\x08\x12\r\n\x05notes\x18\t \x03(\t\x12.\n\x08reseller\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x9b\x02\n\x0b\x44\x61taQuality\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".epp.nominet_ext.DataQualityStatus\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0e\x64\x61te_commenced\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0f\x64\x61te_to_suspend\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n\x0clock_applied\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0f\n\x07\x64omains\x18\x06 \x03(\t*@\n\x08\x42illType\x12\x0f\n\x0bUnspecified\x10\x00\x12\x11\n\rBillRegistrar\x10\x01\x12\x10\n\x0c\x42illCustomer\x10\x02*Z\n\x12RegistrationStatus\x12\x19\n\x15RegisteredUntilExpiry\x10\x00\x12\x13\n\x0fRenewalRequired\x10\x01\x12\x14\n\x10NoLongerRequired\x10\x02*+\n\x11\x44\x61taQualityStatus\x12\x0b\n\x07Invalid\x10\x00\x12\t\n\x05Valid\x10\x01\x42\x36Z4github.com/as207960/epp-proxy/gen/go/epp/nominet_extb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dnominet_ext/nominet_ext.proto\x12\x0f\x65pp.nominet_ext\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xf3\x02\n\x0c\x44omainCreate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05notes\x18\x07 \x03(\t\x12.\n\x08reseller\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\xad\x03\n\x0c\x44omainUpdate\x12-\n\nfirst_bill\x18\x01 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x38\n\x14renewal_not_required\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\r\n\x05notes\x18\x08 \x03(\t\x12.\n\x08reseller\x18\t \x01(\x0b\x32\x1c.google.protobuf.StringValue\"&\n\x0f\x44omainCheckInfo\x12\x13\n\x0b\x61\x62use_limit\x18\x01 \x01(\x04\"\xd1\x03\n\nDomainInfo\x12@\n\x13registration_status\x18\x01 \x01(\x0e\x32#.epp.nominet_ext.RegistrationStatus\x12-\n\nfirst_bill\x18\x02 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12-\n\nrecur_bill\x18\x03 \x01(\x0e\x32\x19.epp.nominet_ext.BillType\x12/\n\tauto_bill\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12/\n\tnext_bill\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0b\x61uto_period\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x31\n\x0bnext_period\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x1c\n\x14renewal_not_required\x18\x08 \x01(\x08\x12\r\n\x05notes\x18\t \x03(\t\x12.\n\x08reseller\x18\n \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\x9b\x02\n\x0b\x44\x61taQuality\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".epp.nominet_ext.DataQualityStatus\x12,\n\x06reason\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x32\n\x0e\x64\x61te_commenced\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0f\x64\x61te_to_suspend\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n\x0clock_applied\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x0f\n\x07\x64omains\x18\x06 \x03(\t*@\n\x08\x42illType\x12\x0f\n\x0bUnspecified\x10\x00\x12\x11\n\rBillRegistrar\x10\x01\x12\x10\n\x0c\x42illCustomer\x10\x02*Z\n\x12RegistrationStatus\x12\x19\n\x15RegisteredUntilExpiry\x10\x00\x12\x13\n\x0fRenewalRequired\x10\x01\x12\x14\n\x10NoLongerRequired\x10\x02*+\n\x11\x44\x61taQualityStatus\x12\x0b\n\x07Invalid\x10\x00\x12\t\n\x05Valid\x10\x01\x42\x36Z4github.com/as207960/epp-proxy/gen/go/epp/nominet_extb\x06proto3')
 
 _BILLTYPE = DESCRIPTOR.enum_types_by_name['BillType']
 BillType = enum_type_wrapper.EnumTypeWrapper(_BILLTYPE)
@@ -79,20 +79,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z4github.com/as207960/epp-proxy/gen/go/epp/nominet_ext'
-  _BILLTYPE._serialized_start=1687
-  _BILLTYPE._serialized_end=1751
-  _REGISTRATIONSTATUS._serialized_start=1753
-  _REGISTRATIONSTATUS._serialized_end=1843
-  _DATAQUALITYSTATUS._serialized_start=1845
-  _DATAQUALITYSTATUS._serialized_end=1888
+  _BILLTYPE._serialized_start=1715
+  _BILLTYPE._serialized_end=1779
+  _REGISTRATIONSTATUS._serialized_start=1781
+  _REGISTRATIONSTATUS._serialized_end=1871
+  _DATAQUALITYSTATUS._serialized_start=1873
+  _DATAQUALITYSTATUS._serialized_end=1916
   _DOMAINCREATE._serialized_start=116
   _DOMAINCREATE._serialized_end=487
   _DOMAINUPDATE._serialized_start=490
-  _DOMAINUPDATE._serialized_end=891
-  _DOMAINCHECKINFO._serialized_start=893
-  _DOMAINCHECKINFO._serialized_end=931
-  _DOMAININFO._serialized_start=934
-  _DOMAININFO._serialized_end=1399
-  _DATAQUALITY._serialized_start=1402
-  _DATAQUALITY._serialized_end=1685
+  _DOMAINUPDATE._serialized_end=919
+  _DOMAINCHECKINFO._serialized_start=921
+  _DOMAINCHECKINFO._serialized_end=959
+  _DOMAININFO._serialized_start=962
+  _DOMAININFO._serialized_end=1427
+  _DATAQUALITY._serialized_start=1430
+  _DATAQUALITY._serialized_end=1713
 # @@protoc_insertion_point(module_scope)

@@ -77,7 +77,7 @@ class Phase(google.protobuf.message.Message):
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _PhaseTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Phase._PhaseType.ValueType], builtins.type):  # noqa: F821
+    class _PhaseTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Phase._PhaseType.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
         Open: Phase._PhaseType.ValueType  # 0
         Sunrise: Phase._PhaseType.ValueType  # 1
@@ -242,7 +242,7 @@ class LaunchCreate(google.protobuf.message.Message):
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _CreateTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[LaunchCreate._CreateType.ValueType], builtins.type):  # noqa: F821
+    class _CreateTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[LaunchCreate._CreateType.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
         Registration: LaunchCreate._CreateType.ValueType  # 0
         Application: LaunchCreate._CreateType.ValueType  # 1

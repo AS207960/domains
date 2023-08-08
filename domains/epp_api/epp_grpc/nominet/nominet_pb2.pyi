@@ -303,7 +303,7 @@ class Process(google.protobuf.message.Message):
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
 
-    class _ProcessStageEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Process._ProcessStage.ValueType], builtins.type):  # noqa: F821
+    class _ProcessStageEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Process._ProcessStage.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
         Initial: Process._ProcessStage.ValueType  # 0
         Updated: Process._ProcessStage.ValueType  # 1

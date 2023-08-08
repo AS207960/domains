@@ -107,8 +107,16 @@
                                 <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
                             {% endif %}
                         {% endif %}
-                        {% if domain.can_delete %}
-                            <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
+                        {% if domain_info.nominet_mark_not_required %}
+                            {% if domain.nominet.renewal_not_required %}
+                                <a href="{% url 'mark_domain_required' domain_id %}" class="btn btn-secondary">Cancel no longer required</a>
+                            {% else %}
+                                <a href="{% url 'mark_domain_not_required' domain_id %}" class="btn btn-danger">&#x1f5d1; No longer required</a>
+                            {% endif %}
+                        {% else %}
+                            {% if domain.can_delete %}
+                                <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
+                            {% endif %}
                         {% endif %}
                         {% if domain.can_update and domain_info.standard_auth_code_procedure %}
                             <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">
