@@ -715,7 +715,10 @@ def notify_restore(restore_order_id):
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
 def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = False):
-    domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+    if auto:
+        domain_renew_order = models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+    else:
+        domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
     user = domain_renew_order.get_user()
 
     sections = [{
