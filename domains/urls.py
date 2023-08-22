@@ -98,4 +98,5 @@ urlpatterns = [
     path('epp_client/nominet_tags/', admin.nominet_tags, name='admin_nominet_tags'),
     path('epp_client/nominet_handshake_accept/', admin.nominet_handshake_accept, name='admin_nominet_handshake_accept'),
     path('epp_client/nominet_handshake_reject/', admin.nominet_handshake_reject, name='admin_nominet_handshake_reject'),
+    path('epp_client/nominet_release/', admin.nominet_release, name='admin_nominet_release'),
 ]
