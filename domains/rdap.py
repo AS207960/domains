@@ -124,7 +124,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                     value=contact.local_address.province
                 )
             )
-        if contact.local_address.postal_code:
+        if contact.local_address.postal_code and contact.local_address.disclose_address:
             entity.js_card.addresses["a"].components.append(
                 rdap_pb2.JSCard.Address.AddressComponent(
                     kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
