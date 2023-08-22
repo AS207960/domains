@@ -310,7 +310,12 @@ def domain(request, domain_id):
                     (hns == ns.host_obj.lower() if ns.host_obj else hns == ns.host_name.lower())
                     for ns in domain_data.name_servers
                 )
-                for hns in ("ns1.as207960.net", "ns2.as207960.net")
+                for hns in (
+                        "ns1.as207960.net",
+                        "ns2.as207960.net",
+                        "ns3.as207960.net",
+                        "ns4.as207960.net",
+                )
         ):
             is_hexdns = True
 
