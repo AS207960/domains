@@ -112,6 +112,7 @@ def host(request, host_id):
         "address_form": address_form,
         "error": error,
         "host_id": user_host.id,
+        "host_obj": user_host,
         "sharing_uri": sharing_uri,
     })
 

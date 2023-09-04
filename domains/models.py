@@ -128,6 +128,9 @@ class ContactAddress(models.Model):
             args=args, kwargs=kwargs
         )
 
+    def get_user(self):
+        return as207960_utils.models.get_resource_owner(self.resource_id)
+
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
         as207960_utils.models.delete_resource(self.resource_id)
@@ -263,6 +266,9 @@ class Contact(models.Model):
             urn="urn:as207960:domains:contact", super_save=super().save, view_name='edit_contact',
             args=args, kwargs=kwargs
         )
+
+    def get_user(self):
+        return as207960_utils.models.get_resource_owner(self.resource_id)
 
     def __str__(self):
         return self.description

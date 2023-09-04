@@ -94,6 +94,15 @@
                         Please contact us to go through the change procedure.
                     </p>
                 {% endif %}
+                <p>
+                    {% with owner=domain_obj.get_user %}
+                        {% if owner.username == user.username %}
+                            <b>Owner:</b> You
+                        {% else %}
+                            <b>Owner:</b> {{ owner.email }}
+                        {% endif %}
+                    {% endwith %}
+                </p>
             </div>
             <div class="col">
                 <p>

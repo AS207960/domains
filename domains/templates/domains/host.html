@@ -34,6 +34,15 @@
                     <a href="{% url 'host_delete' host_id %}" class="btn btn-danger">Delete</a>
                 {% endif %}
             </div>
+            <div class="col-md-6 col-lg-3">
+                {% with owner=host_obj.get_user %}
+                    {% if owner.username == user.username %}
+                        <b>Owner:</b> You
+                    {% else %}
+                        <b>Owner:</b> {{ owner.email }}
+                    {% endif %}
+                {% endwith %}
+            </div>
         </div>
         <hr>
         <h2>Statuses</h2>

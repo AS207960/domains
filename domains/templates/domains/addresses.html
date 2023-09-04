@@ -1,6 +1,11 @@
 {% extends 'domains/base.html' %}
 {% block title %}My addresses{% endblock %}
 {% block content %}
+    <style>
+        table .dt-hidden-td {
+            display: none;
+        }
+    </style>
     <section class="stripe">
         <div class="container py-3">
             <div class="bg-light p-3 rounded">
@@ -12,11 +17,11 @@
         </div>
     </section>
     <div class="container my-3">
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="addresses">
                 <thead class="table-dark">
                 <tr>
                     <th>Description</th>
+                    <th>Owner</th>
                     <th>Name</th>
                     <th>Organisation</th>
                     <th>Country</th>
@@ -28,6 +33,15 @@
                     {% for address in addresses %}
                         <tr>
                             <th scope="row">{{ address.description }}</th>
+                            <td>
+                                {% with owner=address.get_user %}
+                                    {% if owner.username == user.username %}
+                                        You
+                                    {% else %}
+                                        {{ owner.email }}
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
                             <td>{{ address.name }}</td>
                             <td>{% if address.organisation %}{{ address.organisation }}{% else %}N/A{% endif %}</td>
                             <td>{{ address.country_code.unicode_flag }}</td>
@@ -41,11 +55,42 @@
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="5">No addresses</td>
+                        <td colspan="6">No addresses</td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
                     </tr>
                 {% endif %}
                 </tbody>
             </table>
-        </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready( function () {
+            $('#addresses').DataTable({
+                responsive: true,
+                paging: false,
+                autoWidth: false,
+                stateSave: true,
+                columns: [{
+                    type: "string"
+                }, {
+                    type: "string"
+                }, {
+                    type: "string"
+                }, {
+                    type: "string"
+                }, {
+                    type: "string"
+                }, {
+                    type: "string",
+                    orderable: false,
+                    searchable: false,
+                }]
+            });
+        } );
+    </script>
 {% endblock %}

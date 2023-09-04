@@ -1,6 +1,11 @@
 {% extends 'domains/base.html' %}
 {% block title %}My hosts{% endblock %}
 {% block content %}
+    <style>
+        table .dt-hidden-td {
+            display: none;
+        }
+    </style>
     <section class="stripe">
         <div class="container py-3">
             <div class="bg-light p-3 rounded my-0">
@@ -20,11 +25,11 @@
                 <p class="mb-0">{{ error }}</p>
             </div>
         {% endif %}
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="hosts">
                 <thead class="table-dark">
                 <tr>
                     <th>Host</th>
+                    <th>Owner</th>
                     <th>Creation date</th>
                     <th>Last updated</th>
                     <th></th>
@@ -38,13 +43,33 @@
                                 <th scope="row">
                                     <del>{{ host.obj.unicode_name_server }}</del>
                                 </th>
-                                <td colspan="4" class="text-danger">
+                                <td>
+                                    {% with owner=host.obj.get_user %}
+                                        {% if owner.username == user.username %}
+                                            You
+                                        {% else %}
+                                            {{ owner.email }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+                                <td colspan="3" class="text-danger">
                                     Unable to contact registry: {{ host.error }}
                                 </td>
+                                <td class="dt-hidden-td"></td>
+                                <td class="dt-hidden-td"></td>
                             </tr>
                         {% else %}
                             <tr>
                                 <th scope="row">{{ host.host.unicode_name }}</th>
+                                <td>
+                                    {% with owner=host.obj.get_user %}
+                                        {% if owner.username == user.username %}
+                                            You
+                                        {% else %}
+                                            {{ owner.email }}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
                                 <td>{% if host.host.creation_date %}{{ host.host.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td>{% if host.host.last_updated_date %}{{ host.host.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
                                 <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>
@@ -54,10 +79,38 @@
                 {% else %}
                     <tr>
                         <td colspan="5">No hosts</td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
+                        <td class="dt-hidden-td"></td>
                     </tr>
                 {% endif %}
                 </tbody>
         </table>
-        </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready( function () {
+            $('#hosts').DataTable({
+                responsive: true,
+                paging: false,
+                autoWidth: false,
+                stateSave: true,
+                columns: [{
+                    type: "string"
+                }, {
+                    type: "string"
+                }, {
+                    type: "date"
+                }, {
+                    type: "date"
+                }, {
+                    type: "string",
+                    orderable: false,
+                    searchable: false,
+                }]
+            });
+        } );
+    </script>
 {% endblock %}

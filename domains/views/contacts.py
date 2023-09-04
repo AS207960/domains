@@ -122,7 +122,8 @@ def edit_contact(request, contact_id):
     return render(request, "domains/contact_form.html", {
         "contact_form": form,
         "title": "Edit contact",
-        "sharing_uri": sharing_uri
+        "sharing_uri": sharing_uri,
+        "contact_obj": user_contact,
     })
 
 
@@ -262,7 +263,8 @@ def edit_address(request, address_id):
     return render(request, "domains/address_form.html", {
         "contact_form": form,
         "title": "Edit address",
-        "sharing_uri": sharing_uri
+        "sharing_uri": sharing_uri,
+        "address_obj": user_address,
     })
 
 

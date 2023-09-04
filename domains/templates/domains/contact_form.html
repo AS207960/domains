@@ -4,10 +4,19 @@
 {% block content %}
     <div class="container my-3">
         <h1>{{ title }}</h1>
-        {% if sharing_uri %}
-            <div class="btn-group my-3">
-                <a href="{{ sharing_uri }}" class="btn btn-info">&#x1f91d; Share</a>
-            </div>
+        {% if contact_obj %}
+            <p>
+                {% with owner=contact_obj.get_user %}
+                    {% if owner.username == user.username %}
+                        <b>Owner:</b> You
+                        {% if sharing_uri %}
+                            <a href="{{ sharing_uri }}" class="btn btn-info btn-sm">&#x1f91d; Share</a>
+                        {% endif %}
+                    {% else %}
+                        <b>Owner:</b> {{ owner.email }}
+                    {% endif %}
+                {% endwith %}
+            </p>
         {% endif %}
         <hr>
         {% crispy contact_form contact_form.helper %}
