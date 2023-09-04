@@ -641,6 +641,9 @@ class NameServer(models.Model):
             args=args, kwargs=kwargs
         )
 
+    def get_user(self):
+        return as207960_utils.models.get_resource_owner(self.resource_id)
+    
     def delete(self, *args, **kwargs):
         super().delete(*args, *kwargs)
         as207960_utils.models.delete_resource(self.resource_id)
