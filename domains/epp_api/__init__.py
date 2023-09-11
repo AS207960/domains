@@ -1567,9 +1567,12 @@ class EPPClient:
             
         self.stub = epp_pb2_grpc.EPPProxyStub(channel)
 
-    def check_domain(self, domain: str) -> typing.Tuple[bool, typing.Optional[str], str]:
+    def check_domain(self, domain: str, registry_id: typing.Optional[str] = None) -> typing.Tuple[bool, typing.Optional[str], str]:
         resp = self.stub.DomainCheck(domain_pb2.DomainCheckRequest(
-            name=domain
+            name=domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                value=registry_id
+            ) if registry_id else None
         ))
         reason = resp.reason.value if resp.HasField("reason") else None
         return resp.available, reason, resp.registry_name
