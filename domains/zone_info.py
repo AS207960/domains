@@ -551,6 +551,7 @@ class DomainInfo:
     REGISTRY_ST = "st-registry"
     REGISTRY_ONE = "one"
     REGISTRY_CEO = "ceo"
+    REGISTRY_INC = "inc"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -675,6 +676,7 @@ class DomainInfo:
             self.REGISTRY_ST,
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
+            self.REGISTRY_INC,
         )
 
     @property
@@ -805,6 +807,7 @@ class DomainInfo:
             self.REGISTRY_ST,
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
+            self.REGISTRY_INC,
         )
 
     @property
@@ -1015,6 +1018,7 @@ class DomainInfo:
             self.REGISTRY_ST,
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
+            self.REGISTRY_INC,
         )
 
     @property
@@ -1083,6 +1087,7 @@ class DomainInfo:
             self.REGISTRY_ST,
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
+            self.REGISTRY_INC,
         )
 
     @property
@@ -1152,6 +1157,7 @@ class DomainInfo:
             self.REGISTRY_ST,
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
+            self.REGISTRY_INC,
         )
 
     @property
@@ -3622,6 +3628,21 @@ else:
         ('ceo', DomainInfo(
             DomainInfo.REGISTRY_CEO,
             MarkupPrice(13800, transfer=13800, restore=10800, currency=None, display_currency='USD', tld='ceo',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('click', DomainInfo(
+            DomainInfo.REGISTRY_INC,
+            MarkupPrice(2361, transfer=2361, restore=13500, currency=None, display_currency='USD', tld='click',
+                        markup=decimal.Decimal("1.5"))
+        )),
+        ('biz', DomainInfo(
+            DomainInfo.REGISTRY_GODADDY,
+            MarkupPrice(2959, transfer=2959, restore=12150, currency=None, display_currency='USD', tld='biz',
+                        markup=decimal.Decimal("1.35"))
+        )),
+        ('mx', DomainInfo(
+            DomainInfo.REGISTRY_GODADDY,
+            MarkupPrice(7062, transfer=7062, restore=5400, currency=None, display_currency='USD', tld='mx',
                         markup=decimal.Decimal("1.2"))
         )),
     )
