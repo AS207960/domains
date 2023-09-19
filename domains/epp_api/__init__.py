@@ -1692,12 +1692,14 @@ class EPPClient:
             domain: str,
             auth_info: str,
             period: typing.Optional[Period] = None,
+            eurid: typing.Optional[eurid_pb2.DomainTransferExtension] = None,
             registry_id: typing.Optional[str] = None,
     ) -> DomainTransfer:
         resp = self.stub.DomainTransferRequest(domain_pb2.DomainTransferRequestRequest(
             name=domain,
             period=period.to_pb() if period else None,
             auth_info=auth_info,
+            eurid_data=eurid,
             registry_name=google.protobuf.wrappers_pb2.StringValue(
                 value=registry_id
             ) if registry_id else None

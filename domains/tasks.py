@@ -686,11 +686,22 @@ def process_domain_transfer_paid(transfer_order_id):
             else:
                 period = None
 
+            if zone.is_eurid:
+                _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
+                eurid_data = apps.epp_api.eurid_pb2.DomainTransferExtension(
+                    registrant=domain_transfer_order.registrant_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.Registrant
+                    ).registry_contact_id
+                )
+            else:
+                eurid_data = None
+
             transfer_data = apps.epp_client.transfer_request_domain(
                 domain_transfer_order.domain,
                 domain_transfer_order.auth_code,
                 period=period,
                 registry_id=domain_transfer_order.registry_id,
+                eurid=eurid_data
             )
         except grpc.RpcError as rpc_error:
             domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL

@@ -390,7 +390,8 @@ class DomainTransferExtension(google.protobuf.message.Message):
     ON_SITE_FIELD_NUMBER: builtins.int
     REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
     registrant: builtins.str
-    billing: builtins.str
+    @property
+    def billing(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
     def technical(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
@@ -403,13 +404,13 @@ class DomainTransferExtension(google.protobuf.message.Message):
         self,
         *,
         registrant: builtins.str = ...,
-        billing: builtins.str = ...,
+        billing: google.protobuf.wrappers_pb2.StringValue | None = ...,
         technical: google.protobuf.wrappers_pb2.StringValue | None = ...,
         reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
         on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
         registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing_extensions.Literal["billing", b"billing", "on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["billing", b"billing", "on_site", b"on_site", "registrant", b"registrant", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> None: ...
 
 global___DomainTransferExtension = DomainTransferExtension
