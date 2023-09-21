@@ -718,10 +718,10 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
     if auto:
         domain_renew_order = models.DomainAutomaticRenewOrder.objects.get(
             id=renew_order_id)  # type: models.DomainRenewOrder
-        user = domain_renew_order.get_user()
+        user = domain_renew_order.domain_obj.get_user() if domain_renew_order.domain_obj else None
     else:
         domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
-        user = domain_renew_order.domain_obj.get_user() if domain_renew_order.domain_obj else None
+        user = domain_renew_order.get_user()
 
     sections = [{
         "header": "Domain data",
