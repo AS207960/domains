@@ -716,10 +716,12 @@ def notify_restore(restore_order_id):
 )
 def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = False):
     if auto:
-        domain_renew_order = models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+        domain_renew_order = models.DomainAutomaticRenewOrder.objects.get(
+            id=renew_order_id)  # type: models.DomainRenewOrder
+        user = domain_renew_order.get_user()
     else:
         domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
-    user = domain_renew_order.get_user()
+        user = domain_renew_order.domain_obj.get_user() if domain_renew_order.domain_obj else None
 
     sections = [{
         "header": "Domain data",
@@ -791,11 +793,13 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
             parent=space.space_id,
             threadKey=f"dm_{domain_renew_order.domain_obj.id}",
             body={
-                "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
-                        f"renewal of {domain_renew_order.domain}" +
-                        (" automatically" if auto else "") + (
-                            " which has errored" if domain_renew_order.last_error else ""
-                        ),
+                "text": f"<users/all> " + (
+                    f"{user.first_name} {user.last_name}" if user else "An unknown user"
+                ) + " has requested the "
+                    f"renewal of {domain_renew_order.domain}" +
+                    (" automatically" if auto else "") + (
+                        " which has errored" if domain_renew_order.last_error else ""
+                    ),
                 "cards": [{
                     "header": {
                         "title": "Domain renew request" if not settings.DEBUG

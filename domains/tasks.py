@@ -691,7 +691,10 @@ def process_domain_transfer_paid(transfer_order_id):
                 eurid_data = apps.epp_api.eurid_pb2.DomainTransferExtension(
                     registrant=domain_transfer_order.registrant_contact.get_registry_id(
                         registry_id, zone, role=apps.epp_api.ContactRole.Registrant
-                    ).registry_contact_id
+                    ).registry_contact_id,
+                    on_site=domain_transfer_order.tech_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                    ).registry_contact_id if domain_transfer_order.tech_contact else None
                 )
             else:
                 eurid_data = None
