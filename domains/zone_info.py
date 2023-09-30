@@ -552,6 +552,7 @@ class DomainInfo:
     REGISTRY_ONE = "one"
     REGISTRY_CEO = "ceo"
     REGISTRY_INC = "inc"
+    REGISTRY_IT = "it"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -677,6 +678,7 @@ class DomainInfo:
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
             self.REGISTRY_INC,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -808,6 +810,7 @@ class DomainInfo:
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
             self.REGISTRY_INC,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -1019,6 +1022,7 @@ class DomainInfo:
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
             self.REGISTRY_INC,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -1088,6 +1092,7 @@ class DomainInfo:
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
             self.REGISTRY_INC,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -1158,6 +1163,7 @@ class DomainInfo:
             self.REGISTRY_ONE,
             self.REGISTRY_CEO,
             self.REGISTRY_INC,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -3644,6 +3650,11 @@ else:
             DomainInfo.REGISTRY_GODADDY,
             MarkupPrice(7062, transfer=7062, restore=5400, currency=None, display_currency='USD', tld='mx',
                         markup=decimal.Decimal("1.2"))
+        )),
+        ('it', DomainInfo(
+            DomainInfo.REGISTRY_IT,
+            MarkupPrice(3107, transfer=3107, restore=2600, currency=None, display_currency='EUR', tld='it',
+                        markup=decimal.Decimal("1.3"))
         )),
     )
 
