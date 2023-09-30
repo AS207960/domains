@@ -91,7 +91,7 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = models.Contact
         fields = "__all__"
-        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email")
+        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email", "handle")
 
 
 class AddressForm(forms.ModelForm):
