@@ -1356,163 +1356,168 @@ else:
         )),
         ('pw', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2700, transfer=2700, currency=None, display_currency='USD', tld='pw',
-                        markup=decimal.Decimal("1.7"))
+            MarkupPrice(2250, transfer=2250, restore=2250, currency=None, display_currency='USD', tld='pw',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('fm', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(12240, transfer=12240, restore=17280, currency=None, display_currency='USD', tld='fm',
-                        markup=decimal.Decimal("1.4"))
+            MarkupPrice(10200, transfer=10200, restore=14400, currency=None, display_currency='USD', tld='fm',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('fo', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(6048, transfer=6048, restore=18808, currency=None, display_currency='EUR', tld='fo',
-                        markup=decimal.Decimal("1.4"))
+            MarkupPrice(5040, transfer=5040, restore=9840, currency=None, display_currency='EUR', tld='fo',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('gd', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(3900, transfer=3900, restore=10920, currency=None, display_currency='USD', tld='gd',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(3250, transfer=3250, restore=9100, currency=None, display_currency='USD', tld='gd',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('gl', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
+            MarkupPrice(3510, transfer=3510, restore=3510, currency=None, display_currency='EUR', tld='vg',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('vg', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(3900, transfer=3900, restore=10920, currency=None, display_currency='USD', tld='vg',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(3250, transfer=3250, restore=9100, currency=None, display_currency='USD', tld='vg',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('ae.org', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2520, transfer=2520, restore=2520, currency=None, display_currency='USD', tld='ae.org',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(2250, transfer=2250, restore=2250, currency=None, display_currency='USD', tld='ae.org',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('br.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(4752, transfer=4752, restore=4752, currency=None, display_currency='USD', tld='br.com',
-                        markup=decimal.Decimal("1.4"))
+            MarkupPrice(4290, transfer=4290, restore=4290, currency=None, display_currency='USD', tld='br.com',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('cn.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2352, renewal=5040, transfer=5040, restore=4752, currency=None, display_currency='USD',
-                        tld='cn.com', markup=decimal.Decimal("1.6"))
+            MarkupPrice(2100, renewal=4500, transfer=4500, restore=4500, currency=None, display_currency='USD',
+                        tld='cn.com', markup=decimal.Decimal("1.5"))
         )),
         ('co.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(3120, transfer=3120, restore=9360, currency=None, display_currency='USD', tld='co.com',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(2800, transfer=2800, restore=8400, currency=None, display_currency='USD', tld='co.com',
+                        markup=decimal.Decimal("1.4"))
         )),
         ('co.nl', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1176, transfer=1176, restore=12000, currency=None, display_currency='EUR', tld='co.nl',
-                        markup=decimal.Decimal("2.2"))
+            MarkupPrice(1127, transfer=1127, restore=10373, currency=None, display_currency='EUR', tld='co.nl',
+                        markup=decimal.Decimal("2.3"))
         )),
         ('co.no', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2495, transfer=2495, restore=10072, currency=None, display_currency='EUR', tld='co.no',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(2228, transfer=2228, restore=7500, currency=None, display_currency='EUR', tld='co.no',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('com.de', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1080, transfer=1080, restore=1080, currency=None, display_currency='EUR', tld='com.de',
-                        markup=decimal.Decimal("2.7"))
+            MarkupPrice(1008, transfer=1008, restore=1008, currency=None, display_currency='EUR', tld='com.de',
+                        markup=decimal.Decimal("2.8"))
         )),
         ('com.se', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1501, transfer=1501, restore=1501, currency=None, display_currency='EUR', tld='com.se',
-                        markup=decimal.Decimal("2"))
+            MarkupPrice(1321, transfer=1321, restore=1321, currency=None, display_currency='EUR', tld='com.se',
+                        markup=decimal.Decimal("1.9"))
         )),
         ('de.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2100, transfer=2100, restore=2100, currency=None, display_currency='EUR', tld='de.com',
+            MarkupPrice(2000, transfer=2000, restore=2000, currency=None, display_currency='EUR', tld='de.com',
                         markup=decimal.Decimal("1.6"))
         )),
         ('eu.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2100, transfer=2100, restore=2100, currency=None, display_currency='EUR', tld='eu.com',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(1875, transfer=1875, restore=1875, currency=None, display_currency='EUR', tld='eu.com',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('gb.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1200, transfer=1200, restore=1200, currency=None, display_currency='GBP', tld='gb.net',
+            MarkupPrice(1100, transfer=1100, restore=1100, currency=None, display_currency='GBP', tld='gb.net',
                         markup=decimal.Decimal("2.2"))
         )),
         ('gr.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1890, transfer=1890, restore=1890, currency=None, display_currency='EUR', tld='gr.com',
+            MarkupPrice(1785, transfer=1785, restore=1785, currency=None, display_currency='EUR', tld='gr.com',
                         markup=decimal.Decimal("1.7"))
         )),
         ('hu.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(3744, transfer=3744, restore=3744, currency=None, display_currency='EUR', tld='hu.net',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(2990, transfer=2990, restore=2990, currency=None, display_currency='EUR', tld='hu.net',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('in.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1440, transfer=1440, restore=1440, currency=None, display_currency='USD', tld='in.net',
-                        markup=decimal.Decimal("2.2"))
+            MarkupPrice(1260, transfer=1260, restore=1260, currency=None, display_currency='USD', tld='in.net',
+                        markup=decimal.Decimal("2.1"))
         )),
         ('jp.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(1680, transfer=1680, restore=1680, currency=None, display_currency='USD', tld='jp.net',
-                        markup=decimal.Decimal("2.2"))
+            MarkupPrice(1400, transfer=1400, restore=1400, currency=None, display_currency='USD', tld='jp.net',
+                        markup=decimal.Decimal("2"))
         )),
         ('jpn.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(4680, transfer=4680, restore=4680, currency=None, display_currency='USD', tld='jpn.com',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(3900, transfer=3900, restore=3900, currency=None, display_currency='USD', tld='jpn.com',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('mex.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2040, transfer=2040, restore=2040, currency=None, display_currency='USD', tld='mex.com',
-                        markup=decimal.Decimal("1.9"))
+            MarkupPrice(1700, transfer=1700, restore=1700, currency=None, display_currency='USD', tld='mex.com',
+                        markup=decimal.Decimal("1.7"))
         )),
         ('ru.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(4680, transfer=4680, restore=4680, currency=None, display_currency='USD', tld='ru.com',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(7080, transfer=7080, restore=7080, currency=None, display_currency='USD', tld='ru.com',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('sa.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(7056, transfer=7056, restore=7056, currency=None, display_currency='USD', tld='sa.com',
-                        markup=decimal.Decimal("1.4"))
+            MarkupPrice(17880, transfer=17880, restore=17880, currency=None, display_currency='USD', tld='sa.com',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('se.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(3588, transfer=3588, restore=3588, currency=None, display_currency='EUR', tld='se.net',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(2990, transfer=2990, restore=2990, currency=None, display_currency='EUR', tld='se.net',
+                        markup=decimal.Decimal("1.3"))
         )),
         ('uk.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2335, transfer=2335, restore=2335, currency=None, display_currency='GBP', tld='uk.com',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(2275, transfer=2275, restore=2275, currency=None, display_currency='GBP', tld='uk.com',
+                        markup=decimal.Decimal("1.4"))
         )),
         ('uk.net', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2335, transfer=2335, restore=2335, currency=None, display_currency='GBP', tld='uk.net',
-                        markup=decimal.Decimal("1.5"))
+            MarkupPrice(2275, transfer=2275, restore=2275, currency=None, display_currency='GBP', tld='uk.net',
+                        markup=decimal.Decimal("1.4"))
         )),
         ('us.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2520, transfer=2520, restore=2520, currency=None, display_currency='USD', tld='us.com',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(2250, transfer=2250, restore=2250, currency=None, display_currency='USD', tld='us.com',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('us.org', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(2520, transfer=2520, restore=2520, currency=None, display_currency='USD', tld='us.org',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(2250, transfer=2250, restore=2250, currency=None, display_currency='USD', tld='us.org',
+                        markup=decimal.Decimal("1.5"))
         )),
         ('za.com', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(7056, transfer=7056, restore=7056, currency=None, display_currency='USD', tld='za.com',
-                        markup=decimal.Decimal("1.4"))
+            MarkupPrice(17880, transfer=17880, restore=17880, currency=None, display_currency='USD', tld='za.com',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('radio.am', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(178, transfer=2160, restore=8460, currency=None, display_currency='USD', tld='radio.am',
-                        markup=decimal.Decimal("1.7"))
+            MarkupPrice(1920, transfer=1920, restore=7520, currency=None, display_currency='USD', tld='radio.am',
+                        markup=decimal.Decimal("1.6"))
         )),
         ('radio.fm', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
-            MarkupPrice(178, transfer=2160, restore=8460, currency=None, display_currency='USD', tld='radio.fm',
-                        markup=decimal.Decimal("1.7"))
+            MarkupPrice(1920, transfer=1920, restore=7520, currency=None, display_currency='USD', tld='radio.fm',
+                        markup=decimal.Decimal("1.6"))
         )),
         ('gay', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
