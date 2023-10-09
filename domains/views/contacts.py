@@ -103,7 +103,7 @@ def edit_contact(request, contact_id):
     }
     sharing_data_uri = urllib.parse.urlencode(sharing_data)
     sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/?{sharing_data_uri}" \
-                  f"#/resource/{user_contact.resource_id}"
+                  f"#/resources/{user_contact.resource_id}"
 
     if request.method == "POST":
         form = forms.ContactForm(request.POST, user=request.user, instance=user_contact)
@@ -244,7 +244,7 @@ def edit_address(request, address_id):
     }
     sharing_data_uri = urllib.parse.urlencode(sharing_data)
     sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/?{sharing_data_uri}" \
-                  f"#/resource/{user_address.resource_id}"
+                  f"#/resources/{user_address.resource_id}"
 
     if request.method == "POST":
         form = forms.AddressForm(request.POST, instance=user_address)
