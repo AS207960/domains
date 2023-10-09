@@ -58,8 +58,8 @@ def host(request, host_id):
         "referrer_uri": request.build_absolute_uri()
     }
     sharing_data_uri = urllib.parse.urlencode(sharing_data)
-    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/resource/" \
-                  f"{user_host.resource_id}?{sharing_data_uri}"
+    sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/?{sharing_data_uri}" \
+                  f"#/resource/{user_host.resource_id}"
 
     error = None
     host_data = None
