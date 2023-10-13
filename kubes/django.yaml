@@ -742,6 +742,89 @@ spec:
   policyTypes:
   - Ingress
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domain-keycloak-events
+  labels:
+    app: domains
+    part: keycloak-events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domains
+      part: keycloak-events
+  template:
+    metadata:
+      annotations:
+        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+      labels:
+        app: domains
+        part: keycloak-events
+    spec:
+      volumes:
+        - name: ca-cert
+          configMap:
+            name: epp-ca
+        - name: google-creds
+          secret:
+            secretName: domains-google-creds
+        - name: privkey
+          secret:
+            secretName: domains-jwt-priv
+      containers:
+        - name: rpc
+          image: as207960/domains-django:(version)
+          imagePullPolicy: IfNotPresent
+          command: [ "sh", "-c", "python3 manage.py keycloak-events" ]
+          volumeMounts:
+            - mountPath: "/ca-cert/"
+              name: ca-cert
+            - mountPath: "/google-creds/"
+              name: google-creds
+            - mountPath: "/privkey/"
+              name: privkey
+          envFrom:
+            - configMapRef:
+                name: domains-django-conf
+            - secretRef:
+                name: domains-db-creds
+              prefix: "DB_"
+            - secretRef:
+                name: domains-django-secret
+            - secretRef:
+                name: domains-keycloak
+              prefix: "KEYCLOAK_"
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
+            - secretRef:
+                name: domains-celery
+              prefix: "CELERY_"
+            - secretRef:
+                name: verisign-ns-key
+              prefix: "VERISIGN_NS_"
+            - secretRef:
+                name: domains-rrpproxy
+              prefix: "RRPPROXY_"
+            - secretRef:
+                name: domains-rpc
+            - secretRef:
+                name: domains-s3
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: domains-keycloak-events
+spec:
+  podSelector:
+    matchLabels:
+      app: domains
+      part: keycloak-events
+  policyTypes:
+    - Ingress
+---
 apiVersion: v1
 kind: Service
 metadata:

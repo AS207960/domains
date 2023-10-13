@@ -53,7 +53,8 @@ class Command(BaseCommand):
             print("Exiting...")
             return
 
-    def domains_callback(self, body, model, task, failed_task=None):
+    @staticmethod
+    def domains_callback(body, model, task, failed_task=None):
         msg = domains.proto.billing_pb2.ChargeStateNotification()
         msg.ParseFromString(body)
 
