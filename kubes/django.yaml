@@ -41,6 +41,9 @@ data:
   S3_CUSTOM_DOMAIN: "domains-django.content.as207960.net"
   STATIC_URL: "https://domains-django.content.as207960.net/"
   MEDIA_URL: "https://domains-django.content.as207960.net/"
+  AFNIC_PROXY_CONTACT: "O-ASN34"
+  EUIRD_PROXY_CONTACT: "c41743909"
+  EUIRD_BILLING_CONTACT: "c41545983"
 ---
 apiVersion: apps/v1
 kind: Deployment

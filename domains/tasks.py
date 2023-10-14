@@ -240,7 +240,12 @@ def process_domain_registration_paid(registration_order_id):
                         registry_id, zone, role=apps.epp_api.ContactRole.Admin
                     ).registry_contact_id
                 ))
-            if zone.billing_supported and domain_registration_order.billing_contact:
+            if zone.is_eurid:
+                contact_objs.append(apps.epp_api.DomainContact(
+                    contact_type="billing",
+                    contact_id=settings.EURID_BILLING_CONTACT
+                ))
+            elif zone.billing_supported and domain_registration_order.billing_contact:
                 contact_objs.append(apps.epp_api.DomainContact(
                     contact_type="billing",
                     contact_id=domain_registration_order.billing_contact.get_registry_id(
@@ -250,11 +255,11 @@ def process_domain_registration_paid(registration_order_id):
             if zone.tech_supported and domain_registration_order.tech_contact:
                 if zone.is_eurid:
                     eurid = apps.epp_api.eurid_pb2.DomainCreateExtension(
-                       on_site=google.protobuf.wrappers_pb2.StringValue(
-                           value=domain_registration_order.tech_contact.get_registry_id(
-                               registry_id, zone, role=apps.epp_api.ContactRole.OnSite
-                           ).registry_contact_id
-                       )
+                        on_site=google.protobuf.wrappers_pb2.StringValue(
+                            value=domain_registration_order.tech_contact.get_registry_id(
+                                registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                            ).registry_contact_id
+                        ),
                     )
                 else:
                     contact_objs.append(apps.epp_api.DomainContact(
