@@ -250,9 +250,11 @@ def process_domain_registration_paid(registration_order_id):
             if zone.tech_supported and domain_registration_order.tech_contact:
                 if zone.is_eurid:
                     eurid = apps.epp_api.eurid_pb2.DomainCreateExtension(
-                       on_site=domain_registration_order.tech_contact.get_registry_id(
-                           registry_id, zone, role=apps.epp_api.ContactRole.OnSite
-                       ).registry_contact_id
+                       on_site=google.protobuf.wrappers_pb2.StringValue(
+                           value=domain_registration_order.tech_contact.get_registry_id(
+                               registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                           ).registry_contact_id
+                       )
                     )
                 else:
                     contact_objs.append(apps.epp_api.DomainContact(
@@ -860,7 +862,7 @@ def process_domain_transfer_contacts(transfer_order_id):
         update_req.keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
 
     if zone.keysys_de:
-        update_req.keysys.de.abuse_contact.value = "https://as207960.net/contact"
+        update_req.keysys.de.abprocessuse_contact.value = "https://as207960.net/contact"
         update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
 
     if should_send:
