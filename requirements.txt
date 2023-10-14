@@ -27,7 +27,7 @@ django-cockroachdb==4.2.*
 pika
 py-webauthn>=0.0.4
 git+https://github.com/AS207960/python-utils@94658686743f1f2ba2dad9960c2b1c8c7ad967af
-git+https://github.com/TheEnbyperor/oscrypto@macos-fix
+git+https://github.com/TheEnbyperor/oscrypto@204225cd0bc11420bb7038ad956b736eb9a79977
 mypy-protobuf
 base32-crockford
 django-storages

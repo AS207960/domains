@@ -668,7 +668,6 @@ class DomainInfo:
             self.REGISTRY_NASK,
             self.REGISTRY_PLAN_BEE,
             self.REGISTRY_REDES,
-            self.REGISTRY_SIDN,
             self.REGISTRY_MDMA,
             self.REGISTRY_COCCA,
             self.REGISTRY_EIF,
@@ -724,6 +723,13 @@ class DomainInfo:
     def keysys_de(self):
         return self.registry in (
             self.REGISTRY_DENIC
+        )
+
+    @property
+    def keysys_auto_renew(self):
+        return self.registry in (
+            self.REGISTRY_DENIC,
+            self.REGISTRY_SIDN,
         )
 
     @property
@@ -3352,7 +3358,7 @@ else:
             )
         )),
         ('nl', DomainInfo(
-            DomainInfo.REGISTRY_NASK,
+            DomainInfo.REGISTRY_SIDN,
             MarkupPrice(1904, restore=1904, currency=None, display_currency='EUR', tld='nl',
                         markup=decimal.Decimal("1.6"))
         )),

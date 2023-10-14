@@ -262,14 +262,13 @@ def process_domain_registration_paid(registration_order_id):
                         ).registry_contact_id
                     ))
 
-            if zone.keysys_de:
-                keysys = apps.epp_api.keysys_pb2.DomainCreate(
-                    renewal_mode=apps.epp_api.keysys_pb2.AutoRenew,
-                    de=apps.epp_api.keysys_pb2.DomainInfoDE(
-                        abuse_contact=google.protobuf.wrappers_pb2.StringValue(value="https://as207960.net/contact"),
-                        general_contact=google.protobuf.wrappers_pb2.StringValue(value="https://as207960.net/contact"),
-                    ),
-                )
+            if zone.keysys_de or zone.keysys_auto_renew:
+                keysys = apps.epp_api.keysys_pb2.DomainCreate()
+                if zone.keysys_auto_renew:
+                    keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
+                if zone.keysys_de:
+                    keysys.de.abuse_contact.value = "https://as207960.net/contact"
+                    keysys.de.general_contact.value = "https://as207960.net/contact"
             else:
                 keysys = None
 
@@ -857,8 +856,10 @@ def process_domain_transfer_contacts(transfer_order_id):
         )
         _update_contact("billing", billing_contact_id.registry_contact_id)
 
-    if zone.keysys_de:
+    if zone.keysys_auto_renew:
         update_req.keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
+
+    if zone.keysys_de:
         update_req.keysys.de.abuse_contact.value = "https://as207960.net/contact"
         update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
 
