@@ -91,6 +91,12 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                         value=contact.local_address.street_3
                     )
                 )
+                entity.js_card.addresses["a"].components.append(
+                    rdap_pb2.JSCard.Address.AddressComponent(
+                        kind=rdap_pb2.JSCard.Address.AddressComponent.Locality,
+                        value=contact.local_address.city
+                    )
+                )
         else:
             entity.js_card.addresses["a"].components.append(
                 rdap_pb2.JSCard.Address.AddressComponent(
@@ -103,12 +109,6 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
             rdap_pb2.JSCard.Address.AddressComponent(
                 kind=rdap_pb2.JSCard.Address.AddressComponent.Separator,
                 value="\n"
-            )
-        )
-        entity.js_card.addresses["a"].components.append(
-            rdap_pb2.JSCard.Address.AddressComponent(
-                kind=rdap_pb2.JSCard.Address.AddressComponent.Locality,
-                value=contact.local_address.city
             )
         )
         if contact.local_address.province:
