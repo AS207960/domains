@@ -168,6 +168,9 @@ with open(os.path.join(BASE_DIR, "secrets/verisign_ns.json")) as f:
 with open(os.path.join(BASE_DIR, "secrets/rrpproxy.json")) as f:
     rrproxy_conf = json.load(f)
 
+with open(os.path.join(BASE_DIR, "secrets/switch.json")) as f:
+    switch_conf = json.load(f)
+
 with open(os.path.join(BASE_DIR, "secrets/jwt_priv.pem")) as f:
     JWT_PRIV_KEY = f.read()
 
@@ -207,6 +210,9 @@ RDAP_OBJECT_TAG = "GLAUCA"
 
 AFNIC_PROXY_CONTACT = "O-ASN34"
 EURID_PROXY_CONTACT = "c41743909"
+
+SWITCH_REGISTRAR_ID = switch_conf["id"]
+SWITCH_REGISTRAR_PASSWORD = switch_conf["password"]
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

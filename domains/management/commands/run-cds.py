@@ -15,6 +15,7 @@ import socket
 from domains import models, zone_info, apps
 
 
+resolver_addr = socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]
 resolver = dns.resolver.Resolver(configure=False)
 resolver.nameservers = [socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]]
 resolver.port = settings.RESOLVER_PORT
@@ -222,6 +223,43 @@ class Command(BaseCommand):
                 continue
 
             cds_data_set = cds_values[0]
+
+            ds_boot_data = {}
+            for ns in name_servers:
+                ds_boot_domain_name = dns.name.from_text(f"_dsboot.{domain.domain}._signal.{ns}")
+                try:
+                    ds_boot_msg = dns.message.make_query(ds_boot_domain_name, cds_type, want_dnssec=True)
+                except dns.resolver.NXDOMAIN:
+                    print(f"Getting {ds_boot_domain_name} returned NXDOMAIN")
+                    continue
+                except dns.resolver.NoNameservers:
+                    print(f"Getting {ds_boot_domain_name} no nameservers")
+                    continue
+                except dns.exception.Timeout:
+                    print(f"Getting {ds_boot_domain_name} timed out")
+                    continue
+
+                if not bool(ds_boot_msg.flags & ds_boot_msg.flags.AD):
+                    continue
+
+                ds_boot_rrs = ds_boot_msg.get_rrset(
+                    dns.message.ANSWER, ds_boot_domain_name, dns.rdataclass.IN, cds_type
+                )
+
+                if not ds_boot_rrs:
+                    continue
+
+                ds_boot_data[ns] = ds_boot_rrs
+
+            if ds_boot_data:
+                ds_boot_values = list(ds_boot_data.values())
+                if ds_boot_values.count(ds_boot_values[0]) != len(ds_boot_values):
+                    print(f"{domain.domain} has differing _dsboot records between NSes")
+                    continue
+
+                if ds_boot_values.count(cds_data_set) != len(ds_boot_values):
+                    print(f"{domain.domain} has differing _dsboot records between NSes and CDS")
+                    continue
 
             if len(cds_data_set) == 1 and cds_data_set[0].algorithm == 0:
                 if domain_data.sec_dns:

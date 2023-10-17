@@ -1,0 +1,63 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <table style="border-spacing: 0;width:100%;">
+        <tr>
+            <td>
+                <p>
+                    We have received a report from SWITCH concerning invalid DMARC or SPF records for the domain
+                    {{ domain.domain }}. The details of the report are below. The report was generated on {{ error_date }}.
+                </p>
+            </td>
+            <td>
+                <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+            </td>
+        </tr>
+    </table>
+    {% if dmarc_status %}
+    <h3>DMARC</h3>
+    <ul>
+        {% if dmarc_status.no_measurement_data %}<li>No measurement data (NXDOMAIN, SERVFAIL, timeout, etc).</li>{% endif %}
+        {% if dmarc_status.no_dmarc_record %}
+            <li>
+                No DMARC record configured.
+                This composite signals that TXT data exists on the _dmarc.
+                But it does not start with the v=DMARC1 prefix.
+            </li>
+        {% endif %}
+        {% if dmarc_status.syntax_error %}<li>Syntax error.</li>{% endif %}
+        {% if dmarc_status.more_than_one_dmarc_record %}<li>More than one DMARC record.</li>{% endif %}
+        {% if dmarc_status.dmarc_none_policy %}<li>The DMARC record's specified policy is 'none'.</li>{% endif %}
+        {% if dmarc_status.dmarc_pct_below_100 %}<li>The DMARC record specifies the optional 'pct' tag with a value that is below 100.</li>{% endif %}
+        {% if dmarc_status.invalid_dmarc_tag %}<li>One of the tags in the DMARC record is not valid.</li>{% endif %}
+        {% if dmarc_status.invalid_dmarc_tag_value %}<li>A given tag value is not valid.</li>{% endif %}
+    </ul>
+    {% endif %}
+    {% if spf_status %}
+    <h3>SPF</h3>
+    <ul>
+        {% if spf_status.no_measurement_data %}<li>No measurement data (NXDOMAIN, SERVFAIL, timeout, etc).</li>{% endif %}
+        {% if spf_status.no_spf_record %}<li>TXT data exists on the @ label but none of the TXT records starts with v=spf1.</li>{% endif %}
+        {% if spf_status.syntax_error %}<li>Syntax error.</li>{% endif %}
+        {% if spf_status.more_than_one_spf_record %}<li>More than one SPF record.</li>{% endif %}
+        {% if spf_status.prohibited_all_qualifier %}
+            <li>
+                The SPF record (primary or aGer redirect) terminates with an (implied) 'all'
+                basic mechanism and (implied) '+' or '?' qualifier.
+            </li>
+        {% endif %}
+        {% if spf_status.ipv4_prefix_too_large %}
+            <li>The SPF record (or its expansion) has (at least one) ip4 designated sender mechanism that has too broad of a prefix (< /14).</li>
+        {% endif %}
+        {% if spf_status.ipv6_prefix_too_large %}
+            <li>The SPF record (or its expansion) has (at least one) ip6 designated sender mechanism that has too broad of a prefix (< /32).</li>
+        {% endif %}
+        {% if spf_status.too_many_dns_lookups %}<li>10 DNS lookups exceeded (see RFC 7208 section 4.6.4).</li>{% endif %}
+        {% if spf_status.too_many_void_lookups %}<li>2 void lookups exceeded (see RFC 7208 section 4.6.4).</li>{% endif %}
+        {% if spf_status.redirect_loop %}<li>Redirect mechanism loop.</li>{% endif %}
+        {% if spf_status.include_loop %}<li>Include mechanism loop.</li>{% endif %}
+        {% if spf_status.included_record_does_not_exist %}
+            <li>Include expansion leads to non-existent SPF record (e.g., include:fqdn and no v=spf1 record at fqdn).</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}
