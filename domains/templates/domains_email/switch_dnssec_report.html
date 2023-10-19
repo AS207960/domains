@@ -1,0 +1,17 @@
+{% extends "domains_email/email_base.html" %}
+{% block content %}
+    <table style="border-spacing: 0;width:100%;">
+        <tr>
+            <td>
+                <p>
+                    We have received a report from SWITCH concerning invalid an DNSSEC setup for the domain
+                    {{ domain.domain }}. The details of the report <a href="{{ report_Url }}">can be found here</a>.
+                    The report was generated on {{ error_date }}.
+                </p>
+            </td>
+            <td>
+                <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

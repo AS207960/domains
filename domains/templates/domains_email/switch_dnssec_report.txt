@@ -1,0 +1,6 @@
+{% extends "domains_email/email_base.txt" %}
+{% block content %}
+We have received a report from SWITCH concerning invalid an DNSSEC setup for the domain {{ domain.domain }}.
+The details of the report can be found at: {{ report_Url }}.
+The report was generated on {{ error_date }}.
+{% endblock content %}
