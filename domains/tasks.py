@@ -702,7 +702,10 @@ def process_domain_transfer_paid(transfer_order_id):
                         value=domain_transfer_order.tech_contact.get_registry_id(
                             registry_id, zone, role=apps.epp_api.ContactRole.OnSite
                         ).registry_contact_id
-                    ) if domain_transfer_order.tech_contact else None
+                    ) if domain_transfer_order.tech_contact else None,
+                    billing=google.protobuf.wrappers_pb2.StringValue(
+                        value=settings.EURID_BILLING_CONTACT
+                    )
                 )
             else:
                 eurid_data = None
