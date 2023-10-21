@@ -1,10 +1,8 @@
 from django.db import models, InternalError
 from django.core import validators
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
-from django.urls import reverse
 import phonenumbers
 import django_keycloak_auth.clients
 from phonenumber_field.modelfields import PhoneNumberField
