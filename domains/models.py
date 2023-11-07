@@ -30,6 +30,14 @@ class RegistryLockState(enum.Enum):
 
     @classmethod
     def from_domain(cls, domain: apps.epp_api.Domain):
+        zone, sld = zone_info.get_domain_info(domain.name)
+        if zone and zone.is_eurid:
+            if int(apps.epp_api.domain_common_pb2.ClientDeleteProhibited) in domain.statuses \
+                    and int(apps.epp_api.domain_common_pb2.ClientTransferProhibited) in domain.statuses \
+                    and int(apps.epp_api.domain_common_pb2.ClientUpdateProhibited) in domain.statuses:
+                return cls.Locked
+            return cls.Unlocked
+
         if int(apps.epp_api.domain_common_pb2.ServerDeleteProhibited) in domain.statuses \
                 and int(apps.epp_api.domain_common_pb2.ServerTransferProhibited) in domain.statuses:
             if int(apps.epp_api.domain_common_pb2.ServerUpdateProhibited) in domain.statuses:
