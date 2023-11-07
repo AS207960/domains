@@ -36,7 +36,6 @@ class RegistryLockState(enum.Enum):
                     and int(apps.epp_api.domain_common_pb2.ClientTransferProhibited) in domain.statuses \
                     and int(apps.epp_api.domain_common_pb2.ClientUpdateProhibited) in domain.statuses:
                 return cls.Locked
-            return cls.Unlocked
 
         if int(apps.epp_api.domain_common_pb2.ServerDeleteProhibited) in domain.statuses \
                 and int(apps.epp_api.domain_common_pb2.ServerTransferProhibited) in domain.statuses:
