@@ -166,8 +166,8 @@ def host_create(request, host_name: str):
     form = None
 
     domain = None
-    for domain_obj in models.DomainRegistration.get_object_list(access_token, action='create-ns-domain'):
-        if host_name.lower().endswith(domain_obj.domain):
+    for domain_obj in models.DomainRegistration.get_object_list(access_token, action='create-ns'):
+        if host_name.lower().endswith(domain_obj.domain.lower()):
             domain = domain_obj
             break
 
