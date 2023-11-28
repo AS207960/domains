@@ -981,6 +981,8 @@ def add_domain_ds_data(request, domain_id):
                 "back_url": referrer
             })
 
+        tasks.notify_dnssec_enabled.delay(user_domain.id)
+
     return redirect(referrer)
 
 
@@ -1083,6 +1085,8 @@ def add_domain_dnskey_data(request, domain_id):
                 "back_url": referrer
             })
 
+        tasks.notify_dnssec_enabled.delay(user_domain.id)
+
     return redirect(referrer)
 
 
@@ -1173,7 +1177,10 @@ def delete_domain_sec_dns(request, domain_id):
             "back_url": referrer
         })
 
+    tasks.notify_dnssec_disabled.delay(user_domain.id)
+
     return redirect(referrer)
+
 
 @login_required
 def domain_hexdns(request, domain_id):

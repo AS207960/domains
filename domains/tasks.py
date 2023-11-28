@@ -5,9 +5,12 @@ from django.shortcuts import reverse
 from . import models, zone_info, apps
 from .views import billing, gchat_bot, emails
 import grpc
+import pika
 import typing
 import google.protobuf.wrappers_pb2
 
+
+pika_parameters = pika.URLParameters(settings.RABBITMQ_RPC_URL)
 logger = get_task_logger(__name__)
 
 
@@ -1088,3 +1091,37 @@ def process_domain_locking_failed(domain_id):
     domain_obj.save()
 
     emails.mail_lock_failed.delay(domain_obj.id)
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def notify_dnssec_disabled(domain_id):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    pika_connection = pika.BlockingConnection(parameters=pika_parameters)
+    pika_channel = pika_connection.channel()
+    pika_channel.basic_publish(
+        exchange='',
+        routing_key='hexdns_disable_dnssec',
+        body=domain_obj.domain.encode()
+    )
+    pika_connection.close()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def notify_dnssec_enabled(domain_id):
+    domain_obj = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    pika_connection = pika.BlockingConnection(parameters=pika_parameters)
+    pika_channel = pika_connection.channel()
+    pika_channel.basic_publish(
+        exchange='',
+        routing_key='hexdns_enable_dnssec',
+        body=domain_obj.domain.encode()
+    )
+    pika_connection.close()
