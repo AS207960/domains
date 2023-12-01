@@ -96,7 +96,7 @@ class Command(BaseCommand):
             domain_info, sld = zone_info.get_domain_info(domain.domain) # type: zone_info.DomainInfo, str
 
             if not domain_info:
-                print(f"Can't renew {domain.domain}: unknown zone")
+                print(f"Can't renew {domain.domain}: unknown zone", flush=True)
                 continue
 
             try:
@@ -104,17 +104,17 @@ class Command(BaseCommand):
                     domain.domain, registry_id=domain.registry_id
                 )
             except grpc.RpcError as rpc_error:
-                print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
+                print(f"Can't get data for {domain.domain}: {rpc_error.details()}", flush=True)
                 continue
 
             if domain_available:
-                print(f"{domain.domain} is available for registration, marking as deleted")
+                print(f"{domain.domain} is available for registration, marking as deleted", flush=True)
                 domain.former_domain = True
                 domain.save()
                 continue
 
             if domain.not_required:
-                print(f"{domain.domain} is not required, skipping")
+                print(f"{domain.domain} is not required, skipping", flush=True)
                 continue
 
             try:
@@ -122,17 +122,17 @@ class Command(BaseCommand):
                     domain.domain, registry_id=domain.registry_id
                 )
             except grpc.RpcError as rpc_error:
-                print(f"Can't get data for {domain.domain}: {rpc_error.details()}")
+                print(f"Can't get data for {domain.domain}: {rpc_error.details()}", flush=True)
                 continue
 
             if apps.epp_api.domain_common_pb2.PendingDelete in domain_data.statuses or \
                apps.epp_api.rgp_pb2.RedemptionPeriod in domain_data.rgp_state or \
                apps.epp_api.rgp_pb2.PendingDelete in domain_data.rgp_state:
-                print(f"{domain_data.name} is already pending delete, not touching")
+                print(f"{domain_data.name} is already pending delete, not touching", flush=True)
                 continue
 
             if not (domain_data.expiry_date or domain_data.paid_until_date):
-                print(f"{domain_data.name} has no expiry date, not touching")
+                print(f"{domain_data.name} has no expiry date, not touching", flush=True)
                 continue
 
             user = domain.get_user()
@@ -147,10 +147,10 @@ class Command(BaseCommand):
                 "domain": domain_data,
                 "expiry_date": expiry_date
             }
-            print(f"{domain_data.name} expiring on {expiry_date}")
+            print(f"{domain_data.name} expiring on {expiry_date}", flush=True)
 
             if (expiry_date - RENEW_INTERVAL) <= now:
-                print(f"{domain_data.name} expiring soon, renewing")
+                print(f"{domain_data.name} expiring soon, renewing", flush=True)
                 renewal_period = domain_info.pricing.periods[0]
 
                 try:
@@ -159,11 +159,11 @@ class Command(BaseCommand):
                         unit=renewal_period.unit, value=renewal_period.value
                     ).amount
                 except grpc.RpcError as rpc_error:
-                    print(f"Can't get renewal price for {domain.domain}: {rpc_error.details()}")
+                    print(f"Can't get renewal price for {domain.domain}: {rpc_error.details()}", flush=True)
                     continue
 
                 if not renewal_price:
-                    print(f"No renewal price available for {domain.domain}")
+                    print(f"No renewal price available for {domain.domain}", flush=True)
                     continue
 
                 if (expiry_date - FAIL_INTERVAL) <= now:
@@ -172,18 +172,18 @@ class Command(BaseCommand):
                             .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
                         if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
                                 last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                            print(f"{domain_data.name} expiring soon, renewal already succeeded")
+                            print(f"{domain_data.name} expiring soon, renewal already succeeded", flush=True)
                             continue
                         last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True)\
                             .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
                         if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
                                 last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
-                            print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded")
+                            print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded", flush=True)
                             continue
 
-                        print(f"Deleting {domain.domain} due to billing failure")
+                        print(f"Deleting {domain.domain} due to billing failure", flush=True)
                         if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                            print(f"Reversing charge just to be sure")
+                            print(f"Reversing charge just to be sure", flush=True)
                             billing.reverse_charge(last_renew_order.id)
 
                             try:
@@ -198,7 +198,7 @@ class Command(BaseCommand):
                                         registry_id=domain.registry_id
                                     )
                             except grpc.RpcError as rpc_error:
-                                print(f"Failed to delete {domain.domain}: {rpc_error.details()}")
+                                print(f"Failed to delete {domain.domain}: {rpc_error.details()}", flush=True)
                                 billing.charge_account(
                                     user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
                                     f"dm_auto_renew_{domain.id}", can_reject=False
@@ -206,18 +206,18 @@ class Command(BaseCommand):
                                 continue
                         domain.former_domain = True
                         domain.save()
-                        print(f"Deleted {domain.domain}")
+                        print(f"Deleted {domain.domain}", flush=True)
                         insert_into_dict(deleted, user, email_data)
                     else:
-                        print(f"{domain.domain} expired, sending reminder")
+                        print(f"{domain.domain} expired, sending reminder", flush=True)
                         insert_into_dict(expired, user, email_data)
 
                 else:
                     if (domain.last_billed + RENEW_INTERVAL) >= now:
-                        print(f"{domain_data.name} expiring soon, renewal already charged")
+                        print(f"{domain_data.name} expiring soon, renewal already charged", flush=True)
                         continue
 
-                    print(f"{domain_data.name} expiring soon, renewing for {renewal_price:.2f} GBP")
+                    print(f"{domain_data.name} expiring soon, renewing for {renewal_price:.2f} GBP", flush=True)
                     order = models.DomainAutomaticRenewOrder(
                         domain=domain.domain,
                         domain_obj=domain,
@@ -245,13 +245,13 @@ class Command(BaseCommand):
 
             elif (expiry_date - NOTIFY_INTERVAL) <= now:
                 if domain.last_renew_notify + NOTIFY_INTERVAL > now:
-                    print(f"{domain_data.name} expiring soon, already notified")
+                    print(f"{domain_data.name} expiring soon, already notified", flush=True)
                     continue
 
-                print(f"{domain_data.name} expiring soon, notifying owner")
+                print(f"{domain_data.name} expiring soon, notifying owner", flush=True)
                 insert_into_dict(notifications, user, email_data)
             else:
-                print(f"Not doing anything with {domain_data.name}")
+                print(f"Not doing anything with {domain_data.name}", flush=True)
 
         for user, domains in notifications.items():
             mail_upcoming(user, domains)
@@ -269,7 +269,7 @@ class Command(BaseCommand):
             domain_info, sld = zone_info.get_domain_info(domain.domain)
 
             if not domain_info:
-                print(f"Can't check RGP on {domain.domain}: unknown zone")
+                print(f"Can't check RGP on {domain.domain}: unknown zone", flush=True)
                 continue
 
             if domain.deleted_date and domain_info.redemption_period:
