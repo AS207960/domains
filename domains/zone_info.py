@@ -3667,6 +3667,11 @@ else:
             MarkupPrice(3107, transfer=3107, restore=2600, currency=None, display_currency='EUR', tld='it',
                         markup=decimal.Decimal("1.3"))
         )),
+        ('ing', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2457, transfer=2457, restore=14000, currency=None, display_currency='USD', tld='ing',
+                        markup=decimal.Decimal("1.4"))
+        )),
     )
 
 
