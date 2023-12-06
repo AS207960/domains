@@ -1747,11 +1747,6 @@ else:
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='systems',
                         markup=decimal.Decimal("1.3"))
         )),
-        ('guide', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(5252, transfer=5252, restore=12960, currency=None, display_currency='USD', tld='guide',
-                        markup=decimal.Decimal("1.2"))
-        )),
         ('email', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='email',
