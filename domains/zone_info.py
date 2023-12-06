@@ -1727,11 +1727,6 @@ else:
             MarkupPrice(3069, transfer=3069, restore=15120, currency=None, display_currency='USD', tld='pro',
                         markup=decimal.Decimal("1.4"))
         )),
-        ('life', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='life',
-                        markup=decimal.Decimal("1.2"))
-        )),
         ('business', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
             MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='business',
