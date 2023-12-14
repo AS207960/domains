@@ -3662,6 +3662,11 @@ else:
             MarkupPrice(2457, transfer=2457, restore=14000, currency=None, display_currency='USD', tld='ing',
                         markup=decimal.Decimal("1.4"))
         )),
+        ('frl', DomainInfo(
+            DomainInfo.REGISTRY_CENTRALNIC,
+            MarkupPrice(5160, transfer=5160, restore=18000, currency=None, display_currency='EUR', tld='frl',
+                        markup=decimal.Decimal("1.2"))
+        )),
     )
 
 
