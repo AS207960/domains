@@ -291,7 +291,7 @@ def domain(request, domain_id):
         if domain_data.tech and domain_info.tech_supported:
             tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user, domain_info)
             tech_contact_form.set_cur_id(cur_id=domain_data.tech.contact_id, registry_id=domain_data.registry_name)
-        elif user_domain.admin_contact:
+        elif user_domain.tech_contact:
             tech = user_domain.tech_contact
             tech_contact_form.fields['contact'].value = user_domain.tech_contact.id
 
