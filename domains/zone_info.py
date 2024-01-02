@@ -957,6 +957,7 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_SIDN,
+            self.REGISTRY_CORE,
         )
 
     @property
