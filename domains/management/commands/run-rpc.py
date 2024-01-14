@@ -63,6 +63,9 @@ class Command(BaseCommand):
             return
         last_error = msg.last_error.value if msg.HasField("last_error") else None
 
+        if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
+            return
+
         if msg.state == domains.proto.billing_pb2.FAILED:
             order.state = order.STATE_FAILED
             order.last_error = last_error
@@ -78,6 +81,8 @@ class Command(BaseCommand):
                 domains.proto.billing_pb2.PENDING,
                 domains.proto.billing_pb2.PROCESSING
         ):
+            if msg.state == order.STATE_PROCESSING:
+                return
             order.state = order.STATE_NEEDS_PAYMENT
             order.redirect_url = msg.redirect_url
             order.save()
