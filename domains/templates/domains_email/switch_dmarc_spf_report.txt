@@ -1,7 +1,8 @@
 {% extends "domains_email/email_base.txt" %}
 {% block content %}
 We have received a report from SWITCH concerning invalid DMARC or SPF records for the domain {{ domain.domain }}.
-The details of the report are below. The report was generated on {{ error_date }}.
+The details of the report are below, and more information can be found at: {{ report_url }}
+The report was generated on {{ error_date }}.
 
 {% if dmarc_status %}DMARC{% if dmarc_status.no_measurement_data %}
 - No measurement data (NXDOMAIN, SERVFAIL, timeout, etc){% endif %}{% if dmarc_status.no_dmarc_record %}

@@ -89,8 +89,9 @@ class Command(BaseCommand):
                 continue
 
             error_date = datetime.date.fromisoformat(line["Error date"])
-            dmarc_code = DMARCFlags.from_code(int(line["DMARC SC"])) if line["DMARC SC"] else None
-            spf_code = SPFFlags.from_code(int(line["SPF SC"])) if line["SPF SC"] else None
+            dmarc_code = DMARCFlags.from_code(int(line["DMARC SC"])) if line.get("DMARC SC") else None
+            spf_code = SPFFlags.from_code(int(line["SPF SC"])) if line.get("SPF SC") else None
+            report_url = line["Report URL"] if line.get("Report URL") else None
 
             if dmarc_code or spf_code:
                 user = domain_obj.get_user()
@@ -100,6 +101,7 @@ class Command(BaseCommand):
                     "error_date": error_date,
                     "dmarc_status": dmarc_code,
                     "spf_status": spf_code,
+                    "report_url": report_url,
                     "subject": "DMARC/SPF error report"
                 }
                 html_content = render_to_string("domains_email/switch_dmarc_spf_report.html", context)
