@@ -42,7 +42,7 @@
         {% if spf_status.more_than_one_spf_record %}<li>More than one SPF record.</li>{% endif %}
         {% if spf_status.prohibited_all_qualifier %}
             <li>
-                The SPF record (primary or aGer redirect) terminates with an (implied) 'all'
+                The SPF record (primary or redirect) terminates with an (implied) 'all'
                 basic mechanism and (implied) '+' or '?' qualifier.
             </li>
         {% endif %}

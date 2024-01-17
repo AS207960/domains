@@ -19,7 +19,7 @@ The report was generated on {{ error_date }}.
 - TXT data exists on the @ label but none of the TXT records starts with v=spf1.{% endif %}{% if spf_status.syntax_error %}
 - Syntax error.{% endif %}{% if spf_status.more_than_one_spf_record %}
 - More than one SPF record.{% endif %}{% if spf_status.prohibited_all_qualifier %}
-- The SPF record (primary or aGer redirect) terminates with an (implied) 'all'  basic mechanism and (implied) '+' or '?' qualifier.{% endif %}{% if spf_status.ipv4_prefix_too_large %}
+- The SPF record (primary or redirect) terminates with an (implied) 'all'  basic mechanism and (implied) '+' or '?' qualifier.{% endif %}{% if spf_status.ipv4_prefix_too_large %}
 - The SPF record (or its expansion) has (at least one) ip4 designated sender mechanism that has too broad of a prefix (< /14).{% endif %}{% if spf_status.ipv6_prefix_too_large %}
 - The SPF record (or its expansion) has (at least one) ip6 designated sender mechanism that has too broad of a prefix (< /32).{% endif %}{% if spf_status.too_many_dns_lookups %}
 - 10 DNS lookups exceeded (see RFC 7208 section 4.6.4).{% endif %}{% if spf_status.too_many_void_lookups %}

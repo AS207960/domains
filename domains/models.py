@@ -348,7 +348,7 @@ class Contact(models.Model):
                 contact=self, registry_id=registry_id,
             )
             if is_eurid and role:
-                contacts_registry = contacts_registry.filter(role=str(role))
+                contacts_registry = contacts_registry.filter(role=str(role.value))
             contact_registry = contacts_registry.first()   # type: ContactRegistry
             if contact_registry:
                 if is_isnic or is_eurid:
@@ -409,7 +409,7 @@ class Contact(models.Model):
                 registry_contact_id=contact_id,
                 auth_info=auth_info,
                 registry=zone_data.registry if zone_data else None,
-                role=str(role) if role else None,
+                role=str(role.value) if role else None,
             )
             contact_registry.save()
 
@@ -527,7 +527,7 @@ class Contact(models.Model):
                 registry_id=registry_id,
                 auth_info=registry_contact.auth_info,
                 registry=zone_data.registry if zone_data else None,
-                role=str(registry_contact.eurid.contact_type) if registry_contact.eurid else None,
+                role=str(registry_contact.eurid.contact_type.value) if registry_contact.eurid else None,
             ).save()
 
         return contact
