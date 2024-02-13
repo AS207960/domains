@@ -1375,22 +1375,39 @@ def domain_register(request, domain_name):
                     "back_url": referrer
                 })
 
-            order = models.DomainRegistrationOrder(
-                domain=domain_name,
-                period_unit=period.unit,
-                period_value=period.value,
-                registrant_contact=registrant,
-                admin_contact=admin_contact,
-                billing_contact=billing_contact,
-                tech_contact=tech_contact,
-                user=request.user,
-                price=billing_value,
-                auth_info=models.make_secret(),
-                off_session=False,
-            )
-            order.save()
-            tasks.process_domain_registration.delay(order.id)
-            return redirect('domain_register_confirm', order.id)
+
+            registration_order = models.DomainRegistrationOrder.get_object_list(access_token) \
+                                   .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                                   .filter(domain=domain_name).first()
+
+            if registration_order:
+                registration_order.period_unit = period.unit
+                registration_order.period_value = period.value
+                registration_order.registrant_contact = registrant
+                registration_order.admin_contact = admin_contact
+                registration_order.billing_contact = billing_contact
+                registration_order.tech_contact = tech_contact
+                registration_order.price = billing_value
+                registration_order.off_session = False
+                registration_order.save()
+            else:
+                registration_order = models.DomainRegistrationOrder(
+                    domain=domain_name,
+                    period_unit=period.unit,
+                    period_value=period.value,
+                    registrant_contact=registrant,
+                    admin_contact=admin_contact,
+                    billing_contact=billing_contact,
+                    tech_contact=tech_contact,
+                    user=request.user,
+                    price=billing_value,
+                    auth_info=models.make_secret(),
+                    off_session=False,
+                )
+                registration_order.save()
+
+            tasks.process_domain_registration.delay(registration_order.id)
+            return redirect('domain_register_confirm', registration_order.id)
     else:
         form = forms.DomainRegisterForm(
             zone=zone,
@@ -1990,21 +2007,36 @@ def domain_transfer(request, domain_name):
             tech_contact = form.cleaned_data['tech']  # type: models.Contact
             billing_contact = form.cleaned_data['billing']  # type: models.Contact
 
-            order = models.DomainTransferOrder(
-                domain=domain_name,
-                auth_code=form.cleaned_data['auth_code'] if zone.auth_code_for_transfer else "N/A",
-                registrant_contact=registrant,
-                admin_contact=admin_contact,
-                billing_contact=billing_contact,
-                tech_contact=tech_contact,
-                price=billing_value.amount,
-                user=request.user,
-                off_session=False,
-            )
-            order.save()
-            tasks.process_domain_transfer.delay(order.id)
+            transfer_order = models.DomainTransferOrder.get_object_list(access_token) \
+                                .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                                .filter(domain=domain_name).first()
 
-            return redirect('domain_transfer_confirm', order.id)
+            if transfer_order:
+                transfer_order.auth_code = form.cleaned_data['auth_code'] if zone.auth_code_for_transfer else "N/A"
+                transfer_order.registrant_contact = registrant
+                transfer_order.admin_contact = admin_contact
+                transfer_order.billing_contact = billing_contact
+                transfer_order.tech_contact = tech_contact
+                transfer_order.price = billing_value.amount
+                transfer_order.off_session = False
+                transfer_order.save()
+            else:
+                transfer_order = models.DomainTransferOrder(
+                    domain=domain_name,
+                    auth_code=form.cleaned_data['auth_code'] if zone.auth_code_for_transfer else "N/A",
+                    registrant_contact=registrant,
+                    admin_contact=admin_contact,
+                    billing_contact=billing_contact,
+                    tech_contact=tech_contact,
+                    price=billing_value.amount,
+                    user=request.user,
+                    off_session=False,
+                )
+                transfer_order.save()
+
+            tasks.process_domain_transfer.delay(transfer_order.id)
+
+            return redirect('domain_transfer_confirm', transfer_order.id)
     else:
         form = forms.DomainTransferForm(zone=zone, user=request.user)
         if "new_contact" in request.session:

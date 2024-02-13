@@ -1,6 +1,6 @@
 {% extends "domains_email/email_base.txt" %}
 {% block content %}
-The following domains are expiring soon.
+The following domains are expiring in the next 60 days.
 No further action is required on your part, and we'll renew them 30 days before the expiry date.
 If the renewal has not succeeded by 3 days before the expiry date these domains will be revoked.
 
