@@ -28,10 +28,10 @@ def send_email(user, data: dict):
         "template_id": settings.LISTMONK_TEMPLATE_ID,
         "from_email": settings.DEFAULT_FROM_EMAIL,
         "data": data,
-        "headers": {
+        "headers": [{
             "Reply-To": "Glauca Support <hello@glauca.digital>",
             "Bcc": "email-log@as207960.net"
-        }
+        }]
     }
     request["data"]["service"] = "Domains by Glauca"
 
