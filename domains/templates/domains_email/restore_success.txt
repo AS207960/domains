@@ -1,4 +1,0 @@
-{% extends "domains_email/email_base.txt" %}
-{% block content %}
-Your order for the restoration of the domain {{ domain }} has succeeded.
-{% endblock content }

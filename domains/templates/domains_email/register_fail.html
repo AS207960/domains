@@ -1,17 +1,14 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
+<p>
+    Your order for the registration of the domain {{ domain }} has unfortunately failed.<br/>
+    The value of this registration has been refunded to your account with us.
+</p>
+{% if reason %}
     <p>
-        Your order for the registration of the domain {{ domain }} has unfortunately failed.<br/>
-        The value of this registration has been refunded to your account with us.
+        The reason for this failure was: {{ reason }}
     </p>
-    {% if reason %}
-        <p>
-            The reason for this failure was: {{ reason }}
-        </p>
-    {% else %}
-        <p>
-            We don't currently have a known reason for this failure. We'll be in touch soon with further
-            details.
-        </p>
-    {% endif %}
-{% endblock %}
+{% else %}
+    <p>
+        We don't currently have a known reason for this failure. We'll be in touch soon with further
+        details.
+    </p>
+{% endif %}

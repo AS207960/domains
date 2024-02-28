@@ -1,19 +1,16 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
-    <p>
-        A request has been received to transfer our domain {{ domain }} away from us.<br/>
-        If you do nothing this will be automatically approved by the registry in about 5 working days.<br/>
-        If you'd like to speed things up, or explicitly reject this transfer you can use the below buttons.
-    </p>
-    <a href="{{ transfer_approve_url }}"
-       style="color: #fff;background-color: #308959;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
-        Approve transfer
-    </a>
-    <a href="{{ transfer_reject_url }}"
-       style="color: #fff;background-color: #E53E3E;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
-        Reject transfer
-    </a>
-    <p>
-        If you didn't request this please reject this request and contact us urgently by replying to this email.
-    </p>
-{% endblock %}
+<p>
+    A request has been received to transfer our domain {{ domain }} away from us.<br/>
+    If you do nothing this will be automatically approved by the registry in about 5 working days.<br/>
+    If you'd like to speed things up, or explicitly reject this transfer you can use the below buttons.
+</p>
+<a href="{{ transfer_approve_url }}"
+   style="color: #fff;background-color: #308959;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
+    Approve transfer
+</a>
+<a href="{{ transfer_reject_url }}"
+   style="color: #fff;background-color: #E53E3E;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.5rem 1rem;font-size: 1.25rem;line-height: 1.5;margin-top: 15px;">
+    Reject transfer
+</a>
+<p>
+    If you didn't request this please reject this request and contact us urgently by replying to this email.
+</p>

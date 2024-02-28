@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 import dns.query
 import dns.resolver
@@ -13,6 +12,7 @@ import base64
 import grpc
 import socket
 from domains import models, zone_info, apps
+from domains.views import emails
 
 
 resolver_addr = socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0]
@@ -22,45 +22,24 @@ resolver.port = settings.RESOLVER_PORT
 
 
 def mail_update(user, domain, add_cds, rem_cds, is_ds):
-    context = {
-        "name": user.first_name,
-        "domain": domain,
-        "add_cds": add_cds,
-        "rem_cds": rem_cds,
-        "is_ds": is_ds,
-        "subject": "Domain CDS update"
-    }
-    html_content = render_to_string("domains_email/cds_update.html", context)
-    txt_content = render_to_string("domains_email/cds_update.txt", context)
-
-    email = EmailMultiAlternatives(
-        subject='Domain CDS update',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    emails.send_email(user, {
+        "subject": "Domain CDS update",
+        "content": render_to_string("domains_email/cds_update.html", {
+            "domain": domain,
+            "add_cds": add_cds,
+            "rem_cds": rem_cds,
+            "is_ds": is_ds,
+        })
+    })
 
 
 def mail_disabled(user, domain):
-    context = {
-        "name": user.first_name,
-        "domain": domain,
-    }
-    html_content = render_to_string("domains_email/cds_disable.html", context)
-    txt_content = render_to_string("domains_email/cds_disable.html", context)
-
-    email = EmailMultiAlternatives(
-        subject='Domain DNSSEC disabled',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
+    emails.send_email(user, {
+        "subject": "Domain CDS disabled",
+        "content": render_to_string("domains_email/cds_disable.html", {
+            "domain": domain,
+        })
+    })
 
 
 class Command(BaseCommand):

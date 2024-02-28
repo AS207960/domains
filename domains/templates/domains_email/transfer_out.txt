@@ -1,9 +1,0 @@
-{% extends "domains_email/email_base.txt" %}
-{% block content %}
-Your domain {{ domain }} has been transferred away from us.
-We're sorry to see you leave. If you'd like to, please give us some feedback using the bellow links.
-We will no longer charge you for the domain renewal and you can no longer manage the domain through us.
-You will have deal with your new registrar to manage your domain.
-
-If you didn't request this please contact us urgently by replying to this email.
-{% endblock content %}

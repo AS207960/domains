@@ -1,24 +1,21 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
-    <table style="border-spacing: 0;width:100%;">
-        <tr>
-            <td>
-                <p>
-                    We tried to renew {{ domain }} as it is expiring soon.
-                    Unfortunately the payment couldn't go through.
-                    Please manually renew your domain from the domain control panel.
-                </p>
-                <p>
-                    The reason for this failure was: {{ error }}
-                </p>
-                <p>
-                    If the domain isn't renewed by 3 days before the expiry date,
-                    then our shark minions will shed a tear as they delete your domain.
-                </p>
-            </td>
-            <td>
-                <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
-            </td>
-        </tr>
-    </table>
-{% endblock %}
+<table style="border-spacing: 0;width:100%;">
+    <tr>
+        <td>
+            <p>
+                We tried to renew {{ domain }} as it is expiring soon.
+                Unfortunately the payment couldn't go through.
+                Please manually renew your domain from the domain control panel.
+            </p>
+            <p>
+                The reason for this failure was: {{ error }}
+            </p>
+            <p>
+                If the domain isn't renewed by 3 days before the expiry date,
+                then our shark minions will shed a tear as they delete your domain.
+            </p>
+        </td>
+        <td>
+            <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+        </td>
+    </tr>
+</table>

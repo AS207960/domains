@@ -1,4 +1,4 @@
-Django==4.2.*
+Django==5.0.*
 #git+https://github.com/TheEnbyperor/django-keycloak-auth@d0c11a4a5dec5dfc7730256b011bc86260dda5cf
 sentry-sdk
 psycopg2-binary
@@ -23,10 +23,10 @@ idna
 pyjwt
 cryptography
 dnspython
-django-cockroachdb==4.2.*
+django-cockroachdb==5.0.*
 pika
 py-webauthn>=0.0.4
-git+https://github.com/AS207960/python-utils@94658686743f1f2ba2dad9960c2b1c8c7ad967af
+git+https://github.com/AS207960/python-utils@da5df1c1b526b678891d19a2dbf77e299e50ede0
 git+https://github.com/TheEnbyperor/oscrypto@204225cd0bc11420bb7038ad956b736eb9a79977
 mypy-protobuf
 base32-crockford

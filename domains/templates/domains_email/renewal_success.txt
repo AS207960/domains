@@ -1,6 +1,0 @@
-{% extends "domains_email/email_base.txt" %}
-{% block content %}
-{{ domain }} has been successfully renewed.
-No further action is required on your part.
-Your account has been charged accordingly for a renewal.
-{% endblock content %}

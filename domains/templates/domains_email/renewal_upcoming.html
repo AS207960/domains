@@ -1,22 +1,19 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
-    <table style="border-spacing: 0;width:100%;">
-        <tr>
-            <td style="padding-right: 10px;">
-                <img src="https://as207960.net/assets/img/shark-curl.png" height="100" alt=""/>
-            </td>
-            <td>
-                <p>
-                    The following domains are expiring in the next 60 days.
-                    No further action is required on your part, and we'll renew them 30 days before the expiry date.
-                    If the renewal has not succeeded by 3 days before the expiry date these domains will be revoked.
-                </p>
-                <ul>
-                    {% for domain in domains %}
-                        <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }})</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-    </table>
-{% endblock %}
+<table style="border-spacing: 0;width:100%;">
+    <tr>
+        <td style="padding-right: 10px;">
+            <img src="https://as207960.net/assets/img/shark-curl.png" height="100" alt=""/>
+        </td>
+        <td>
+            <p>
+                The following domains are expiring in the next 60 days.
+                No further action is required on your part, and we'll renew them 30 days before the expiry date.
+                If the renewal has not succeeded by 3 days before the expiry date these domains will be revoked.
+            </p>
+            <ul>
+                {% for domain in domains %}
+                    <li>{{ domain.domain.name }} (expiring: {{ domain.expiry_date }})</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+</table>

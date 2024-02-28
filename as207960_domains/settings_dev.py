@@ -214,6 +214,9 @@ EURID_PROXY_CONTACT = "c41743909"
 SWITCH_REGISTRAR_ID = switch_conf["id"]
 SWITCH_REGISTRAR_PASSWORD = switch_conf["password"]
 
+LISTMONK_TEMPLATE_ID = 3
+LISTMONK_URL = "https://listmonk.as207960.net"
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

@@ -1,6 +1,0 @@
-{% extends "domains_email/email_base.txt" %}
-{% block content %}
-Your order for the transfer of the domain {{ domain }} to us has succeeded.
-Thank you for choosing to register with us!
-You can now manage the domain from the domains control panel.
-{% endblock content %}

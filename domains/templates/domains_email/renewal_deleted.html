@@ -1,13 +1,10 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
-    <p>
-        We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account
-        for them. This was our last attempt and unfortunately your domains have now been deleted. They'll be available
-        to buy again in about 30 days (depending on registry policy).
-    </p>
-    <ul>
-        {% for domain in domains %}
-            <li>{{ domain.domain.name }}; reason for failure: {{ domain.error }}</li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+<p>
+    We tried to renew following domains as they are expiring soon. Unfortunately we failed to charge your account
+    for them. This was our last attempt and unfortunately your domains have now been deleted. They'll be available
+    to buy again in about 30 days (depending on registry policy).
+</p>
+<ul>
+    {% for domain in domains %}
+        <li>{{ domain.domain.name }}; reason for failure: {{ domain.error }}</li>
+    {% endfor %}
+</ul>

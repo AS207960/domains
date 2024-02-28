@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from domains.views import emails
 import requests
 import csv
 import datetime
@@ -95,24 +95,14 @@ class Command(BaseCommand):
 
             if dmarc_code or spf_code:
                 user = domain_obj.get_user()
-                context = {
-                    "name": user.first_name,
-                    "domain": domain_obj,
-                    "error_date": error_date,
-                    "dmarc_status": dmarc_code,
-                    "spf_status": spf_code,
-                    "report_url": report_url,
-                    "subject": "DMARC/SPF error report"
-                }
-                html_content = render_to_string("domains_email/switch_dmarc_spf_report.html", context)
-                txt_content = render_to_string("domains_email/switch_dmarc_spf_report.txt", context)
-
-                email = EmailMultiAlternatives(
-                    subject='DMARC/SPF error report',
-                    body=txt_content,
-                    to=[user.email],
-                    bcc=['email-log@as207960.net'],
-                    reply_to=['Glauca Support <hello@glauca.digital>']
-                )
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+                if user:
+                    emails.send_email(user, {
+                        "subject": "DMARC/SPF error report",
+                        "content": render_to_string("domains_email/switch_dmarc_spf_report.html", {
+                            "domain": domain_obj,
+                            "error_date": error_date,
+                            "dmarc_status": dmarc_code,
+                            "spf_status": spf_code,
+                            "report_url": report_url,
+                        })
+                    })

@@ -1,8 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import reverse
-from django.conf import settings
 from django.utils import timezone
 import datetime
 import grpc
@@ -12,66 +9,6 @@ from domains.views import billing, emails
 NOTIFY_INTERVAL = datetime.timedelta(days=60)
 RENEW_INTERVAL = datetime.timedelta(days=30)
 FAIL_INTERVAL = datetime.timedelta(days=3)
-
-
-def mail_upcoming(user, domains):
-    context = {
-        "name": user.first_name,
-        "domains": domains,
-        "subject": "Upcoming domain renewals"
-    }
-    html_content = render_to_string("domains_email/renewal_upcoming.html", context)
-    txt_content = render_to_string("domains_email/renewal_upcoming.txt", context)
-
-    email = EmailMultiAlternatives(
-        subject='Upcoming domain renewals',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
-def mail_deleted(user, domains):
-    context = {
-        "name": user.first_name,
-        "domains": domains,
-        "subject": "Domain renewal failed - domains deleted"
-    }
-    html_content = render_to_string("domains_email/renewal_deleted.html", context)
-    txt_content = render_to_string("domains_email/renewal_deleted.txt", context)
-
-    email = EmailMultiAlternatives(
-        subject='Domain renewal failed - domains deleted',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
-def mail_expired(user, domains):
-    context = {
-        "name": user.first_name,
-        "domains": domains,
-        "subject": "Your domain has expired"
-    }
-    html_content = render_to_string("domains_email/renewal_expired.html", context)
-    txt_content = render_to_string("domains_email/renewal_expired.txt", context)
-
-    email = EmailMultiAlternatives(
-        subject='Your domain has expired',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
 
 
 class Command(BaseCommand):
@@ -254,16 +191,32 @@ class Command(BaseCommand):
                 print(f"Not doing anything with {domain_data.name}", flush=True)
 
         for user, domains in notifications.items():
-            mail_upcoming(user, domains)
+            emails.send_email(user, {
+                "subject": "Upcoming domain renewals",
+                "content": render_to_string("domains_email/renewal_upcoming.html", {
+                    "domains": domains,
+                })
+            })
+
             for domain in domains:
                 domain["obj"].last_renew_notify = now
                 domain["obj"].save()
 
         for user, domains in deleted.items():
-            mail_deleted(user, domains)
+            emails.send_email(user, {
+                "subject": "Domain renewal failed - domains deleted",
+                "content": render_to_string("domains_email/renewal_deleted.html", {
+                    "domains": domains,
+                })
+            })
 
         for user, domains in expired.items():
-            mail_expired(user, domains)
+            emails.send_email(user, {
+                "subject": "Your domain has expired",
+                "content": render_to_string("domains_email/renewal_expired.html", {
+                    "domains": domains,
+                })
+            })
 
         for domain in deleted_domains:
             domain_info, sld = zone_info.get_domain_info(domain.domain)

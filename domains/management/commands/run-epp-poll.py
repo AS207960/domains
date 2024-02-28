@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from domains import apps, models
 from django.conf import settings
 from django.shortcuts import reverse
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import threading
 import domains.epp_api.epp_grpc.epp_pb2
@@ -12,7 +11,10 @@ import queue
 import time
 import grpc
 import traceback
+import django_keycloak_auth.clients
+import requests
 import json
+from domains.views import emails
 
 
 class PollClient:
@@ -92,29 +94,6 @@ class PollClient:
     def registry_name(self):
         return self._registry_name
 
-
-def mail_domain_change_poll(domain: models.DomainRegistration):
-    user = domain.get_user()
-    domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.id,))
-    context = {
-        "name": user.first_name,
-        "domain": domain.unicode_domain,
-        "domain_url": domain_url,
-    }
-    html_content = render_to_string("domains_email/register_success.html", context)
-    txt_content = render_to_string("domains_email/register_success.txt", context)
-
-    email = EmailMultiAlternatives(
-        subject='Domain updated by registry',
-        body=txt_content,
-        to=[user.email],
-        bcc=['email-log@as207960.net'],
-        reply_to=['Glauca Support <hello@glauca.digital>']
-    )
-    email.attach_alternative(html_content, "text/html")
-    email.send()
-
-
 class Command(BaseCommand):
     help = 'Runs long running EPP poll commands and handles responses'
 
@@ -145,22 +124,42 @@ class Command(BaseCommand):
         m_data = google.protobuf.json_format.MessageToDict(m, including_default_value_fields=True)
         json_data = json.dumps(m_data, indent=4, sort_keys=True)
 
-        e_msg = EmailMultiAlternatives(
-            subject=f"EPP Poll Notification - {client.registry_name}",
-            body=json_data,
-            to=["noc@as207960.net"]
+        access_token = django_keycloak_auth.clients.get_access_token()
+        r = requests.post(
+            f"{settings.LISTMONK_URL}/api/tx",
+            json={
+                "subscriber_email": "noc@as207960.net",
+                "template_id": settings.LISTMONK_TEMPLATE_ID,
+                "from_email": settings.DEFAULT_FROM_EMAIL,
+                "data": {
+                    "subject": f"EPP Poll Notification - {client.registry_name}",
+                    "content": f"<p><pre>{json_data}</pre></p>"
+                }
+            },
+            headers={
+                "Authorization": f"Bearer {access_token}"
+            }
         )
-        e_msg.send()
-
-        client.ack(m.msg_id)
+        r.raise_for_status()
 
     def callback_exc(self, client: PollClient, e):
-        e_msg = EmailMultiAlternatives(
-            subject=f"EPP Poll Exception - {client.registry_name}",
-            body=str(e),
-            to=["noc@as207960.net"]
+        access_token = django_keycloak_auth.clients.get_access_token()
+        r = requests.post(
+            f"{settings.LISTMONK_URL}/api/tx",
+            json={
+                "subscriber_email": "noc@as207960.net",
+                "template_id": settings.LISTMONK_TEMPLATE_ID,
+                "from_email": settings.DEFAULT_FROM_EMAIL,
+                "data": {
+                    "subject": f"EPP Poll Exception - {client.registry_name}",
+                    "content": f"<p><pre>{e}</pre></p>"
+                }
+            },
+            headers={
+                "Authorization": f"Bearer {access_token}"
+            }
         )
-        e_msg.send()
+        r.raise_for_status()
 
     def handle_domain_update(self, m):
         domain = apps.epp_api.Domain.from_pb(m.domain_info, apps.epp_client)
@@ -172,24 +171,15 @@ class Command(BaseCommand):
             return
 
         user = domain_obj.get_user()
-        domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.id,))
-        context = {
-            "name": user.first_name,
-            "domain": domain_obj.unicode_domain,
-            "domain_data": domain,
-            "domain_url": domain_url,
-            "change_data": change_data,
-            "subject": "Domain updated by registry"
-        }
-        html_content = render_to_string("domains_email/registry_update.html", context)
-        txt_content = render_to_string("domains_email/registry_update.txt", context)
+        if user:
+            domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.id,))
 
-        email = EmailMultiAlternatives(
-            subject='Domain updated by registry',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            emails.send_email(user, {
+                "subject": "Domain updated by registry",
+                "content": render_to_string("domains_email/registry_update.html", {
+                    "domain": domain_obj.unicode_domain,
+                    "domain_data": domain,
+                    "domain_url": domain_url,
+                    "change_data": change_data,
+                })
+            })

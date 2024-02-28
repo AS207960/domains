@@ -1,5 +1,4 @@
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import reverse
 from celery import shared_task
 from django.conf import settings
@@ -24,6 +23,33 @@ def get_feedback_url(description: str, reference: str):
     return data["public_url"]
 
 
+def send_email(user, data: dict):
+    request = {
+        "template_id": settings.LISTMONK_TEMPLATE_ID,
+        "from_email": settings.DEFAULT_FROM_EMAIL,
+        "data": data,
+        "headers": {
+            "Reply-To": "Glauca Support <hello@glauca.digital>",
+            "Bcc": "email-log@as207960.net"
+        }
+    }
+    request["data"]["service"] = "Domains by Glauca"
+
+    if user.oidc_profile.id_data and user.oidc_profile.id_data.get("listmonk_user_id"):
+        request["subscriber_id"] = user.oidc_profile.id_data["listmonk_user_id"]
+    else:
+        request["subscriber_email"] = user.email
+
+    access_token = django_keycloak_auth.clients.get_access_token()
+    r = requests.post(
+        f"{settings.LISTMONK_URL}/api/tx",
+        json=request,
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+    )
+    r.raise_for_status()
+
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
@@ -37,26 +63,14 @@ def mail_registered(registration_order_id):
         )
         domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.domain_obj.id,))
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "feedback_url": feedback_url,
-            "domain_url": domain_url,
+        send_email(user, {
             "subject": "Domain registration success",
-        }
-        html_content = render_to_string("domains_email/register_success.html", context)
-        txt_content = render_to_string("domains_email/register_success.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain registration success',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/register_success.html", {
+                "domain": domain.domain,
+                "domain_url": domain_url,
+            })
+        })
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
@@ -70,25 +84,14 @@ def mail_register_failed(registration_order_id, reason: str = None):
             f"{domain.domain} domain registration", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "reason": reason,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain registration failure",
-        }
-        html_content = render_to_string("domains_email/register_fail.html", context)
-        txt_content = render_to_string("domains_email/register_fail.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain registration failure',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/register_fail.html", {
+                "domain": domain.domain,
+                "reason": reason
+            })
+        })
 
 
 @shared_task(
@@ -103,25 +106,14 @@ def mail_transferred(transfer_order_id):
         )
         domain_url = settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain.domain_obj.id,))
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "feedback_url": feedback_url,
-            "domain_url": domain_url,
+        send_email(user, {
             "subject": "Domain transfer success",
-        }
-        html_content = render_to_string("domains_email/transfer_success.html", context)
-        txt_content = render_to_string("domains_email/transfer_success.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain transfer success',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/transfer_success.html", {
+                "domain": domain.domain,
+                "domain_url": domain_url,
+            })
+        })
 
 
 @shared_task(
@@ -135,25 +127,14 @@ def mail_transfer_failed(transfer_order_id, reason: str = None):
             f"{domain.domain} domain transfer", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "reason": reason,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain transfer failure",
-        }
-        html_content = render_to_string("domains_email/transfer_fail.html", context)
-        txt_content = render_to_string("domains_email/transfer_fail.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain transfer failure',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/transfer_fail.html", {
+                "domain": domain.domain,
+                "reason": reason
+            })
+        })
 
 
 @shared_task(
@@ -167,24 +148,13 @@ def mail_restored(restore_order_id):
             f"{domain.domain} domain restoration", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain restore success",
-        }
-        html_content = render_to_string("domains_email/restore_success.html", context)
-        txt_content = render_to_string("domains_email/restore_success.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain restore success',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/restore_success.html", {
+                "domain": domain.domain,
+            })
+        })
 
 
 @shared_task(
@@ -198,26 +168,14 @@ def mail_restore_failed(restore_order_id, reason: str = None):
             f"{domain.domain} domain restoration", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "reason": reason,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain restore failure",
-        }
-        html_content = render_to_string("domains_email/restore_fail.html", context)
-        txt_content = render_to_string("domains_email/restore_fail.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain restore failure',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
-
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/restore_fail.html", {
+                "domain": domain.domain,
+                "reason": reason
+            })
+        })
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
@@ -231,24 +189,13 @@ def mail_transferred_out(domain_id):
             f"{domain.domain} domain transfer out", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain transferred out",
-        }
-        html_content = render_to_string("domains_email/transfer_out.html", context)
-        txt_content = render_to_string("domains_email/transfer_out.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain transferred out',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/transfer_out.html", {
+                "domain": domain.domain,
+            })
+        })
 
 
 @shared_task(
@@ -259,27 +206,16 @@ def mail_transfer_out_request(domain_id):
         .filter(id=domain_id).first()  # type: models.DomainRegistration
     user = domain.get_user()
     if user:
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "transfer_approve_url":
-                settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "approve")),
-            "transfer_reject_url":
-                settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "reject")),
+        send_email(user, {
             "subject": "Domain transfer request",
-        }
-        html_content = render_to_string("domains_email/transfer_out_request.html", context)
-        txt_content = render_to_string("domains_email/transfer_out_request.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject='Domain transfer request',
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "content": render_to_string("domains_email/transfer_out_request.html", {
+                "domain": domain.domain,
+                "transfer_approve_url":
+                    settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "approve")),
+                "transfer_reject_url":
+                    settings.EXTERNAL_URL_BASE + reverse('domain_transfer_out', args=(domain.id, "reject")),
+            })
+        })
 
 
 @shared_task(
@@ -291,24 +227,13 @@ def mail_auto_renew_redirect(order_id):
     if order.domain_obj:
         user = order.domain_obj.get_user()
         if user:
-            context = {
-                "name": user.first_name,
-                "domain": order.unicode_domain,
+            send_email(user, {
                 "subject": f"{order.unicode_domain} renewal - payment required",
-                "redirect_url": order.redirect_uri
-            }
-            html_content = render_to_string("domains_email/renewal_redirect.html", context)
-            txt_content = render_to_string("domains_email/renewal_redirect.txt", context)
-
-            email = EmailMultiAlternatives(
-                subject=f"{order.unicode_domain} renewal - payment required",
-                body=txt_content,
-                to=[user.email],
-                bcc=['email-log@as207960.net'],
-                reply_to=['Glauca Support <hello@glauca.digital>']
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+                "content": render_to_string("domains_email/renewal_redirect.html", {
+                    "domain": order.unicode_domain,
+                    "redirect_url": order.redirect_uri
+                })
+            })
 
 
 @shared_task(
@@ -320,24 +245,13 @@ def mail_auto_renew_failed(order_id):
     if order.domain_obj:
         user = order.domain_obj.get_user()
         if user:
-            context = {
-                "name": user.first_name,
-                "domain": order.unicode_domain,
+            send_email(user, {
                 "subject": f"{order.unicode_domain} renewal - payment failed",
-                "error": order.last_error
-            }
-            html_content = render_to_string("domains_email/renewal_failed.html", context)
-            txt_content = render_to_string("domains_email/renewal_failed.txt", context)
-
-            email = EmailMultiAlternatives(
-                subject=f"{order.unicode_domain} renewal - payment failed",
-                body=txt_content,
-                to=[user.email],
-                bcc=['email-log@as207960.net'],
-                reply_to=['Glauca Support <hello@glauca.digital>']
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+                "content": render_to_string("domains_email/renewal_failed.html", {
+                    "domain": order.unicode_domain,
+                    "error": order.last_error
+                })
+            })
 
 
 @shared_task(
@@ -349,23 +263,12 @@ def mail_auto_renew_success(order_id):
     if order.domain_obj:
         user = order.domain_obj.get_user()
         if user:
-            context = {
-                "name": user.first_name,
-                "domain": order.unicode_domain,
+            send_email(user, {
                 "subject": f"{order.unicode_domain} renewal successful",
-            }
-            html_content = render_to_string("domains_email/renewal_success.html", context)
-            txt_content = render_to_string("domains_email/renewal_success.txt", context)
-
-            email = EmailMultiAlternatives(
-                subject=f"{order.unicode_domain} renewal successful",
-                body=txt_content,
-                to=[user.email],
-                bcc=['email-log@as207960.net'],
-                reply_to=['Glauca Support <hello@glauca.digital>']
-            )
-            email.attach_alternative(html_content, "text/html")
-            email.send()
+                "content": render_to_string("domains_email/renewal_success.html", {
+                    "domain": order.unicode_domain,
+                })
+            })
 
 
 @shared_task(
@@ -379,24 +282,13 @@ def mail_locked(domain_id):
             f"{domain.domain} registry lock", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "feedback_url": feedback_url,
+        send_email(user, {
             "subject": "Domain registry lock update success",
-        }
-        html_content = render_to_string("domains_email/locking_success.html", context)
-        txt_content = render_to_string("domains_email/locking_success.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject= "Domain registry lock update success",
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/locking_success.html", {
+                "domain": domain.domain,
+            })
+        })
 
 
 @shared_task(
@@ -410,22 +302,11 @@ def mail_lock_failed(domain_id, reason: str = None):
             f"{domain.domain} registry lock", domain.id
         )
 
-        context = {
-            "name": user.first_name,
-            "domain": domain.domain,
-            "reason": reason,
+        send_email(user, {
+            "subject": "Domain registry lock update success",
             "feedback_url": feedback_url,
-            "subject": "Domain registry lock update failure",
-        }
-        html_content = render_to_string("domains_email/locking_fail.html", context)
-        txt_content = render_to_string("domains_email/locking_fail.txt", context)
-
-        email = EmailMultiAlternatives(
-            subject="Domain registry lock update failure",
-            body=txt_content,
-            to=[user.email],
-            bcc=['email-log@as207960.net'],
-            reply_to=['Glauca Support <hello@glauca.digital>']
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+            "content": render_to_string("domains_email/locking_fail.html", {
+                "domain": domain.domain,
+                "reason": reason
+            })
+        })

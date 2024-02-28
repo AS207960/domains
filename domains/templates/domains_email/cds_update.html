@@ -1,52 +1,53 @@
-{% extends "domains_email/email_base.html" %}
-{% block content %}
-    <table style="border-spacing: 0;width:100%;">
-        <tr>
-            <td>
-                <p>
-                    We have received your (or your DNS operator's) request to update the DS records for the
-                    domain {{ domain.domain }} via CDS. Our shark minions have now processed this.
-                    The changes made are detailed below.
-                </p>
-                <p>
-                    For the sneaky techy deets go read <a href="https://tools.ietf.org/html/rfc8078">RFC8078</a>
-                </p>
-            </td>
-            <td>
-                <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
-            </td>
-        </tr>
-    </table>
-    <h3>Records added</h3>
-    {% if add_cds %}
-        <ul>
-            {% for ds in add_cds %}
-                {% if is_ds %}
-                    <li><code><pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre></code></li>
-                {% else %}
-                    <li><code><pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre></code></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No records added</p>
-    {% endif %}
-    <h3>Records removed</h3>
-    {% if rem_cds %}
-        <ul>
-            {% for ds in rem_cds %}
-                {% if is_ds %}
-                    <li><code>
-                        <pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre>
-                    </code></li>
-                {% else %}
-                    <li><code>
-                        <pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre>
-                    </code></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No records removed</p>
-    {% endif %}
-{% endblock %}
+<table style="border-spacing: 0;width:100%;">
+    <tr>
+        <td>
+            <p>
+                We have received your (or your DNS operator's) request to update the DS records for the
+                domain {{ domain.domain }} via CDS. Our shark minions have now processed this.
+                The changes made are detailed below.
+            </p>
+            <p>
+                For the sneaky techy deets go read <a href="https://tools.ietf.org/html/rfc8078">RFC8078</a>
+            </p>
+        </td>
+        <td>
+            <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+        </td>
+    </tr>
+</table>
+<h3>Records added</h3>
+{% if add_cds %}
+    <ul>
+        {% for ds in add_cds %}
+            {% if is_ds %}
+                <li><code>
+                    <pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre>
+                </code></li>
+            {% else %}
+                <li><code>
+                    <pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre>
+                </code></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No records added</p>
+{% endif %}
+<h3>Records removed</h3>
+{% if rem_cds %}
+    <ul>
+        {% for ds in rem_cds %}
+            {% if is_ds %}
+                <li><code>
+                    <pre>DS {{ ds.key_tag }} {{ ds.algorithm }} {{ ds.digest_type }} {{ ds.digest }}</pre>
+                </code></li>
+            {% else %}
+                <li><code>
+                    <pre>DNSKEY {{ ds.flags }} {{ ds.protocol }} {{ ds.algorithm }} {{ ds.public_key }}</pre>
+                </code></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No records removed</p>
+{% endif %}
