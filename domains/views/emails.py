@@ -45,7 +45,8 @@ def send_email(user, data: dict):
         f"{settings.LISTMONK_URL}/api/tx",
         json=request,
         headers={
-            "Authorization": f"Bearer {access_token}"
+            "Authorization": f"Bearer {access_token}",
+            "Accept": "application/json",
         }
     )
     r.raise_for_status()
