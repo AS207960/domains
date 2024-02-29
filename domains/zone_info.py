@@ -3671,13 +3671,21 @@ else:
     )
 
 
-def get_domain_info(domain: str) -> typing.Tuple[typing.Optional[DomainInfo], str]:
+def get_domain_info(domain: str, registry_id: typing.Optional[str] = None) -> typing.Tuple[typing.Optional[DomainInfo], str]:
     parts = domain.rstrip(".").split(".", maxsplit=1)
     if len(parts) != 2:
         return None, domain
     sld, tld = parts
     for zone in ZONES:
         if zone[0] == tld:
-            return zone[1], sld
+            zone_info: DomainInfo = zone[1]
+
+            if zone_info.registry == zone_info.REGISTRY_EURID and registry_id == "rrpproxy":
+                zone_info.registry = zone_info.REGISTRY_EURID_RRPPROXY
+
+            if zone_info.registry == zone_info.REGISTRY_NOMINET and registry_id == "rrpproxy":
+                zone_info.registry = zone_info.REGISTRY_NOMINET_RRPPROXY
+
+            return zone_info, sld
 
     return None, sld

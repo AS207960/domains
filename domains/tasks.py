@@ -204,7 +204,7 @@ def process_domain_registration_paid(registration_order_id):
         value=domain_registration_order.period_value,
         unit=domain_registration_order.period_unit
     )
-    zone, sld = zone_info.get_domain_info(domain_registration_order.domain)
+    zone, sld = zone_info.get_domain_info(domain_registration_order.domain, registry_id=domain_registration_order.registry_id)
 
     try:
         available, _, registry_id = apps.epp_client.check_domain(domain_registration_order.domain)
@@ -349,7 +349,7 @@ def process_domain_registration(registration_order_id):
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
     user = domain_registration_order.get_user()
 
-    zone, _ = zone_info.get_domain_info(domain_registration_order.domain)
+    zone, _ = zone_info.get_domain_info(domain_registration_order.domain, registry_id=domain_registration_order.registry_id)
     if not zone:
         domain_registration_order.state = domain_registration_order.STATE_FAILED
         domain_registration_order.last_error = "You don't have permission to perform this action"
@@ -427,7 +427,8 @@ def process_domain_registration_failed(registration_order_id):
 def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order = \
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
-    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
+    zone, sld = zone_info.get_domain_info(
+        domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id)
 
     period = apps.epp_api.Period(
         value=domain_renewal_order.period_value,
@@ -483,7 +484,8 @@ def process_domain_renewal(renewal_order_id):
         models.DomainRenewOrder.objects.get(id=renewal_order_id)  # type: models.DomainRenewOrder
     user = domain_renewal_order.get_user()
 
-    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
+    zone, sld = zone_info.get_domain_info(
+        domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id)
     if not zone:
         domain_renewal_order.state = domain_renewal_order.STATE_FAILED
         domain_renewal_order.last_error = "You don't have permission to perform this action"
@@ -545,7 +547,8 @@ def process_domain_restore_paid(restore_order_id):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
 
-    zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
+    zone, sld = zone_info.get_domain_info(
+        domain_restore_order.domain, registry_id=domain_restore_order.domain_obj.registry_id)
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -622,7 +625,8 @@ def process_domain_restore(restore_order_id):
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
     user = domain_restore_order.get_user()
 
-    zone, sld = zone_info.get_domain_info(domain_restore_order.domain)
+    zone, sld = zone_info.get_domain_info(
+        domain_restore_order.domain, registry_id=domain_restore_order.domain_obj.registry_id)
     if not zone:
         domain_restore_order.state = domain_restore_order.STATE_FAILED
         domain_restore_order.last_error = "You don't have permission to perform this action"
@@ -686,7 +690,7 @@ def process_domain_restore_failed(restore_order_id):
 def process_domain_transfer_paid(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
-    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
+    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id)
 
     if zone.direct_transfer_supported:
         try:
@@ -776,7 +780,7 @@ def process_domain_transfer(transfer_order_id):
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     user = domain_transfer_order.get_user()
 
-    zone, _ = zone_info.get_domain_info(domain_transfer_order.domain)
+    zone, _ = zone_info.get_domain_info(domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id)
     if not zone:
         domain_transfer_order.state = domain_transfer_order.STATE_FAILED
         domain_transfer_order.last_error = "You don't have permission to perform this action"
@@ -805,7 +809,7 @@ def process_domain_transfer_contacts(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
-    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain)
+    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id)
     if not zone:
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
         return
@@ -937,7 +941,7 @@ def set_dns_to_own(domain_id):
         domain.domain, registry_id=domain.registry_id
     )
 
-    domain_info = zone_info.get_domain_info(domain.domain)[0]
+    domain_info = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)[0]
 
     hosts = [
         "ns1.as207960.net",
@@ -988,7 +992,8 @@ def set_dns_to_own(domain_id):
 def process_domain_auto_renew_paid(renew_order_id):
     domain_renewal_order = \
         models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainAutomaticRenewOrder
-    zone, sld = zone_info.get_domain_info(domain_renewal_order.domain)
+    zone, sld = zone_info.get_domain_info(
+        domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id)
 
     period = apps.epp_api.Period(
         value=domain_renewal_order.period_value,

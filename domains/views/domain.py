@@ -173,7 +173,7 @@ def domain(request, domain_id):
     sharing_uri = f"{settings.KEYCLOAK_SERVER_URL}/auth/realms/{settings.KEYCLOAK_REALM}/account/?{sharing_data_uri}" \
                   f"#/resources/{user_domain.resource_id}"
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     error = None
     domain_data = None
@@ -394,7 +394,7 @@ def update_domain_contact(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -521,7 +521,7 @@ def domain_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -567,7 +567,7 @@ def domain_del_block_transfer(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -660,7 +660,7 @@ def add_domain_host_obj(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if not domain_info.host_object_supported:
         return render(request, "domains/error.html", {
@@ -755,7 +755,7 @@ def delete_domain_host_obj(request, domain_id, host_name):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if not domain_info.host_object_supported:
         return render(request, "domains/error.html", {
@@ -814,7 +814,7 @@ def add_domain_host_addr(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if domain_info.host_object_supported:
         return render(request, "domains/error.html", {
@@ -885,7 +885,7 @@ def delete_domain_host_addr(request, domain_id, host_name):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if domain_info.host_object_supported:
         return render(request, "domains/error.html", {
@@ -1494,7 +1494,7 @@ def delete_domain(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -1552,7 +1552,7 @@ def mark_domain_not_required(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if not domain_info.nominet_mark_not_required:
         return render(request, "domains/error.html", {
@@ -1594,7 +1594,7 @@ def mark_domain_required(request, domain_id):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     if not domain_info.nominet_mark_not_required:
         return render(request, "domains/error.html", {
@@ -1649,7 +1649,7 @@ def transfer_out_domain(request, domain_id, transfer_action):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
 
     try:
         domain_data = apps.epp_client.get_domain(
@@ -1735,7 +1735,7 @@ def renew_domain(request, domain_id):
             "back_url": referrer
         })
 
-    zone, sld = zone_info.get_domain_info(user_domain.domain)
+    zone, sld = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)
     if not zone:
         raise Http404
 
@@ -1831,7 +1831,7 @@ def restore_domain(request, domain_id):
             "back_url": referrer
         })
 
-    zone, sld = zone_info.get_domain_info(user_domain.domain)
+    zone, sld = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)
     if not zone:
         return render(request, "domains/error.html", {
             "error": "You don't have permission to perform this action",

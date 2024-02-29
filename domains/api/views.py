@@ -385,7 +385,7 @@ class Domain(viewsets.ViewSet):
         apps.epp_client.delete_domain(
             domain.domain, registry_id=domain.registry_id
         )
-        domain_info, sld = zone_info.get_domain_info(domain.domain)
+        domain_info, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
         if not domain_info.restore_supported:
             domain.former_domain = True
             domain.save()
@@ -575,7 +575,7 @@ class Domain(viewsets.ViewSet):
         })
         serializer.is_valid(raise_exception=True)
 
-        zone, sld = zone_info.get_domain_info(domain.domain)
+        zone, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
 
         if zone.renew_supported and not domain.deleted:
             period = serializer.validated_data['period']
@@ -619,7 +619,7 @@ class Domain(viewsets.ViewSet):
         if not domain.has_scope(request.auth.token, 'view'):
             raise PermissionDenied
 
-        zone, sld = zone_info.get_domain_info(domain.domain)
+        zone, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
 
         if zone.restore_supported and domain.deleted:
             price = zone.pricing.restore("GB", request.user.username, sld).amount

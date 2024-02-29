@@ -18,7 +18,7 @@ class Command(BaseCommand):
         orders = models.DomainTransferOrder.objects.filter(state=models.DomainTransferOrder.STATE_PENDING_APPROVAL)
 
         for order in orders:
-            domain_info, sld = zone_info.get_domain_info(order.domain)  # type: (zone_info.DomainInfo, str)
+            domain_info, sld = zone_info.get_domain_info(order.domain, registry_id=order.registry_id)  # type: (zone_info.DomainInfo, str)
 
             if not domain_info:
                 print(f"Can't notify {order.domain}: unknown zone")

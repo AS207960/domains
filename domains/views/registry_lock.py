@@ -56,7 +56,7 @@ def manage_registry_lock(request, domain_id):
     domain = apps.epp_client.get_domain(
         user_domain.domain, registry_id=user_domain.registry_id
     )
-    domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
 
@@ -116,7 +116,7 @@ def update(request, domain_id):
     domain = apps.epp_client.get_domain(
         user_domain.domain, registry_id=user_domain.registry_id
     )
-    domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain)[0]
+    domain_info: zone_info.DomainInfo = zone_info.get_domain_info(user_domain.domain, registry_id=user_domain.registry_id)[0]
     referrer = request.META.get("HTTP_REFERER")
     referrer = referrer if referrer else reverse('domains')
     can_update = is_authenticated(request, user_domain, consume=True)

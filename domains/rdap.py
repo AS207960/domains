@@ -279,7 +279,7 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         domain_data = apps.epp_client.get_domain(
             domain_obj.domain, registry_id=domain_obj.registry_id
         )
-        zone_data = zone_info.get_domain_info(domain_data.name.lower())[0]
+        zone_data = zone_info.get_domain_info(domain_data.name.lower(), registry_id=domain_obj.registry_id)[0]
 
         resp_data = rdap_pb2.Domain(
             handle=domain_data.registry_id,

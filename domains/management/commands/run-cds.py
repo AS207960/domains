@@ -49,7 +49,7 @@ class Command(BaseCommand):
         domains = models.DomainRegistration.objects.filter(deleted=False, former_domain=False)
 
         for domain in domains:
-            domain_info, sld = zone_info.get_domain_info(domain.domain)
+            domain_info, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
 
             if not domain_info:
                 print(f"Can't run CDS on {domain.domain}: unknown zone")

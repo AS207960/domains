@@ -672,7 +672,7 @@ class DomainSerializer(serializers.Serializer):
         )
 
     def update(self, instance: Domain, validated_data):
-        domain_info = zone_info.get_domain_info(instance.domain)[0]  # type: zone_info.DomainInfo
+        domain_info = zone_info.get_domain_info(instance.domain, registry_id=instance.registry_id)[0]  # type: zone_info.DomainInfo
         update_req = apps.epp_api.domain_pb2.DomainUpdateRequest(
             name=instance.domain,
             remove=[],

@@ -30,7 +30,7 @@ class Command(BaseCommand):
                 d[key].append(value)
 
         for domain in domains:
-            domain_info, sld = zone_info.get_domain_info(domain.domain) # type: zone_info.DomainInfo, str
+            domain_info, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id) # type: zone_info.DomainInfo, str
 
             if not domain_info:
                 print(f"Can't renew {domain.domain}: unknown zone", flush=True)
@@ -219,7 +219,7 @@ class Command(BaseCommand):
             })
 
         for domain in deleted_domains:
-            domain_info, sld = zone_info.get_domain_info(domain.domain)
+            domain_info, sld = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
 
             if not domain_info:
                 print(f"Can't check RGP on {domain.domain}: unknown zone", flush=True)

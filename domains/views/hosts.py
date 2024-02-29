@@ -177,7 +177,7 @@ def host_create(request, host_name: str):
             "back_url": referrer
         })
 
-    domain_info = zone_info.get_domain_info(domain.domain)[0]
+    domain_info = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)[0]
 
     try:
         host_unicode = idna.decode(host_name, uts46=True)
