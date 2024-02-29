@@ -18,7 +18,7 @@ import logging
 from django_countries.widgets import LazyChoicesMixin
 
 LazyChoicesMixin.get_choices = lambda self: self._choices
-LazyChoicesMixin.choices = property(LazyChoicesMixin.get_choices, LazyChoicesMixin.set_choices)s
+LazyChoicesMixin.choices = property(LazyChoicesMixin.get_choices, LazyChoicesMixin.set_choices)
 
 
 # logging.basicConfig(level=logging.DEBUG)
