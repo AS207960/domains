@@ -23,11 +23,11 @@ class ContactForm(forms.ModelForm):
         self.fields['local_address'].help_text = "The address in the local format, usually the only one required"
         self.fields['int_address'].help_text = "The Latinised version of the address, usually not required"
         self.fields['phone'].help_text = \
-            "A phone number the contact can be reached at, in international format (i.e. +44 29 2010 2455 etc)"
+            "A phone number the contact can be reached at, in international format (e.g. +44 29 2010 2455)"
         self.fields['phone_ext'].help_text = \
             "If the contact is on an internal extension of the contact number, please provide it here"
         self.fields['fax'].help_text =\
-            "A phone number for the contact's fax machine, in international format (i.e. +44 29 2010 2455 etc)"
+            "A phone number for the contact's fax machine, in international format (e.g. +44 29 2010 2455)"
         self.fields['phone_ext'].help_text = \
             "If the contact's fax machine is on an internal extension of the fax number, please provide it here"
         self.fields['entity_type'].help_text = "What legal form does the contact have?"
@@ -202,7 +202,7 @@ class ContactAndAddressForm(forms.Form):
             """
     ))
     phone = PhoneNumberField(
-        help_text="A phone number the contact can be reached at, in international format (i.e. +44 29 2010 2455 etc)"
+        help_text="A phone number the contact can be reached at, in international format (e.g. +44 29 2010 2455)"
     )
     phone_ext = forms.CharField(
         max_length=64, required=False, label="Phone extension",
@@ -210,7 +210,7 @@ class ContactAndAddressForm(forms.Form):
     )
     fax = PhoneNumberField(
         required=False,
-        help_text="A phone number for the contact's fax machine, in international format (i.e. +44 29 2010 2455 etc)"
+        help_text="A phone number for the contact's fax machine, in international format (e.g. +44 29 2010 2455)"
     )
     fax_ext = forms.CharField(
         max_length=64, required=False, label="Fax extension",
