@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'django_countries',
     'django_grpc',
     'rest_framework',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'domains'
 ]
 
@@ -192,7 +192,7 @@ OIDC_CLIENT_SECRET = os.getenv("KEYCLOAK_CLIENT_SECRET")
 OIDC_SCOPES = os.getenv("KEYCLOAK_SCOPES")
 
 PHONENUMBER_DEFAULT_REGION = "GB"
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 XFF_TRUSTED_PROXY_DEPTH = 1
@@ -320,6 +320,3 @@ EURID_BILLING_CONTACT = os.getenv("EURID_BILLING_CONTACT")
 
 SWITCH_REGISTRAR_ID = os.getenv("SWITCH_REGISTRAR_ID")
 SWITCH_REGISTRAR_PASSWORD = os.getenv("SWITCH_REGISTRAR_PASSWORD")
-
-LISTMONK_TEMPLATE_ID = int(os.getenv("LISTMONK_TEMPLATE_ID"))
-LISTMONK_URL = os.getenv("LISTMONK_URL")

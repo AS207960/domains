@@ -4,7 +4,7 @@ sentry-sdk
 psycopg2-binary
 gunicorn
 django-crispy-forms
-crispy-bootstrap4
+crispy-bootstrap5
 django-countries
 django-phonenumber-field[phonenumbers]
 django-xff

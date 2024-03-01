@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'django_countries',
     'django_grpc',
     'rest_framework',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'domains'
 ]
 
@@ -155,7 +155,7 @@ EXTERNAL_URL_BASE = "http://localhost:8000"
 RP_ID = "as207960-domains.eu.ngrok.io"
 
 PHONENUMBER_DEFAULT_REGION = "GB"
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 GCHAT_SERVICE_ACCOUNT = os.path.join(BASE_DIR, "secrets/Domain Registration-24045e71a81b.json")
