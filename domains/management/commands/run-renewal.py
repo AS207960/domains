@@ -88,6 +88,20 @@ class Command(BaseCommand):
 
             if (expiry_date - RENEW_INTERVAL) <= now:
                 print(f"{domain_data.name} expiring soon, renewing", flush=True)
+
+                last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain) \
+                    .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
+                if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
+                        last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                    print(f"{domain_data.name} expiring soon, renewal already succeeded", flush=True)
+                    continue
+                last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True) \
+                    .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
+                if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
+                        last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
+                    print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded", flush=True)
+                    continue
+
                 renewal_period = domain_info.pricing.periods[0]
 
                 try:
@@ -105,19 +119,6 @@ class Command(BaseCommand):
 
                 if (expiry_date - FAIL_INTERVAL) <= now:
                     if domain_info.renews_if_not_deleted:
-                        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain)\
-                            .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
-                        if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
-                                last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
-                            print(f"{domain_data.name} expiring soon, renewal already succeeded", flush=True)
-                            continue
-                        last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True)\
-                            .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
-                        if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
-                                last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
-                            print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded", flush=True)
-                            continue
-
                         print(f"Deleting {domain.domain} due to billing failure", flush=True)
                         if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
                             print(f"Reversing charge just to be sure", flush=True)
