@@ -21,6 +21,9 @@ data:
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_FROM: "Glauca Domains <domains@glauca.digital>"
+  EMAIL_HOST: "mx.postal.as207960.net"
+  EMAIL_PORT: "25"
+  EMAIL_HOST_USER: "as207960/main"
   GCHAT_PROJECT_ID: "226795660453"
   GCHAT_SERVICE_ACCOUNT_FILE: "/google-creds/sa.json"
   PRIV_KEY_LOCATION: "/privkey/privkey.pem"
@@ -87,7 +90,7 @@ spec:
               name: google-creds
             - mountPath: "/privkey/"
               name: privkey
-          envFrom:
+          envFrom: &envFrom
             - configMapRef:
                 name: domains-django-conf
             - secretRef:
@@ -113,6 +116,9 @@ spec:
                 name: domains-s3
             - secretRef:
                 name: domains-switch
+            - secretRef:
+                name: domains-email
+              prefix: "EMAIL_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -127,32 +133,7 @@ spec:
               name: google-creds
             - mountPath: "/privkey/"
               name: privkey
-          envFrom:
-            - configMapRef:
-                name: domains-django-conf
-            - secretRef:
-                name: domains-db-creds
-              prefix: "DB_"
-            - secretRef:
-                name: domains-django-secret
-            - secretRef:
-                name: domains-keycloak
-              prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-celery
-              prefix: "CELERY_"
-            - secretRef:
-                name: verisign-ns-key
-              prefix: "VERISIGN_NS_"
-            - secretRef:
-                name: domains-rrpproxy
-              prefix: "RRPPROXY_"
-            - secretRef:
-                name: domains-rpc
-            - secretRef:
-                name: domains-s3
-            - secretRef:
-                name: domains-switch
+          envFrom: *envFrom
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

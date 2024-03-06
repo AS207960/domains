@@ -722,7 +722,7 @@ def process_domain_transfer_paid(transfer_order_id):
                 domain_transfer_order.auth_code,
                 period=period,
                 registry_id=domain_transfer_order.registry_id,
-                eurid=eurid_data
+                eurid=eurid_data,
             )
         except grpc.RpcError as rpc_error:
             domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
@@ -875,16 +875,43 @@ def process_domain_transfer_contacts(transfer_order_id):
         )
         _update_contact("billing", billing_contact_id.registry_contact_id)
 
+    if should_send:
+        apps.epp_client.stub.DomainUpdate(update_req)
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def process_domain_transfer_keysys(transfer_order_id):
+    domain_transfer_order = \
+        models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
+
+    zone, sld = zone_info.get_domain_info(domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id)
+    if not zone:
+        logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
+        return
+
+    domain_data = apps.epp_client.get_domain(
+        domain_transfer_order.domain, registry_id=domain_transfer_order.registry_id
+    )
+
+    update_req = apps.epp_api.domain_pb2.DomainUpdateRequest(
+        name=domain_data.name,
+    )
+
+    should_send = False
+
     if zone.keysys_auto_renew:
         update_req.keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
+        should_send = True
 
     if zone.keysys_de:
         update_req.keysys.de.abprocessuse_contact.value = "https://as207960.net/contact"
         update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
+        should_send = True
 
     if should_send:
         apps.epp_client.stub.DomainUpdate(update_req)
-
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
@@ -906,6 +933,7 @@ def process_domain_transfer_complete(transfer_order_id):
     )
     domain_obj.save()
     process_domain_transfer_contacts.delay(domain_transfer_order.id)
+    process_domain_transfer_keysys.delay(domain_transfer_order.id)
 
     domain_transfer_order.state = domain_transfer_order.STATE_COMPLETED
     domain_transfer_order.domain_obj = domain_obj
