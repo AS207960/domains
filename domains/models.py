@@ -205,36 +205,36 @@ class Contact(models.Model):
     )
 
     EURID_CITIZENSHIP = (
-        ("AT", "Österreich (Austria)"),
         ("BE", "België (Belgium)"),
         ("BG", "България (Bulgaria)"),
-        ("CY", "Κύπρος (Cyprus)"),
         ("CZ", "Česká republika (Czech Republic)"),
         ("DE", "Deutschland (Germany)"),
         ("DK", "Danmark (Denmark)"),
         ("EE", "Eesti (Estonia)"),
-        ("ES", "España (Spain)"),
-        ("FI", "Suomi (Finland)"),
-        ("FR", "France"),
         ("GR", "Ελλάδα (Greece)"),
-        ("HR", "Hrvatska (Croatia)"),
-        ("HU", "Magyarország (Hungary)"),
         ("IE", "Éire (Ireland)"),
+        ("ES", "España (Spain)"),
+        ("FR", "France"),
+        ("HR", "Hrvatska (Croatia)"),
+        ("IS", "Ísland (Iceland)"),
         ("IT", "Italia (Italy)"),
+        ("CY", "Κύπρος (Cyprus)"),
         ("LT", "Lietuva (Lithuania)"),
         ("LU", "Lëtzebuerg (Luxembourg)"),
         ("LV", "Latvija (Latvia)"),
+        ("LI", "Liechtenstein"),
         ("MT", "Malta"),
+        ("HU", "Magyarország (Hungary)"),
         ("NL", "Nederland (Netherlands)"),
+        ("NO", "Norge (Norway)"),
+        ("AT", "Österreich (Austria)"),
         ("PL", "Polska (Poland)"),
         ("PT", "Portugal"),
         ("RO", "România (Romania)"),
+        ("FI", "Suomi (Finland)"),
         ("SE", "Sverige (Sweden)"),
         ("SI", "Slovenija (Slovenia)"),
         ("SK", "Slovensko (Slovakia)"),
-        ("IS", "Ísland (Iceland)"),
-        ("LI", "Liechtenstein"),
-        ("NO", "Norge (Norway)"),
     )
 
     id = as207960_utils.models.TypedUUIDField('domains_contact', primary_key=True)
@@ -262,7 +262,8 @@ class Contact(models.Model):
     entity_type = models.PositiveSmallIntegerField(choices=ENTITY_TYPES)
     trading_name = models.CharField(max_length=255, blank=True, null=True)
     company_number = models.CharField(max_length=255, blank=True, null=True)
-    eurid_citizenship = models.CharField(max_length=2, choices=EURID_CITIZENSHIP, blank=True, null=True)
+    eurid_citizenship = models.CharField(
+        max_length=2, choices=EURID_CITIZENSHIP, blank=True, null=True, verbose_name="EURid citizenship")
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     disclose_phone = models.BooleanField(default=False, blank=True)
