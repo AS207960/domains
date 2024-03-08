@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import domain, hosts, contacts, admin, gchat_bot, suggest, billing, privacy, isnic, registry_lock
+from .views import domain, hosts, contacts, admin, gchat_bot, suggest, billing, privacy, isnic, registry_lock, data
 
 urlpatterns = [
     path('', domain.index, name='index'),
@@ -75,11 +75,16 @@ urlpatterns = [
     path('addresses/new/', contacts.new_address, name='new_address'),
     path('addresses/<str:address_id>/delete/', contacts.delete_address, name='delete_address'),
     path('addresses/<str:address_id>/', contacts.edit_address, name='edit_address'),
+
     path('api/', include('domains.api.urls')),
+
+    path('data/tlds/', data.tlds),
+
     path('gchat_bot/webhook/', gchat_bot.webhook),
     path('privacy/webhook/', privacy.postal),
     path('isnic/webhook/', isnic.postal),
     path('gchat_bot/link/<str:state_id>', gchat_bot.link_account, name='gchat_account_link'),
+
     path('epp_client/', admin.index, name='admin_index'),
     path('epp_client/domains/', admin.view_domains, name='admin_view_domains'),
     path('epp_client/domains/<str:domain_id>/', admin.view_domain, name='admin_view_domain'),
