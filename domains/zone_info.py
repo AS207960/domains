@@ -15,12 +15,40 @@ AFNIC_PERMITTED_COUNTRIES = [
     "MQ", "MT", "NC", "NL", "NO", "PF", "PL", "PM", "PT", "RE", "RO", "SE",
     "SI", "SK", "TF", "WF", "YT"
 ]
-EURID_PERMITTED_COUNTRIES = [
-    "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR",
-    "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO",
-    "SE", "SI", "SK", "AX", "GF", "GP", "GI", "MF", "MQ", "RE", "YT", "IS",
-    "LI", "NO"
-]
+
+EURID_CITIZENSHIP = (
+    ("BE", "België (Belgium)"),
+    ("BG", "България (Bulgaria)"),
+    ("CZ", "Česká republika (Czech Republic)"),
+    ("DE", "Deutschland (Germany)"),
+    ("DK", "Danmark (Denmark)"),
+    ("EE", "Eesti (Estonia)"),
+    ("GR", "Ελλάδα (Greece)"),
+    ("IE", "Éire (Ireland)"),
+    ("ES", "España (Spain)"),
+    ("FR", "France"),
+    ("HR", "Hrvatska (Croatia)"),
+    ("IS", "Ísland (Iceland)"),
+    ("IT", "Italia (Italy)"),
+    ("CY", "Κύπρος (Cyprus)"),
+    ("LT", "Lietuva (Lithuania)"),
+    ("LU", "Lëtzebuerg (Luxembourg)"),
+    ("LV", "Latvija (Latvia)"),
+    ("LI", "Liechtenstein"),
+    ("MT", "Malta"),
+    ("HU", "Magyarország (Hungary)"),
+    ("NL", "Nederland (Netherlands)"),
+    ("NO", "Norge (Norway)"),
+    ("AT", "Österreich (Austria)"),
+    ("PL", "Polska (Poland)"),
+    ("PT", "Portugal"),
+    ("RO", "România (Romania)"),
+    ("FI", "Suomi (Finland)"),
+    ("SE", "Sverige (Sweden)"),
+    ("SI", "Slovenija (Slovenia)"),
+    ("SK", "Slovensko (Slovakia)"),
+)
+EURID_PERMITTED_COUNTRIES = [c[0] for c in EURID_CITIZENSHIP]
 
 
 def _mul(value, unit):

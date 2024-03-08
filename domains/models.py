@@ -204,39 +204,6 @@ class Contact(models.Model):
         (apps.epp_api.contact_pb2.OtherPublicCommunity, "Other Public Community"),
     )
 
-    EURID_CITIZENSHIP = (
-        ("BE", "België (Belgium)"),
-        ("BG", "България (Bulgaria)"),
-        ("CZ", "Česká republika (Czech Republic)"),
-        ("DE", "Deutschland (Germany)"),
-        ("DK", "Danmark (Denmark)"),
-        ("EE", "Eesti (Estonia)"),
-        ("GR", "Ελλάδα (Greece)"),
-        ("IE", "Éire (Ireland)"),
-        ("ES", "España (Spain)"),
-        ("FR", "France"),
-        ("HR", "Hrvatska (Croatia)"),
-        ("IS", "Ísland (Iceland)"),
-        ("IT", "Italia (Italy)"),
-        ("CY", "Κύπρος (Cyprus)"),
-        ("LT", "Lietuva (Lithuania)"),
-        ("LU", "Lëtzebuerg (Luxembourg)"),
-        ("LV", "Latvija (Latvia)"),
-        ("LI", "Liechtenstein"),
-        ("MT", "Malta"),
-        ("HU", "Magyarország (Hungary)"),
-        ("NL", "Nederland (Netherlands)"),
-        ("NO", "Norge (Norway)"),
-        ("AT", "Österreich (Austria)"),
-        ("PL", "Polska (Poland)"),
-        ("PT", "Portugal"),
-        ("RO", "România (Romania)"),
-        ("FI", "Suomi (Finland)"),
-        ("SE", "Sverige (Sweden)"),
-        ("SI", "Slovenija (Slovenia)"),
-        ("SK", "Slovensko (Slovakia)"),
-    )
-
     id = as207960_utils.models.TypedUUIDField('domains_contact', primary_key=True)
     handle = models.CharField(max_length=255, unique=True, default=make_id)
     description = models.CharField(max_length=255)
@@ -263,7 +230,7 @@ class Contact(models.Model):
     trading_name = models.CharField(max_length=255, blank=True, null=True)
     company_number = models.CharField(max_length=255, blank=True, null=True)
     eurid_citizenship = models.CharField(
-        max_length=2, choices=EURID_CITIZENSHIP, blank=True, null=True, verbose_name="EURid citizenship")
+        max_length=2, choices=zone_info.EURID_CITIZENSHIP, blank=True, null=True, verbose_name="EURid citizenship")
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     disclose_phone = models.BooleanField(default=False, blank=True)
