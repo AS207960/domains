@@ -1,3 +1,4 @@
+import google.protobuf.wrappers_pb2
 from django.db import models, InternalError
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -203,6 +204,39 @@ class Contact(models.Model):
         (apps.epp_api.contact_pb2.OtherPublicCommunity, "Other Public Community"),
     )
 
+    EURID_CITIZENSHIP = (
+        ("AT", "Österreich (Austria)"),
+        ("BE", "België (Belgium)"),
+        ("BG", "България (Bulgaria)"),
+        ("CY", "Κύπρος (Cyprus)"),
+        ("CZ", "Česká republika (Czech Republic)"),
+        ("DE", "Deutschland (Germany)"),
+        ("DK", "Danmark (Denmark)"),
+        ("EE", "Eesti (Estonia)"),
+        ("ES", "España (Spain)"),
+        ("FI", "Suomi (Finland)"),
+        ("FR", "France"),
+        ("GR", "Ελλάδα (Greece)"),
+        ("HR", "Hrvatska (Croatia)"),
+        ("HU", "Magyarország (Hungary)"),
+        ("IE", "Éire (Ireland)"),
+        ("IT", "Italia (Italy)"),
+        ("LT", "Lietuva (Lithuania)"),
+        ("LU", "Lëtzebuerg (Luxembourg)"),
+        ("LV", "Latvija (Latvia)"),
+        ("MT", "Malta"),
+        ("NL", "Nederland (Netherlands)"),
+        ("PL", "Polska (Poland)"),
+        ("PT", "Portugal"),
+        ("RO", "România (Romania)"),
+        ("SE", "Sverige (Sweden)"),
+        ("SI", "Slovenija (Slovenia)"),
+        ("SK", "Slovensko (Slovakia)"),
+        ("IS", "Ísland (Iceland)"),
+        ("LI", "Liechtenstein"),
+        ("NO", "Norge (Norway)"),
+    )
+
     id = as207960_utils.models.TypedUUIDField('domains_contact', primary_key=True)
     handle = models.CharField(max_length=255, unique=True, default=make_id)
     description = models.CharField(max_length=255)
@@ -228,6 +262,7 @@ class Contact(models.Model):
     entity_type = models.PositiveSmallIntegerField(choices=ENTITY_TYPES)
     trading_name = models.CharField(max_length=255, blank=True, null=True)
     company_number = models.CharField(max_length=255, blank=True, null=True)
+    eurid_citizenship = models.CharField(max_length=2, choices=EURID_CITIZENSHIP, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     disclose_phone = models.BooleanField(default=False, blank=True)
@@ -398,7 +433,7 @@ class Contact(models.Model):
                     (not self.disclose_email) and role == apps.epp_api.ContactRole.Registrant else None,
                     vat_number=None,
                     language="en",
-                    country_of_citizenship=None,
+                    country_of_citizenship=self.eurid_citizenship if self.eurid_citizenship else None,
                 ) if is_eurid else None,
                 registry_name=registry_id
             )

@@ -91,7 +91,7 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = models.Contact
         fields = "__all__"
-        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email", "handle")
+        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email", "handle", "eurid_citizenship")
 
 
 class AddressForm(forms.ModelForm):
@@ -317,11 +317,6 @@ class ContactAndAddressForm(forms.Form):
         self.helper.layout = crispy_forms.layout.Layout(*layout)
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
-
-    class Meta:
-        model = models.Contact
-        fields = "__all__"
-        exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email")
 
 
 class DomainContactForm(forms.Form):

@@ -68,7 +68,7 @@ def update_contact(contact_registry_id):
                 whois_email=instance.private_whois_email if not instance.disclose_email else None,
                 vat_number=None,
                 language="en",
-                country_of_citizenship=None,
+                country_of_citizenship=instance.eurid_citizenship if instance.eurid_citizenship else None,
             ) if is_eurid else None,
             auth_info=None
         )
