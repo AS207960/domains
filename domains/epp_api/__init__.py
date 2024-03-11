@@ -44,20 +44,20 @@ class IPAddress:
 
     @property
     def address_obj(self) -> typing.Union[ipaddress.IPv4Address, ipaddress.IPv6Address]:
-        if self.ip_type == 1:
+        if self.ip_type == common_pb2.IPAddress.IPv4:
             return ipaddress.IPv4Address(self.address)
-        elif self.ip_type == 2:
+        elif self.ip_type == common_pb2.IPAddress.IPv6:
             return ipaddress.IPv6Address(self.address)
         else:
             raise Exception("Unknown IP address type")
 
     @property
     def ip_type_str(self) -> str:
-        if self.ip_type == 0:
+        if self.ip_type == common_pb2.IPAddress.UNKNOWN:
             return "Unknown"
-        elif self.ip_type == 1:
+        elif self.ip_type == common_pb2.IPAddress.IPv4:
             return "IPv4"
-        elif self.ip_type == 2:
+        elif self.ip_type == common_pb2.IPAddress.IPv6:
             return "IPv6"
 
     def __str__(self):

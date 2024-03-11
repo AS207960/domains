@@ -469,16 +469,25 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         ))
 
         for ns in domain_data.name_servers:
-            try:
-                resp_data.name_servers.append(self.name_server_to_proto(models.NameServer(
-                    name_server=ns.host_obj,
-                    registry_id=domain_data.registry_name
-                )))
-            except grpc.RpcError:
+            if ns.host_name:
                 resp_data.name_servers.append(rdap_pb2.NameServer(
-                    name=ns.host_obj,
-                    port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net")
+                    name=ns.host_name,
+                    ip_addresses=rdap_pb2.NameServer.IPAddresses(
+                        v4=[a.address for a in ns.address if a.ip_type == apps.epp_api.common_pb2.IPAddress.IPv4],
+                        v6=[a.address for a in ns.address if a.ip_type == apps.epp_api.common_pb2.IPAddress.IPv6],
+                    )
                 ))
+            else:
+                try:
+                    resp_data.name_servers.append(self.name_server_to_proto(models.NameServer(
+                        name_server=ns.host_obj,
+                        registry_id=domain_data.registry_name
+                    )))
+                except grpc.RpcError:
+                    resp_data.name_servers.append(rdap_pb2.NameServer(
+                        name=ns.host_obj,
+                        port43=google.protobuf.wrappers_pb2.StringValue(value="whois.as207960.net")
+                    ))
 
         if domain_data.sec_dns:
             resp_data.sec_dns.delegation_signed.value = True
