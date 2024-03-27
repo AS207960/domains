@@ -1237,6 +1237,8 @@ class DomainInfo:
 
     def registrant_proxy(self, contact) -> typing.Optional[str]:
         if self.registry == self.REGISTRY_EURID:
+            if contact.eurid_citizenship and contact.eurid_citizenship in EURID_PERMITTED_COUNTRIES:
+                return None
             if contact.local_address.country_code.code not in EURID_PERMITTED_COUNTRIES:
                 return settings.EURID_PROXY_CONTACT
         elif self.registry == self.REGISTRY_AFNIC:

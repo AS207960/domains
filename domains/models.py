@@ -1,4 +1,3 @@
-import google.protobuf.wrappers_pb2
 from django.db import models, InternalError
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -401,7 +400,9 @@ class Contact(models.Model):
                     (not self.disclose_email) and role == apps.epp_api.ContactRole.Registrant else None,
                     vat_number=None,
                     language="en",
-                    country_of_citizenship=self.eurid_citizenship if self.eurid_citizenship else None,
+                    country_of_citizenship=self.eurid_citizenship if (
+                            self.eurid_citizenship and role == apps.epp_api.ContactRole.Registrant
+                    ) else None,
                 ) if is_eurid else None,
                 registry_name=registry_id
             )
