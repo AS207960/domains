@@ -32,3 +32,4 @@ mypy-protobuf
 base32-crockford
 django-storages
 boto3
+pytz
