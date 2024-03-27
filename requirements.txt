@@ -5,7 +5,7 @@ psycopg2-binary
 gunicorn
 django-crispy-forms
 crispy-bootstrap5
-django-countries
+django-countries>=7.6
 django-phonenumber-field[phonenumbers]
 django-xff
 grpcio

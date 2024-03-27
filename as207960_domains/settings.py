@@ -15,12 +15,6 @@ import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 import logging
 
-from django_countries.widgets import LazyChoicesMixin
-
-LazyChoicesMixin.get_choices = lambda self: self._choices
-LazyChoicesMixin.choices = property(LazyChoicesMixin.get_choices, LazyChoicesMixin.set_choices)
-
-
 # logging.basicConfig(level=logging.DEBUG)
 
 sentry_sdk.init(
