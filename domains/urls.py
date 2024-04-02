@@ -22,6 +22,7 @@ urlpatterns = [
     path('domains/register_confirm/<str:order_id>/', domain.domain_register_confirm, name='domain_register_confirm'),
     path('domains/transfer_confirm/<str:order_id>/', domain.domain_transfer_confirm, name='domain_transfer_confirm'),
     path('domains/restore_confirm/<str:order_id>/', domain.restore_domain_confirm, name='restore_domain_confirm'),
+    path('domains/auto_renew_confirm/<str:order_id>', domain.auto_renew_domain_confirm, name='auto_renew_domain_confirm'),
     path('domains/renew_confirm/<str:order_id>', domain.renew_domain_confirm, name='renew_domain_confirm'),
     path('domains/<str:domain_id>/', domain.domain, name='domain'),
     path('domains/<str:domain_id>/delete/', domain.delete_domain, name='delete_domain'),

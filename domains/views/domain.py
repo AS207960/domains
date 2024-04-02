@@ -92,6 +92,7 @@ def domains(request):
     user_domains = models.DomainRegistration.get_object_list(access_token).filter(former_domain=False)
     registration_orders = models.DomainRegistrationOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     transfer_orders = models.DomainTransferOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
+    auto_renew_orders = models.DomainAutomaticRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     renew_orders = models.DomainRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     restore_orders = models.DomainRestoreOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
     error = None
@@ -133,6 +134,7 @@ def domains(request):
         "deleted_domains": deleted_domains,
         "registration_orders": registration_orders,
         "transfer_orders": transfer_orders,
+        "auto_renew_orders": auto_renew_orders,
         "renew_orders": renew_orders,
         "restore_orders": restore_orders,
         "error": error,
@@ -1378,6 +1380,7 @@ def domain_register(request, domain_name):
 
             registration_order = models.DomainRegistrationOrder.get_object_list(access_token) \
                                    .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                                   .exclude(state=models.AbstractOrder.STATE_FAILED) \
                                    .filter(domain=domain_name).first()
 
             if registration_order:
@@ -1818,6 +1821,13 @@ def renew_domain_confirm(request, order_id):
 
 
 @login_required
+def auto_renew_domain_confirm(request, order_id):
+    renew_order = get_object_or_404(models.DomainAutomaticRenewOrder, id=order_id)
+
+    return confirm_order(request, renew_order, "domains/domain_pending.html", "domains/domain_passed_off.html")
+
+
+@login_required
 def restore_domain(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=True, former_domain=False)
@@ -2009,6 +2019,7 @@ def domain_transfer(request, domain_name):
 
             transfer_order = models.DomainTransferOrder.get_object_list(access_token) \
                                 .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                                .exclude(state=models.AbstractOrder.STATE_FAILED) \
                                 .filter(domain=domain_name).first()
 
             if transfer_order:
