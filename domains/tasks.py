@@ -145,7 +145,7 @@ def update_contact(contact_registry_id):
 
 
 def charge_order(
-        order: models.SimpleAbstractOrder,
+        order: models.AbstractOrder,
         username: str,
         descriptor: str,
         charge_id: str,

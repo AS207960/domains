@@ -163,6 +163,7 @@ class Command(BaseCommand):
                         period_value=renewal_period.value,
                         price=renewal_price,
                         off_session=True,
+                        user=user,
                     )
                     order.save()
                     tasks.charge_order(

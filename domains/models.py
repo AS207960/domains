@@ -768,7 +768,7 @@ class WebAuthNKey(models.Model):
     sign_count = models.PositiveSmallIntegerField(default=0)
 
 
-class SimpleAbstractOrder(models.Model):
+class AbstractOrder(models.Model):
     STATE_PENDING = "P"
     STATE_STARTED = "T"
     STATE_NEEDS_PAYMENT = "N"
@@ -793,12 +793,6 @@ class SimpleAbstractOrder(models.Model):
     last_error = models.TextField(blank=True, null=True)
     off_session = models.BooleanField(blank=True, default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        abstract = True
-
-
-class AbstractOrder(SimpleAbstractOrder):
     resource_id = models.UUIDField(null=True, db_index=True)
 
     resource_type: str
@@ -846,6 +840,8 @@ class AbstractOrder(SimpleAbstractOrder):
         if self.user:
             return self.user
         return as207960_utils.models.get_resource_owner(self.resource_id)
+
+
 
 
 class DomainRegistrationOrder(AbstractOrder):
@@ -944,7 +940,11 @@ class DomainRenewOrder(AbstractOrder):
         return self.domain
 
 
-class DomainAutomaticRenewOrder(SimpleAbstractOrder):
+class DomainAutomaticRenewOrder(AbstractOrder):
+    resource_type = "auto-renew-order"
+    resource_urn = "urn:as207960:domains:auto_renew_order"
+    resource_display_name = "Automatic renewal order"
+
     id = as207960_utils.models.TypedUUIDField(f'domains_domainautoreneworder', primary_key=True)
     domain = models.CharField(max_length=255)
     period_unit = models.PositiveSmallIntegerField()
