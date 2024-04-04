@@ -6,11 +6,13 @@ import logging
 import email.parser
 import uuid
 import requests
+import re
+import urllib.parse
 from .. import models
 from . import postal
 
 logger = logging.getLogger(__name__)
-
+owner_change_re = re.compile(r"^https://icann-transfers.key-systems.net/\?.*trigger=(?P<code>[^&]+).*$")
 
 class RawMessageBody:
     def __init__(self, body):
@@ -70,6 +72,24 @@ def postal(_request, req_body):
                     )
                     r.raise_for_status()
                     trigger_found = True
+
+                if line.startswith("https://icann-transfers.key-systems.net"):
+                    m = owner_change_re.match(line)
+                    if m:
+                        trigger = urllib.parse.unquote(m['code'])
+                        r = requests.get(
+                            "https://api.rrpproxy.net/api/call",
+                            params={
+                                "s_login": settings.RRPPROXY_USER,
+                                "s_pw": settings.RRPPROXY_PASS,
+                                "command": "ActivateOwnerChange",
+                                "action": "APPROVE",
+                                "trigger": trigger,
+                                "transferlock": "0"
+                            }
+                        )
+                        r.raise_for_status()
+                        trigger_found = True
 
     if trigger_found:
         return HttpResponse(status=200)
