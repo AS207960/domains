@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 from . import models, zone_info, apps
 from .views import billing, gchat_bot, emails
 import grpc
+import requests
 import pika
 import typing
 import google.protobuf.wrappers_pb2
@@ -832,8 +833,21 @@ def process_domain_transfer_contacts(transfer_order_id):
                 domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
             )
         if domain_data.registrant != registrant_id.registry_contact_id:
-            update_req.new_registrant.value = registrant_id.registry_contact_id
-            should_send = True
+            if zone.keysys_owner_trade:
+                r = requests.get(
+                    "https://api.rrpproxy.net/api/call",
+                    params={
+                        "s_login": settings.RRPPROXY_USER,
+                        "s_pw": settings.RRPPROXY_PASS,
+                        "command": "TradeDomain",
+                        "domain": domain_data.name,
+                        "ownercontact0": registrant_id.registry_contact_id,
+                    }
+                )
+                r.raise_for_status()
+            else:
+                update_req.new_registrant.value = registrant_id.registry_contact_id
+                should_send = True
 
     def _update_contact(contact_type, new_id):
         global should_send

@@ -757,7 +757,17 @@ class DomainInfo:
     def keysys_auto_renew(self):
         return self.registry in (
             self.REGISTRY_DENIC,
+            self.REGISTRY_NICAT,
             self.REGISTRY_SIDN,
+        )
+
+    @property
+    def keysys_owner_trade(self):
+        return self.registry in (
+            self.REGISTRY_NICAT,
+            self.REGISTRY_DNSBELGIUM,
+            self.REGISTRY_REDES,
+            self.REGISTRY_IT,
         )
 
     @property
