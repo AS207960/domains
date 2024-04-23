@@ -979,18 +979,20 @@ def process_domain_transfer_failed(transfer_order_id):
 )
 def set_dns_to_own(domain_id):
     domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    set_dns(domain, [
+        "ns1.as207960.net",
+        "ns2.as207960.net",
+        "ns3.as207960.net",
+        "ns4.as207960.net"
+    ])
+
+def set_dns(domain: models.DomainRegistration, hosts: typing.List[str]):
     domain_data = apps.epp_client.get_domain(
         domain.domain, registry_id=domain.registry_id
     )
 
     domain_info = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)[0]
-
-    hosts = [
-        "ns1.as207960.net",
-        "ns2.as207960.net",
-        "ns3.as207960.net",
-        "ns4.as207960.net"
-    ]
 
     if domain_info.host_object_supported:
         cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
@@ -1025,7 +1027,6 @@ def set_dns_to_own(domain_id):
             )
         ), add_hosts))
     ))
-
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,

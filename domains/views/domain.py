@@ -12,8 +12,11 @@ import jwt
 import json
 import urllib.parse
 import datetime
+import requests
 import google.protobuf.wrappers_pb2
 from concurrent.futures import ThreadPoolExecutor
+from ..proto import billing_pb2
+from .. import apps
 from .. import models, apps, forms, zone_info, tasks
 from . import gchat_bot
 
@@ -1209,6 +1212,66 @@ def domain_hexdns(request, domain_id):
     }, settings.JWT_PRIV_KEY, algorithm='ES384')
 
     return redirect(f"{settings.HEXDNS_URL}/setup_domains_zone/?domain_token={domain_jwt}")
+
+
+@login_required
+def domain_cf(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    msg = billing_pb2.BillingRequest(
+        cloudflare_account=billing_pb2.CloudflareAccountRequest(
+            id=request.user.username
+        )
+    )
+    msg_response = billing_pb2.CloudflareAccountResponse()
+    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString(), timeout=0))
+
+    if msg_response.result == msg_response.NEEDS_SETUP:
+        return redirect(reverse('https://billing.as207970.net'))
+    elif msg_response.result == msg_response.FAIL:
+        return render(request, "domains/error.html", {
+            "error": msg_response.message if msg_response.message else "An error occurred",
+            "back_url": referrer
+        })
+
+    r = requests.post("https://api.cloudflare.com/client/v4/zones", headers={
+        "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
+        "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+    }, json={
+        "name": user_domain.domain,
+        "account": {
+            "id": msg_response.account_id
+        }
+    })
+    r.raise_for_status()
+
+    data = r.json()["result"]
+
+    user_domain.cf_zone_id = data["id"]
+    user_domain.save()
+
+    r = requests.post(f"https://api.cloudflare.com/client/v4/zones/{user_domain.cf_zone_id}/subscription", headers={
+        "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
+        "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+    }, json={
+        "rate_plan": {
+            "id": "PARTNERS_FREE"
+        },
+    })
+    r.raise_for_status()
+
+    tasks.set_dns(user_domain, data["name_servers"])
+
+    return redirect('domain', user_domain.id)
 
 
 def _domain_search(request, domain_name):

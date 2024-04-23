@@ -119,6 +119,9 @@ spec:
             - secretRef:
                 name: domains-email
               prefix: "EMAIL_"
+            - secretRef:
+                name: domains-cloudflare
+              prefix: "CLOUDFLARE_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -223,6 +226,9 @@ spec:
                     name: domains-s3
                 - secretRef:
                     name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -290,6 +296,9 @@ spec:
                     name: domains-s3
                 - secretRef:
                     name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -357,6 +366,9 @@ spec:
                     name: domains-s3
                 - secretRef:
                     name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -424,6 +436,9 @@ spec:
                     name: domains-s3
                 - secretRef:
                     name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -491,6 +506,9 @@ spec:
                     name: domains-s3
                 - secretRef:
                     name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
           restartPolicy: OnFailure
 ---
 apiVersion: networking.k8s.io/v1
@@ -576,6 +594,9 @@ spec:
                 name: domains-s3
             - secretRef:
                 name: domains-switch
+            - secretRef:
+                name: domains-cloudflare
+              prefix: "CLOUDFLARE_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -660,6 +681,9 @@ spec:
                 name: domains-s3
             - secretRef:
                 name: domains-switch
+            - secretRef:
+                name: domains-cloudflare
+              prefix: "CLOUDFLARE_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -755,6 +779,9 @@ spec:
                 name: domains-s3
             - secretRef:
                 name: domains-switch
+            - secretRef:
+                name: domains-cloudflare
+              prefix: "CLOUDFLARE_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -837,6 +864,9 @@ spec:
                 name: domains-s3
             - secretRef:
                 name: domains-switch
+            - secretRef:
+                name: domains-cloudflare
+              prefix: "CLOUDFLARE_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

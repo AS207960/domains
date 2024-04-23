@@ -699,6 +699,7 @@ class DomainRegistration(models.Model):
     pending_registry_lock_status = models.PositiveSmallIntegerField(blank=True, null=True)
     registry_id = models.CharField(max_length=255, blank=True, null=True)
     not_required = models.BooleanField(default=False, blank=True)
+    cf_zone_id = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['domain']
