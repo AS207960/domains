@@ -1299,6 +1299,9 @@ def domain_cf_remove(request, domain_id):
         })
         r.raise_for_status()
 
+        user_domain.cf_zone_id = None
+        user_domain.save()
+
     tasks.set_dns(user_domain, [])
 
     return redirect('domain', user_domain.id)
