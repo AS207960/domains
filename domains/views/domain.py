@@ -1279,6 +1279,30 @@ def domain_cf(request, domain_id):
 
     return redirect('domain', user_domain.id)
 
+@login_required
+def domain_cf_remove(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    if user_domain.cf_zone_id:
+        r = requests.delete(f"https://api.cloudflare.com/client/v4/zones/{user_domain.cf_zone_id}", headers={
+            "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
+            "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+        })
+        r.raise_for_status()
+
+    tasks.set_dns(user_domain, [])
+
+    return redirect('domain', user_domain.id)
+
 
 def _domain_search(request, domain_name):
     try:

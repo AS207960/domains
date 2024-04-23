@@ -287,10 +287,16 @@
                                 &#x1f440; View in HexDNS
                             </a>
                         {% endif %}
-                        {% if not domain_obj.cf_zone_id and domain.can_update %}
-                            <a href="{% url 'setup_domain_cf' domain_id %}" class="btn btn-warning btn-sm">
-                                &#x1f4df; Setup for Cloudflare
-                            </a>
+                        {% if domain.can_update %}
+                            {% if not domain_obj.cf_zone_id %}
+                                <a href="{% url 'setup_domain_cf' domain_id %}" class="btn btn-warning btn-sm">
+                                    &#x1f4df; Setup for Cloudflare
+                                </a>
+                            {% else %}
+                                <a href="{% url 'delete_domain_cf' domain_id %}" class="btn btn-warning btn-sm">
+                                    &#x1f5d1; Delete from Cloudflare
+                                </a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
