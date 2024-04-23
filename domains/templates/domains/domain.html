@@ -271,11 +271,6 @@
                                 </a>
                             {% endif %}
                         {% endif %}
-                        {% if not domain_obj.cf_zone_id and domain.can_update %}
-                            <a href="{% url 'setup_domain_cf' domain_id %}" class="btn btn-warning btn-sm">
-                                &#x1f4df; Setup for Cloudflare
-                            </a>
-                        {% endif %}
                         {% if not is_hexdns %}
                             {% if domain.can_update %}
                                 <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-primary btn-sm">
@@ -285,6 +280,11 @@
                         {% else %}
                             <a href="{% url 'setup_domain_hexdns' domain_id %}" class="btn btn-secondary btn-sm">
                                 &#x1f440; View in HexDNS
+                            </a>
+                        {% endif %}
+                        {% if not domain_obj.cf_zone_id and domain.can_update %}
+                            <a href="{% url 'setup_domain_cf' domain_id %}" class="btn btn-warning btn-sm">
+                                &#x1f4df; Setup for Cloudflare
                             </a>
                         {% endif %}
                     </div>

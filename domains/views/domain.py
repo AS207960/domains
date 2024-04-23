@@ -16,7 +16,6 @@ import requests
 import google.protobuf.wrappers_pb2
 from concurrent.futures import ThreadPoolExecutor
 from ..proto import billing_pb2
-from .. import apps
 from .. import models, apps, forms, zone_info, tasks
 from . import gchat_bot
 
@@ -1239,25 +1238,32 @@ def domain_cf(request, domain_id):
         return redirect(reverse('https://billing.as207970.net'))
     elif msg_response.result == msg_response.FAIL:
         return render(request, "domains/error.html", {
-            "error": msg_response.message if msg_response.message else "An error occurred",
+            "error": msg_response.message if msg_response.message.strip() != "" else "An error occurred",
             "back_url": referrer
         })
 
-    r = requests.post("https://api.cloudflare.com/client/v4/zones", headers={
-        "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
-        "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
-    }, json={
-        "name": user_domain.domain,
-        "account": {
-            "id": msg_response.account_id
-        }
-    })
-    r.raise_for_status()
+    if not user_domain.cf_zone_id:
+        r = requests.post("https://api.cloudflare.com/client/v4/zones", headers={
+            "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
+            "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+        }, json={
+            "name": user_domain.domain,
+            "account": {
+                "id": msg_response.account_id
+            }
+        })
+        r.raise_for_status()
+        zone_data = r.json()["result"]
 
-    data = r.json()["result"]
-
-    user_domain.cf_zone_id = data["id"]
-    user_domain.save()
+        user_domain.cf_zone_id = zone_data["id"]
+        user_domain.save()
+    else:
+        r = requests.get(f"https://api.cloudflare.com/client/v4/zones/{user_domain.cf_zone_id}", headers={
+            "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
+            "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+        })
+        r.raise_for_status()
+        zone_data = r.json()["result"]
 
     r = requests.post(f"https://api.cloudflare.com/client/v4/zones/{user_domain.cf_zone_id}/subscription", headers={
         "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
@@ -1269,7 +1275,7 @@ def domain_cf(request, domain_id):
     })
     r.raise_for_status()
 
-    tasks.set_dns(user_domain, data["name_servers"])
+    tasks.set_dns(user_domain, zone_data["name_servers"])
 
     return redirect('domain', user_domain.id)
 
