@@ -1270,7 +1270,7 @@ def domain_cf(request, domain_id):
         "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
     }, json={
         "rate_plan": {
-            "id": "PARTNERS_FREE"
+            "id": "CF_FREE"
         },
     })
     r.raise_for_status()
