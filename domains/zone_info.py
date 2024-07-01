@@ -1252,6 +1252,18 @@ class DomainInfo:
     def is_eurid(self):
         return self.registry == self.REGISTRY_EURID
 
+    @property
+    def use_epp_auth_code(self):
+        return self.registry in (
+            self.REGISTRY_SIDN,
+        )
+
+    @property
+    def can_update_auth_code(self):
+        return self.registry not in (
+            self.REGISTRY_SIDN,
+        )
+
     def registrant_proxy(self, contact) -> typing.Optional[str]:
         if self.registry == self.REGISTRY_EURID:
             if contact.eurid_citizenship and contact.eurid_citizenship in EURID_PERMITTED_COUNTRIES:

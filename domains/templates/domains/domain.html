@@ -127,7 +127,7 @@
                                 <a href="{% url 'delete_domain' domain_id %}" class="btn btn-danger">&#x1f5d1; Delete</a>
                             {% endif %}
                         {% endif %}
-                        {% if domain.can_update and domain_info.standard_auth_code_procedure %}
+                        {% if domain.can_update and domain_info.standard_auth_code_procedure and domain_info.can_update_auth_code %}
                             <a href="{% url 'domain_regen_transfer_code' domain_id %}" class="btn btn-info">
                                 Regenerate transfer code
                             </a>
@@ -151,7 +151,12 @@
                                 text-shadow: none;
                             }
                         </style>
-                        <b>Transfer auth code:</b> <span class="auth-hide">{{ domain_obj.auth_info }}</span>
+                        <b>Transfer auth code:</b>
+                        {% if domain_info.use_epp_auth_code %}
+                            <span class="auth-hide">{{ domain.auth_info }}</span>
+                        {% else %}
+                            <span class="auth-hide">{{ domain_obj.auth_info }}</span>
+                        {% endif %}
                     </p>
                 {% else %}
                     <p>
