@@ -43,8 +43,12 @@
                                 {% endwith %}
                             </td>
                             <td>{{ contact.email }}</td>
-                            <td>{% if contact.created_date %}{{ contact.created_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                            <td>{% if contact.updated_date %}{{ contact.updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                            <td data-sort="{% if contact.created_date %}{{ contact.created_date.timestamp }}{% else %}0{% endif %}">
+                                {% if contact.created_date %}{{ contact.created_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                            </td>
+                            <td data-sort="{% if contact.updated_date %}{{ contact.updated_date.timestamp }}{% else %}0{% endif %}">
+                                {% if contact.updated_date %}{{ contact.updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <a href="{% url 'edit_contact' contact.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a>
@@ -83,9 +87,9 @@
                 }, {
                     type: "string"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
                     type: "string",
                     orderable: false,

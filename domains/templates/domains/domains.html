@@ -57,7 +57,7 @@
                                         {% endif %}
                                     {% endwith %}
                                 </td>
-                                <td colspan="4" class="text-danger">
+                                <td colspan="4" class="text-danger" data-sort="0">
                                     Unable to contact registry: {{ domain.error }}
                                 </td>
                                 <td class="dt-hidden-td"></td>
@@ -90,8 +90,10 @@
                                         {% endif %}
                                     {% endwith %}
                                 </td>
-                                <td>{% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                                <td>
+                                <td data-sort="{% if domain.domain.creation_date %}{{ domain.domain.creation_date.timestamp }}{% else %}0{% endif %}">
+                                    {% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                                </td>
+                                <td data-sort="{% if domain.domain.paid_until_date %}{{ domain.domain.paid_until_date.timestamp }}{% elif domain.domain.expiry_date %}{{ domain.domain.expiry_date.timestamp }}{% else %}0{% endif %}">
                                     {% if domain.paid_until_date %}
                                         {{ domain.paid_until_date|date:"N jS Y P" }}
                                     {% elif domain.domain.expiry_date %}
@@ -100,7 +102,9 @@
                                         N/A
                                     {% endif %}
                                 </td>
-                                <td>{% if domain.domain.last_updated_date %}{{ domain.domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td data-sort="{% if domain.domain.last_updated_date %}{{ domain.domain.last_updated_date.timestamp }}{% else %}0{% endif %}">
+                                    {% if domain.domain.last_updated_date %}{{ domain.domain.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                                </td>
                                 <td><a href="{% url 'domain' domain.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>
                             </tr>
                         {% endif %}
@@ -542,11 +546,11 @@
                 }, {
                     type: "string"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
                     type: "string",
                     orderable: false,

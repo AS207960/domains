@@ -70,8 +70,12 @@
                                         {% endif %}
                                     {% endwith %}
                                 </td>
-                                <td>{% if host.host.creation_date %}{{ host.host.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
-                                <td>{% if host.host.last_updated_date %}{{ host.host.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}</td>
+                                <td data-sort="{% if host.host.creation_date %}{{ host.host.creation_date.timestamp }}{% else %}0{% endif %}">
+                                    {% if host.host.creation_date %}{{ host.host.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                                </td>
+                                <td data-sort="{% if host.host.last_updated_date %}{{ host.host.last_updated_date.timestamp }}{% else %}0{% endif %}">
+                                    {% if host.host.last_updated_date %}{{ host.host.last_updated_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
+                                </td>
                                 <td><a href="{% url 'host' host.id %}" class="btn btn-primary btn-sm">&#x1f58a; Edit</a></td>
                             </tr>
                         {% endif %}
@@ -102,9 +106,9 @@
                 }, {
                     type: "string"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
-                    type: "date"
+                    type: "num"
                 }, {
                     type: "string",
                     orderable: false,
