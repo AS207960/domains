@@ -566,7 +566,7 @@ class Domain:
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
-    def del_host_objs(self, hosts: typing.List[str]) -> bool:
+    def del_host_objs(self, hosts: typing.List[str], with_dnssec: bool = False) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             add=[],
@@ -575,6 +575,9 @@ class Domain:
                     host_obj=h
                 )
             ), hosts)),
+            sec_dns=domain_pb2.UpdateSecDNSData(
+                all=True
+            ) if with_dnssec else None,
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
@@ -591,7 +594,7 @@ class Domain:
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 
-    def del_host_name(self, hosts: typing.List[str]) -> bool:
+    def del_host_name(self, hosts: typing.List[str], with_dnssec: bool = False) -> bool:
         return self._app.stub.DomainUpdate(domain_pb2.DomainUpdateRequest(
             name=self.name,
             add=[],
@@ -600,6 +603,9 @@ class Domain:
                     host_name=h
                 )
             ), hosts)),
+            sec_dns=domain_pb2.UpdateSecDNSData(
+                all=True
+            ) if with_dnssec else None,
             registry_name=google.protobuf.wrappers_pb2.StringValue(value=self.registry_name)
         )).pending
 

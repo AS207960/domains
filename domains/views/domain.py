@@ -784,7 +784,7 @@ def delete_domain_host_obj(request, domain_id, host_name):
             "back_url": referrer
         })
 
-    if host_name == "all":
+    if host_name in ("all", "all_dnssec"):
         host_objs = []
         for ns in domain_data.name_servers:
             if ns.host_obj:
@@ -793,7 +793,7 @@ def delete_domain_host_obj(request, domain_id, host_name):
         host_objs = [host_name]
 
     try:
-        domain_data.del_host_objs(host_objs)
+        domain_data.del_host_objs(host_objs, with_dnssec=host_name == "all_dnssec")
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
@@ -914,7 +914,7 @@ def delete_domain_host_addr(request, domain_id, host_name):
             "back_url": referrer
         })
 
-    if host_name == "all":
+    if host_name in ("all", "all_dnssec"):
         host_objs = []
         for ns in domain_data.name_servers:
             if ns.host_name:
@@ -923,7 +923,7 @@ def delete_domain_host_addr(request, domain_id, host_name):
         host_objs = [host_name]
 
     try:
-        domain_data.del_host_name(host_objs)
+        domain_data.del_host_name(host_objs, with_dnssec=host_name == "all_dnssec")
     except grpc.RpcError as rpc_error:
         error = rpc_error.details()
         return render(request, "domains/error.html", {
