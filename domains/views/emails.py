@@ -35,9 +35,13 @@ def send_email(user, data: dict):
     }
     request["data"]["service"] = "Domains by Glauca"
 
-    if user.oidc_profile.id_data and user.oidc_profile.id_data.get("listmonk_user_id"):
-        request["subscriber_id"] = user.oidc_profile.id_data["listmonk_user_id"]
-    else:
+    try:
+        django_keycloak_auth.clients.get_active_access_token(user.oidc_profile)
+        if user.oidc_profile.id_data and user.oidc_profile.id_data.get("listmonk_user_id"):
+            request["subscriber_id"] = user.oidc_profile.id_data["listmonk_user_id"]
+        else:
+            request["subscriber_email"] = user.email
+    except django_keycloak_auth.clients.TokensExpired:
         request["subscriber_email"] = user.email
 
     access_token = django_keycloak_auth.clients.get_access_token()

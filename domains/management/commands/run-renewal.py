@@ -3,11 +3,9 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 import datetime
 import grpc
-from domains import models, zone_info, apps, tasks
+from domains import models, zone_info, apps, tasks, utils
 from domains.views import billing, emails
 
-NOTIFY_INTERVAL = datetime.timedelta(days=60)
-RENEW_INTERVAL = datetime.timedelta(days=30)
 FAIL_INTERVAL = datetime.timedelta(days=3)
 
 
@@ -74,10 +72,7 @@ class Command(BaseCommand):
 
             user = domain.get_user()
 
-            if domain_data.paid_until_date:
-                expiry_date = domain_data.paid_until_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
-            else:
-                expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
+            expiry_date, _ = utils.domain_paid_until_date(domain, domain_data, domain_info)
 
             email_data = {
                 "obj": domain,
@@ -86,19 +81,25 @@ class Command(BaseCommand):
             }
             print(f"{domain_data.name} expiring on {expiry_date}", flush=True)
 
-            if (expiry_date - RENEW_INTERVAL) <= now:
+            if (expiry_date - utils.RENEW_INTERVAL) <= now:
                 print(f"{domain_data.name} expiring soon, renewing", flush=True)
 
                 last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=domain) \
                     .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
                 if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
-                        last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                        last_renew_order.timestamp + utils.NOTIFY_INTERVAL >= now:
+                    print(f"{domain_data.name} expiring soon, renewal already succeeded", flush=True)
+                    continue
+                last_renew_order = models.DomainRenewOrder.objects.filter(domain_obj=domain) \
+                    .order_by("-timestamp").first()  # type: models.DomainRenewOrder
+                if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
+                        last_renew_order.timestamp + utils.NOTIFY_INTERVAL >= now:
                     print(f"{domain_data.name} expiring soon, renewal already succeeded", flush=True)
                     continue
                 last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=domain, should_renew=True) \
                     .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
                 if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
-                        last_restore_order.timestamp + NOTIFY_INTERVAL >= now:
+                        last_restore_order.timestamp + utils.NOTIFY_INTERVAL >= now:
                     print(f"{domain_data.name} expiring soon, renewal (by restore) already succeeded", flush=True)
                     continue
 
@@ -120,7 +121,7 @@ class Command(BaseCommand):
                 if (expiry_date - FAIL_INTERVAL) <= now:
                     if domain_info.renews_if_not_deleted:
                         print(f"Deleting {domain.domain} due to billing failure", flush=True)
-                        if last_renew_order.timestamp + NOTIFY_INTERVAL >= now:
+                        if last_renew_order.timestamp + utils.NOTIFY_INTERVAL >= now:
                             print(f"Reversing charge just to be sure", flush=True)
                             billing.reverse_charge(last_renew_order.id)
 
@@ -151,7 +152,7 @@ class Command(BaseCommand):
                         insert_into_dict(expired, user, email_data)
 
                 else:
-                    if (domain.last_billed + RENEW_INTERVAL) >= now:
+                    if (domain.last_billed + utils.RENEW_INTERVAL) >= now:
                         print(f"{domain_data.name} expiring soon, renewal already charged", flush=True)
                         continue
 
@@ -182,8 +183,8 @@ class Command(BaseCommand):
                     elif order.state == order.STATE_FAILED:
                         emails.mail_auto_renew_failed.delay(order.id)
 
-            elif (expiry_date - NOTIFY_INTERVAL) <= now:
-                if domain.last_renew_notify + NOTIFY_INTERVAL > now:
+            elif (expiry_date - utils.NOTIFY_INTERVAL) <= now:
+                if domain.last_renew_notify + utils.NOTIFY_INTERVAL > now:
                     print(f"{domain_data.name} expiring soon, already notified", flush=True)
                     continue
 

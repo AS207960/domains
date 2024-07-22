@@ -16,11 +16,8 @@ import requests
 import google.protobuf.wrappers_pb2
 from concurrent.futures import ThreadPoolExecutor
 from ..proto import billing_pb2
-from .. import models, apps, forms, zone_info, tasks
+from .. import models, apps, forms, zone_info, tasks, utils
 from . import gchat_bot
-
-
-RENEW_INTERVAL = datetime.timedelta(days=30)
 
 
 def index(request):
@@ -329,31 +326,7 @@ def domain(request, domain_id):
             "back_url": referrer
         })
 
-    now = timezone.now()
-    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + domain_info.expiry_offset
-    paid_up_until = None
-    if expiry_date - RENEW_INTERVAL <= now:
-        last_renew_order = models.DomainAutomaticRenewOrder.objects.filter(domain_obj=user_domain) \
-            .order_by("-timestamp").first()  # type: models.DomainAutomaticRenewOrder
-        if last_renew_order and last_renew_order.state == last_renew_order.STATE_COMPLETED and \
-                last_renew_order.timestamp + datetime.timedelta(days=60) >= now:
-            if last_renew_order.period_unit == apps.epp_api.common_pb2.Period.Months:
-                renew_period = datetime.timedelta(weeks=4 * last_renew_order.period_value)
-            else:
-                renew_period = datetime.timedelta(weeks=52 * last_renew_order.period_value)
-
-            paid_up_until = expiry_date + renew_period
-        else:
-            last_restore_order = models.DomainRestoreOrder.objects.filter(domain_obj=user_domain, should_renew=True)\
-                        .order_by("-timestamp").first()  # type: models.DomainRestoreOrder
-            if last_restore_order and last_restore_order.state == last_restore_order.STATE_COMPLETED and \
-                    last_restore_order.timestamp + datetime.timedelta(days=60) >= now:
-                if last_restore_order.period_unit == apps.epp_api.common_pb2.Period.Months:
-                    renew_period = datetime.timedelta(weeks=4 * last_restore_order.period_value)
-                else:
-                    renew_period = datetime.timedelta(weeks=52 * last_restore_order.period_value)
-
-                paid_up_until = expiry_date + renew_period
+    expiry_date, paid_up_until = utils.domain_paid_until_date(domain_data)
 
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
