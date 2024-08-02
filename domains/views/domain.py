@@ -326,7 +326,9 @@ def domain(request, domain_id):
             "back_url": referrer
         })
 
-    expiry_date, paid_up_until = utils.domain_paid_until_date(domain_data)
+    expiry_date, paid_up_until = utils.domain_paid_until_date(
+        domain_obj=user_domain, domain_data=domain_data, domain_info=domain_info
+    )
 
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
