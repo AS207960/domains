@@ -576,6 +576,15 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
         return resp_data
 
+    def check_wildcard(self, search_term: str):
+        if "*" in search_term and len(search_term) < 4:
+            response = rdap_pb2.NameServerResponse(error=rdap_pb2.ErrorResponse(
+                error_code=400,
+                title="Bad Request",
+                description="Wildcard search too short"
+            ))
+            return response
+
     def DomainLookup(self, request: rdap_pb2.LookupRequest, context):
         domain_obj = models.DomainRegistration.objects.filter(
             domain__iexact=request.query,
@@ -613,6 +622,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def DomainSearch(self, request: rdap_pb2.DomainSearchRequest, context):
         if request.WhichOneof("query") == "name":
+            if r := self.check_wildcard(request.name):
+                return r
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             domain_objs = models.DomainRegistration.objects.filter(
                 domain__iregex=f"^{regex}$",
@@ -691,6 +702,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
         entities = {}
 
         if request.WhichOneof("query") == "name":
+            if r := self.check_wildcard(request.name):
+                return r
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             contact_objs = models.Contact.objects.filter(
                 Q(local_address__name__iregex=f"^{regex}$", local_address__disclose_name=True) |
@@ -703,6 +716,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
                 if contact_obj.id not in entities:
                     entities[contact_obj.id] = contact_obj
         elif request.WhichOneof("query") == "handle":
+            if r := self.check_wildcard(request.handle):
+                return r
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.handle).replace("*", ".*")
             try:
                 contact_objs = list(models.Contact.objects.filter(
@@ -782,6 +797,8 @@ class RDAPServicer(rdap_pb2_grpc.RDAPServicer):
 
     def NameServerSearch(self, request: rdap_pb2.NameServerSearchRequest, context):
         if request.WhichOneof("query") == "name":
+            if r := self.check_wildcard(request.name):
+                return r
             regex = re.sub(r"[-[\]{}()+?.,\\^$|#\s]", r'\\\g<0>', request.name).replace("*", ".*")
             name_server_objs = models.NameServer.objects.filter(
                 name_server__iregex=f"^{regex}$"
