@@ -164,6 +164,8 @@ class DomainInfo(google.protobuf.message.Message):
     SUSPENDED_FIELD_NUMBER: builtins.int
     DELAYED_FIELD_NUMBER: builtins.int
     SEIZED_FIELD_NUMBER: builtins.int
+    AVAILABLE_DATE_FIELD_NUMBER: builtins.int
+    SCHEDULED_SUSPENSION_DATE_FIELD_NUMBER: builtins.int
     DELETION_DATE_FIELD_NUMBER: builtins.int
     ON_SITE_FIELD_NUMBER: builtins.int
     RESELLER_FIELD_NUMBER: builtins.int
@@ -178,6 +180,10 @@ class DomainInfo(google.protobuf.message.Message):
     suspended: builtins.bool
     delayed: builtins.bool
     seized: builtins.bool
+    @property
+    def available_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    @property
+    def scheduled_suspension_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
     @property
     def deletion_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
     @property
@@ -201,6 +207,8 @@ class DomainInfo(google.protobuf.message.Message):
         suspended: builtins.bool = ...,
         delayed: builtins.bool = ...,
         seized: builtins.bool = ...,
+        available_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        scheduled_suspension_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         deletion_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
         reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
@@ -210,8 +218,8 @@ class DomainInfo(google.protobuf.message.Message):
         auth_info_valid_until: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["auth_info_valid_until", b"auth_info_valid_until", "deletion_date", b"deletion_date", "on_site", b"on_site", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["auth_info_valid_until", b"auth_info_valid_until", "delayed", b"delayed", "deletion_date", b"deletion_date", "max_extension_period", b"max_extension_period", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "registrant_country", b"registrant_country", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "seized", b"seized", "suspended", b"suspended"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "deletion_date", b"deletion_date", "on_site", b"on_site", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "scheduled_suspension_date", b"scheduled_suspension_date"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "delayed", b"delayed", "deletion_date", b"deletion_date", "max_extension_period", b"max_extension_period", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "registrant_country", b"registrant_country", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "scheduled_suspension_date", b"scheduled_suspension_date", "seized", b"seized", "suspended", b"suspended"]) -> None: ...
 
 global___DomainInfo = DomainInfo
 
@@ -307,21 +315,25 @@ class DomainCreateExtension(google.protobuf.message.Message):
     ON_SITE_FIELD_NUMBER: builtins.int
     RESELLER_FIELD_NUMBER: builtins.int
     REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
+    VOUCHER_FIELD_NUMBER: builtins.int
     @property
     def on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
     def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
     def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    @property
+    def voucher(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
         on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
         reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
         registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        voucher: google.protobuf.wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]) -> None: ...
 
 global___DomainCreateExtension = DomainCreateExtension
 

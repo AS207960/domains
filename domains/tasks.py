@@ -273,13 +273,19 @@ def process_domain_registration_paid(registration_order_id):
                         ).registry_contact_id
                     ))
 
-            if zone.keysys_de or zone.keysys_auto_renew:
+            if zone.keysys_de or zone.keysys_tel or zone.keysys_auto_renew:
                 keysys = apps.epp_api.keysys_pb2.DomainCreate()
                 if zone.keysys_auto_renew:
                     keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
                 if zone.keysys_de:
                     keysys.de.abuse_contact.value = "https://as207960.net/contact"
                     keysys.de.general_contact.value = "https://as207960.net/contact"
+                if zone.keysys_tel:
+                    keysys.tel.whois_type.value = (
+                        apps.epp_api.keysys_pb2.TelLegal if domain_registration_order.registrant_contact.is_company else
+                        apps.epp_api.keysys_pb2.TelNatural
+                    )
+                    keysys.tel.publish_whois.value = False
             else:
                 keysys = None
 
@@ -922,6 +928,14 @@ def process_domain_transfer_keysys(transfer_order_id):
     if zone.keysys_de:
         update_req.keysys.de.abprocessuse_contact.value = "https://as207960.net/contact"
         update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
+        should_send = True
+
+    if zone.keysys_tel:
+        update_req.keysys.tel.whois_type.value = (
+            apps.epp_api.keysys_pb2.TelLegal if domain_transfer_order.domain_obj.registrant_contact.is_company else
+            apps.epp_api.keysys_pb2.TelNatural
+        )
+        update_req.keysys.tel.publish_whois.value = False
         should_send = True
 
     if should_send:

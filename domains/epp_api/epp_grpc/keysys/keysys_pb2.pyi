@@ -331,6 +331,23 @@ RegularActivity: USCategory.ValueType  # 4
 OfficeOrFacility: USCategory.ValueType  # 5
 global___USCategory = USCategory
 
+class _TelWhoisType:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _TelWhoisTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_TelWhoisType.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    TelUnknownType: _TelWhoisType.ValueType  # 0
+    TelNatural: _TelWhoisType.ValueType  # 1
+    TelLegal: _TelWhoisType.ValueType  # 2
+
+class TelWhoisType(_TelWhoisType, metaclass=_TelWhoisTypeEnumTypeWrapper): ...
+
+TelUnknownType: TelWhoisType.ValueType  # 0
+TelNatural: TelWhoisType.ValueType  # 1
+TelLegal: TelWhoisType.ValueType  # 2
+global___TelWhoisType = TelWhoisType
+
 @typing_extensions.final
 class ContactInfo(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -429,6 +446,7 @@ class DomainCreate(google.protobuf.message.Message):
     NAME_FIELD_NUMBER: builtins.int
     RS_FIELD_NUMBER: builtins.int
     US_FIELD_NUMBER: builtins.int
+    TEL_FIELD_NUMBER: builtins.int
     accept_premium_price: builtins.bool
     accept_ssl_requirements: builtins.bool
     allocation_token: builtins.str
@@ -454,6 +472,8 @@ class DomainCreate(google.protobuf.message.Message):
     def rs(self) -> global___DomainInfoRS: ...
     @property
     def us(self) -> global___DomainInfoUS: ...
+    @property
+    def tel(self) -> global___DomainInfoTel: ...
     def __init__(
         self,
         *,
@@ -473,10 +493,11 @@ class DomainCreate(google.protobuf.message.Message):
         name: global___DomainInfoName | None = ...,
         rs: global___DomainInfoRS | None = ...,
         us: global___DomainInfoUS | None = ...,
+        tel: global___DomainInfoTel | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "rs", b"rs", "tld", b"tld", "us", b"us"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["accept_premium_price", b"accept_premium_price", "accept_ssl_requirements", b"accept_ssl_requirements", "allocation_token", b"allocation_token", "ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "gay", "name", "rs", "us"] | None: ...
+    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "rs", b"rs", "tel", b"tel", "tld", b"tld", "us", b"us"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["accept_premium_price", b"accept_premium_price", "accept_ssl_requirements", b"accept_ssl_requirements", "allocation_token", b"allocation_token", "ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tel", b"tel", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "gay", "name", "rs", "us", "tel"] | None: ...
 
 global___DomainCreate = DomainCreate
 
@@ -580,6 +601,7 @@ class DomainUpdate(google.protobuf.message.Message):
     NAME_FIELD_NUMBER: builtins.int
     RS_FIELD_NUMBER: builtins.int
     US_FIELD_NUMBER: builtins.int
+    TEL_FIELD_NUMBER: builtins.int
     renewal_mode: global___RenewalMode.ValueType
     transfer_mode: global___TransferMode.ValueType
     @property
@@ -602,6 +624,8 @@ class DomainUpdate(google.protobuf.message.Message):
     def rs(self) -> global___DomainInfoRS: ...
     @property
     def us(self) -> global___DomainInfoUS: ...
+    @property
+    def tel(self) -> global___DomainInfoTel: ...
     def __init__(
         self,
         *,
@@ -617,10 +641,11 @@ class DomainUpdate(google.protobuf.message.Message):
         name: global___DomainInfoName | None = ...,
         rs: global___DomainInfoRS | None = ...,
         us: global___DomainInfoUS | None = ...,
+        tel: global___DomainInfoTel | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "rs", b"rs", "tld", b"tld", "us", b"us", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "name", "rs", "us"] | None: ...
+    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "rs", b"rs", "tel", b"tel", "tld", b"tld", "us", b"us", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tel", b"tel", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "name", "rs", "us", "tel"] | None: ...
 
 global___DomainUpdate = DomainUpdate
 
@@ -731,6 +756,7 @@ class DomainInfo(google.protobuf.message.Message):
     NAME_FIELD_NUMBER: builtins.int
     RS_FIELD_NUMBER: builtins.int
     US_FIELD_NUMBER: builtins.int
+    TEL_FIELD_NUMBER: builtins.int
     @property
     def renewal_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
     @property
@@ -759,6 +785,8 @@ class DomainInfo(google.protobuf.message.Message):
     def rs(self) -> global___DomainInfoRS: ...
     @property
     def us(self) -> global___DomainInfoUS: ...
+    @property
+    def tel(self) -> global___DomainInfoTel: ...
     def __init__(
         self,
         *,
@@ -777,10 +805,11 @@ class DomainInfo(google.protobuf.message.Message):
         name: global___DomainInfoName | None = ...,
         rs: global___DomainInfoRS | None = ...,
         us: global___DomainInfoUS | None = ...,
+        tel: global___DomainInfoTel | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "paid_until_date", b"paid_until_date", "renewal_date", b"renewal_date", "roid", b"roid", "rs", b"rs", "tld", b"tld", "us", b"us", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "paid_until_date", b"paid_until_date", "renewal_date", b"renewal_date", "renewal_mode", b"renewal_mode", "roid", b"roid", "rs", b"rs", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "name", "rs", "us"] | None: ...
+    def HasField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "paid_until_date", b"paid_until_date", "renewal_date", b"renewal_date", "roid", b"roid", "rs", b"rs", "tel", b"tel", "tld", b"tld", "us", b"us", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "name", b"name", "paid_until_date", b"paid_until_date", "renewal_date", b"renewal_date", "renewal_mode", b"renewal_mode", "roid", b"roid", "rs", b"rs", "tel", b"tel", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["tld", b"tld"]) -> typing_extensions.Literal["ca", "de", "eu", "fr", "name", "rs", "us", "tel"] | None: ...
 
 global___DomainInfo = DomainInfo
 
@@ -941,3 +970,23 @@ class DomainInfoUS(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["category", b"category", "purpose", b"purpose", "validator", b"validator"]) -> None: ...
 
 global___DomainInfoUS = DomainInfoUS
+
+@typing_extensions.final
+class DomainInfoTel(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    PUBLISH_WHOIS_FIELD_NUMBER: builtins.int
+    WHOIS_TYPE_FIELD_NUMBER: builtins.int
+    @property
+    def publish_whois(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
+    whois_type: global___TelWhoisType.ValueType
+    def __init__(
+        self,
+        *,
+        publish_whois: google.protobuf.wrappers_pb2.BoolValue | None = ...,
+        whois_type: global___TelWhoisType.ValueType = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["publish_whois", b"publish_whois"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["publish_whois", b"publish_whois", "whois_type", b"whois_type"]) -> None: ...
+
+global___DomainInfoTel = DomainInfoTel

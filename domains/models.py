@@ -280,6 +280,24 @@ class Contact(models.Model):
     def __str__(self):
         return self.description
 
+    @property
+    def is_company(self):
+        return self.entity_type in (
+                apps.epp_api.contact_pb2.UkLimitedCompany, apps.epp_api.contact_pb2.UkPublicLimitedCompany,
+                apps.epp_api.contact_pb2.UkPartnership, apps.epp_api.contact_pb2.UkLimitedLiabilityPartnership,
+                apps.epp_api.contact_pb2.UkIndustrialProvidentRegisteredCompany, apps.epp_api.contact_pb2.UkSchool,
+                apps.epp_api.contact_pb2.UkRegisteredCharity, apps.epp_api.contact_pb2.UkGovernmentBody,
+                apps.epp_api.contact_pb2.UkCorporationByRoyalCharter, apps.epp_api.contact_pb2.UkStatutoryBody,
+                apps.epp_api.contact_pb2.UkPoliticalParty, apps.epp_api.contact_pb2.OtherUkEntity,
+                apps.epp_api.contact_pb2.FinnishCompany, apps.epp_api.contact_pb2.FinnishAssociation,
+                apps.epp_api.contact_pb2.FinnishInstitution, apps.epp_api.contact_pb2.FinnishPoliticalParty,
+                apps.epp_api.contact_pb2.FinnishMunicipality, apps.epp_api.contact_pb2.FinnishGovernment,
+                apps.epp_api.contact_pb2.FinnishPublicCommunity, apps.epp_api.contact_pb2.OtherCompany,
+                apps.epp_api.contact_pb2.OtherAssociation, apps.epp_api.contact_pb2.OtherInstitution,
+                apps.epp_api.contact_pb2.OtherPoliticalParty, apps.epp_api.contact_pb2.OtherMunicipality,
+                apps.epp_api.contact_pb2.OtherGovernment, apps.epp_api.contact_pb2.OtherPublicCommunity,
+        )
+
     def clean(self):
         if self.entity_type in (
                 apps.epp_api.contact_pb2.UkIndividual, apps.epp_api.contact_pb2.FinnishIndividual,

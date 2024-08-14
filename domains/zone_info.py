@@ -582,6 +582,7 @@ class DomainInfo:
     REGISTRY_INC = "inc"
     REGISTRY_IT = "it"
     REGISTRY_DOMICILIUM = "domicilium"
+    REGISTRY_TELNAMES = "telnames"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -708,6 +709,7 @@ class DomainInfo:
             self.REGISTRY_INC,
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
+            self.REGISTRY_TELNAMES,
         )
 
     @property
@@ -753,6 +755,12 @@ class DomainInfo:
     def keysys_de(self):
         return self.registry in (
             self.REGISTRY_DENIC
+        )
+
+    @property
+    def keysys_tel(self):
+        return self.registry in (
+            self.REGISTRY_TELNAMES
         )
 
     @property
@@ -858,6 +866,7 @@ class DomainInfo:
             self.REGISTRY_INC,
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
+            self.REGISTRY_TELNAMES,
         )
 
     @property
@@ -1073,6 +1082,7 @@ class DomainInfo:
             self.REGISTRY_INC,
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
+            self.REGISTRY_TELNAMES,
         )
 
     @property
@@ -1144,6 +1154,7 @@ class DomainInfo:
             self.REGISTRY_INC,
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
+            self.REGISTRY_TELNAMES,
         )
 
     @property
@@ -1216,6 +1227,7 @@ class DomainInfo:
             self.REGISTRY_INC,
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
+            self.REGISTRY_TELNAMES,
         )
 
     @property
@@ -3413,7 +3425,7 @@ else:
                         markup=decimal.Decimal("1.6"))
         )),
         ('tel', DomainInfo(
-            DomainInfo.REGISTRY_GODADDY,
+            DomainInfo.REGISTRY_TELNAMES,
             MarkupPrice(2363, restore=2363, currency=None, display_currency='USD', tld='tel',
                         markup=decimal.Decimal("1.4"))
         )),
