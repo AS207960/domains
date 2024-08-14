@@ -384,6 +384,10 @@ def process_domain_registration(registration_order_id):
 def process_domain_registration_complete(registration_order_id):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
+    if models.DomainRegistration.objects.filter(
+        id=domain_registration_order.domain_id
+    ).first():
+        return
 
     period = apps.epp_api.Period(
         value=domain_registration_order.period_value,
