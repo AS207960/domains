@@ -583,6 +583,7 @@ class DomainInfo:
     REGISTRY_IT = "it"
     REGISTRY_DOMICILIUM = "domicilium"
     REGISTRY_TELNAMES = "telnames"
+    REGISTRY_NICSM = "nicsm"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -710,6 +711,7 @@ class DomainInfo:
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
+            self.REGISTRY_NICSM,
         )
 
     @property
@@ -867,6 +869,7 @@ class DomainInfo:
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
+            self.REGISTRY_NICSM,
         )
 
     @property
@@ -1083,6 +1086,7 @@ class DomainInfo:
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
+            self.REGISTRY_NICSM,
         )
 
     @property
@@ -1155,6 +1159,7 @@ class DomainInfo:
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
+            self.REGISTRY_NICSM,
         )
 
     @property
@@ -1228,6 +1233,7 @@ class DomainInfo:
             self.REGISTRY_IT,
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
+            self.REGISTRY_NICSM,
         )
 
     @property
@@ -3743,6 +3749,11 @@ else:
             DomainInfo.REGISTRY_DOMICILIUM,
             MarkupPrice(2860, transfer=0, restore=0, currency=None, display_currency='GBP', tld='im',
                         markup=decimal.Decimal("1.3"))
+        )),
+        ('sm', DomainInfo(
+            DomainInfo.REGISTRY_NICSM,
+            MarkupPrice(20470, transfer=25870, restore=0, currency=None, display_currency='EUR', tld='sm',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
