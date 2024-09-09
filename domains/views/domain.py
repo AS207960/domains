@@ -1272,7 +1272,8 @@ def domain_cf_remove(request, domain_id):
             "X-Auth-Email": settings.CLOUDFLARE_API_EMAIL,
             "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
         })
-        r.raise_for_status()
+        if r.status_code != 400:
+            r.raise_for_status()
 
         user_domain.cf_zone_id = None
         user_domain.save()
