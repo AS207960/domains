@@ -8,6 +8,7 @@ import django_keycloak_auth.clients
 from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
 from . import apps, zone_info
+import re
 import uuid
 import grpc
 import time
@@ -21,6 +22,7 @@ import as207960_utils.models
 
 CONTACT_SEARCH = threading.Lock()
 NAME_SERVER_SEARCH = threading.Lock()
+UK_POSTCODE_RE = re.compile(r"^([A-Z][A-HJ-Y]?\d[A-Z\d]? \d[A-Z]{2}|GIR 0A{2})$")
 
 
 class RegistryLockState(enum.Enum):
@@ -106,6 +108,12 @@ class ContactAddress(models.Model):
 
     def __str__(self):
         return self.description
+
+    def clean(self):
+        if self.country_code.code == "GB" and not UK_POSTCODE_RE.match(self.postal_code):
+            raise ValidationError({
+                "postal_code": "Invalid postcode"
+            })
 
     @classmethod
     def get_object_list(cls, access_token: str, action='view'):
