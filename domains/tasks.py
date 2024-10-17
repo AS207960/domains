@@ -953,6 +953,9 @@ def process_domain_transfer_complete(transfer_order_id):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
+    if models.DomainRegistration.objects.filter(id=domain_transfer_order.domain_id).exists():
+        return
+
     domain_obj = models.DomainRegistration(
         id=domain_transfer_order.domain_id,
         domain=domain_transfer_order.domain,
