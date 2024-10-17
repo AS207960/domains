@@ -256,7 +256,7 @@ def edit_address(request, address_id):
                     "error": str(e),
                     "back_url": referrer
                 })
-            return redirect(referrer)
+            return redirect('addresses')
     else:
         form = forms.AddressForm(instance=user_address)
 
