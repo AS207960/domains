@@ -121,28 +121,29 @@ class Command(BaseCommand):
                 if (expiry_date - FAIL_INTERVAL) <= now:
                     if domain_info.renews_if_not_deleted:
                         print(f"Deleting {domain.domain} due to billing failure", flush=True)
-                        if last_renew_order.timestamp + utils.NOTIFY_INTERVAL >= now:
+                        if last_renew_order and last_renew_order.timestamp + utils.NOTIFY_INTERVAL >= now:
                             print(f"Reversing charge just to be sure", flush=True)
                             billing.reverse_charge(last_renew_order.id)
 
-                            try:
-                                if domain_info.keysys_de:
-                                    apps.epp_client.delete_domain(
-                                        domain.domain, keysys_target="TRANSIT",
-                                        registry_id=domain.registry_id
-                                    )
-                                else:
-                                    apps.epp_client.delete_domain(
-                                        domain_data.name,
-                                        registry_id=domain.registry_id
-                                    )
-                            except grpc.RpcError as rpc_error:
-                                print(f"Failed to delete {domain.domain}: {rpc_error.details()}", flush=True)
-                                billing.charge_account(
-                                    user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
-                                    f"dm_auto_renew_{domain.id}", can_reject=False
+                        try:
+                            if domain_info.keysys_de:
+                                apps.epp_client.delete_domain(
+                                    domain.domain, keysys_target="TRANSIT",
+                                    registry_id=domain.registry_id
                                 )
-                                continue
+                            else:
+                                apps.epp_client.delete_domain(
+                                    domain_data.name,
+                                    registry_id=domain.registry_id
+                                )
+                        except grpc.RpcError as rpc_error:
+                            print(f"Failed to delete {domain.domain}: {rpc_error.details()}", flush=True)
+                            billing.charge_account(
+                                user.username, renewal_price, f"{domain.unicode_domain} automatic renewal",
+                                f"dm_auto_renew_{domain.id}", can_reject=False
+                            )
+                            continue
+
                         domain.former_domain = True
                         domain.save()
                         print(f"Deleted {domain.domain}", flush=True)
