@@ -119,14 +119,23 @@ def postal(_request, req_body):
     del message['From']
     del message['Reply-To']
     del message['Subject']
-    message['From'] = "AS207960 Domain Privacy <domain-privacy@as207960.net>"
+    del message['x-postal-spam-threshold']
+    del message['x-postal-spam-score']
+    del message['x-postal-threat']
+    message['From'] = "Glauca Domain Privacy <domain-privacy@as207960.net>"
     message['Reply-To'] = old_from
-    message['Subject'] = f"[AS207960 Domain Privacy] {old_subject}"
+
+    if message.get('x-postal-spam', 'no') == 'yes':
+        message['Subject'] = f"[SPAM - Glauca Domain Privacy] {old_subject}"
+    else:
+        message['Subject'] = f"[Glauca Domain Privacy] {old_subject}"
+
+    del message['x-postal-spam']
 
     new_msg_bytes = message.as_bytes()
 
     new_message = RawMessage(
-        to=[privacy_contact.email], from_email="AS207960 Domain Privacy <domain-privacy@as207960.net>",
+        to=[privacy_contact.email], from_email="Glauca Domain Privacy <domain-privacy@as207960.net>",
         body=new_msg_bytes
     )
     mail.get_connection().send_messages([new_message])

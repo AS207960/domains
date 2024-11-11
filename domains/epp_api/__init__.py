@@ -1225,7 +1225,9 @@ class EURIDContactUpdate:
             new_whois_email=google.protobuf.wrappers_pb2.StringValue(
                 value=self.whois_email
             ) if self.whois_email else None,
-            new_language=self.language,
+            new_language=google.protobuf.wrappers_pb2.StringValue(
+                value=self.language,
+            ) if self.language else None,
             new_citizenship_country=google.protobuf.wrappers_pb2.StringValue(
                 value=self.country_of_citizenship
             ) if self.country_of_citizenship else None,
