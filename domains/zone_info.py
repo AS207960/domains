@@ -771,6 +771,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_NICAT,
             self.REGISTRY_SIDN,
+            self.REGISTRY_IT,
         )
 
     @property
@@ -918,6 +919,7 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_NICAT,
             self.REGISTRY_SIDN,
+            self.REGISTRY_IT,
         )
 
     @property
