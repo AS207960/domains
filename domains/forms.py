@@ -100,7 +100,8 @@ class AddressForm(forms.ModelForm):
         this_year = datetime.date.today().year
         self.fields['description'].help_text = "Something descriptive of the address so you can find it later"
         self.fields['name'].help_text = \
-            "Your own name if acting as an individual, or the representative's name from the organisation"
+            "Your own name if acting as an individual, or the representative's name from the organisation. " \
+            "This need not be the name on your government-issued ID."
         self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.use_custom_control = False
@@ -180,7 +181,10 @@ class ContactAndAddressForm(forms.Form):
     )
     name = forms.CharField(
         max_length=255, validators=[validators.MinLengthValidator(4)],
-        help_text="Your own name if acting as an individual, or the representative's name from the organisation"
+        help_text=(
+            "Your own name if acting as an individual, or the representative's name from the organisation. "
+            "This need not be the name on your government-issued ID."
+        )
     )
     birthday = forms.DateField(required=False)
     identity_number = forms.CharField(max_length=255, required=False, label="National identity number")
