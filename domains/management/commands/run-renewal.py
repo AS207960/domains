@@ -144,7 +144,11 @@ class Command(BaseCommand):
                             )
                             continue
 
-                        domain.former_domain = True
+                        if not domain_info.restore_supported:
+                            domain.former_domain = True
+                        else:
+                            domain.deleted = True
+                            domain.deleted_date = now
                         domain.save()
                         print(f"Deleted {domain.domain}", flush=True)
                         insert_into_dict(deleted, user, email_data)

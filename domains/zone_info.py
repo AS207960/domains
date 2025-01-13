@@ -8,7 +8,6 @@ from django.utils import timezone
 import domains.views.billing
 from . import apps
 
-
 AFNIC_PERMITTED_COUNTRIES = [
     "AT", "AX", "BE", "BG", "CH", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
     "FR", "GF", "GP", "GR", "HU", "IE", "IS", "IT", "LI", "LT", "LU", "LV",
@@ -130,7 +129,7 @@ class SimplePrice:
             fee, "GBP", username, None, country, local_currency=local_currency
         )
 
-    def transfer(self,  country: str, username, sld: str, value=1, unit=0, local_currency=False):
+    def transfer(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         if apps.epp_api.Period(
                 unit=unit,
                 value=value
@@ -223,7 +222,7 @@ class Nominet2021PromotionalPrice:
     def restore(self, country: str, username, sld: str, local_currency=False):
         return None
 
-    def transfer(self,  country: str, username, sld: str, value=1, unit=0, local_currency=False):
+    def transfer(self, country: str, username, sld: str, value=1, unit=0, local_currency=False):
         fee = decimal.Decimal(0)
         return domains.views.billing.convert_currency(
             fee, "GBP", username, None, country, local_currency=local_currency
@@ -263,7 +262,7 @@ class LengthPrice:
             "periods": list(map(lambda p: {
                 "period": p,
                 "create": self.registration(country, username, sld, p.value, p.unit, local_currency=True),
-                "renew": self.renewal(country, username,sld, p.value, p.unit, local_currency=True),
+                "renew": self.renewal(country, username, sld, p.value, p.unit, local_currency=True),
             }, self.periods)),
             "restore": self.restore(country, username, sld, local_currency=True),
             "transfer": self.transfer(country, username, sld, local_currency=True),
@@ -628,7 +627,8 @@ class DomainInfo:
     def redemption_period(self):
         if self.registry == self.REGISTRY_EURID_RRPPROXY:
             return datetime.timedelta(days=45)
-        elif self.registry in (self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID, self.REGISTRY_EURID_RRPPROXY):
+        elif self.registry in (
+                self.REGISTRY_SWITCH, self.REGISTRY_DNSBELGIUM, self.REGISTRY_EURID, self.REGISTRY_EURID_RRPPROXY):
             return datetime.timedelta(days=40)
         elif self.registry == self.REGISTRY_PIR:
             return datetime.timedelta(days=35)
@@ -717,8 +717,8 @@ class DomainInfo:
     @property
     def nominet_mark_not_required(self):
         return self.registry in (
-                self.REGISTRY_NOMINET,
-                self.REGISTRY_NOMINET_SPECIAL,
+            self.REGISTRY_NOMINET,
+            self.REGISTRY_NOMINET_SPECIAL,
         )
 
     @property
@@ -1655,13 +1655,23 @@ else:
         )),
         ('de', DomainInfo(
             DomainInfo.REGISTRY_DENIC,
-            MarkupPrice(1596, transfer=1260, restore=5250, currency=None, display_currency='EUR', tld='de',
-                        markup=decimal.Decimal("1.75"))
+            MarkupPrice(
+                1596, transfer=1260, restore=5250, currency=None, display_currency='EUR', tld='de',
+                markup=decimal.Decimal("1.75"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                )]
+            )
         )),
         ('be', DomainInfo(
             DomainInfo.REGISTRY_DNSBELGIUM,
-            MarkupPrice(2694, transfer=2694, restore=6480, currency=None, display_currency='EUR', tld='be',
-                        markup=decimal.Decimal("1.35"))
+            MarkupPrice(
+                2694, transfer=2694, restore=6480, currency=None, display_currency='EUR', tld='be',
+                markup=decimal.Decimal("1.35"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                )]
+            )
         )),
         ('space', DomainInfo(
             DomainInfo.REGISTRY_RADIX,
@@ -1744,7 +1754,8 @@ else:
         )),
         ('tv', DomainInfo(
             DomainInfo.REGISTRY_GODADDY_CCTLD,
-            MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"), phase="open")
+            MarkupPrice(3250, transfer=3250, restore=5200, currency='USD', tld='tv', markup=decimal.Decimal("1.3"),
+                        phase="open")
         )),
         ('cc', DomainInfo(DomainInfo.REGISTRY_VERISIGN, SimplePrice(1299, transfer=1299, restore=6500))),
         ('icu', DomainInfo(
@@ -3375,7 +3386,7 @@ else:
                     unit=0,
                     value=10
                 )]
-            )
+                        )
         )),
         ('nom.es', DomainInfo(
             DomainInfo.REGISTRY_REDES,
@@ -3429,8 +3440,13 @@ else:
         )),
         ('nl', DomainInfo(
             DomainInfo.REGISTRY_SIDN,
-            MarkupPrice(1904, restore=1904, currency=None, display_currency='EUR', tld='nl',
-                        markup=decimal.Decimal("1.6"))
+            MarkupPrice(
+                1904, restore=1904, currency=None, display_currency='EUR', tld='nl',
+                markup=decimal.Decimal("1.6"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                )]
+            )
         )),
         ('tel', DomainInfo(
             DomainInfo.REGISTRY_TELNAMES,
@@ -3734,8 +3750,13 @@ else:
         )),
         ('it', DomainInfo(
             DomainInfo.REGISTRY_IT,
-            MarkupPrice(3107, transfer=3107, restore=2600, currency=None, display_currency='EUR', tld='it',
-                        markup=decimal.Decimal("1.3"))
+            MarkupPrice(
+                3107, transfer=3107, restore=2600, currency=None, display_currency='EUR', tld='it',
+                markup=decimal.Decimal("1.3"), periods=[apps.epp_api.Period(
+                    unit=0,
+                    value=1
+                )]
+            )
         )),
         ('ing', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
@@ -3760,7 +3781,8 @@ else:
     )
 
 
-def get_domain_info(domain: str, registry_id: typing.Optional[str] = None) -> typing.Tuple[typing.Optional[DomainInfo], str]:
+def get_domain_info(domain: str, registry_id: typing.Optional[str] = None) -> typing.Tuple[
+    typing.Optional[DomainInfo], str]:
     parts = domain.rstrip(".").split(".", maxsplit=1)
     if len(parts) != 2:
         return None, domain

@@ -107,7 +107,7 @@
                         <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
                     {% else %}
                         {% if registration_enabled %}
-                            {% if domain_info.renew_supported and domain.can_renew %}
+                            {% if renew_supported and domain.can_renew %}
                                 <a href="{% url 'renew_domain' domain_id %}" class="btn btn-success">Renew</a>
                             {% endif %}
                         {% endif %}

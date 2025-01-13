@@ -330,6 +330,10 @@ def domain(request, domain_id):
         domain_obj=user_domain, domain_data=domain_data, domain_info=domain_info
     )
 
+    renew_supported = domain_info.renew_supported or (
+            paid_up_until and timezone.now() + datetime.timedelta(days=90) > paid_up_until
+    )
+
     return render(request, "domains/domain.html", {
         "domain_id": domain_id,
         "domain_info": domain_info,
@@ -355,7 +359,8 @@ def domain(request, domain_id):
         "is_hexdns": is_hexdns,
         "sharing_uri": sharing_uri,
         "paid_up_until": paid_up_until,
-        "expiry_date": expiry_date
+        "expiry_date": expiry_date,
+        "renew_supported": renew_supported,
     })
 
 
