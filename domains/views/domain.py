@@ -1925,27 +1925,24 @@ def restore_domain(request, domain_id):
             "back_url": referrer
         })
 
-    try:
-        domain_data = apps.epp_client.get_domain(
-            user_domain.domain, registry_id=user_domain.registry_id
-        )
-    except grpc.RpcError as rpc_error:
-        error = rpc_error.details()
-        return render(request, "domains/error.html", {
-            "error": error,
-            "back_url": referrer
-        })
-
-    expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + zone.expiry_offset
     zone_price, _ = zone.pricing, zone.registry
     renewal_period = zone_price.periods[0]
     billing_value = zone_price.restore(request.country.iso_code, request.user.username, sld).amount
     should_renew = False
-    if (expiry_date - RENEW_INTERVAL) <= timezone.now():
-        should_renew = True
-        billing_value += zone_price.renewal(
-            request.country.iso_code, request.user.username, sld, unit=renewal_period.unit, value=renewal_period.value
-        ).amount
+
+    try:
+        domain_data = apps.epp_client.get_domain(
+            user_domain.domain, registry_id=user_domain.registry_id
+        )
+        expiry_date = domain_data.expiry_date.replace(tzinfo=datetime.timezone.utc) + zone.expiry_offset
+        if (expiry_date - utils.RENEW_INTERVAL) <= timezone.now():
+            should_renew = True
+            billing_value += zone_price.renewal(
+                request.country.iso_code, request.user.username, sld, unit=renewal_period.unit,
+                value=renewal_period.value
+            ).amount
+    except grpc.RpcError:
+        pass
 
     order = models.DomainRestoreOrder(
         domain=user_domain.domain,
