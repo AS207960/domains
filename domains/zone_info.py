@@ -3508,6 +3508,11 @@ else:
             MarkupPrice(4511, restore=13000, currency=None, display_currency='USD', tld='esq',
                         markup=decimal.Decimal("1.3"))
         )),
+        ('day', DomainInfo(
+            DomainInfo.REGISTRY_GOOGLE,
+            MarkupPrice(2468, restore=14000, currency=None, display_currency='USD', tld='day',
+                        markup=decimal.Decimal("1.4"))
+        )),
         ('ee', DomainInfo(
             DomainInfo.REGISTRY_EIF,
             MarkupPrice(1860, restore=3750, currency=None, display_currency='EUR', tld='ee',
