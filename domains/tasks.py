@@ -577,7 +577,7 @@ def process_domain_restore_paid(restore_order_id):
         )
     except grpc.RpcError as rpc_error:
         logger.warn(f"Failed to load data of {domain_restore_order.domain}: {rpc_error.details()}")
-        raise rpc_error
+        domain_data = None
 
     if zone.direct_restore_supported:
         try:
@@ -604,7 +604,7 @@ def process_domain_restore_paid(restore_order_id):
                 unit=domain_restore_order.period_unit
             )
 
-            if zone.direct_renew_supported:
+            if zone.direct_renew_supported and domain_data:
                 try:
                     _pending, _new_expiry, _registry_id = apps.epp_client.renew_domain(
                         domain_restore_order.domain, period, domain_data.expiry_date,

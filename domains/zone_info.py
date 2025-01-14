@@ -949,6 +949,7 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_SWITCH,
             self.REGISTRY_ISNIC,
+            self.REGISTRY_SIDN,
         )
 
     @property
