@@ -66,26 +66,28 @@ class Command(BaseCommand):
         if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
             return
 
+        order.redirect_url = msg.redirect_url
         if msg.state == domains.proto.billing_pb2.FAILED:
             order.state = order.STATE_FAILED
             order.last_error = last_error
-            order.save()
             if failed_task:
+                order.save()
                 failed_task.delay(order.id)
+                return
         elif msg.state == domains.proto.billing_pb2.COMPLETED:
             if order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT):
                 order.state = order.STATE_PROCESSING
                 order.save()
                 task.delay(order.id)
+                return
         elif msg.state in (
                 domains.proto.billing_pb2.PENDING,
                 domains.proto.billing_pb2.PROCESSING
         ):
-            if msg.state == order.STATE_PROCESSING:
-                return
-            order.state = order.STATE_NEEDS_PAYMENT
-            order.redirect_url = msg.redirect_url
-            order.save()
+            if msg.state != order.STATE_PROCESSING:
+                order.state = order.STATE_NEEDS_PAYMENT
+
+        order.save()
 
     def domains_registration_callback(self, channel, method, properties, body):
         self.domains_callback(body, models.DomainRegistrationOrder, tasks.process_domain_registration_paid)
