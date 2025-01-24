@@ -31,5 +31,5 @@ git+https://github.com/TheEnbyperor/oscrypto@204225cd0bc11420bb7038ad956b736eb9a
 mypy-protobuf
 base32-crockford
 django-storages
-boto3
+boto3==1.35.99
 pytz

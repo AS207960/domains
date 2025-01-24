@@ -66,7 +66,7 @@ class Command(BaseCommand):
         if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
             return
 
-        order.redirect_url = msg.redirect_url
+        order.redirect_uri = msg.redirect_url
         if msg.state == domains.proto.billing_pb2.FAILED:
             order.state = order.STATE_FAILED
             order.last_error = last_error
