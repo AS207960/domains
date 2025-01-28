@@ -1439,7 +1439,7 @@ else:
         )),
         ('me', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            SimplePrice(1665, transfer=1665, restore=5416)
+            SimplePrice(1879, transfer=1879, restore=5368)
         )),
         ('pw', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC_CCTLD,
