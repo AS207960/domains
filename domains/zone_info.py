@@ -3446,7 +3446,7 @@ else:
         ('nl', DomainInfo(
             DomainInfo.REGISTRY_SIDN,
             MarkupPrice(
-                1904, restore=1904, currency=None, display_currency='EUR', tld='nl',
+                1904, transfer=1904, restore=16000, currency=None, display_currency='EUR', tld='nl',
                 markup=decimal.Decimal("1.6"), periods=[apps.epp_api.Period(
                     unit=0,
                     value=1
