@@ -723,25 +723,16 @@ class DomainInfo:
 
     @property
     def direct_registration_supported(self):
-        return self.registry in (
-            self.REGISTRY_SWITCH,
-            self.REGISTRY_VERISIGN,
-            self.REGISTRY_CENTRALNIC_CCTLD,
-            self.REGISTRY_NOMINET,
-            self.REGISTRY_NOMINET_SPECIAL,
-            self.REGISTRY_GODADDY_CCTLD,
-            self.REGISTRY_EURID,
+        return self.registry not in (
+            self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID_RRPPROXY,
         )
 
     @property
     def direct_transfer_supported(self):
-        return self.registry in (
-            self.REGISTRY_SWITCH,
-            self.REGISTRY_DENIC,
-            self.REGISTRY_CENTRALNIC_CCTLD,
-            self.REGISTRY_VERISIGN,
-            self.REGISTRY_GODADDY_CCTLD,
-            self.REGISTRY_EURID,
+        return self.registry not in (
+            self.REGISTRY_ISNIC,
+            self.REGISTRY_EURID_RRPPROXY,
         )
 
     @property
