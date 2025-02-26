@@ -3461,7 +3461,12 @@ else:
         )),
         ('blue', DomainInfo(
             DomainInfo.REGISTRY_AFILIAS,
-            MarkupPrice(3192, restore=11700, currency=None, display_currency='USD', tld='blue',
+            MarkupPrice(4040, restore=11700, currency=None, display_currency='USD', tld='blue',
+                        markup=decimal.Decimal("1.3"))
+        )),
+        ('red', DomainInfo(
+            DomainInfo.REGISTRY_AFILIAS,
+            MarkupPrice(3826, restore=11700, currency=None, display_currency='USD', tld='red',
                         markup=decimal.Decimal("1.3"))
         )),
         ('foo', DomainInfo(
