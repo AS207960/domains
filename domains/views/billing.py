@@ -56,7 +56,10 @@ def convert_currency(
         )
     )
     msg_response = billing_pb2.ConvertCurrencyResponse()
-    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString(), timeout=timeout))
+    msg_response.ParseFromString(apps.rpc_client.call(
+        'billing_rpc', msg.SerializeToString(),
+        timeout=timeout
+    ))
 
     amount = (decimal.Decimal(msg_response.amount) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
     amount_inc_vat = (decimal.Decimal(msg_response.amount_inc_vat) / decimal.Decimal(100)).quantize(decimal.Decimal('1.00'))
@@ -106,7 +109,10 @@ def charge_account(username: str, amount: decimal.Decimal, descriptor: str, char
         )
     )
     charge_response = billing_pb2.ChargeUserResponse()
-    charge_response.ParseFromString(apps.rpc_client.call('billing_rpc', charge_request.SerializeToString()))
+    charge_response.ParseFromString(apps.rpc_client.call(
+        'billing_rpc', charge_request.SerializeToString(),
+        timeout=30
+    ))
 
     if charge_response.result == billing_pb2.ChargeUserResponse.SUCCESS:
         return ChargeResult(

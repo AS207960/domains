@@ -1212,7 +1212,10 @@ def domain_cf(request, domain_id):
         )
     )
     msg_response = billing_pb2.CloudflareAccountResponse()
-    msg_response.ParseFromString(apps.rpc_client.call('billing_rpc', msg.SerializeToString(), timeout=0))
+    msg_response.ParseFromString(apps.rpc_client.call(
+        'billing_rpc', msg.SerializeToString(),
+        timeout=30
+    ))
 
     if msg_response.result == msg_response.NEEDS_SETUP:
         return redirect(reverse('https://billing.as207970.net'))
