@@ -733,6 +733,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID_RRPPROXY,
+            self.REGISTRY_NOMINET,
         )
 
     @property

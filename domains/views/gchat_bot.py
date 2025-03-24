@@ -222,7 +222,7 @@ def notify_registration(registration_order_id, period: str):
                                     "onClick": {
                                         "openLink": {
                                             "url": settings.EXTERNAL_URL_BASE + reverse(
-                                                'domain', args=(domain_registration_order.domain_obj.pk,))
+                                                'domain', args=(domain_registration_order.domain_obj_id,))
                                         }
                                     }
                                 }

@@ -940,7 +940,7 @@ def process_domain_transfer_keysys(transfer_order_id):
         should_send = True
 
     if zone.keysys_de:
-        update_req.keysys.de.abprocessuse_contact.value = "https://as207960.net/contact"
+        update_req.keysys.de.abuse_contact.value = "https://as207960.net/contact"
         update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
         should_send = True
 

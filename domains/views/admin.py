@@ -300,7 +300,7 @@ def nominet_release(request):
                 indent=2, print_unknown_fields=True
             )
     else:
-        form = forms.AdminNominetHandshakeAcceptForm()
+        form = forms.AdminNominetReleaseForm()
 
     return render(request, "domains/admin/nominet_release.html", {
         "release_form": form,
