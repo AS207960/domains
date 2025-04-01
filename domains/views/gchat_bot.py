@@ -418,6 +418,57 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     user = domain_transfer_order.get_user()
+
+    sections = [{
+        "header": "Domain data",
+        "widgets": [{
+            "keyValue": {
+                "topLabel": "Domain name",
+                "content": domain_transfer_order.domain
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Registry ID",
+                "content": registry_id if registry_id else "UNKNOWN"
+            }
+        }, {
+            "keyValue": {
+                "topLabel": "Object ID",
+                "content": str(domain_transfer_order.pk)
+            }
+        }]
+    }, make_user_data(user), {
+        "widgets": [{
+            "buttons": [{
+                "textButton": {
+                    "text": "Mark complete",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-transferred",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_transfer_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }, {
+                "textButton": {
+                    "text": "Mark failed",
+                    "onClick": {
+                        "action": {
+                            "actionMethodName": "mark-domain-transfer-fail",
+                            "parameters": [{
+                                "key": "domain_id",
+                                "value": str(domain_transfer_order.pk)
+                            }]
+                        }
+                    }
+                }
+            }]
+        }]
+    }]
+
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
             parent=space.space_id,
@@ -430,25 +481,7 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
                         "title": "Domain transfer pending notification" if not settings.DEBUG
                         else "Domain transfer pending notification [TEST]",
                     },
-                    "sections": [{
-                        "header": "Domain data",
-                        "widgets": [{
-                            "keyValue": {
-                                "topLabel": "Domain name",
-                                "content": domain_transfer_order.domain
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Registry ID",
-                                "content": registry_id if registry_id else "UNKNOWN"
-                            }
-                        }, {
-                            "keyValue": {
-                                "topLabel": "Object ID",
-                                "content": str(domain_transfer_order.pk)
-                            }
-                        }]
-                    }, make_user_data(user)],
+                    "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }
@@ -797,9 +830,9 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
                     f"{user.first_name} {user.last_name}" if user else "An unknown user"
                 ) + " has requested the "
                     f"renewal of {domain_renew_order.domain}" +
-                    (" automatically" if auto else "") + (
-                        " which has errored" if domain_renew_order.last_error else ""
-                    ),
+                        (" automatically" if auto else "") + (
+                            " which has errored" if domain_renew_order.last_error else ""
+                        ),
                 "cards": [{
                     "header": {
                         "title": "Domain renew request" if not settings.DEBUG
@@ -1204,6 +1237,10 @@ def message_event(event):
                 "url": settings.EXTERNAL_URL_BASE + reverse('gchat_account_link', args=(link_state.pk,))
             }
         }
+    else:
+        return {
+            "text": "Error: unknown action"
+        }
 
 
 def card_clicked(event):
@@ -1314,6 +1351,9 @@ def card_clicked(event):
                     "name": f"domain-register-{domain_registration_order.domain_id}"
                 }]
             }
+        else:
+            raise AssertionError("Unreachable code")
+
     elif action_name in ("mark-domain-restored", "mark-domain-restore-fail"):
         domain_restore_order = models.DomainRestoreOrder.objects \
             .filter(pk=domain_id).first()  # type: models.DomainRestoreOrder
@@ -1383,6 +1423,8 @@ def card_clicked(event):
                     "name": f"domain-restore-{domain_restore_order.id}"
                 }]
             }
+        else:
+            raise AssertionError("Unreachable code")
 
     elif action_name in ("mark-domain-renewed", "mark-domain-renew-fail",
                          "mark-domain-auto-renewed", "mark-domain-auto-renew-fail"):
@@ -1465,6 +1507,8 @@ def card_clicked(event):
                     "name": f"domain-renew-{domain_renew_order.id}"
                 }]
             }
+        else:
+            raise AssertionError("Unreachable code")
 
     elif action_name in ("mark-domain-transferred", "mark-domain-transfer-fail"):
         domain_transfer_order = models.DomainTransferOrder.objects \
@@ -1549,6 +1593,8 @@ def card_clicked(event):
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
                 }]
             }
+        else:
+            raise AssertionError("Unreachable code")
 
     elif action_name in ("mark-domain-locked", "mark-domain-lock-fail"):
         domain_obj = models.DomainRegistration.objects \
@@ -1631,3 +1677,10 @@ def card_clicked(event):
                     "name": f"domain-locking-{domain_obj.pk}"
                 }]
             }
+        else:
+            raise AssertionError("Unreachable code")
+        
+    else:
+        return {
+            "text": "Error: unknown action"
+        }
