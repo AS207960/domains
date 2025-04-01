@@ -1082,6 +1082,7 @@ class DomainInfo:
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
+            self.REGISTRY_DENIC,
         )
 
     @property
@@ -1155,6 +1156,7 @@ class DomainInfo:
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
+            self.REGISTRY_DENIC,
         )
 
     @property
@@ -1229,6 +1231,7 @@ class DomainInfo:
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
+            self.REGISTRY_DENIC,
         )
 
     @property

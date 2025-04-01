@@ -1679,7 +1679,7 @@ def card_clicked(event):
             }
         else:
             raise AssertionError("Unreachable code")
-        
+
     else:
         return {
             "text": "Error: unknown action"
