@@ -488,11 +488,11 @@ def process_domain_renewal_paid(renew_order_id):
             logger.info(f"{domain_renewal_order.domain} successfully requested renewal")
             return
 
-    domain_renew_order.state = domain_renew_order.STATE_COMPLETED
-    domain_renew_order.redirect_uri = None
-    domain_renew_order.last_error = None
-    domain_renew_order.save()
-    gchat_bot.notify_renew.delay(domain_renew_order.domain_obj_id, domain_data.registry_id, str(period))
+    domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
+    domain_renewal_order.redirect_uri = None
+    domain_renewal_order.last_error = None
+    domain_renewal_order.save()
+    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj_id, domain_data.registry_id, str(period))
     logger.info(f"{domain_renewal_order.domain} successfully renewed")
 
 
