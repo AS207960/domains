@@ -3788,6 +3788,11 @@ else:
             MarkupPrice(20470, transfer=25870, restore=0, currency=None, display_currency='EUR', tld='sm',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('party', DomainInfo(
+            DomainInfo.REGISTRY_GODADDY,
+            MarkupPrice(4125, transfer=4125, restore=11250, currency=None, display_currency='USD', tld='party',
+                        markup=decimal.Decimal("1.25"))
+        )),
     )
 
 
