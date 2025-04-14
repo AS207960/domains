@@ -2166,9 +2166,9 @@ def internal_check_price(request):
         available, reason, _ = apps.epp_client.check_domain(search_domain)
         if not available:
             return HttpResponse(json.dumps({
-                "price": 0.0,
-                "currency": "",
-                "message": f"Domain unavailable: {reason}"
+                "price": "Unavailable",
+                "currency": "CUSTOM",
+                "message": reason,
             }), content_type="application/json")
 
         price = domain_info.pricing.registration(
