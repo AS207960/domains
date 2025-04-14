@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import Http404, HttpResponseBadRequest, HttpResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -89,11 +90,16 @@ def domain_price_query(request):
 def domains(request):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
     user_domains = models.DomainRegistration.get_object_list(access_token).filter(former_domain=False)
-    registration_orders = models.DomainRegistrationOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
-    transfer_orders = models.DomainTransferOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
-    auto_renew_orders = models.DomainAutomaticRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
-    renew_orders = models.DomainRenewOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
-    restore_orders = models.DomainRestoreOrder.get_object_list(access_token).exclude(state=models.AbstractOrder.STATE_COMPLETED)
+    registration_orders = models.DomainRegistrationOrder.get_object_list(access_token).exclude(
+        state=models.AbstractOrder.STATE_COMPLETED)
+    transfer_orders = models.DomainTransferOrder.get_object_list(access_token).exclude(
+        state=models.AbstractOrder.STATE_COMPLETED)
+    auto_renew_orders = models.DomainAutomaticRenewOrder.get_object_list(access_token).exclude(
+        state=models.AbstractOrder.STATE_COMPLETED)
+    renew_orders = models.DomainRenewOrder.get_object_list(access_token).exclude(
+        state=models.AbstractOrder.STATE_COMPLETED)
+    restore_orders = models.DomainRestoreOrder.get_object_list(access_token).exclude(
+        state=models.AbstractOrder.STATE_COMPLETED)
     error = None
 
     active_domains = []
@@ -221,7 +227,7 @@ def domain(request, domain_id):
     dnskey_form = forms.DomainDNSKeyDataForm(
         domain_id=domain_id
     )
-    
+
     ds_form.fields['algorithm'].choices = list(filter(
         lambda c: c[0] in domain_info.supported_dnssec_algorithms, ds_form.fields['algorithm'].choices
     ))
@@ -269,28 +275,33 @@ def domain(request, domain_id):
                             return redirect('host_create', host)
 
         if domain_info.registrant_supported:
-            registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user, domain_info)
+            registrant = models.Contact.get_contact(domain_data.registrant, domain_data.registry_name, request.user,
+                                                    domain_info)
             registrant_form.set_cur_id(cur_id=domain_data.registrant, registry_id=domain_data.registry_name)
         else:
             registrant = user_domain.registrant_contact
             registrant_form.fields['contact'].value = user_domain.registrant_contact.id
 
         if domain_data.admin and domain_info.admin_supported:
-            admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user, domain_info)
+            admin = models.Contact.get_contact(domain_data.admin.contact_id, domain_data.registry_name, request.user,
+                                               domain_info)
             admin_contact_form.set_cur_id(cur_id=domain_data.admin.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.admin_contact:
             admin = user_domain.admin_contact
             admin_contact_form.fields['contact'].value = user_domain.admin_contact.id
 
         if domain_data.billing and domain_info.billing_supported:
-            billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name, request.user, domain_info)
-            billing_contact_form.set_cur_id(cur_id=domain_data.billing.contact_id, registry_id=domain_data.registry_name)
+            billing = models.Contact.get_contact(domain_data.billing.contact_id, domain_data.registry_name,
+                                                 request.user, domain_info)
+            billing_contact_form.set_cur_id(cur_id=domain_data.billing.contact_id,
+                                            registry_id=domain_data.registry_name)
         elif user_domain.billing_contact:
             billing = user_domain.billing_contact
             billing_contact_form.fields['contact'].value = user_domain.billing_contact.id
 
         if domain_data.tech and domain_info.tech_supported:
-            tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user, domain_info)
+            tech = models.Contact.get_contact(domain_data.tech.contact_id, domain_data.registry_name, request.user,
+                                              domain_info)
             tech_contact_form.set_cur_id(cur_id=domain_data.tech.contact_id, registry_id=domain_data.registry_name)
         elif user_domain.tech_contact:
             tech = user_domain.tech_contact
@@ -442,7 +453,8 @@ def update_domain_contact(request, domain_id):
                                     if contact_id.registry_contact_id != domain_data.eurid.on_site:
                                         apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
                                             name=domain_data.name,
-                                            registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain_data.registry_name),
+                                            registry_name=google.protobuf.wrappers_pb2.StringValue(
+                                                value=domain_data.registry_name),
                                             eurid_data=apps.epp_api.eurid_pb2.DomainUpdateExtension(
                                                 remove_on_site=domain_data.eurid.on_site,
                                                 add_on_site=contact_id.registry_contact_id
@@ -1262,6 +1274,7 @@ def domain_cf(request, domain_id):
 
     return redirect('domain', user_domain.id)
 
+
 @login_required
 def domain_cf_remove(request, domain_id):
     access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
@@ -1457,11 +1470,10 @@ def domain_register(request, domain_name):
                     "back_url": referrer
                 })
 
-
             registration_order = models.DomainRegistrationOrder.get_object_list(access_token) \
-                                   .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
-                                   .exclude(state=models.AbstractOrder.STATE_FAILED) \
-                                   .filter(domain=domain_name).first()
+                .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                .exclude(state=models.AbstractOrder.STATE_FAILED) \
+                .filter(domain=domain_name).first()
 
             if registration_order:
                 registration_order.period_unit = period.unit
@@ -2008,7 +2020,8 @@ def domain_transfer_query(request):
                                     else:
                                         if any(s in domain_data.statuses for s in (3, 7, 8, 10, 15)):
                                             available = False
-                                            form.add_error('domain', "Domain not eligible for transfer (check transfer lock)")
+                                            form.add_error('domain',
+                                                           "Domain not eligible for transfer (check transfer lock)")
                             else:
                                 form.add_error('domain', "Domain does not exist")
 
@@ -2095,9 +2108,9 @@ def domain_transfer(request, domain_name):
             billing_contact = form.cleaned_data['billing']  # type: models.Contact
 
             transfer_order = models.DomainTransferOrder.get_object_list(access_token) \
-                                .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
-                                .exclude(state=models.AbstractOrder.STATE_FAILED) \
-                                .filter(domain=domain_name).first()
+                .exclude(state=models.AbstractOrder.STATE_COMPLETED) \
+                .exclude(state=models.AbstractOrder.STATE_FAILED) \
+                .filter(domain=domain_name).first()
 
             if transfer_order:
                 transfer_order.auth_code = form.cleaned_data['auth_code'] if zone.auth_code_for_transfer else "N/A"
@@ -2151,8 +2164,17 @@ def domain_transfer_confirm(request, order_id):
     )
 
 
+@csrf_exempt
 @require_POST
 def internal_check_price(request):
+    origin = request.META.get("HTTP_ORIGIN")
+
+    if origin not in (
+        "https://domains.glauca.digital",
+        "https://glauca.digital",
+    ):
+        return HttpResponseBadRequest()
+
     search_action = request.POST.get("action")
     search_domain = request.POST.get("domain")
     if not search_domain or not search_action:
@@ -2169,7 +2191,9 @@ def internal_check_price(request):
                 "price": "Unavailable",
                 "currency": "CUSTOM",
                 "message": reason,
-            }), content_type="application/json")
+            }), content_type="application/json", headers={
+                "Access-Control-Allow-Origin": origin,
+            })
 
         price = domain_info.pricing.registration(
             request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld,
@@ -2182,4 +2206,6 @@ def internal_check_price(request):
         "price": float(price.amount_inc_vat),
         "currency": price.currency,
         "message": domain_info.notice
-    }), content_type="application/json")
+    }), content_type="application/json", headers={
+        "Access-Control-Allow-Origin": origin,
+    })

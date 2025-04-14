@@ -109,9 +109,6 @@
                                 method: "POST",
                                 body: data,
                                 credentials: 'same-origin',
-                                headers: {
-                                    "X-CSRFToken": "{{ csrf_token }}"
-                                }
                             }).then(function (res) {
                                 return res.json();
                             }).then(function (data) {
