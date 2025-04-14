@@ -174,7 +174,7 @@
                     inputCreateAttestation.value = b64encode(res.response.attestationObject);
                     dataCreateForm.submit();
                 }).catch(function (err) {
-                    console.log(err);
+                    console.error(err);
                     errorElm.style.display = 'block';
                 });
             });
@@ -215,7 +215,7 @@
                     inputGetSignature.value = b64encode(res.response.signature);
                     dataGetForm.submit();
                 }).catch(function (err) {
-                    console.log(err);
+                    console.error(err);
                     errorElm.style.display = 'block';
                 });
             });

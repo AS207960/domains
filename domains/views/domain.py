@@ -2163,6 +2163,14 @@ def internal_check_price(request):
         return HttpResponseBadRequest()
 
     if search_action == "register":
+        available, reason, _ = apps.epp_client.check_domain(search_domain)
+        if not available:
+            return HttpResponse(json.dumps({
+                "price": 0.0,
+                "currency": "",
+                "message": f"Domain unavailable: {reason}"
+            }), content_type="application/json")
+
         price = domain_info.pricing.registration(
             request.country.iso_code, request.user.username if request.user.is_authenticated else None, sld,
             local_currency=True
