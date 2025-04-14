@@ -160,7 +160,7 @@ def map_attestation(result: webauthn.CreateResult, key_id: str) -> models.WebAut
         ).decode()
     )
     if result.attestation.mode == webauthn.types.AttestationMode.NoneAttestation:
-        raise webauthn.errors.WebAuthnError(message="none attestation is not supported")
+        raise webauthn.errors.WebAuthnError(message="Authenticator attestation is required")
     elif result.attestation.mode == webauthn.types.AttestationMode.AndroidSafetynet:
         if not result.attestation.safety_net_cts:
             raise webauthn.errors.WebAuthnError(message="Android SafetyNet breached")
@@ -168,27 +168,27 @@ def map_attestation(result: webauthn.CreateResult, key_id: str) -> models.WebAut
         out.name = "Android Device"
         return out
     elif result.attestation.mode == webauthn.types.AttestationMode.Apple:
-        out.name = "Apple FaceID"
+        out.name = "Apple Passkey"
         return out
     elif result.attestation.mode in (
             webauthn.types.AttestationMode.FIDOU2F,
             webauthn.types.AttestationMode.Packed
     ):
         if result.attestation.type != webauthn.types.AttestationType.AttestationCA:
-            raise webauthn.errors.WebAuthnError(message="unknown attestation CA")
+            raise webauthn.errors.WebAuthnError(message="Unknown attestation CA")
 
         if result.attestation.fido_metadata.fido_certification_level == \
                 webauthn.metadata.FIDOCertification.NotCertified:
-            raise webauthn.errors.WebAuthnError(message="authenticator not FIDO certified")
+            raise webauthn.errors.WebAuthnError(message="Authenticator not FIDO certified")
 
         if result.attestation.fido_metadata.is_compromised:
-            raise webauthn.errors.WebAuthnError(message="authenticator reported as compromised")
+            raise webauthn.errors.WebAuthnError(message="Authenticator reported as compromised")
 
         out.name = result.attestation.fido_metadata.description
         out.icon = result.attestation.fido_metadata.icon
         return out
     else:
-        raise webauthn.errors.WebAuthnError(message="unsupported attestation format")
+        raise webauthn.errors.WebAuthnError(message=f"Unsupported attestation format: {result.attestation.mode.name}")
 
 
 @login_required
