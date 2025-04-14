@@ -94,7 +94,7 @@ def mail_register_failed(registration_order_id, reason: str = None):
             "feedback_url": feedback_url,
             "content": render_to_string("domains_email/register_fail.html", {
                 "domain": domain.domain,
-                "reason": reason
+                "reason": reason if reason else domain.last_error
             })
         })
 

@@ -20,7 +20,7 @@ RP = webauthn.types.RelyingParty(
 FIDO_METADATA = webauthn.metadata.FIDOMetadata.from_metadata(webauthn.metadata.get_metadata())
 
 
-def get_user(domain: models.DomainRegistration) -> webauthn.types.User:
+def get_user(domain: models.DomainRegistration) -> "webauthn.types.User":
     return webauthn.types.User(
         id=str(domain.id).encode(),
         name=domain.unicode_domain,
@@ -148,7 +148,7 @@ def update(request, domain_id):
     return redirect('domain_registry_lock', user_domain.id)
 
 
-def map_attestation(result: webauthn.CreateResult, key_id: str) -> models.WebAuthNKey:
+def map_attestation(result: "webauthn.CreateResult", key_id: str) -> models.WebAuthNKey:
     out = models.WebAuthNKey(
         aaguid=result.aaguid,
         key_id=key_id,

@@ -192,6 +192,8 @@ def charge_order(
                 order.save()
                 logger.warn(f"Payment for {descriptor} failed with error {charge_state.error}")
 
+    return False
+
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
@@ -220,6 +222,7 @@ def process_domain_registration_paid(registration_order_id):
         domain_registration_order.last_error = "Domain no longer available to purchase."
         domain_registration_order.save()
         billing.reverse_charge(domain_registration_order.id)
+        emails.mail_register_failed.delay(domain_registration_order.id)
         return
 
     if zone.direct_registration_supported:
@@ -362,6 +365,7 @@ def process_domain_registration(registration_order_id):
         domain_registration_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_registration_order.domain}")
         billing.reverse_charge(domain_registration_order.id)
+        emails.mail_register_failed.delay(domain_registration_order.id)
         return
 
     charge_order(
@@ -653,6 +657,7 @@ def process_domain_restore(restore_order_id):
         domain_restore_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_restore_order.domain}")
         billing.reverse_charge(domain_restore_order.id)
+        emails.mail_restore_failed.delay(domain_restore_order.id)
         return
 
     charge_order(
@@ -697,11 +702,11 @@ def process_domain_restore_failed(restore_order_id):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
 
-    emails.mail_restore_failed.delay(domain_restore_order.id)
-
     billing.reverse_charge(domain_restore_order.id)
     domain_restore_order.state = domain_restore_order.STATE_FAILED
     domain_restore_order.save()
+
+    emails.mail_restore_failed.delay(domain_restore_order.id)
 
 
 @shared_task(
@@ -807,6 +812,7 @@ def process_domain_transfer(transfer_order_id):
         domain_transfer_order.last_error = "You don't have permission to perform this action"
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
         billing.reverse_charge(domain_transfer_order.id)
+        emails.mail_transfer_failed.delay(domain_transfer_order.id)
         return
 
     charge_order(
@@ -1144,6 +1150,8 @@ def process_domain_auto_renew_failed(renew_order_id):
     billing.reverse_charge(domain_renew_order.id)
     domain_renew_order.state = domain_renew_order.STATE_FAILED
     domain_renew_order.save()
+
+    emails.mail_auto_renew_failed.delay(domain_renew_order.id)
 
 
 @shared_task(
