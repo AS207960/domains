@@ -483,7 +483,10 @@ class Contact(models.Model):
             if contact_registry:
                 return contact_registry.contact
 
-            registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
+            try:
+                registry_contact = apps.epp_client.get_contact(registry_contact_id, registry_id)
+            except grpc.RpcError:
+                return None
 
             local_address = registry_contact.local_address if not is_isnic else registry_contact.int_address
             local_streets = iter(local_address.streets)
