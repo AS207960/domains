@@ -584,6 +584,7 @@ class DomainInfo:
     REGISTRY_DOMICILIUM = "domicilium"
     REGISTRY_TELNAMES = "telnames"
     REGISTRY_NICSM = "nicsm"
+    REGISTRY_AUDA = "auda"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
         self.registry = registry
@@ -714,6 +715,7 @@ class DomainInfo:
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -728,6 +730,7 @@ class DomainInfo:
         return self.registry not in (
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID_RRPPROXY,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -745,6 +748,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_EURID,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -866,6 +870,7 @@ class DomainInfo:
             self.REGISTRY_DOMICILIUM,
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -1088,6 +1093,7 @@ class DomainInfo:
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -1163,6 +1169,7 @@ class DomainInfo:
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -1239,6 +1246,7 @@ class DomainInfo:
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
+            self.REGISTRY_AUDA,
         )
 
     @property
@@ -3799,6 +3807,31 @@ else:
             DomainInfo.REGISTRY_GODADDY,
             MarkupPrice(4125, transfer=4125, restore=11250, currency=None, display_currency='USD', tld='party',
                         markup=decimal.Decimal("1.25"))
+        )),
+        ('au', DomainInfo(
+            DomainInfo.REGISTRY_AUDA,
+            MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='au',
+                        markup=decimal.Decimal("1.6"))
+        )),
+        ('com.au', DomainInfo(
+            DomainInfo.REGISTRY_AUDA,
+            MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='com.au',
+                        markup=decimal.Decimal("1.6"))
+        )),
+        ('net.au', DomainInfo(
+            DomainInfo.REGISTRY_AUDA,
+            MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='net.au',
+                        markup=decimal.Decimal("1.6"))
+        )),
+        ('org.au', DomainInfo(
+            DomainInfo.REGISTRY_AUDA,
+            MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='org.au',
+                        markup=decimal.Decimal("1.6"))
+        )),
+        ('id.au', DomainInfo(
+            DomainInfo.REGISTRY_AUDA,
+            MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='id.au',
+                        markup=decimal.Decimal("1.6"))
         )),
     )
 
