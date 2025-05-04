@@ -527,6 +527,7 @@ class DomainInfo:
     REGISTRY_DENIC = "denic"
     REGISTRY_VERISIGN = "verisign"
     REGISTRY_DONUTS = "donuts"
+    REGISTRY_DONUTS_THIN = "donuts-thin"
     REGISTRY_VERISIGN_COMNET = "verisign-comnet"
     REGISTRY_PIR = "pir"
     REGISTRY_CENTRALNIC_CCTLD = "centralni-ccctld"
@@ -661,6 +662,7 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_AFILIAS,
             self.REGISTRY_DONUTS,
+            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC,
@@ -814,6 +816,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_DONUTS,
+            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_ZODIAC_LEO,
             self.REGISTRY_GMO,
             self.REGISTRY_DOT_STRATEGY,
@@ -984,7 +987,8 @@ class DomainInfo:
     @property
     def registrant_supported(self):
         return self.registry not in (
-            self.REGISTRY_VERISIGN
+            self.REGISTRY_VERISIGN,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1020,6 +1024,7 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1092,6 +1097,7 @@ class DomainInfo:
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1170,6 +1176,7 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -3125,7 +3132,7 @@ else:
             SimplePrice(7750, transfer=7750, restore=7750)
         )),
         ('vc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_DONUTS_THIN,
             SimplePrice(2633, transfer=2633, restore=7916)
         )),
         ('llc', DomainInfo(
