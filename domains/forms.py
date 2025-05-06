@@ -1,5 +1,4 @@
 import datetime
-
 import crispy_forms.bootstrap
 import crispy_forms.helper
 import crispy_forms.layout
@@ -10,8 +9,7 @@ from django.urls import reverse
 from django.core import validators
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
-from django.utils import timezone
-
+from django.core.exceptions import ValidationError
 from . import models, apps, zone_info
 
 
@@ -321,6 +319,13 @@ class ContactAndAddressForm(forms.Form):
         self.helper.layout = crispy_forms.layout.Layout(*layout)
 
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit'))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data["country_code"].code == "GB" and not models.UK_POSTCODE_RE.match(cleaned_data["postal_code"]):
+            raise ValidationError({
+                "postal_code": "Invalid postcode"
+            })
 
 
 class DomainContactForm(forms.Form):
