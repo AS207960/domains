@@ -2,7 +2,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.shortcuts import reverse
-from . import models, zone_info, apps
+from . import models, zone_info, apps, utils
 from .views import billing, gchat_bot, emails
 import grpc
 import requests
@@ -751,12 +751,26 @@ def process_domain_transfer_paid(transfer_order_id):
                 eurid=eurid_data,
             )
         except grpc.RpcError as rpc_error:
-            domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
-            domain_transfer_order.last_error = rpc_error.details()
-            domain_transfer_order.save()
-            gchat_bot.request_transfer.delay(domain_transfer_order.id, "")
-            logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()},"
-                         f" passing off to human")
+            error_code = utils.epp_grpc_error_code(rpc_error)
+            if error_code == "authorization-error":
+                domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+                domain_transfer_order.last_error = "The transfer code provided is invalid."
+                domain_transfer_order.save()
+                billing.reverse_charge(domain_transfer_order.id)
+                emails.mail_transfer_failed.delay(domain_transfer_order.id)
+            elif error_code == "object-status-prohibits-operation":
+                domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+                domain_transfer_order.last_error = "The domain is locked from being transferred by the previous registrar."
+                domain_transfer_order.save()
+                billing.reverse_charge(domain_transfer_order.id)
+                emails.mail_transfer_failed.delay(domain_transfer_order.id)
+            else:
+                domain_transfer_order.state = domain_transfer_order.STATE_PENDING_APPROVAL
+                domain_transfer_order.last_error = rpc_error.details()
+                domain_transfer_order.save()
+                gchat_bot.request_transfer.delay(domain_transfer_order.id, "")
+                logger.error(f"Failed to transfer {domain_transfer_order.domain}: {rpc_error.details()},"
+                             f" passing off to human")
         else:
             domain_transfer_order.registry_id = transfer_data.registry_name
 
@@ -810,6 +824,7 @@ def process_domain_transfer(transfer_order_id):
     if not zone:
         domain_transfer_order.state = domain_transfer_order.STATE_FAILED
         domain_transfer_order.last_error = "You don't have permission to perform this action"
+        domain_transfer_order.save()
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
         billing.reverse_charge(domain_transfer_order.id)
         emails.mail_transfer_failed.delay(domain_transfer_order.id)

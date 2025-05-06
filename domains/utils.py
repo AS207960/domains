@@ -1,3 +1,4 @@
+import grpc
 from django.utils import timezone
 import datetime
 from . import apps, zone_info, models
@@ -42,3 +43,14 @@ def domain_paid_until_date(
                 paid_up_until = expiry_date + renew_period
 
     return expiry_date, paid_up_until
+
+
+def epp_grpc_error_code(call):
+    if call.trailing_metadata() is None:
+        return None
+    else:
+        for key, value in call.trailing_metadata():
+            if key == "error-code":
+                return value
+            
+        return None
