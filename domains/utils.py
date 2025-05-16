@@ -1,4 +1,3 @@
-import grpc
 from django.utils import timezone
 import datetime
 from . import apps, zone_info, models
@@ -52,5 +51,5 @@ def epp_grpc_error_code(call):
         for key, value in call.trailing_metadata():
             if key == "error-code":
                 return value
-            
+
         return None

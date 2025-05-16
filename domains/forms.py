@@ -322,7 +322,7 @@ class ContactAndAddressForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data["country_code"].code == "GB" and not models.UK_POSTCODE_RE.match(cleaned_data["postal_code"]):
+        if cleaned_data["country_code"] == "GB" and not models.UK_POSTCODE_RE.match(cleaned_data["postal_code"]):
             raise ValidationError({
                 "postal_code": "Invalid postcode"
             })
