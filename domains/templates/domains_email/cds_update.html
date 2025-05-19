@@ -1,14 +1,21 @@
 <table style="border-spacing: 0;width:100%;">
     <tr>
         <td>
-            <p>
-                We have received your (or your DNS operator's) request to update the DS records for the
-                domain {{ domain.domain }} via CDS. Our shark minions have now processed this.
-                The changes made are detailed below.
-            </p>
-            <p>
-                For the sneaky techy deets go read <a href="https://tools.ietf.org/html/rfc8078">RFC8078</a>
-            </p>
+            {% if is_own_ns %}
+                <p>
+                    For your information, we have updated the DS records for the domain {{ domain.domain }} via CDS.
+                    The changes made are detailed below.
+                </p>
+            {% else %}
+                <p>
+                    We have received your (or your DNS operator's) request to update the DS records for the
+                    domain {{ domain.domain }} via CDS. Our shark minions have now processed this.
+                    The changes made are detailed below.
+                </p>
+                <p>
+                    For the sneaky techy deets go read <a href="https://tools.ietf.org/html/rfc8078">RFC8078</a>
+                </p>
+            {% endif %}
         </td>
         <td>
             <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>

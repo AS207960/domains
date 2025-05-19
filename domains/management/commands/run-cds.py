@@ -21,7 +21,7 @@ resolver.nameservers = [socket.getaddrinfo(settings.RESOLVER_ADDR, None)[0][4][0
 resolver.port = settings.RESOLVER_PORT
 
 
-def mail_update(user, domain, add_cds, rem_cds, is_ds):
+def mail_update(user, domain, add_cds, rem_cds, is_ds, is_own: bool = False):
     emails.send_email(user, {
         "subject": "Domain CDS update",
         "content": render_to_string("domains_email/cds_update.html", {
@@ -29,15 +29,17 @@ def mail_update(user, domain, add_cds, rem_cds, is_ds):
             "add_cds": add_cds,
             "rem_cds": rem_cds,
             "is_ds": is_ds,
+            "is_own_ns": is_own,
         })
     })
 
 
-def mail_disabled(user, domain):
+def mail_disabled(user, domain, is_own: bool = False):
     emails.send_email(user, {
         "subject": "Domain CDS disabled",
         "content": render_to_string("domains_email/cds_disable.html", {
             "domain": domain,
+            "is_own_ns": is_own
         })
     })
 
@@ -72,6 +74,8 @@ class Command(BaseCommand):
 
             if not name_servers:
                 continue
+
+            is_own_ns = all([ns.lower().endwith(".as207960.net") for ns in name_servers])
 
             user = domain.get_user()
 
@@ -254,7 +258,7 @@ class Command(BaseCommand):
                         print(f"Can't remove DNSSEC for {domain.domain}: {rpc_error.details()}")
                         continue
 
-                    mail_disabled(user, domain)
+                    mail_disabled(user, domain, is_own_ns)
             else:
                 current_cds_set = []
                 if domain_data.sec_dns:
@@ -336,4 +340,4 @@ class Command(BaseCommand):
                         print(f"Can't update DNSSEC for {domain.domain}: {rpc_error.details()}")
                         continue
 
-                    mail_update(user, domain, add_cds_set, rem_cds_set, domain_info.ds_data_supported)
+                    mail_update(user, domain, add_cds_set, rem_cds_set, domain_info.ds_data_supported, is_own_ns)
