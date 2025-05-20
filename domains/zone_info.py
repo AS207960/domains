@@ -527,6 +527,7 @@ class DomainInfo:
     REGISTRY_DENIC = "denic"
     REGISTRY_VERISIGN = "verisign"
     REGISTRY_DONUTS = "donuts"
+    REGISTRY_DONUTS_DIRECT = "donuts-direct"
     REGISTRY_DONUTS_THIN = "donuts-thin"
     REGISTRY_VERISIGN_COMNET = "verisign-comnet"
     REGISTRY_PIR = "pir"
@@ -663,7 +664,6 @@ class DomainInfo:
             self.REGISTRY_EURID,
             self.REGISTRY_AFILIAS,
             self.REGISTRY_DONUTS,
-            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC,
@@ -748,6 +748,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_EURID,
+            self.REGISTRY_DONUTS_DIRECT,
             self.REGISTRY_DONUTS_THIN,
         )
 
@@ -820,6 +821,7 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_NOMINET_GTLD,
             self.REGISTRY_DONUTS,
+            self.REGISTRY_DONUTS_DIRECT,
             self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_ZODIAC_LEO,
             self.REGISTRY_GMO,
@@ -1037,6 +1039,7 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_AFILIAS,
             self.REGISTRY_DONUTS,
+            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC_CCTLD,
@@ -1111,6 +1114,7 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_AFILIAS,
             self.REGISTRY_DONUTS,
+            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC_CCTLD,
@@ -1261,6 +1265,8 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_ISNIC,
             self.REGISTRY_GODADDY_CCTLD,
+            self.REGISTRY_DONUTS_DIRECT,
+            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1448,7 +1454,7 @@ else:
                                   "your previous registrar."
         )),
         ('me', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_DONUTS_DIRECT,
             SimplePrice(1879, transfer=1879, restore=5368)
         )),
         ('pw', DomainInfo(
