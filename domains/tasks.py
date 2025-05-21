@@ -1227,3 +1227,43 @@ def notify_dnssec_enabled(domain_id):
         body=domain_obj.domain.encode()
     )
     pika_connection.close()
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
+    ignore_result=True
+)
+def request_auth_code(domain_id):
+    domain = models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
+
+    zone, _ = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)
+    if not zone:
+        logger.error(f"Failed to request auth code for {domain.domain}: unknown zone")
+        return
+
+    if not zone.keysys_request_auth_code:
+        logger.error(f"Failed to request auth code for {domain.domain}: unsupported for zone")
+        return
+
+    try:
+        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+            name=domain.domain,
+            registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
+            keysys=apps.epp_api.keysys_pb2.DomainUpdate(
+                request_auth_code=google.protobuf.wrappers_pb2.BoolValue(value=True),
+            )
+        ))
+    except grpc.RpcError as rpc_error:
+        logger.warn(f"Failed request auth code for {domain.domain}: {rpc_error.details()}")
+        raise rpc_error
+
+    try:
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
+    except grpc.RpcError as rpc_error:
+        logger.warn(f"Failed to load data of {domain.domain}: {rpc_error.details()}")
+        raise rpc_error
+
+    emails.mail_new_auth_code.delay(domain.id, domain_data.auth_info)
+    logger.info(f"New auth code set for {domain.domain}")

@@ -315,3 +315,24 @@ def mail_lock_failed(domain_id, reason: str = None):
                 "reason": reason
             })
         })
+
+
+@shared_task(
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
+)
+def mail_new_auth_code(domain_id, auth_code: str):
+    domain = models.DomainRegistration.objects.filter(pk=domain_id).first()  # type: models.DomainRegistration
+    user = domain.get_user()
+    if user:
+        feedback_url = get_feedback_url(
+            f"{domain.domain} transfer authorization code", domain.id
+        )
+
+        send_email(user, {
+            "subject": f"Your new transfer authorization code for {domain.domain}",
+            "feedback_url": feedback_url,
+            "content": render_to_string("domains_email/new_auth_code.html", {
+                "domain": domain.domain,
+                "auth_code": auth_code,
+            })
+        })

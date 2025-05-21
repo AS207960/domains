@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib import messages
 import django_keycloak_auth.clients
 import ipaddress
 import grpc
@@ -638,6 +639,25 @@ def domain_regen_transfer_code(request, domain_id):
 
     user_domain.auth_info = new_auth_info
     user_domain.save()
+
+    return redirect(referrer)
+
+
+@login_required
+def domain_request_auth_code(request, domain_id):
+    access_token = django_keycloak_auth.clients.get_active_access_token(oidc_profile=request.user.oidc_profile)
+    user_domain = get_object_or_404(models.DomainRegistration, id=domain_id, deleted=False, former_domain=False)
+    referrer = request.META.get("HTTP_REFERER")
+    referrer = referrer if referrer else reverse('domains')
+
+    if not user_domain.has_scope(access_token, 'edit'):
+        return render(request, "domains/error.html", {
+            "error": "You don't have permission to perform this action",
+            "back_url": referrer
+        })
+
+    tasks.request_auth_code.delay(user_domain.id)
+    messages.info(request, "Your transfer authorization code has been requested. It will be sent to you shortly.")
 
     return redirect(referrer)
 

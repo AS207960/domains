@@ -783,6 +783,12 @@ class DomainInfo:
         )
 
     @property
+    def keysys_request_auth_code(self):
+        return self.registry in (
+            self.REGISTRY_DENIC,
+        )
+
+    @property
     def disclosure_supported(self):
         return self.registry not in (
             self.REGISTRY_AFILIAS,

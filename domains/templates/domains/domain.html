@@ -153,6 +153,14 @@
                             <span class="auth-hide">{{ domain_obj.auth_info }}</span>
                         {% endif %}
                     </p>
+                {% elif domain_info.keysys_request_auth_code %}
+                    <a href="{% url 'domain_request_auth_code' domain_id %}" class="btn btn-info">
+                        Request authorization code
+                    </a>
+                    <p>
+                        This TLD has a non-standard transfer procedure.
+                        A transfer authorization code will be emailed to you, when you request it.
+                    </p>
                 {% else %}
                     <p>
                         This TLD has a non-standard transfer procedure. Please

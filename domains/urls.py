@@ -46,6 +46,7 @@ urlpatterns = [
     path('domains/<str:domain_id>/block_transfer/', domain.domain_block_transfer, name='domain_block_transfer'),
     path('domains/<str:domain_id>/del_block_transfer/', domain.domain_del_block_transfer, name='domain_del_block_transfer'),
     path('domains/<str:domain_id>/regen_transfer_code/', domain.domain_regen_transfer_code, name='domain_regen_transfer_code'),
+    path('domains/<str:domain_id>/request_auth_code/', domain.domain_request_auth_code, name='domain_request_auth_code'),
     path('domains/<str:domain_id>/transfer_out/<str:transfer_action>/', domain.transfer_out_domain, name='domain_transfer_out'),
     path('domains/<str:domain_id>/registry_lock/', registry_lock.manage_registry_lock, name='domain_registry_lock'),
     path(
