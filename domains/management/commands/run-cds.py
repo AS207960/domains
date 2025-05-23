@@ -75,7 +75,7 @@ class Command(BaseCommand):
             if not name_servers:
                 continue
 
-            is_own_ns = all([ns.lower().endwith(".as207960.net") for ns in name_servers])
+            is_own_ns = all([ns.lower().endswith(".as207960.net") for ns in name_servers])
 
             user = domain.get_user()
 

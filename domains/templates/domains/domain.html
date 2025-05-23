@@ -100,8 +100,7 @@
                 </p>
             </div>
             <div class="col">
-                <p>
-                <div class="btn-group" style="flex-wrap: wrap; gap: 5px 0;">
+                <div class="btn-group mb-3" style="flex-wrap: wrap; gap: 5px 0;">
                     <a href="{{ sharing_uri }}" class="btn btn-primary">&#x1f91d; Share</a>
                     {% if domain_info.registry == domain_info.REGISTRY_TRAFICOM and 8 in domain.statuses %}
                         <a href="{% url 'restore_domain' domain_id %}" class="btn btn-info">Restore</a>
@@ -132,7 +131,6 @@
                         {% endif %}
                     {% endif %}
                 </div>
-                </p>
                 {% if domain_info.standard_auth_code_procedure %}
                     <p>
                         <style>
@@ -154,7 +152,7 @@
                         {% endif %}
                     </p>
                 {% elif domain_info.keysys_request_auth_code %}
-                    <a href="{% url 'domain_request_auth_code' domain_id %}" class="btn btn-info">
+                    <a href="{% url 'domain_request_auth_code' domain_id %}" class="btn btn-info mb-3">
                         Request authorization code
                     </a>
                     <p>
