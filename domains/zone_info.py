@@ -3797,7 +3797,8 @@ else:
         ('ing', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(2457, transfer=2457, restore=14000, currency=None, display_currency='USD', tld='ing',
-                        markup=decimal.Decimal("1.4"))
+                        markup=decimal.Decimal("1.4")),
+            hsts_preload=True
         )),
         ('frl', DomainInfo(
             DomainInfo.REGISTRY_CENTRALNIC,
