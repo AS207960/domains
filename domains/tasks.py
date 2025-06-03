@@ -276,7 +276,7 @@ def process_domain_registration_paid(registration_order_id):
                         ).registry_contact_id
                     ))
 
-            if zone.keysys_de or zone.keysys_tel or zone.keysys_auto_renew:
+            if zone.keysys_de or zone.keysys_tel or zone.keysys_auto_renew or zone.hsts_preload:
                 keysys = apps.epp_api.keysys_pb2.DomainCreate()
                 if zone.keysys_auto_renew:
                     keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
@@ -289,6 +289,8 @@ def process_domain_registration_paid(registration_order_id):
                         apps.epp_api.keysys_pb2.TelNatural
                     )
                     keysys.tel.publish_whois.value = False
+                if zone.hsts_preload:
+                    keysys.accept_ssl_requirements = True
             else:
                 keysys = None
 

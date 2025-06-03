@@ -587,11 +587,12 @@ class DomainInfo:
     REGISTRY_NICSM = "nicsm"
     REGISTRY_AUDA = "auda"
 
-    def __init__(self, registry, pricing, notice=None, transfer_instructions=None):
+    def __init__(self, registry, pricing, notice=None, transfer_instructions=None, hsts_preload=False):
         self.registry = registry
         self.pricing = pricing
         self.notice = notice
         self.transfer_instructions = transfer_instructions
+        self.hsts_preload = hsts_preload
 
     @property
     def supported_dnssec_algorithms(self):
@@ -1404,8 +1405,7 @@ if settings.DEBUG:
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(2940, transfer=2940, restore=22500, currency=None, display_currency='USD', tld='dev',
                         markup=decimal.Decimal("1.4")),
-            notice=".dev is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
-                   ".dev domain."
+            hsts_preload=True,
         )),
         ('is', DomainInfo(
             DomainInfo.REGISTRY_ISNIC,
@@ -1757,20 +1757,19 @@ else:
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(2940, transfer=2940, restore=25200, currency=None, display_currency='USD', tld='dev',
                         markup=decimal.Decimal("1.4")),
-            notice=".dev is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
-                   ".dev domain."
+            hsts_preload=True,
         )),
         ('app', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(3198, transfer=3198, restore=23400, currency=None, display_currency='USD', tld='app',
                         markup=decimal.Decimal("1.3")),
-            notice=".app is a HSTS preload zone, meaning you'll need to deploy HTTPS on any website hosted on a "
-                   ".app domain."
+            hsts_preload=True,
         )),
         ('new', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(84960, transfer=84960, restore=21600, currency=None, display_currency='USD', tld='new',
                         markup=decimal.Decimal("1.2")),
+            hsts_preload=True,
             notice=".new domains must allow a user to create something, without further navigation, within 100 days "
                    "of being purchased. .new is a HSTS preload zone, meaning you'll need to deploy HTTPS on any "
                    "website hosted on a .new domain."

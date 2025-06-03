@@ -1463,7 +1463,7 @@ def domain_register(request, domain_name):
     except UnicodeError:
         domain_unicode = domain_name
 
-    zone_price, registry_name, zone_notice = zone.pricing, zone.registry, zone.notice
+    zone_price, registry_name = zone.pricing, zone.registry
 
     if request.method == "POST":
         if "new_contact" in request.session:
@@ -1540,7 +1540,8 @@ def domain_register(request, domain_name):
         "domain_form": form,
         "domain_name": domain_unicode,
         "price_decimal": price_decimal,
-        "zone_notice": zone_notice,
+        "zone_notice": zone.notice,
+        "zone_hsts_preload": zone.hsts_preload,
         "zone_info": zone,
         "error": error
     })

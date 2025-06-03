@@ -25,6 +25,12 @@
                 {{ zone_notice }}
             </div>
         {% endif %}
+        {% if zone_hsts_preload %}
+            <div class="alert alert-info" role="alert">
+                This domain is in a HSTS preload zone, meaning you'll need to
+                deploy HTTPS on any website hosted under it.
+            </div>
+        {% endif %}
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Oh no! &#x1f631;</h4>
