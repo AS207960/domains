@@ -1504,6 +1504,7 @@ def domain_register(request, domain_name):
                 registration_order.tech_contact = tech_contact
                 registration_order.price = billing_value
                 registration_order.off_session = False
+                registration_order.intended_use = form.cleaned_data.get("intended_use")
                 registration_order.save()
             else:
                 registration_order = models.DomainRegistrationOrder(
@@ -1518,6 +1519,7 @@ def domain_register(request, domain_name):
                     price=billing_value,
                     auth_info=models.make_secret(),
                     off_session=False,
+                    intended_use=form.cleaned_data.get("intended_use")
                 )
                 registration_order.save()
 

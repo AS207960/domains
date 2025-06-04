@@ -439,6 +439,7 @@ class DomainCreate(google.protobuf.message.Message):
     WHOIS_BANNER_FIELD_NUMBER: builtins.int
     WHOIS_RSP_FIELD_NUMBER: builtins.int
     WHOIS_URL_FIELD_NUMBER: builtins.int
+    INTENDED_USE_FIELD_NUMBER: builtins.int
     CA_FIELD_NUMBER: builtins.int
     DE_FIELD_NUMBER: builtins.int
     EU_FIELD_NUMBER: builtins.int
@@ -455,6 +456,7 @@ class DomainCreate(google.protobuf.message.Message):
     transfer_mode: global___TransferMode.ValueType
     whois_rsp: builtins.str
     whois_url: builtins.str
+    intended_use: builtins.str
     @property
     def whois_banner(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
     @property
@@ -486,6 +488,7 @@ class DomainCreate(google.protobuf.message.Message):
         whois_banner: collections.abc.Iterable[builtins.str] | None = ...,
         whois_rsp: builtins.str = ...,
         whois_url: builtins.str = ...,
+        intended_use: builtins.str = ...,
         ca: global___DomainInfoCA | None = ...,
         de: global___DomainInfoDE | None = ...,
         eu: global___DomainInfoEU | None = ...,
@@ -497,7 +500,7 @@ class DomainCreate(google.protobuf.message.Message):
         tel: global___DomainInfoTel | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "rs", b"rs", "tel", b"tel", "tld", b"tld", "us", b"us"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["accept_premium_price", b"accept_premium_price", "accept_ssl_requirements", b"accept_ssl_requirements", "allocation_token", b"allocation_token", "ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tel", b"tel", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["accept_premium_price", b"accept_premium_price", "accept_ssl_requirements", b"accept_ssl_requirements", "allocation_token", b"allocation_token", "ca", b"ca", "de", b"de", "eu", b"eu", "fr", b"fr", "gay", b"gay", "intended_use", b"intended_use", "name", b"name", "renewal_mode", b"renewal_mode", "rs", b"rs", "tel", b"tel", "tld", b"tld", "transfer_mode", b"transfer_mode", "us", b"us", "whois_banner", b"whois_banner", "whois_rsp", b"whois_rsp", "whois_url", b"whois_url"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["tld", b"tld"]) -> typing.Literal["ca", "de", "eu", "fr", "gay", "name", "rs", "us", "tel"] | None: ...
 
 global___DomainCreate = DomainCreate

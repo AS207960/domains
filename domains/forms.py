@@ -565,6 +565,7 @@ class DomainRegisterForm(forms.Form):
     admin = forms.ModelChoiceField(queryset=None, label="Admin contact", required=False)
     billing = forms.ModelChoiceField(queryset=None, label="Billing contact", required=False)
     tech = forms.ModelChoiceField(queryset=None, label="Technical contact", required=False)
+    intended_use = forms.CharField(max_length=256, label="Intended use", required=True)
 
     def __init__(self, *args, zone: zone_info.DomainInfo, user, **kwargs):
         super().__init__(*args, **kwargs)
@@ -578,11 +579,15 @@ class DomainRegisterForm(forms.Form):
         self.fields['billing'].required = zone.billing_required
         self.fields['tech'].required = zone.tech_required
 
+        if not zone.intended_use_required:
+            del self.fields['intended_use']
+
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.label_class = "mt-2"
         self.helper.field_class = "mb-2"
         self.helper.layout = crispy_forms.layout.Layout(
             'period',
+            'intended_use',
             crispy_forms.layout.HTML("<hr/>"),
             crispy_forms.layout.Fieldset(
                 'Domain contacts',

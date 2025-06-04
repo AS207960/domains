@@ -1308,6 +1308,12 @@ class DomainInfo:
             self.REGISTRY_SIDN,
         )
 
+    @property
+    def intended_use_required(self):
+        return self.registry in (
+            self.REGISTRY_CORE,
+        )
+
     def registrant_proxy(self, contact) -> typing.Optional[str]:
         if self.registry == self.REGISTRY_EURID:
             if contact.eurid_citizenship and contact.eurid_citizenship in EURID_PERMITTED_COUNTRIES:
