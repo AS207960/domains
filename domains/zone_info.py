@@ -586,6 +586,7 @@ class DomainInfo:
     REGISTRY_TELNAMES = "telnames"
     REGISTRY_NICSM = "nicsm"
     REGISTRY_AUDA = "auda"
+    REGISTRY_SAARLAND = "saarland"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None, hsts_preload=False):
         self.registry = registry
@@ -717,6 +718,7 @@ class DomainInfo:
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
             self.REGISTRY_AUDA,
+            self.REGISTRY_SAARLAND,
         )
 
     @property
@@ -880,6 +882,7 @@ class DomainInfo:
             self.REGISTRY_TELNAMES,
             self.REGISTRY_NICSM,
             self.REGISTRY_AUDA,
+            self.REGISTRY_SAARLAND,
         )
 
     @property
@@ -1104,6 +1107,7 @@ class DomainInfo:
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
+            self.REGISTRY_SAARLAND,
         )
 
     @property
@@ -1181,6 +1185,7 @@ class DomainInfo:
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
+            self.REGISTRY_SAARLAND,
         )
 
     @property
@@ -1258,6 +1263,7 @@ class DomainInfo:
             self.REGISTRY_NICSM,
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
+            self.REGISTRY_SAARLAND,
         )
 
     @property
@@ -3850,6 +3856,11 @@ else:
             DomainInfo.REGISTRY_AUDA,
             MarkupPrice(3139, transfer=3139, restore=4000, currency=None, display_currency='AUD', tld='id.au',
                         markup=decimal.Decimal("1.6"))
+        )),
+        ('saarland', DomainInfo(
+            DomainInfo.REGISTRY_SAARLAND,
+            MarkupPrice(3120, transfer=3120, restore=22750, currency=None, display_currency='EUR', tld='saarland',
+                        markup=decimal.Decimal("1.3"))
         )),
     )
 
