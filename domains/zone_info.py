@@ -1763,7 +1763,8 @@ else:
         ('page', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(2436, transfer=2436, restore=26100, currency=None, display_currency='USD', tld='page',
-                        markup=decimal.Decimal("1.45"))
+                        markup=decimal.Decimal("1.45")),
+            hsts_preload=True,
         )),
         ('dev', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
