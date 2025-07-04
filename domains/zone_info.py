@@ -587,6 +587,7 @@ class DomainInfo:
     REGISTRY_NICSM = "nicsm"
     REGISTRY_AUDA = "auda"
     REGISTRY_SAARLAND = "saarland"
+    REGISTRY_RUHR = "ruhr"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None, hsts_preload=False):
         self.registry = registry
@@ -719,6 +720,7 @@ class DomainInfo:
             self.REGISTRY_NICSM,
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
+            self.REGISTRY_RUHR,
         )
 
     @property
@@ -889,6 +891,7 @@ class DomainInfo:
             self.REGISTRY_NICSM,
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
+            self.REGISTRY_RUHR,
         )
 
     @property
@@ -1114,6 +1117,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
+            self.REGISTRY_RUHR,
         )
 
     @property
@@ -1192,6 +1196,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
+            self.REGISTRY_RUHR,
         )
 
     @property
@@ -1270,6 +1275,7 @@ class DomainInfo:
             self.REGISTRY_DENIC,
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
+            self.REGISTRY_RUHR,
         )
 
     @property
@@ -3868,6 +3874,11 @@ else:
             DomainInfo.REGISTRY_SAARLAND,
             MarkupPrice(3120, transfer=3120, restore=22750, currency=None, display_currency='EUR', tld='saarland',
                         markup=decimal.Decimal("1.3"))
+        )),
+        ('ruhr', DomainInfo(
+            DomainInfo.REGISTRY_RUHR,
+            MarkupPrice(4152, transfer=4152, restore=180, currency=None, display_currency='EUR', tld='ruhr',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
