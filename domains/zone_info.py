@@ -792,6 +792,12 @@ class DomainInfo:
         )
 
     @property
+    def eurid_request_auth_code(self):
+        return self.registry in (
+            self.REGISTRY_EURID,
+        )
+
+    @property
     def disclosure_supported(self):
         return self.registry not in (
             self.REGISTRY_AFILIAS,

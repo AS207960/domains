@@ -1245,29 +1245,50 @@ def request_auth_code(domain_id):
         logger.error(f"Failed to request auth code for {domain.domain}: unknown zone")
         return
 
-    if not zone.keysys_request_auth_code:
+    if not zone.keysys_request_auth_code and not zone.eurid_request_auth_code:
         logger.error(f"Failed to request auth code for {domain.domain}: unsupported for zone")
         return
 
-    try:
-        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
-            name=domain.domain,
-            registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
-            keysys=apps.epp_api.keysys_pb2.DomainUpdate(
-                request_auth_code=google.protobuf.wrappers_pb2.BoolValue(value=True),
+    if zone.keysys_request_auth_code:
+        try:
+            apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+                name=domain.domain,
+                registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
+                keysys=apps.epp_api.keysys_pb2.DomainUpdate(
+                    request_auth_code=google.protobuf.wrappers_pb2.BoolValue(value=True),
+                )
+            ))
+        except grpc.RpcError as rpc_error:
+            logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
+            raise rpc_error
+
+        try:
+            domain_data = apps.epp_client.get_domain(
+                domain.domain, registry_id=domain.registry_id
             )
-        ))
-    except grpc.RpcError as rpc_error:
-        logger.warn(f"Failed request auth code for {domain.domain}: {rpc_error.details()}")
-        raise rpc_error
+        except grpc.RpcError as rpc_error:
+            logger.warn(f"Failed to load data of {domain.domain}: {rpc_error.details()}")
+            raise rpc_error
 
-    try:
-        domain_data = apps.epp_client.get_domain(
-            domain.domain, registry_id=domain.registry_id
-        )
-    except grpc.RpcError as rpc_error:
-        logger.warn(f"Failed to load data of {domain.domain}: {rpc_error.details()}")
-        raise rpc_error
+        new_auth_code = domain_data.auth_code
+        auth_code_expiry = None
+    elif zone.eurid_request_auth_code:
+        try:
+            domain_data = apps.epp_client.stub.DomainInfo(apps.epp_api.domain_pb2.DomainInfoRequest(
+                name=domain.domain,
+                registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
+                eurid_data=apps.epp_api.eurid_pb2.DomainInfoRequest(
+                    request=True
+                )
+            ))
+        except grpc.RpcError as rpc_error:
+            logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
+            raise rpc_error
 
-    emails.mail_new_auth_code.delay(domain.id, domain_data.auth_info)
+        new_auth_code = domain_data.auth_info.value
+        auth_code_expiry = domain_data.eurid_data.auth_info_valid_until.ToDatetime() if domain_data.eurid_data.auth_info_valid_until else None
+    else:
+        raise NotImplementedError()
+
+    emails.mail_new_auth_code.delay(domain.id, new_auth_code, auth_code_expiry)
     logger.info(f"New auth code set for {domain.domain}")
