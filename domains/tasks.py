@@ -779,6 +779,9 @@ def process_domain_transfer_paid(transfer_order_id):
             domain_transfer_order.registry_id = transfer_data.registry_name
 
             if transfer_data.status == 5:
+                domain_transfer_order.state = domain_transfer_order.STATE_COMPLETED
+                domain_transfer_order.redirect_uri = None
+                domain_transfer_order.last_error = None
                 domain_transfer_order.save()
                 gchat_bot.notify_transfer.delay(domain_transfer_order.id, transfer_data.registry_name)
                 process_domain_transfer_complete.delay(domain_transfer_order.id)
@@ -832,6 +835,24 @@ def process_domain_transfer(transfer_order_id):
         logger.error(f"Failed to get zone info for {domain_transfer_order.domain}")
         billing.reverse_charge(domain_transfer_order.id)
         emails.mail_transfer_failed.delay(domain_transfer_order.id)
+        return
+
+    if registration := models.DomainRegistration.objects.filter(domain=domain_transfer_order.domain, former_domain=False).first():
+        if registration.auth_info == domain_transfer_order.auth_code:
+            registration.former_domain = True
+            domain_transfer_order.state = domain_transfer_order.STATE_COMPLETED
+            domain_transfer_order.redirect_uri = None
+            domain_transfer_order.last_error = None
+            domain_transfer_order.save()
+            gchat_bot.notify_transfer.delay(domain_transfer_order.id, "INTERNAL")
+            process_domain_transfer_complete.delay(domain_transfer_order.id)
+            logger.info(f"{domain_transfer_order.domain} successfully transferred internally")
+        else:
+            domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+            domain_transfer_order.last_error = "The authorization code is invalid."
+            domain_transfer_order.save()
+            emails.mail_transfer_failed.delay(domain_transfer_order.id)
+
         return
 
     charge_order(
