@@ -125,14 +125,15 @@ class Command(BaseCommand):
         )
         json_data = json.dumps(m_data, indent=4, sort_keys=True)
 
-        m = mail.EmailMessage(
+        email = mail.EmailMessage(
             to=["noc@as207960.net"],
             from_email=settings.DEFAULT_FROM_EMAIL,
             subject=f"EPP Poll Notification - {client.registry_name}",
             body=f"<p><pre>{json_data}</pre></p>",
             headers={"Content-Type": "text/html"},
         )
-        m.send()
+        email.send()
+        client.ack(m.msg_id)
 
     def callback_exc(self, client: PollClient, e):
         m = mail.EmailMessage(
