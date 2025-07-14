@@ -35,15 +35,13 @@ class PollClient:
         return self
 
     def __next__(self):
-        while (msg_id := self._pending_ack.get()) is None:
-            time.sleep(0.1)
-
+        msg_id = self._pending_ack.get(block=True)
         return domains.epp_api.epp_grpc.epp_pb2.PollAck(
             msg_id=msg_id
         )
 
     def _run_iter(self):
-        while not self._exit.isSet():
+        while not self._exit.is_set():
             self._channel = self._stub.Poll(
                 self,
                 metadata=(
@@ -70,7 +68,7 @@ class PollClient:
             time.sleep(60)
 
     def _run_watcher(self):
-        while not self._exit.isSet():
+        while not self._exit.is_set():
             if not self._t.is_alive():
                 self._t = threading.Thread(target=self._run_iter)
                 self._t.start()
@@ -111,7 +109,7 @@ class Command(BaseCommand):
         print("Poll handler running")
         try:
             while True:
-                time.sleep(0.1)
+                time.sleep(5)
         except (KeyboardInterrupt, SystemExit):
             print("Exiting...")
             for c in clients:
@@ -121,7 +119,9 @@ class Command(BaseCommand):
         if m.HasField("change_data") and m.WhichOneof("data") == "domain_info":
             self.handle_domain_update(m)
 
-        m_data = google.protobuf.json_format.MessageToDict(m, including_default_value_fields=True)
+        m_data = google.protobuf.json_format.MessageToDict(
+            m, always_print_fields_with_no_presence=True
+        )
         json_data = json.dumps(m_data, indent=4, sort_keys=True)
 
         access_token = django_keycloak_auth.clients.get_access_token()

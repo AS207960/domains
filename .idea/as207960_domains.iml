@@ -29,6 +29,9 @@
     <orderEntry type="library" name="any-number" level="application" />
     <orderEntry type="library" name="responsive.bootstrap4" level="application" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="" />
+  </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
   </component>
