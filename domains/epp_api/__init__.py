@@ -1385,16 +1385,20 @@ class ChangeState:
 
     @property
     def name(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.ChangeState.AFTER:
             return "after"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.ChangeState.BEFORE:
             return "before"
+        else:
+            return "unknown"
 
     def __str__(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.ChangeState.AFTER:
             return "after"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.ChangeState.BEFORE:
             return "before"
+        else:
+            return f"unknown ({self.item})"
 
     def __eq__(self, other):
         if type(other) == int:
@@ -1411,48 +1415,52 @@ class ChangeOperationType:
 
     @property
     def name(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Custom:
             return "custom"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Create:
             return "create"
-        elif self.item == 2:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Delete:
             return "delete"
-        elif self.item == 3:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Renew:
             return "renew"
-        elif self.item == 4:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Transfer:
             return "transfer"
-        elif self.item == 5:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Update:
             return "update"
-        elif self.item == 6:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Restore:
             return "restore"
-        elif self.item == 7:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoRenew:
             return "auto_renew"
-        elif self.item == 8:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoDelete:
             return "auto_delete"
-        elif self.item == 9:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoPurge:
             return "auto_purge"
+        else:
+            return "unknown"
 
     def __str__(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Custom:
             return "Custom"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Create:
             return "Create"
-        elif self.item == 2:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Delete:
             return "Delete"
-        elif self.item == 3:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Renew:
             return "Renew"
-        elif self.item == 4:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Transfer:
             return "Transfer"
-        elif self.item == 5:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Update:
             return "Update"
-        elif self.item == 6:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Restore:
             return "Restore"
-        elif self.item == 7:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoRenew:
             return "Automatic renew"
-        elif self.item == 8:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoDelete:
             return "Automatic delete"
-        elif self.item == 9:
+        elif self.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.AutoPurge:
             return "Automatic purge"
+        else:
+            return f"Unknown operation {self.item}"
 
     def __eq__(self, other):
         if type(other) == int:
@@ -1476,7 +1484,7 @@ class ChangeOperation:
         )
 
     def __str__(self):
-        if self.type.item == 0:
+        if self.type.item == epp_pb2.ChangeData.ChangeOperation.ChangeOperationType.Custom:
             return str(self.operation)
         else:
             if self.operation:
@@ -1491,20 +1499,24 @@ class ChangeCaseIDType:
 
     @property
     def name(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.CaseID.CaseIDType.Custom:
             return "custom"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.CaseID.CaseIDType.UDRP:
             return "udrp"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.CaseID.CaseIDType.URS:
             return "urs"
+        else:
+            return "unknown"
 
     def __str__(self):
-        if self.item == 0:
+        if self.item == epp_pb2.ChangeData.CaseID.CaseIDType.Custom:
             return "Custom"
-        elif self.item == 1:
+        elif self.item == epp_pb2.ChangeData.CaseID.CaseIDType.UDRP:
             return "UDRP"
-        elif self.item == 2:
+        elif self.item == epp_pb2.ChangeData.CaseID.CaseIDType.URS:
             return "URS"
+        else:
+            return f"Unknown Case Type ({self.item})"
 
     def __eq__(self, other):
         if type(other) == int:
