@@ -3,6 +3,7 @@ from domains import apps, models
 from django.conf import settings
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
+from django.core import mail
 import threading
 import domains.epp_api.epp_grpc.epp_pb2
 import domains.epp_api.epp_grpc.epp_pb2_grpc
@@ -124,42 +125,24 @@ class Command(BaseCommand):
         )
         json_data = json.dumps(m_data, indent=4, sort_keys=True)
 
-        access_token = django_keycloak_auth.clients.get_access_token()
-        r = requests.post(
-            f"{settings.LISTMONK_URL}/api/tx",
-            json={
-                "subscriber_email": "noc@as207960.net",
-                "template_id": settings.LISTMONK_TEMPLATE_ID,
-                "from_email": settings.DEFAULT_FROM_EMAIL,
-                "data": {
-                    "subject": f"EPP Poll Notification - {client.registry_name}",
-                    "content": f"<p><pre>{json_data}</pre></p>"
-                }
-            },
-            headers={
-                "Authorization": f"Bearer {access_token}"
-            }
+        m = mail.EmailMessage(
+            to=["noc@as207960.net"],
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            subject=f"EPP Poll Notification - {client.registry_name}",
+            body=f"<p><pre>{json_data}</pre></p>",
+            headers={"Content-Type": "text/html"},
         )
-        r.raise_for_status()
+        m.send()
 
     def callback_exc(self, client: PollClient, e):
-        access_token = django_keycloak_auth.clients.get_access_token()
-        r = requests.post(
-            f"{settings.LISTMONK_URL}/api/tx",
-            json={
-                "subscriber_email": "noc@as207960.net",
-                "template_id": settings.LISTMONK_TEMPLATE_ID,
-                "from_email": settings.DEFAULT_FROM_EMAIL,
-                "data": {
-                    "subject": f"EPP Poll Exception - {client.registry_name}",
-                    "content": f"<p><pre>{e}</pre></p>"
-                }
-            },
-            headers={
-                "Authorization": f"Bearer {access_token}"
-            }
+        m = mail.EmailMessage(
+            to=["noc@as207960.net"],
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            subject=f"EPP Poll Exception - {client.registry_name}",
+            body=f"<p><pre>{e}</pre></p>",
+            headers={"Content-Type": "text/html"},
         )
-        r.raise_for_status()
+        m.send()
 
     def handle_domain_update(self, m):
         domain = apps.epp_api.Domain.from_pb(m.domain_info, apps.epp_client)
