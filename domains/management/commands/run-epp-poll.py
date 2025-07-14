@@ -12,8 +12,7 @@ import queue
 import time
 import grpc
 import traceback
-import django_keycloak_auth.clients
-import requests
+import email.utils
 import json
 from domains.views import emails
 
@@ -125,25 +124,26 @@ class Command(BaseCommand):
         )
         json_data = json.dumps(m_data, indent=4, sort_keys=True)
 
-        email = mail.EmailMessage(
+        mail.EmailMessage(
             to=["noc@as207960.net"],
             from_email=settings.DEFAULT_FROM_EMAIL,
             subject=f"EPP Poll Notification - {client.registry_name}",
             body=f"<p><pre>{json_data}</pre></p>",
-            headers={"Content-Type": "text/html"},
-        )
-        email.send()
+            headers={
+                "Content-Type": "text/html",
+                "Date": email.utils.format_datetime(m.enqueue_date.ToDatetime())
+            },
+        ).send()
         client.ack(m.msg_id)
 
     def callback_exc(self, client: PollClient, e):
-        m = mail.EmailMessage(
+        mail.EmailMessage(
             to=["noc@as207960.net"],
             from_email=settings.DEFAULT_FROM_EMAIL,
             subject=f"EPP Poll Exception - {client.registry_name}",
             body=f"<p><pre>{e}</pre></p>",
             headers={"Content-Type": "text/html"},
-        )
-        m.send()
+        ).send()
 
     def handle_domain_update(self, m):
         domain = apps.epp_api.Domain.from_pb(m.domain_info, apps.epp_client)
