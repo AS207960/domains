@@ -25,14 +25,17 @@ def get_feedback_url(description: str, reference: str):
     return data["public_url"]
 
 
-def send_email(user, data: dict):
+def send_email(user, data: dict, extra_headers: typing.Optional[dict] = None):
+    if extra_headers is None:
+        extra_headers = {}
     request = {
         "template_id": settings.LISTMONK_TEMPLATE_ID,
         "from_email": settings.DEFAULT_FROM_EMAIL,
         "data": data,
         "headers": [{
             "Reply-To": "Glauca Support <hello@glauca.digital>",
-            "Bcc": "email-log@as207960.net"
+            "Bcc": "email-log@as207960.net",
+            **extra_headers
         }]
     }
     request["data"]["service"] = "Domains by Glauca"

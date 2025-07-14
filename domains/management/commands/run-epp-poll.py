@@ -166,4 +166,6 @@ class Command(BaseCommand):
                     "domain_url": domain_url,
                     "change_data": change_data,
                 })
+            }, extra_headers={
+                "Date": email.utils.format_datetime(m.enqueue_date.ToDatetime())
             })
