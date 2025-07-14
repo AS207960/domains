@@ -1297,17 +1297,43 @@ def request_auth_code(domain_id):
         try:
             domain_data = apps.epp_client.stub.DomainInfo(apps.epp_api.domain_pb2.DomainInfoRequest(
                 name=domain.domain,
-                registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
-                eurid_data=apps.epp_api.eurid_pb2.DomainInfoRequest(
-                    request=True
-                )
+                registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id) if domain.registry_id else None,
             ))
         except grpc.RpcError as rpc_error:
-            logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
-            raise rpc_error
+            error_code = utils.epp_grpc_error_code(rpc_error)
+            if error_code == "object-does-not-exist":
+                logger.warn(f"Cannot request auth code for nonexistent domain {domain.domain}: {rpc_error.details()}")
+                return
+            else:
+                logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
+                raise rpc_error
 
-        new_auth_code = domain_data.auth_info.value
-        auth_code_expiry = domain_data.eurid_data.auth_info_valid_until.ToDatetime() if domain_data.eurid_data.auth_info_valid_until else None
+        if domain_data.auth_info:
+            new_auth_code = domain_data.auth_info.value
+            auth_code_expiry = domain_data.eurid_data.auth_info_valid_until.ToDatetime() if domain_data.eurid_data.auth_info_valid_until else None
+        else:
+            try:
+                domain_data = apps.epp_client.stub.DomainInfo(apps.epp_api.domain_pb2.DomainInfoRequest(
+                    name=domain.domain,
+                    registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id) if domain.registry_id else None,
+                    eurid_data=apps.epp_api.eurid_pb2.DomainInfoRequest(
+                        request=True
+                    )
+                ))
+            except grpc.RpcError as rpc_error:
+                error_code = utils.epp_grpc_error_code(rpc_error)
+                if error_code == "object-exists":
+                    logger.warn(f"Authcode already exists for domain {domain.domain}: {rpc_error.details()}")
+                    return
+                elif error_code == "object-does-not-exist":
+                    logger.warn(f"Cannot request auth code for nonexistent domain {domain.domain}: {rpc_error.details()}")
+                    return
+                else:
+                    logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
+                    raise rpc_error
+
+            new_auth_code = domain_data.auth_info.value
+            auth_code_expiry = domain_data.eurid_data.auth_info_valid_until.ToDatetime() if domain_data.eurid_data.auth_info_valid_until else None
     else:
         raise NotImplementedError()
 
