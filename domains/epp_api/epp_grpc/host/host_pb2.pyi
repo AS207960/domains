@@ -14,6 +14,7 @@ import google.protobuf.timestamp_pb2
 import google.protobuf.wrappers_pb2
 import isnic.isnic_pb2
 import sys
+import ttl.ttl_pb2
 import typing
 
 if sys.version_info >= (3, 10):
@@ -128,6 +129,7 @@ class HostInfoReply(google.protobuf.message.Message):
     LAST_UPDATED_CLIENT_FIELD_NUMBER: builtins.int
     LAST_UPDATED_DATE_FIELD_NUMBER: builtins.int
     LAST_TRANSFER_DATE_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
     CMD_RESP_FIELD_NUMBER: builtins.int
     name: builtins.str
     registry_id: builtins.str
@@ -147,6 +149,8 @@ class HostInfoReply(google.protobuf.message.Message):
     @property
     def last_transfer_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
     @property
+    def ttl(self) -> ttl.ttl_pb2.TTLInfo: ...
+    @property
     def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
     def __init__(
         self,
@@ -161,10 +165,11 @@ class HostInfoReply(google.protobuf.message.Message):
         last_updated_client: google.protobuf.wrappers_pb2.StringValue | None = ...,
         last_updated_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         last_transfer_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        ttl: ttl.ttl_pb2.TTLInfo | None = ...,
         cmd_resp: common.common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["addresses", b"addresses", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "name", b"name", "registry_id", b"registry_id", "statuses", b"statuses"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "ttl", b"ttl"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["addresses", b"addresses", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "name", b"name", "registry_id", b"registry_id", "statuses", b"statuses", "ttl", b"ttl"]) -> None: ...
 
 global___HostInfoReply = HostInfoReply
 
@@ -176,12 +181,15 @@ class HostCreateRequest(google.protobuf.message.Message):
     ADDRESSES_FIELD_NUMBER: builtins.int
     REGISTRY_NAME_FIELD_NUMBER: builtins.int
     ISNIC_INFO_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
     name: builtins.str
     registry_name: builtins.str
     @property
     def addresses(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[common.common_pb2.IPAddress]: ...
     @property
     def isnic_info(self) -> isnic.isnic_pb2.HostInfo: ...
+    @property
+    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
@@ -189,9 +197,10 @@ class HostCreateRequest(google.protobuf.message.Message):
         addresses: collections.abc.Iterable[common.common_pb2.IPAddress] | None = ...,
         registry_name: builtins.str = ...,
         isnic_info: isnic.isnic_pb2.HostInfo | None = ...,
+        ttl: ttl.ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["isnic_info", b"isnic_info"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["addresses", b"addresses", "isnic_info", b"isnic_info", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["isnic_info", b"isnic_info", "ttl", b"ttl"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["addresses", b"addresses", "isnic_info", b"isnic_info", "name", b"name", "registry_name", b"registry_name", "ttl", b"ttl"]) -> None: ...
 
 global___HostCreateRequest = HostCreateRequest
 
@@ -289,6 +298,7 @@ class HostUpdateRequest(google.protobuf.message.Message):
     NEW_NAME_FIELD_NUMBER: builtins.int
     REGISTRY_NAME_FIELD_NUMBER: builtins.int
     ISNIC_INFO_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
     name: builtins.str
     registry_name: builtins.str
     @property
@@ -299,6 +309,8 @@ class HostUpdateRequest(google.protobuf.message.Message):
     def new_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
     @property
     def isnic_info(self) -> isnic.isnic_pb2.HostInfo: ...
+    @property
+    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
@@ -308,9 +320,10 @@ class HostUpdateRequest(google.protobuf.message.Message):
         new_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
         registry_name: builtins.str = ...,
         isnic_info: isnic.isnic_pb2.HostInfo | None = ...,
+        ttl: ttl.ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["isnic_info", b"isnic_info", "new_name", b"new_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "isnic_info", b"isnic_info", "name", b"name", "new_name", b"new_name", "registry_name", b"registry_name", "remove", b"remove"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["isnic_info", b"isnic_info", "new_name", b"new_name", "ttl", b"ttl"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["add", b"add", "isnic_info", b"isnic_info", "name", b"name", "new_name", b"new_name", "registry_name", b"registry_name", "remove", b"remove", "ttl", b"ttl"]) -> None: ...
 
 global___HostUpdateRequest = HostUpdateRequest
 

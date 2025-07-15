@@ -22,6 +22,7 @@ import nominet_ext.nominet_ext_pb2
 import personal_registration.personal_registration_pb2
 import rgp.rgp_pb2
 import sys
+import ttl.ttl_pb2
 import typing
 
 if sys.version_info >= (3, 10):
@@ -320,13 +321,14 @@ class DomainInfoReply(google.protobuf.message.Message):
     LAUNCH_INFO_FIELD_NUMBER: builtins.int
     DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
     VERISIGN_WHOIS_INFO_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
     EURID_IDN_FIELD_NUMBER: builtins.int
     EURID_DATA_FIELD_NUMBER: builtins.int
     ISNIC_INFO_FIELD_NUMBER: builtins.int
     PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
     KEYSYS_FIELD_NUMBER: builtins.int
     NOMINET_EXT_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
+    CMD_RESP_FIELD_NUMBER: builtins.int
     name: builtins.str
     registry_id: builtins.str
     registrant: builtins.str
@@ -365,8 +367,6 @@ class DomainInfoReply(google.protobuf.message.Message):
     @property
     def verisign_whois_info(self) -> global___VerisignWhoisInfo: ...
     @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
     def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
     @property
     def eurid_data(self) -> eurid.eurid_pb2.DomainInfo: ...
@@ -378,6 +378,10 @@ class DomainInfoReply(google.protobuf.message.Message):
     def keysys(self) -> keysys.keysys_pb2.DomainInfo: ...
     @property
     def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainInfo: ...
+    @property
+    def ttl(self) -> ttl.ttl_pb2.TTLInfo: ...
+    @property
+    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
@@ -402,16 +406,17 @@ class DomainInfoReply(google.protobuf.message.Message):
         launch_info: launch.launch_pb2.LaunchInfoData | None = ...,
         donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
         verisign_whois_info: global___VerisignWhoisInfo | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
         eurid_idn: eurid.eurid_pb2.IDN | None = ...,
         eurid_data: eurid.eurid_pb2.DomainInfo | None = ...,
         isnic_info: isnic.isnic_pb2.DomainInfo | None = ...,
         personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationInfo | None = ...,
         keysys: keysys.keysys_pb2.DomainInfo | None = ...,
         nominet_ext: nominet_ext.nominet_ext_pb2.DomainInfo | None = ...,
+        ttl: ttl.ttl_pb2.TTLInfo | None = ...,
+        cmd_resp: common.common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "sec_dns", b"sec_dns", "verisign_whois_info", b"verisign_whois_info"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "contacts", b"contacts", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "hosts", b"hosts", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_id", b"registry_id", "registry_name", b"registry_name", "rgp_state", b"rgp_state", "sec_dns", b"sec_dns", "statuses", b"statuses", "verisign_whois_info", b"verisign_whois_info"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "sec_dns", b"sec_dns", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "contacts", b"contacts", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "hosts", b"hosts", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_id", b"registry_id", "registry_name", b"registry_name", "rgp_state", b"rgp_state", "sec_dns", b"sec_dns", "statuses", b"statuses", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]) -> None: ...
 
 global___DomainInfoReply = DomainInfoReply
 
@@ -435,6 +440,7 @@ class DomainCreateRequest(google.protobuf.message.Message):
     PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
     KEYSYS_FIELD_NUMBER: builtins.int
     NOMINET_EXT_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
     name: builtins.str
     registrant: builtins.str
     auth_info: builtins.str
@@ -464,6 +470,8 @@ class DomainCreateRequest(google.protobuf.message.Message):
     def keysys(self) -> keysys.keysys_pb2.DomainCreate: ...
     @property
     def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainCreate: ...
+    @property
+    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
@@ -483,9 +491,10 @@ class DomainCreateRequest(google.protobuf.message.Message):
         personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationInfo | None = ...,
         keysys: keysys.keysys_pb2.DomainCreate | None = ...,
         nominet_ext: nominet_ext.nominet_ext_pb2.DomainCreate | None = ...,
+        ttl: ttl.ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "sec_dns", b"sec_dns"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "contacts", b"contacts", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_name", b"registry_name", "sec_dns", b"sec_dns"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "contacts", b"contacts", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> None: ...
 
 global___DomainCreateRequest = DomainCreateRequest
 
@@ -651,6 +660,7 @@ class DomainUpdateRequest(google.protobuf.message.Message):
     ISNIC_INFO_FIELD_NUMBER: builtins.int
     KEYSYS_FIELD_NUMBER: builtins.int
     NOMINET_EXT_FIELD_NUMBER: builtins.int
+    TTL_FIELD_NUMBER: builtins.int
     name: builtins.str
     @property
     def add(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___DomainUpdateRequest.Param]: ...
@@ -678,6 +688,8 @@ class DomainUpdateRequest(google.protobuf.message.Message):
     def keysys(self) -> keysys.keysys_pb2.DomainUpdate: ...
     @property
     def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainUpdate: ...
+    @property
+    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
@@ -695,9 +707,10 @@ class DomainUpdateRequest(google.protobuf.message.Message):
         isnic_info: isnic.isnic_pb2.DomainUpdate | None = ...,
         keysys: keysys.keysys_pb2.DomainUpdate | None = ...,
         nominet_ext: nominet_ext.nominet_ext_pb2.DomainUpdate | None = ...,
+        ttl: ttl.ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "sec_dns", b"sec_dns"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "remove", b"remove", "sec_dns", b"sec_dns"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["add", b"add", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "remove", b"remove", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> None: ...
 
 global___DomainUpdateRequest = DomainUpdateRequest
 
