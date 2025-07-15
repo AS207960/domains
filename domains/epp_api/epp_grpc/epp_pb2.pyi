@@ -4,11 +4,13 @@ isort:skip_file
 """
 
 import builtins
+import collections.abc
 import common.common_pb2
 import contact.contact_pb2
 import domain.domain_pb2
 import eurid.eurid_pb2
 import google.protobuf.descriptor
+import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 import google.protobuf.timestamp_pb2
@@ -86,6 +88,7 @@ class PollReply(google.protobuf.message.Message):
     EURID_POLL_FIELD_NUMBER: builtins.int
     HOST_INFO_FIELD_NUMBER: builtins.int
     CHANGE_DATA_FIELD_NUMBER: builtins.int
+    KEYSYS_FIELD_NUMBER: builtins.int
     CMD_RESP_FIELD_NUMBER: builtins.int
     msg_id: builtins.str
     message: builtins.str
@@ -136,6 +139,8 @@ class PollReply(google.protobuf.message.Message):
     @property
     def change_data(self) -> global___ChangeData: ...
     @property
+    def keysys(self) -> global___KeysysPoll: ...
+    @property
     def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
     def __init__(
         self,
@@ -165,10 +170,11 @@ class PollReply(google.protobuf.message.Message):
         eurid_poll: eurid.eurid_pb2.PollReply | None = ...,
         host_info: host.host_pb2.HostInfoReply | None = ...,
         change_data: global___ChangeData | None = ...,
+        keysys: global___KeysysPoll | None = ...,
         cmd_resp: common.common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "maintenance_info", b"maintenance_info", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "maintenance_info", b"maintenance_info", "message", b"message", "msg_id", b"msg_id", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "message", b"message", "msg_id", b"msg_id", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["data", b"data"]) -> typing.Literal["domain_info", "domain_transfer", "domain_create", "domain_renew", "domain_pan", "contact_info", "contact_transfer", "contact_pan", "nominet_domain_cancel", "nominet_domain_release", "nominet_domain_registrar_change", "nominet_host_cancel", "nominet_process", "nominet_suspend", "nominet_domain_fail", "nominet_registrant_transfer", "traficom_trn", "verisign_low_balance", "maintenance_info", "eurid_poll", "host_info"] | None: ...
 
 global___PollReply = PollReply
@@ -306,6 +312,43 @@ class ChangeData(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "change_state", b"change_state", "date", b"date", "operation", b"operation", "reason", b"reason", "server_transaction_id", b"server_transaction_id", "who", b"who"]) -> None: ...
 
 global___ChangeData = ChangeData
+
+@typing.final
+class KeysysPoll(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    @typing.final
+    class DataEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.str
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.str = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    INFO_FIELD_NUMBER: builtins.int
+    DATA_FIELD_NUMBER: builtins.int
+    @property
+    def info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    @property
+    def data(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]: ...
+    def __init__(
+        self,
+        *,
+        info: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        data: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["info", b"info"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["data", b"data", "info", b"info"]) -> None: ...
+
+global___KeysysPoll = KeysysPoll
 
 @typing.final
 class BalanceReply(google.protobuf.message.Message):
