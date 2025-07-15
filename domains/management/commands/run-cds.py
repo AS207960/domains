@@ -273,6 +273,13 @@ class Command(BaseCommand):
                     else:
                         current_cds_set = domain_data.sec_dns.key_data
 
+                supported_algorithms = domain_info.supported_dnssec_algorithms
+                cds_data_set = list(filter(lambda r: r.algorithm == 0 or r.algorithm in supported_algorithms, cds_data_set))
+
+                if len(cds_data_set) == 0:
+                    print(f"{domain.domain} CDS uses invalid algorithm/digest")
+                    continue
+
                 if not domain_info.ds_data_supported:
                     cds_set = list(map(lambda d: dns.dnssec.make_ds(domain_name, d, "SHA256"), cds_data_set))
                 else:
@@ -284,20 +291,6 @@ class Command(BaseCommand):
                         validate_message(res, dnskey, cds_set)
                 except dns.dnssec.ValidationFailure:
                     print(f"{domain.domain} failed validation with presented CDS set")
-                    continue
-
-                invalid_algo_digest = False
-                for cds in cds_set:
-                    if not (
-                            cds.algorithm in domain_info.supported_dnssec_algorithms or cds.algorithm == 0
-                    ) or not (
-                            cds.digest_type in domain_info.supported_dnssec_digests or cds.digest_type == 0
-                    ):
-                        print(f"{domain.domain} CDS uses invalid algorithm/digest")
-                        invalid_algo_digest = True
-                        break
-
-                if invalid_algo_digest:
                     continue
 
                 if domain_info.ds_data_supported:
