@@ -151,6 +151,9 @@ class Command(BaseCommand):
                         except dns.exception.Timeout:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
                             return
+                        except dns.exception.DNSException as e:
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
+                            return
                         except OSError as e:
                             print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
                             return

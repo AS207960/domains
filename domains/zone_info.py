@@ -605,6 +605,8 @@ class DomainInfo:
             return 8, 10, 13, 14, 15, 16
         elif self.registry == self.REGISTRY_DENIC:
             return 3, 5, 6, 7, 8, 10, 12, 13, 14
+        elif self.registry == self.REGISTRY_CORE:
+            return 3, 5, 6, 7, 8, 10, 12, 13, 14
         elif self.registry == self.REGISTRY_VERISIGN:
             return 5, 7, 8, 10, 12, 13, 14, 15, 16, 253, 254
         elif self.registry == self.REGISTRY_ISNIC:
