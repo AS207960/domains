@@ -92,6 +92,9 @@ class Command(BaseCommand):
             except dns.exception.Timeout:
                 print(f"Getting DS of {domain.domain} timed out")
                 continue
+            except dns.exception.DNSException as e:
+                print(f"Getting DS of {domain.domain}: {e}")
+                continue
 
             if original_ds_msg.rcode() != 0:
                 print(f"Getting DS of {domain.domain} returned error")
@@ -169,6 +172,9 @@ class Command(BaseCommand):
                         except dns.exception.Timeout:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
                             return
+                        except dns.exception.DNSException as e:
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
+                            return
                         except OSError as e:
                             print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
                             return
@@ -224,6 +230,9 @@ class Command(BaseCommand):
                         continue
                     except dns.exception.Timeout:
                         print(f"Getting {ds_boot_domain_name} timed out")
+                        continue
+                    except dns.exception.DNSException as e:
+                        print(f"Getting {ds_boot_domain_name}: {e}")
                         continue
 
                     if not bool(ds_boot_msg.flags & ds_boot_msg.flags.AD):
