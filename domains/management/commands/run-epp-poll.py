@@ -55,9 +55,8 @@ class PollClient:
                     except:
                         traceback.print_exc()
             except grpc.RpcError as e:
-                if e.code() == grpc.StatusCode.CANCELLED:
-                    return
-                elif e.code() in (grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED):
+                print(f"Encountered error polling {self._registry_name}: {e.details()}")
+                if e.code() in (grpc.StatusCode.CANCELLED, grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED):
                     pass
                 else:
                     try:
