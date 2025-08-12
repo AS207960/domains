@@ -3542,7 +3542,8 @@ else:
         ('zip', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(2940, restore=16800, currency=None, display_currency='USD', tld='zip',
-                        markup=decimal.Decimal("1.4"))
+                        markup=decimal.Decimal("1.4")),
+            hsts_preload=True,
         )),
         ('mov', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
