@@ -140,7 +140,7 @@ class Command(BaseCommand):
                         ns_ips = socket.getaddrinfo(ns, None, socket.AF_INET6)
                     except socket.gaierror as e:
                         print(f"Getting IP of {ns} for domain {domain.domain}: {e.args[1]}")
-                        return
+                        return None
 
                     for ns_ip in ns_ips:
                         ns_ip = ns_ip[4][0]
@@ -153,17 +153,20 @@ class Command(BaseCommand):
                             dns_cds = dns.query.tcp(msg, ns_ip, timeout=15)
                         except dns.exception.Timeout:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
-                            return
+                            return None
+                        except EOFError:
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: unexpected EOF")
+                            return None
                         except dns.exception.DNSException as e:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
-                            return
+                            return None
                         except OSError as e:
                             print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
-                            return
+                            return None
 
                         if dns_cds.rcode() == dns.rcode.NXDOMAIN:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} returned NXDOMAIN")
-                            return
+                            return None
 
                         try:
                             msg = dns.message.make_query(domain_name, dns.rdatatype.DNSKEY)
@@ -171,13 +174,16 @@ class Command(BaseCommand):
                             dns_dnskey = dns.query.tcp(msg, ns_ip, timeout=15)
                         except dns.exception.Timeout:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain} timed out")
-                            return
+                            return None
+                        except EOFError:
+                            print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: unexpected EOF")
+                            return None
                         except dns.exception.DNSException as e:
                             print(f"NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
-                            return
+                            return None
                         except OSError as e:
                             print(f"Can't access NS {ns} (IP {ns_ip}) for domain {domain.domain}: {e}")
-                            return
+                            return None
 
                         cds_rrs = dns_cds.get_rrset(
                             dns.message.ANSWER, domain_name, dns.rdataclass.IN, cds_type
@@ -192,7 +198,7 @@ class Command(BaseCommand):
                                 validate_message(dns_cds, dnskey_rrs, original_ds, cds_type, False)
                         except dns.dnssec.ValidationFailure:
                             print(f"{domain.domain} failed validation with current DS set")
-                            return
+                            return None
 
                         if cds_rrs:
                             cds[ns_ip] = cds_rrs
@@ -232,7 +238,7 @@ class Command(BaseCommand):
                         print(f"Getting {ds_boot_domain_name} timed out")
                         continue
                     except dns.exception.DNSException as e:
-                        print(f"Getting {ds_boot_domain_name}: {e}")
+                        print(f"Getting {ds_boot_domain_name}f: {e}")
                         continue
 
                     if not bool(ds_boot_msg.flags & ds_boot_msg.flags.AD):
