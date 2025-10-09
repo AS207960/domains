@@ -1308,7 +1308,7 @@ def request_auth_code(domain_id):
                 logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
                 raise rpc_error
 
-        if domain_data.auth_info:
+        if domain_data.auth_info and domain_data.auth_info.value:
             new_auth_code = domain_data.auth_info.value
             auth_code_expiry = domain_data.eurid_data.auth_info_valid_until.ToDatetime() if domain_data.eurid_data.auth_info_valid_until else None
         else:
