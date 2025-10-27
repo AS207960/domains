@@ -1,0 +1,39 @@
+<table style="border-spacing: 0;width:100%;">
+    <tr>
+        <td>
+            <p>
+                We have received a report from SWITCH concerning IPv6 errors on the domain
+                {{ domain.domain }}. The details of the report are below. The report was generated on {{ error_date }}.
+            </p>
+        </td>
+        <td>
+            <img src="https://as207960.net/assets/img/shark-pointing.png" height="100" alt=""/>
+        </td>
+    </tr>
+</table>
+<ul>
+    {% if ipv6_status.nxdomain_error %}
+        <li>An NXDOMAIN error was encountered resolving your domain.</li>
+    {% endif %}
+    {% if ipv6_status.servfail_error %}
+        <li>A SERVFAIL error was encountered resolving your domain.</li>
+    {% endif %}
+    {% if ipv6_status.timeout_error %}
+        <li>A timeout error was encountered resolving your domain.</li>
+    {% endif %}
+    {% if ipv6_status.less_than_two_ns %}
+        <li>Your domain has only one NS record.</li>
+    {% endif %}
+    {% if ipv6_status.less_than_two_ns_with_aaaa %}
+        <li>Your domain has only one nameserver with at least one AAAA record.</li>
+    {% endif %}
+    {% if ipv6_status.less_than_two_aaaa %}
+        <li>Your domain has only one distinct AAAA record in the set of all AAAA records gathered from all nameserver record names.</li>
+    {% endif %}
+    {% if ipv6_status.not_resolvable_over_ipv6 %}
+        <li>Your domain name is not resolvable over an IPv6 only connection.</li>
+    {% endif %}
+    {% if ipv6_status.no_aaaa_at_apex %}
+        <li>Your domain name does not have an AAAA record, even though it has an A record.</li>
+    {% endif %}
+</ul>
