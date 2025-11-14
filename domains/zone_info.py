@@ -1772,6 +1772,10 @@ else:
         ('eu', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
         ('xn--e1a4c', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
         ('xn--qxa6a', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(833, transfer=833))),
+        # From 1st Feb 2026
+        # ('eu', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(1150, transfer=1150))),
+        # ('xn--e1a4c', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(1150, transfer=1150))),
+        # ('xn--qxa6a', DomainInfo(DomainInfo.REGISTRY_EURID, SimplePrice(1150, transfer=1150))),
         ('soy', DomainInfo(
             DomainInfo.REGISTRY_GOOGLE,
             MarkupPrice(4478, transfer=4478, restore=21600, currency=None, display_currency='USD', tld='soy',
