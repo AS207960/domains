@@ -457,8 +457,10 @@ def update_domain_contact(request, domain_id):
                                             registry_name=google.protobuf.wrappers_pb2.StringValue(
                                                 value=domain_data.registry_name),
                                             eurid_data=apps.epp_api.eurid_pb2.DomainUpdateExtension(
-                                                remove_on_site=domain_data.eurid.on_site,
-                                                add_on_site=contact_id.registry_contact_id
+                                                remove_on_site=google.protobuf.wrappers_pb2.StringValue(
+                                                    value=domain_data.eurid.on_site),
+                                                add_on_site=google.protobuf.wrappers_pb2.StringValue(
+                                                    value=contact_id.registry_contact_id)
                                             )
                                         ))
                             else:
