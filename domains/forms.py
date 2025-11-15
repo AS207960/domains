@@ -585,23 +585,42 @@ class DomainRegisterForm(forms.Form):
         self.helper = crispy_forms.helper.FormHelper()
         self.helper.label_class = "mt-2"
         self.helper.field_class = "mb-2"
-        self.helper.layout = crispy_forms.layout.Layout(
-            'period',
-            'intended_use',
-            crispy_forms.layout.HTML("<hr/>"),
-            crispy_forms.layout.Fieldset(
-                'Domain contacts',
-                crispy_forms.layout.HTML("""
-                    <div class="alert alert-info" role="alert">
-                        Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
-                    </div>
-                """),
-                'registrant',
-                'admin',
-                'billing',
-                'tech'
+
+        if not zone.intended_use_required:
+            self.helper.layout = crispy_forms.layout.Layout(
+                'period',
+                crispy_forms.layout.HTML("<hr/>"),
+                crispy_forms.layout.Fieldset(
+                    'Domain contacts',
+                    crispy_forms.layout.HTML("""
+                        <div class="alert alert-info" role="alert">
+                            Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
+                        </div>
+                    """),
+                    'registrant',
+                    'admin',
+                    'billing',
+                    'tech'
+                )
             )
-        )
+        else:
+            self.helper.layout = crispy_forms.layout.Layout(
+                'period',
+                'intended_use',
+                crispy_forms.layout.HTML("<hr/>"),
+                crispy_forms.layout.Fieldset(
+                    'Domain contacts',
+                    crispy_forms.layout.HTML("""
+                        <div class="alert alert-info" role="alert">
+                            Manage contacts <a href="{% url 'contacts' %}" class="alert-link">here</a>
+                        </div>
+                    """),
+                    'registrant',
+                    'admin',
+                    'billing',
+                    'tech'
+                )
+            )
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Submit order', css_class="btn-block"))
 
 
