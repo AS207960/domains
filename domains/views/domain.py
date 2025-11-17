@@ -451,14 +451,25 @@ def update_domain_contact(request, domain_id):
                                         domain_data.registry_name, domain_info,
                                         role=apps.epp_api.ContactRole.OnSite
                                     )
-                                    if contact_id.registry_contact_id != domain_data.eurid.on_site:
+                                    if domain_data.eurid.on_site:
+                                        if contact_id.registry_contact_id != domain_data.eurid.on_site.value:
+                                            apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+                                                name=domain_data.name,
+                                                registry_name=google.protobuf.wrappers_pb2.StringValue(
+                                                    value=domain_data.registry_name),
+                                                eurid_data=apps.epp_api.eurid_pb2.DomainUpdateExtension(
+                                                    remove_on_site=google.protobuf.wrappers_pb2.StringValue(
+                                                        value=domain_data.eurid.on_site.value),
+                                                    add_on_site=google.protobuf.wrappers_pb2.StringValue(
+                                                        value=contact_id.registry_contact_id)
+                                                )
+                                            ))
+                                    else:
                                         apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
                                             name=domain_data.name,
                                             registry_name=google.protobuf.wrappers_pb2.StringValue(
                                                 value=domain_data.registry_name),
                                             eurid_data=apps.epp_api.eurid_pb2.DomainUpdateExtension(
-                                                remove_on_site=google.protobuf.wrappers_pb2.StringValue(
-                                                    value=domain_data.eurid.on_site),
                                                 add_on_site=google.protobuf.wrappers_pb2.StringValue(
                                                     value=contact_id.registry_contact_id)
                                             )
