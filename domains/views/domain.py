@@ -1225,9 +1225,9 @@ def domain_hexdns(request, domain_id):
         })
 
     domain_jwt = jwt.encode({
-        "iat": datetime.datetime.utcnow(),
-        "nbf": datetime.datetime.utcnow(),
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=5),
+        "iat": datetime.datetime.now(datetime.UTC),
+        "nbf": datetime.datetime.now(datetime.UTC),
+        "exp": datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=5),
         "iss": "urn:as207960:domains",
         "aud": ["urn:as207960:hexdns"],
         "domain": user_domain.domain,

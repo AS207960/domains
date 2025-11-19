@@ -7,6 +7,7 @@ import requests
 import django_keycloak_auth.clients
 import typing
 import datetime
+import jwt
 
 
 def get_feedback_url(description: str, reference: str):
@@ -199,11 +200,23 @@ def mail_transferred_out(domain_id):
             f"{domain.domain} domain transfer out", domain.id
         )
 
+        domain_jwt = jwt.encode({
+            "iat": datetime.datetime.now(datetime.UTC),
+            "nbf": datetime.datetime.now(datetime.UTC),
+            "exp": datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=7),
+            "iss": "urn:as207960:domains",
+            "aud": ["urn:as207960:hexdns"],
+            "domain": domain.domain,
+            "domain_id": domain.id,
+            "sub": user.username,
+        }, settings.JWT_PRIV_KEY, algorithm='ES384')
+
         send_email(user, {
             "subject": "Domain transferred out",
             "feedback_url": feedback_url,
             "content": render_to_string("domains_email/transfer_out.html", {
                 "domain": domain.domain,
+                "hexdns_url": f"{settings.HEXDNS_URL}/setup_domains_zone/?domain_token={domain_jwt}"
             })
         })
 

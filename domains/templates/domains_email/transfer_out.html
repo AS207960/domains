@@ -1,9 +1,17 @@
 <p>
     Your domain {{ domain }} has been transferred away from us.<br/>
     We're sorry to see you leave. If you'd like to, please give us some feedback at the below link.<br/>
-    We will no longer charge you for the domain renewal and you can no longer manage the domain through
+    We will no longer charge you for the domain renewal, and you can no longer manage the domain through
     us. You will have deal with your new registrar to manage your domain.
 </p>
+<p>
+    If you used HexDNS for {{ domain }}, we have kept the zone registered in HexDNS, and will continue serving
+    DNS requests for it, and it will count towards your billed usage for HexDNS until the zone is deleted from HexDNS.
+</p>
+<a href="{{ hexdns_url }}"
+   style="color: #fff;background-color: #3182CE;text-align: center;text-decoration: none;box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);border-radius: .5rem;display: block;padding: 0.25rem 0.75rem;font-size: 1.1rem;line-height: 1.5;margin-top: 10px;">
+    View in HexDNS
+</a>
 <p>
     If you didn't request this please contact us urgently by replying to this email.
 </p>
