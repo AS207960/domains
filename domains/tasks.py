@@ -1071,6 +1071,10 @@ def set_dns(domain: models.DomainRegistration, hosts: typing.List[str]):
 
     domain_info = zone_info.get_domain_info(domain.domain, registry_id=domain.registry_id)[0]
 
+    if int(apps.epp_api.domain_common_pb2.ClientUpdateProhibited) in domain_data.statuses or \
+            int(apps.epp_api.domain_common_pb2.ServerUpdateProhibited) in domain_data.statuses:
+        return
+
     if domain_info.host_object_supported:
         cur_ns = list(map(lambda ns: ns.host_obj.lower(), domain_data.name_servers))
     else:
