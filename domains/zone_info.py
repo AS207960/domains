@@ -588,6 +588,7 @@ class DomainInfo:
     REGISTRY_AUDA = "auda"
     REGISTRY_SAARLAND = "saarland"
     REGISTRY_RUHR = "ruhr"
+    REGISTRY_ARUBA = "aruba"
     REGISTRY_SX = "sx"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None, hsts_preload=False):
@@ -726,6 +727,7 @@ class DomainInfo:
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
             self.REGISTRY_RUHR,
+            self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
         )
 
@@ -898,6 +900,7 @@ class DomainInfo:
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
             self.REGISTRY_RUHR,
+            self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
         )
 
@@ -1125,6 +1128,7 @@ class DomainInfo:
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
             self.REGISTRY_RUHR,
+            self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
         )
 
@@ -1205,6 +1209,7 @@ class DomainInfo:
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
             self.REGISTRY_RUHR,
+            self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
         )
 
@@ -1285,6 +1290,7 @@ class DomainInfo:
             self.REGISTRY_AUDA,
             self.REGISTRY_SAARLAND,
             self.REGISTRY_RUHR,
+            self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
         )
 
@@ -3899,6 +3905,11 @@ else:
             DomainInfo.REGISTRY_SX,
             MarkupPrice(4500, transfer=4500, restore=12500, currency=None, display_currency='USD', tld='sx',
                         markup=decimal.Decimal("1.25"))
+        )),
+        ('cloud', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(4648, transfer=4648, restore=11866, currency=None, display_currency='USD', tld='cloud',
+                        markup=decimal.Decimal("1.2"))
         )),
     )
 
