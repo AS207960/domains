@@ -43,6 +43,16 @@ def suggest_name(request):
     })
 
 
+def split_name(name):
+    name_parts = name.split(" ")
+    if len(name_parts) == 1:
+        return name_parts[0], None, None
+    elif len(name_parts) == 2:
+        return name_parts[0], None, name_parts[1]
+    else:
+        return name_parts[0], name_parts[1:-1], name_parts[-1]
+
+
 def suggest_personal_name(request):
     suggestions = None
     error = None
@@ -50,19 +60,7 @@ def suggest_personal_name(request):
     if request.method == "POST":
         form = forms.PersonalNameSearchForm(request.POST)
         if form.is_valid():
-            name_parts = form.cleaned_data['name'].split(" ")
-            if len(name_parts) == 1:
-                first_name = name_parts[0]
-                middle_names = None
-                last_name = None
-            elif len(name_parts) == 2:
-                first_name = name_parts[0]
-                middle_names = None
-                last_name = name_parts[1]
-            else:
-                first_name = name_parts[0]
-                middle_names = name_parts[1:-1]
-                last_name = name_parts[-1]
+            first_name, middle_names, last_name = split_name(form.cleaned_data['name'])
             try:
                 suggestions = verisign.suggest_personal_names(
                     first_name, last_name, middle_names,
@@ -74,14 +72,15 @@ def suggest_personal_name(request):
     else:
         form = forms.PersonalNameSearchForm()
         if request.user.is_authenticated:
+            first_name, middle_names, last_name = split_name(f"{request.user.first_name} {request.user.last_name}")
             try:
                 suggestions = verisign.suggest_personal_names(
-                    request.user.first_name, request.user.last_name,
+                    first_name, last_name, middle_names,
                     iso_code=request.country.iso_code,
                     username=request.user.username if request.user.is_authenticated else None
                 )
-            except verisign.VerisignError as e:
-                error = e.message
+            except verisign.VerisignError:
+                pass
 
     return render(request, "domains/domain_suggest_personal.html", {
         "name_form": form,
