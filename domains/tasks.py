@@ -1275,17 +1275,18 @@ def request_auth_code(domain_id):
         return
 
     if zone.keysys_request_auth_code:
-        try:
-            apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
-                name=domain.domain,
-                registry_name=google.protobuf.wrappers_pb2.StringValue(value=domain.registry_id),
-                keysys=apps.epp_api.keysys_pb2.DomainUpdate(
-                    request_auth_code=google.protobuf.wrappers_pb2.BoolValue(value=True),
-                )
-            ))
-        except grpc.RpcError as rpc_error:
-            logger.warn(f"Failed to request auth code for {domain.domain}: {rpc_error.details()}")
-            raise rpc_error
+        r = requests.get(
+            "https://api.rrpproxy.net/api/call",
+            params={
+                "s_login": settings.RRPPROXY_USER,
+                "s_pw": settings.RRPPROXY_PASS,
+                "command": "SetAuthCode",
+                "domain": domain.domain,
+            }
+        )
+        if not r.ok:
+            logger.warn(f"Failed to request auth code for {domain.domain}: {r.text}")
+            r.raise_for_status()
 
         try:
             domain_data = apps.epp_client.get_domain(
