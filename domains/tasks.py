@@ -1296,7 +1296,7 @@ def request_auth_code(domain_id):
             logger.warn(f"Failed to load data of {domain.domain}: {rpc_error.details()}")
             raise rpc_error
 
-        new_auth_code = domain_data.auth_code
+        new_auth_code = domain_data.auth_info
         auth_code_expiry = None
     elif zone.eurid_request_auth_code:
         try:
