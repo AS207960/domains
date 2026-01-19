@@ -982,13 +982,31 @@ def process_domain_transfer_keysys(transfer_order_id):
     should_send = False
 
     if zone.keysys_auto_renew:
-        update_req.keysys.renewal_mode = apps.epp_api.keysys_pb2.AutoRenew
-        should_send = True
+        r = requests.get(
+            "https://api.rrpproxy.net/api/call",
+            params={
+                "s_login": settings.RRPPROXY_USER,
+                "s_pw": settings.RRPPROXY_PASS,
+                "command": "SetDomainRenewalMode",
+                "domain": domain_transfer_order.domain,
+                "renewalmode": "AUTORENEW"
+            }
+        )
+        r.raise_for_status()
 
     if zone.keysys_de:
-        update_req.keysys.de.abuse_contact.value = "https://as207960.net/contact"
-        update_req.keysys.de.general_contact.value = "https://as207960.net/contact"
-        should_send = True
+        r = requests.get(
+            "https://api.rrpproxy.net/api/call",
+            params={
+                "s_login": settings.RRPPROXY_USER,
+                "s_pw": settings.RRPPROXY_PASS,
+                "command": "ModifyDomain",
+                "domain": domain_transfer_order.domain,
+                "X-DE-ABUSE-CONTACT": "https://as207960.net/contact",
+                "X-DE-GENERAL-REQUEST": "https://as207960.net/contact",
+            }
+        )
+        r.raise_for_status()
 
     if zone.keysys_tel:
         update_req.keysys.tel.whois_type.value = (
