@@ -2698,13 +2698,13 @@ else:
         )),
         ('photography', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='photography',
-                        markup=decimal.Decimal("1.3"))
+            MarkupPrice(6754, transfer=6754, restore=11866, currency=None, display_currency='USD', tld='photography',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('photos', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='photos',
-                        markup=decimal.Decimal("1.3"))
+            MarkupPrice(5539, transfer=5539, restore=11866, currency=None, display_currency='USD', tld='photos',
+                        markup=decimal.Decimal("1.2"))
         )),
         ('pictures', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
