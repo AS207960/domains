@@ -117,6 +117,8 @@ class Command(BaseCommand):
     def callback(self, client: PollClient, m: domains.epp_api.epp_grpc.epp_pb2.PollReply):
         if m.HasField("change_data") and m.WhichOneof("data") == "domain_info":
             self.handle_domain_update(m)
+        elif m.WhichOneof("data") == "nominet_domain_release":
+            self.handle_nominet_domain_release(m)
 
         m_data = google.protobuf.json_format.MessageToDict(
             m, always_print_fields_with_no_presence=True
@@ -168,3 +170,14 @@ class Command(BaseCommand):
             }, extra_headers={
                 "Date": email.utils.format_datetime(m.enqueue_date.ToDatetime())
             })
+
+    def handle_nominet_domain_release(self, m):
+        for domain in m.nominet_domain_release.domains:
+            domain_obj = models.DomainRegistration.objects.filter(domain=domain).first()
+            if not domain_obj:
+                print(f"Unknown domain: {domain}")
+                return
+
+            domain_obj.former_domain = True
+            domain_obj.save()
+            emails.mail_transferred_out.delay(domain_obj.id)
