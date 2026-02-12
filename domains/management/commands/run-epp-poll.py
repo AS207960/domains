@@ -7,6 +7,7 @@ from django.core import mail
 import threading
 import domains.epp_api.epp_grpc.epp_pb2
 import domains.epp_api.epp_grpc.epp_pb2_grpc
+import domains.epp_api.epp_grpc.common.common_pb2
 import google.protobuf.json_format
 import queue
 import time
@@ -15,6 +16,7 @@ import traceback
 import email.utils
 import json
 from domains.views import emails
+from domains import tasks
 
 
 class PollClient:
@@ -119,6 +121,8 @@ class Command(BaseCommand):
             self.handle_domain_update(m)
         elif m.WhichOneof("data") == "nominet_domain_release":
             self.handle_nominet_domain_release(m)
+        elif m.WhichOneof("data") == "domain_transfer":
+            self.handle_domain_transfer(m, client.registry_name)
 
         m_data = google.protobuf.json_format.MessageToDict(
             m, always_print_fields_with_no_presence=True
@@ -181,3 +185,45 @@ class Command(BaseCommand):
             domain_obj.former_domain = True
             domain_obj.save()
             emails.mail_transferred_out.delay(domain_obj.id)
+
+    def handle_domain_transfer(self, m, registry_name: str):
+        if registry_name == "rrpproxy":
+            if m.domain_transfer.requested_client_id == "as207960":
+                self.handle_domain_transfer_in(m)
+            else:
+                self.handle_domain_transfer_out(m)
+
+    def handle_domain_transfer_in(self, m):
+        domain_transfer_order = models.DomainTransferOrder.objects.filter(pk=m.domain_transfer.name).first()
+        if not domain_transfer_order:
+            print(f"Unknown domain transfer: {m.domain_transfer.name}")
+            return
+
+        if m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerApproved or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientApproved:
+            tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
+        elif m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerCancelled or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientCancelled or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientRejected:
+            tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
+
+    def handle_domain_transfer_out(self, m):
+        domain_obj = models.DomainRegistration.objects.filter(domain=m.domain_transfer.name).first()
+        if not domain_obj:
+            print(f"Unknown domain: {m.domain_transfer.name}")
+            return
+
+        if m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.Pending:
+            domain_obj.transfer_out_pending = True
+            domain_obj.save()
+            emails.mail_transfer_out_request.delay(domain_obj.id)
+        elif m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerApproved or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientApproved:
+            domain_obj.former_domain = True
+            domain_obj.save()
+            emails.mail_transferred_out.delay(domain_obj.id)
+        elif m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerCancelled or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientCancelled or \
+            m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientRejected:
+            domain_obj.transfer_out_pending = False
+            domain_obj.save()
