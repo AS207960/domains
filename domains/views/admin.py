@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .. import apps, forms, models, zone_info
 from . import emails
 import grpc
+import datetime
 import google.protobuf.text_format
 import google.protobuf.wrappers_pb2
 
@@ -205,7 +206,12 @@ def domain_renew(request):
         form.helper.form_action = request.get_full_path()
         if form.is_valid():
             domain = apps.epp_client.renew_domain(
-                form.cleaned_data["domain"], form.cleaned_data["period"], form.cleaned_data["current_expiry"]
+                form.cleaned_data["domain"], form.cleaned_data["period"],
+                datetime.datetime(
+                    year=form.cleaned_data["current_expiry"].year,
+                    month=form.cleaned_data["current_expiry"].month,
+                    day=form.cleaned_data["current_expiry"].day
+                )
             )
     else:
         form = forms.AdminDomainRenewForm()
