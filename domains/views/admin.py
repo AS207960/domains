@@ -197,6 +197,30 @@ def domain_transfer_request(request):
 @login_required
 @permission_required('domains.access_eppclient', raise_exception=True)
 @catch_epp_error
+def domain_renew(request):
+    domain = None
+
+    if request.method == "POST":
+        form = forms.AdminDomainRenewForm(request.POST)
+        form.helper.form_action = request.get_full_path()
+        if form.is_valid():
+            domain = apps.epp_client.renew_domain(
+                form.cleaned_data["domain"], form.cleaned_data["period"], form.cleaned_data["current_expiry"]
+            )
+    else:
+        form = forms.AdminDomainRenewForm()
+        form.helper.form_action = request.get_full_path()
+
+    return render(request, "domains/admin/domain_renew_info.html", {
+        "domain_form": form,
+        "renew_info": domain,
+        "title": "Domain renew"
+    })
+
+
+@login_required
+@permission_required('domains.access_eppclient', raise_exception=True)
+@catch_epp_error
 def contact_info(request):
     contact = None
 

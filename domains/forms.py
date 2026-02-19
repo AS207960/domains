@@ -761,6 +761,41 @@ class AdminDomainTransferForm(forms.Form):
         self.helper.add_input(crispy_forms.layout.Submit('submit', 'Transfer'))
 
 
+class AdminDomainRenewForm(forms.Form):
+    domain = forms.CharField(max_length=63, label="Domain name", required=True, widget=forms.TextInput(
+        attrs={'placeholder': 'myawesome.website'}
+    ))
+    current_expiry = forms.DateField(required=False)
+    period = forms.TypedChoiceField(choices=(
+        (f"0:1", "1 Year"),
+        (f"0:2", "2 Years"),
+        (f"0:3", "3 Years"),
+        (f"0:4", "4 Years"),
+        (f"0:5", "5 Years"),
+        (f"0:6", "6 Years"),
+        (f"0:7", "7 Years"),
+        (f"0:8", "8 Years"),
+        (f"0:9", "9 Years"),
+        (f"0:10", "10 Years"),
+    ), required=False, coerce=unmap_period, empty_value=None)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = crispy_forms.helper.FormHelper()
+        self.helper.use_custom_control = False
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-10 my-1'
+        self.helper.layout = crispy_forms.layout.Layout(
+            'domain',
+            'current_expiry',
+            'period'
+        )
+
+        self.helper.add_input(crispy_forms.layout.Submit('submit', 'Renew'))
+
+
 class AdminContactCheckForm(forms.Form):
     contact = forms.CharField(max_length=63, label="Registry Contact ID", required=True)
     registry_id = forms.CharField(max_length=63, label="Registry ID", required=True)

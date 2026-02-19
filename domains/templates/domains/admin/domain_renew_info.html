@@ -1,0 +1,32 @@
+{% extends 'domains/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container my-3">
+        <h1>{{ title }}</h1>
+        {% crispy domain_form domain_form.helper %}
+        {% if renew_info %}
+            <table class="table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Pending</th>
+                    <td>{{ renew_info.0 }}</td>
+                </tr>
+                <tr>
+                    <th>New Expiry Date</th>
+                    <td>{{ renew_info.1 }}</td>
+                </tr>
+                <tr>
+                    <th>Registry ID</th>
+                    <td>{{ renew_info.2 }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

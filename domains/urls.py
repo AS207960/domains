@@ -103,6 +103,7 @@ urlpatterns = [
     path('epp_client/contact_get_id/', admin.get_contact_id, name='admin_get_contact_id'),
     path('epp_client/domain_transfer_info/', admin.domain_transfer_info, name='admin_domain_transfer_info'),
     path('epp_client/domain_transfer_request/', admin.domain_transfer_request, name='admin_domain_transfer_request'),
+    path('epp_client/domain_renew/', admin.domain_renew, name='admin_domain_renew'),
     path('epp_client/balance/<str:registry_name>/', admin.balance, name='admin_balance'),
     path('epp_client/nominet_tags/', admin.nominet_tags, name='admin_nominet_tags'),
     path('epp_client/nominet_handshake_accept/', admin.nominet_handshake_accept, name='admin_nominet_handshake_accept'),
