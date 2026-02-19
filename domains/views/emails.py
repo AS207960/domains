@@ -209,7 +209,7 @@ def mail_transferred_out(domain_id):
             "domain": domain.domain,
             "domain_id": domain.id,
             "sub": user.username,
-        }, settings.JWT_PRIV_KEY, algorithm='ES384')
+        }, settings.JWT_PRIV_KEY, algorithm='ES256')
 
         send_email(user, {
             "subject": "Domain transferred out",

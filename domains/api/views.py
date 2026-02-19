@@ -89,7 +89,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
                         "domain": domain["domain"],
                         "domain_id": str(domain_obj.id),
                         "sub": pk,
-                    }, settings.JWT_PRIV_KEY, algorithm='ES384')
+                    }, settings.JWT_PRIV_KEY, algorithm='ES256')
 
                     out.append({
                         "domain": domain["domain"],
@@ -123,7 +123,7 @@ class UserDomainsViewSet(viewsets.ViewSet):
                 "domain": domain_obj.domain,
                 "domain_id": str(domain_obj.id),
                 "sub": pk,
-            }, settings.JWT_PRIV_KEY, algorithm='ES384')
+            }, settings.JWT_PRIV_KEY, algorithm='ES256')
 
             out.append({
                 "domain": domain_obj.domain,
