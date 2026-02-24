@@ -24,7 +24,7 @@ class PollClient:
             self, stub: domains.epp_api.epp_grpc.epp_pb2_grpc.EPPProxyStub, registry_name: str,
             callback, callback_exc=None
     ):
-        self._stub = stub
+        self.stub = stub
         self._registry_name = str(registry_name)
         self._pending_ack = queue.Queue()
         self._callback = callback
@@ -44,7 +44,7 @@ class PollClient:
 
     def _run_iter(self):
         while not self._exit.is_set():
-            self._channel = self._stub.Poll(
+            self._channel = self.stub.Poll(
                 self,
                 metadata=(
                     ("registry_name", self._registry_name),
@@ -121,6 +121,8 @@ class Command(BaseCommand):
             self.handle_domain_update(m)
         elif m.WhichOneof("data") == "nominet_domain_release":
             self.handle_nominet_domain_release(m)
+        elif m.WhichOneof("data") == "nominet_domain_registrar_change":
+            self.handle_nominet_domain_registrar_change(client, m)
         elif m.WhichOneof("data") == "domain_transfer":
             self.handle_domain_transfer(m, client.registry_name)
 
@@ -186,6 +188,26 @@ class Command(BaseCommand):
             domain_obj.save()
             emails.mail_transferred_out.delay(domain_obj.id)
 
+    def handle_nominet_domain_registrar_change(self, client: PollClient, m):
+        for domain in m.nominet_domain_registrar_change.domains:
+            domain_transfer_order = models.DomainTransferOrder.objects.filter(domain=m.domain_transfer.name).first()
+            if domain.client_id != m.nominet_domain_registrar_change.registrar_tag:
+                if domain_transfer_order:
+                    client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
+                        case_id=m.nominet_domain_registrar_change.case_id,
+                        registry_name=client.registry_name,
+                    ))
+                else:
+                    client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
+                        case_id=m.nominet_domain_registrar_change.case_id,
+                        registry_name=client.registry_name,
+                    ))
+            else:
+                if not domain_transfer_order:
+                    print(f"Unknown domain transfer: {m.domain_transfer.name}")
+                    return
+                tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
+
     def handle_domain_transfer(self, m, registry_name: str):
         if registry_name == "rrpproxy":
             if m.domain_transfer.requested_client_id == "as207960":
@@ -205,7 +227,7 @@ class Command(BaseCommand):
         elif m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerCancelled or \
             m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientCancelled or \
             m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientRejected:
-            tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
+            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
 
     def handle_domain_transfer_out(self, m):
         domain_obj = models.DomainRegistration.objects.filter(domain=m.domain_transfer.name).first()
