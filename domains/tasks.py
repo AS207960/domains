@@ -1051,6 +1051,7 @@ def process_domain_transfer_complete(transfer_order_id):
     domain_transfer_order.save()
 
     emails.mail_transferred.delay(domain_transfer_order.id)
+    gchat_bot.notify_transfer.delay(domain_transfer_order.id, "")
 
 
 @shared_task(
