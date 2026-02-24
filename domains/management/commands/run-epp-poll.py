@@ -194,7 +194,7 @@ class Command(BaseCommand):
                 self.handle_domain_transfer_out(m)
 
     def handle_domain_transfer_in(self, m):
-        domain_transfer_order = models.DomainTransferOrder.objects.filter(pk=m.domain_transfer.name).first()
+        domain_transfer_order = models.DomainTransferOrder.objects.filter(domain=m.domain_transfer.name).first()
         if not domain_transfer_order:
             print(f"Unknown domain transfer: {m.domain_transfer.name}")
             return
