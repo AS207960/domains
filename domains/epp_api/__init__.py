@@ -464,7 +464,12 @@ class Domain:
 
     @property
     def expired(self):
-        return self.expiry_date <= datetime.datetime.now() if self.expiry_date else False
+        if self.paid_until_date:
+            return self.paid_until_date < datetime.datetime.now()
+        elif self.expiry_date:
+            return self.expiry_date < datetime.datetime.now()
+        else:
+            return False
 
     @property
     def admin(self):
