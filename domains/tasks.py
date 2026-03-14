@@ -1112,21 +1112,27 @@ def set_dns(domain: models.DomainRegistration, hosts: typing.List[str]):
             if host_available:
                 apps.epp_client.create_host(host, [], domain_data.registry_name, None)
 
-    apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
-        name=domain_data.name,
-        remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-            nameserver=apps.epp_api.domain_pb2.NameServer(
-                host_obj=h if domain_info.host_object_supported else None,
-                host_name=h if not domain_info.host_object_supported else None,
-            )
-        ), rem_hosts)),
-        add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
-            nameserver=apps.epp_api.domain_pb2.NameServer(
-                host_obj=h if domain_info.host_object_supported else None,
-                host_name=h if not domain_info.host_object_supported else None,
-            )
-        ), add_hosts))
-    ))
+    try:
+        apps.epp_client.stub.DomainUpdate(apps.epp_api.domain_pb2.DomainUpdateRequest(
+            name=domain_data.name,
+            remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+                nameserver=apps.epp_api.domain_pb2.NameServer(
+                    host_obj=h if domain_info.host_object_supported else None,
+                    host_name=h if not domain_info.host_object_supported else None,
+                )
+            ), rem_hosts)),
+            add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
+                nameserver=apps.epp_api.domain_pb2.NameServer(
+                    host_obj=h if domain_info.host_object_supported else None,
+                    host_name=h if not domain_info.host_object_supported else None,
+                )
+            ), add_hosts))
+        ))
+    except grpc.RpcError as e:
+        if domain_info.keysys_de:
+            pass
+        else:
+            raise e
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
