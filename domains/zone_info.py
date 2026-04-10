@@ -3911,6 +3911,41 @@ else:
             MarkupPrice(4648, transfer=4648, restore=11866, currency=None, display_currency='USD', tld='cloud',
                         markup=decimal.Decimal("1.2"))
         )),
+        ('versicherung', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(21095, transfer=21095, restore=46146, currency=None, display_currency='EUR', tld='versicherung',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('bayern', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(5754, transfer=5754, restore=13184, currency=None, display_currency='EUR', tld='bayern',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('berlin', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(8842, transfer=8842, restore=19777, currency=None, display_currency='EUR', tld='berlin',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('cologne', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(4534, transfer=4534, restore=11866, currency=None, display_currency='EUR', tld='cologne',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('koeln', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(4534, transfer=4534, restore=11866, currency=None, display_currency='EUR', tld='koeln',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('hamburg', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(8186, transfer=8186, restore=23072, currency=None, display_currency='EUR', tld='hamburg',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('nrw', DomainInfo(
+            DomainInfo.REGISTRY_ARUBA,
+            MarkupPrice(7194, transfer=7194, restore=13184, currency=None, display_currency='EUR', tld='nrw',
+                        markup=decimal.Decimal("1.2"))
+        )),
     )
 
 
