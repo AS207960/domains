@@ -156,7 +156,7 @@ class Command(BaseCommand):
         domain = apps.epp_api.Domain.from_pb(m.domain_info, apps.epp_client)
         change_data = apps.epp_api.ChangeData.from_pb(m.change_data)
 
-        domain_obj = models.DomainRegistration.objects.filter(domain=domain.name).first()
+        domain_obj = models.DomainRegistration.objects.filter(domain__iexact=domain.name).first()
         if not domain_obj:
             print(f"Unknown domain: {domain.name}", flush=True)
             return
@@ -179,7 +179,7 @@ class Command(BaseCommand):
 
     def handle_nominet_domain_release(self, m):
         for domain in m.nominet_domain_release.domains:
-            domain_obj = models.DomainRegistration.objects.filter(domain=domain).first()
+            domain_obj = models.DomainRegistration.objects.filter(domain__iexact=domain).first()
             if not domain_obj:
                 print(f"Unknown domain: {domain}", flush=True)
                 return
@@ -190,7 +190,7 @@ class Command(BaseCommand):
 
     def handle_nominet_domain_registrar_change(self, client: PollClient, m):
         for domain in m.nominet_domain_registrar_change.domains:
-            domain_transfer_order = models.DomainTransferOrder.objects.filter(domain=domain.name).first()
+            domain_transfer_order = models.DomainTransferOrder.objects.filter(domain__iexact=domain.name).first()
             if domain.client_id != m.nominet_domain_registrar_change.registrar_tag:
                 if domain_transfer_order:
                     client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
@@ -216,7 +216,7 @@ class Command(BaseCommand):
                 self.handle_domain_transfer_out(m)
 
     def handle_domain_transfer_in(self, m):
-        domain_transfer_order = models.DomainTransferOrder.objects.filter(domain=m.domain_transfer.name).first()
+        domain_transfer_order = models.DomainTransferOrder.objects.filter(domain__iexact=m.domain_transfer.name).first()
         if not domain_transfer_order:
             print(f"Unknown domain transfer: {m.domain_transfer.name}", flush=True)
             return
@@ -230,7 +230,7 @@ class Command(BaseCommand):
             tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
 
     def handle_domain_transfer_out(self, m):
-        domain_obj = models.DomainRegistration.objects.filter(domain=m.domain_transfer.name).first()
+        domain_obj = models.DomainRegistration.objects.filter(domain__iexact=m.domain_transfer.name).first()
         if not domain_obj:
             print(f"Unknown domain: {m.domain_transfer.name}", flush=True)
             return
