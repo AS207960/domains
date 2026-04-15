@@ -966,9 +966,9 @@ class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
         ret = {
             "url": self.fields["url"].to_representation(instance),
             "id": self.fields["id"].to_representation(instance),
-            "redirect_uri": self.fields["redirect_uri"].to_representation(instance)
+            "redirect_uri": self.fields["redirect_uri"].to_representation(instance.redirect_uri)
             if instance.redirect_uri else None,
-            "last_error": self.fields["last_error"].to_representation(instance)
+            "last_error": self.fields["last_error"].to_representation(instance.last_error)
             if instance.last_error else None,
             "off_session": instance.off_session,
             "price": instance.price,
