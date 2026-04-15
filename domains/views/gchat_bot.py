@@ -159,7 +159,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_registration_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -188,7 +188,7 @@ def notify_registration(registration_order_id, period: str):
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_registration_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -247,7 +247,7 @@ def notify_registration_pending(registration_order_id, period: str):
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_registration_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -395,7 +395,7 @@ def request_transfer(transfer_order_id, registry_id):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_transfer_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -475,7 +475,7 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_transfer_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -502,7 +502,7 @@ def notify_transfer(transfer_order_id, registry_id: str):
     user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_transfer_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -634,7 +634,7 @@ def request_restore_renew(restore_order_id, period: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_restore_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_restore_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -708,7 +708,7 @@ def notify_restore(restore_order_id):
     user = domain_restore_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_restore_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_restore_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -831,7 +831,7 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_renew_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_renew_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
@@ -867,7 +867,7 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
         user = domain_renew_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"{space.space_id}/messages/{domain_renew_order.id}",
+            name=f"{space.space_id}/messages/client-{str(domain_renew_order.id).replace('_', '-')}",
             updateMask="*",
             allowMissing=True,
             body={
