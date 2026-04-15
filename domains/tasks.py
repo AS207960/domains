@@ -754,7 +754,7 @@ def process_domain_transfer_paid(transfer_order_id):
             )
         except grpc.RpcError as rpc_error:
             error_code = utils.epp_grpc_error_code(rpc_error)
-            if error_code == "authorization-error":
+            if error_code == "authorization-error" or error_code == "invalid-authorization":
                 domain_transfer_order.state = domain_transfer_order.STATE_FAILED
                 domain_transfer_order.last_error = "The transfer code provided is invalid."
                 domain_transfer_order.save()
