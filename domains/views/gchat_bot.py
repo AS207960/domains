@@ -159,7 +159,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"registration of {domain_registration_order.domain}" + (
@@ -188,7 +188,7 @@ def notify_registration(registration_order_id, period: str):
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}",
                 "cards": [{
@@ -247,7 +247,7 @@ def notify_registration_pending(registration_order_id, period: str):
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
+            name=f"{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}, which is pending",
                 "cards": [{
@@ -395,7 +395,7 @@ def request_transfer(transfer_order_id, registry_id):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} "
                         f"has requested the transfer of {domain_transfer_order.domain}" + (
@@ -475,7 +475,7 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} "
                         f"has started the transfer of {domain_transfer_order.domain}",
@@ -502,7 +502,7 @@ def notify_transfer(transfer_order_id, registry_id: str):
     user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
+            name=f"{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has transferred {domain_transfer_order.domain}",
                 "cards": [{
@@ -634,7 +634,7 @@ def request_restore_renew(restore_order_id, period: str):
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_restore_order.id}",
+            name=f"{space.space_id}/messages/{domain_restore_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"renewal of {domain_restore_order.domain} following restore",
@@ -708,7 +708,7 @@ def notify_restore(restore_order_id):
     user = domain_restore_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_restore_order.id}",
+            name=f"{space.space_id}/messages/{domain_restore_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has restored {domain_restore_order.domain}",
                 "cards": [{
@@ -831,7 +831,7 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
 
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
-            name=f"spaces/{space.space_id}/messages/{domain_renew_order.id}",
+            name=f"{space.space_id}/messages/{domain_renew_order.id}",
             body={
                 "text": f"<users/all> " + (
                     f"{user.first_name} {user.last_name}" if user else "An unknown user"
@@ -866,8 +866,8 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
         domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
         user = domain_renew_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            name=f"spaces/{space.space_id}/messages/{domain_renew_order.id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"{space.space_id}/messages/{domain_renew_order.id}",
             body={
                 "text": (
                             f"{user.first_name} {user.last_name}" if user else "An unknown user"
@@ -917,7 +917,9 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
                         }]
                     }],
                     "name": f"domain-renew-{domain_renew_order.domain_obj.pk}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
