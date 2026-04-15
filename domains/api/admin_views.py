@@ -18,8 +18,9 @@ class AccessEPPPermission(permissions.BasePermission):
             return False
 
         return "access-epp" in request.auth.claims.get("resource_access", {}).get(
-                settings.OIDC_CLIENT_ID, {}
+            settings.OIDC_CLIENT_ID, {}
         ).get("roles", [])
+
 
 class AccessUserDomainsPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -27,8 +28,9 @@ class AccessUserDomainsPermission(permissions.BasePermission):
             return False
 
         return "access-user-domains" in request.auth.claims.get("resource_access", {}).get(
-                settings.OIDC_CLIENT_ID, {}
+            settings.OIDC_CLIENT_ID, {}
         ).get("roles", [])
+
 
 class EPPBalanceViewSet(viewsets.ViewSet):
     permission_classes = [AccessEPPPermission]
@@ -106,7 +108,7 @@ class PendingLockViewSet(viewsets.ViewSet):
                 "domain": r.domain,
                 "state": str(models.RegistryLockState(r.pending_registry_lock_status))
             }
-            for r in pending_locks],
+                for r in pending_locks],
         })
 
 
@@ -144,7 +146,8 @@ class AdminOrderViewSet(viewsets.ViewSet):
 
     @decorators.action(detail=True, methods=['get'])
     def lookup_pending_by_domain(self, request, pk=None):
-        instance = get_object_or_404(self.order_object, domain__iexact=pk, state=models.AbstractOrder.STATE_PENDING_APPROVAL)
+        instance = get_object_or_404(self.order_object, domain__iexact=pk,
+                                     state=models.AbstractOrder.STATE_PENDING_APPROVAL)
         d = self.order_serializer(data=instance, context={
             "request": request
         })
@@ -187,7 +190,10 @@ class AdminOrderViewSet(viewsets.ViewSet):
         if instance.state != models.AbstractOrder.STATE_PENDING_APPROVAL:
             raise ValidationError("invalid state transition")
 
-        self.fail_task.delay(instance.id, request.data["error"]).forget()
+        self.fail_task.delay(
+            instance.id, error=request.data["error"],
+            silent=bool(request.data.get("silent", False))
+        ).forget()
         return Response(status=status.HTTP_202_ACCEPTED)
 
 

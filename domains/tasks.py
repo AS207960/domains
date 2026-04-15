@@ -426,7 +426,7 @@ def process_domain_registration_complete(registration_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
 )
-def process_domain_registration_failed(registration_order_id, error: typing.Optional[str] = None):
+def process_domain_registration_failed(registration_order_id, error: typing.Optional[str] = None, silent: bool = False):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
 
@@ -435,7 +435,8 @@ def process_domain_registration_failed(registration_order_id, error: typing.Opti
     domain_registration_order.last_error = error
     domain_registration_order.save()
 
-    emails.mail_register_failed.delay(domain_registration_order.id)
+    if not silent:
+        emails.mail_register_failed.delay(domain_registration_order.id)
 
 
 @shared_task(
@@ -556,7 +557,7 @@ def process_domain_renewal_complete(renew_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
 )
-def process_domain_renewal_failed(renew_order_id, error: typing.Optional[str] = None):
+def process_domain_renewal_failed(renew_order_id, error: typing.Optional[str] = None, silent: bool = False):
     domain_renew_order = \
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
@@ -698,7 +699,7 @@ def process_domain_restore_complete(restore_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
 )
-def process_domain_restore_failed(restore_order_id, error: typing.Optional[str] = None):
+def process_domain_restore_failed(restore_order_id, error: typing.Optional[str] = None, silent: bool = False):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
 
@@ -707,7 +708,8 @@ def process_domain_restore_failed(restore_order_id, error: typing.Optional[str] 
     domain_restore_order.last_error = error
     domain_restore_order.save()
 
-    emails.mail_restore_failed.delay(domain_restore_order.id)
+    if not silent:
+        emails.mail_restore_failed.delay(domain_restore_order.id)
 
 
 @shared_task(
@@ -1053,7 +1055,7 @@ def process_domain_transfer_complete(transfer_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
 )
-def process_domain_transfer_failed(transfer_order_id, error: typing.Optional[str] = None):
+def process_domain_transfer_failed(transfer_order_id, error: typing.Optional[str] = None, silent: bool = False):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
@@ -1062,7 +1064,8 @@ def process_domain_transfer_failed(transfer_order_id, error: typing.Optional[str
     domain_transfer_order.last_error = error
     domain_transfer_order.save()
 
-    emails.mail_transfer_failed.delay(domain_transfer_order.id)
+    if not silent:
+        emails.mail_transfer_failed.delay(domain_transfer_order.id)
 
 
 @shared_task(
@@ -1206,7 +1209,7 @@ def process_domain_auto_renew_complete(renew_order_id):
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
 )
-def process_domain_auto_renew_failed(renew_order_id, error: typing.Optional[str] = None):
+def process_domain_auto_renew_failed(renew_order_id, error: typing.Optional[str] = None, silent: bool = False):
     domain_renew_order = \
         models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
@@ -1215,7 +1218,8 @@ def process_domain_auto_renew_failed(renew_order_id, error: typing.Optional[str]
     domain_renew_order.last_error = error
     domain_renew_order.save()
 
-    emails.mail_auto_renew_failed.delay(domain_renew_order.id)
+    if not silent:
+        emails.mail_auto_renew_failed.delay(domain_renew_order.id)
 
 
 @shared_task(

@@ -1210,8 +1210,8 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
             if instance.domain_obj else None,
             "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance)
             if instance.domain_obj else None,
-            "registrant": self.fields["registrant"].to_representation(instance),
-            "registrant_url": self.fields["registrant_url"].to_representation(instance),
+            "registrant": self.fields["registrant"].to_representation(instance.registrant_contact),
+            "registrant_url": self.fields["registrant_url"].to_representation(instance.registrant_contact),
             "admin_contact": self.fields["admin_contact"].to_representation(instance.admin_contact)
             if instance.admin_contact is not None else None,
             "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance.admin_contact)
