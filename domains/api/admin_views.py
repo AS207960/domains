@@ -94,7 +94,9 @@ class InProgressOrderViewSet(viewsets.ViewSet):
         in_progress_transfer = models.DomainTransferOrder.objects.filter(
             state=models.AbstractOrder.STATE_PENDING_APPROVAL, last_error__isnull=True).order_by("-timestamp")
         return Response({
-            "transfer": [serializers.DomainTransferOrderSerializer(r).data for r in in_progress_transfer],
+            "transfer": [serializers.DomainTransferOrderSerializer(instance=r, context={
+                "request": request
+            }).data for r in in_progress_transfer],
         })
 
 
@@ -148,7 +150,7 @@ class AdminOrderViewSet(viewsets.ViewSet):
     def lookup_pending_by_domain(self, request, pk=None):
         instance = get_object_or_404(self.order_object, domain__iexact=pk,
                                      state=models.AbstractOrder.STATE_PENDING_APPROVAL)
-        d = self.order_serializer(data=instance, context={
+        d = self.order_serializer(instance=instance, context={
             "request": request
         })
         return Response(d.data)
@@ -163,7 +165,7 @@ class AdminOrderViewSet(viewsets.ViewSet):
         h = self.retry_task.delay(instance.id)
         h.get()
         instance.refresh_from_db()
-        d = self.order_serializer(data=instance, context={
+        d = self.order_serializer(instance=instance, context={
             "request": request
         })
         return Response(d.data)
