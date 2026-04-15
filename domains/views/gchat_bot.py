@@ -160,6 +160,8 @@ def request_registration(registration_order_id, registry_id: str, period: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"registration of {domain_registration_order.domain}" + (
@@ -172,9 +174,7 @@ def request_registration(registration_order_id, registry_id: str, period: str):
                     },
                     "sections": sections,
                     "name": f"domain-register-{domain_registration_order.domain_id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -189,6 +189,8 @@ def notify_registration(registration_order_id, period: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}",
                 "cards": [{
@@ -230,9 +232,7 @@ def notify_registration(registration_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-register-{domain_registration_order.domain_obj_id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -248,6 +248,8 @@ def notify_registration_pending(registration_order_id, period: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_registration_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}, which is pending",
                 "cards": [{
@@ -305,9 +307,7 @@ def notify_registration_pending(registration_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-register-{domain_registration_order.domain_id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -396,6 +396,8 @@ def request_transfer(transfer_order_id, registry_id):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} "
                         f"has requested the transfer of {domain_transfer_order.domain}" + (
@@ -408,9 +410,7 @@ def request_transfer(transfer_order_id, registry_id):
                     },
                     "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}",
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -476,6 +476,8 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"{user.first_name} {user.last_name} "
                         f"has started the transfer of {domain_transfer_order.domain}",
@@ -486,9 +488,7 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
                     },
                     "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -503,6 +503,8 @@ def notify_transfer(transfer_order_id, registry_id: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_transfer_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"{user.first_name} {user.last_name} has transferred {domain_transfer_order.domain}",
                 "cards": [{
@@ -544,9 +546,7 @@ def notify_transfer(transfer_order_id, registry_id: str):
                         }]
                     }],
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -635,6 +635,8 @@ def request_restore_renew(restore_order_id, period: str):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_restore_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"renewal of {domain_restore_order.domain} following restore",
@@ -693,9 +695,7 @@ def request_restore_renew(restore_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -709,6 +709,8 @@ def notify_restore(restore_order_id):
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_restore_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"{user.first_name} {user.last_name} has restored {domain_restore_order.domain}",
                 "cards": [{
@@ -745,9 +747,7 @@ def notify_restore(restore_order_id):
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -832,6 +832,8 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_renew_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": f"<users/all> " + (
                     f"{user.first_name} {user.last_name}" if user else "An unknown user"
@@ -847,9 +849,7 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
                     },
                     "sections": sections,
                     "name": f"domain-renew-{domain_renew_order.domain_obj.id}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
@@ -868,6 +868,8 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().patch(
             name=f"{space.space_id}/messages/{domain_renew_order.id}",
+            updateMask="*",
+            allowMissing=True,
             body={
                 "text": (
                             f"{user.first_name} {user.last_name}" if user else "An unknown user"
@@ -917,9 +919,7 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
                         }]
                     }],
                     "name": f"domain-renew-{domain_renew_order.domain_obj.pk}"
-                }],
-                "updateMask": "*",
-                "allowMissing": True
+                }]
             }
         ).execute()
 
