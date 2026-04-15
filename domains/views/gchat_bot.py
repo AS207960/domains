@@ -23,7 +23,7 @@ PUBLIC_CERT_URL_PREFIX = 'https://www.googleapis.com/service_accounts/v1/metadat
 AUDIENCE = settings.GCHAT_PROJECT_ID
 
 def format_message_id(o_id):
-    m_id = f"client-{str(o_id).replace("domain-", "").replace('_', '-')}"
+    m_id = f"client-{str(o_id).replace('domain-', '').replace('_', '-')}"
     return m_id[:63]
 
 def make_contact(contact, label):
