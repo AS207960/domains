@@ -69,19 +69,19 @@ class PendingOrderViewSet(viewsets.ViewSet):
         return Response({
             "registration": [serializers.DomainRegistrationOrderSerializer(data=r, context={
                 "request": request
-            }) for r in pending_registration],
+            }).data for r in pending_registration],
             "transfer": [serializers.DomainTransferOrderSerializer(data=r, context={
                 "request": request
-            }) for r in pending_transfer],
+            }).data for r in pending_transfer],
             "renew": [serializers.DomainRenewOrderSerializer(data=r, context={
                 "request": request
-            }) for r in pending_renew],
+            }).data for r in pending_renew],
             "auto_renew": [serializers.DomainRenewOrderSerializer(data=r, context={
                 "request": request
-            }) for r in pending_auto_renew],
+            }).data for r in pending_auto_renew],
             "restore": [serializers.DomainRestoreOrderSerializer(data=r, context={
                 "request": request
-            }) for r in pending_restore],
+            }).data for r in pending_restore],
         })
 
 
@@ -92,7 +92,7 @@ class InProgressOrderViewSet(viewsets.ViewSet):
         in_progress_transfer = models.DomainTransferOrder.objects.filter(
             state=models.AbstractOrder.STATE_PENDING_APPROVAL, last_error__isnull=True).order_by("-timestamp")
         return Response({
-            "transfer": [serializers.DomainTransferOrderSerializer(r) for r in in_progress_transfer],
+            "transfer": [serializers.DomainTransferOrderSerializer(r).data for r in in_progress_transfer],
         })
 
 
