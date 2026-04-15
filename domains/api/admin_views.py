@@ -177,7 +177,7 @@ class AdminOrderViewSet(viewsets.ViewSet):
         if instance.state != models.AbstractOrder.STATE_PENDING_APPROVAL:
             raise ValidationError("invalid state transition")
 
-        self.complete_task.delay(instance.id).forget()
+        self.complete_task.delay(instance.id)
         return Response(status=status.HTTP_202_ACCEPTED)
 
     @decorators.action(detail=True, methods=['post'])
@@ -195,7 +195,7 @@ class AdminOrderViewSet(viewsets.ViewSet):
         self.fail_task.delay(
             instance.id, error=request.data["error"],
             silent=bool(request.data.get("silent", False))
-        ).forget()
+        )
         return Response(status=status.HTTP_202_ACCEPTED)
 
 

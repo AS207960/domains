@@ -176,7 +176,7 @@ def charge_order(
         if charge_state.immediate_completion:
             order.state = order.STATE_PROCESSING
             order.save()
-            success_func.delay(order.id).forget()
+            success_func.delay(order.id)
         else:
             if charge_state.success:
                 order.state = order.STATE_PROCESSING

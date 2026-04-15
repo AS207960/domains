@@ -877,7 +877,7 @@ def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fal
             body={
                 "text": (
                             f"{user.first_name} {user.last_name}" if user else "An unknown user"
-                        ) + " has renewed {domain_renew_order.domain}" +
+                        ) + f" has renewed {domain_renew_order.domain}" +
                         (" automatically" if auto else ""),
                 "cards": [{
                     "header": {
@@ -1344,7 +1344,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-register-fail":
-            tasks.process_domain_registration_failed.delay(domain_registration_order.id).forget()
+            tasks.process_domain_registration_failed.delay(domain_registration_order.id)
 
             return {
                 "actionResponse": {
@@ -1416,7 +1416,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-restore-fail":
-            tasks.process_domain_restore_failed.delay(domain_restore_order.id).forget()
+            tasks.process_domain_restore_failed.delay(domain_restore_order.id)
 
             return {
                 "actionResponse": {
@@ -1498,9 +1498,9 @@ def card_clicked(event):
             }
         elif action_name in ("mark-domain-renew-fail", "mark-domain-auto-renew-fail"):
             if is_auto:
-                tasks.process_domain_auto_renew_failed.delay(domain_renew_order.id).forget()
+                tasks.process_domain_auto_renew_failed.delay(domain_renew_order.id)
             else:
-                tasks.process_domain_renewal_failed.delay(domain_renew_order.id).forget()
+                tasks.process_domain_renewal_failed.delay(domain_renew_order.id)
 
             return {
                 "actionResponse": {
@@ -1586,7 +1586,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-transfer-fail":
-            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id).forget()
+            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
 
             return {
                 "actionResponse": {
