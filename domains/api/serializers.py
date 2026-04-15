@@ -1084,19 +1084,19 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
             if instance.domain_obj else None,
             "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance)
             if instance.domain_obj else None,
-            "registrant": self.fields["registrant"].to_representation(instance),
-            "registrant_url": self.fields["registrant_url"].to_representation(instance),
-            "admin_contact": self.fields["admin_contact"].to_representation(instance)
+            "registrant": self.fields["registrant"].to_representation(instance.registrant_contact),
+            "registrant_url": self.fields["registrant_url"].to_representation(instance.registrant_contact),
+            "admin_contact": self.fields["admin_contact"].to_representation(instance.admin_contact)
             if instance.admin_contact is not None else None,
-            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance)
+            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance.admin_contact)
             if instance.admin_contact is not None else None,
-            "billing_contact": self.fields["billing_contact"].to_representation(instance)
+            "billing_contact": self.fields["billing_contact"].to_representation(instance.billing_contact)
             if instance.billing_contact is not None else None,
-            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance)
+            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance.billing_contact)
             if instance.billing_contact is not None else None,
-            "tech_contact": self.fields["tech_contact"].to_representation(instance)
+            "tech_contact": self.fields["tech_contact"].to_representation(instance.tech_contact)
             if instance.tech_contact is not None else None,
-            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance)
+            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance.tech_contact)
             if instance.tech_contact is not None else None,
             "period": {
                 "unit": "y" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Years
@@ -1212,19 +1212,19 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
             if instance.domain_obj else None,
             "registrant": self.fields["registrant"].to_representation(instance),
             "registrant_url": self.fields["registrant_url"].to_representation(instance),
-            "admin_contact": self.fields["admin_contact"].to_representation(instance)
+            "admin_contact": self.fields["admin_contact"].to_representation(instance.admin_contact)
             if instance.admin_contact is not None else None,
-            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance)
+            "admin_contact_url": self.fields["admin_contact_url"].to_representation(instance.admin_contact)
             if instance.admin_contact is not None else None,
-            "billing_contact": self.fields["billing_contact"].to_representation(instance)
+            "billing_contact": self.fields["billing_contact"].to_representation(instance.billing_contact)
             if instance.billing_contact is not None else None,
-            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance)
+            "billing_contact_url": self.fields["billing_contact_url"].to_representation(instance.billing_contact)
             if instance.billing_contact is not None else None,
-            "tech_contact": self.fields["tech_contact"].to_representation(instance)
+            "tech_contact": self.fields["tech_contact"].to_representation(instance.tech_contact)
             if instance.tech_contact is not None else None,
-            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance)
+            "tech_contact_url": self.fields["tech_contact_url"].to_representation(instance.tech_contact)
             if instance.tech_contact is not None else None,
-            "auth_code": self.fields["auth_code"].to_representation(instance),
+            "auth_code": self.fields["auth_code"].to_representation(instance.auth_code),
         })
 
         return ret
@@ -1297,9 +1297,9 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
 
         ret = dict(**ret, **{
             "domain": self.fields["domain"].to_representation(instance),
-            "domain_obj": self.fields["domain_obj"].to_representation(instance)
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
             if instance.domain_obj else None,
-            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance)
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
             if instance.domain_obj else None,
             "period": {
                 "unit": "y" if instance.period_unit == apps.epp_api.common_pb2.Period.Unit.Years
@@ -1369,9 +1369,9 @@ class DomainRestoreOrderSerializer(BaseOrderSerializer):
 
         ret = dict(**ret, **{
             "domain": self.fields["domain"].to_representation(instance),
-            "domain_obj": self.fields["domain_obj"].to_representation(instance)
+            "domain_obj": self.fields["domain_obj"].to_representation(instance.domain_obj)
             if instance.domain_obj else None,
-            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance)
+            "domain_obj_url": self.fields["domain_obj_url"].to_representation(instance.domain_obj)
             if instance.domain_obj else None,
         })
 
