@@ -227,7 +227,7 @@ class Command(BaseCommand):
         elif m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ServerCancelled or \
             m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientCancelled or \
             m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientRejected:
-            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
+            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id).forget()
 
     def handle_domain_transfer_out(self, m):
         domain_obj = models.DomainRegistration.objects.filter(domain__iexact=m.domain_transfer.name).first()

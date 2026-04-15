@@ -176,7 +176,7 @@ def charge_order(
         if charge_state.immediate_completion:
             order.state = order.STATE_PROCESSING
             order.save()
-            success_func.delay(order.id)
+            success_func.delay(order.id).forget()
         else:
             if charge_state.success:
                 order.state = order.STATE_PROCESSING
@@ -197,7 +197,6 @@ def charge_order(
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
 def process_domain_registration_paid(registration_order_id):
     domain_registration_order = \
@@ -426,14 +425,14 @@ def process_domain_registration_complete(registration_order_id):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
-def process_domain_registration_failed(registration_order_id):
+def process_domain_registration_failed(registration_order_id, error: typing.Optional[str] = None):
     domain_registration_order = \
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
 
     billing.reverse_charge(domain_registration_order.id)
     domain_registration_order.state = domain_registration_order.STATE_FAILED
+    domain_registration_order.last_error = error
     domain_registration_order.save()
 
     emails.mail_register_failed.delay(domain_registration_order.id)
@@ -441,7 +440,6 @@ def process_domain_registration_failed(registration_order_id):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
 def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order = \
@@ -477,7 +475,7 @@ def process_domain_renewal_paid(renew_order_id):
                              f" passing off to human")
                 return
 
-            gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, registry_id, str(period))
+            gchat_bot.notify_renew.delay(domain_renewal_order.id, registry_id, str(period))
 
             domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
             domain_renewal_order.redirect_uri = None
@@ -500,7 +498,7 @@ def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order.redirect_uri = None
     domain_renewal_order.last_error = None
     domain_renewal_order.save()
-    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj_id, domain_data.registry_id, str(period))
+    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
     logger.info(f"{domain_renewal_order.domain} successfully renewed")
 
 
@@ -552,25 +550,24 @@ def process_domain_renewal_complete(renew_order_id):
     domain_renew_order.redirect_uri = None
     domain_renew_order.last_error = None
     domain_renew_order.save()
-    gchat_bot.notify_renew.delay(domain_renew_order.domain_obj_id, "N/A", str(period))
+    gchat_bot.notify_renew.delay(domain_renew_order.id, "N/A", str(period))
 
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
-def process_domain_renewal_failed(renew_order_id):
+def process_domain_renewal_failed(renew_order_id, error: typing.Optional[str] = None):
     domain_renew_order = \
         models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
     billing.reverse_charge(domain_renew_order.id)
     domain_renew_order.state = domain_renew_order.STATE_FAILED
+    domain_renew_order.last_error = error
     domain_renew_order.save()
 
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
 def process_domain_restore_paid(restore_order_id):
     domain_restore_order = \
@@ -700,22 +697,21 @@ def process_domain_restore_complete(restore_order_id):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
-def process_domain_restore_failed(restore_order_id):
+def process_domain_restore_failed(restore_order_id, error: typing.Optional[str] = None):
     domain_restore_order = \
         models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
 
     billing.reverse_charge(domain_restore_order.id)
     domain_restore_order.state = domain_restore_order.STATE_FAILED
+    domain_restore_order.last_error = error
     domain_restore_order.save()
 
     emails.mail_restore_failed.delay(domain_restore_order.id)
 
 
 @shared_task(
-    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
+    autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
 def process_domain_transfer_paid(transfer_order_id):
     domain_transfer_order = \
@@ -1056,14 +1052,14 @@ def process_domain_transfer_complete(transfer_order_id):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
-def process_domain_transfer_failed(transfer_order_id):
+def process_domain_transfer_failed(transfer_order_id, error: typing.Optional[str] = None):
     domain_transfer_order = \
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
 
     billing.reverse_charge(domain_transfer_order.id)
     domain_transfer_order.state = domain_transfer_order.STATE_FAILED
+    domain_transfer_order.last_error = error
     domain_transfer_order.save()
 
     emails.mail_transfer_failed.delay(domain_transfer_order.id)
@@ -1136,7 +1132,6 @@ def set_dns(domain: models.DomainRegistration, hosts: typing.List[str]):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
 def process_domain_auto_renew_paid(renew_order_id):
     domain_renewal_order = \
@@ -1181,7 +1176,7 @@ def process_domain_auto_renew_paid(renew_order_id):
             logger.info(f"{domain_renewal_order.domain} successfully requested renewal")
             return
 
-    gchat_bot.notify_renew.delay(domain_renewal_order.domain_obj.id, domain_data.registry_name, str(period))
+    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_data.registry_name, str(period), auto=True)
 
     domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
     domain_renewal_order.redirect_uri = None
@@ -1210,14 +1205,14 @@ def process_domain_auto_renew_complete(renew_order_id):
 
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3,
-    ignore_result=True
 )
-def process_domain_auto_renew_failed(renew_order_id):
+def process_domain_auto_renew_failed(renew_order_id, error: typing.Optional[str] = None):
     domain_renew_order = \
         models.DomainAutomaticRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
 
     billing.reverse_charge(domain_renew_order.id)
     domain_renew_order.state = domain_renew_order.STATE_FAILED
+    domain_renew_order.last_error = error
     domain_renew_order.save()
 
     emails.mail_auto_renew_failed.delay(domain_renew_order.id)

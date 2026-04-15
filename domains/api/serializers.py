@@ -971,7 +971,8 @@ class BaseOrderSerializer(WriteOnceMixin, serializers.ModelSerializer):
             "last_error": self.fields["last_error"].to_representation(instance)
             if instance.last_error else None,
             "off_session": instance.off_session,
-            "price": instance.price
+            "price": instance.price,
+            "timestamp": instance.timestamp,
         }
 
         if instance.state == models.AbstractOrder.STATE_STARTED:

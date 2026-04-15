@@ -158,9 +158,8 @@ def request_registration(registration_order_id, registry_id: str, period: str):
     }])
 
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_registration_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"registration of {domain_registration_order.domain}" + (
@@ -173,7 +172,9 @@ def request_registration(registration_order_id, registry_id: str, period: str):
                     },
                     "sections": sections,
                     "name": f"domain-register-{domain_registration_order.domain_id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -186,9 +187,8 @@ def notify_registration(registration_order_id, period: str):
         models.DomainRegistrationOrder.objects.get(id=registration_order_id)  # type: models.DomainRegistrationOrder
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_registration_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}",
                 "cards": [{
@@ -230,7 +230,9 @@ def notify_registration(registration_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-register-{domain_registration_order.domain_obj_id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -244,9 +246,8 @@ def notify_registration_pending(registration_order_id, period: str):
 
     user = domain_registration_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_registration_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_registration_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has registered {domain_registration_order.domain}, which is pending",
                 "cards": [{
@@ -304,7 +305,9 @@ def notify_registration_pending(registration_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-register-{domain_registration_order.domain_id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -391,9 +394,8 @@ def request_transfer(transfer_order_id, registry_id):
     }])
 
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_transfer_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} "
                         f"has requested the transfer of {domain_transfer_order.domain}" + (
@@ -406,7 +408,9 @@ def request_transfer(transfer_order_id, registry_id):
                     },
                     "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}",
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -470,9 +474,8 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
     }]
 
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_transfer_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} "
                         f"has started the transfer of {domain_transfer_order.domain}",
@@ -483,7 +486,9 @@ def notify_transfer_pending(transfer_order_id, registry_id: str):
                     },
                     "sections": sections,
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -496,9 +501,8 @@ def notify_transfer(transfer_order_id, registry_id: str):
         models.DomainTransferOrder.objects.get(id=transfer_order_id)  # type: models.DomainTransferOrder
     user = domain_transfer_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_transfer_order.domain_id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_transfer_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has transferred {domain_transfer_order.domain}",
                 "cards": [{
@@ -540,7 +544,9 @@ def notify_transfer(transfer_order_id, registry_id: str):
                         }]
                     }],
                     "name": f"domain-transfer-{domain_transfer_order.domain_id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -627,9 +633,8 @@ def request_restore_renew(restore_order_id, period: str):
     user = domain_restore_order.get_user()
 
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_restore_order.domain_obj.id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_restore_order.id}",
             body={
                 "text": f"<users/all> {user.first_name} {user.last_name} has requested the "
                         f"renewal of {domain_restore_order.domain} following restore",
@@ -688,7 +693,9 @@ def request_restore_renew(restore_order_id, period: str):
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -700,9 +707,8 @@ def notify_restore(restore_order_id):
     domain_restore_order = models.DomainRestoreOrder.objects.get(id=restore_order_id)  # type: models.DomainRestoreOrder
     user = domain_restore_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_restore_order.domain_obj.id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_restore_order.id}",
             body={
                 "text": f"{user.first_name} {user.last_name} has restored {domain_restore_order.domain}",
                 "cards": [{
@@ -739,7 +745,9 @@ def notify_restore(restore_order_id):
                         }]
                     }],
                     "name": f"domain-restore-{domain_restore_order.domain_obj.id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -822,9 +830,8 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
     }])
 
     for space in models.HangoutsSpaces.objects.all():
-        CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_renew_order.domain_obj.id}",
+        CHAT_API.spaces().messages().patch(
+            name=f"spaces/{space.space_id}/messages/{domain_renew_order.id}",
             body={
                 "text": f"<users/all> " + (
                     f"{user.first_name} {user.last_name}" if user else "An unknown user"
@@ -840,7 +847,9 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
                     },
                     "sections": sections,
                     "name": f"domain-renew-{domain_renew_order.domain_obj.id}"
-                }]
+                }],
+                "updateMask": "*",
+                "allowMissing": True
             }
         ).execute()
 
@@ -848,16 +857,21 @@ def request_renew(renew_order_id, registry_id: str, period: str, auto: bool = Fa
 @shared_task(
     autoretry_for=(Exception,), retry_backoff=1, retry_backoff_max=60, max_retries=None, default_retry_delay=3
 )
-def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
-    domain_obj = \
-        models.DomainRegistration.objects.get(id=domain_id)  # type: models.DomainRegistration
-    user = domain_obj.get_user()
+def notify_renew(renew_order_id, registry_id: str, period: str, auto: bool = False):
+    if auto:
+        domain_renew_order = models.DomainAutomaticRenewOrder.objects.get(
+            id=renew_order_id)  # type: models.DomainRenewOrder
+        user = domain_renew_order.domain_obj.get_user() if domain_renew_order.domain_obj else None
+    else:
+        domain_renew_order = models.DomainRenewOrder.objects.get(id=renew_order_id)  # type: models.DomainRenewOrder
+        user = domain_renew_order.get_user()
     for space in models.HangoutsSpaces.objects.all():
         CHAT_API.spaces().messages().create(
-            parent=space.space_id,
-            threadKey=f"dm_{domain_obj.pk}",
+            name=f"spaces/{space.space_id}/messages/{domain_renew_order.id}",
             body={
-                "text": f"{user.first_name} {user.last_name} has renewed {domain_obj.domain}" +
+                "text": (
+                            f"{user.first_name} {user.last_name}" if user else "An unknown user"
+                        ) + " has renewed {domain_renew_order.domain}" +
                         (" automatically" if auto else ""),
                 "cards": [{
                     "header": {
@@ -869,7 +883,7 @@ def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
                         "widgets": [{
                             "keyValue": {
                                 "topLabel": "Domain name",
-                                "content": domain_obj.domain
+                                "content": domain_renew_order.domain
                             }
                         }, {
                             "keyValue": {
@@ -879,7 +893,7 @@ def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
                         }, {
                             "keyValue": {
                                 "topLabel": "Object ID",
-                                "content": str(domain_obj.pk)
+                                "content": str(domain_renew_order.domain_obj.id)
                             }
                         }, {
                             "keyValue": {
@@ -894,14 +908,15 @@ def notify_renew(domain_id, registry_id: str, period: str, auto: bool = False):
                                     "text": "View",
                                     "onClick": {
                                         "openLink": {
-                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(domain_obj.pk,))
+                                            "url": settings.EXTERNAL_URL_BASE + reverse('domain', args=(
+                                                domain_renew_order.domain_obj.pk,))
                                         }
                                     }
                                 }
                             }]
                         }]
                     }],
-                    "name": f"domain-renew-{domain_obj.pk}"
+                    "name": f"domain-renew-{domain_renew_order.domain_obj.pk}"
                 }]
             }
         ).execute()
@@ -1323,7 +1338,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-register-fail":
-            tasks.process_domain_registration_failed.delay(domain_registration_order.id)
+            tasks.process_domain_registration_failed.delay(domain_registration_order.id).forget()
 
             return {
                 "actionResponse": {
@@ -1395,7 +1410,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-restore-fail":
-            tasks.process_domain_restore_failed.delay(domain_restore_order.id)
+            tasks.process_domain_restore_failed.delay(domain_restore_order.id).forget()
 
             return {
                 "actionResponse": {
@@ -1477,9 +1492,9 @@ def card_clicked(event):
             }
         elif action_name in ("mark-domain-renew-fail", "mark-domain-auto-renew-fail"):
             if is_auto:
-                tasks.process_domain_auto_renew_failed.delay(domain_renew_order.id)
+                tasks.process_domain_auto_renew_failed.delay(domain_renew_order.id).forget()
             else:
-                tasks.process_domain_renewal_failed.delay(domain_renew_order.id)
+                tasks.process_domain_renewal_failed.delay(domain_renew_order.id).forget()
 
             return {
                 "actionResponse": {
@@ -1565,7 +1580,7 @@ def card_clicked(event):
                 }]
             }
         elif action_name == "mark-domain-transfer-fail":
-            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id)
+            tasks.process_domain_transfer_failed.delay(domain_transfer_order.id).forget()
 
             return {
                 "actionResponse": {
