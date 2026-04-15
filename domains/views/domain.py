@@ -1916,6 +1916,7 @@ def renew_domain(request, domain_id):
             order = models.DomainRenewOrder(
                 domain=user_domain.domain,
                 domain_obj=user_domain,
+                current_expiry=domain_data.expiry_date,
                 period_unit=period.unit,
                 period_value=period.value,
                 user=request.user,

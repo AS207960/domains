@@ -233,6 +233,7 @@ class DomainAutoRenewAdminOrderViewSet(AdminOrderViewSet):
 
 class UserDomainsViewSet(viewsets.ViewSet):
     permission_classes = [AccessUserDomainsPermission]
+    lookup_value_regex = r'[^/]+'
 
     def update(self, request, pk=None):
         user = get_object_or_404(get_user_model(), username=pk)

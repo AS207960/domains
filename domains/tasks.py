@@ -452,26 +452,19 @@ def process_domain_renewal_paid(renew_order_id):
         value=domain_renewal_order.period_value,
         unit=domain_renewal_order.period_unit
     )
-    try:
-        domain_data = apps.epp_client.get_domain(
-            domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id
-        )
-    except grpc.RpcError as rpc_error:
-        logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
-        raise rpc_error
 
     if zone.renew_supported:
         if zone.direct_renew_supported:
             try:
                 _pending, _new_expiry, registry_id = apps.epp_client.renew_domain(
-                    domain_renewal_order.domain, period, domain_data.expiry_date,
+                    domain_renewal_order.domain, period, domain_renewal_order.current_expiry,
                     registry_id=domain_renewal_order.domain_obj.registry_id
                 )
             except grpc.RpcError as rpc_error:
                 domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
                 domain_renewal_order.last_error = rpc_error.details()
                 domain_renewal_order.save()
-                gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
+                gchat_bot.request_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period))
                 logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()},"
                              f" passing off to human")
                 return
@@ -487,7 +480,7 @@ def process_domain_renewal_paid(renew_order_id):
             return
 
         else:
-            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
+            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period))
 
             domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
             domain_renewal_order.save()
@@ -499,7 +492,7 @@ def process_domain_renewal_paid(renew_order_id):
     domain_renewal_order.redirect_uri = None
     domain_renewal_order.last_error = None
     domain_renewal_order.save()
-    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period))
+    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period))
     logger.info(f"{domain_renewal_order.domain} successfully renewed")
 
 
@@ -1147,31 +1140,23 @@ def process_domain_auto_renew_paid(renew_order_id):
         unit=domain_renewal_order.period_unit
     )
 
-    try:
-        domain_data = apps.epp_client.get_domain(
-            domain_renewal_order.domain, registry_id=domain_renewal_order.domain_obj.registry_id
-        )
-    except grpc.RpcError as rpc_error:
-        logger.warn(f"Failed to load data of {domain_renewal_order.domain}: {rpc_error.details()}")
-        raise rpc_error
-
     if zone.renew_supported:
         if zone.direct_renew_supported:
             try:
                 _pending, _new_expiry, _ = apps.epp_client.renew_domain(
-                    domain_renewal_order.domain, period, domain_data.expiry_date,
+                    domain_renewal_order.domain, period, domain_renewal_order.current_expiry,
                     registry_id=domain_renewal_order.domain_obj.registry_id
                 )
             except grpc.RpcError as rpc_error:
                 domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
                 domain_renewal_order.last_error = rpc_error.details()
                 domain_renewal_order.save()
-                gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period), auto=True)
+                gchat_bot.request_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period), auto=True)
                 logger.error(f"Failed to renew {domain_renewal_order.domain}: {rpc_error.details()},"
                              f" passing off to human")
                 return
         else:
-            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_data.registry_id, str(period), auto=True)
+            gchat_bot.request_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period), auto=True)
 
             domain_renewal_order.state = domain_renewal_order.STATE_PENDING_APPROVAL
             domain_renewal_order.save()
@@ -1179,7 +1164,7 @@ def process_domain_auto_renew_paid(renew_order_id):
             logger.info(f"{domain_renewal_order.domain} successfully requested renewal")
             return
 
-    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_data.registry_name, str(period), auto=True)
+    gchat_bot.notify_renew.delay(domain_renewal_order.id, domain_renewal_order.domain_obj.registry_id, str(period), auto=True)
 
     domain_renewal_order.state = domain_renewal_order.STATE_COMPLETED
     domain_renewal_order.redirect_uri = None

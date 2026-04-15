@@ -165,6 +165,7 @@ class Command(BaseCommand):
                     order = models.DomainAutomaticRenewOrder(
                         domain=domain.domain,
                         domain_obj=domain,
+                        current_expiry=domain_data.expiry_date,
                         period_unit=renewal_period.unit,
                         period_value=renewal_period.value,
                         price=renewal_price,

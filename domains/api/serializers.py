@@ -1317,6 +1317,12 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
         if not zone:
             raise PermissionDenied
 
+        domain_data = apps.epp_client.get_domain(
+            domain.domain, registry_id=domain.registry_id
+        )
+        if not domain_data.can_renew:
+            raise PermissionDenied
+
         zone_price, registry_name = zone.pricing, zone.registry
         period = apps.epp_api.Period(
             unit=apps.epp_api.common_pb2.Period.Unit.Years if validated_data['period']['unit'] == "y"
@@ -1333,6 +1339,7 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
         order = models.DomainRenewOrder(
             domain=domain.domain,
             domain_obj=domain,
+            current_expiry=domain_data.expiry_date,
             period_unit=period.unit,
             period_value=period.value,
             user=self.context['request'].user,

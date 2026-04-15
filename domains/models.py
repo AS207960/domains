@@ -953,6 +953,7 @@ class DomainRenewOrder(AbstractOrder):
 
     id = as207960_utils.models.TypedUUIDField(f'domains_domainreneworder', primary_key=True)
     domain = models.CharField(max_length=255)
+    current_expiry = models.DateTimeField(default=timezone.now)
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
@@ -978,6 +979,7 @@ class DomainAutomaticRenewOrder(AbstractOrder):
 
     id = as207960_utils.models.TypedUUIDField(f'domains_domainautoreneworder', primary_key=True)
     domain = models.CharField(max_length=255)
+    current_expiry = models.DateTimeField(default=timezone.now)
     period_unit = models.PositiveSmallIntegerField()
     period_value = models.PositiveSmallIntegerField()
     domain_obj = models.ForeignKey(DomainRegistration, on_delete=models.SET_NULL, blank=True, null=True)
