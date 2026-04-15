@@ -4,7 +4,6 @@ from rest_framework import viewsets, decorators, status, permissions
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from as207960_utils.api import auth
 import datetime
@@ -16,24 +15,20 @@ from .. import apps, models, tasks
 class AccessEPPPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if not isinstance(request.auth, auth.OAuthToken):
-            raise PermissionDenied
+            return False
 
-        if "access-epp" not in request.auth.claims.get("resource_access", {}).get(
+        return "access-epp" in request.auth.claims.get("resource_access", {}).get(
                 settings.OIDC_CLIENT_ID, {}
-        ).get("roles", []):
-            raise PermissionDenied
-
+        ).get("roles", [])
 
 class AccessUserDomainsPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if not isinstance(request.auth, auth.OAuthToken):
-            raise PermissionDenied
+            return False
 
-        if "access-user-domains" not in request.auth.claims.get("resource_access", {}).get(
+        return "access-user-domains" in request.auth.claims.get("resource_access", {}).get(
                 settings.OIDC_CLIENT_ID, {}
-        ).get("roles", []):
-            raise PermissionDenied
-
+        ).get("roles", [])
 
 class EPPBalanceViewSet(viewsets.ViewSet):
     permission_classes = [AccessEPPPermission]
