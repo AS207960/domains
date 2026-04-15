@@ -67,19 +67,19 @@ class PendingOrderViewSet(viewsets.ViewSet):
         pending_restore = models.DomainRestoreOrder.objects.filter(
             state=models.AbstractOrder.STATE_PENDING_APPROVAL).order_by("-timestamp")
         return Response({
-            "registration": [serializers.DomainRegistrationOrderSerializer(data=r, context={
+            "registration": [serializers.DomainRegistrationOrderSerializer(instance=r, context={
                 "request": request
             }).data for r in pending_registration],
-            "transfer": [serializers.DomainTransferOrderSerializer(data=r, context={
+            "transfer": [serializers.DomainTransferOrderSerializer(instance=r, context={
                 "request": request
             }).data for r in pending_transfer],
-            "renew": [serializers.DomainRenewOrderSerializer(data=r, context={
+            "renew": [serializers.DomainRenewOrderSerializer(instance=r, context={
                 "request": request
             }).data for r in pending_renew],
-            "auto_renew": [serializers.DomainRenewOrderSerializer(data=r, context={
+            "auto_renew": [serializers.DomainRenewOrderSerializer(instance=r, context={
                 "request": request
             }).data for r in pending_auto_renew],
-            "restore": [serializers.DomainRestoreOrderSerializer(data=r, context={
+            "restore": [serializers.DomainRestoreOrderSerializer(instance=r, context={
                 "request": request
             }).data for r in pending_restore],
         })
