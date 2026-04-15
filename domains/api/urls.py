@@ -13,14 +13,14 @@ router.register(r'domain_restore_orders', views.DomainRestoreOrderViewSet, basen
 router.register(r'name_servers', views.NameServer, basename='nameserver')
 router.register(r'internal/balance', admin_views.EPPBalanceViewSet, basename='balance')
 router.register(r'internal/domains', admin_views.UserDomainsViewSet, basename='user-domains')
-router.register(r'internal/domain_locking', admin_views.DomainLockingViewSet)
-router.register(r'internal/orders/pending', admin_views.PendingOrderViewSet)
-router.register(r'internal/orders/in_progress', admin_views.InProgressOrderViewSet)
-router.register(r'internal/pending_locks', admin_views.PendingLockViewSet),
-router.register(r'internal/registration_order', admin_views.DomainRegistrationAdminOrderViewSet)
-router.register(r'internal/transfer_order', admin_views.DomainTransferAdminOrderViewSet)
-router.register(r'internal/renew_order', admin_views.DomainRenewAdminOrderViewSet)
-router.register(r'internal/auto_renew_order', admin_views.DomainAutoRenewAdminOrderViewSet)
+router.register(r'internal/domain_locking', admin_views.DomainLockingViewSet, basename='domain-locking')
+router.register(r'internal/orders/pending', admin_views.PendingOrderViewSet, basename='pending-orders')
+router.register(r'internal/orders/in_progress', admin_views.InProgressOrderViewSet, basename='in-progress-orders')
+router.register(r'internal/pending_locks', admin_views.PendingLockViewSet, basename='pending-locks'),
+router.register(r'internal/registration_order', admin_views.DomainRegistrationAdminOrderViewSet, basename='registration-order')
+router.register(r'internal/transfer_order', admin_views.DomainTransferAdminOrderViewSet, basename='transfer-order')
+router.register(r'internal/renew_order', admin_views.DomainRenewAdminOrderViewSet, basename='renew-order')
+router.register(r'internal/auto_renew_order', admin_views.DomainAutoRenewAdminOrderViewSet, basename='auto-renew-order')
 
 
 urlpatterns = [
