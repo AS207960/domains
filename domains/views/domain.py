@@ -120,10 +120,16 @@ def domains(request):
                     d.save()
                     deleted_domains.append(d)
                 else:
+                    domain_info = zone_info.get_domain_info(d.domain, registry_id=d.registry_id)[0]
+                    expiry_date, paid_up_until = utils.domain_paid_until_date(
+                        domain_obj=d, domain_data=domain_data, domain_info=domain_info
+                    )
                     active_domains.append({
                         "id": d.id,
                         "obj": d,
-                        "domain": domain_data
+                        "domain": domain_data,
+                        "expiry_date": expiry_date,
+                        "paid_up_until": paid_up_until,
                     })
             except grpc.RpcError as rpc_error:
                 active_domains.append({

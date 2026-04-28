@@ -93,11 +93,11 @@
                                 <td data-sort="{% if domain.domain.creation_date %}{{ domain.domain.creation_date.timestamp }}{% else %}0{% endif %}">
                                     {% if domain.domain.creation_date %}{{ domain.domain.creation_date|date:"N jS Y P" }}{% else %}N/A{% endif %}
                                 </td>
-                                <td data-sort="{% if domain.domain.paid_until_date %}{{ domain.domain.paid_until_date.timestamp }}{% elif domain.domain.expiry_date %}{{ domain.domain.expiry_date.timestamp }}{% else %}0{% endif %}">
-                                    {% if domain.paid_until_date %}
-                                        {{ domain.paid_until_date|date:"N jS Y P" }}
-                                    {% elif domain.domain.expiry_date %}
-                                        {{ domain.domain.expiry_date|date:"N jS Y P" }}
+                                <td data-sort="{% if domain.paid_up_until %}{{ domain.paid_up_until.timestamp }}{% elif domain.expiry_date %}{{ domain.expiry_date.timestamp }}{% else %}0{% endif %}">
+                                    {% if domain.paid_up_until %}
+                                        {{ domain.paid_up_until|date:"N jS Y P" }}
+                                    {% elif domain.expiry_date %}
+                                        {{ domain.expiry_date|date:"N jS Y P" }}
                                     {% else %}
                                         N/A
                                     {% endif %}
