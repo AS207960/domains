@@ -123,8 +123,12 @@ class Command(BaseCommand):
             self.handle_nominet_domain_release(m)
         elif m.WhichOneof("data") == "nominet_domain_registrar_change":
             self.handle_nominet_domain_registrar_change(client, m)
+        elif m.WhichOneof("data") == "nominet_domain_cancel":
+            self.handle_nominet_domain_cancel(client, m)
         elif m.WhichOneof("data") == "domain_transfer":
             self.handle_domain_transfer(m, client.registry_name)
+        elif m.WhichOneof("data") == "eurid_poll":
+            self.handle_eurid_poll(m)
 
         m_data = google.protobuf.json_format.MessageToDict(
             m, always_print_fields_with_no_presence=True
@@ -208,6 +212,15 @@ class Command(BaseCommand):
                     return
                 tasks.process_domain_transfer_complete.delay(domain_transfer_order.id)
 
+    def handle_nominet_domain_cancel(self, m):
+        domain_obj = models.DomainRegistration.objects.filter(domain__iexact=m.nominet_domain_cancel.name).first()
+        if not domain_obj:
+            print(f"Unknown domain: {m.nominet_domain_cancel.name}", flush=True)
+            return
+
+        domain_obj.former_domain = True
+        domain_obj.save()
+
     def handle_domain_transfer(self, m, registry_name: str):
         if registry_name == "rrpproxy":
             if m.domain_transfer.requested_client_id == "as207960":
@@ -249,3 +262,13 @@ class Command(BaseCommand):
             m.domain_transfer.status == domains.epp_api.epp_grpc.common.common_pb2.ClientRejected:
             domain_obj.transfer_out_pending = False
             domain_obj.save()
+
+    def handle_eurid_poll(self, m):
+        if m.eurid_poll.context == "TRANSFER" and m.eurid_poll.action == "AWAY" and m.eurid_poll.object_type == "DOMAIN":
+            domain_obj = models.DomainRegistration.objects.filter(domain__iexact=m.eurid_poll.object).first()
+            if not domain_obj:
+                print(f"Unknown domain: {m.eurid_poll.object}", flush=True)
+                return
+            domain_obj.former_domain = True
+            domain_obj.save()
+            emails.mail_transferred_out.delay(domain_obj.id)
