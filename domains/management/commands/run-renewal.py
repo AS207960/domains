@@ -171,6 +171,7 @@ class Command(BaseCommand):
                         price=renewal_price,
                         off_session=True,
                         user=user,
+                        timestamp=timezone.now(),
                     )
                     order.save()
                     tasks.charge_order(

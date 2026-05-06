@@ -1538,7 +1538,8 @@ def domain_register(request, domain_name):
                     price=billing_value,
                     auth_info=models.make_secret(),
                     off_session=False,
-                    intended_use=form.cleaned_data.get("intended_use")
+                    intended_use=form.cleaned_data.get("intended_use"),
+                    timestamp=timezone.now(),
                 )
                 registration_order.save()
 
@@ -1928,6 +1929,7 @@ def renew_domain(request, domain_id):
                 user=request.user,
                 price=billing_value,
                 off_session=False,
+                timestamp=timezone.now()
             )
             order.save()
             tasks.process_domain_renewal.delay(order.id)
@@ -2010,7 +2012,8 @@ def restore_domain(request, domain_id):
         off_session=False,
         period_unit=renewal_period.unit,
         period_value=renewal_period.value,
-        should_renew=should_renew
+        should_renew=should_renew,
+        timestamp=timezone.now()
     )
     order.save()
     tasks.process_domain_restore.delay(order.id)
@@ -2175,6 +2178,7 @@ def domain_transfer(request, domain_name):
                     price=billing_value.amount,
                     user=request.user,
                     off_session=False,
+                    timestamp=timezone.now()
                 )
                 transfer_order.save()
 

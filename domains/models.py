@@ -822,7 +822,7 @@ class AbstractOrder(models.Model):
     redirect_uri = models.TextField(blank=True, null=True)
     last_error = models.TextField(blank=True, null=True)
     off_session = models.BooleanField(blank=True, default=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
     resource_id = models.UUIDField(null=True, db_index=True)
 
     resource_type: str

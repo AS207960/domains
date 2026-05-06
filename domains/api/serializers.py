@@ -1150,7 +1150,8 @@ class DomainRegistrationOrderSerializer(BaseOrderSerializer):
             user=self.context['request'].user,
             price=billing_value,
             auth_info=models.make_secret(),
-            off_session=validated_data["off_session"]
+            off_session=validated_data["off_session"],
+            timestamp=timezone.now()
         )
         order.save()
         tasks.process_domain_registration.delay(order.id)
@@ -1264,7 +1265,8 @@ class DomainTransferOrderSerializer(BaseOrderSerializer):
             tech_contact=validated_data['tech_contact'],
             user=self.context['request'].user,
             price=billing_value,
-            off_session=validated_data["off_session"]
+            off_session=validated_data["off_session"],
+            timestamp=timezone.now()
         )
         order.save()
         tasks.process_domain_transfer.delay(order.id)
@@ -1344,7 +1346,8 @@ class DomainRenewOrderSerializer(BaseOrderSerializer):
             period_value=period.value,
             user=self.context['request'].user,
             price=billing_value,
-            off_session=validated_data["off_session"]
+            off_session=validated_data["off_session"],
+            timestamp=timezone.now()
         )
         order.save()
         tasks.process_domain_renewal.delay(order.id)
@@ -1404,7 +1407,8 @@ class DomainRestoreOrderSerializer(BaseOrderSerializer):
             domain_obj=domain,
             user=self.context['request'].user,
             price=billing_value,
-            off_session=validated_data["off_session"]
+            off_session=validated_data["off_session"],
+            timestamp=timezone.now(),
         )
         order.save()
         tasks.process_domain_restore.delay(order.id)
