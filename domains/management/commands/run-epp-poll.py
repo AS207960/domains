@@ -124,7 +124,7 @@ class Command(BaseCommand):
         elif m.WhichOneof("data") == "nominet_domain_registrar_change":
             self.handle_nominet_domain_registrar_change(client, m)
         elif m.WhichOneof("data") == "nominet_domain_cancel":
-            self.handle_nominet_domain_cancel(client, m)
+            self.handle_nominet_domain_cancel(m)
         elif m.WhichOneof("data") == "domain_transfer":
             self.handle_domain_transfer(m, client.registry_name)
         elif m.WhichOneof("data") == "eurid_poll":
