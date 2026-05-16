@@ -196,16 +196,17 @@ class Command(BaseCommand):
         for domain in m.nominet_domain_registrar_change.domains:
             domain_transfer_order = models.DomainTransferOrder.objects.filter(domain__iexact=domain.name).first()
             if domain.client_id != m.nominet_domain_registrar_change.registrar_tag:
-                if domain_transfer_order:
-                    client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
-                        case_id=m.nominet_domain_registrar_change.case_id,
-                        registry_name=client.registry_name,
-                    ))
-                else:
-                    client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
-                        case_id=m.nominet_domain_registrar_change.case_id,
-                        registry_name=client.registry_name,
-                    ))
+                if m.nominet_domain_registrar_change.case_id:
+                    if domain_transfer_order:
+                        client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
+                            case_id=m.nominet_domain_registrar_change.case_id.value,
+                            registry_name=client.registry_name,
+                        ))
+                    else:
+                        client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
+                            case_id=m.nominet_domain_registrar_change.case_id.value,
+                            registry_name=client.registry_name,
+                        ))
             else:
                 if not domain_transfer_order:
                     print(f"Unknown domain transfer: {m.domain_transfer.name}", flush=True)
