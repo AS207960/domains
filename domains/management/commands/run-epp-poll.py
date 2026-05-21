@@ -18,6 +18,11 @@ import json
 from domains.views import emails
 from domains import tasks
 
+REGISTRY_CLIENT_IDS = {
+    "rrpproxy": "as207960",
+    "id": "ascy-802642"
+}
+
 
 class PollClient:
     def __init__(
@@ -223,8 +228,8 @@ class Command(BaseCommand):
         domain_obj.save()
 
     def handle_domain_transfer(self, m, registry_name: str):
-        if registry_name == "rrpproxy":
-            if m.domain_transfer.requested_client_id == "as207960":
+        if registry_name in REGISTRY_CLIENT_IDS:
+            if m.domain_transfer.requested_client_id == REGISTRY_CLIENT_IDS[registry_name]:
                 self.handle_domain_transfer_in(m)
             else:
                 self.handle_domain_transfer_out(m)
