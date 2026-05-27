@@ -190,6 +190,7 @@ def new_address(request):
         })
 
     show_fi = True
+    show_se = True
     if "setup_domain" in request.session:
         zone, sld = zone_info.get_domain_info(request.session["setup_domain"])
         if not zone or not zone.transfer_supported:
@@ -198,9 +199,10 @@ def new_address(request):
                 "back_url": referrer
             })
         show_fi = zone.registry == zone.REGISTRY_TRAFICOM
+        show_se = zone.registry == zone.REGISTRY_INTERNET_STIFTELSEN
 
     if request.method == "POST":
-        form = forms.AddressForm(request.POST, show_fi=show_fi)
+        form = forms.AddressForm(request.POST, show_fi=show_fi, show_se=show_se)
         if form.is_valid():
             form.instance.user = request.user
             try:
@@ -217,7 +219,7 @@ def new_address(request):
                 return redirect(request.session.pop("next_uri"))
             return redirect('addresses')
     else:
-        form = forms.AddressForm(show_fi=show_fi)
+        form = forms.AddressForm(show_fi=show_fi, show_se=show_se)
 
     return render(request, "domains/address_form.html", {
         "contact_form": form,
@@ -315,6 +317,7 @@ def new_contact_and_address(request):
         })
 
     show_fi = True
+    show_se = True
     if "setup_domain" in request.session:
         zone, sld = zone_info.get_domain_info(request.session["setup_domain"])
         if not zone or not zone.transfer_supported:
@@ -323,9 +326,10 @@ def new_contact_and_address(request):
                 "back_url": referrer
             })
         show_fi = zone.registry == zone.REGISTRY_TRAFICOM
+        show_se = zone.registry == zone.REGISTRY_INTERNET_STIFTELSEN
 
     if request.method == "POST":
-        form = forms.ContactAndAddressForm(request.POST, show_fi=show_fi)
+        form = forms.ContactAndAddressForm(request.POST, show_fi=show_fi, show_se=show_se)
         if form.is_valid():
             address = models.ContactAddress(
                 description=form.cleaned_data['description'],
@@ -389,7 +393,7 @@ def new_contact_and_address(request):
                 return redirect(request.session.pop("next_uri"))
             return redirect('contacts')
     else:
-        form = forms.ContactAndAddressForm(show_fi=show_fi)
+        form = forms.ContactAndAddressForm(show_fi=show_fi, show_se=show_se)
 
     return render(request, "domains/contact_form.html", {
         "contact_form": form,

@@ -91,9 +91,47 @@ class ContactForm(forms.ModelForm):
         fields = "__all__"
         exclude = ("id", "resource_id", "created_date", "updated_date", "privacy_email", "handle", "eurid_citizenship")
 
+def add_fi_se_notices(layout, show_fi: bool, show_se: bool):
+    if show_fi and show_se:
+        layout.append(crispy_forms.layout.Fieldset(
+            'Personal information',
+            crispy_forms.layout.HTML("""
+                <div class="alert alert-info" role="alert">
+                    Birthday is required for foreign personal registrants under the .fi domain.
+                    A National Identity Number is required for Finnish registrants under the .fi domain.
+                </div>
+                <div class="alert alert-info" role="alert">
+                    A National Identity Number or Passport Number is required for registrants under the .se and .nu domains.
+                </div>
+            """),
+            'birthday',
+            'identity_number',
+        ))
+    if show_fi and not show_se:
+        layout.append(crispy_forms.layout.Fieldset(
+            'Personal information',
+            crispy_forms.layout.HTML("""
+                <div class="alert alert-info" role="alert">
+                    Birthday is required for foreign personal registrants under the .fi domain.
+                    A National Identity Number is required for Finnish registrants under the .fi domain.
+                </div>
+            """),
+            'birthday',
+            'identity_number',
+        ))
+    if show_se and not show_fi:
+        layout.append(crispy_forms.layout.Fieldset(
+            'Personal information',
+            crispy_forms.layout.HTML("""
+                <div class="alert alert-info" role="alert">
+                    A National Identity Number or Passport Number is required for registrants under the .se and .nu domains.
+                </div>
+            """),
+            'identity_number',
+        ))
 
 class AddressForm(forms.ModelForm):
-    def __init__(self, *args, show_fi=True, **kwargs):
+    def __init__(self, *args, show_fi=True, show_se=True, **kwargs):
         super().__init__(*args, **kwargs)
         this_year = datetime.date.today().year
         self.fields['description'].help_text = "Something descriptive of the address so you can find it later"
@@ -115,18 +153,7 @@ class AddressForm(forms.ModelForm):
                 'organisation',
             )
         ]
-        if show_fi:
-            layout.append(crispy_forms.layout.Fieldset(
-                'Personal information',
-                crispy_forms.layout.HTML("""
-                    <div class="alert alert-info" role="alert">
-                        Birthday is required for foreign personal registrants under the .fi domain<br/>
-                        National identity number is required for Finnish registrants under the .fi domain<br/>
-                    </div>
-                """),
-                'birthday',
-                'identity_number',
-            ))
+        add_fi_se_notices(layout, show_fi, show_se)
 
         layout.extend([
             crispy_forms.layout.HTML("<hr/>"),
@@ -236,7 +263,7 @@ class ContactAndAddressForm(forms.Form):
     disclose_fax = forms.BooleanField(required=False)
     disclose_email = forms.BooleanField(required=False)
 
-    def __init__(self, *args, show_fi=True, **kwargs):
+    def __init__(self, *args, show_fi=True, show_se=True, **kwargs):
         super().__init__(*args, **kwargs)
         this_year = datetime.date.today().year
         self.fields['birthday'].widget = forms.SelectDateWidget(years=range(this_year - 99, this_year))
@@ -254,18 +281,7 @@ class ContactAndAddressForm(forms.Form):
                 'organisation',
             )
         ]
-        if show_fi:
-            layout.append(crispy_forms.layout.Fieldset(
-                'Personal information',
-                crispy_forms.layout.HTML("""
-                    <div class="alert alert-info" role="alert">
-                        Birthday is required for foreign personal registrants under the .fi domain<br/>
-                        National identity number is required for Finnish registrants under the .fi domain<br/>
-                    </div>
-                """),
-                'birthday',
-                'identity_number',
-            ))
+        add_fi_se_notices(layout, show_fi, show_se)
 
         layout.extend([
             crispy_forms.layout.HTML("<hr/>"),
