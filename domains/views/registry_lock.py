@@ -17,7 +17,12 @@ RP = webauthn.types.RelyingParty(
     name="Glauca Domains",
     icon="https://as207960.net/assets/img/logo.png"
 )
-FIDO_METADATA = webauthn.metadata.FIDOMetadata.from_metadata(webauthn.metadata.get_metadata())
+
+try:
+    with open(settings.FIDO_METADATA_FILE, "r") as f:
+        FIDO_METADATA = webauthn.metadata.FIDOMetadata.from_metadata(json.load(f))
+except FileNotFoundError:
+    FIDO_METADATA = None
 
 
 def get_user(domain: models.DomainRegistration) -> "webauthn.types.User":

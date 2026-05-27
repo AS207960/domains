@@ -218,6 +218,8 @@ SWITCH_REGISTRAR_PASSWORD = switch_conf["password"]
 LISTMONK_TEMPLATE_ID = 3
 LISTMONK_URL = "https://listmonk.as207960.net"
 
+FIDO_METADATA_FILE = os.path.join(BASE_DIR, "fido-metadata.json")
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',

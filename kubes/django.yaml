@@ -46,6 +46,7 @@ data:
   EURID_BILLING_CONTACT: "c41545983"
   LISTMONK_TEMPLATE_ID: "3"
   LISTMONK_URL: "https://listmonk.as207960.net"
+  FIDO_METADATA_FILE: "/fido/metadata.json"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,11 +79,13 @@ spec:
         - name: privkey
           secret:
             secretName: domains-jwt-priv
+        - name: fido-metadata
+          emptyDir: {}
       initContainers:
         - name: django
           image: as207960/domains-django:(version)
           imagePullPolicy: IfNotPresent
-          command: ["sh", "-c", "python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
+          command: ["sh", "-c", "python3 manage.py download-fido-metadata && python3 manage.py collectstatic --noinput && python3 manage.py migrate && python3 manage.py sync-keycloak"]
           volumeMounts:
             - mountPath: "/ca-cert/"
               name: ca-cert
@@ -90,6 +93,8 @@ spec:
               name: google-creds
             - mountPath: "/privkey/"
               name: privkey
+            - mountPath: "/fido/"
+              name: fido-metdata
           envFrom: &envFrom
             - configMapRef:
                 name: domains-django-conf
@@ -136,6 +141,8 @@ spec:
               name: google-creds
             - mountPath: "/privkey/"
               name: privkey
+            - mountPath: "/fido/"
+              name: fido-metdata
           envFrom: *envFrom
 ---
 apiVersion: networking.k8s.io/v1

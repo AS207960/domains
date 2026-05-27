@@ -264,6 +264,8 @@ CLOUDFLARE_API_EMAIL = os.getenv("CLOUDFLARE_API_EMAIL")
 ISNIC_CONTACT_EMAIL = os.getenv("ISNIC_CONTACT_EMAIL") or "isnic-auto@as207960.ltd.uk"
 RDAP_OBJECT_TAG = os.getenv("RDAP_OBJECT_TAG") or "GLAUCA"
 
+FIDO_METADATA_FILE = os.getenv("FIDO_METADATA_FILE")
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
