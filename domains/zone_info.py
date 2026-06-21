@@ -1331,6 +1331,10 @@ class DomainInfo:
         return self.registry == self.REGISTRY_EURID
 
     @property
+    def is_afnic(self):
+        return self.registry == self.REGISTRY_AFNIC
+
+    @property
     def use_epp_auth_code(self):
         return self.registry in (
             self.REGISTRY_SIDN,

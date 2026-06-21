@@ -94,7 +94,7 @@ spec:
             - mountPath: "/privkey/"
               name: privkey
             - mountPath: "/fido/"
-              name: fido-metdata
+              name: fido-metadata
           envFrom: &envFrom
             - configMapRef:
                 name: domains-django-conf
@@ -142,7 +142,7 @@ spec:
             - mountPath: "/privkey/"
               name: privkey
             - mountPath: "/fido/"
-              name: fido-metdata
+              name: fido-metadata
           envFrom: *envFrom
 ---
 apiVersion: networking.k8s.io/v1
