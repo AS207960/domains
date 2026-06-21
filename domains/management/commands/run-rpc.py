@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.db import transaction
 import pika
 from domains import models, tasks
 import domains.proto.billing_pb2
@@ -19,7 +20,7 @@ class Command(BaseCommand):
         channel.queue_declare(queue='domains_auto_renew_billing_notif', durable=True)
         channel.queue_declare(queue='domains_restore_billing_notif', durable=True)
 
-        channel.basic_qos(prefetch_count=1)
+        channel.basic_qos(prefetch_count=0)
         channel.basic_consume(
             queue='domains_registration_billing_notif',
             on_message_callback=self.domains_registration_callback,
@@ -58,36 +59,37 @@ class Command(BaseCommand):
         msg = domains.proto.billing_pb2.ChargeStateNotification()
         msg.ParseFromString(body)
 
-        order = model.objects.filter(charge_state_id=msg.charge_id).first()
-        if not order:
-            return
-        last_error = msg.last_error.value if msg.HasField("last_error") else None
-
-        if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
-            return
-
-        order.redirect_uri = msg.redirect_url
-        if msg.state == domains.proto.billing_pb2.FAILED:
-            order.state = order.STATE_FAILED
-            order.last_error = last_error
-            if failed_task:
-                order.save()
-                failed_task.delay(order.id)
+        with transaction.atomic():
+            order = model.objects.filter(charge_state_id=msg.charge_id).first()
+            if not order:
                 return
-        elif msg.state == domains.proto.billing_pb2.COMPLETED:
-            if order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT):
-                order.state = order.STATE_PROCESSING
-                order.save()
-                task.delay(order.id)
-                return
-        elif msg.state in (
-                domains.proto.billing_pb2.PENDING,
-                domains.proto.billing_pb2.PROCESSING
-        ):
-            if msg.state != order.STATE_PROCESSING:
-                order.state = order.STATE_NEEDS_PAYMENT
+            last_error = msg.last_error.value if msg.HasField("last_error") else None
 
-        order.save()
+            if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
+                return
+
+            order.redirect_uri = msg.redirect_url
+            if msg.state == domains.proto.billing_pb2.FAILED:
+                order.state = order.STATE_FAILED
+                order.last_error = last_error
+                if failed_task:
+                    order.save()
+                    failed_task.delay(order.id)
+                    return
+            elif msg.state == domains.proto.billing_pb2.COMPLETED:
+                if order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT):
+                    order.state = order.STATE_PROCESSING
+                    order.save()
+                    task.delay(order.id)
+                    return
+            elif msg.state in (
+                    domains.proto.billing_pb2.PENDING,
+                    domains.proto.billing_pb2.PROCESSING
+            ):
+                if msg.state != order.STATE_PROCESSING:
+                    order.state = order.STATE_NEEDS_PAYMENT
+
+            order.save()
 
     def domains_registration_callback(self, channel, method, properties, body):
         self.domains_callback(body, models.DomainRegistrationOrder, tasks.process_domain_registration_paid)
