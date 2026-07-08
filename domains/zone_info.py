@@ -2837,7 +2837,7 @@ else:
         )),
         ('sexy', DomainInfo(
             DomainInfo.REGISTRY_DONUTS,
-            MarkupPrice(5160, transfer=5160, restore=10800, currency=None, display_currency='USD', tld='sexy',
+            MarkupPrice(395532, transfer=395532, restore=10800, currency=None, display_currency='USD', tld='sexy',
                         markup=decimal.Decimal("1.2"))
         )),
         ('shoes', DomainInfo(
