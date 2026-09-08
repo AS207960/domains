@@ -911,7 +911,14 @@ def process_domain_transfer_contacts(transfer_order_id):
                 r.raise_for_status()
             elif zone.is_isnic:
                 update_req.new_registrant.value = registrant_id.registry_contact_id
-                apps.epp_client.stub.DomainUpdate(update_req)
+                try:
+                    apps.epp_client.stub.DomainUpdate(update_req)
+                except grpc.RpcError as rpc_error:
+                    error_code = utils.epp_grpc_error_code(rpc_error)
+                    if error_code == "invalid-argument":
+                        pass
+                    else:
+                        raise rpc_error
                 update_req = apps.epp_api.domain_pb2.DomainUpdateRequest(
                     name=domain_data.name,
                 )
