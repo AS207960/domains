@@ -892,7 +892,7 @@ def process_domain_transfer_contacts(transfer_order_id):
                 )
             except grpc.RpcError as rpc_error:
                 error_code = utils.epp_grpc_error_code(rpc_error)
-                if error_code == "invalid-argument":
+                if error_code == "required-parameter-missing":
                     registrant_id = None
                 else:
                     raise rpc_error
@@ -915,7 +915,7 @@ def process_domain_transfer_contacts(transfer_order_id):
                     apps.epp_client.stub.DomainUpdate(update_req)
                 except grpc.RpcError as rpc_error:
                     error_code = utils.epp_grpc_error_code(rpc_error)
-                    if error_code == "invalid-argument":
+                    if error_code == "required-parameter-missing":
                         pass
                     else:
                         raise rpc_error
@@ -957,7 +957,7 @@ def process_domain_transfer_contacts(transfer_order_id):
                 _update_contact("tech", tech_contact_id.registry_contact_id)
             except grpc.RpcError as rpc_error:
                 error_code = utils.epp_grpc_error_code(rpc_error)
-                if error_code == "invalid-argument":
+                if error_code == "required-parameter-missing":
                     pass
                 else:
                     raise rpc_error
@@ -970,7 +970,7 @@ def process_domain_transfer_contacts(transfer_order_id):
             _update_contact("admin", admin_contact_id.registry_contact_id)
         except grpc.RpcError as rpc_error:
             error_code = utils.epp_grpc_error_code(rpc_error)
-            if error_code == "invalid-argument":
+            if error_code == "required-parameter-missing":
                 pass
             else:
                 raise rpc_error
@@ -983,7 +983,7 @@ def process_domain_transfer_contacts(transfer_order_id):
             _update_contact("billing", billing_contact_id.registry_contact_id)
         except grpc.RpcError as rpc_error:
             error_code = utils.epp_grpc_error_code(rpc_error)
-            if error_code == "invalid-argument":
+            if error_code == "required-parameter-missing":
                 pass
             else:
                 raise rpc_error
@@ -993,7 +993,7 @@ def process_domain_transfer_contacts(transfer_order_id):
             apps.epp_client.stub.DomainUpdate(update_req)
         except grpc.RpcError as rpc_error:
             error_code = utils.epp_grpc_error_code(rpc_error)
-            if error_code == "invalid-argument":
+            if error_code == "required-parameter-missing":
                 pass
             else:
                 raise rpc_error
