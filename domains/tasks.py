@@ -886,10 +886,17 @@ def process_domain_transfer_contacts(transfer_order_id):
     if zone.registrant_supported and zone.registrant_change_supported:
         registrant_id = zone.registrant_proxy(domain_transfer_order.registrant_contact)
         if not registrant_id:
-            registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
-                domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
-            )
-        if domain_data.registrant != registrant_id.registry_contact_id:
+            try:
+                registrant_id = domain_transfer_order.registrant_contact.get_registry_id(
+                    domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Registrant
+                )
+            except grpc.RpcError as rpc_error:
+                error_code = utils.epp_grpc_error_code(rpc_error)
+                if error_code == "invalid-argument":
+                    registrant_id = None
+                else:
+                    raise rpc_error
+        if registrant_id and domain_data.registrant != registrant_id.registry_contact_id:
             if zone.keysys_owner_trade:
                 r = requests.get(
                     "https://api.rrpproxy.net/api/call",
@@ -936,22 +943,43 @@ def process_domain_transfer_contacts(transfer_order_id):
 
     if domain_transfer_order.tech_contact and zone.tech_supported:
         if not (zone.is_afnic and domain_transfer_order.tech_contact == domain_transfer_order.registrant_contact):
-            tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(
-                domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Tech
-            )
-            _update_contact("tech", tech_contact_id.registry_contact_id)
+            try:
+                tech_contact_id = domain_transfer_order.tech_contact.get_registry_id(
+                    domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Tech
+                )
+                _update_contact("tech", tech_contact_id.registry_contact_id)
+            except grpc.RpcError as rpc_error:
+                error_code = utils.epp_grpc_error_code(rpc_error)
+                if error_code == "invalid-argument":
+                    pass
+                else:
+                    raise rpc_error
 
     if domain_transfer_order.admin_contact and zone.admin_supported:
-        admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(
-            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Admin
-        )
-        _update_contact("admin", admin_contact_id.registry_contact_id)
+        try:
+            admin_contact_id = domain_transfer_order.admin_contact.get_registry_id(
+                domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Admin
+            )
+            _update_contact("admin", admin_contact_id.registry_contact_id)
+        except grpc.RpcError as rpc_error:
+            error_code = utils.epp_grpc_error_code(rpc_error)
+            if error_code == "invalid-argument":
+                pass
+            else:
+                raise rpc_error
 
     if domain_transfer_order.billing_contact and zone.billing_supported:
-        billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(
-            domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Billing
-        )
-        _update_contact("billing", billing_contact_id.registry_contact_id)
+        try:
+            billing_contact_id = domain_transfer_order.billing_contact.get_registry_id(
+                domain_data.registry_name, zone, role=apps.epp_api.ContactRole.Billing
+            )
+            _update_contact("billing", billing_contact_id.registry_contact_id)
+        except grpc.RpcError as rpc_error:
+            error_code = utils.epp_grpc_error_code(rpc_error)
+            if error_code == "invalid-argument":
+                pass
+            else:
+                raise rpc_error
 
     if should_send:
         apps.epp_client.stub.DomainUpdate(update_req)
