@@ -522,13 +522,11 @@ class DomainInfo:
     REGISTRY_NOMINET_RRPPROXY = "nominet-rrpproxy"
     REGISTRY_SWITCH = "switch"
     REGISTRY_TRAFICOM = "traficom"
-    REGISTRY_AFILIAS = "afilias"
+    REGISTRY_IDENTITY_DIGITAL = "identity-digital"
+    REGISTRY_IDENTITY_DIGITAL_RRPPROXY = "identity-digital-rrpproxy"
     REGISTRY_AFNIC = "afnic"
     REGISTRY_DENIC = "denic"
     REGISTRY_VERISIGN = "verisign"
-    REGISTRY_DONUTS = "donuts"
-    REGISTRY_DONUTS_DIRECT = "donuts-direct"
-    REGISTRY_DONUTS_THIN = "donuts-thin"
     REGISTRY_VERISIGN_COMNET = "verisign-comnet"
     REGISTRY_PIR = "pir"
     REGISTRY_CENTRALNIC_CCTLD = "centralni-ccctld"
@@ -623,6 +621,8 @@ class DomainInfo:
             return 2, 4
         elif self.registry == self.REGISTRY_ISNIC:
             return 1, 2, 3, 4
+        elif self.registry == self.REGISTRY_IDENTITY_DIGITAL:
+            return 2, 4, 5, 6
         elif self.registry in (self.REGISTRY_MNI, self.REGISTRY_ST):
             return ()
         else:
@@ -671,8 +671,8 @@ class DomainInfo:
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_KENIC,
             self.REGISTRY_EURID,
-            self.REGISTRY_AFILIAS,
-            self.REGISTRY_DONUTS,
+            self.REGISTRY_IDENTITY_DIGITAL,
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC,
@@ -761,8 +761,7 @@ class DomainInfo:
             self.REGISTRY_VERISIGN,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_EURID,
-            self.REGISTRY_DONUTS_DIRECT,
-            self.REGISTRY_DONUTS_THIN,
+            self.REGISTRY_IDENTITY_DIGITAL,
         )
 
     @property
@@ -810,7 +809,7 @@ class DomainInfo:
     @property
     def disclosure_supported(self):
         return self.registry not in (
-            self.REGISTRY_AFILIAS,
+            self.REGISTRY_IDENTITY_DIGITAL,
             self.REGISTRY_GODADDY_CCTLD,
             self.REGISTRY_EURID,
         )
@@ -845,9 +844,6 @@ class DomainInfo:
             self.REGISTRY_CENTRALNIC,
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_NOMINET_GTLD,
-            self.REGISTRY_DONUTS,
-            self.REGISTRY_DONUTS_DIRECT,
-            self.REGISTRY_DONUTS_THIN,
             self.REGISTRY_ZODIAC_LEO,
             self.REGISTRY_GMO,
             self.REGISTRY_DOT_STRATEGY,
@@ -859,7 +855,8 @@ class DomainInfo:
             self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_INTERLINK,
             self.REGISTRY_CLUB_DOMAINS,
-            self.REGISTRY_AFILIAS,
+            self.REGISTRY_IDENTITY_DIGITAL,
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             self.REGISTRY_MINDS_MACHINES,
             self.REGISTRY_INFIBEAM,
             self.REGISTRY_DNSBELGIUM,
@@ -908,7 +905,7 @@ class DomainInfo:
     def pre_transfer_query_supported(self):
         return self.registry in (
             self.REGISTRY_SWITCH,
-            self.REGISTRY_AFILIAS,
+            self.REGISTRY_IDENTITY_DIGITAL,
             self.REGISTRY_NOMINET,
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
@@ -1024,7 +1021,6 @@ class DomainInfo:
     def registrant_supported(self):
         return self.registry not in (
             self.REGISTRY_VERISIGN,
-            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1060,15 +1056,13 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID,
-            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
     def admin_required(self):
         return self.registry in (
-            self.REGISTRY_AFILIAS,
-            self.REGISTRY_DONUTS,
-            self.REGISTRY_DONUTS_THIN,
+            self.REGISTRY_IDENTITY_DIGITAL,
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC_CCTLD,
@@ -1139,15 +1133,13 @@ class DomainInfo:
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_TRAFICOM,
             self.REGISTRY_VERISIGN,
-            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
     def tech_required(self):
         return self.registry in (
-            self.REGISTRY_AFILIAS,
-            self.REGISTRY_DONUTS,
-            self.REGISTRY_DONUTS_THIN,
+            self.REGISTRY_IDENTITY_DIGITAL,
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC_CCTLD,
@@ -1224,14 +1216,13 @@ class DomainInfo:
             self.REGISTRY_DNSBELGIUM,
             self.REGISTRY_ISNIC,
             self.REGISTRY_EURID,
-            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
     def billing_required(self):
         return self.registry in (
-            self.REGISTRY_AFILIAS,
-            self.REGISTRY_DONUTS,
+            self.REGISTRY_IDENTITY_DIGITAL,
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_PIR,
             self.REGISTRY_CENTRALNIC_CCTLD,
@@ -1301,13 +1292,11 @@ class DomainInfo:
             self.REGISTRY_NOMINET_SPECIAL,
             self.REGISTRY_SWITCH,
             self.REGISTRY_TRAFICOM,
-            self.REGISTRY_AFILIAS,
+            self.REGISTRY_IDENTITY_DIGITAL,
             self.REGISTRY_CENTRALNIC_CCTLD,
             self.REGISTRY_VERISIGN,
             self.REGISTRY_ISNIC,
             self.REGISTRY_GODADDY_CCTLD,
-            self.REGISTRY_DONUTS_DIRECT,
-            self.REGISTRY_DONUTS_THIN,
         )
 
     @property
@@ -1432,7 +1421,7 @@ if settings.DEBUG:
             value=i
         ), range(1, 6))))),
         ('me', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             MarkupPrice(1400, currency='EUR', tld='me', markup=decimal.Decimal("1.25"))
         )),
         ('de', DomainInfo(
@@ -1504,7 +1493,7 @@ else:
                                   "your previous registrar."
         )),
         ('me', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS_DIRECT,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1879, transfer=1879, restore=5368)
         )),
         ('pw', DomainInfo(
@@ -1835,17 +1824,17 @@ else:
                         markup=decimal.Decimal("1.7"))
         )),
         ('info', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2874, transfer=2874, restore=12600, currency=None, display_currency='USD', tld='info',
                         markup=decimal.Decimal("1.4"))
         )),
         ('pet', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3097, transfer=3097, restore=12150, currency=None, display_currency='USD', tld='pet',
                         markup=decimal.Decimal("1.35"))
         )),
         ('pink', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3192, transfer=3192, restore=117, currency=None, display_currency='USD', tld='pink',
                         markup=decimal.Decimal("1.30"))
         )),
@@ -1890,97 +1879,97 @@ else:
                         markup=decimal.Decimal("1.4"))
         )),
         ('business', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='business',
                         markup=decimal.Decimal("1.3"))
         )),
         ('pizza', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(9363, transfer=9363, restore=12960, currency=None, display_currency='USD', tld='pizza',
                         markup=decimal.Decimal("1.2"))
         )),
         ('systems', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='systems',
                         markup=decimal.Decimal("1.3"))
         )),
         ('email', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='email',
                         markup=decimal.Decimal("1.3"))
         )),
         ('academy', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='academy',
                         markup=decimal.Decimal("1.2"))
         )),
         ('live', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='live',
                         markup=decimal.Decimal("1.3"))
         )),
         ('studio', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='studio',
                         markup=decimal.Decimal("1.3"))
         )),
         ('rocks', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2513, transfer=2513, restore=15120, currency=None, display_currency='USD', tld='rocks',
                         markup=decimal.Decimal("1.4"))
         )),
         ('accountants', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='accountants',
                         markup=decimal.Decimal("1.2"))
         )),
         ('actor', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(6561, transfer=6561, restore=12960, currency=None, display_currency='USD', tld='actor',
                         markup=decimal.Decimal("1.2"))
         )),
         ('agency', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=12960, currency=None, display_currency='USD', tld='agency',
                         markup=decimal.Decimal("1.2"))
         )),
         ('apartments', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='apartments',
                         markup=decimal.Decimal("1.2"))
         )),
         ('associates', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='associates',
                         markup=decimal.Decimal("1.2"))
         )),
         ('auction', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='auction',
                         markup=decimal.Decimal("1.2"))
         )),
         ('band', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='band',
                         markup=decimal.Decimal("1.3"))
         )),
         ('bargains', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='bargains',
                         markup=decimal.Decimal("1.2"))
         )),
         ('bike', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='bike',
                         markup=decimal.Decimal("1.2"))
         )),
         ('bingo', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='bingo',
                         markup=decimal.Decimal("1.2"))
         )),
         ('botique', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='academy',
                         markup=decimal.Decimal("1.2"))
         )),
@@ -1990,1083 +1979,1083 @@ else:
                         markup=decimal.Decimal("1.2"))
         )),
         ('builders', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='builders',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cab', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='cab',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cafe', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='cafe',
                         markup=decimal.Decimal("1.2"))
         )),
         ('camp', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8935, transfer=8935, restore=12960, currency=None, display_currency='USD', tld='camp',
                         markup=decimal.Decimal("1.2"))
         )),
         ('capital', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='capital',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cards', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4488, transfer=4488, restore=12960, currency=None, display_currency='USD', tld='cards',
                         markup=decimal.Decimal("1.2"))
         )),
         ('care', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4488, transfer=4488, restore=12960, currency=None, display_currency='USD', tld='care',
                         markup=decimal.Decimal("1.2"))
         )),
         ('careers', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='careers',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cash', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='cash',
                         markup=decimal.Decimal("1.2"))
         )),
         ('casino', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(21600, transfer=21600, restore=12960, currency=None, display_currency='USD', tld='casino',
                         markup=decimal.Decimal("1.2"))
         )),
         ('catering', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='catering',
                         markup=decimal.Decimal("1.2"))
         )),
         ('center', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='center',
                         markup=decimal.Decimal("1.3"))
         )),
         ('charity', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='charity',
                         markup=decimal.Decimal("1.2"))
         )),
         ('chat', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='chat',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cheap', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='cheap',
                         markup=decimal.Decimal("1.2"))
         )),
         ('church', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='church',
                         markup=decimal.Decimal("1.2"))
         )),
         ('city', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='city',
                         markup=decimal.Decimal("1.3"))
         )),
         ('cash', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='cash',
                         markup=decimal.Decimal("1.2"))
         )),
         ('claims', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='claims',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cleaning', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='cleaning',
                         markup=decimal.Decimal("1.2"))
         )),
         ('clinic', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='clinic',
                         markup=decimal.Decimal("1.2"))
         )),
         ('clothing', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='clothing',
                         markup=decimal.Decimal("1.2"))
         )),
         ('coach', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='coach',
                         markup=decimal.Decimal("1.2"))
         )),
         ('codes', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='codes',
                         markup=decimal.Decimal("1.2"))
         )),
         ('coffee', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='coffee',
                         markup=decimal.Decimal("1.2"))
         )),
         ('community', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='community',
                         markup=decimal.Decimal("1.2"))
         )),
         ('company', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='company',
                         markup=decimal.Decimal("1.3"))
         )),
         ('computer', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='computer',
                         markup=decimal.Decimal("1.2"))
         )),
         ('condos', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='condos',
                         markup=decimal.Decimal("1.2"))
         )),
         ('construction', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='construction',
                         markup=decimal.Decimal("1.2"))
         )),
         ('consulting', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='consulting',
                         markup=decimal.Decimal("1.2"))
         )),
         ('contact', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2376, transfer=2376, restore=16200, currency=None, display_currency='USD', tld='contact',
                         markup=decimal.Decimal("1.5"))
         )),
         ('contractors', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='contractors',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cool', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='cool',
                         markup=decimal.Decimal("1.2"))
         )),
         ('coupons', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='coupons',
                         markup=decimal.Decimal("1.2"))
         )),
         ('credit', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='credit',
                         markup=decimal.Decimal("1.2"))
         )),
         ('creditcard', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(21600, transfer=21600, restore=12960, currency=None, display_currency='USD', tld='creditcard',
                         markup=decimal.Decimal("1.2"))
         )),
         ('cruises', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='cruises',
                         markup=decimal.Decimal("1.2"))
         )),
         ('dance', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4077, transfer=4077, restore=13500, currency=None, display_currency='USD', tld='dance',
                         markup=decimal.Decimal("1.25"))
         )),
         ('dating', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='dating',
                         markup=decimal.Decimal("1.2"))
         )),
         ('deals', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='deals',
                         markup=decimal.Decimal("1.2"))
         )),
         ('degree', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(7600, transfer=7600, restore=12960, currency=None, display_currency='USD', tld='degree',
                         markup=decimal.Decimal("1.2"))
         )),
         ('delivery', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='delivery',
                         markup=decimal.Decimal("1.2"))
         )),
         ('democrat', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='democrat',
                         markup=decimal.Decimal("1.2"))
         )),
         ('dental', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='dental',
                         markup=decimal.Decimal("1.2"))
         )),
         ('dentist', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8774, transfer=8774, restore=12960, currency=None, display_currency='USD', tld='dentist',
                         markup=decimal.Decimal("1.2"))
         )),
         ('diamonds', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='diamonds',
                         markup=decimal.Decimal("1.2"))
         )),
         ('digital', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='digital',
                         markup=decimal.Decimal("1.2"))
         )),
         ('direct', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='direct',
                         markup=decimal.Decimal("1.2"))
         )),
         ('directory', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='directory',
                         markup=decimal.Decimal("1.3"))
         )),
         ('discount', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='discount',
                         markup=decimal.Decimal("1.2"))
         )),
         ('doctor', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='doctor',
                         markup=decimal.Decimal("1.2"))
         )),
         ('dog', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='dog',
                         markup=decimal.Decimal("1.2"))
         )),
         ('domains', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='domains',
                         markup=decimal.Decimal("1.2"))
         )),
         ('education', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='education',
                         markup=decimal.Decimal("1.3"))
         )),
         ('energy', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='energy',
                         markup=decimal.Decimal("1.2"))
         )),
         ('engineer', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='engineer',
                         markup=decimal.Decimal("1.2"))
         )),
         ('engineering', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='engineering',
                         markup=decimal.Decimal("1.2"))
         )),
         ('enterprises', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='enterprises',
                         markup=decimal.Decimal("1.3"))
         )),
         ('equipment', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='equipment',
                         markup=decimal.Decimal("1.3"))
         )),
         ('estate', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='estate',
                         markup=decimal.Decimal("1.2"))
         )),
         ('events', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='events',
                         markup=decimal.Decimal("1.2"))
         )),
         ('exchange', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='exchange',
                         markup=decimal.Decimal("1.2"))
         )),
         ('expert', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='expert',
                         markup=decimal.Decimal("1.2"))
         )),
         ('exposed', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='exposed',
                         markup=decimal.Decimal("1.3"))
         )),
         ('express', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='express',
                         markup=decimal.Decimal("1.2"))
         )),
         ('fail', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='fail',
                         markup=decimal.Decimal("1.2"))
         )),
         ('family', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='family',
                         markup=decimal.Decimal("1.2"))
         )),
         ('farm', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='farm',
                         markup=decimal.Decimal("1.2"))
         )),
         ('finance', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='finance',
                         markup=decimal.Decimal("1.2"))
         )),
         ('financial', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='financial',
                         markup=decimal.Decimal("1.2"))
         )),
         ('fish', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='fish',
                         markup=decimal.Decimal("1.2"))
         )),
         ('fitness', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='fitness',
                         markup=decimal.Decimal("1.2"))
         )),
         ('flights', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='flights',
                         markup=decimal.Decimal("1.2"))
         )),
         ('florist', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='florist',
                         markup=decimal.Decimal("1.2"))
         )),
         ('football', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='football',
                         markup=decimal.Decimal("1.3"))
         )),
         ('forsale', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='forsale',
                         markup=decimal.Decimal("1.2"))
         )),
         ('foundation', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='foundation',
                         markup=decimal.Decimal("1.2"))
         )),
         ('fund', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='fund',
                         markup=decimal.Decimal("1.2"))
         )),
         ('furniture', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='furniture',
                         markup=decimal.Decimal("1.2"))
         )),
         ('futbol', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2693, transfer=2693, restore=16200, currency=None, display_currency='USD', tld='futbol',
                         markup=decimal.Decimal("1.5"))
         )),
         ('fyi', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='fyi',
                         markup=decimal.Decimal("1.3"))
         )),
         ('gallery', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='gallery',
                         markup=decimal.Decimal("1.3"))
         )),
         ('games', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3529, transfer=3529, restore=14040, currency=None, display_currency='USD', tld='games',
                         markup=decimal.Decimal("1.3"))
         )),
         ('gifts', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='gifts',
                         markup=decimal.Decimal("1.2"))
         )),
         ('gives', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='gives',
                         markup=decimal.Decimal("1.2"))
         )),
         ('glass', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='glass',
                         markup=decimal.Decimal("1.2"))
         )),
         ('gmbh', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='gmbh',
                         markup=decimal.Decimal("1.2")),
             notice="This TLD is restricted to entities registered as a GmbH"
         )),
         ('gold', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='gold',
                         markup=decimal.Decimal("1.2"))
         )),
         ('golf', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='golf',
                         markup=decimal.Decimal("1.2"))
         )),
         ('graphics', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='graphics',
                         markup=decimal.Decimal("1.3"))
         )),
         ('gratis', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=12960, currency=None, display_currency='USD', tld='gratis',
                         markup=decimal.Decimal("1.3"))
         )),
         ('gripe', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='gripe',
                         markup=decimal.Decimal("1.2"))
         )),
         ('group', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3526, transfer=3526, restore=14040, currency=None, display_currency='USD', tld='group',
                         markup=decimal.Decimal("1.3"))
         )),
         ('guide', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='guide',
                         markup=decimal.Decimal("1.2"))
         )),
         ('guru', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='guru',
                         markup=decimal.Decimal("1.2"))
         )),
         ('haus', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='haus',
                         markup=decimal.Decimal("1.2"))
         )),
         ('healthcare', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='healthcare',
                         markup=decimal.Decimal("1.2"))
         )),
         ('hockey', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='hockey',
                         markup=decimal.Decimal("1.2"))
         )),
         ('holdings', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='holdings',
                         markup=decimal.Decimal("1.2"))
         )),
         ('holiday', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='holiday',
                         markup=decimal.Decimal("1.2"))
         )),
         ('hospital', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='hospital',
                         markup=decimal.Decimal("1.2"))
         )),
         ('house', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='house',
                         markup=decimal.Decimal("1.2"))
         )),
         ('immo', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='immo',
                         markup=decimal.Decimal("1.2"))
         )),
         ('immobilien', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='immobilien',
                         markup=decimal.Decimal("1.2"))
         )),
         ('industries', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='industries',
                         markup=decimal.Decimal("1.2"))
         )),
         ('insitute', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='institute',
                         markup=decimal.Decimal("1.3"))
         )),
         ('insure', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='insure',
                         markup=decimal.Decimal("1.2"))
         )),
         ('international', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='international',
                         markup=decimal.Decimal("1.3"))
         )),
         ('investments', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='investments',
                         markup=decimal.Decimal("1.2"))
         )),
         ('irish', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(6120, transfer=6120, restore=12960, currency=None, display_currency='USD', tld='irish',
                         markup=decimal.Decimal("1.2"))
         )),
         ('jetzt', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3742, transfer=3742, restore=14040, currency=None, display_currency='USD', tld='jetzt',
                         markup=decimal.Decimal("1.3"))
         )),
         ('jewelry', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='jewelry',
                         markup=decimal.Decimal("1.2"))
         )),
         ('kaufen', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='kaufen',
                         markup=decimal.Decimal("1.2"))
         )),
         ('kitchen', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='kitchen',
                         markup=decimal.Decimal("1.2"))
         )),
         ('land', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='land',
                         markup=decimal.Decimal("1.2"))
         )),
         ('lawyer', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8774, transfer=8774, restore=12960, currency=None, display_currency='USD', tld='lawyer',
                         markup=decimal.Decimal("1.2"))
         )),
         ('lease', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='lease',
                         markup=decimal.Decimal("1.2"))
         )),
         ('legal', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='legal',
                         markup=decimal.Decimal("1.2"))
         )),
         ('life', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='life',
                         markup=decimal.Decimal("1.2"))
         )),
         ('lighting', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='lighting',
                         markup=decimal.Decimal("1.3"))
         )),
         ('limited', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='limited',
                         markup=decimal.Decimal("1.2"))
         )),
         ('limo', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8935, transfer=8935, restore=12960, currency=None, display_currency='USD', tld='limo',
                         markup=decimal.Decimal("1.2"))
         )),
         ('loans', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='loans',
                         markup=decimal.Decimal("1.2"))
         )),
         ('ltd', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='ltd',
                         markup=decimal.Decimal("1.3"))
         )),
         ('maison', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='maison',
                         markup=decimal.Decimal("1.2"))
         )),
         ('management', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='management',
                         markup=decimal.Decimal("1.3"))
         )),
         ('market', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='market',
                         markup=decimal.Decimal("1.2"))
         )),
         ('marketing', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='marketing',
                         markup=decimal.Decimal("1.2"))
         )),
         ('mba', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='mba',
                         markup=decimal.Decimal("1.2"))
         )),
         ('media', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='media',
                         markup=decimal.Decimal("1.2"))
         )),
         ('memorial', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='memorial',
                         markup=decimal.Decimal("1.2"))
         )),
         ('moda', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='moda',
                         markup=decimal.Decimal("1.2"))
         )),
         ('money', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='money',
                         markup=decimal.Decimal("1.2"))
         )),
         ('mortgage', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(7600, transfer=7600, restore=12960, currency=None, display_currency='USD', tld='mortgage',
                         markup=decimal.Decimal("1.2"))
         )),
         ('movie', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(46008, transfer=46080, restore=12960, currency=None, display_currency='USD', tld='movie',
                         markup=decimal.Decimal("1.2"))
         )),
         ('network', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='network',
                         markup=decimal.Decimal("1.3"))
         )),
         ('news', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='news',
                         markup=decimal.Decimal("1.3"))
         )),
         ('ninja', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3529, transfer=3529, restore=14040, currency=None, display_currency='USD', tld='ninja',
                         markup=decimal.Decimal("1.3"))
         )),
         ('observer', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2256, transfer=2256, restore=48000, currency=None, display_currency='USD', tld='observer',
                         markup=decimal.Decimal("1.6"))
         )),
         ('partners', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='partners',
                         markup=decimal.Decimal("1.2"))
         )),
         ('parts', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='parts',
                         markup=decimal.Decimal("1.2"))
         )),
         ('photography', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(6754, transfer=6754, restore=11866, currency=None, display_currency='USD', tld='photography',
                         markup=decimal.Decimal("1.2"))
         )),
         ('photos', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5539, transfer=5539, restore=11866, currency=None, display_currency='USD', tld='photos',
                         markup=decimal.Decimal("1.2"))
         )),
         ('pictures', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(2407, transfer=2407, restore=16200, currency=None, display_currency='USD', tld='pictures',
                         markup=decimal.Decimal("1.5"))
         )),
         ('place', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4982, transfer=4982, restore=12960, currency=None, display_currency='USD', tld='place',
                         markup=decimal.Decimal("1.2"))
         )),
         ('plumbing', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='plumbing',
                         markup=decimal.Decimal("1.2"))
         )),
         ('plus', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='plus',
                         markup=decimal.Decimal("1.2"))
         )),
         ('productions', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='productions',
                         markup=decimal.Decimal("1.2"))
         )),
         ('properties', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='properties',
                         markup=decimal.Decimal("1.2"))
         )),
         ('pub', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='pub',
                         markup=decimal.Decimal("1.2"))
         )),
         ('recipies', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='recipies',
                         markup=decimal.Decimal("1.2"))
         )),
         ('rehab', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='rehab',
                         markup=decimal.Decimal("1.2"))
         )),
         ('reise', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='reise',
                         markup=decimal.Decimal("1.2"))
         )),
         ('reisen', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='reisen',
                         markup=decimal.Decimal("1.3"))
         )),
         ('rentals', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='rentals',
                         markup=decimal.Decimal("1.2"))
         )),
         ('repair', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='repair',
                         markup=decimal.Decimal("1.2"))
         )),
         ('report', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='report',
                         markup=decimal.Decimal("1.3"))
         )),
         ('republican', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='republican',
                         markup=decimal.Decimal("1.2"))
         )),
         ('restaurant', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='restaurance',
                         markup=decimal.Decimal("1.2"))
         )),
         ('reviews', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4077, transfer=4077, restore=13500, currency=None, display_currency='USD', tld='reviews',
                         markup=decimal.Decimal("1.25"))
         )),
         ('rip', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3529, transfer=3529, restore=14040, currency=None, display_currency='USD', tld='rip',
                         markup=decimal.Decimal("1.3"))
         )),
         ('run', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='run',
                         markup=decimal.Decimal("1.3"))
         )),
         ('sale', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='sale',
                         markup=decimal.Decimal("1.2"))
         )),
         ('salon', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8935, transfer=8935, restore=12960, currency=None, display_currency='USD', tld='salon',
                         markup=decimal.Decimal("1.2"))
         )),
         ('sarl', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='sarl',
                         markup=decimal.Decimal("1.2"))
         )),
         ('school', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='school',
                         markup=decimal.Decimal("1.2"))
         )),
         ('schule', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='schule',
                         markup=decimal.Decimal("1.3"))
         )),
         ('services', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='services',
                         markup=decimal.Decimal("1.2"))
         )),
         ('sexy', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(395532, transfer=395532, restore=10800, currency=None, display_currency='USD', tld='sexy',
                         markup=decimal.Decimal("1.2"))
         )),
         ('shoes', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='shoes',
                         markup=decimal.Decimal("1.2"))
         )),
         ('shopping', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='shopping',
                         markup=decimal.Decimal("1.2"))
         )),
         ('show', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='show',
                         markup=decimal.Decimal("1.2"))
         )),
         ('singles', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5230, transfer=5230, restore=12960, currency=None, display_currency='USD', tld='singles',
                         markup=decimal.Decimal("1.2"))
         )),
         ('soccer', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='soccer',
                         markup=decimal.Decimal("1.3"))
         )),
         ('social', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='social',
                         markup=decimal.Decimal("1.2"))
         )),
         ('software', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='software',
                         markup=decimal.Decimal("1.2"))
         )),
         ('solar', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='solar',
                         markup=decimal.Decimal("1.2"))
         )),
         ('solutions', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='solutions',
                         markup=decimal.Decimal("1.3"))
         )),
         ('style', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='style',
                         markup=decimal.Decimal("1.2"))
         )),
         ('supplies', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='supplies',
                         markup=decimal.Decimal("1.3"))
         )),
         ('supply', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='supply',
                         markup=decimal.Decimal("1.3"))
         )),
         ('support', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='support',
                         markup=decimal.Decimal("1.3"))
         )),
         ('surgery', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='surgery',
                         markup=decimal.Decimal("1.2"))
         )),
         ('tax', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='tax',
                         markup=decimal.Decimal("1.2"))
         )),
         ('taxi', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='taxi',
                         markup=decimal.Decimal("1.2"))
         )),
         ('team', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='team',
                         markup=decimal.Decimal("1.2"))
         )),
         ('technology', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='technology',
                         markup=decimal.Decimal("1.3"))
         )),
         ('tennis', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='tennis',
                         markup=decimal.Decimal("1.2"))
         )),
         ('theatre', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(108000, transfer=108000, restore=7200, currency=None, display_currency='USD', tld='theatre',
                         markup=decimal.Decimal("1.2"))
         )),
         ('tienda', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='tienda',
                         markup=decimal.Decimal("1.2"))
         )),
         ('tips', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='tips',
                         markup=decimal.Decimal("1.3"))
         )),
         ('tires', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15682, transfer=15682, restore=12960, currency=None, display_currency='USD', tld='tires',
                         markup=decimal.Decimal("1.2"))
         )),
         ('today', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='today',
                         markup=decimal.Decimal("1.3"))
         )),
         ('tools', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='tools',
                         markup=decimal.Decimal("1.2"))
         )),
         ('tours', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='tours',
                         markup=decimal.Decimal("1.2"))
         )),
         ('town', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='town',
                         markup=decimal.Decimal("1.2"))
         )),
         ('toys', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='toys',
                         markup=decimal.Decimal("1.2"))
         )),
         ('training', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='training',
                         markup=decimal.Decimal("1.2"))
         )),
         ('travel', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(15552, transfer=15552, restore=12960, currency=None, display_currency='USD', tld='travel',
                         markup=decimal.Decimal("1.2"))
         )),
         ('university', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='university',
                         markup=decimal.Decimal("1.2"))
         )),
         ('vacations', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='vacations',
                         markup=decimal.Decimal("1.2"))
         )),
         ('ventures', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='ventures',
                         markup=decimal.Decimal("1.2"))
         )),
         ('vet', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='vet',
                         markup=decimal.Decimal("1.2"))
         )),
         ('viajes', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8688, transfer=8688, restore=12960, currency=None, display_currency='USD', tld='viajes',
                         markup=decimal.Decimal("1.2"))
         )),
         ('video', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4240, transfer=4240, restore=14040, currency=None, display_currency='USD', tld='video',
                         markup=decimal.Decimal("1.2"))
         )),
         ('villas', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='villas',
                         markup=decimal.Decimal("1.2"))
         )),
         ('vin', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='vin',
                         markup=decimal.Decimal("1.2"))
         )),
         ('vision', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='vision',
                         markup=decimal.Decimal("1.2"))
         )),
         ('voyage', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='voyage',
                         markup=decimal.Decimal("1.2"))
         )),
         ('watch', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='watch',
                         markup=decimal.Decimal("1.2"))
         )),
         ('wine', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(8811, transfer=8811, restore=12960, currency=None, display_currency='USD', tld='wine',
                         markup=decimal.Decimal("1.2"))
         )),
         ('works', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='works',
                         markup=decimal.Decimal("1.2"))
         )),
         ('world', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='world',
                         markup=decimal.Decimal("1.2"))
         )),
         ('wtf', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='wtf',
                         markup=decimal.Decimal("1.2"))
         )),
         ('zone', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='zone',
                         markup=decimal.Decimal("1.2"))
         )),
@@ -3116,95 +3105,95 @@ else:
                         markup=decimal.Decimal("1.4"))
         )),
         ('ai', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(6750, transfer=6750, restore=13500)
         )),
         ('ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(7166, transfer=7166, restore=7166)
         )),
         ('com.ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(4750, transfer=4750, restore=7166)
         )),
         ('net.ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(4750, transfer=4750, restore=7166)
         )),
         ('org.ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(4750, transfer=4750, restore=7166)
         )),
         ('nom.ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(4750, transfer=4750, restore=7166)
         )),
         ('co.ag', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(4750, transfer=4750, restore=7166)
         )),
         ('bz', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(2000, transfer=2000, restore=7250)
         )),
         ('com.bz', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(2000, transfer=2000, restore=7250)
         )),
         ('net.bz', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(2000, transfer=2000, restore=7250)
         )),
         ('co.bz', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(2000, transfer=2000, restore=7250)
         )),
         ('lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('com.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('net.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('org.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('co.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('p.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         ('l.lc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(1583, transfer=1583, restore=9166)
         )),
         # ('mn', DomainInfo(
-        #     DomainInfo.REGISTRY_AFILIAS,
+        #     DomainInfo.REGISTRY_IDENTITY_DIGITAL,
         #     SimplePrice(3583, transfer=3583, restore=4166)
         # )),
         ('pr', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(95833, transfer=95833, restore=95833)
         )),
         ('sc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(7750, transfer=7750, restore=7750)
         )),
         ('vc', DomainInfo(
-            DomainInfo.REGISTRY_DONUTS_THIN,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL,
             SimplePrice(2633, transfer=2633, restore=7916)
         )),
         ('llc', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4550, transfer=4550, restore=10800, currency=None, display_currency='USD', tld='llc',
                         markup=decimal.Decimal("1.2"))
         )),
@@ -3539,12 +3528,12 @@ else:
                         markup=decimal.Decimal("1.2"))
         )),
         ('blue', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(4040, restore=11700, currency=None, display_currency='USD', tld='blue',
                         markup=decimal.Decimal("1.3"))
         )),
         ('red', DomainInfo(
-            DomainInfo.REGISTRY_AFILIAS,
+            DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3826, restore=11700, currency=None, display_currency='USD', tld='red',
                         markup=decimal.Decimal("1.3"))
         )),
