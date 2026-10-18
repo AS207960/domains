@@ -124,16 +124,20 @@ class Command(BaseCommand):
             domain_transfer_order = models.DomainTransferOrder.objects.filter(domain__iexact=domain.name).first()
             if domain.client_id != m.nominet_domain_registrar_change.registrar_tag:
                 if m.nominet_domain_registrar_change.case_id:
-                    if domain_transfer_order:
-                        apps.epp_client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
-                            case_id=m.nominet_domain_registrar_change.case_id.value,
-                            registry_name=registry_name,
-                        ))
-                    else:
-                        apps.epp_client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
-                            case_id=m.nominet_domain_registrar_change.case_id.value,
-                            registry_name=registry_name,
-                        ))
+                    try:
+                        if domain_transfer_order:
+                            apps.epp_client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
+                                case_id=m.nominet_domain_registrar_change.case_id.value,
+                                registry_name=registry_name,
+                            ))
+                        else:
+                            apps.epp_client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
+                                case_id=m.nominet_domain_registrar_change.case_id.value,
+                                registry_name=registry_name,
+                            ))
+                    except grpc.RpcError as e:
+                        print(f"Can't action pending transfer for {domain.domain}: {e.details()}")
+                        return
             else:
                 if not domain_transfer_order:
                     print(f"Unknown domain transfer: {m.domain_transfer.name}", flush=True)

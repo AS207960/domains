@@ -901,6 +901,7 @@ spec:
             - name: privkey
               secret:
                 secretName: domains-jwt-priv
+          restartPolicy: OnFailure
           containers:
             - name: poll
               image: as207960/domains-django:(version)
