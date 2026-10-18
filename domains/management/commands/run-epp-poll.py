@@ -136,7 +136,7 @@ class Command(BaseCommand):
                                 registry_name=registry_name,
                             ))
                     except grpc.RpcError as e:
-                        print(f"Can't action pending transfer for {domain.domain}: {e.details()}")
+                        print(f"Can't action pending transfer for {domain.name}: {e.details()}")
                         return
             else:
                 if not domain_transfer_order:
