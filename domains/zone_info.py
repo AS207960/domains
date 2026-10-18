@@ -1043,6 +1043,7 @@ class DomainInfo:
             self.REGISTRY_EURID_RRPPROXY,
             self.REGISTRY_SIDN,
             self.REGISTRY_CORE,
+            self.REGISTRY_DNSBELGIUM,
         )
 
     @property
