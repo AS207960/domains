@@ -3,30 +3,30 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _StatusType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _StatusTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_StatusType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _StatusTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_StatusType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Custom: _StatusType.ValueType  # 0
     PendingValidation: _StatusType.ValueType  # 1
     Validated: _StatusType.ValueType  # 2
@@ -44,42 +44,45 @@ Invalid: StatusType.ValueType  # 3
 PendingAllocation: StatusType.ValueType  # 4
 Allocated: StatusType.ValueType  # 5
 Rejected: StatusType.ValueType  # 6
-global___StatusType = StatusType
+Global___StatusType: _TypeAlias = StatusType  # noqa: Y015
 
-@typing.final
-class Status(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Status(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUS_TYPE_FIELD_NUMBER: builtins.int
-    STATUS_NAME_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    status_type: global___StatusType.ValueType
-    @property
-    def status_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def message(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    STATUS_TYPE_FIELD_NUMBER: _builtins.int
+    STATUS_NAME_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    status_type: Global___StatusType.ValueType
+    @_builtins.property
+    def status_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def message(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        status_type: global___StatusType.ValueType = ...,
-        status_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        message: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        status_type: Global___StatusType.ValueType = ...,
+        status_name: _wrappers_pb2.StringValue | None = ...,
+        message: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["message", b"message", "status_name", b"status_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["message", b"message", "status_name", b"status_name", "status_type", b"status_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status_name", b"status_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status_name", b"status_name", "status_type", b"status_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Status = Status
+Global___Status: _TypeAlias = Status  # noqa: Y015
 
-@typing.final
-class Phase(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Phase(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _PhaseType:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _PhaseTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Phase._PhaseType.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _PhaseTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[Phase._PhaseType.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         Open: Phase._PhaseType.ValueType  # 0
         Sunrise: Phase._PhaseType.ValueType  # 1
         Landrush: Phase._PhaseType.ValueType  # 2
@@ -93,158 +96,176 @@ class Phase(google.protobuf.message.Message):
     Claims: Phase.PhaseType.ValueType  # 3
     Custom: Phase.PhaseType.ValueType  # 4
 
-    PHASE_TYPE_FIELD_NUMBER: builtins.int
-    PHASE_NAME_FIELD_NUMBER: builtins.int
-    phase_type: global___Phase.PhaseType.ValueType
-    @property
-    def phase_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    PHASE_TYPE_FIELD_NUMBER: _builtins.int
+    PHASE_NAME_FIELD_NUMBER: _builtins.int
+    phase_type: Global___Phase.PhaseType.ValueType
+    @_builtins.property
+    def phase_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        phase_type: global___Phase.PhaseType.ValueType = ...,
-        phase_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        phase_type: Global___Phase.PhaseType.ValueType = ...,
+        phase_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["phase_name", b"phase_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["phase_name", b"phase_name", "phase_type", b"phase_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["phase_name", b"phase_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["phase_name", b"phase_name", "phase_type", b"phase_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Phase = Phase
+Global___Phase: _TypeAlias = Phase  # noqa: Y015
 
-@typing.final
-class ClaimsKey(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ClaimsKey(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    KEY_FIELD_NUMBER: builtins.int
-    VALIDATOR_ID_FIELD_NUMBER: builtins.int
-    key: builtins.str
-    @property
-    def validator_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    KEY_FIELD_NUMBER: _builtins.int
+    VALIDATOR_ID_FIELD_NUMBER: _builtins.int
+    key: _builtins.str
+    @_builtins.property
+    def validator_id(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        key: builtins.str = ...,
-        validator_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        key: _builtins.str = ...,
+        validator_id: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["validator_id", b"validator_id"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["key", b"key", "validator_id", b"validator_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["validator_id", b"validator_id"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["key", b"key", "validator_id", b"validator_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ClaimsKey = ClaimsKey
+Global___ClaimsKey: _TypeAlias = ClaimsKey  # noqa: Y015
 
-@typing.final
-class LaunchInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LaunchInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    INCLUDE_MARK_FIELD_NUMBER: builtins.int
-    PHASE_FIELD_NUMBER: builtins.int
-    APPLICATION_ID_FIELD_NUMBER: builtins.int
-    include_mark: builtins.bool
-    @property
-    def phase(self) -> global___Phase: ...
-    @property
-    def application_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    INCLUDE_MARK_FIELD_NUMBER: _builtins.int
+    PHASE_FIELD_NUMBER: _builtins.int
+    APPLICATION_ID_FIELD_NUMBER: _builtins.int
+    include_mark: _builtins.bool
+    @_builtins.property
+    def phase(self) -> Global___Phase: ...
+    @_builtins.property
+    def application_id(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        include_mark: builtins.bool = ...,
-        phase: global___Phase | None = ...,
-        application_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        include_mark: _builtins.bool = ...,
+        phase: Global___Phase | None = ...,
+        application_id: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["application_id", b"application_id", "phase", b"phase"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["application_id", b"application_id", "include_mark", b"include_mark", "phase", b"phase"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["application_id", b"application_id", "phase", b"phase"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["application_id", b"application_id", "include_mark", b"include_mark", "phase", b"phase"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LaunchInfo = LaunchInfo
+Global___LaunchInfo: _TypeAlias = LaunchInfo  # noqa: Y015
 
-@typing.final
-class LaunchInfoData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LaunchInfoData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PHASE_FIELD_NUMBER: builtins.int
-    APPLICATION_ID_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    MARK_FIELD_NUMBER: builtins.int
-    @property
-    def phase(self) -> global___Phase: ...
-    @property
-    def application_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def status(self) -> global___Status: ...
-    @property
-    def mark(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    PHASE_FIELD_NUMBER: _builtins.int
+    APPLICATION_ID_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    MARK_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def phase(self) -> Global___Phase: ...
+    @_builtins.property
+    def application_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def status(self) -> Global___Status: ...
+    @_builtins.property
+    def mark(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        phase: global___Phase | None = ...,
-        application_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        status: global___Status | None = ...,
-        mark: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        phase: Global___Phase | None = ...,
+        application_id: _wrappers_pb2.StringValue | None = ...,
+        status: Global___Status | None = ...,
+        mark: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["application_id", b"application_id", "mark", b"mark", "phase", b"phase", "status", b"status"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["application_id", b"application_id", "mark", b"mark", "phase", b"phase", "status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["application_id", b"application_id", "mark", b"mark", "phase", b"phase", "status", b"status"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["application_id", b"application_id", "mark", b"mark", "phase", b"phase", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LaunchInfoData = LaunchInfoData
+Global___LaunchInfoData: _TypeAlias = LaunchInfoData  # noqa: Y015
 
-@typing.final
-class CodeMark(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CodeMark(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CODE_FIELD_NUMBER: builtins.int
-    VALIDATOR_FIELD_NUMBER: builtins.int
-    MARK_FIELD_NUMBER: builtins.int
-    @property
-    def code(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def validator(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def mark(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    CODE_FIELD_NUMBER: _builtins.int
+    VALIDATOR_FIELD_NUMBER: _builtins.int
+    MARK_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def code(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def validator(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def mark(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        code: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        validator: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        mark: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        code: _wrappers_pb2.StringValue | None = ...,
+        validator: _wrappers_pb2.StringValue | None = ...,
+        mark: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["code", b"code", "mark", b"mark", "validator", b"validator"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["code", b"code", "mark", b"mark", "validator", b"validator"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["code", b"code", "mark", b"mark", "validator", b"validator"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["code", b"code", "mark", b"mark", "validator", b"validator"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CodeMark = CodeMark
+Global___CodeMark: _TypeAlias = CodeMark  # noqa: Y015
 
-@typing.final
-class Notice(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Notice(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NOTICE_ID_FIELD_NUMBER: builtins.int
-    VALIDATOR_FIELD_NUMBER: builtins.int
-    NOT_AFTER_FIELD_NUMBER: builtins.int
-    ACCEPTED_AFTER_FIELD_NUMBER: builtins.int
-    notice_id: builtins.str
-    @property
-    def validator(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def not_after(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def accepted_after(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    NOTICE_ID_FIELD_NUMBER: _builtins.int
+    VALIDATOR_FIELD_NUMBER: _builtins.int
+    NOT_AFTER_FIELD_NUMBER: _builtins.int
+    ACCEPTED_AFTER_FIELD_NUMBER: _builtins.int
+    notice_id: _builtins.str
+    @_builtins.property
+    def validator(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def not_after(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def accepted_after(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        notice_id: builtins.str = ...,
-        validator: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        not_after: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        accepted_after: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        notice_id: _builtins.str = ...,
+        validator: _wrappers_pb2.StringValue | None = ...,
+        not_after: _timestamp_pb2.Timestamp | None = ...,
+        accepted_after: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["accepted_after", b"accepted_after", "not_after", b"not_after", "validator", b"validator"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["accepted_after", b"accepted_after", "not_after", b"not_after", "notice_id", b"notice_id", "validator", b"validator"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["accepted_after", b"accepted_after", "not_after", b"not_after", "validator", b"validator"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted_after", b"accepted_after", "not_after", b"not_after", "notice_id", b"notice_id", "validator", b"validator"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Notice = Notice
+Global___Notice: _TypeAlias = Notice  # noqa: Y015
 
-@typing.final
-class LaunchCreate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LaunchCreate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _CreateType:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _CreateTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[LaunchCreate._CreateType.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _CreateTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[LaunchCreate._CreateType.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         Registration: LaunchCreate._CreateType.ValueType  # 0
         Application: LaunchCreate._CreateType.ValueType  # 1
 
@@ -252,75 +273,84 @@ class LaunchCreate(google.protobuf.message.Message):
     Registration: LaunchCreate.CreateType.ValueType  # 0
     Application: LaunchCreate.CreateType.ValueType  # 1
 
-    PHASE_FIELD_NUMBER: builtins.int
-    CODE_MARK_FIELD_NUMBER: builtins.int
-    NOTICES_FIELD_NUMBER: builtins.int
-    SIGNED_MARK_FIELD_NUMBER: builtins.int
-    CREATE_TYPE_FIELD_NUMBER: builtins.int
-    CORE_NIC_AUGMENTED_MARK_FIELD_NUMBER: builtins.int
-    create_type: global___LaunchCreate.CreateType.ValueType
-    @property
-    def phase(self) -> global___Phase: ...
-    @property
-    def code_mark(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CodeMark]: ...
-    @property
-    def notices(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Notice]: ...
-    @property
-    def signed_mark(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def core_nic_augmented_mark(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CoreNICApplicationInfo]: ...
+    PHASE_FIELD_NUMBER: _builtins.int
+    CODE_MARK_FIELD_NUMBER: _builtins.int
+    NOTICES_FIELD_NUMBER: _builtins.int
+    SIGNED_MARK_FIELD_NUMBER: _builtins.int
+    CREATE_TYPE_FIELD_NUMBER: _builtins.int
+    CORE_NIC_AUGMENTED_MARK_FIELD_NUMBER: _builtins.int
+    create_type: Global___LaunchCreate.CreateType.ValueType
+    @_builtins.property
+    def phase(self) -> Global___Phase: ...
+    @_builtins.property
+    def code_mark(self) -> _containers.RepeatedCompositeFieldContainer[Global___CodeMark]: ...
+    @_builtins.property
+    def notices(self) -> _containers.RepeatedCompositeFieldContainer[Global___Notice]: ...
+    @_builtins.property
+    def signed_mark(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def core_nic_augmented_mark(self) -> _containers.RepeatedCompositeFieldContainer[Global___CoreNICApplicationInfo]: ...
     def __init__(
         self,
         *,
-        phase: global___Phase | None = ...,
-        code_mark: collections.abc.Iterable[global___CodeMark] | None = ...,
-        notices: collections.abc.Iterable[global___Notice] | None = ...,
-        signed_mark: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        create_type: global___LaunchCreate.CreateType.ValueType = ...,
-        core_nic_augmented_mark: collections.abc.Iterable[global___CoreNICApplicationInfo] | None = ...,
+        phase: Global___Phase | None = ...,
+        code_mark: _abc.Iterable[Global___CodeMark] | None = ...,
+        notices: _abc.Iterable[Global___Notice] | None = ...,
+        signed_mark: _wrappers_pb2.StringValue | None = ...,
+        create_type: Global___LaunchCreate.CreateType.ValueType = ...,
+        core_nic_augmented_mark: _abc.Iterable[Global___CoreNICApplicationInfo] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["phase", b"phase", "signed_mark", b"signed_mark"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["code_mark", b"code_mark", "core_nic_augmented_mark", b"core_nic_augmented_mark", "create_type", b"create_type", "notices", b"notices", "phase", b"phase", "signed_mark", b"signed_mark"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["phase", b"phase", "signed_mark", b"signed_mark"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["code_mark", b"code_mark", "core_nic_augmented_mark", b"core_nic_augmented_mark", "create_type", b"create_type", "notices", b"notices", "phase", b"phase", "signed_mark", b"signed_mark"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LaunchCreate = LaunchCreate
+Global___LaunchCreate: _TypeAlias = LaunchCreate  # noqa: Y015
 
-@typing.final
-class LaunchData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LaunchData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PHASE_FIELD_NUMBER: builtins.int
-    APPLICATION_ID_FIELD_NUMBER: builtins.int
-    @property
-    def phase(self) -> global___Phase: ...
-    @property
-    def application_Id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    PHASE_FIELD_NUMBER: _builtins.int
+    APPLICATION_ID_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def phase(self) -> Global___Phase: ...
+    @_builtins.property
+    def application_Id(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        phase: global___Phase | None = ...,
-        application_Id: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        phase: Global___Phase | None = ...,
+        application_Id: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["application_Id", b"application_Id", "phase", b"phase"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["application_Id", b"application_Id", "phase", b"phase"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["application_Id", b"application_Id", "phase", b"phase"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["application_Id", b"application_Id", "phase", b"phase"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LaunchData = LaunchData
+Global___LaunchData: _TypeAlias = LaunchData  # noqa: Y015
 
-@typing.final
-class CoreNICApplicationInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CoreNICApplicationInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    INFO_FIELD_NUMBER: builtins.int
-    INFO_TYPE_FIELD_NUMBER: builtins.int
-    info: builtins.str
-    @property
-    def info_type(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    INFO_FIELD_NUMBER: _builtins.int
+    INFO_TYPE_FIELD_NUMBER: _builtins.int
+    info: _builtins.str
+    @_builtins.property
+    def info_type(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        info: builtins.str = ...,
-        info_type: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        info: _builtins.str = ...,
+        info_type: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["info_type", b"info_type"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["info", b"info", "info_type", b"info_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["info_type", b"info_type"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["info", b"info", "info_type", b"info_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CoreNICApplicationInfo = CoreNICApplicationInfo
+Global___CoreNICApplicationInfo: _TypeAlias = CoreNICApplicationInfo  # noqa: Y015

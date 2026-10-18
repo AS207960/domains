@@ -3,29 +3,29 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _Record:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _RecordEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Record.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _RecordEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Record.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     NS: _Record.ValueType  # 0
     DS: _Record.ValueType  # 1
     DNAME: _Record.ValueType  # 2
@@ -39,96 +39,112 @@ DS: Record.ValueType  # 1
 DNAME: Record.ValueType  # 2
 A: Record.ValueType  # 3
 AAAA: Record.ValueType  # 4
-global___Record = Record
+Global___Record: _TypeAlias = Record  # noqa: Y015
 
-@typing.final
-class TTLInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TTLInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TTL_FIELD_NUMBER: builtins.int
-    @property
-    def ttl(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___TTL]: ...
+    TTL_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def ttl(self) -> _containers.RepeatedCompositeFieldContainer[Global___TTL]: ...
     def __init__(
         self,
         *,
-        ttl: collections.abc.Iterable[global___TTL] | None = ...,
+        ttl: _abc.Iterable[Global___TTL] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["ttl", b"ttl"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ttl", b"ttl"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TTLInfo = TTLInfo
+Global___TTLInfo: _TypeAlias = TTLInfo  # noqa: Y015
 
-@typing.final
-class TTL(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TTL(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TTL_FIELD_NUMBER: builtins.int
-    WK_RECORD_FIELD_NUMBER: builtins.int
-    CUSTOM_RECORD_FIELD_NUMBER: builtins.int
-    MIN_FIELD_NUMBER: builtins.int
-    MAX_FIELD_NUMBER: builtins.int
-    DEFAULT_FIELD_NUMBER: builtins.int
-    wk_record: global___Record.ValueType
-    custom_record: builtins.str
-    @property
-    def ttl(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def min(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def max(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def default(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+    TTL_FIELD_NUMBER: _builtins.int
+    WK_RECORD_FIELD_NUMBER: _builtins.int
+    CUSTOM_RECORD_FIELD_NUMBER: _builtins.int
+    MIN_FIELD_NUMBER: _builtins.int
+    MAX_FIELD_NUMBER: _builtins.int
+    DEFAULT_FIELD_NUMBER: _builtins.int
+    wk_record: Global___Record.ValueType
+    custom_record: _builtins.str
+    @_builtins.property
+    def ttl(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def min(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def max(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def default(self) -> _wrappers_pb2.UInt32Value: ...
     def __init__(
         self,
         *,
-        ttl: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        wk_record: global___Record.ValueType = ...,
-        custom_record: builtins.str = ...,
-        min: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        max: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        default: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
+        ttl: _wrappers_pb2.UInt32Value | None = ...,
+        wk_record: Global___Record.ValueType = ...,
+        custom_record: _builtins.str = ...,
+        min: _wrappers_pb2.UInt32Value | None = ...,
+        max: _wrappers_pb2.UInt32Value | None = ...,
+        default: _wrappers_pb2.UInt32Value | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["custom_record", b"custom_record", "default", b"default", "max", b"max", "min", b"min", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["custom_record", b"custom_record", "default", b"default", "max", b"max", "min", b"min", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["record", b"record"]) -> typing.Literal["wk_record", "custom_record"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["custom_record", b"custom_record", "default", b"default", "max", b"max", "min", b"min", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["custom_record", b"custom_record", "default", b"default", "max", b"max", "min", b"min", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_record: _TypeAlias = _typing.Literal["wk_record", "custom_record"]  # noqa: Y015
+    _WhichOneofArgType_record: _TypeAlias = _typing.Literal["record", b"record"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_record) -> _WhichOneofReturnType_record | None: ...
 
-global___TTL = TTL
+Global___TTL: _TypeAlias = TTL  # noqa: Y015
 
-@typing.final
-class TTLSet(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TTLSet(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TTL_FIELD_NUMBER: builtins.int
-    @property
-    def ttl(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___TTLCommand]: ...
+    TTL_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def ttl(self) -> _containers.RepeatedCompositeFieldContainer[Global___TTLCommand]: ...
     def __init__(
         self,
         *,
-        ttl: collections.abc.Iterable[global___TTLCommand] | None = ...,
+        ttl: _abc.Iterable[Global___TTLCommand] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["ttl", b"ttl"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ttl", b"ttl"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TTLSet = TTLSet
+Global___TTLSet: _TypeAlias = TTLSet  # noqa: Y015
 
-@typing.final
-class TTLCommand(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TTLCommand(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TTL_FIELD_NUMBER: builtins.int
-    WK_RECORD_FIELD_NUMBER: builtins.int
-    CUSTOM_RECORD_FIELD_NUMBER: builtins.int
-    wk_record: global___Record.ValueType
-    custom_record: builtins.str
-    @property
-    def ttl(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
+    TTL_FIELD_NUMBER: _builtins.int
+    WK_RECORD_FIELD_NUMBER: _builtins.int
+    CUSTOM_RECORD_FIELD_NUMBER: _builtins.int
+    wk_record: Global___Record.ValueType
+    custom_record: _builtins.str
+    @_builtins.property
+    def ttl(self) -> _wrappers_pb2.UInt32Value: ...
     def __init__(
         self,
         *,
-        ttl: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        wk_record: global___Record.ValueType = ...,
-        custom_record: builtins.str = ...,
+        ttl: _wrappers_pb2.UInt32Value | None = ...,
+        wk_record: Global___Record.ValueType = ...,
+        custom_record: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["custom_record", b"custom_record", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["custom_record", b"custom_record", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["record", b"record"]) -> typing.Literal["wk_record", "custom_record"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["custom_record", b"custom_record", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["custom_record", b"custom_record", "record", b"record", "ttl", b"ttl", "wk_record", b"wk_record"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_record: _TypeAlias = _typing.Literal["wk_record", "custom_record"]  # noqa: Y015
+    _WhichOneofArgType_record: _TypeAlias = _typing.Literal["record", b"record"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_record) -> _WhichOneofReturnType_record | None: ...
 
-global___TTLCommand = TTLCommand
+Global___TTLCommand: _TypeAlias = TTLCommand  # noqa: Y015

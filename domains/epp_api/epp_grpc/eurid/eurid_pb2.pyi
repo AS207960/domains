@@ -3,32 +3,32 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import domain_common.domain_common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from domain_common import domain_common_pb2 as _domain_common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _ContactType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ContactTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ContactType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ContactTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ContactType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Registrant: _ContactType.ValueType  # 0
     Billing: _ContactType.ValueType  # 1
     Tech: _ContactType.ValueType  # 2
@@ -42,579 +42,640 @@ Billing: ContactType.ValueType  # 1
 Tech: ContactType.ValueType  # 2
 OnSite: ContactType.ValueType  # 3
 Reseller: ContactType.ValueType  # 4
-global___ContactType = ContactType
+Global___ContactType: _TypeAlias = ContactType  # noqa: Y015
 
-@typing.final
-class IDN(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class IDN(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ACE_FIELD_NUMBER: builtins.int
-    UNICODE_FIELD_NUMBER: builtins.int
-    ace: builtins.str
-    unicode: builtins.str
+    ACE_FIELD_NUMBER: _builtins.int
+    UNICODE_FIELD_NUMBER: _builtins.int
+    ace: _builtins.str
+    unicode: _builtins.str
     def __init__(
         self,
         *,
-        ace: builtins.str = ...,
-        unicode: builtins.str = ...,
+        ace: _builtins.str = ...,
+        unicode: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["ace", b"ace", "unicode", b"unicode"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ace", b"ace", "unicode", b"unicode"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___IDN = IDN
+Global___IDN: _TypeAlias = IDN  # noqa: Y015
 
-@typing.final
-class ContactExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONTACT_TYPE_FIELD_NUMBER: builtins.int
-    WHOIS_EMAIL_FIELD_NUMBER: builtins.int
-    VAT_FIELD_NUMBER: builtins.int
-    CITIZENSHIP_COUNTRY_FIELD_NUMBER: builtins.int
-    LANGUAGE_FIELD_NUMBER: builtins.int
-    HAS_RESERVED_DOMAIN_FIELD_NUMBER: builtins.int
-    HAS_DOMAIN_ON_HOLD_FIELD_NUMBER: builtins.int
-    HAS_DOMAIN_REGISTRY_LOCK_FIELD_NUMBER: builtins.int
-    HAS_DOMAIN_REGISTRAR_LOCK_FIELD_NUMBER: builtins.int
-    contact_type: global___ContactType.ValueType
-    language: builtins.str
-    has_reserved_domain: builtins.bool
-    has_domain_on_hold: builtins.bool
-    has_domain_registry_lock: builtins.bool
-    has_domain_registrar_lock: builtins.bool
-    @property
-    def whois_email(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def vat(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def citizenship_country(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    CONTACT_TYPE_FIELD_NUMBER: _builtins.int
+    WHOIS_EMAIL_FIELD_NUMBER: _builtins.int
+    VAT_FIELD_NUMBER: _builtins.int
+    CITIZENSHIP_COUNTRY_FIELD_NUMBER: _builtins.int
+    LANGUAGE_FIELD_NUMBER: _builtins.int
+    HAS_RESERVED_DOMAIN_FIELD_NUMBER: _builtins.int
+    HAS_DOMAIN_ON_HOLD_FIELD_NUMBER: _builtins.int
+    HAS_DOMAIN_REGISTRY_LOCK_FIELD_NUMBER: _builtins.int
+    HAS_DOMAIN_REGISTRAR_LOCK_FIELD_NUMBER: _builtins.int
+    contact_type: Global___ContactType.ValueType
+    language: _builtins.str
+    has_reserved_domain: _builtins.bool
+    has_domain_on_hold: _builtins.bool
+    has_domain_registry_lock: _builtins.bool
+    has_domain_registrar_lock: _builtins.bool
+    @_builtins.property
+    def whois_email(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def vat(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def citizenship_country(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        contact_type: global___ContactType.ValueType = ...,
-        whois_email: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        vat: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        citizenship_country: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        language: builtins.str = ...,
-        has_reserved_domain: builtins.bool = ...,
-        has_domain_on_hold: builtins.bool = ...,
-        has_domain_registry_lock: builtins.bool = ...,
-        has_domain_registrar_lock: builtins.bool = ...,
+        contact_type: Global___ContactType.ValueType = ...,
+        whois_email: _wrappers_pb2.StringValue | None = ...,
+        vat: _wrappers_pb2.StringValue | None = ...,
+        citizenship_country: _wrappers_pb2.StringValue | None = ...,
+        language: _builtins.str = ...,
+        has_reserved_domain: _builtins.bool = ...,
+        has_domain_on_hold: _builtins.bool = ...,
+        has_domain_registry_lock: _builtins.bool = ...,
+        has_domain_registrar_lock: _builtins.bool = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["citizenship_country", b"citizenship_country", "vat", b"vat", "whois_email", b"whois_email"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["citizenship_country", b"citizenship_country", "contact_type", b"contact_type", "has_domain_on_hold", b"has_domain_on_hold", "has_domain_registrar_lock", b"has_domain_registrar_lock", "has_domain_registry_lock", b"has_domain_registry_lock", "has_reserved_domain", b"has_reserved_domain", "language", b"language", "vat", b"vat", "whois_email", b"whois_email"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["citizenship_country", b"citizenship_country", "vat", b"vat", "whois_email", b"whois_email"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["citizenship_country", b"citizenship_country", "contact_type", b"contact_type", "has_domain_on_hold", b"has_domain_on_hold", "has_domain_registrar_lock", b"has_domain_registrar_lock", "has_domain_registry_lock", b"has_domain_registry_lock", "has_reserved_domain", b"has_reserved_domain", "language", b"language", "vat", b"vat", "whois_email", b"whois_email"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactExtension = ContactExtension
+Global___ContactExtension: _TypeAlias = ContactExtension  # noqa: Y015
 
-@typing.final
-class ContactUpdateExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactUpdateExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NEW_WHOIS_EMAIL_FIELD_NUMBER: builtins.int
-    NEW_VAT_FIELD_NUMBER: builtins.int
-    NEW_CITIZENSHIP_COUNTRY_FIELD_NUMBER: builtins.int
-    NEW_LANGUAGE_FIELD_NUMBER: builtins.int
-    @property
-    def new_whois_email(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def new_vat(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def new_citizenship_country(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def new_language(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NEW_WHOIS_EMAIL_FIELD_NUMBER: _builtins.int
+    NEW_VAT_FIELD_NUMBER: _builtins.int
+    NEW_CITIZENSHIP_COUNTRY_FIELD_NUMBER: _builtins.int
+    NEW_LANGUAGE_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def new_whois_email(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def new_vat(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def new_citizenship_country(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def new_language(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        new_whois_email: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        new_vat: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        new_citizenship_country: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        new_language: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        new_whois_email: _wrappers_pb2.StringValue | None = ...,
+        new_vat: _wrappers_pb2.StringValue | None = ...,
+        new_citizenship_country: _wrappers_pb2.StringValue | None = ...,
+        new_language: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["new_citizenship_country", b"new_citizenship_country", "new_language", b"new_language", "new_vat", b"new_vat", "new_whois_email", b"new_whois_email"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["new_citizenship_country", b"new_citizenship_country", "new_language", b"new_language", "new_vat", b"new_vat", "new_whois_email", b"new_whois_email"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["new_citizenship_country", b"new_citizenship_country", "new_language", b"new_language", "new_vat", b"new_vat", "new_whois_email", b"new_whois_email"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["new_citizenship_country", b"new_citizenship_country", "new_language", b"new_language", "new_vat", b"new_vat", "new_whois_email", b"new_whois_email"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactUpdateExtension = ContactUpdateExtension
+Global___ContactUpdateExtension: _TypeAlias = ContactUpdateExtension  # noqa: Y015
 
-@typing.final
-class DomainCheckData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCheckData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    AVAILABLE_DATE_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    @property
-    def available_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def status(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[domain_common.domain_common_pb2.DomainStatus.ValueType]: ...
+    AVAILABLE_DATE_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def available_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def status(self) -> _containers.RepeatedScalarFieldContainer[_domain_common_pb2.DomainStatus.ValueType]: ...
     def __init__(
         self,
         *,
-        available_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        status: collections.abc.Iterable[domain_common.domain_common_pb2.DomainStatus.ValueType] | None = ...,
+        available_date: _timestamp_pb2.Timestamp | None = ...,
+        status: _abc.Iterable[_domain_common_pb2.DomainStatus.ValueType] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["available_date", b"available_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["available_date", b"available_date", "status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["available_date", b"available_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["available_date", b"available_date", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCheckData = DomainCheckData
+Global___DomainCheckData: _TypeAlias = DomainCheckData  # noqa: Y015
 
-@typing.final
-class DomainInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ON_HOLD_FIELD_NUMBER: builtins.int
-    RESERVED_FIELD_NUMBER: builtins.int
-    QUARANTINED_FIELD_NUMBER: builtins.int
-    SUSPENDED_FIELD_NUMBER: builtins.int
-    DELAYED_FIELD_NUMBER: builtins.int
-    SEIZED_FIELD_NUMBER: builtins.int
-    AVAILABLE_DATE_FIELD_NUMBER: builtins.int
-    SCHEDULED_SUSPENSION_DATE_FIELD_NUMBER: builtins.int
-    DELETION_DATE_FIELD_NUMBER: builtins.int
-    ON_SITE_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    MAX_EXTENSION_PERIOD_FIELD_NUMBER: builtins.int
-    REGISTRANT_COUNTRY_FIELD_NUMBER: builtins.int
-    REGISTRANT_COUNTRY_OF_CITIZENSHIP_FIELD_NUMBER: builtins.int
-    AUTH_INFO_VALID_UNTIL_FIELD_NUMBER: builtins.int
-    REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
-    on_hold: builtins.bool
-    reserved: builtins.bool
-    quarantined: builtins.bool
-    suspended: builtins.bool
-    delayed: builtins.bool
-    seized: builtins.bool
-    max_extension_period: builtins.int
-    registrant_country: builtins.str
-    @property
-    def available_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def scheduled_suspension_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def deletion_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrant_country_of_citizenship(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def auth_info_valid_until(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ON_HOLD_FIELD_NUMBER: _builtins.int
+    RESERVED_FIELD_NUMBER: _builtins.int
+    QUARANTINED_FIELD_NUMBER: _builtins.int
+    SUSPENDED_FIELD_NUMBER: _builtins.int
+    DELAYED_FIELD_NUMBER: _builtins.int
+    SEIZED_FIELD_NUMBER: _builtins.int
+    AVAILABLE_DATE_FIELD_NUMBER: _builtins.int
+    SCHEDULED_SUSPENSION_DATE_FIELD_NUMBER: _builtins.int
+    DELETION_DATE_FIELD_NUMBER: _builtins.int
+    ON_SITE_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    MAX_EXTENSION_PERIOD_FIELD_NUMBER: _builtins.int
+    REGISTRANT_COUNTRY_FIELD_NUMBER: _builtins.int
+    REGISTRANT_COUNTRY_OF_CITIZENSHIP_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_VALID_UNTIL_FIELD_NUMBER: _builtins.int
+    REGISTRAR_REFERENCE_FIELD_NUMBER: _builtins.int
+    on_hold: _builtins.bool
+    reserved: _builtins.bool
+    quarantined: _builtins.bool
+    suspended: _builtins.bool
+    delayed: _builtins.bool
+    seized: _builtins.bool
+    max_extension_period: _builtins.int
+    registrant_country: _builtins.str
+    @_builtins.property
+    def available_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def scheduled_suspension_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def deletion_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrant_country_of_citizenship(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def auth_info_valid_until(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def registrar_reference(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        on_hold: builtins.bool = ...,
-        reserved: builtins.bool = ...,
-        quarantined: builtins.bool = ...,
-        suspended: builtins.bool = ...,
-        delayed: builtins.bool = ...,
-        seized: builtins.bool = ...,
-        available_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        scheduled_suspension_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        deletion_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        max_extension_period: builtins.int = ...,
-        registrant_country: builtins.str = ...,
-        registrant_country_of_citizenship: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        auth_info_valid_until: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        on_hold: _builtins.bool = ...,
+        reserved: _builtins.bool = ...,
+        quarantined: _builtins.bool = ...,
+        suspended: _builtins.bool = ...,
+        delayed: _builtins.bool = ...,
+        seized: _builtins.bool = ...,
+        available_date: _timestamp_pb2.Timestamp | None = ...,
+        scheduled_suspension_date: _timestamp_pb2.Timestamp | None = ...,
+        deletion_date: _timestamp_pb2.Timestamp | None = ...,
+        on_site: _wrappers_pb2.StringValue | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
+        max_extension_period: _builtins.int = ...,
+        registrant_country: _builtins.str = ...,
+        registrant_country_of_citizenship: _wrappers_pb2.StringValue | None = ...,
+        auth_info_valid_until: _timestamp_pb2.Timestamp | None = ...,
+        registrar_reference: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "deletion_date", b"deletion_date", "on_site", b"on_site", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "scheduled_suspension_date", b"scheduled_suspension_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "delayed", b"delayed", "deletion_date", b"deletion_date", "max_extension_period", b"max_extension_period", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "registrant_country", b"registrant_country", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "scheduled_suspension_date", b"scheduled_suspension_date", "seized", b"seized", "suspended", b"suspended"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "deletion_date", b"deletion_date", "on_site", b"on_site", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "scheduled_suspension_date", b"scheduled_suspension_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info_valid_until", b"auth_info_valid_until", "available_date", b"available_date", "delayed", b"delayed", "deletion_date", b"deletion_date", "max_extension_period", b"max_extension_period", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "registrant_country", b"registrant_country", "registrant_country_of_citizenship", b"registrant_country_of_citizenship", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "scheduled_suspension_date", b"scheduled_suspension_date", "seized", b"seized", "suspended", b"suspended"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainInfo = DomainInfo
+Global___DomainInfo: _TypeAlias = DomainInfo  # noqa: Y015
 
-@typing.final
-class DomainInfoRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfoRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REQUEST_FIELD_NUMBER: builtins.int
-    CANCEL_FIELD_NUMBER: builtins.int
-    request: builtins.bool
-    cancel: builtins.bool
+    REQUEST_FIELD_NUMBER: _builtins.int
+    CANCEL_FIELD_NUMBER: _builtins.int
+    request: _builtins.bool
+    cancel: _builtins.bool
     def __init__(
         self,
         *,
-        request: builtins.bool = ...,
-        cancel: builtins.bool = ...,
+        request: _builtins.bool = ...,
+        cancel: _builtins.bool = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "cancel", b"cancel", "request", b"request"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "cancel", b"cancel", "request", b"request"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["auth_info", b"auth_info"]) -> typing.Literal["request", "cancel"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "cancel", b"cancel", "request", b"request"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "cancel", b"cancel", "request", b"request"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_auth_info: _TypeAlias = _typing.Literal["request", "cancel"]  # noqa: Y015
+    _WhichOneofArgType_auth_info: _TypeAlias = _typing.Literal["auth_info", b"auth_info"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_auth_info) -> _WhichOneofReturnType_auth_info | None: ...
 
-global___DomainInfoRequest = DomainInfoRequest
+Global___DomainInfoRequest: _TypeAlias = DomainInfoRequest  # noqa: Y015
 
-@typing.final
-class DomainTransferInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ON_HOLD_FIELD_NUMBER: builtins.int
-    RESERVED_FIELD_NUMBER: builtins.int
-    QUARANTINED_FIELD_NUMBER: builtins.int
-    DELAYED_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    BILLING_FIELD_NUMBER: builtins.int
-    ON_SITE_FIELD_NUMBER: builtins.int
-    TECHNICAL_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
-    on_hold: builtins.bool
-    reserved: builtins.bool
-    quarantined: builtins.bool
-    delayed: builtins.bool
-    reason: builtins.str
-    registrant: builtins.str
-    billing: builtins.str
-    @property
-    def on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def technical(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ON_HOLD_FIELD_NUMBER: _builtins.int
+    RESERVED_FIELD_NUMBER: _builtins.int
+    QUARANTINED_FIELD_NUMBER: _builtins.int
+    DELAYED_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    BILLING_FIELD_NUMBER: _builtins.int
+    ON_SITE_FIELD_NUMBER: _builtins.int
+    TECHNICAL_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    REGISTRAR_REFERENCE_FIELD_NUMBER: _builtins.int
+    on_hold: _builtins.bool
+    reserved: _builtins.bool
+    quarantined: _builtins.bool
+    delayed: _builtins.bool
+    reason: _builtins.str
+    registrant: _builtins.str
+    billing: _builtins.str
+    @_builtins.property
+    def on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def technical(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrar_reference(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        on_hold: builtins.bool = ...,
-        reserved: builtins.bool = ...,
-        quarantined: builtins.bool = ...,
-        delayed: builtins.bool = ...,
-        reason: builtins.str = ...,
-        registrant: builtins.str = ...,
-        billing: builtins.str = ...,
-        on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        technical: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        on_hold: _builtins.bool = ...,
+        reserved: _builtins.bool = ...,
+        quarantined: _builtins.bool = ...,
+        delayed: _builtins.bool = ...,
+        reason: _builtins.str = ...,
+        registrant: _builtins.str = ...,
+        billing: _builtins.str = ...,
+        on_site: _wrappers_pb2.StringValue | None = ...,
+        technical: _wrappers_pb2.StringValue | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
+        registrar_reference: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["billing", b"billing", "delayed", b"delayed", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "reason", b"reason", "registrant", b"registrant", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "technical", b"technical"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["billing", b"billing", "delayed", b"delayed", "on_hold", b"on_hold", "on_site", b"on_site", "quarantined", b"quarantined", "reason", b"reason", "registrant", b"registrant", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "reserved", b"reserved", "technical", b"technical"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferInfo = DomainTransferInfo
+Global___DomainTransferInfo: _TypeAlias = DomainTransferInfo  # noqa: Y015
 
-@typing.final
-class DomainRenewInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRenewInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REMOVED_DELETION_FIELD_NUMBER: builtins.int
-    removed_deletion: builtins.bool
+    REMOVED_DELETION_FIELD_NUMBER: _builtins.int
+    removed_deletion: _builtins.bool
     def __init__(
         self,
         *,
-        removed_deletion: builtins.bool = ...,
+        removed_deletion: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["removed_deletion", b"removed_deletion"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["removed_deletion", b"removed_deletion"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRenewInfo = DomainRenewInfo
+Global___DomainRenewInfo: _TypeAlias = DomainRenewInfo  # noqa: Y015
 
-@typing.final
-class DomainCreateExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCreateExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ON_SITE_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
-    VOUCHER_FIELD_NUMBER: builtins.int
-    @property
-    def on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def voucher(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ON_SITE_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    REGISTRAR_REFERENCE_FIELD_NUMBER: _builtins.int
+    VOUCHER_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrar_reference(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def voucher(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        voucher: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        on_site: _wrappers_pb2.StringValue | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
+        registrar_reference: _wrappers_pb2.StringValue | None = ...,
+        voucher: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "voucher", b"voucher"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCreateExtension = DomainCreateExtension
+Global___DomainCreateExtension: _TypeAlias = DomainCreateExtension  # noqa: Y015
 
-@typing.final
-class DomainUpdateExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainUpdateExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ADD_ON_SITE_FIELD_NUMBER: builtins.int
-    ADD_RESELLER_FIELD_NUMBER: builtins.int
-    REMOVE_ON_SITE_FIELD_NUMBER: builtins.int
-    REMOVE_RESELLER_FIELD_NUMBER: builtins.int
-    REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
-    @property
-    def add_on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def add_reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def remove_on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def remove_reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ADD_ON_SITE_FIELD_NUMBER: _builtins.int
+    ADD_RESELLER_FIELD_NUMBER: _builtins.int
+    REMOVE_ON_SITE_FIELD_NUMBER: _builtins.int
+    REMOVE_RESELLER_FIELD_NUMBER: _builtins.int
+    REGISTRAR_REFERENCE_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def add_on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def add_reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def remove_on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def remove_reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrar_reference(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        add_on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        add_reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        remove_on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        remove_reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        add_on_site: _wrappers_pb2.StringValue | None = ...,
+        add_reseller: _wrappers_pb2.StringValue | None = ...,
+        remove_on_site: _wrappers_pb2.StringValue | None = ...,
+        remove_reseller: _wrappers_pb2.StringValue | None = ...,
+        registrar_reference: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["add_on_site", b"add_on_site", "add_reseller", b"add_reseller", "registrar_reference", b"registrar_reference", "remove_on_site", b"remove_on_site", "remove_reseller", b"remove_reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add_on_site", b"add_on_site", "add_reseller", b"add_reseller", "registrar_reference", b"registrar_reference", "remove_on_site", b"remove_on_site", "remove_reseller", b"remove_reseller"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["add_on_site", b"add_on_site", "add_reseller", b"add_reseller", "registrar_reference", b"registrar_reference", "remove_on_site", b"remove_on_site", "remove_reseller", b"remove_reseller"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add_on_site", b"add_on_site", "add_reseller", b"add_reseller", "registrar_reference", b"registrar_reference", "remove_on_site", b"remove_on_site", "remove_reseller", b"remove_reseller"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainUpdateExtension = DomainUpdateExtension
+Global___DomainUpdateExtension: _TypeAlias = DomainUpdateExtension  # noqa: Y015
 
-@typing.final
-class DomainDeleteExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainDeleteExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    SCHEDULE_FIELD_NUMBER: builtins.int
-    CANCEL_FIELD_NUMBER: builtins.int
-    cancel: builtins.bool
-    @property
-    def schedule(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    SCHEDULE_FIELD_NUMBER: _builtins.int
+    CANCEL_FIELD_NUMBER: _builtins.int
+    cancel: _builtins.bool
+    @_builtins.property
+    def schedule(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        schedule: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cancel: builtins.bool = ...,
+        schedule: _timestamp_pb2.Timestamp | None = ...,
+        cancel: _builtins.bool = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cancel", b"cancel", "delete", b"delete", "schedule", b"schedule"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cancel", b"cancel", "delete", b"delete", "schedule", b"schedule"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["delete", b"delete"]) -> typing.Literal["schedule", "cancel"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cancel", b"cancel", "delete", b"delete", "schedule", b"schedule"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cancel", b"cancel", "delete", b"delete", "schedule", b"schedule"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_delete: _TypeAlias = _typing.Literal["schedule", "cancel"]  # noqa: Y015
+    _WhichOneofArgType_delete: _TypeAlias = _typing.Literal["delete", b"delete"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_delete) -> _WhichOneofReturnType_delete | None: ...
 
-global___DomainDeleteExtension = DomainDeleteExtension
+Global___DomainDeleteExtension: _TypeAlias = DomainDeleteExtension  # noqa: Y015
 
-@typing.final
-class DomainTransferExtension(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferExtension(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    BILLING_FIELD_NUMBER: builtins.int
-    TECHNICAL_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    ON_SITE_FIELD_NUMBER: builtins.int
-    REGISTRAR_REFERENCE_FIELD_NUMBER: builtins.int
-    registrant: builtins.str
-    @property
-    def billing(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def technical(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def on_site(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrar_reference(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    BILLING_FIELD_NUMBER: _builtins.int
+    TECHNICAL_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    ON_SITE_FIELD_NUMBER: _builtins.int
+    REGISTRAR_REFERENCE_FIELD_NUMBER: _builtins.int
+    registrant: _builtins.str
+    @_builtins.property
+    def billing(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def technical(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def on_site(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrar_reference(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        registrant: builtins.str = ...,
-        billing: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        technical: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        on_site: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registrar_reference: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        registrant: _builtins.str = ...,
+        billing: _wrappers_pb2.StringValue | None = ...,
+        technical: _wrappers_pb2.StringValue | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
+        on_site: _wrappers_pb2.StringValue | None = ...,
+        registrar_reference: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["billing", b"billing", "on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["billing", b"billing", "on_site", b"on_site", "registrant", b"registrant", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["billing", b"billing", "on_site", b"on_site", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["billing", b"billing", "on_site", b"on_site", "registrant", b"registrant", "registrar_reference", b"registrar_reference", "reseller", b"reseller", "technical", b"technical"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferExtension = DomainTransferExtension
+Global___DomainTransferExtension: _TypeAlias = DomainTransferExtension  # noqa: Y015
 
-@typing.final
-class HitPointsReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HitPointsReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    HIT_POINTS_FIELD_NUMBER: builtins.int
-    MAX_HIT_POINTS_FIELD_NUMBER: builtins.int
-    BLOCKED_UNTIL_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    hit_points: builtins.int
-    max_hit_points: builtins.int
-    @property
-    def blocked_until(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    HIT_POINTS_FIELD_NUMBER: _builtins.int
+    MAX_HIT_POINTS_FIELD_NUMBER: _builtins.int
+    BLOCKED_UNTIL_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    hit_points: _builtins.int
+    max_hit_points: _builtins.int
+    @_builtins.property
+    def blocked_until(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        hit_points: builtins.int = ...,
-        max_hit_points: builtins.int = ...,
-        blocked_until: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        hit_points: _builtins.int = ...,
+        max_hit_points: _builtins.int = ...,
+        blocked_until: _timestamp_pb2.Timestamp | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["blocked_until", b"blocked_until", "cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["blocked_until", b"blocked_until", "cmd_resp", b"cmd_resp", "hit_points", b"hit_points", "max_hit_points", b"max_hit_points"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["blocked_until", b"blocked_until", "cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["blocked_until", b"blocked_until", "cmd_resp", b"cmd_resp", "hit_points", b"hit_points", "max_hit_points", b"max_hit_points"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HitPointsReply = HitPointsReply
+Global___HitPointsReply: _TypeAlias = HitPointsReply  # noqa: Y015
 
-@typing.final
-class RegistrationLimitReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class RegistrationLimitReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MONTHLY_REGISTRATIONS_FIELD_NUMBER: builtins.int
-    MAX_MONTHLY_REGISTRATIONS_FIELD_NUMBER: builtins.int
-    LIMITED_UNTIL_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    monthly_registrations: builtins.int
-    @property
-    def max_monthly_registrations(self) -> google.protobuf.wrappers_pb2.UInt64Value: ...
-    @property
-    def limited_until(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    MONTHLY_REGISTRATIONS_FIELD_NUMBER: _builtins.int
+    MAX_MONTHLY_REGISTRATIONS_FIELD_NUMBER: _builtins.int
+    LIMITED_UNTIL_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    monthly_registrations: _builtins.int
+    @_builtins.property
+    def max_monthly_registrations(self) -> _wrappers_pb2.UInt64Value: ...
+    @_builtins.property
+    def limited_until(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        monthly_registrations: builtins.int = ...,
-        max_monthly_registrations: google.protobuf.wrappers_pb2.UInt64Value | None = ...,
-        limited_until: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        monthly_registrations: _builtins.int = ...,
+        max_monthly_registrations: _wrappers_pb2.UInt64Value | None = ...,
+        limited_until: _timestamp_pb2.Timestamp | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "limited_until", b"limited_until", "max_monthly_registrations", b"max_monthly_registrations"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "limited_until", b"limited_until", "max_monthly_registrations", b"max_monthly_registrations", "monthly_registrations", b"monthly_registrations"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "limited_until", b"limited_until", "max_monthly_registrations", b"max_monthly_registrations"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "limited_until", b"limited_until", "max_monthly_registrations", b"max_monthly_registrations", "monthly_registrations", b"monthly_registrations"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___RegistrationLimitReply = RegistrationLimitReply
+Global___RegistrationLimitReply: _TypeAlias = RegistrationLimitReply  # noqa: Y015
 
-@typing.final
-class DNSSECEligibilityRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DNSSECEligibilityRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DNSSECEligibilityRequest = DNSSECEligibilityRequest
+Global___DNSSECEligibilityRequest: _TypeAlias = DNSSECEligibilityRequest  # noqa: Y015
 
-@typing.final
-class DNSSECEligibilityReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DNSSECEligibilityReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ELIGIBLE_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    CODE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    eligible: builtins.bool
-    message: builtins.str
-    code: builtins.int
-    registry_name: builtins.str
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ELIGIBLE_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    CODE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    eligible: _builtins.bool
+    message: _builtins.str
+    code: _builtins.int
+    registry_name: _builtins.str
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        eligible: builtins.bool = ...,
-        message: builtins.str = ...,
-        code: builtins.int = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        registry_name: builtins.str = ...,
+        eligible: _builtins.bool = ...,
+        message: _builtins.str = ...,
+        code: _builtins.int = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "code", b"code", "eligible", b"eligible", "message", b"message", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "code", b"code", "eligible", b"eligible", "message", b"message", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DNSSECEligibilityReply = DNSSECEligibilityReply
+Global___DNSSECEligibilityReply: _TypeAlias = DNSSECEligibilityReply  # noqa: Y015
 
-@typing.final
-class DNSQualityRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DNSQualityRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DNSQualityRequest = DNSQualityRequest
+Global___DNSQualityRequest: _TypeAlias = DNSQualityRequest  # noqa: Y015
 
-@typing.final
-class DNSQualityReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DNSQualityReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    SCORE_FIELD_NUMBER: builtins.int
-    CHECK_TIME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    score: builtins.str
-    registry_name: builtins.str
-    @property
-    def check_time(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    SCORE_FIELD_NUMBER: _builtins.int
+    CHECK_TIME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    score: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def check_time(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        score: builtins.str = ...,
-        check_time: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        registry_name: builtins.str = ...,
+        score: _builtins.str = ...,
+        check_time: _timestamp_pb2.Timestamp | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["check_time", b"check_time", "cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["check_time", b"check_time", "cmd_resp", b"cmd_resp", "registry_name", b"registry_name", "score", b"score"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["check_time", b"check_time", "cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["check_time", b"check_time", "cmd_resp", b"cmd_resp", "registry_name", b"registry_name", "score", b"score"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DNSQualityReply = DNSQualityReply
+Global___DNSQualityReply: _TypeAlias = DNSQualityReply  # noqa: Y015
 
-@typing.final
-class PollReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PollReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONTEXT_FIELD_NUMBER: builtins.int
-    OBJECT_TYPE_FIELD_NUMBER: builtins.int
-    OBJECT_FIELD_NUMBER: builtins.int
-    OBJECT_UNICODE_FIELD_NUMBER: builtins.int
-    ACTION_FIELD_NUMBER: builtins.int
-    CODE_FIELD_NUMBER: builtins.int
-    DETAIL_FIELD_NUMBER: builtins.int
-    REGISTRAR_FIELD_NUMBER: builtins.int
-    context: builtins.str
-    object_type: builtins.str
-    object: builtins.str
-    action: builtins.str
-    code: builtins.int
-    @property
-    def object_unicode(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def detail(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registrar(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    CONTEXT_FIELD_NUMBER: _builtins.int
+    OBJECT_TYPE_FIELD_NUMBER: _builtins.int
+    OBJECT_FIELD_NUMBER: _builtins.int
+    OBJECT_UNICODE_FIELD_NUMBER: _builtins.int
+    ACTION_FIELD_NUMBER: _builtins.int
+    CODE_FIELD_NUMBER: _builtins.int
+    DETAIL_FIELD_NUMBER: _builtins.int
+    REGISTRAR_FIELD_NUMBER: _builtins.int
+    context: _builtins.str
+    object_type: _builtins.str
+    object: _builtins.str
+    action: _builtins.str
+    code: _builtins.int
+    @_builtins.property
+    def object_unicode(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def detail(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registrar(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        context: builtins.str = ...,
-        object_type: builtins.str = ...,
-        object: builtins.str = ...,
-        object_unicode: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        action: builtins.str = ...,
-        code: builtins.int = ...,
-        detail: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registrar: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        context: _builtins.str = ...,
+        object_type: _builtins.str = ...,
+        object: _builtins.str = ...,
+        object_unicode: _wrappers_pb2.StringValue | None = ...,
+        action: _builtins.str = ...,
+        code: _builtins.int = ...,
+        detail: _wrappers_pb2.StringValue | None = ...,
+        registrar: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["detail", b"detail", "object_unicode", b"object_unicode", "registrar", b"registrar"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["action", b"action", "code", b"code", "context", b"context", "detail", b"detail", "object", b"object", "object_type", b"object_type", "object_unicode", b"object_unicode", "registrar", b"registrar"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["detail", b"detail", "object_unicode", b"object_unicode", "registrar", b"registrar"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["action", b"action", "code", b"code", "context", b"context", "detail", b"detail", "object", b"object", "object_type", b"object_type", "object_unicode", b"object_unicode", "registrar", b"registrar"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PollReply = PollReply
+Global___PollReply: _TypeAlias = PollReply  # noqa: Y015

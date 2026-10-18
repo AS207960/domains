@@ -3,30 +3,30 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _ContactStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ContactStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ContactStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ContactStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ContactStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Ok: _ContactStatus.ValueType  # 0
     OkUnconfirmed: _ContactStatus.ValueType  # 1
     PendingCreate: _ContactStatus.ValueType  # 2
@@ -40,188 +40,215 @@ OkUnconfirmed: ContactStatus.ValueType  # 1
 PendingCreate: ContactStatus.ValueType  # 2
 ServerExpired: ContactStatus.ValueType  # 3
 ServerSuspended: ContactStatus.ValueType  # 4
-global___ContactStatus = ContactStatus
+Global___ContactStatus: _TypeAlias = ContactStatus  # noqa: Y015
 
-@typing.final
-class PaymentInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PaymentInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class Card(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class Card(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        ID_FIELD_NUMBER: builtins.int
-        CVC_FIELD_NUMBER: builtins.int
-        id: builtins.int
-        cvc: builtins.str
+        ID_FIELD_NUMBER: _builtins.int
+        CVC_FIELD_NUMBER: _builtins.int
+        id: _builtins.int
+        cvc: _builtins.str
         def __init__(
             self,
             *,
-            id: builtins.int = ...,
-            cvc: builtins.str = ...,
+            id: _builtins.int = ...,
+            cvc: _builtins.str = ...,
         ) -> None: ...
-        def ClearField(self, field_name: typing.Literal["cvc", b"cvc", "id", b"id"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["cvc", b"cvc", "id", b"id"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    PREPAID_FIELD_NUMBER: builtins.int
-    CARD_FIELD_NUMBER: builtins.int
-    prepaid: builtins.int
-    @property
-    def card(self) -> global___PaymentInfo.Card: ...
+    PREPAID_FIELD_NUMBER: _builtins.int
+    CARD_FIELD_NUMBER: _builtins.int
+    prepaid: _builtins.int
+    @_builtins.property
+    def card(self) -> Global___PaymentInfo.Card: ...
     def __init__(
         self,
         *,
-        prepaid: builtins.int = ...,
-        card: global___PaymentInfo.Card | None = ...,
+        prepaid: _builtins.int = ...,
+        card: Global___PaymentInfo.Card | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["card", b"card", "payment_method", b"payment_method", "prepaid", b"prepaid"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["card", b"card", "payment_method", b"payment_method", "prepaid", b"prepaid"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["payment_method", b"payment_method"]) -> typing.Literal["prepaid", "card"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["card", b"card", "payment_method", b"payment_method", "prepaid", b"prepaid"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["card", b"card", "payment_method", b"payment_method", "prepaid", b"prepaid"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_payment_method: _TypeAlias = _typing.Literal["prepaid", "card"]  # noqa: Y015
+    _WhichOneofArgType_payment_method: _TypeAlias = _typing.Literal["payment_method", b"payment_method"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_payment_method) -> _WhichOneofReturnType_payment_method | None: ...
 
-global___PaymentInfo = PaymentInfo
+Global___PaymentInfo: _TypeAlias = PaymentInfo  # noqa: Y015
 
-@typing.final
-class DomainInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ZONE_CONTACT_FIELD_NUMBER: builtins.int
-    @property
-    def zone_contact(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ZONE_CONTACT_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def zone_contact(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        zone_contact: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        zone_contact: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["zone_contact", b"zone_contact"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["zone_contact", b"zone_contact"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["zone_contact", b"zone_contact"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["zone_contact", b"zone_contact"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainInfo = DomainInfo
+Global___DomainInfo: _TypeAlias = DomainInfo  # noqa: Y015
 
-@typing.final
-class DomainUpdate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainUpdate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REMOVE_ALL_NS_FIELD_NUMBER: builtins.int
-    NEW_MASTER_NS_FIELD_NUMBER: builtins.int
-    remove_all_ns: builtins.bool
-    @property
-    def new_master_ns(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    REMOVE_ALL_NS_FIELD_NUMBER: _builtins.int
+    NEW_MASTER_NS_FIELD_NUMBER: _builtins.int
+    remove_all_ns: _builtins.bool
+    @_builtins.property
+    def new_master_ns(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        remove_all_ns: builtins.bool = ...,
-        new_master_ns: collections.abc.Iterable[builtins.str] | None = ...,
+        remove_all_ns: _builtins.bool = ...,
+        new_master_ns: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["new_master_ns", b"new_master_ns", "remove_all_ns", b"remove_all_ns"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["new_master_ns", b"new_master_ns", "remove_all_ns", b"remove_all_ns"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainUpdate = DomainUpdate
+Global___DomainUpdate: _TypeAlias = DomainUpdate  # noqa: Y015
 
-@typing.final
-class ContactInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUSES_FIELD_NUMBER: builtins.int
-    MOBILE_FIELD_NUMBER: builtins.int
-    SID_FIELD_NUMBER: builtins.int
-    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: builtins.int
-    PAPER_INVOICES_FIELD_NUMBER: builtins.int
-    auto_update_from_national_registry: builtins.bool
-    paper_invoices: builtins.bool
-    @property
-    def statuses(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[global___ContactStatus.ValueType]: ...
-    @property
-    def mobile(self) -> common.common_pb2.Phone: ...
-    @property
-    def sid(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    STATUSES_FIELD_NUMBER: _builtins.int
+    MOBILE_FIELD_NUMBER: _builtins.int
+    SID_FIELD_NUMBER: _builtins.int
+    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: _builtins.int
+    PAPER_INVOICES_FIELD_NUMBER: _builtins.int
+    auto_update_from_national_registry: _builtins.bool
+    paper_invoices: _builtins.bool
+    @_builtins.property
+    def statuses(self) -> _containers.RepeatedScalarFieldContainer[Global___ContactStatus.ValueType]: ...
+    @_builtins.property
+    def mobile(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def sid(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        statuses: collections.abc.Iterable[global___ContactStatus.ValueType] | None = ...,
-        mobile: common.common_pb2.Phone | None = ...,
-        sid: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        auto_update_from_national_registry: builtins.bool = ...,
-        paper_invoices: builtins.bool = ...,
+        statuses: _abc.Iterable[Global___ContactStatus.ValueType] | None = ...,
+        mobile: _common_pb2.Phone | None = ...,
+        sid: _wrappers_pb2.StringValue | None = ...,
+        auto_update_from_national_registry: _builtins.bool = ...,
+        paper_invoices: _builtins.bool = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["mobile", b"mobile", "sid", b"sid"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "sid", b"sid", "statuses", b"statuses"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["mobile", b"mobile", "sid", b"sid"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "sid", b"sid", "statuses", b"statuses"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactInfo = ContactInfo
+Global___ContactInfo: _TypeAlias = ContactInfo  # noqa: Y015
 
-@typing.final
-class ContactCreate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactCreate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MOBILE_FIELD_NUMBER: builtins.int
-    SID_FIELD_NUMBER: builtins.int
-    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: builtins.int
-    PAPER_INVOICES_FIELD_NUMBER: builtins.int
-    LANG_FIELD_NUMBER: builtins.int
-    auto_update_from_national_registry: builtins.bool
-    paper_invoices: builtins.bool
-    @property
-    def mobile(self) -> common.common_pb2.Phone: ...
-    @property
-    def sid(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def lang(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    MOBILE_FIELD_NUMBER: _builtins.int
+    SID_FIELD_NUMBER: _builtins.int
+    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: _builtins.int
+    PAPER_INVOICES_FIELD_NUMBER: _builtins.int
+    LANG_FIELD_NUMBER: _builtins.int
+    auto_update_from_national_registry: _builtins.bool
+    paper_invoices: _builtins.bool
+    @_builtins.property
+    def mobile(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def sid(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def lang(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        mobile: common.common_pb2.Phone | None = ...,
-        sid: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        auto_update_from_national_registry: builtins.bool = ...,
-        paper_invoices: builtins.bool = ...,
-        lang: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        mobile: _common_pb2.Phone | None = ...,
+        sid: _wrappers_pb2.StringValue | None = ...,
+        auto_update_from_national_registry: _builtins.bool = ...,
+        paper_invoices: _builtins.bool = ...,
+        lang: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["lang", b"lang", "mobile", b"mobile", "sid", b"sid"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "sid", b"sid"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["lang", b"lang", "mobile", b"mobile", "sid", b"sid"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "sid", b"sid"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactCreate = ContactCreate
+Global___ContactCreate: _TypeAlias = ContactCreate  # noqa: Y015
 
-@typing.final
-class ContactUpdate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactUpdate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MOBILE_FIELD_NUMBER: builtins.int
-    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: builtins.int
-    PAPER_INVOICES_FIELD_NUMBER: builtins.int
-    LANG_FIELD_NUMBER: builtins.int
-    PASSWORD_FIELD_NUMBER: builtins.int
-    password: builtins.str
-    @property
-    def mobile(self) -> common.common_pb2.Phone: ...
-    @property
-    def auto_update_from_national_registry(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def paper_invoices(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def lang(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    MOBILE_FIELD_NUMBER: _builtins.int
+    AUTO_UPDATE_FROM_NATIONAL_REGISTRY_FIELD_NUMBER: _builtins.int
+    PAPER_INVOICES_FIELD_NUMBER: _builtins.int
+    LANG_FIELD_NUMBER: _builtins.int
+    PASSWORD_FIELD_NUMBER: _builtins.int
+    password: _builtins.str
+    @_builtins.property
+    def mobile(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def auto_update_from_national_registry(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def paper_invoices(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def lang(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        mobile: common.common_pb2.Phone | None = ...,
-        auto_update_from_national_registry: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        paper_invoices: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        lang: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        password: builtins.str = ...,
+        mobile: _common_pb2.Phone | None = ...,
+        auto_update_from_national_registry: _wrappers_pb2.BoolValue | None = ...,
+        paper_invoices: _wrappers_pb2.BoolValue | None = ...,
+        lang: _wrappers_pb2.StringValue | None = ...,
+        password: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "password", b"password"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_update_from_national_registry", b"auto_update_from_national_registry", "lang", b"lang", "mobile", b"mobile", "paper_invoices", b"paper_invoices", "password", b"password"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactUpdate = ContactUpdate
+Global___ContactUpdate: _TypeAlias = ContactUpdate  # noqa: Y015
 
-@typing.final
-class HostInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HostInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ZONE_CONTACT_FIELD_NUMBER: builtins.int
-    @property
-    def zone_contact(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    ZONE_CONTACT_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def zone_contact(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        zone_contact: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        zone_contact: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["zone_contact", b"zone_contact"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["zone_contact", b"zone_contact"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["zone_contact", b"zone_contact"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["zone_contact", b"zone_contact"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HostInfo = HostInfo
+Global___HostInfo: _TypeAlias = HostInfo  # noqa: Y015

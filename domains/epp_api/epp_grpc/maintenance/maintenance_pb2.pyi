@@ -3,31 +3,31 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _Environment:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _EnvironmentEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Environment.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _EnvironmentEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Environment.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Production: _Environment.ValueType  # 0
     OTE: _Environment.ValueType  # 1
     Staging: _Environment.ValueType  # 2
@@ -41,14 +41,14 @@ OTE: Environment.ValueType  # 1
 Staging: Environment.ValueType  # 2
 Development: Environment.ValueType  # 3
 Custom: Environment.ValueType  # 4
-global___Environment = Environment
+Global___Environment: _TypeAlias = Environment  # noqa: Y015
 
 class _Impact:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ImpactEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Impact.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ImpactEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Impact.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Full: _Impact.ValueType  # 0
     Partial: _Impact.ValueType  # 1
 
@@ -56,14 +56,14 @@ class Impact(_Impact, metaclass=_ImpactEnumTypeWrapper): ...
 
 Full: Impact.ValueType  # 0
 Partial: Impact.ValueType  # 1
-global___Impact = Impact
+Global___Impact: _TypeAlias = Impact  # noqa: Y015
 
 class _Reason:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ReasonEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Reason.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Reason.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Planned: _Reason.ValueType  # 0
     Emergency: _Reason.ValueType  # 1
 
@@ -71,14 +71,14 @@ class Reason(_Reason, metaclass=_ReasonEnumTypeWrapper): ...
 
 Planned: Reason.ValueType  # 0
 Emergency: Reason.ValueType  # 1
-global___Reason = Reason
+Global___Reason: _TypeAlias = Reason  # noqa: Y015
 
 class _PollType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _PollTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_PollType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _PollTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_PollType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     NotSet: _PollType.ValueType  # 0
     Create: _PollType.ValueType  # 1
     Update: _PollType.ValueType  # 2
@@ -94,215 +94,239 @@ Update: PollType.ValueType  # 2
 Delete: PollType.ValueType  # 3
 Courtesy: PollType.ValueType  # 4
 End: PollType.ValueType  # 5
-global___PollType = PollType
+Global___PollType: _TypeAlias = PollType  # noqa: Y015
 
-@typing.final
-class MaintenanceInfoRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MaintenanceInfoRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MaintenanceInfoRequest = MaintenanceInfoRequest
+Global___MaintenanceInfoRequest: _TypeAlias = MaintenanceInfoRequest  # noqa: Y015
 
-@typing.final
-class MaintenanceInfoReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MaintenanceInfoReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    NAME_FIELD_NUMBER: builtins.int
-    ITEM_TYPE_FIELD_NUMBER: builtins.int
-    POLL_TYPE_FIELD_NUMBER: builtins.int
-    ENVIRONMENT_FIELD_NUMBER: builtins.int
-    ENVIRONMENT_NAME_FIELD_NUMBER: builtins.int
-    SYSTEMS_FIELD_NUMBER: builtins.int
-    START_FIELD_NUMBER: builtins.int
-    END_FIELD_NUMBER: builtins.int
-    CREATED_FIELD_NUMBER: builtins.int
-    UPDATED_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    DETAIL_URL_FIELD_NUMBER: builtins.int
-    DESCRIPTIONS_FIELD_NUMBER: builtins.int
-    TLDS_FIELD_NUMBER: builtins.int
-    INTERVENTION_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    poll_type: global___PollType.ValueType
-    environment: global___Environment.ValueType
-    reason: global___Reason.ValueType
-    @property
-    def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def item_type(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def environment_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def systems(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___System]: ...
-    @property
-    def start(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def end(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def created(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def updated(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def detail_url(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def descriptions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Description]: ...
-    @property
-    def tlds(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def intervention(self) -> global___Intervention: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    ITEM_TYPE_FIELD_NUMBER: _builtins.int
+    POLL_TYPE_FIELD_NUMBER: _builtins.int
+    ENVIRONMENT_FIELD_NUMBER: _builtins.int
+    ENVIRONMENT_NAME_FIELD_NUMBER: _builtins.int
+    SYSTEMS_FIELD_NUMBER: _builtins.int
+    START_FIELD_NUMBER: _builtins.int
+    END_FIELD_NUMBER: _builtins.int
+    CREATED_FIELD_NUMBER: _builtins.int
+    UPDATED_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    DETAIL_URL_FIELD_NUMBER: _builtins.int
+    DESCRIPTIONS_FIELD_NUMBER: _builtins.int
+    TLDS_FIELD_NUMBER: _builtins.int
+    INTERVENTION_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    poll_type: Global___PollType.ValueType
+    environment: Global___Environment.ValueType
+    reason: Global___Reason.ValueType
+    @_builtins.property
+    def name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def item_type(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def environment_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def systems(self) -> _containers.RepeatedCompositeFieldContainer[Global___System]: ...
+    @_builtins.property
+    def start(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def end(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def created(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def updated(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def detail_url(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def descriptions(self) -> _containers.RepeatedCompositeFieldContainer[Global___Description]: ...
+    @_builtins.property
+    def tlds(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def intervention(self) -> Global___Intervention: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        item_type: collections.abc.Iterable[builtins.str] | None = ...,
-        poll_type: global___PollType.ValueType = ...,
-        environment: global___Environment.ValueType = ...,
-        environment_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        systems: collections.abc.Iterable[global___System] | None = ...,
-        start: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        end: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        created: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        updated: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        reason: global___Reason.ValueType = ...,
-        detail_url: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        descriptions: collections.abc.Iterable[global___Description] | None = ...,
-        tlds: collections.abc.Iterable[builtins.str] | None = ...,
-        intervention: global___Intervention | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        name: _wrappers_pb2.StringValue | None = ...,
+        item_type: _abc.Iterable[_builtins.str] | None = ...,
+        poll_type: Global___PollType.ValueType = ...,
+        environment: Global___Environment.ValueType = ...,
+        environment_name: _wrappers_pb2.StringValue | None = ...,
+        systems: _abc.Iterable[Global___System] | None = ...,
+        start: _timestamp_pb2.Timestamp | None = ...,
+        end: _timestamp_pb2.Timestamp | None = ...,
+        created: _timestamp_pb2.Timestamp | None = ...,
+        updated: _timestamp_pb2.Timestamp | None = ...,
+        reason: Global___Reason.ValueType = ...,
+        detail_url: _wrappers_pb2.StringValue | None = ...,
+        descriptions: _abc.Iterable[Global___Description] | None = ...,
+        tlds: _abc.Iterable[_builtins.str] | None = ...,
+        intervention: Global___Intervention | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "created", b"created", "detail_url", b"detail_url", "end", b"end", "environment_name", b"environment_name", "intervention", b"intervention", "name", b"name", "start", b"start", "updated", b"updated"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "created", b"created", "descriptions", b"descriptions", "detail_url", b"detail_url", "end", b"end", "environment", b"environment", "environment_name", b"environment_name", "id", b"id", "intervention", b"intervention", "item_type", b"item_type", "name", b"name", "poll_type", b"poll_type", "reason", b"reason", "start", b"start", "systems", b"systems", "tlds", b"tlds", "updated", b"updated"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "created", b"created", "detail_url", b"detail_url", "end", b"end", "environment_name", b"environment_name", "intervention", b"intervention", "name", b"name", "start", b"start", "updated", b"updated"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "created", b"created", "descriptions", b"descriptions", "detail_url", b"detail_url", "end", b"end", "environment", b"environment", "environment_name", b"environment_name", "id", b"id", "intervention", b"intervention", "item_type", b"item_type", "name", b"name", "poll_type", b"poll_type", "reason", b"reason", "start", b"start", "systems", b"systems", "tlds", b"tlds", "updated", b"updated"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MaintenanceInfoReply = MaintenanceInfoReply
+Global___MaintenanceInfoReply: _TypeAlias = MaintenanceInfoReply  # noqa: Y015
 
-@typing.final
-class MaintenanceListReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MaintenanceListReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class Item(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class Item(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        ID_FIELD_NUMBER: builtins.int
-        NAME_FIELD_NUMBER: builtins.int
-        START_FIELD_NUMBER: builtins.int
-        END_FIELD_NUMBER: builtins.int
-        CREATED_FIELD_NUMBER: builtins.int
-        UPDATED_FIELD_NUMBER: builtins.int
-        id: builtins.str
-        @property
-        def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-        @property
-        def start(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-        @property
-        def end(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-        @property
-        def created(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-        @property
-        def updated(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+        ID_FIELD_NUMBER: _builtins.int
+        NAME_FIELD_NUMBER: _builtins.int
+        START_FIELD_NUMBER: _builtins.int
+        END_FIELD_NUMBER: _builtins.int
+        CREATED_FIELD_NUMBER: _builtins.int
+        UPDATED_FIELD_NUMBER: _builtins.int
+        id: _builtins.str
+        @_builtins.property
+        def name(self) -> _wrappers_pb2.StringValue: ...
+        @_builtins.property
+        def start(self) -> _timestamp_pb2.Timestamp: ...
+        @_builtins.property
+        def end(self) -> _timestamp_pb2.Timestamp: ...
+        @_builtins.property
+        def created(self) -> _timestamp_pb2.Timestamp: ...
+        @_builtins.property
+        def updated(self) -> _timestamp_pb2.Timestamp: ...
         def __init__(
             self,
             *,
-            id: builtins.str = ...,
-            name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            start: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-            end: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-            created: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-            updated: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+            id: _builtins.str = ...,
+            name: _wrappers_pb2.StringValue | None = ...,
+            start: _timestamp_pb2.Timestamp | None = ...,
+            end: _timestamp_pb2.Timestamp | None = ...,
+            created: _timestamp_pb2.Timestamp | None = ...,
+            updated: _timestamp_pb2.Timestamp | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["created", b"created", "end", b"end", "name", b"name", "start", b"start", "updated", b"updated"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["created", b"created", "end", b"end", "id", b"id", "name", b"name", "start", b"start", "updated", b"updated"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["created", b"created", "end", b"end", "name", b"name", "start", b"start", "updated", b"updated"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["created", b"created", "end", b"end", "id", b"id", "name", b"name", "start", b"start", "updated", b"updated"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    ITEMS_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def items(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MaintenanceListReply.Item]: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ITEMS_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def items(self) -> _containers.RepeatedCompositeFieldContainer[Global___MaintenanceListReply.Item]: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        items: collections.abc.Iterable[global___MaintenanceListReply.Item] | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        items: _abc.Iterable[Global___MaintenanceListReply.Item] | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "items", b"items"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "items", b"items"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MaintenanceListReply = MaintenanceListReply
+Global___MaintenanceListReply: _TypeAlias = MaintenanceListReply  # noqa: Y015
 
-@typing.final
-class System(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class System(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    HOST_FIELD_NUMBER: builtins.int
-    IMPACT_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    impact: global___Impact.ValueType
-    @property
-    def host(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    HOST_FIELD_NUMBER: _builtins.int
+    IMPACT_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    impact: Global___Impact.ValueType
+    @_builtins.property
+    def host(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        host: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        impact: global___Impact.ValueType = ...,
+        name: _builtins.str = ...,
+        host: _wrappers_pb2.StringValue | None = ...,
+        impact: Global___Impact.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["host", b"host"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["host", b"host", "impact", b"impact", "name", b"name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["host", b"host"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["host", b"host", "impact", b"impact", "name", b"name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___System = System
+Global___System: _TypeAlias = System  # noqa: Y015
 
-@typing.final
-class Description(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Description(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PLAIN_FIELD_NUMBER: builtins.int
-    HTML_FIELD_NUMBER: builtins.int
-    plain: builtins.str
-    html: builtins.str
+    PLAIN_FIELD_NUMBER: _builtins.int
+    HTML_FIELD_NUMBER: _builtins.int
+    plain: _builtins.str
+    html: _builtins.str
     def __init__(
         self,
         *,
-        plain: builtins.str = ...,
-        html: builtins.str = ...,
+        plain: _builtins.str = ...,
+        html: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["description", b"description", "html", b"html", "plain", b"plain"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["description", b"description", "html", b"html", "plain", b"plain"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["description", b"description"]) -> typing.Literal["plain", "html"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["description", b"description", "html", b"html", "plain", b"plain"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["description", b"description", "html", b"html", "plain", b"plain"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_description: _TypeAlias = _typing.Literal["plain", "html"]  # noqa: Y015
+    _WhichOneofArgType_description: _TypeAlias = _typing.Literal["description", b"description"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_description) -> _WhichOneofReturnType_description | None: ...
 
-global___Description = Description
+Global___Description: _TypeAlias = Description  # noqa: Y015
 
-@typing.final
-class Intervention(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Intervention(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONNECTION_FIELD_NUMBER: builtins.int
-    IMPLEMENTATION_FIELD_NUMBER: builtins.int
-    connection: builtins.bool
-    implementation: builtins.bool
+    CONNECTION_FIELD_NUMBER: _builtins.int
+    IMPLEMENTATION_FIELD_NUMBER: _builtins.int
+    connection: _builtins.bool
+    implementation: _builtins.bool
     def __init__(
         self,
         *,
-        connection: builtins.bool = ...,
-        implementation: builtins.bool = ...,
+        connection: _builtins.bool = ...,
+        implementation: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["connection", b"connection", "implementation", b"implementation"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["connection", b"connection", "implementation", b"implementation"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Intervention = Intervention
+Global___Intervention: _TypeAlias = Intervention  # noqa: Y015

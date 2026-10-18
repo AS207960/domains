@@ -872,78 +872,76 @@ spec:
   policyTypes:
   - Ingress
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: domain-poll
   labels:
     app: domains
     part: poll
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: domains
-      part: poll
-  template:
-    metadata:
-      annotations:
-        cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
-      labels:
-        app: domains
-        part: poll
+  schedule: "*/5 * * * *"
+  jobTemplate:
     spec:
-      volumes:
-        - name: ca-cert
-          configMap:
-            name: epp-ca
-        - name: google-creds
-          secret:
-            secretName: domains-google-creds
-        - name: privkey
-          secret:
-            secretName: domains-jwt-priv
-      containers:
-        - name: poll
-          image: as207960/domains-django:(version)
-          imagePullPolicy: IfNotPresent
-          command: [ "sh", "-c", "python3 manage.py run-epp-poll centralnic eurid id godaddy nominet rrpproxy switch traficom" ]
-          volumeMounts:
-            - mountPath: "/ca-cert/"
-              name: ca-cert
-            - mountPath: "/google-creds/"
-              name: google-creds
-            - mountPath: "/privkey/"
-              name: privkey
-          envFrom:
-            - configMapRef:
-                name: domains-django-conf
-            - secretRef:
-                name: domains-db-creds
-              prefix: "DB_"
-            - secretRef:
-                name: domains-django-secret
-            - secretRef:
-                name: domains-keycloak
-              prefix: "KEYCLOAK_"
-            - secretRef:
-                name: domains-celery
-              prefix: "CELERY_"
-            - secretRef:
-                name: verisign-ns-key
-              prefix: "VERISIGN_NS_"
-            - secretRef:
-                name: domains-rrpproxy
-              prefix: "RRPPROXY_"
-            - secretRef:
-                name: domains-rpc
-            - secretRef:
-                name: domains-s3
-            - secretRef:
-                name: domains-switch
-            - secretRef:
-                name: domains-cloudflare
-              prefix: "CLOUDFLARE_"
+      template:
+        metadata:
+          annotations:
+            cni.projectcalico.org/ipv6pools: "[\"default-ipv6-ippool\"]"
+          labels:
+            app: domains
+            part: poll
+        spec:
+          volumes:
+            - name: ca-cert
+              configMap:
+                name: epp-ca
+            - name: google-creds
+              secret:
+                secretName: domains-google-creds
+            - name: privkey
+              secret:
+                secretName: domains-jwt-priv
+          containers:
+            - name: poll
+              image: as207960/domains-django:(version)
+              imagePullPolicy: IfNotPresent
+              command: [ "sh", "-c", "python3 manage.py run-epp-poll centralnic eurid id godaddy nominet rrpproxy switch traficom" ]
+              volumeMounts:
+                - mountPath: "/ca-cert/"
+                  name: ca-cert
+                - mountPath: "/google-creds/"
+                  name: google-creds
+                - mountPath: "/privkey/"
+                  name: privkey
+              envFrom:
+                - configMapRef:
+                    name: domains-django-conf
+                - secretRef:
+                    name: domains-db-creds
+                  prefix: "DB_"
+                - secretRef:
+                    name: domains-django-secret
+                - secretRef:
+                    name: domains-keycloak
+                  prefix: "KEYCLOAK_"
+                - secretRef:
+                    name: domains-celery
+                  prefix: "CELERY_"
+                - secretRef:
+                    name: verisign-ns-key
+                  prefix: "VERISIGN_NS_"
+                - secretRef:
+                    name: domains-rrpproxy
+                  prefix: "RRPPROXY_"
+                - secretRef:
+                    name: domains-rpc
+                - secretRef:
+                    name: domains-s3
+                - secretRef:
+                    name: domains-switch
+                - secretRef:
+                    name: domains-cloudflare
+                  prefix: "CLOUDFLARE_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

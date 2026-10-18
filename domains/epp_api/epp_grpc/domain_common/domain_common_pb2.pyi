@@ -3,25 +3,25 @@
 isort:skip_file
 """
 
-import builtins
-import google.protobuf.descriptor
-import google.protobuf.internal.enum_type_wrapper
+from google.protobuf import descriptor as _descriptor
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
 if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+    from typing import TypeAlias as _TypeAlias
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _DomainStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DomainStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DomainStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DomainStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DomainStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     ClientDeleteProhibited: _DomainStatus.ValueType  # 0
     ClientHold: _DomainStatus.ValueType  # 1
     ClientRenewProhibited: _DomainStatus.ValueType  # 2
@@ -59,4 +59,4 @@ ServerHold: DomainStatus.ValueType  # 13
 ServerRenewProhibited: DomainStatus.ValueType  # 14
 ServerTransferProhibited: DomainStatus.ValueType  # 15
 ServerUpdateProhibited: DomainStatus.ValueType  # 16
-global___DomainStatus = DomainStatus
+Global___DomainStatus: _TypeAlias = DomainStatus  # noqa: Y015

@@ -3,41 +3,41 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import domain_common.domain_common_pb2
-import eurid.eurid_pb2
-import fee.fee_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
-import isnic.isnic_pb2
-import keysys.keysys_pb2
-import launch.launch_pb2
-import nominet_ext.nominet_ext_pb2
-import personal_registration.personal_registration_pb2
-import rgp.rgp_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from domain_common import domain_common_pb2 as _domain_common_pb2
+from eurid import eurid_pb2 as _eurid_pb2
+from fee import fee_pb2 as _fee_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from isnic import isnic_pb2 as _isnic_pb2
+from keysys import keysys_pb2 as _keysys_pb2
+from launch import launch_pb2 as _launch_pb2
+from nominet_ext import nominet_ext_pb2 as _nominet_ext_pb2
+from personal_registration import personal_registration_pb2 as _personal_registration_pb2
+from rgp import rgp_pb2 as _rgp_pb2
+from ttl import ttl_pb2 as _ttl_pb2
+import builtins as _builtins
 import sys
-import ttl.ttl_pb2
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _DomainHostsType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DomainHostsTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DomainHostsType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DomainHostsTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DomainHostsType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     All: _DomainHostsType.ValueType  # 0
     Delegated: _DomainHostsType.ValueType  # 1
     Subordinate: _DomainHostsType.ValueType  # 2
@@ -47,1191 +47,1298 @@ class DomainHostsType(_DomainHostsType, metaclass=_DomainHostsTypeEnumTypeWrappe
 All: DomainHostsType.ValueType  # 0
 Delegated: DomainHostsType.ValueType  # 1
 Subordinate: DomainHostsType.ValueType  # 2
-global___DomainHostsType = DomainHostsType
+Global___DomainHostsType: _TypeAlias = DomainHostsType  # noqa: Y015
 
-@typing.final
-class Contact(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Contact(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    TYPE_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    type: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    TYPE_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    type: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        type: builtins.str = ...,
+        id: _builtins.str = ...,
+        type: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "type", b"type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "type", b"type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Contact = Contact
+Global___Contact: _TypeAlias = Contact  # noqa: Y015
 
-@typing.final
-class NameServer(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class NameServer(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    HOST_OBJ_FIELD_NUMBER: builtins.int
-    HOST_NAME_FIELD_NUMBER: builtins.int
-    ADDRESSES_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    host_obj: builtins.str
-    host_name: builtins.str
-    @property
-    def addresses(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[common.common_pb2.IPAddress]: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
+    HOST_OBJ_FIELD_NUMBER: _builtins.int
+    HOST_NAME_FIELD_NUMBER: _builtins.int
+    ADDRESSES_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    host_obj: _builtins.str
+    host_name: _builtins.str
+    @_builtins.property
+    def addresses(self) -> _containers.RepeatedCompositeFieldContainer[_common_pb2.IPAddress]: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
     def __init__(
         self,
         *,
-        host_obj: builtins.str = ...,
-        host_name: builtins.str = ...,
-        addresses: collections.abc.Iterable[common.common_pb2.IPAddress] | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
+        host_obj: _builtins.str = ...,
+        host_name: _builtins.str = ...,
+        addresses: _abc.Iterable[_common_pb2.IPAddress] | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["eurid_idn", b"eurid_idn", "host_name", b"host_name", "host_obj", b"host_obj", "server", b"server"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["addresses", b"addresses", "eurid_idn", b"eurid_idn", "host_name", b"host_name", "host_obj", b"host_obj", "server", b"server"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["server", b"server"]) -> typing.Literal["host_obj", "host_name"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["eurid_idn", b"eurid_idn", "host_name", b"host_name", "host_obj", b"host_obj", "server", b"server"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["addresses", b"addresses", "eurid_idn", b"eurid_idn", "host_name", b"host_name", "host_obj", b"host_obj", "server", b"server"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_server: _TypeAlias = _typing.Literal["host_obj", "host_name"]  # noqa: Y015
+    _WhichOneofArgType_server: _TypeAlias = _typing.Literal["server", b"server"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_server) -> _WhichOneofReturnType_server | None: ...
 
-global___NameServer = NameServer
+Global___NameServer: _TypeAlias = NameServer  # noqa: Y015
 
-@typing.final
-class DomainHosts(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainHosts(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    HOSTS_FIELD_NUMBER: builtins.int
-    hosts: global___DomainHostsType.ValueType
+    HOSTS_FIELD_NUMBER: _builtins.int
+    hosts: Global___DomainHostsType.ValueType
     def __init__(
         self,
         *,
-        hosts: global___DomainHostsType.ValueType = ...,
+        hosts: Global___DomainHostsType.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["hosts", b"hosts"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["hosts", b"hosts"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainHosts = DomainHosts
+Global___DomainHosts: _TypeAlias = DomainHosts  # noqa: Y015
 
-@typing.final
-class DomainCheckRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCheckRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    FEE_CHECK_FIELD_NUMBER: builtins.int
-    LAUNCH_CHECK_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def fee_check(self) -> fee.fee_pb2.FeeCheck: ...
-    @property
-    def launch_check(self) -> launch.launch_pb2.Phase: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainCheck: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    FEE_CHECK_FIELD_NUMBER: _builtins.int
+    LAUNCH_CHECK_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def fee_check(self) -> _fee_pb2.FeeCheck: ...
+    @_builtins.property
+    def launch_check(self) -> _launch_pb2.Phase: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainCheck: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        fee_check: fee.fee_pb2.FeeCheck | None = ...,
-        launch_check: launch.launch_pb2.Phase | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        keysys: keysys.keysys_pb2.DomainCheck | None = ...,
+        name: _builtins.str = ...,
+        fee_check: _fee_pb2.FeeCheck | None = ...,
+        launch_check: _launch_pb2.Phase | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        keysys: _keysys_pb2.DomainCheck | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["fee_check", b"fee_check", "keysys", b"keysys", "launch_check", b"launch_check", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["fee_check", b"fee_check", "keysys", b"keysys", "launch_check", b"launch_check", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["fee_check", b"fee_check", "keysys", b"keysys", "launch_check", b"launch_check", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["fee_check", b"fee_check", "keysys", b"keysys", "launch_check", b"launch_check", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCheckRequest = DomainCheckRequest
+Global___DomainCheckRequest: _TypeAlias = DomainCheckRequest  # noqa: Y015
 
-@typing.final
-class DomainClaimsCheckRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainClaimsCheckRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    LAUNCH_CHECK_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def launch_check(self) -> launch.launch_pb2.Phase: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    LAUNCH_CHECK_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def launch_check(self) -> _launch_pb2.Phase: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        launch_check: launch.launch_pb2.Phase | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        launch_check: _launch_pb2.Phase | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["launch_check", b"launch_check", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["launch_check", b"launch_check", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["launch_check", b"launch_check", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["launch_check", b"launch_check", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainClaimsCheckRequest = DomainClaimsCheckRequest
+Global___DomainClaimsCheckRequest: _TypeAlias = DomainClaimsCheckRequest  # noqa: Y015
 
-@typing.final
-class DomainTrademarkCheckRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTrademarkCheckRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTrademarkCheckRequest = DomainTrademarkCheckRequest
+Global___DomainTrademarkCheckRequest: _TypeAlias = DomainTrademarkCheckRequest  # noqa: Y015
 
-@typing.final
-class DomainCheckReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCheckReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    AVAILABLE_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    FEE_CHECK_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_CHECK_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    available: builtins.bool
-    registry_name: builtins.str
-    @property
-    def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def fee_check(self) -> fee.fee_pb2.FeeCheckData: ...
-    @property
-    def donuts_fee_check(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainCheckData: ...
+    AVAILABLE_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    FEE_CHECK_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_CHECK_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    available: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def reason(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def fee_check(self) -> _fee_pb2.FeeCheckData: ...
+    @_builtins.property
+    def donuts_fee_check(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainCheckData: ...
     def __init__(
         self,
         *,
-        available: builtins.bool = ...,
-        reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        fee_check: fee.fee_pb2.FeeCheckData | None = ...,
-        donuts_fee_check: fee.fee_pb2.DonutsFeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainCheckData | None = ...,
+        available: _builtins.bool = ...,
+        reason: _wrappers_pb2.StringValue | None = ...,
+        fee_check: _fee_pb2.FeeCheckData | None = ...,
+        donuts_fee_check: _fee_pb2.DonutsFeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
+        eurid_data: _eurid_pb2.DomainCheckData | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_check", b"donuts_fee_check", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "fee_check", b"fee_check", "reason", b"reason"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["available", b"available", "cmd_resp", b"cmd_resp", "donuts_fee_check", b"donuts_fee_check", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "fee_check", b"fee_check", "reason", b"reason", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_check", b"donuts_fee_check", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "fee_check", b"fee_check", "reason", b"reason"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["available", b"available", "cmd_resp", b"cmd_resp", "donuts_fee_check", b"donuts_fee_check", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "fee_check", b"fee_check", "reason", b"reason", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCheckReply = DomainCheckReply
+Global___DomainCheckReply: _TypeAlias = DomainCheckReply  # noqa: Y015
 
-@typing.final
-class DomainClaimsCheckReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainClaimsCheckReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    EXISTS_FIELD_NUMBER: builtins.int
-    CLAIMS_KEYS_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    exists: builtins.bool
-    registry_name: builtins.str
-    @property
-    def claims_keys(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[launch.launch_pb2.ClaimsKey]: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    EXISTS_FIELD_NUMBER: _builtins.int
+    CLAIMS_KEYS_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    exists: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def claims_keys(self) -> _containers.RepeatedCompositeFieldContainer[_launch_pb2.ClaimsKey]: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        exists: builtins.bool = ...,
-        claims_keys: collections.abc.Iterable[launch.launch_pb2.ClaimsKey] | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        exists: _builtins.bool = ...,
+        claims_keys: _abc.Iterable[_launch_pb2.ClaimsKey] | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["claims_keys", b"claims_keys", "cmd_resp", b"cmd_resp", "exists", b"exists", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["claims_keys", b"claims_keys", "cmd_resp", b"cmd_resp", "exists", b"exists", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainClaimsCheckReply = DomainClaimsCheckReply
+Global___DomainClaimsCheckReply: _TypeAlias = DomainClaimsCheckReply  # noqa: Y015
 
-@typing.final
-class DomainInfoRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfoRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    HOSTS_FIELD_NUMBER: builtins.int
-    LAUNCH_INFO_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def auth_info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def hosts(self) -> global___DomainHosts: ...
-    @property
-    def launch_info(self) -> launch.launch_pb2.LaunchInfo: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainInfoRequest: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    HOSTS_FIELD_NUMBER: _builtins.int
+    LAUNCH_INFO_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def auth_info(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def hosts(self) -> Global___DomainHosts: ...
+    @_builtins.property
+    def launch_info(self) -> _launch_pb2.LaunchInfo: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainInfoRequest: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        auth_info: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        hosts: global___DomainHosts | None = ...,
-        launch_info: launch.launch_pb2.LaunchInfo | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainInfoRequest | None = ...,
+        name: _builtins.str = ...,
+        auth_info: _wrappers_pb2.StringValue | None = ...,
+        hosts: Global___DomainHosts | None = ...,
+        launch_info: _launch_pb2.LaunchInfo | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        eurid_data: _eurid_pb2.DomainInfoRequest | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "hosts", b"hosts", "launch_info", b"launch_info", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "hosts", b"hosts", "launch_info", b"launch_info", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "hosts", b"hosts", "launch_info", b"launch_info", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "hosts", b"hosts", "launch_info", b"launch_info", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainInfoRequest = DomainInfoRequest
+Global___DomainInfoRequest: _TypeAlias = DomainInfoRequest  # noqa: Y015
 
-@typing.final
-class DomainInfoReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfoReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_ID_FIELD_NUMBER: builtins.int
-    STATUSES_FIELD_NUMBER: builtins.int
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    CONTACTS_FIELD_NUMBER: builtins.int
-    NAMESERVERS_FIELD_NUMBER: builtins.int
-    HOSTS_FIELD_NUMBER: builtins.int
-    CLIENT_ID_FIELD_NUMBER: builtins.int
-    CLIENT_CREATED_ID_FIELD_NUMBER: builtins.int
-    CREATION_DATE_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    LAST_UPDATED_CLIENT_FIELD_NUMBER: builtins.int
-    LAST_UPDATED_DATE_FIELD_NUMBER: builtins.int
-    LAST_TRANSFER_DATE_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    RGP_STATE_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    SEC_DNS_FIELD_NUMBER: builtins.int
-    LAUNCH_INFO_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
-    VERISIGN_WHOIS_INFO_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    ISNIC_INFO_FIELD_NUMBER: builtins.int
-    PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    NOMINET_EXT_FIELD_NUMBER: builtins.int
-    TTL_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    registry_id: builtins.str
-    registrant: builtins.str
-    client_id: builtins.str
-    registry_name: builtins.str
-    @property
-    def statuses(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[domain_common.domain_common_pb2.DomainStatus.ValueType]: ...
-    @property
-    def contacts(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Contact]: ...
-    @property
-    def nameservers(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___NameServer]: ...
-    @property
-    def hosts(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def client_created_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def creation_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def last_updated_client(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def last_updated_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def last_transfer_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def rgp_state(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[rgp.rgp_pb2.RGPState.ValueType]: ...
-    @property
-    def auth_info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def sec_dns(self) -> global___SecDNSData: ...
-    @property
-    def launch_info(self) -> launch.launch_pb2.LaunchInfoData: ...
-    @property
-    def donuts_fee_data(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def verisign_whois_info(self) -> global___VerisignWhoisInfo: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainInfo: ...
-    @property
-    def isnic_info(self) -> isnic.isnic_pb2.DomainInfo: ...
-    @property
-    def personal_registration(self) -> personal_registration.personal_registration_pb2.PersonalRegistrationInfo: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainInfo: ...
-    @property
-    def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainInfo: ...
-    @property
-    def ttl(self) -> ttl.ttl_pb2.TTLInfo: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_ID_FIELD_NUMBER: _builtins.int
+    STATUSES_FIELD_NUMBER: _builtins.int
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    CONTACTS_FIELD_NUMBER: _builtins.int
+    NAMESERVERS_FIELD_NUMBER: _builtins.int
+    HOSTS_FIELD_NUMBER: _builtins.int
+    CLIENT_ID_FIELD_NUMBER: _builtins.int
+    CLIENT_CREATED_ID_FIELD_NUMBER: _builtins.int
+    CREATION_DATE_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    LAST_UPDATED_CLIENT_FIELD_NUMBER: _builtins.int
+    LAST_UPDATED_DATE_FIELD_NUMBER: _builtins.int
+    LAST_TRANSFER_DATE_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    RGP_STATE_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    SEC_DNS_FIELD_NUMBER: _builtins.int
+    LAUNCH_INFO_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_DATA_FIELD_NUMBER: _builtins.int
+    VERISIGN_WHOIS_INFO_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    ISNIC_INFO_FIELD_NUMBER: _builtins.int
+    PERSONAL_REGISTRATION_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    NOMINET_EXT_FIELD_NUMBER: _builtins.int
+    TTL_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    registry_id: _builtins.str
+    registrant: _builtins.str
+    client_id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def statuses(self) -> _containers.RepeatedScalarFieldContainer[_domain_common_pb2.DomainStatus.ValueType]: ...
+    @_builtins.property
+    def contacts(self) -> _containers.RepeatedCompositeFieldContainer[Global___Contact]: ...
+    @_builtins.property
+    def nameservers(self) -> _containers.RepeatedCompositeFieldContainer[Global___NameServer]: ...
+    @_builtins.property
+    def hosts(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def client_created_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def creation_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def last_updated_client(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def last_updated_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def last_transfer_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def rgp_state(self) -> _containers.RepeatedScalarFieldContainer[_rgp_pb2.RGPState.ValueType]: ...
+    @_builtins.property
+    def auth_info(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def sec_dns(self) -> Global___SecDNSData: ...
+    @_builtins.property
+    def launch_info(self) -> _launch_pb2.LaunchInfoData: ...
+    @_builtins.property
+    def donuts_fee_data(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def verisign_whois_info(self) -> Global___VerisignWhoisInfo: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainInfo: ...
+    @_builtins.property
+    def isnic_info(self) -> _isnic_pb2.DomainInfo: ...
+    @_builtins.property
+    def personal_registration(self) -> _personal_registration_pb2.PersonalRegistrationInfo: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainInfo: ...
+    @_builtins.property
+    def nominet_ext(self) -> _nominet_ext_pb2.DomainInfo: ...
+    @_builtins.property
+    def ttl(self) -> _ttl_pb2.TTLInfo: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_id: builtins.str = ...,
-        statuses: collections.abc.Iterable[domain_common.domain_common_pb2.DomainStatus.ValueType] | None = ...,
-        registrant: builtins.str = ...,
-        contacts: collections.abc.Iterable[global___Contact] | None = ...,
-        nameservers: collections.abc.Iterable[global___NameServer] | None = ...,
-        hosts: collections.abc.Iterable[builtins.str] | None = ...,
-        client_id: builtins.str = ...,
-        client_created_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        creation_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        last_updated_client: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        last_updated_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        last_transfer_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        registry_name: builtins.str = ...,
-        rgp_state: collections.abc.Iterable[rgp.rgp_pb2.RGPState.ValueType] | None = ...,
-        auth_info: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        sec_dns: global___SecDNSData | None = ...,
-        launch_info: launch.launch_pb2.LaunchInfoData | None = ...,
-        donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
-        verisign_whois_info: global___VerisignWhoisInfo | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainInfo | None = ...,
-        isnic_info: isnic.isnic_pb2.DomainInfo | None = ...,
-        personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationInfo | None = ...,
-        keysys: keysys.keysys_pb2.DomainInfo | None = ...,
-        nominet_ext: nominet_ext.nominet_ext_pb2.DomainInfo | None = ...,
-        ttl: ttl.ttl_pb2.TTLInfo | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        name: _builtins.str = ...,
+        registry_id: _builtins.str = ...,
+        statuses: _abc.Iterable[_domain_common_pb2.DomainStatus.ValueType] | None = ...,
+        registrant: _builtins.str = ...,
+        contacts: _abc.Iterable[Global___Contact] | None = ...,
+        nameservers: _abc.Iterable[Global___NameServer] | None = ...,
+        hosts: _abc.Iterable[_builtins.str] | None = ...,
+        client_id: _builtins.str = ...,
+        client_created_id: _wrappers_pb2.StringValue | None = ...,
+        creation_date: _timestamp_pb2.Timestamp | None = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        last_updated_client: _wrappers_pb2.StringValue | None = ...,
+        last_updated_date: _timestamp_pb2.Timestamp | None = ...,
+        last_transfer_date: _timestamp_pb2.Timestamp | None = ...,
+        registry_name: _builtins.str = ...,
+        rgp_state: _abc.Iterable[_rgp_pb2.RGPState.ValueType] | None = ...,
+        auth_info: _wrappers_pb2.StringValue | None = ...,
+        sec_dns: Global___SecDNSData | None = ...,
+        launch_info: _launch_pb2.LaunchInfoData | None = ...,
+        donuts_fee_data: _fee_pb2.DonutsFeeData | None = ...,
+        verisign_whois_info: Global___VerisignWhoisInfo | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
+        eurid_data: _eurid_pb2.DomainInfo | None = ...,
+        isnic_info: _isnic_pb2.DomainInfo | None = ...,
+        personal_registration: _personal_registration_pb2.PersonalRegistrationInfo | None = ...,
+        keysys: _keysys_pb2.DomainInfo | None = ...,
+        nominet_ext: _nominet_ext_pb2.DomainInfo | None = ...,
+        ttl: _ttl_pb2.TTLInfo | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "sec_dns", b"sec_dns", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "contacts", b"contacts", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "hosts", b"hosts", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_id", b"registry_id", "registry_name", b"registry_name", "rgp_state", b"rgp_state", "sec_dns", b"sec_dns", "statuses", b"statuses", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "sec_dns", b"sec_dns", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "client_created_id", b"client_created_id", "client_id", b"client_id", "cmd_resp", b"cmd_resp", "contacts", b"contacts", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "hosts", b"hosts", "isnic_info", b"isnic_info", "keysys", b"keysys", "last_transfer_date", b"last_transfer_date", "last_updated_client", b"last_updated_client", "last_updated_date", b"last_updated_date", "launch_info", b"launch_info", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_id", b"registry_id", "registry_name", b"registry_name", "rgp_state", b"rgp_state", "sec_dns", b"sec_dns", "statuses", b"statuses", "ttl", b"ttl", "verisign_whois_info", b"verisign_whois_info"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainInfoReply = DomainInfoReply
+Global___DomainInfoReply: _TypeAlias = DomainInfoReply  # noqa: Y015
 
-@typing.final
-class DomainCreateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCreateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    CONTACTS_FIELD_NUMBER: builtins.int
-    NAMESERVERS_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    SEC_DNS_FIELD_NUMBER: builtins.int
-    LAUNCH_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    ISNIC_PAYMENT_FIELD_NUMBER: builtins.int
-    PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    NOMINET_EXT_FIELD_NUMBER: builtins.int
-    TTL_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    registrant: builtins.str
-    auth_info: builtins.str
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def contacts(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Contact]: ...
-    @property
-    def nameservers(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___NameServer]: ...
-    @property
-    def sec_dns(self) -> global___SecDNSData: ...
-    @property
-    def launch_data(self) -> launch.launch_pb2.LaunchCreate: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def fee_agreement(self) -> fee.fee_pb2.FeeAgreement: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainCreateExtension: ...
-    @property
-    def isnic_payment(self) -> isnic.isnic_pb2.PaymentInfo: ...
-    @property
-    def personal_registration(self) -> personal_registration.personal_registration_pb2.PersonalRegistrationInfo: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainCreate: ...
-    @property
-    def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainCreate: ...
-    @property
-    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    CONTACTS_FIELD_NUMBER: _builtins.int
+    NAMESERVERS_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    SEC_DNS_FIELD_NUMBER: _builtins.int
+    LAUNCH_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    ISNIC_PAYMENT_FIELD_NUMBER: _builtins.int
+    PERSONAL_REGISTRATION_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    NOMINET_EXT_FIELD_NUMBER: _builtins.int
+    TTL_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    registrant: _builtins.str
+    auth_info: _builtins.str
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def contacts(self) -> _containers.RepeatedCompositeFieldContainer[Global___Contact]: ...
+    @_builtins.property
+    def nameservers(self) -> _containers.RepeatedCompositeFieldContainer[Global___NameServer]: ...
+    @_builtins.property
+    def sec_dns(self) -> Global___SecDNSData: ...
+    @_builtins.property
+    def launch_data(self) -> _launch_pb2.LaunchCreate: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def fee_agreement(self) -> _fee_pb2.FeeAgreement: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainCreateExtension: ...
+    @_builtins.property
+    def isnic_payment(self) -> _isnic_pb2.PaymentInfo: ...
+    @_builtins.property
+    def personal_registration(self) -> _personal_registration_pb2.PersonalRegistrationInfo: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainCreate: ...
+    @_builtins.property
+    def nominet_ext(self) -> _nominet_ext_pb2.DomainCreate: ...
+    @_builtins.property
+    def ttl(self) -> _ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        period: common.common_pb2.Period | None = ...,
-        registrant: builtins.str = ...,
-        contacts: collections.abc.Iterable[global___Contact] | None = ...,
-        nameservers: collections.abc.Iterable[global___NameServer] | None = ...,
-        auth_info: builtins.str = ...,
-        sec_dns: global___SecDNSData | None = ...,
-        launch_data: launch.launch_pb2.LaunchCreate | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        fee_agreement: fee.fee_pb2.FeeAgreement | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainCreateExtension | None = ...,
-        isnic_payment: isnic.isnic_pb2.PaymentInfo | None = ...,
-        personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationInfo | None = ...,
-        keysys: keysys.keysys_pb2.DomainCreate | None = ...,
-        nominet_ext: nominet_ext.nominet_ext_pb2.DomainCreate | None = ...,
-        ttl: ttl.ttl_pb2.TTLSet | None = ...,
+        name: _builtins.str = ...,
+        period: _common_pb2.Period | None = ...,
+        registrant: _builtins.str = ...,
+        contacts: _abc.Iterable[Global___Contact] | None = ...,
+        nameservers: _abc.Iterable[Global___NameServer] | None = ...,
+        auth_info: _builtins.str = ...,
+        sec_dns: Global___SecDNSData | None = ...,
+        launch_data: _launch_pb2.LaunchCreate | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        fee_agreement: _fee_pb2.FeeAgreement | None = ...,
+        eurid_data: _eurid_pb2.DomainCreateExtension | None = ...,
+        isnic_payment: _isnic_pb2.PaymentInfo | None = ...,
+        personal_registration: _personal_registration_pb2.PersonalRegistrationInfo | None = ...,
+        keysys: _keysys_pb2.DomainCreate | None = ...,
+        nominet_ext: _nominet_ext_pb2.DomainCreate | None = ...,
+        ttl: _ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "contacts", b"contacts", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "contacts", b"contacts", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "nameservers", b"nameservers", "nominet_ext", b"nominet_ext", "period", b"period", "personal_registration", b"personal_registration", "registrant", b"registrant", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCreateRequest = DomainCreateRequest
+Global___DomainCreateRequest: _TypeAlias = DomainCreateRequest  # noqa: Y015
 
-@typing.final
-class DomainCreateReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCreateReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PENDING_FIELD_NUMBER: builtins.int
-    CREATION_DATE_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
-    LAUNCH_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def creation_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def donuts_fee_data(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def launch_data(self) -> launch.launch_pb2.LaunchData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
-    @property
-    def personal_registration(self) -> personal_registration.personal_registration_pb2.PersonalRegistrationCreate: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PENDING_FIELD_NUMBER: _builtins.int
+    CREATION_DATE_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_DATA_FIELD_NUMBER: _builtins.int
+    LAUNCH_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    PERSONAL_REGISTRATION_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def creation_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def donuts_fee_data(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def launch_data(self) -> _launch_pb2.LaunchData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
+    @_builtins.property
+    def personal_registration(self) -> _personal_registration_pb2.PersonalRegistrationCreate: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        pending: builtins.bool = ...,
-        creation_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
-        launch_data: launch.launch_pb2.LaunchData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
-        personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationCreate | None = ...,
+        name: _builtins.str = ...,
+        pending: _builtins.bool = ...,
+        creation_date: _timestamp_pb2.Timestamp | None = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        donuts_fee_data: _fee_pb2.DonutsFeeData | None = ...,
+        launch_data: _launch_pb2.LaunchData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
+        personal_registration: _personal_registration_pb2.PersonalRegistrationCreate | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "launch_data", b"launch_data", "personal_registration", b"personal_registration"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "launch_data", b"launch_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "launch_data", b"launch_data", "personal_registration", b"personal_registration"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "creation_date", b"creation_date", "donuts_fee_data", b"donuts_fee_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "launch_data", b"launch_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCreateReply = DomainCreateReply
+Global___DomainCreateReply: _TypeAlias = DomainCreateReply  # noqa: Y015
 
-@typing.final
-class DomainDeleteRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainDeleteRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    LAUNCH_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def launch_data(self) -> launch.launch_pb2.LaunchData: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainDeleteExtension: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainDelete: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    LAUNCH_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def launch_data(self) -> _launch_pb2.LaunchData: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainDeleteExtension: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainDelete: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        launch_data: launch.launch_pb2.LaunchData | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainDeleteExtension | None = ...,
-        keysys: keysys.keysys_pb2.DomainDelete | None = ...,
+        name: _builtins.str = ...,
+        launch_data: _launch_pb2.LaunchData | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        eurid_data: _eurid_pb2.DomainDeleteExtension | None = ...,
+        keysys: _keysys_pb2.DomainDelete | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "keysys", b"keysys", "launch_data", b"launch_data", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "keysys", b"keysys", "launch_data", b"launch_data", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainDeleteRequest = DomainDeleteRequest
+Global___DomainDeleteRequest: _TypeAlias = DomainDeleteRequest  # noqa: Y015
 
-@typing.final
-class DomainDeleteReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainDeleteReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
+        pending: _builtins.bool = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "eurid_idn", b"eurid_idn", "fee_data", b"fee_data"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "eurid_idn", b"eurid_idn", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "eurid_idn", b"eurid_idn", "fee_data", b"fee_data"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "eurid_idn", b"eurid_idn", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainDeleteReply = DomainDeleteReply
+Global___DomainDeleteReply: _TypeAlias = DomainDeleteReply  # noqa: Y015
 
-@typing.final
-class DomainUpdateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainUpdateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class Param(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class Param(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        NAMESERVER_FIELD_NUMBER: builtins.int
-        CONTACT_FIELD_NUMBER: builtins.int
-        STATE_FIELD_NUMBER: builtins.int
-        state: domain_common.domain_common_pb2.DomainStatus.ValueType
-        @property
-        def nameserver(self) -> global___NameServer: ...
-        @property
-        def contact(self) -> global___Contact: ...
+        NAMESERVER_FIELD_NUMBER: _builtins.int
+        CONTACT_FIELD_NUMBER: _builtins.int
+        STATE_FIELD_NUMBER: _builtins.int
+        state: _domain_common_pb2.DomainStatus.ValueType
+        @_builtins.property
+        def nameserver(self) -> Global___NameServer: ...
+        @_builtins.property
+        def contact(self) -> Global___Contact: ...
         def __init__(
             self,
             *,
-            nameserver: global___NameServer | None = ...,
-            contact: global___Contact | None = ...,
-            state: domain_common.domain_common_pb2.DomainStatus.ValueType = ...,
+            nameserver: Global___NameServer | None = ...,
+            contact: Global___Contact | None = ...,
+            state: _domain_common_pb2.DomainStatus.ValueType = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["contact", b"contact", "nameserver", b"nameserver", "param", b"param", "state", b"state"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["contact", b"contact", "nameserver", b"nameserver", "param", b"param", "state", b"state"]) -> None: ...
-        def WhichOneof(self, oneof_group: typing.Literal["param", b"param"]) -> typing.Literal["nameserver", "contact", "state"] | None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["contact", b"contact", "nameserver", b"nameserver", "param", b"param", "state", b"state"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["contact", b"contact", "nameserver", b"nameserver", "param", b"param", "state", b"state"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        _WhichOneofReturnType_param: _TypeAlias = _typing.Literal["nameserver", "contact", "state"]  # noqa: Y015
+        _WhichOneofArgType_param: _TypeAlias = _typing.Literal["param", b"param"]  # noqa: Y015
+        def WhichOneof(self, oneof_group: _WhichOneofArgType_param) -> _WhichOneofReturnType_param | None: ...
 
-    NAME_FIELD_NUMBER: builtins.int
-    ADD_FIELD_NUMBER: builtins.int
-    REMOVE_FIELD_NUMBER: builtins.int
-    NEW_REGISTRANT_FIELD_NUMBER: builtins.int
-    NEW_AUTH_INFO_FIELD_NUMBER: builtins.int
-    SEC_DNS_FIELD_NUMBER: builtins.int
-    LAUNCH_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    ISNIC_INFO_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    NOMINET_EXT_FIELD_NUMBER: builtins.int
-    TTL_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def add(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___DomainUpdateRequest.Param]: ...
-    @property
-    def remove(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___DomainUpdateRequest.Param]: ...
-    @property
-    def new_registrant(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def new_auth_info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def sec_dns(self) -> global___UpdateSecDNSData: ...
-    @property
-    def launch_data(self) -> launch.launch_pb2.LaunchData: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def fee_agreement(self) -> fee.fee_pb2.FeeAgreement: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainUpdateExtension: ...
-    @property
-    def isnic_info(self) -> isnic.isnic_pb2.DomainUpdate: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainUpdate: ...
-    @property
-    def nominet_ext(self) -> nominet_ext.nominet_ext_pb2.DomainUpdate: ...
-    @property
-    def ttl(self) -> ttl.ttl_pb2.TTLSet: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    ADD_FIELD_NUMBER: _builtins.int
+    REMOVE_FIELD_NUMBER: _builtins.int
+    NEW_REGISTRANT_FIELD_NUMBER: _builtins.int
+    NEW_AUTH_INFO_FIELD_NUMBER: _builtins.int
+    SEC_DNS_FIELD_NUMBER: _builtins.int
+    LAUNCH_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    ISNIC_INFO_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    NOMINET_EXT_FIELD_NUMBER: _builtins.int
+    TTL_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def add(self) -> _containers.RepeatedCompositeFieldContainer[Global___DomainUpdateRequest.Param]: ...
+    @_builtins.property
+    def remove(self) -> _containers.RepeatedCompositeFieldContainer[Global___DomainUpdateRequest.Param]: ...
+    @_builtins.property
+    def new_registrant(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def new_auth_info(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def sec_dns(self) -> Global___UpdateSecDNSData: ...
+    @_builtins.property
+    def launch_data(self) -> _launch_pb2.LaunchData: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def fee_agreement(self) -> _fee_pb2.FeeAgreement: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainUpdateExtension: ...
+    @_builtins.property
+    def isnic_info(self) -> _isnic_pb2.DomainUpdate: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainUpdate: ...
+    @_builtins.property
+    def nominet_ext(self) -> _nominet_ext_pb2.DomainUpdate: ...
+    @_builtins.property
+    def ttl(self) -> _ttl_pb2.TTLSet: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        add: collections.abc.Iterable[global___DomainUpdateRequest.Param] | None = ...,
-        remove: collections.abc.Iterable[global___DomainUpdateRequest.Param] | None = ...,
-        new_registrant: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        new_auth_info: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        sec_dns: global___UpdateSecDNSData | None = ...,
-        launch_data: launch.launch_pb2.LaunchData | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        fee_agreement: fee.fee_pb2.FeeAgreement | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainUpdateExtension | None = ...,
-        isnic_info: isnic.isnic_pb2.DomainUpdate | None = ...,
-        keysys: keysys.keysys_pb2.DomainUpdate | None = ...,
-        nominet_ext: nominet_ext.nominet_ext_pb2.DomainUpdate | None = ...,
-        ttl: ttl.ttl_pb2.TTLSet | None = ...,
+        name: _builtins.str = ...,
+        add: _abc.Iterable[Global___DomainUpdateRequest.Param] | None = ...,
+        remove: _abc.Iterable[Global___DomainUpdateRequest.Param] | None = ...,
+        new_registrant: _wrappers_pb2.StringValue | None = ...,
+        new_auth_info: _wrappers_pb2.StringValue | None = ...,
+        sec_dns: Global___UpdateSecDNSData | None = ...,
+        launch_data: _launch_pb2.LaunchData | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        fee_agreement: _fee_pb2.FeeAgreement | None = ...,
+        eurid_data: _eurid_pb2.DomainUpdateExtension | None = ...,
+        isnic_info: _isnic_pb2.DomainUpdate | None = ...,
+        keysys: _keysys_pb2.DomainUpdate | None = ...,
+        nominet_ext: _nominet_ext_pb2.DomainUpdate | None = ...,
+        ttl: _ttl_pb2.TTLSet | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "remove", b"remove", "sec_dns", b"sec_dns", "ttl", b"ttl"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "sec_dns", b"sec_dns", "ttl", b"ttl"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add", b"add", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "isnic_info", b"isnic_info", "keysys", b"keysys", "launch_data", b"launch_data", "name", b"name", "new_auth_info", b"new_auth_info", "new_registrant", b"new_registrant", "nominet_ext", b"nominet_ext", "registry_name", b"registry_name", "remove", b"remove", "sec_dns", b"sec_dns", "ttl", b"ttl"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainUpdateRequest = DomainUpdateRequest
+Global___DomainUpdateRequest: _TypeAlias = DomainUpdateRequest  # noqa: Y015
 
-@typing.final
-class DomainSyncRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainSyncRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    MONTH_FIELD_NUMBER: builtins.int
-    DAY_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    month: builtins.int
-    day: builtins.int
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    MONTH_FIELD_NUMBER: _builtins.int
+    DAY_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    month: _builtins.int
+    day: _builtins.int
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        month: builtins.int = ...,
-        day: builtins.int = ...,
+        name: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        month: _builtins.int = ...,
+        day: _builtins.int = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["day", b"day", "month", b"month", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["day", b"day", "month", b"month", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainSyncRequest = DomainSyncRequest
+Global___DomainSyncRequest: _TypeAlias = DomainSyncRequest  # noqa: Y015
 
-@typing.final
-class DomainUpdateReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainUpdateReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def donuts_fee_data(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def donuts_fee_data(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        pending: _builtins.bool = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        donuts_fee_data: _fee_pb2.DonutsFeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "fee_data", b"fee_data"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "fee_data", b"fee_data"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainUpdateReply = DomainUpdateReply
+Global___DomainUpdateReply: _TypeAlias = DomainUpdateReply  # noqa: Y015
 
-@typing.final
-class DomainRenewRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRenewRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    CURRENT_EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    ISNIC_PAYMENT_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def current_expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def fee_agreement(self) -> fee.fee_pb2.FeeAgreement: ...
-    @property
-    def isnic_payment(self) -> isnic.isnic_pb2.PaymentInfo: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainRenew: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    CURRENT_EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    ISNIC_PAYMENT_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def current_expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def fee_agreement(self) -> _fee_pb2.FeeAgreement: ...
+    @_builtins.property
+    def isnic_payment(self) -> _isnic_pb2.PaymentInfo: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainRenew: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        period: common.common_pb2.Period | None = ...,
-        current_expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        fee_agreement: fee.fee_pb2.FeeAgreement | None = ...,
-        isnic_payment: isnic.isnic_pb2.PaymentInfo | None = ...,
-        keysys: keysys.keysys_pb2.DomainRenew | None = ...,
+        name: _builtins.str = ...,
+        period: _common_pb2.Period | None = ...,
+        current_expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        fee_agreement: _fee_pb2.FeeAgreement | None = ...,
+        isnic_payment: _isnic_pb2.PaymentInfo | None = ...,
+        keysys: _keysys_pb2.DomainRenew | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["current_expiry_date", b"current_expiry_date", "donuts_fee_agreement", b"donuts_fee_agreement", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "period", b"period", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["current_expiry_date", b"current_expiry_date", "donuts_fee_agreement", b"donuts_fee_agreement", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "name", b"name", "period", b"period", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["current_expiry_date", b"current_expiry_date", "donuts_fee_agreement", b"donuts_fee_agreement", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "period", b"period", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["current_expiry_date", b"current_expiry_date", "donuts_fee_agreement", b"donuts_fee_agreement", "fee_agreement", b"fee_agreement", "isnic_payment", b"isnic_payment", "keysys", b"keysys", "name", b"name", "period", b"period", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRenewRequest = DomainRenewRequest
+Global___DomainRenewRequest: _TypeAlias = DomainRenewRequest  # noqa: Y015
 
-@typing.final
-class DomainRenewReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRenewReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PENDING_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def donuts_fee_data(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainRenewInfo: ...
-    @property
-    def personal_registration(self) -> personal_registration.personal_registration_pb2.PersonalRegistrationCreate: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PENDING_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    PERSONAL_REGISTRATION_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def donuts_fee_data(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainRenewInfo: ...
+    @_builtins.property
+    def personal_registration(self) -> _personal_registration_pb2.PersonalRegistrationCreate: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        pending: builtins.bool = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainRenewInfo | None = ...,
-        personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationCreate | None = ...,
+        name: _builtins.str = ...,
+        pending: _builtins.bool = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        donuts_fee_data: _fee_pb2.DonutsFeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
+        eurid_data: _eurid_pb2.DomainRenewInfo | None = ...,
+        personal_registration: _personal_registration_pb2.PersonalRegistrationCreate | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "personal_registration", b"personal_registration"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "personal_registration", b"personal_registration"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRenewReply = DomainRenewReply
+Global___DomainRenewReply: _TypeAlias = DomainRenewReply  # noqa: Y015
 
-@typing.final
-class DomainTransferQueryRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferQueryRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def auth_info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def auth_info(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        auth_info: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        auth_info: _wrappers_pb2.StringValue | None = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auth_info", b"auth_info", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferQueryRequest = DomainTransferQueryRequest
+Global___DomainTransferQueryRequest: _TypeAlias = DomainTransferQueryRequest  # noqa: Y015
 
-@typing.final
-class DomainTransferRequestRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferRequestRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    auth_info: builtins.str
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def fee_agreement(self) -> fee.fee_pb2.FeeAgreement: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainTransferExtension: ...
-    @property
-    def keysys(self) -> keysys.keysys_pb2.DomainTransfer: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    auth_info: _builtins.str
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def fee_agreement(self) -> _fee_pb2.FeeAgreement: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainTransferExtension: ...
+    @_builtins.property
+    def keysys(self) -> _keysys_pb2.DomainTransfer: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        period: common.common_pb2.Period | None = ...,
-        auth_info: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
-        fee_agreement: fee.fee_pb2.FeeAgreement | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainTransferExtension | None = ...,
-        keysys: keysys.keysys_pb2.DomainTransfer | None = ...,
+        name: _builtins.str = ...,
+        period: _common_pb2.Period | None = ...,
+        auth_info: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
+        fee_agreement: _fee_pb2.FeeAgreement | None = ...,
+        eurid_data: _eurid_pb2.DomainTransferExtension | None = ...,
+        keysys: _keysys_pb2.DomainTransfer | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "keysys", b"keysys", "period", b"period", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "keysys", b"keysys", "name", b"name", "period", b"period", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "keysys", b"keysys", "period", b"period", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "donuts_fee_agreement", b"donuts_fee_agreement", "eurid_data", b"eurid_data", "fee_agreement", b"fee_agreement", "keysys", b"keysys", "name", b"name", "period", b"period", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferRequestRequest = DomainTransferRequestRequest
+Global___DomainTransferRequestRequest: _TypeAlias = DomainTransferRequestRequest  # noqa: Y015
 
-@typing.final
-class DomainTransferAcceptRejectRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferAcceptRejectRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    auth_info: builtins.str
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    auth_info: _builtins.str
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        auth_info: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        name: _builtins.str = ...,
+        auth_info: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferAcceptRejectRequest = DomainTransferAcceptRejectRequest
+Global___DomainTransferAcceptRejectRequest: _TypeAlias = DomainTransferAcceptRejectRequest  # noqa: Y015
 
-@typing.final
-class DomainTransferReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainTransferReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    NAME_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    REQUESTED_CLIENT_ID_FIELD_NUMBER: builtins.int
-    REQUESTED_DATE_FIELD_NUMBER: builtins.int
-    ACT_CLIENT_ID_FIELD_NUMBER: builtins.int
-    ACT_DATE_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    EURID_IDN_FIELD_NUMBER: builtins.int
-    EURID_DATA_FIELD_NUMBER: builtins.int
-    PERSONAL_REGISTRATION_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    name: builtins.str
-    status: common.common_pb2.TransferStatus.ValueType
-    requested_client_id: builtins.str
-    act_client_id: builtins.str
-    registry_name: builtins.str
-    @property
-    def requested_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def act_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def donuts_fee_data(self) -> fee.fee_pb2.DonutsFeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
-    @property
-    def eurid_idn(self) -> eurid.eurid_pb2.IDN: ...
-    @property
-    def eurid_data(self) -> eurid.eurid_pb2.DomainTransferInfo: ...
-    @property
-    def personal_registration(self) -> personal_registration.personal_registration_pb2.PersonalRegistrationCreate: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    REQUESTED_CLIENT_ID_FIELD_NUMBER: _builtins.int
+    REQUESTED_DATE_FIELD_NUMBER: _builtins.int
+    ACT_CLIENT_ID_FIELD_NUMBER: _builtins.int
+    ACT_DATE_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    EURID_IDN_FIELD_NUMBER: _builtins.int
+    EURID_DATA_FIELD_NUMBER: _builtins.int
+    PERSONAL_REGISTRATION_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    name: _builtins.str
+    status: _common_pb2.TransferStatus.ValueType
+    requested_client_id: _builtins.str
+    act_client_id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def requested_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def act_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def donuts_fee_data(self) -> _fee_pb2.DonutsFeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    @_builtins.property
+    def eurid_idn(self) -> _eurid_pb2.IDN: ...
+    @_builtins.property
+    def eurid_data(self) -> _eurid_pb2.DomainTransferInfo: ...
+    @_builtins.property
+    def personal_registration(self) -> _personal_registration_pb2.PersonalRegistrationCreate: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        name: builtins.str = ...,
-        status: common.common_pb2.TransferStatus.ValueType = ...,
-        requested_client_id: builtins.str = ...,
-        requested_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        act_client_id: builtins.str = ...,
-        act_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        donuts_fee_data: fee.fee_pb2.DonutsFeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
-        eurid_idn: eurid.eurid_pb2.IDN | None = ...,
-        eurid_data: eurid.eurid_pb2.DomainTransferInfo | None = ...,
-        personal_registration: personal_registration.personal_registration_pb2.PersonalRegistrationCreate | None = ...,
+        pending: _builtins.bool = ...,
+        name: _builtins.str = ...,
+        status: _common_pb2.TransferStatus.ValueType = ...,
+        requested_client_id: _builtins.str = ...,
+        requested_date: _timestamp_pb2.Timestamp | None = ...,
+        act_client_id: _builtins.str = ...,
+        act_date: _timestamp_pb2.Timestamp | None = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        donuts_fee_data: _fee_pb2.DonutsFeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+        eurid_idn: _eurid_pb2.IDN | None = ...,
+        eurid_data: _eurid_pb2.DomainTransferInfo | None = ...,
+        personal_registration: _personal_registration_pb2.PersonalRegistrationCreate | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["act_date", b"act_date", "cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "personal_registration", b"personal_registration", "requested_date", b"requested_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["act_client_id", b"act_client_id", "act_date", b"act_date", "cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "requested_client_id", b"requested_client_id", "requested_date", b"requested_date", "status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["act_date", b"act_date", "cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "personal_registration", b"personal_registration", "requested_date", b"requested_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["act_client_id", b"act_client_id", "act_date", b"act_date", "cmd_resp", b"cmd_resp", "donuts_fee_data", b"donuts_fee_data", "eurid_data", b"eurid_data", "eurid_idn", b"eurid_idn", "expiry_date", b"expiry_date", "fee_data", b"fee_data", "name", b"name", "pending", b"pending", "personal_registration", b"personal_registration", "registry_name", b"registry_name", "requested_client_id", b"requested_client_id", "requested_date", b"requested_date", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainTransferReply = DomainTransferReply
+Global___DomainTransferReply: _TypeAlias = DomainTransferReply  # noqa: Y015
 
-@typing.final
-class SecDNSData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class SecDNSData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MAX_SIG_LIFE_FIELD_NUMBER: builtins.int
-    DS_DATA_FIELD_NUMBER: builtins.int
-    KEY_DATA_FIELD_NUMBER: builtins.int
-    @property
-    def max_sig_life(self) -> google.protobuf.wrappers_pb2.Int64Value: ...
-    @property
-    def ds_data(self) -> global___SecDNSDSData: ...
-    @property
-    def key_data(self) -> global___SecDNSKeyData: ...
+    MAX_SIG_LIFE_FIELD_NUMBER: _builtins.int
+    DS_DATA_FIELD_NUMBER: _builtins.int
+    KEY_DATA_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def max_sig_life(self) -> _wrappers_pb2.Int64Value: ...
+    @_builtins.property
+    def ds_data(self) -> Global___SecDNSDSData: ...
+    @_builtins.property
+    def key_data(self) -> Global___SecDNSKeyData: ...
     def __init__(
         self,
         *,
-        max_sig_life: google.protobuf.wrappers_pb2.Int64Value | None = ...,
-        ds_data: global___SecDNSDSData | None = ...,
-        key_data: global___SecDNSKeyData | None = ...,
+        max_sig_life: _wrappers_pb2.Int64Value | None = ...,
+        ds_data: Global___SecDNSDSData | None = ...,
+        key_data: Global___SecDNSKeyData | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["data", b"data", "ds_data", b"ds_data", "key_data", b"key_data", "max_sig_life", b"max_sig_life"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["data", b"data", "ds_data", b"ds_data", "key_data", b"key_data", "max_sig_life", b"max_sig_life"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["data", b"data"]) -> typing.Literal["ds_data", "key_data"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["data", b"data", "ds_data", b"ds_data", "key_data", b"key_data", "max_sig_life", b"max_sig_life"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["data", b"data", "ds_data", b"ds_data", "key_data", b"key_data", "max_sig_life", b"max_sig_life"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_data: _TypeAlias = _typing.Literal["ds_data", "key_data"]  # noqa: Y015
+    _WhichOneofArgType_data: _TypeAlias = _typing.Literal["data", b"data"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_data) -> _WhichOneofReturnType_data | None: ...
 
-global___SecDNSData = SecDNSData
+Global___SecDNSData: _TypeAlias = SecDNSData  # noqa: Y015
 
-@typing.final
-class SecDNSDSData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class SecDNSDSData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DATA_FIELD_NUMBER: builtins.int
-    @property
-    def data(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___SecDNSDSDatum]: ...
+    DATA_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def data(self) -> _containers.RepeatedCompositeFieldContainer[Global___SecDNSDSDatum]: ...
     def __init__(
         self,
         *,
-        data: collections.abc.Iterable[global___SecDNSDSDatum] | None = ...,
+        data: _abc.Iterable[Global___SecDNSDSDatum] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["data", b"data"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["data", b"data"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SecDNSDSData = SecDNSDSData
+Global___SecDNSDSData: _TypeAlias = SecDNSDSData  # noqa: Y015
 
-@typing.final
-class SecDNSDSDatum(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class SecDNSDSDatum(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    KEY_TAG_FIELD_NUMBER: builtins.int
-    ALGORITHM_FIELD_NUMBER: builtins.int
-    DIGEST_TYPE_FIELD_NUMBER: builtins.int
-    DIGEST_FIELD_NUMBER: builtins.int
-    KEY_DATA_FIELD_NUMBER: builtins.int
-    key_tag: builtins.int
-    algorithm: builtins.int
-    digest_type: builtins.int
-    digest: builtins.str
-    @property
-    def key_data(self) -> global___SecDNSKeyDatum: ...
+    KEY_TAG_FIELD_NUMBER: _builtins.int
+    ALGORITHM_FIELD_NUMBER: _builtins.int
+    DIGEST_TYPE_FIELD_NUMBER: _builtins.int
+    DIGEST_FIELD_NUMBER: _builtins.int
+    KEY_DATA_FIELD_NUMBER: _builtins.int
+    key_tag: _builtins.int
+    algorithm: _builtins.int
+    digest_type: _builtins.int
+    digest: _builtins.str
+    @_builtins.property
+    def key_data(self) -> Global___SecDNSKeyDatum: ...
     def __init__(
         self,
         *,
-        key_tag: builtins.int = ...,
-        algorithm: builtins.int = ...,
-        digest_type: builtins.int = ...,
-        digest: builtins.str = ...,
-        key_data: global___SecDNSKeyDatum | None = ...,
+        key_tag: _builtins.int = ...,
+        algorithm: _builtins.int = ...,
+        digest_type: _builtins.int = ...,
+        digest: _builtins.str = ...,
+        key_data: Global___SecDNSKeyDatum | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["key_data", b"key_data"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["algorithm", b"algorithm", "digest", b"digest", "digest_type", b"digest_type", "key_data", b"key_data", "key_tag", b"key_tag"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["key_data", b"key_data"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["algorithm", b"algorithm", "digest", b"digest", "digest_type", b"digest_type", "key_data", b"key_data", "key_tag", b"key_tag"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SecDNSDSDatum = SecDNSDSDatum
+Global___SecDNSDSDatum: _TypeAlias = SecDNSDSDatum  # noqa: Y015
 
-@typing.final
-class SecDNSKeyData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class SecDNSKeyData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DATA_FIELD_NUMBER: builtins.int
-    @property
-    def data(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___SecDNSKeyDatum]: ...
+    DATA_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def data(self) -> _containers.RepeatedCompositeFieldContainer[Global___SecDNSKeyDatum]: ...
     def __init__(
         self,
         *,
-        data: collections.abc.Iterable[global___SecDNSKeyDatum] | None = ...,
+        data: _abc.Iterable[Global___SecDNSKeyDatum] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["data", b"data"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["data", b"data"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SecDNSKeyData = SecDNSKeyData
+Global___SecDNSKeyData: _TypeAlias = SecDNSKeyData  # noqa: Y015
 
-@typing.final
-class SecDNSKeyDatum(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class SecDNSKeyDatum(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    FLAGS_FIELD_NUMBER: builtins.int
-    PROTOCOL_FIELD_NUMBER: builtins.int
-    ALGORITHM_FIELD_NUMBER: builtins.int
-    PUBLIC_KEY_FIELD_NUMBER: builtins.int
-    flags: builtins.int
-    protocol: builtins.int
-    algorithm: builtins.int
-    public_key: builtins.str
+    FLAGS_FIELD_NUMBER: _builtins.int
+    PROTOCOL_FIELD_NUMBER: _builtins.int
+    ALGORITHM_FIELD_NUMBER: _builtins.int
+    PUBLIC_KEY_FIELD_NUMBER: _builtins.int
+    flags: _builtins.int
+    protocol: _builtins.int
+    algorithm: _builtins.int
+    public_key: _builtins.str
     def __init__(
         self,
         *,
-        flags: builtins.int = ...,
-        protocol: builtins.int = ...,
-        algorithm: builtins.int = ...,
-        public_key: builtins.str = ...,
+        flags: _builtins.int = ...,
+        protocol: _builtins.int = ...,
+        algorithm: _builtins.int = ...,
+        public_key: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["algorithm", b"algorithm", "flags", b"flags", "protocol", b"protocol", "public_key", b"public_key"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["algorithm", b"algorithm", "flags", b"flags", "protocol", b"protocol", "public_key", b"public_key"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SecDNSKeyDatum = SecDNSKeyDatum
+Global___SecDNSKeyDatum: _TypeAlias = SecDNSKeyDatum  # noqa: Y015
 
-@typing.final
-class UpdateSecDNSData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class UpdateSecDNSData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    URGENT_FIELD_NUMBER: builtins.int
-    NEW_MAX_SIG_LIFE_FIELD_NUMBER: builtins.int
-    ADD_DS_DATA_FIELD_NUMBER: builtins.int
-    ADD_KEY_DATA_FIELD_NUMBER: builtins.int
-    ALL_FIELD_NUMBER: builtins.int
-    REM_DS_DATA_FIELD_NUMBER: builtins.int
-    REM_KEY_DATA_FIELD_NUMBER: builtins.int
-    all: builtins.bool
-    @property
-    def urgent(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def new_max_sig_life(self) -> google.protobuf.wrappers_pb2.Int64Value: ...
-    @property
-    def add_ds_data(self) -> global___SecDNSDSData: ...
-    @property
-    def add_key_data(self) -> global___SecDNSKeyData: ...
-    @property
-    def rem_ds_data(self) -> global___SecDNSDSData: ...
-    @property
-    def rem_key_data(self) -> global___SecDNSKeyData: ...
+    URGENT_FIELD_NUMBER: _builtins.int
+    NEW_MAX_SIG_LIFE_FIELD_NUMBER: _builtins.int
+    ADD_DS_DATA_FIELD_NUMBER: _builtins.int
+    ADD_KEY_DATA_FIELD_NUMBER: _builtins.int
+    ALL_FIELD_NUMBER: _builtins.int
+    REM_DS_DATA_FIELD_NUMBER: _builtins.int
+    REM_KEY_DATA_FIELD_NUMBER: _builtins.int
+    all: _builtins.bool
+    @_builtins.property
+    def urgent(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def new_max_sig_life(self) -> _wrappers_pb2.Int64Value: ...
+    @_builtins.property
+    def add_ds_data(self) -> Global___SecDNSDSData: ...
+    @_builtins.property
+    def add_key_data(self) -> Global___SecDNSKeyData: ...
+    @_builtins.property
+    def rem_ds_data(self) -> Global___SecDNSDSData: ...
+    @_builtins.property
+    def rem_key_data(self) -> Global___SecDNSKeyData: ...
     def __init__(
         self,
         *,
-        urgent: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        new_max_sig_life: google.protobuf.wrappers_pb2.Int64Value | None = ...,
-        add_ds_data: global___SecDNSDSData | None = ...,
-        add_key_data: global___SecDNSKeyData | None = ...,
-        all: builtins.bool = ...,
-        rem_ds_data: global___SecDNSDSData | None = ...,
-        rem_key_data: global___SecDNSKeyData | None = ...,
+        urgent: _wrappers_pb2.BoolValue | None = ...,
+        new_max_sig_life: _wrappers_pb2.Int64Value | None = ...,
+        add_ds_data: Global___SecDNSDSData | None = ...,
+        add_key_data: Global___SecDNSKeyData | None = ...,
+        all: _builtins.bool = ...,
+        rem_ds_data: Global___SecDNSDSData | None = ...,
+        rem_key_data: Global___SecDNSKeyData | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["add", b"add", "add_ds_data", b"add_ds_data", "add_key_data", b"add_key_data", "all", b"all", "new_max_sig_life", b"new_max_sig_life", "rem_ds_data", b"rem_ds_data", "rem_key_data", b"rem_key_data", "remove", b"remove", "urgent", b"urgent"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "add_ds_data", b"add_ds_data", "add_key_data", b"add_key_data", "all", b"all", "new_max_sig_life", b"new_max_sig_life", "rem_ds_data", b"rem_ds_data", "rem_key_data", b"rem_key_data", "remove", b"remove", "urgent", b"urgent"]) -> None: ...
-    @typing.overload
-    def WhichOneof(self, oneof_group: typing.Literal["add", b"add"]) -> typing.Literal["add_ds_data", "add_key_data"] | None: ...
-    @typing.overload
-    def WhichOneof(self, oneof_group: typing.Literal["remove", b"remove"]) -> typing.Literal["all", "rem_ds_data", "rem_key_data"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["add", b"add", "add_ds_data", b"add_ds_data", "add_key_data", b"add_key_data", "all", b"all", "new_max_sig_life", b"new_max_sig_life", "rem_ds_data", b"rem_ds_data", "rem_key_data", b"rem_key_data", "remove", b"remove", "urgent", b"urgent"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add", b"add", "add_ds_data", b"add_ds_data", "add_key_data", b"add_key_data", "all", b"all", "new_max_sig_life", b"new_max_sig_life", "rem_ds_data", b"rem_ds_data", "rem_key_data", b"rem_key_data", "remove", b"remove", "urgent", b"urgent"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_add: _TypeAlias = _typing.Literal["add_ds_data", "add_key_data"]  # noqa: Y015
+    _WhichOneofArgType_add: _TypeAlias = _typing.Literal["add", b"add"]  # noqa: Y015
+    _WhichOneofReturnType_remove: _TypeAlias = _typing.Literal["all", "rem_ds_data", "rem_key_data"]  # noqa: Y015
+    _WhichOneofArgType_remove: _TypeAlias = _typing.Literal["remove", b"remove"]  # noqa: Y015
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_add) -> _WhichOneofReturnType_add | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_remove) -> _WhichOneofReturnType_remove | None: ...
 
-global___UpdateSecDNSData = UpdateSecDNSData
+Global___UpdateSecDNSData: _TypeAlias = UpdateSecDNSData  # noqa: Y015
 
-@typing.final
-class VerisignWhoisInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class VerisignWhoisInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRAR_FIELD_NUMBER: builtins.int
-    WHOIS_SERVER_FIELD_NUMBER: builtins.int
-    URL_FIELD_NUMBER: builtins.int
-    IRIS_SERVER_FIELD_NUMBER: builtins.int
-    registrar: builtins.str
-    @property
-    def whois_server(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def url(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def iris_server(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    REGISTRAR_FIELD_NUMBER: _builtins.int
+    WHOIS_SERVER_FIELD_NUMBER: _builtins.int
+    URL_FIELD_NUMBER: _builtins.int
+    IRIS_SERVER_FIELD_NUMBER: _builtins.int
+    registrar: _builtins.str
+    @_builtins.property
+    def whois_server(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def url(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def iris_server(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        registrar: builtins.str = ...,
-        whois_server: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        url: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        iris_server: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        registrar: _builtins.str = ...,
+        whois_server: _wrappers_pb2.StringValue | None = ...,
+        url: _wrappers_pb2.StringValue | None = ...,
+        iris_server: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["iris_server", b"iris_server", "url", b"url", "whois_server", b"whois_server"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["iris_server", b"iris_server", "registrar", b"registrar", "url", b"url", "whois_server", b"whois_server"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["iris_server", b"iris_server", "url", b"url", "whois_server", b"whois_server"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["iris_server", b"iris_server", "registrar", b"registrar", "url", b"url", "whois_server", b"whois_server"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___VerisignWhoisInfo = VerisignWhoisInfo
+Global___VerisignWhoisInfo: _TypeAlias = VerisignWhoisInfo  # noqa: Y015
 
-@typing.final
-class DomainPANReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainPANReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    RESULT_FIELD_NUMBER: builtins.int
-    SERVER_TRANSACTION_ID_FIELD_NUMBER: builtins.int
-    CLIENT_TRANSACTION_ID_FIELD_NUMBER: builtins.int
-    DATE_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    result: builtins.bool
-    @property
-    def server_transaction_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def client_transaction_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    RESULT_FIELD_NUMBER: _builtins.int
+    SERVER_TRANSACTION_ID_FIELD_NUMBER: _builtins.int
+    CLIENT_TRANSACTION_ID_FIELD_NUMBER: _builtins.int
+    DATE_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    result: _builtins.bool
+    @_builtins.property
+    def server_transaction_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def client_transaction_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def date(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        result: builtins.bool = ...,
-        server_transaction_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        client_transaction_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        name: _builtins.str = ...,
+        result: _builtins.bool = ...,
+        server_transaction_id: _wrappers_pb2.StringValue | None = ...,
+        client_transaction_id: _wrappers_pb2.StringValue | None = ...,
+        date: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["client_transaction_id", b"client_transaction_id", "date", b"date", "server_transaction_id", b"server_transaction_id"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["client_transaction_id", b"client_transaction_id", "date", b"date", "name", b"name", "result", b"result", "server_transaction_id", b"server_transaction_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["client_transaction_id", b"client_transaction_id", "date", b"date", "server_transaction_id", b"server_transaction_id"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["client_transaction_id", b"client_transaction_id", "date", b"date", "name", b"name", "result", b"result", "server_transaction_id", b"server_transaction_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainPANReply = DomainPANReply
+Global___DomainPANReply: _TypeAlias = DomainPANReply  # noqa: Y015

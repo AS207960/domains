@@ -3,192 +3,255 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import contact.contact_pb2
-import domain.domain_pb2
-import eurid.eurid_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
-import host.host_pb2
-import maintenance.maintenance_pb2
-import nominet.nominet_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from contact import contact_pb2 as _contact_pb2
+from domain import domain_pb2 as _domain_pb2
+from eurid import eurid_pb2 as _eurid_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from host import host_pb2 as _host_pb2
+from maintenance import maintenance_pb2 as _maintenance_pb2
+from nominet import nominet_pb2 as _nominet_pb2
+from traficom import traficom_pb2 as _traficom_pb2
+import builtins as _builtins
 import sys
-import traficom.traficom_pb2
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
-@typing.final
-class RegistryInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class RegistryInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___RegistryInfo = RegistryInfo
+Global___RegistryInfo: _TypeAlias = RegistryInfo  # noqa: Y015
 
-@typing.final
-class PollAck(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PollAck(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MSG_ID_FIELD_NUMBER: builtins.int
-    msg_id: builtins.str
+    MSG_ID_FIELD_NUMBER: _builtins.int
+    msg_id: _builtins.str
     def __init__(
         self,
         *,
-        msg_id: builtins.str = ...,
+        msg_id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["msg_id", b"msg_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["msg_id", b"msg_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PollAck = PollAck
+Global___PollAck: _TypeAlias = PollAck  # noqa: Y015
 
-@typing.final
-class PollReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PollAckSingle(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MSG_ID_FIELD_NUMBER: builtins.int
-    ENQUEUE_DATE_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    DOMAIN_INFO_FIELD_NUMBER: builtins.int
-    DOMAIN_TRANSFER_FIELD_NUMBER: builtins.int
-    DOMAIN_CREATE_FIELD_NUMBER: builtins.int
-    DOMAIN_RENEW_FIELD_NUMBER: builtins.int
-    DOMAIN_PAN_FIELD_NUMBER: builtins.int
-    CONTACT_INFO_FIELD_NUMBER: builtins.int
-    CONTACT_TRANSFER_FIELD_NUMBER: builtins.int
-    CONTACT_PAN_FIELD_NUMBER: builtins.int
-    NOMINET_DOMAIN_CANCEL_FIELD_NUMBER: builtins.int
-    NOMINET_DOMAIN_RELEASE_FIELD_NUMBER: builtins.int
-    NOMINET_DOMAIN_REGISTRAR_CHANGE_FIELD_NUMBER: builtins.int
-    NOMINET_HOST_CANCEL_FIELD_NUMBER: builtins.int
-    NOMINET_PROCESS_FIELD_NUMBER: builtins.int
-    NOMINET_SUSPEND_FIELD_NUMBER: builtins.int
-    NOMINET_DOMAIN_FAIL_FIELD_NUMBER: builtins.int
-    NOMINET_REGISTRANT_TRANSFER_FIELD_NUMBER: builtins.int
-    TRAFICOM_TRN_FIELD_NUMBER: builtins.int
-    VERISIGN_LOW_BALANCE_FIELD_NUMBER: builtins.int
-    MAINTENANCE_INFO_FIELD_NUMBER: builtins.int
-    EURID_POLL_FIELD_NUMBER: builtins.int
-    HOST_INFO_FIELD_NUMBER: builtins.int
-    CHANGE_DATA_FIELD_NUMBER: builtins.int
-    KEYSYS_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    msg_id: builtins.str
-    message: builtins.str
-    @property
-    def enqueue_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def domain_info(self) -> domain.domain_pb2.DomainInfoReply: ...
-    @property
-    def domain_transfer(self) -> domain.domain_pb2.DomainTransferReply: ...
-    @property
-    def domain_create(self) -> domain.domain_pb2.DomainCreateReply: ...
-    @property
-    def domain_renew(self) -> domain.domain_pb2.DomainRenewReply: ...
-    @property
-    def domain_pan(self) -> domain.domain_pb2.DomainPANReply: ...
-    @property
-    def contact_info(self) -> contact.contact_pb2.ContactInfoReply: ...
-    @property
-    def contact_transfer(self) -> contact.contact_pb2.ContactTransferReply: ...
-    @property
-    def contact_pan(self) -> contact.contact_pb2.ContactPANReply: ...
-    @property
-    def nominet_domain_cancel(self) -> nominet.nominet_pb2.DomainCancel: ...
-    @property
-    def nominet_domain_release(self) -> nominet.nominet_pb2.DomainRelease: ...
-    @property
-    def nominet_domain_registrar_change(self) -> nominet.nominet_pb2.DomainRegistrarChange: ...
-    @property
-    def nominet_host_cancel(self) -> nominet.nominet_pb2.HostCancel: ...
-    @property
-    def nominet_process(self) -> nominet.nominet_pb2.Process: ...
-    @property
-    def nominet_suspend(self) -> nominet.nominet_pb2.Suspend: ...
-    @property
-    def nominet_domain_fail(self) -> nominet.nominet_pb2.DomainFail: ...
-    @property
-    def nominet_registrant_transfer(self) -> nominet.nominet_pb2.RegistrantTransfer: ...
-    @property
-    def traficom_trn(self) -> traficom.traficom_pb2.TrnData: ...
-    @property
-    def verisign_low_balance(self) -> global___BalanceReply: ...
-    @property
-    def maintenance_info(self) -> maintenance.maintenance_pb2.MaintenanceInfoReply: ...
-    @property
-    def eurid_poll(self) -> eurid.eurid_pb2.PollReply: ...
-    @property
-    def host_info(self) -> host.host_pb2.HostInfoReply: ...
-    @property
-    def change_data(self) -> global___ChangeData: ...
-    @property
-    def keysys(self) -> global___KeysysPoll: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    MSG_ID_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    msg_id: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        msg_id: builtins.str = ...,
-        enqueue_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        message: builtins.str = ...,
-        domain_info: domain.domain_pb2.DomainInfoReply | None = ...,
-        domain_transfer: domain.domain_pb2.DomainTransferReply | None = ...,
-        domain_create: domain.domain_pb2.DomainCreateReply | None = ...,
-        domain_renew: domain.domain_pb2.DomainRenewReply | None = ...,
-        domain_pan: domain.domain_pb2.DomainPANReply | None = ...,
-        contact_info: contact.contact_pb2.ContactInfoReply | None = ...,
-        contact_transfer: contact.contact_pb2.ContactTransferReply | None = ...,
-        contact_pan: contact.contact_pb2.ContactPANReply | None = ...,
-        nominet_domain_cancel: nominet.nominet_pb2.DomainCancel | None = ...,
-        nominet_domain_release: nominet.nominet_pb2.DomainRelease | None = ...,
-        nominet_domain_registrar_change: nominet.nominet_pb2.DomainRegistrarChange | None = ...,
-        nominet_host_cancel: nominet.nominet_pb2.HostCancel | None = ...,
-        nominet_process: nominet.nominet_pb2.Process | None = ...,
-        nominet_suspend: nominet.nominet_pb2.Suspend | None = ...,
-        nominet_domain_fail: nominet.nominet_pb2.DomainFail | None = ...,
-        nominet_registrant_transfer: nominet.nominet_pb2.RegistrantTransfer | None = ...,
-        traficom_trn: traficom.traficom_pb2.TrnData | None = ...,
-        verisign_low_balance: global___BalanceReply | None = ...,
-        maintenance_info: maintenance.maintenance_pb2.MaintenanceInfoReply | None = ...,
-        eurid_poll: eurid.eurid_pb2.PollReply | None = ...,
-        host_info: host.host_pb2.HostInfoReply | None = ...,
-        change_data: global___ChangeData | None = ...,
-        keysys: global___KeysysPoll | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        msg_id: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "message", b"message", "msg_id", b"msg_id", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["data", b"data"]) -> typing.Literal["domain_info", "domain_transfer", "domain_create", "domain_renew", "domain_pan", "contact_info", "contact_transfer", "contact_pan", "nominet_domain_cancel", "nominet_domain_release", "nominet_domain_registrar_change", "nominet_host_cancel", "nominet_process", "nominet_suspend", "nominet_domain_fail", "nominet_registrant_transfer", "traficom_trn", "verisign_low_balance", "maintenance_info", "eurid_poll", "host_info"] | None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["msg_id", b"msg_id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PollReply = PollReply
+Global___PollAckSingle: _TypeAlias = PollAckSingle  # noqa: Y015
 
-@typing.final
-class ChangeData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PollAckReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    COUNT_FIELD_NUMBER: _builtins.int
+    NEXT_MSG_ID_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    count: _builtins.int
+    next_msg_id: _builtins.str
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    def __init__(
+        self,
+        *,
+        count: _builtins.int = ...,
+        next_msg_id: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "count", b"count", "next_msg_id", b"next_msg_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
+
+Global___PollAckReply: _TypeAlias = PollAckReply  # noqa: Y015
+
+@_typing.final
+class PollReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MSG_ID_FIELD_NUMBER: _builtins.int
+    COUNT_FIELD_NUMBER: _builtins.int
+    ENQUEUE_DATE_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    DOMAIN_INFO_FIELD_NUMBER: _builtins.int
+    DOMAIN_TRANSFER_FIELD_NUMBER: _builtins.int
+    DOMAIN_CREATE_FIELD_NUMBER: _builtins.int
+    DOMAIN_RENEW_FIELD_NUMBER: _builtins.int
+    DOMAIN_PAN_FIELD_NUMBER: _builtins.int
+    CONTACT_INFO_FIELD_NUMBER: _builtins.int
+    CONTACT_TRANSFER_FIELD_NUMBER: _builtins.int
+    CONTACT_PAN_FIELD_NUMBER: _builtins.int
+    NOMINET_DOMAIN_CANCEL_FIELD_NUMBER: _builtins.int
+    NOMINET_DOMAIN_RELEASE_FIELD_NUMBER: _builtins.int
+    NOMINET_DOMAIN_REGISTRAR_CHANGE_FIELD_NUMBER: _builtins.int
+    NOMINET_HOST_CANCEL_FIELD_NUMBER: _builtins.int
+    NOMINET_PROCESS_FIELD_NUMBER: _builtins.int
+    NOMINET_SUSPEND_FIELD_NUMBER: _builtins.int
+    NOMINET_DOMAIN_FAIL_FIELD_NUMBER: _builtins.int
+    NOMINET_REGISTRANT_TRANSFER_FIELD_NUMBER: _builtins.int
+    TRAFICOM_TRN_FIELD_NUMBER: _builtins.int
+    VERISIGN_LOW_BALANCE_FIELD_NUMBER: _builtins.int
+    MAINTENANCE_INFO_FIELD_NUMBER: _builtins.int
+    EURID_POLL_FIELD_NUMBER: _builtins.int
+    HOST_INFO_FIELD_NUMBER: _builtins.int
+    CHANGE_DATA_FIELD_NUMBER: _builtins.int
+    KEYSYS_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    msg_id: _builtins.str
+    count: _builtins.int
+    message: _builtins.str
+    @_builtins.property
+    def enqueue_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def domain_info(self) -> _domain_pb2.DomainInfoReply: ...
+    @_builtins.property
+    def domain_transfer(self) -> _domain_pb2.DomainTransferReply: ...
+    @_builtins.property
+    def domain_create(self) -> _domain_pb2.DomainCreateReply: ...
+    @_builtins.property
+    def domain_renew(self) -> _domain_pb2.DomainRenewReply: ...
+    @_builtins.property
+    def domain_pan(self) -> _domain_pb2.DomainPANReply: ...
+    @_builtins.property
+    def contact_info(self) -> _contact_pb2.ContactInfoReply: ...
+    @_builtins.property
+    def contact_transfer(self) -> _contact_pb2.ContactTransferReply: ...
+    @_builtins.property
+    def contact_pan(self) -> _contact_pb2.ContactPANReply: ...
+    @_builtins.property
+    def nominet_domain_cancel(self) -> _nominet_pb2.DomainCancel: ...
+    @_builtins.property
+    def nominet_domain_release(self) -> _nominet_pb2.DomainRelease: ...
+    @_builtins.property
+    def nominet_domain_registrar_change(self) -> _nominet_pb2.DomainRegistrarChange: ...
+    @_builtins.property
+    def nominet_host_cancel(self) -> _nominet_pb2.HostCancel: ...
+    @_builtins.property
+    def nominet_process(self) -> _nominet_pb2.Process: ...
+    @_builtins.property
+    def nominet_suspend(self) -> _nominet_pb2.Suspend: ...
+    @_builtins.property
+    def nominet_domain_fail(self) -> _nominet_pb2.DomainFail: ...
+    @_builtins.property
+    def nominet_registrant_transfer(self) -> _nominet_pb2.RegistrantTransfer: ...
+    @_builtins.property
+    def traficom_trn(self) -> _traficom_pb2.TrnData: ...
+    @_builtins.property
+    def verisign_low_balance(self) -> Global___BalanceReply: ...
+    @_builtins.property
+    def maintenance_info(self) -> _maintenance_pb2.MaintenanceInfoReply: ...
+    @_builtins.property
+    def eurid_poll(self) -> _eurid_pb2.PollReply: ...
+    @_builtins.property
+    def host_info(self) -> _host_pb2.HostInfoReply: ...
+    @_builtins.property
+    def change_data(self) -> Global___ChangeData: ...
+    @_builtins.property
+    def keysys(self) -> Global___KeysysPoll: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
+    def __init__(
+        self,
+        *,
+        msg_id: _builtins.str = ...,
+        count: _builtins.int = ...,
+        enqueue_date: _timestamp_pb2.Timestamp | None = ...,
+        message: _builtins.str = ...,
+        domain_info: _domain_pb2.DomainInfoReply | None = ...,
+        domain_transfer: _domain_pb2.DomainTransferReply | None = ...,
+        domain_create: _domain_pb2.DomainCreateReply | None = ...,
+        domain_renew: _domain_pb2.DomainRenewReply | None = ...,
+        domain_pan: _domain_pb2.DomainPANReply | None = ...,
+        contact_info: _contact_pb2.ContactInfoReply | None = ...,
+        contact_transfer: _contact_pb2.ContactTransferReply | None = ...,
+        contact_pan: _contact_pb2.ContactPANReply | None = ...,
+        nominet_domain_cancel: _nominet_pb2.DomainCancel | None = ...,
+        nominet_domain_release: _nominet_pb2.DomainRelease | None = ...,
+        nominet_domain_registrar_change: _nominet_pb2.DomainRegistrarChange | None = ...,
+        nominet_host_cancel: _nominet_pb2.HostCancel | None = ...,
+        nominet_process: _nominet_pb2.Process | None = ...,
+        nominet_suspend: _nominet_pb2.Suspend | None = ...,
+        nominet_domain_fail: _nominet_pb2.DomainFail | None = ...,
+        nominet_registrant_transfer: _nominet_pb2.RegistrantTransfer | None = ...,
+        traficom_trn: _traficom_pb2.TrnData | None = ...,
+        verisign_low_balance: Global___BalanceReply | None = ...,
+        maintenance_info: _maintenance_pb2.MaintenanceInfoReply | None = ...,
+        eurid_poll: _eurid_pb2.PollReply | None = ...,
+        host_info: _host_pb2.HostInfoReply | None = ...,
+        change_data: Global___ChangeData | None = ...,
+        keysys: Global___KeysysPoll | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["change_data", b"change_data", "cmd_resp", b"cmd_resp", "contact_info", b"contact_info", "contact_pan", b"contact_pan", "contact_transfer", b"contact_transfer", "count", b"count", "data", b"data", "domain_create", b"domain_create", "domain_info", b"domain_info", "domain_pan", b"domain_pan", "domain_renew", b"domain_renew", "domain_transfer", b"domain_transfer", "enqueue_date", b"enqueue_date", "eurid_poll", b"eurid_poll", "host_info", b"host_info", "keysys", b"keysys", "maintenance_info", b"maintenance_info", "message", b"message", "msg_id", b"msg_id", "nominet_domain_cancel", b"nominet_domain_cancel", "nominet_domain_fail", b"nominet_domain_fail", "nominet_domain_registrar_change", b"nominet_domain_registrar_change", "nominet_domain_release", b"nominet_domain_release", "nominet_host_cancel", b"nominet_host_cancel", "nominet_process", b"nominet_process", "nominet_registrant_transfer", b"nominet_registrant_transfer", "nominet_suspend", b"nominet_suspend", "traficom_trn", b"traficom_trn", "verisign_low_balance", b"verisign_low_balance"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_data: _TypeAlias = _typing.Literal["domain_info", "domain_transfer", "domain_create", "domain_renew", "domain_pan", "contact_info", "contact_transfer", "contact_pan", "nominet_domain_cancel", "nominet_domain_release", "nominet_domain_registrar_change", "nominet_host_cancel", "nominet_process", "nominet_suspend", "nominet_domain_fail", "nominet_registrant_transfer", "traficom_trn", "verisign_low_balance", "maintenance_info", "eurid_poll", "host_info"]  # noqa: Y015
+    _WhichOneofArgType_data: _TypeAlias = _typing.Literal["data", b"data"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_data) -> _WhichOneofReturnType_data | None: ...
+
+Global___PollReply: _TypeAlias = PollReply  # noqa: Y015
+
+@_typing.final
+class ChangeData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _ChangeState:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _ChangeStateEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[ChangeData._ChangeState.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _ChangeStateEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[ChangeData._ChangeState.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         AFTER: ChangeData._ChangeState.ValueType  # 0
         BEFORE: ChangeData._ChangeState.ValueType  # 1
 
@@ -196,16 +259,16 @@ class ChangeData(google.protobuf.message.Message):
     AFTER: ChangeData.ChangeState.ValueType  # 0
     BEFORE: ChangeData.ChangeState.ValueType  # 1
 
-    @typing.final
-    class ChangeOperation(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class ChangeOperation(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
         class _ChangeOperationType:
-            ValueType = typing.NewType("ValueType", builtins.int)
-            V: typing_extensions.TypeAlias = ValueType
+            ValueType = _typing.NewType("ValueType", _builtins.int)
+            V: _TypeAlias = ValueType  # noqa: Y015
 
-        class _ChangeOperationTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[ChangeData.ChangeOperation._ChangeOperationType.ValueType], builtins.type):
-            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        class _ChangeOperationTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[ChangeData.ChangeOperation._ChangeOperationType.ValueType], _builtins.type):
+            DESCRIPTOR: _descriptor.EnumDescriptor
             Custom: ChangeData.ChangeOperation._ChangeOperationType.ValueType  # 0
             Create: ChangeData.ChangeOperation._ChangeOperationType.ValueType  # 1
             Delete: ChangeData.ChangeOperation._ChangeOperationType.ValueType  # 2
@@ -229,30 +292,33 @@ class ChangeData(google.protobuf.message.Message):
         AutoDelete: ChangeData.ChangeOperation.ChangeOperationType.ValueType  # 8
         AutoPurge: ChangeData.ChangeOperation.ChangeOperationType.ValueType  # 9
 
-        OPERATION_TYPE_FIELD_NUMBER: builtins.int
-        OPERATION_FIELD_NUMBER: builtins.int
-        operation_type: global___ChangeData.ChangeOperation.ChangeOperationType.ValueType
-        @property
-        def operation(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        OPERATION_TYPE_FIELD_NUMBER: _builtins.int
+        OPERATION_FIELD_NUMBER: _builtins.int
+        operation_type: Global___ChangeData.ChangeOperation.ChangeOperationType.ValueType
+        @_builtins.property
+        def operation(self) -> _wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            operation_type: global___ChangeData.ChangeOperation.ChangeOperationType.ValueType = ...,
-            operation: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            operation_type: Global___ChangeData.ChangeOperation.ChangeOperationType.ValueType = ...,
+            operation: _wrappers_pb2.StringValue | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["operation", b"operation"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["operation", b"operation", "operation_type", b"operation_type"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["operation", b"operation"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["operation", b"operation", "operation_type", b"operation_type"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    @typing.final
-    class CaseID(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class CaseID(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
         class _CaseIDType:
-            ValueType = typing.NewType("ValueType", builtins.int)
-            V: typing_extensions.TypeAlias = ValueType
+            ValueType = _typing.NewType("ValueType", _builtins.int)
+            V: _TypeAlias = ValueType  # noqa: Y015
 
-        class _CaseIDTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[ChangeData.CaseID._CaseIDType.ValueType], builtins.type):
-            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        class _CaseIDTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[ChangeData.CaseID._CaseIDType.ValueType], _builtins.type):
+            DESCRIPTOR: _descriptor.EnumDescriptor
             Custom: ChangeData.CaseID._CaseIDType.ValueType  # 0
             UDRP: ChangeData.CaseID._CaseIDType.ValueType  # 1
             URS: ChangeData.CaseID._CaseIDType.ValueType  # 2
@@ -262,130 +328,147 @@ class ChangeData(google.protobuf.message.Message):
         UDRP: ChangeData.CaseID.CaseIDType.ValueType  # 1
         URS: ChangeData.CaseID.CaseIDType.ValueType  # 2
 
-        CASE_ID_TYPE_FIELD_NUMBER: builtins.int
-        NAME_FIELD_NUMBER: builtins.int
-        CASE_ID_FIELD_NUMBER: builtins.int
-        case_id_type: global___ChangeData.CaseID.CaseIDType.ValueType
-        case_id: builtins.str
-        @property
-        def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        CASE_ID_TYPE_FIELD_NUMBER: _builtins.int
+        NAME_FIELD_NUMBER: _builtins.int
+        CASE_ID_FIELD_NUMBER: _builtins.int
+        case_id_type: Global___ChangeData.CaseID.CaseIDType.ValueType
+        case_id: _builtins.str
+        @_builtins.property
+        def name(self) -> _wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            case_id_type: global___ChangeData.CaseID.CaseIDType.ValueType = ...,
-            name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            case_id: builtins.str = ...,
+            case_id_type: Global___ChangeData.CaseID.CaseIDType.ValueType = ...,
+            name: _wrappers_pb2.StringValue | None = ...,
+            case_id: _builtins.str = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["name", b"name"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "case_id_type", b"case_id_type", "name", b"name"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["name", b"name"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "case_id_type", b"case_id_type", "name", b"name"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    CHANGE_STATE_FIELD_NUMBER: builtins.int
-    OPERATION_FIELD_NUMBER: builtins.int
-    DATE_FIELD_NUMBER: builtins.int
-    SERVER_TRANSACTION_ID_FIELD_NUMBER: builtins.int
-    WHO_FIELD_NUMBER: builtins.int
-    CASE_ID_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    change_state: global___ChangeData.ChangeState.ValueType
-    server_transaction_id: builtins.str
-    who: builtins.str
-    @property
-    def operation(self) -> global___ChangeData.ChangeOperation: ...
-    @property
-    def date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def case_id(self) -> global___ChangeData.CaseID: ...
-    @property
-    def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    CHANGE_STATE_FIELD_NUMBER: _builtins.int
+    OPERATION_FIELD_NUMBER: _builtins.int
+    DATE_FIELD_NUMBER: _builtins.int
+    SERVER_TRANSACTION_ID_FIELD_NUMBER: _builtins.int
+    WHO_FIELD_NUMBER: _builtins.int
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    change_state: Global___ChangeData.ChangeState.ValueType
+    server_transaction_id: _builtins.str
+    who: _builtins.str
+    @_builtins.property
+    def operation(self) -> Global___ChangeData.ChangeOperation: ...
+    @_builtins.property
+    def date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def case_id(self) -> Global___ChangeData.CaseID: ...
+    @_builtins.property
+    def reason(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        change_state: global___ChangeData.ChangeState.ValueType = ...,
-        operation: global___ChangeData.ChangeOperation | None = ...,
-        date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        server_transaction_id: builtins.str = ...,
-        who: builtins.str = ...,
-        case_id: global___ChangeData.CaseID | None = ...,
-        reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        change_state: Global___ChangeData.ChangeState.ValueType = ...,
+        operation: Global___ChangeData.ChangeOperation | None = ...,
+        date: _timestamp_pb2.Timestamp | None = ...,
+        server_transaction_id: _builtins.str = ...,
+        who: _builtins.str = ...,
+        case_id: Global___ChangeData.CaseID | None = ...,
+        reason: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["case_id", b"case_id", "date", b"date", "operation", b"operation", "reason", b"reason"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "change_state", b"change_state", "date", b"date", "operation", b"operation", "reason", b"reason", "server_transaction_id", b"server_transaction_id", "who", b"who"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "date", b"date", "operation", b"operation", "reason", b"reason"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "change_state", b"change_state", "date", b"date", "operation", b"operation", "reason", b"reason", "server_transaction_id", b"server_transaction_id", "who", b"who"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ChangeData = ChangeData
+Global___ChangeData: _TypeAlias = ChangeData  # noqa: Y015
 
-@typing.final
-class KeysysPoll(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class KeysysPoll(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class DataEntry(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class DataEntry(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        KEY_FIELD_NUMBER: builtins.int
-        VALUE_FIELD_NUMBER: builtins.int
-        key: builtins.str
-        value: builtins.str
+        KEY_FIELD_NUMBER: _builtins.int
+        VALUE_FIELD_NUMBER: _builtins.int
+        key: _builtins.str
+        value: _builtins.str
         def __init__(
             self,
             *,
-            key: builtins.str = ...,
-            value: builtins.str = ...,
+            key: _builtins.str = ...,
+            value: _builtins.str = ...,
         ) -> None: ...
-        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["key", b"key", "value", b"value"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    INFO_FIELD_NUMBER: builtins.int
-    DATA_FIELD_NUMBER: builtins.int
-    @property
-    def info(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def data(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]: ...
+    INFO_FIELD_NUMBER: _builtins.int
+    DATA_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def info(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def data(self) -> _containers.ScalarMap[_builtins.str, _builtins.str]: ...
     def __init__(
         self,
         *,
-        info: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        data: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
+        info: _wrappers_pb2.StringValue | None = ...,
+        data: _abc.Mapping[_builtins.str, _builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["info", b"info"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["data", b"data", "info", b"info"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["info", b"info"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["data", b"data", "info", b"info"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___KeysysPoll = KeysysPoll
+Global___KeysysPoll: _TypeAlias = KeysysPoll  # noqa: Y015
 
-@typing.final
-class BalanceReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class BalanceReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    BALANCE_FIELD_NUMBER: builtins.int
-    CURRENCY_FIELD_NUMBER: builtins.int
-    CREDIT_LIMIT_FIELD_NUMBER: builtins.int
-    AVAILABLE_CREDIT_FIELD_NUMBER: builtins.int
-    FIXED_CREDIT_THRESHOLD_FIELD_NUMBER: builtins.int
-    PERCENTAGE_CREDIT_THRESHOLD_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    balance: builtins.str
-    currency: builtins.str
-    @property
-    def credit_limit(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def available_credit(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def fixed_credit_threshold(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def percentage_credit_threshold(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    BALANCE_FIELD_NUMBER: _builtins.int
+    CURRENCY_FIELD_NUMBER: _builtins.int
+    CREDIT_LIMIT_FIELD_NUMBER: _builtins.int
+    AVAILABLE_CREDIT_FIELD_NUMBER: _builtins.int
+    FIXED_CREDIT_THRESHOLD_FIELD_NUMBER: _builtins.int
+    PERCENTAGE_CREDIT_THRESHOLD_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    balance: _builtins.str
+    currency: _builtins.str
+    @_builtins.property
+    def credit_limit(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def available_credit(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def fixed_credit_threshold(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def percentage_credit_threshold(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        balance: builtins.str = ...,
-        currency: builtins.str = ...,
-        credit_limit: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        available_credit: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        fixed_credit_threshold: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        percentage_credit_threshold: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        balance: _builtins.str = ...,
+        currency: _builtins.str = ...,
+        credit_limit: _wrappers_pb2.StringValue | None = ...,
+        available_credit: _wrappers_pb2.StringValue | None = ...,
+        fixed_credit_threshold: _wrappers_pb2.StringValue | None = ...,
+        percentage_credit_threshold: _wrappers_pb2.UInt32Value | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["available_credit", b"available_credit", "cmd_resp", b"cmd_resp", "credit_limit", b"credit_limit", "credit_threshold", b"credit_threshold", "fixed_credit_threshold", b"fixed_credit_threshold", "percentage_credit_threshold", b"percentage_credit_threshold"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["available_credit", b"available_credit", "balance", b"balance", "cmd_resp", b"cmd_resp", "credit_limit", b"credit_limit", "credit_threshold", b"credit_threshold", "currency", b"currency", "fixed_credit_threshold", b"fixed_credit_threshold", "percentage_credit_threshold", b"percentage_credit_threshold"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["credit_threshold", b"credit_threshold"]) -> typing.Literal["fixed_credit_threshold", "percentage_credit_threshold"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["available_credit", b"available_credit", "cmd_resp", b"cmd_resp", "credit_limit", b"credit_limit", "credit_threshold", b"credit_threshold", "fixed_credit_threshold", b"fixed_credit_threshold", "percentage_credit_threshold", b"percentage_credit_threshold"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["available_credit", b"available_credit", "balance", b"balance", "cmd_resp", b"cmd_resp", "credit_limit", b"credit_limit", "credit_threshold", b"credit_threshold", "currency", b"currency", "fixed_credit_threshold", b"fixed_credit_threshold", "percentage_credit_threshold", b"percentage_credit_threshold"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_credit_threshold: _TypeAlias = _typing.Literal["fixed_credit_threshold", "percentage_credit_threshold"]  # noqa: Y015
+    _WhichOneofArgType_credit_threshold: _TypeAlias = _typing.Literal["credit_threshold", b"credit_threshold"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_credit_threshold) -> _WhichOneofReturnType_credit_threshold | None: ...
 
-global___BalanceReply = BalanceReply
+Global___BalanceReply: _TypeAlias = BalanceReply  # noqa: Y015

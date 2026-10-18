@@ -3,28 +3,28 @@
 isort:skip_file
 """
 
-import builtins
-import google.protobuf.descriptor
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _Environment:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _EnvironmentEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Environment.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _EnvironmentEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Environment.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     RealTime: _Environment.ValueType  # 0
     TimeDelay: _Environment.ValueType  # 1
 
@@ -32,14 +32,14 @@ class Environment(_Environment, metaclass=_EnvironmentEnumTypeWrapper): ...
 
 RealTime: Environment.ValueType  # 0
 TimeDelay: Environment.ValueType  # 1
-global___Environment = Environment
+Global___Environment: _TypeAlias = Environment  # noqa: Y015
 
 class _DomainState:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DomainStateEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DomainState.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DomainStateEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DomainState.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Registered: _DomainState.ValueType  # 0
     Available: _DomainState.ValueType  # 1
     NotWithinRegistry: _DomainState.ValueType  # 2
@@ -51,14 +51,14 @@ Registered: DomainState.ValueType  # 0
 Available: DomainState.ValueType  # 1
 NotWithinRegistry: DomainState.ValueType  # 2
 RulesPrevent: DomainState.ValueType  # 3
-global___DomainState = DomainState
+Global___DomainState: _TypeAlias = DomainState  # noqa: Y015
 
 class _DomainStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DomainStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DomainStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DomainStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DomainStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Unknown: _DomainStatus.ValueType  # 0
     RegisteredUntilExpiry: _DomainStatus.ValueType  # 1
     RenewalRequired: _DomainStatus.ValueType  # 2
@@ -70,98 +70,113 @@ Unknown: DomainStatus.ValueType  # 0
 RegisteredUntilExpiry: DomainStatus.ValueType  # 1
 RenewalRequired: DomainStatus.ValueType  # 2
 NoLongerRequired: DomainStatus.ValueType  # 3
-global___DomainStatus = DomainStatus
+Global___DomainStatus: _TypeAlias = DomainStatus  # noqa: Y015
 
-@typing.final
-class DomainRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    ENVIRONMENT_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    environment: global___Environment.ValueType
-    registry_name: builtins.str
+    NAME_FIELD_NUMBER: _builtins.int
+    ENVIRONMENT_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    environment: Global___Environment.ValueType
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        environment: global___Environment.ValueType = ...,
-        registry_name: builtins.str = ...,
+        name: _builtins.str = ...,
+        environment: Global___Environment.ValueType = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["environment", b"environment", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["environment", b"environment", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRequest = DomainRequest
+Global___DomainRequest: _TypeAlias = DomainRequest  # noqa: Y015
 
-@typing.final
-class DomainResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRATION_STATE_FIELD_NUMBER: builtins.int
-    DETAGGED_FIELD_NUMBER: builtins.int
-    SUSPENDED_FIELD_NUMBER: builtins.int
-    CREATED_FIELD_NUMBER: builtins.int
-    EXPIRY_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    TAG_FIELD_NUMBER: builtins.int
-    registration_state: global___DomainState.ValueType
-    detagged: builtins.bool
-    status: global___DomainStatus.ValueType
-    tag: builtins.str
-    @property
-    def suspended(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def created(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    REGISTRATION_STATE_FIELD_NUMBER: _builtins.int
+    DETAGGED_FIELD_NUMBER: _builtins.int
+    SUSPENDED_FIELD_NUMBER: _builtins.int
+    CREATED_FIELD_NUMBER: _builtins.int
+    EXPIRY_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    TAG_FIELD_NUMBER: _builtins.int
+    registration_state: Global___DomainState.ValueType
+    detagged: _builtins.bool
+    status: Global___DomainStatus.ValueType
+    tag: _builtins.str
+    @_builtins.property
+    def suspended(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def created(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        registration_state: global___DomainState.ValueType = ...,
-        detagged: builtins.bool = ...,
-        suspended: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        created: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        status: global___DomainStatus.ValueType = ...,
-        tag: builtins.str = ...,
+        registration_state: Global___DomainState.ValueType = ...,
+        detagged: _builtins.bool = ...,
+        suspended: _wrappers_pb2.BoolValue | None = ...,
+        created: _timestamp_pb2.Timestamp | None = ...,
+        expiry: _timestamp_pb2.Timestamp | None = ...,
+        status: Global___DomainStatus.ValueType = ...,
+        tag: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["created", b"created", "expiry", b"expiry", "suspended", b"suspended"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["created", b"created", "detagged", b"detagged", "expiry", b"expiry", "registration_state", b"registration_state", "status", b"status", "suspended", b"suspended", "tag", b"tag"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["created", b"created", "expiry", b"expiry", "suspended", b"suspended"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["created", b"created", "detagged", b"detagged", "expiry", b"expiry", "registration_state", b"registration_state", "status", b"status", "suspended", b"suspended", "tag", b"tag"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainResponse = DomainResponse
+Global___DomainResponse: _TypeAlias = DomainResponse  # noqa: Y015
 
-@typing.final
-class UsageRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class UsageRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ENVIRONMENT_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    environment: global___Environment.ValueType
-    registry_name: builtins.str
+    ENVIRONMENT_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    environment: Global___Environment.ValueType
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        environment: global___Environment.ValueType = ...,
-        registry_name: builtins.str = ...,
+        environment: Global___Environment.ValueType = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["environment", b"environment", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["environment", b"environment", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___UsageRequest = UsageRequest
+Global___UsageRequest: _TypeAlias = UsageRequest  # noqa: Y015
 
-@typing.final
-class UsageResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class UsageResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    USAGE_60_FIELD_NUMBER: builtins.int
-    USAGE_24_FIELD_NUMBER: builtins.int
-    usage_60: builtins.int
-    usage_24: builtins.int
+    USAGE_60_FIELD_NUMBER: _builtins.int
+    USAGE_24_FIELD_NUMBER: _builtins.int
+    usage_60: _builtins.int
+    usage_24: _builtins.int
     def __init__(
         self,
         *,
-        usage_60: builtins.int = ...,
-        usage_24: builtins.int = ...,
+        usage_60: _builtins.int = ...,
+        usage_24: _builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["usage_24", b"usage_24", "usage_60", b"usage_60"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["usage_24", b"usage_24", "usage_60", b"usage_60"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___UsageResponse = UsageResponse
+Global___UsageResponse: _TypeAlias = UsageResponse  # noqa: Y015

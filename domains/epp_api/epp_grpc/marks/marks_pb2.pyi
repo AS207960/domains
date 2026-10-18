@@ -3,31 +3,31 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _Entitlement:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _EntitlementEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Entitlement.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _EntitlementEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Entitlement.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Owner: _Entitlement.ValueType  # 0
     Assignee: _Entitlement.ValueType  # 1
     Licensee: _Entitlement.ValueType  # 2
@@ -37,14 +37,14 @@ class Entitlement(_Entitlement, metaclass=_EntitlementEnumTypeWrapper): ...
 Owner: Entitlement.ValueType  # 0
 Assignee: Entitlement.ValueType  # 1
 Licensee: Entitlement.ValueType  # 2
-global___Entitlement = Entitlement
+Global___Entitlement: _TypeAlias = Entitlement  # noqa: Y015
 
 class _ContactType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ContactTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ContactType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ContactTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ContactType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     OwnerContact: _ContactType.ValueType  # 0
     Agent: _ContactType.ValueType  # 1
     ThirdParty: _ContactType.ValueType  # 2
@@ -54,334 +54,359 @@ class ContactType(_ContactType, metaclass=_ContactTypeEnumTypeWrapper): ...
 OwnerContact: ContactType.ValueType  # 0
 Agent: ContactType.ValueType  # 1
 ThirdParty: ContactType.ValueType  # 2
-global___ContactType = ContactType
+Global___ContactType: _TypeAlias = ContactType  # noqa: Y015
 
-@typing.final
-class Mark(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Mark(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TRADEMARK_FIELD_NUMBER: builtins.int
-    TREATY_OR_STATUTE_FIELD_NUMBER: builtins.int
-    COURT_FIELD_NUMBER: builtins.int
-    @property
-    def trademark(self) -> global___TradeMark: ...
-    @property
-    def treaty_or_statute(self) -> global___TreatyOrStatute: ...
-    @property
-    def court(self) -> global___Court: ...
+    TRADEMARK_FIELD_NUMBER: _builtins.int
+    TREATY_OR_STATUTE_FIELD_NUMBER: _builtins.int
+    COURT_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def trademark(self) -> Global___TradeMark: ...
+    @_builtins.property
+    def treaty_or_statute(self) -> Global___TreatyOrStatute: ...
+    @_builtins.property
+    def court(self) -> Global___Court: ...
     def __init__(
         self,
         *,
-        trademark: global___TradeMark | None = ...,
-        treaty_or_statute: global___TreatyOrStatute | None = ...,
-        court: global___Court | None = ...,
+        trademark: Global___TradeMark | None = ...,
+        treaty_or_statute: Global___TreatyOrStatute | None = ...,
+        court: Global___Court | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["court", b"court", "mark", b"mark", "trademark", b"trademark", "treaty_or_statute", b"treaty_or_statute"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["court", b"court", "mark", b"mark", "trademark", b"trademark", "treaty_or_statute", b"treaty_or_statute"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["mark", b"mark"]) -> typing.Literal["trademark", "treaty_or_statute", "court"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["court", b"court", "mark", b"mark", "trademark", b"trademark", "treaty_or_statute", b"treaty_or_statute"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["court", b"court", "mark", b"mark", "trademark", b"trademark", "treaty_or_statute", b"treaty_or_statute"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_mark: _TypeAlias = _typing.Literal["trademark", "treaty_or_statute", "court"]  # noqa: Y015
+    _WhichOneofArgType_mark: _TypeAlias = _typing.Literal["mark", b"mark"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_mark) -> _WhichOneofReturnType_mark | None: ...
 
-global___Mark = Mark
+Global___Mark: _TypeAlias = Mark  # noqa: Y015
 
-@typing.final
-class TradeMark(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TradeMark(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    MARK_NAME_FIELD_NUMBER: builtins.int
-    HOLDERS_FIELD_NUMBER: builtins.int
-    CONTACTS_FIELD_NUMBER: builtins.int
-    JURISDICTION_FIELD_NUMBER: builtins.int
-    CLASSES_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    GOODS_AND_SERVICES_FIELD_NUMBER: builtins.int
-    APPLICATION_ID_FIELD_NUMBER: builtins.int
-    APPLICATION_DATE_FIELD_NUMBER: builtins.int
-    REGISTRATION_ID_FIELD_NUMBER: builtins.int
-    REGISTRATION_DATE_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    mark_name: builtins.str
-    jurisdiction: builtins.str
-    goods_and_services: builtins.str
-    registration_id: builtins.str
-    @property
-    def holders(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Holder]: ...
-    @property
-    def contacts(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Contact]: ...
-    @property
-    def classes(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.int]: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def application_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def application_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def registration_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    ID_FIELD_NUMBER: _builtins.int
+    MARK_NAME_FIELD_NUMBER: _builtins.int
+    HOLDERS_FIELD_NUMBER: _builtins.int
+    CONTACTS_FIELD_NUMBER: _builtins.int
+    JURISDICTION_FIELD_NUMBER: _builtins.int
+    CLASSES_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    GOODS_AND_SERVICES_FIELD_NUMBER: _builtins.int
+    APPLICATION_ID_FIELD_NUMBER: _builtins.int
+    APPLICATION_DATE_FIELD_NUMBER: _builtins.int
+    REGISTRATION_ID_FIELD_NUMBER: _builtins.int
+    REGISTRATION_DATE_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    mark_name: _builtins.str
+    jurisdiction: _builtins.str
+    goods_and_services: _builtins.str
+    registration_id: _builtins.str
+    @_builtins.property
+    def holders(self) -> _containers.RepeatedCompositeFieldContainer[Global___Holder]: ...
+    @_builtins.property
+    def contacts(self) -> _containers.RepeatedCompositeFieldContainer[Global___Contact]: ...
+    @_builtins.property
+    def classes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.int]: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def application_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def application_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def registration_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        mark_name: builtins.str = ...,
-        holders: collections.abc.Iterable[global___Holder] | None = ...,
-        contacts: collections.abc.Iterable[global___Contact] | None = ...,
-        jurisdiction: builtins.str = ...,
-        classes: collections.abc.Iterable[builtins.int] | None = ...,
-        labels: collections.abc.Iterable[builtins.str] | None = ...,
-        goods_and_services: builtins.str = ...,
-        application_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        application_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        registration_id: builtins.str = ...,
-        registration_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        id: _builtins.str = ...,
+        mark_name: _builtins.str = ...,
+        holders: _abc.Iterable[Global___Holder] | None = ...,
+        contacts: _abc.Iterable[Global___Contact] | None = ...,
+        jurisdiction: _builtins.str = ...,
+        classes: _abc.Iterable[_builtins.int] | None = ...,
+        labels: _abc.Iterable[_builtins.str] | None = ...,
+        goods_and_services: _builtins.str = ...,
+        application_id: _wrappers_pb2.StringValue | None = ...,
+        application_date: _timestamp_pb2.Timestamp | None = ...,
+        registration_id: _builtins.str = ...,
+        registration_date: _timestamp_pb2.Timestamp | None = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["application_date", b"application_date", "application_id", b"application_id", "expiry_date", b"expiry_date", "registration_date", b"registration_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["application_date", b"application_date", "application_id", b"application_id", "classes", b"classes", "contacts", b"contacts", "expiry_date", b"expiry_date", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "jurisdiction", b"jurisdiction", "labels", b"labels", "mark_name", b"mark_name", "registration_date", b"registration_date", "registration_id", b"registration_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["application_date", b"application_date", "application_id", b"application_id", "expiry_date", b"expiry_date", "registration_date", b"registration_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["application_date", b"application_date", "application_id", b"application_id", "classes", b"classes", "contacts", b"contacts", "expiry_date", b"expiry_date", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "jurisdiction", b"jurisdiction", "labels", b"labels", "mark_name", b"mark_name", "registration_date", b"registration_date", "registration_id", b"registration_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TradeMark = TradeMark
+Global___TradeMark: _TypeAlias = TradeMark  # noqa: Y015
 
-@typing.final
-class TreatyOrStatute(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TreatyOrStatute(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    MARK_NAME_FIELD_NUMBER: builtins.int
-    HOLDERS_FIELD_NUMBER: builtins.int
-    CONTACTS_FIELD_NUMBER: builtins.int
-    PROTECTIONS_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    GOODS_AND_SERVICES_FIELD_NUMBER: builtins.int
-    REFERENCE_NUMBER_FIELD_NUMBER: builtins.int
-    PROTECTION_DATE_FIELD_NUMBER: builtins.int
-    TITLE_FIELD_NUMBER: builtins.int
-    EXECUTION_DATE_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    mark_name: builtins.str
-    goods_and_services: builtins.str
-    reference_number: builtins.str
-    title: builtins.str
-    @property
-    def holders(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Holder]: ...
-    @property
-    def contacts(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Contact]: ...
-    @property
-    def protections(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Protection]: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def protection_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def execution_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    ID_FIELD_NUMBER: _builtins.int
+    MARK_NAME_FIELD_NUMBER: _builtins.int
+    HOLDERS_FIELD_NUMBER: _builtins.int
+    CONTACTS_FIELD_NUMBER: _builtins.int
+    PROTECTIONS_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    GOODS_AND_SERVICES_FIELD_NUMBER: _builtins.int
+    REFERENCE_NUMBER_FIELD_NUMBER: _builtins.int
+    PROTECTION_DATE_FIELD_NUMBER: _builtins.int
+    TITLE_FIELD_NUMBER: _builtins.int
+    EXECUTION_DATE_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    mark_name: _builtins.str
+    goods_and_services: _builtins.str
+    reference_number: _builtins.str
+    title: _builtins.str
+    @_builtins.property
+    def holders(self) -> _containers.RepeatedCompositeFieldContainer[Global___Holder]: ...
+    @_builtins.property
+    def contacts(self) -> _containers.RepeatedCompositeFieldContainer[Global___Contact]: ...
+    @_builtins.property
+    def protections(self) -> _containers.RepeatedCompositeFieldContainer[Global___Protection]: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def protection_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def execution_date(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        mark_name: builtins.str = ...,
-        holders: collections.abc.Iterable[global___Holder] | None = ...,
-        contacts: collections.abc.Iterable[global___Contact] | None = ...,
-        protections: collections.abc.Iterable[global___Protection] | None = ...,
-        labels: collections.abc.Iterable[builtins.str] | None = ...,
-        goods_and_services: builtins.str = ...,
-        reference_number: builtins.str = ...,
-        protection_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        title: builtins.str = ...,
-        execution_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        id: _builtins.str = ...,
+        mark_name: _builtins.str = ...,
+        holders: _abc.Iterable[Global___Holder] | None = ...,
+        contacts: _abc.Iterable[Global___Contact] | None = ...,
+        protections: _abc.Iterable[Global___Protection] | None = ...,
+        labels: _abc.Iterable[_builtins.str] | None = ...,
+        goods_and_services: _builtins.str = ...,
+        reference_number: _builtins.str = ...,
+        protection_date: _timestamp_pb2.Timestamp | None = ...,
+        title: _builtins.str = ...,
+        execution_date: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["execution_date", b"execution_date", "protection_date", b"protection_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["contacts", b"contacts", "execution_date", b"execution_date", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "labels", b"labels", "mark_name", b"mark_name", "protection_date", b"protection_date", "protections", b"protections", "reference_number", b"reference_number", "title", b"title"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["execution_date", b"execution_date", "protection_date", b"protection_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["contacts", b"contacts", "execution_date", b"execution_date", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "labels", b"labels", "mark_name", b"mark_name", "protection_date", b"protection_date", "protections", b"protections", "reference_number", b"reference_number", "title", b"title"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TreatyOrStatute = TreatyOrStatute
+Global___TreatyOrStatute: _TypeAlias = TreatyOrStatute  # noqa: Y015
 
-@typing.final
-class Protection(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Protection(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    COUNTRY_CODE_FIELD_NUMBER: builtins.int
-    REGION_FIELD_NUMBER: builtins.int
-    RULING_FIELD_NUMBER: builtins.int
-    country_code: builtins.str
-    @property
-    def region(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def ruling(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    COUNTRY_CODE_FIELD_NUMBER: _builtins.int
+    REGION_FIELD_NUMBER: _builtins.int
+    RULING_FIELD_NUMBER: _builtins.int
+    country_code: _builtins.str
+    @_builtins.property
+    def region(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def ruling(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        country_code: builtins.str = ...,
-        region: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        ruling: collections.abc.Iterable[builtins.str] | None = ...,
+        country_code: _builtins.str = ...,
+        region: _wrappers_pb2.StringValue | None = ...,
+        ruling: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["region", b"region"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["country_code", b"country_code", "region", b"region", "ruling", b"ruling"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["region", b"region"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["country_code", b"country_code", "region", b"region", "ruling", b"ruling"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Protection = Protection
+Global___Protection: _TypeAlias = Protection  # noqa: Y015
 
-@typing.final
-class Court(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Court(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    MARK_NAME_FIELD_NUMBER: builtins.int
-    HOLDERS_FIELD_NUMBER: builtins.int
-    CONTACTS_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    GOODS_AND_SERVICES_FIELD_NUMBER: builtins.int
-    REFERENCE_NUMBER_FIELD_NUMBER: builtins.int
-    PROTECTION_DATE_FIELD_NUMBER: builtins.int
-    COUNTRY_CODE_FIELD_NUMBER: builtins.int
-    REGIONS_FIELD_NUMBER: builtins.int
-    COURT_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    mark_name: builtins.str
-    goods_and_services: builtins.str
-    reference_number: builtins.str
-    country_code: builtins.str
-    court_name: builtins.str
-    @property
-    def holders(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Holder]: ...
-    @property
-    def contacts(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Contact]: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def protection_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def regions(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    ID_FIELD_NUMBER: _builtins.int
+    MARK_NAME_FIELD_NUMBER: _builtins.int
+    HOLDERS_FIELD_NUMBER: _builtins.int
+    CONTACTS_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    GOODS_AND_SERVICES_FIELD_NUMBER: _builtins.int
+    REFERENCE_NUMBER_FIELD_NUMBER: _builtins.int
+    PROTECTION_DATE_FIELD_NUMBER: _builtins.int
+    COUNTRY_CODE_FIELD_NUMBER: _builtins.int
+    REGIONS_FIELD_NUMBER: _builtins.int
+    COURT_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    mark_name: _builtins.str
+    goods_and_services: _builtins.str
+    reference_number: _builtins.str
+    country_code: _builtins.str
+    court_name: _builtins.str
+    @_builtins.property
+    def holders(self) -> _containers.RepeatedCompositeFieldContainer[Global___Holder]: ...
+    @_builtins.property
+    def contacts(self) -> _containers.RepeatedCompositeFieldContainer[Global___Contact]: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def protection_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def regions(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        mark_name: builtins.str = ...,
-        holders: collections.abc.Iterable[global___Holder] | None = ...,
-        contacts: collections.abc.Iterable[global___Contact] | None = ...,
-        labels: collections.abc.Iterable[builtins.str] | None = ...,
-        goods_and_services: builtins.str = ...,
-        reference_number: builtins.str = ...,
-        protection_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        country_code: builtins.str = ...,
-        regions: collections.abc.Iterable[builtins.str] | None = ...,
-        court_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        mark_name: _builtins.str = ...,
+        holders: _abc.Iterable[Global___Holder] | None = ...,
+        contacts: _abc.Iterable[Global___Contact] | None = ...,
+        labels: _abc.Iterable[_builtins.str] | None = ...,
+        goods_and_services: _builtins.str = ...,
+        reference_number: _builtins.str = ...,
+        protection_date: _timestamp_pb2.Timestamp | None = ...,
+        country_code: _builtins.str = ...,
+        regions: _abc.Iterable[_builtins.str] | None = ...,
+        court_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["protection_date", b"protection_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["contacts", b"contacts", "country_code", b"country_code", "court_name", b"court_name", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "labels", b"labels", "mark_name", b"mark_name", "protection_date", b"protection_date", "reference_number", b"reference_number", "regions", b"regions"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["protection_date", b"protection_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["contacts", b"contacts", "country_code", b"country_code", "court_name", b"court_name", "goods_and_services", b"goods_and_services", "holders", b"holders", "id", b"id", "labels", b"labels", "mark_name", b"mark_name", "protection_date", b"protection_date", "reference_number", b"reference_number", "regions", b"regions"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Court = Court
+Global___Court: _TypeAlias = Court  # noqa: Y015
 
-@typing.final
-class Holder(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Holder(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    ORGANISATION_FIELD_NUMBER: builtins.int
-    ADDRESS_FIELD_NUMBER: builtins.int
-    VOICE_FIELD_NUMBER: builtins.int
-    FAX_FIELD_NUMBER: builtins.int
-    EMAIL_FIELD_NUMBER: builtins.int
-    ENTITLEMENT_FIELD_NUMBER: builtins.int
-    entitlement: global___Entitlement.ValueType
-    @property
-    def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def organisation(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def address(self) -> global___Address: ...
-    @property
-    def voice(self) -> common.common_pb2.Phone: ...
-    @property
-    def fax(self) -> common.common_pb2.Phone: ...
-    @property
-    def email(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    ORGANISATION_FIELD_NUMBER: _builtins.int
+    ADDRESS_FIELD_NUMBER: _builtins.int
+    VOICE_FIELD_NUMBER: _builtins.int
+    FAX_FIELD_NUMBER: _builtins.int
+    EMAIL_FIELD_NUMBER: _builtins.int
+    ENTITLEMENT_FIELD_NUMBER: _builtins.int
+    entitlement: Global___Entitlement.ValueType
+    @_builtins.property
+    def name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def organisation(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def address(self) -> Global___Address: ...
+    @_builtins.property
+    def voice(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def fax(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def email(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        organisation: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        address: global___Address | None = ...,
-        voice: common.common_pb2.Phone | None = ...,
-        fax: common.common_pb2.Phone | None = ...,
-        email: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        entitlement: global___Entitlement.ValueType = ...,
+        name: _wrappers_pb2.StringValue | None = ...,
+        organisation: _wrappers_pb2.StringValue | None = ...,
+        address: Global___Address | None = ...,
+        voice: _common_pb2.Phone | None = ...,
+        fax: _common_pb2.Phone | None = ...,
+        email: _wrappers_pb2.StringValue | None = ...,
+        entitlement: Global___Entitlement.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["address", b"address", "email", b"email", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["address", b"address", "email", b"email", "entitlement", b"entitlement", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["address", b"address", "email", b"email", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["address", b"address", "email", b"email", "entitlement", b"entitlement", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Holder = Holder
+Global___Holder: _TypeAlias = Holder  # noqa: Y015
 
-@typing.final
-class Contact(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Contact(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    ORGANISATION_FIELD_NUMBER: builtins.int
-    ADDRESS_FIELD_NUMBER: builtins.int
-    VOICE_FIELD_NUMBER: builtins.int
-    FAX_FIELD_NUMBER: builtins.int
-    EMAIL_FIELD_NUMBER: builtins.int
-    CONTACT_TYPE_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    email: builtins.str
-    contact_type: global___ContactType.ValueType
-    @property
-    def organisation(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def address(self) -> global___Address: ...
-    @property
-    def voice(self) -> common.common_pb2.Phone: ...
-    @property
-    def fax(self) -> common.common_pb2.Phone: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    ORGANISATION_FIELD_NUMBER: _builtins.int
+    ADDRESS_FIELD_NUMBER: _builtins.int
+    VOICE_FIELD_NUMBER: _builtins.int
+    FAX_FIELD_NUMBER: _builtins.int
+    EMAIL_FIELD_NUMBER: _builtins.int
+    CONTACT_TYPE_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    email: _builtins.str
+    contact_type: Global___ContactType.ValueType
+    @_builtins.property
+    def organisation(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def address(self) -> Global___Address: ...
+    @_builtins.property
+    def voice(self) -> _common_pb2.Phone: ...
+    @_builtins.property
+    def fax(self) -> _common_pb2.Phone: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        organisation: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        address: global___Address | None = ...,
-        voice: common.common_pb2.Phone | None = ...,
-        fax: common.common_pb2.Phone | None = ...,
-        email: builtins.str = ...,
-        contact_type: global___ContactType.ValueType = ...,
+        name: _builtins.str = ...,
+        organisation: _wrappers_pb2.StringValue | None = ...,
+        address: Global___Address | None = ...,
+        voice: _common_pb2.Phone | None = ...,
+        fax: _common_pb2.Phone | None = ...,
+        email: _builtins.str = ...,
+        contact_type: Global___ContactType.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["address", b"address", "fax", b"fax", "organisation", b"organisation", "voice", b"voice"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["address", b"address", "contact_type", b"contact_type", "email", b"email", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["address", b"address", "fax", b"fax", "organisation", b"organisation", "voice", b"voice"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["address", b"address", "contact_type", b"contact_type", "email", b"email", "fax", b"fax", "name", b"name", "organisation", b"organisation", "voice", b"voice"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Contact = Contact
+Global___Contact: _TypeAlias = Contact  # noqa: Y015
 
-@typing.final
-class Address(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Address(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STREET1_FIELD_NUMBER: builtins.int
-    STREET2_FIELD_NUMBER: builtins.int
-    STREET3_FIELD_NUMBER: builtins.int
-    CITY_FIELD_NUMBER: builtins.int
-    PROVINCE_FIELD_NUMBER: builtins.int
-    POSTAL_CODE_FIELD_NUMBER: builtins.int
-    COUNTRY_CODE_FIELD_NUMBER: builtins.int
-    city: builtins.str
-    country_code: builtins.str
-    @property
-    def street1(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def street2(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def street3(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def province(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def postal_code(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    STREET1_FIELD_NUMBER: _builtins.int
+    STREET2_FIELD_NUMBER: _builtins.int
+    STREET3_FIELD_NUMBER: _builtins.int
+    CITY_FIELD_NUMBER: _builtins.int
+    PROVINCE_FIELD_NUMBER: _builtins.int
+    POSTAL_CODE_FIELD_NUMBER: _builtins.int
+    COUNTRY_CODE_FIELD_NUMBER: _builtins.int
+    city: _builtins.str
+    country_code: _builtins.str
+    @_builtins.property
+    def street1(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def street2(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def street3(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def province(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def postal_code(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        street1: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        street2: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        street3: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        city: builtins.str = ...,
-        province: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        postal_code: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        country_code: builtins.str = ...,
+        street1: _wrappers_pb2.StringValue | None = ...,
+        street2: _wrappers_pb2.StringValue | None = ...,
+        street3: _wrappers_pb2.StringValue | None = ...,
+        city: _builtins.str = ...,
+        province: _wrappers_pb2.StringValue | None = ...,
+        postal_code: _wrappers_pb2.StringValue | None = ...,
+        country_code: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["postal_code", b"postal_code", "province", b"province", "street1", b"street1", "street2", b"street2", "street3", b"street3"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["city", b"city", "country_code", b"country_code", "postal_code", b"postal_code", "province", b"province", "street1", b"street1", "street2", b"street2", "street3", b"street3"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["postal_code", b"postal_code", "province", b"province", "street1", b"street1", "street2", b"street2", "street3", b"street3"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["city", b"city", "country_code", b"country_code", "postal_code", b"postal_code", "province", b"province", "street1", b"street1", "street2", b"street2", "street3", b"street3"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Address = Address
+Global___Address: _TypeAlias = Address  # noqa: Y015

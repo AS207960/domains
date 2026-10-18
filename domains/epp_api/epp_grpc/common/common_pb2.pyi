@@ -3,29 +3,29 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _TransferStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _TransferStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_TransferStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _TransferStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_TransferStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     UnknownStatus: _TransferStatus.ValueType  # 0
     ClientApproved: _TransferStatus.ValueType  # 1
     ClientCancelled: _TransferStatus.ValueType  # 2
@@ -43,18 +43,18 @@ ClientRejected: TransferStatus.ValueType  # 3
 Pending: TransferStatus.ValueType  # 4
 ServerApproved: TransferStatus.ValueType  # 5
 ServerCancelled: TransferStatus.ValueType  # 6
-global___TransferStatus = TransferStatus
+Global___TransferStatus: _TypeAlias = TransferStatus  # noqa: Y015
 
-@typing.final
-class IPAddress(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class IPAddress(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _IPVersion:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _IPVersionEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[IPAddress._IPVersion.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _IPVersionEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[IPAddress._IPVersion.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         UNKNOWN: IPAddress._IPVersion.ValueType  # 0
         IPv4: IPAddress._IPVersion.ValueType  # 1
         IPv6: IPAddress._IPVersion.ValueType  # 2
@@ -64,30 +64,34 @@ class IPAddress(google.protobuf.message.Message):
     IPv4: IPAddress.IPVersion.ValueType  # 1
     IPv6: IPAddress.IPVersion.ValueType  # 2
 
-    ADDRESS_FIELD_NUMBER: builtins.int
-    TYPE_FIELD_NUMBER: builtins.int
-    address: builtins.str
-    type: global___IPAddress.IPVersion.ValueType
+    ADDRESS_FIELD_NUMBER: _builtins.int
+    TYPE_FIELD_NUMBER: _builtins.int
+    address: _builtins.str
+    type: Global___IPAddress.IPVersion.ValueType
     def __init__(
         self,
         *,
-        address: builtins.str = ...,
-        type: global___IPAddress.IPVersion.ValueType = ...,
+        address: _builtins.str = ...,
+        type: Global___IPAddress.IPVersion.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["address", b"address", "type", b"type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["address", b"address", "type", b"type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___IPAddress = IPAddress
+Global___IPAddress: _TypeAlias = IPAddress  # noqa: Y015
 
-@typing.final
-class Period(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Period(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _Unit:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _UnitEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Period._Unit.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _UnitEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[Period._Unit.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         Years: Period._Unit.ValueType  # 0
         Months: Period._Unit.ValueType  # 1
 
@@ -95,93 +99,111 @@ class Period(google.protobuf.message.Message):
     Years: Period.Unit.ValueType  # 0
     Months: Period.Unit.ValueType  # 1
 
-    VALUE_FIELD_NUMBER: builtins.int
-    UNIT_FIELD_NUMBER: builtins.int
-    value: builtins.int
-    unit: global___Period.Unit.ValueType
+    VALUE_FIELD_NUMBER: _builtins.int
+    UNIT_FIELD_NUMBER: _builtins.int
+    value: _builtins.int
+    unit: Global___Period.Unit.ValueType
     def __init__(
         self,
         *,
-        value: builtins.int = ...,
-        unit: global___Period.Unit.ValueType = ...,
+        value: _builtins.int = ...,
+        unit: Global___Period.Unit.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["unit", b"unit", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["unit", b"unit", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Period = Period
+Global___Period: _TypeAlias = Period  # noqa: Y015
 
-@typing.final
-class CommandExtraValue(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CommandExtraValue(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REASON_FIELD_NUMBER: builtins.int
-    VALUE_FIELD_NUMBER: builtins.int
-    reason: builtins.str
-    value: builtins.str
+    REASON_FIELD_NUMBER: _builtins.int
+    VALUE_FIELD_NUMBER: _builtins.int
+    reason: _builtins.str
+    value: _builtins.str
     def __init__(
         self,
         *,
-        reason: builtins.str = ...,
-        value: builtins.str = ...,
+        reason: _builtins.str = ...,
+        value: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["reason", b"reason", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["reason", b"reason", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CommandExtraValue = CommandExtraValue
+Global___CommandExtraValue: _TypeAlias = CommandExtraValue  # noqa: Y015
 
-@typing.final
-class CommandTransactionID(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CommandTransactionID(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CLIENT_FIELD_NUMBER: builtins.int
-    SERVER_FIELD_NUMBER: builtins.int
-    client: builtins.str
-    server: builtins.str
+    CLIENT_FIELD_NUMBER: _builtins.int
+    SERVER_FIELD_NUMBER: _builtins.int
+    client: _builtins.str
+    server: _builtins.str
     def __init__(
         self,
         *,
-        client: builtins.str = ...,
-        server: builtins.str = ...,
+        client: _builtins.str = ...,
+        server: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["client", b"client", "server", b"server"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["client", b"client", "server", b"server"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CommandTransactionID = CommandTransactionID
+Global___CommandTransactionID: _TypeAlias = CommandTransactionID  # noqa: Y015
 
-@typing.final
-class CommandResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CommandResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    EXTRA_VALUES_FIELD_NUMBER: builtins.int
-    TRANSACTION_ID_FIELD_NUMBER: builtins.int
-    @property
-    def extra_values(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CommandExtraValue]: ...
-    @property
-    def transaction_id(self) -> global___CommandTransactionID: ...
+    EXTRA_VALUES_FIELD_NUMBER: _builtins.int
+    TRANSACTION_ID_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def extra_values(self) -> _containers.RepeatedCompositeFieldContainer[Global___CommandExtraValue]: ...
+    @_builtins.property
+    def transaction_id(self) -> Global___CommandTransactionID: ...
     def __init__(
         self,
         *,
-        extra_values: collections.abc.Iterable[global___CommandExtraValue] | None = ...,
-        transaction_id: global___CommandTransactionID | None = ...,
+        extra_values: _abc.Iterable[Global___CommandExtraValue] | None = ...,
+        transaction_id: Global___CommandTransactionID | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["transaction_id", b"transaction_id"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["extra_values", b"extra_values", "transaction_id", b"transaction_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["transaction_id", b"transaction_id"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["extra_values", b"extra_values", "transaction_id", b"transaction_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CommandResponse = CommandResponse
+Global___CommandResponse: _TypeAlias = CommandResponse  # noqa: Y015
 
-@typing.final
-class Phone(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Phone(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NUMBER_FIELD_NUMBER: builtins.int
-    EXTENSION_FIELD_NUMBER: builtins.int
-    number: builtins.str
-    @property
-    def extension(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    NUMBER_FIELD_NUMBER: _builtins.int
+    EXTENSION_FIELD_NUMBER: _builtins.int
+    number: _builtins.str
+    @_builtins.property
+    def extension(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        number: builtins.str = ...,
-        extension: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        number: _builtins.str = ...,
+        extension: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["extension", b"extension"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["extension", b"extension", "number", b"number"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["extension", b"extension"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["extension", b"extension", "number", b"number"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Phone = Phone
+Global___Phone: _TypeAlias = Phone  # noqa: Y015

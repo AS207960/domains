@@ -1,18 +1,14 @@
 from django.core.management.base import BaseCommand
 from domains import apps, models
 from django.conf import settings
-from django.shortcuts import reverse
+from django.urls import reverse
 from django.template.loader import render_to_string
 from django.core import mail
-import threading
 import domains.epp_api.epp_grpc.epp_pb2
 import domains.epp_api.epp_grpc.epp_pb2_grpc
 import domains.epp_api.epp_grpc.common.common_pb2
 import google.protobuf.json_format
-import queue
-import time
 import grpc
-import traceback
 import email.utils
 import json
 from domains.views import emails
@@ -23,115 +19,51 @@ REGISTRY_CLIENT_IDS = {
     "id": "ascy-802642"
 }
 
-
-class PollClient:
-    def __init__(
-            self, stub: domains.epp_api.epp_grpc.epp_pb2_grpc.EPPProxyStub, registry_name: str,
-            callback, callback_exc=None
-    ):
-        self.stub = stub
-        self._registry_name = str(registry_name)
-        self._pending_ack = queue.Queue()
-        self._callback = callback
-        self._callback_exc = callback_exc
-        self._exit = threading.Event()
-        self._channel = None
-        self._t = None
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        msg_id = self._pending_ack.get(block=True)
-        return domains.epp_api.epp_grpc.epp_pb2.PollAck(
-            msg_id=msg_id
-        )
-
-    def _run_iter(self):
-        while not self._exit.is_set():
-            self._channel = self.stub.Poll(
-                self,
-                metadata=(
-                    ("registry_name", self._registry_name),
-                )
-            )
-            try:
-                for msg in self._channel:
-                    try:
-                        self._callback(self, msg)
-                    except:
-                        traceback.print_exc()
-            except grpc.RpcError as e:
-                print(f"Encountered error polling {self._registry_name}: {e.details()}")
-                if e.code() in (grpc.StatusCode.CANCELLED, grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED):
-                    pass
-                else:
-                    try:
-                        self._callback_exc(self, e)
-                    except:
-                        traceback.print_exc()
-
-            time.sleep(60)
-
-    def _run_watcher(self):
-        while not self._exit.is_set():
-            if not self._t.is_alive():
-                self._t = threading.Thread(target=self._run_iter)
-                self._t.start()
-            time.sleep(5)
-
-    def run(self):
-        self._t = threading.Thread(target=self._run_iter)
-        t = threading.Thread(target=self._run_watcher)
-        self._t.start()
-        t.start()
-
-    def exit(self):
-        self._exit.set()
-        if self._channel:
-            self._channel.cancel()
-
-    def ack(self, msg_id: str):
-        self._pending_ack.put(str(msg_id))
-
-    @property
-    def registry_name(self):
-        return self._registry_name
-
 class Command(BaseCommand):
-    help = 'Runs long running EPP poll commands and handles responses'
+    help = "Polls and handles any pending messages from registries"
 
     def add_arguments(self, parser):
         parser.add_argument("registry", nargs="+", type=str)
 
     def handle(self, *args, **options):
-        clients = []
-
         for r in options["registry"]:
-            c = PollClient(apps.epp_client.stub, r, self.callback, self.callback_exc)
-            print(f"Starting client for: {r}", flush=True)
-            c.run()
-            clients.append(c)
-        print("Poll handler running", flush=True)
-        try:
-            while True:
-                time.sleep(5)
-        except (KeyboardInterrupt, SystemExit):
-            print("Exiting...", flush=True)
-            for c in clients:
-                c.exit()
+            self.poll_registry(r)
 
-    def callback(self, client: PollClient, m: domains.epp_api.epp_grpc.epp_pb2.PollReply):
+    def poll_registry(self, registry_name: str):
+        print(f"Polling {registry_name}", flush=True)
+        while True:
+            try:
+                resp: apps.epp_api.epp_pb2.PollReply = apps.epp_client.stub.PollSingle(apps.epp_api.epp_pb2.RegistryInfo(
+                    registry_name=registry_name
+                ))
+            except grpc.RpcError as e:
+                if e.code() == grpc.StatusCode.RESOURCE_EXHAUSTED:
+                    break
+                raise e
+
+            self.callback(resp, registry_name)
+
+            ack_resp: apps.epp_api.epp_pb2.PollAckReply = apps.epp_client.stub.AckPoll(apps.epp_api.epp_pb2.PollAckSingle(
+                msg_id=resp.msg_id,
+                registry_name=registry_name
+            ))
+            print(f"{ack_resp.count} messages remaining on {registry_name}", flush=True)
+            if ack_resp.count == 0:
+                break
+
+        print(f"Done with {registry_name}", flush=True)
+
+    def callback(self, m: domains.epp_api.epp_grpc.epp_pb2.PollReply, registry_name: str):
         if m.HasField("change_data") and m.WhichOneof("data") == "domain_info":
             self.handle_domain_update(m)
         elif m.WhichOneof("data") == "nominet_domain_release":
             self.handle_nominet_domain_release(m)
         elif m.WhichOneof("data") == "nominet_domain_registrar_change":
-            self.handle_nominet_domain_registrar_change(client, m)
+            self.handle_nominet_domain_registrar_change(m, registry_name)
         elif m.WhichOneof("data") == "nominet_domain_cancel":
             self.handle_nominet_domain_cancel(m)
         elif m.WhichOneof("data") == "domain_transfer":
-            self.handle_domain_transfer(m, client.registry_name)
+            self.handle_domain_transfer(m, registry_name)
         elif m.WhichOneof("data") == "eurid_poll":
             self.handle_eurid_poll(m)
 
@@ -143,22 +75,12 @@ class Command(BaseCommand):
         mail.EmailMessage(
             to=["noc@as207960.net"],
             from_email=settings.DEFAULT_FROM_EMAIL,
-            subject=f"EPP Poll Notification - {client.registry_name}",
+            subject=f"EPP Poll Notification - {registry_name}",
             body=f"<p><pre>{json_data}</pre></p>",
             headers={
                 "Content-Type": "text/html",
                 "Date": email.utils.format_datetime(m.enqueue_date.ToDatetime())
             },
-        ).send()
-        client.ack(m.msg_id)
-
-    def callback_exc(self, client: PollClient, e):
-        mail.EmailMessage(
-            to=["noc@as207960.net"],
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            subject=f"EPP Poll Exception - {client.registry_name}",
-            body=f"<p><pre>{e}</pre></p>",
-            headers={"Content-Type": "text/html"},
         ).send()
 
     def handle_domain_update(self, m):
@@ -197,20 +119,20 @@ class Command(BaseCommand):
             domain_obj.save()
             emails.mail_transferred_out.delay(domain_obj.id)
 
-    def handle_nominet_domain_registrar_change(self, client: PollClient, m):
+    def handle_nominet_domain_registrar_change(self, m, registry_name: str):
         for domain in m.nominet_domain_registrar_change.domains:
             domain_transfer_order = models.DomainTransferOrder.objects.filter(domain__iexact=domain.name).first()
             if domain.client_id != m.nominet_domain_registrar_change.registrar_tag:
                 if m.nominet_domain_registrar_change.case_id:
                     if domain_transfer_order:
-                        client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
+                        apps.epp_client.stub.NominetAccept(apps.epp_api.nominet_pb2.HandshakeAcceptRequest(
                             case_id=m.nominet_domain_registrar_change.case_id.value,
-                            registry_name=client.registry_name,
+                            registry_name=registry_name,
                         ))
                     else:
-                        client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
+                        apps.epp_client.stub.NominetReject(apps.epp_api.nominet_pb2.HandshakeRejectRequest(
                             case_id=m.nominet_domain_registrar_change.case_id.value,
-                            registry_name=client.registry_name,
+                            registry_name=registry_name,
                         ))
             else:
                 if not domain_transfer_order:

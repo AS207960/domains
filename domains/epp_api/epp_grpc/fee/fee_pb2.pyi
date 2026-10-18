@@ -3,30 +3,30 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _Command:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _CommandEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Command.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _CommandEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Command.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Create: _Command.ValueType  # 0
     Renew: _Command.ValueType  # 1
     Transfer: _Command.ValueType  # 2
@@ -48,14 +48,14 @@ Update: Command.ValueType  # 5
 Check: Command.ValueType  # 6
 Info: Command.ValueType  # 7
 Custom: Command.ValueType  # 8
-global___Command = Command
+Global___Command: _TypeAlias = Command  # noqa: Y015
 
 class _Applied:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _AppliedEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_Applied.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _AppliedEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_Applied.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Immediate: _Applied.ValueType  # 0
     Delayed: _Applied.ValueType  # 1
     Unspecified: _Applied.ValueType  # 2
@@ -65,284 +65,314 @@ class Applied(_Applied, metaclass=_AppliedEnumTypeWrapper): ...
 Immediate: Applied.ValueType  # 0
 Delayed: Applied.ValueType  # 1
 Unspecified: Applied.ValueType  # 2
-global___Applied = Applied
+Global___Applied: _TypeAlias = Applied  # noqa: Y015
 
-@typing.final
-class Fee(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Fee(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    VALUE_FIELD_NUMBER: builtins.int
-    DESCRIPTION_FIELD_NUMBER: builtins.int
-    REFUNDABLE_FIELD_NUMBER: builtins.int
-    GRACE_PERIOD_FIELD_NUMBER: builtins.int
-    APPLIED_FIELD_NUMBER: builtins.int
-    value: builtins.str
-    applied: global___Applied.ValueType
-    @property
-    def description(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def refundable(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def grace_period(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    VALUE_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    REFUNDABLE_FIELD_NUMBER: _builtins.int
+    GRACE_PERIOD_FIELD_NUMBER: _builtins.int
+    APPLIED_FIELD_NUMBER: _builtins.int
+    value: _builtins.str
+    applied: Global___Applied.ValueType
+    @_builtins.property
+    def description(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def refundable(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def grace_period(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        value: builtins.str = ...,
-        description: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        refundable: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        grace_period: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        applied: global___Applied.ValueType = ...,
+        value: _builtins.str = ...,
+        description: _wrappers_pb2.StringValue | None = ...,
+        refundable: _wrappers_pb2.BoolValue | None = ...,
+        grace_period: _wrappers_pb2.StringValue | None = ...,
+        applied: Global___Applied.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["description", b"description", "grace_period", b"grace_period", "refundable", b"refundable"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["applied", b"applied", "description", b"description", "grace_period", b"grace_period", "refundable", b"refundable", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["description", b"description", "grace_period", b"grace_period", "refundable", b"refundable"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applied", b"applied", "description", b"description", "grace_period", b"grace_period", "refundable", b"refundable", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Fee = Fee
+Global___Fee: _TypeAlias = Fee  # noqa: Y015
 
-@typing.final
-class Credit(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Credit(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    VALUE_FIELD_NUMBER: builtins.int
-    DESCRIPTION_FIELD_NUMBER: builtins.int
-    value: builtins.str
-    @property
-    def description(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    VALUE_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    value: _builtins.str
+    @_builtins.property
+    def description(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        value: builtins.str = ...,
-        description: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        value: _builtins.str = ...,
+        description: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["description", b"description"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["description", b"description", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["description", b"description"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["description", b"description", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Credit = Credit
+Global___Credit: _TypeAlias = Credit  # noqa: Y015
 
-@typing.final
-class FeeCheck(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class FeeCheck(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CURRENCY_FIELD_NUMBER: builtins.int
-    COMMANDS_FIELD_NUMBER: builtins.int
-    @property
-    def currency(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def commands(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FeeCommand]: ...
+    CURRENCY_FIELD_NUMBER: _builtins.int
+    COMMANDS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def currency(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def commands(self) -> _containers.RepeatedCompositeFieldContainer[Global___FeeCommand]: ...
     def __init__(
         self,
         *,
-        currency: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        commands: collections.abc.Iterable[global___FeeCommand] | None = ...,
+        currency: _wrappers_pb2.StringValue | None = ...,
+        commands: _abc.Iterable[Global___FeeCommand] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["currency", b"currency"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["commands", b"commands", "currency", b"currency"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["currency", b"currency"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["commands", b"commands", "currency", b"currency"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___FeeCheck = FeeCheck
+Global___FeeCheck: _TypeAlias = FeeCheck  # noqa: Y015
 
-@typing.final
-class FeeAgreement(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class FeeAgreement(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CURRENCY_FIELD_NUMBER: builtins.int
-    FEES_FIELD_NUMBER: builtins.int
-    @property
-    def currency(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def fees(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Fee]: ...
+    CURRENCY_FIELD_NUMBER: _builtins.int
+    FEES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def currency(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def fees(self) -> _containers.RepeatedCompositeFieldContainer[Global___Fee]: ...
     def __init__(
         self,
         *,
-        currency: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        fees: collections.abc.Iterable[global___Fee] | None = ...,
+        currency: _wrappers_pb2.StringValue | None = ...,
+        fees: _abc.Iterable[Global___Fee] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["currency", b"currency"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["currency", b"currency", "fees", b"fees"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["currency", b"currency"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["currency", b"currency", "fees", b"fees"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___FeeAgreement = FeeAgreement
+Global___FeeAgreement: _TypeAlias = FeeAgreement  # noqa: Y015
 
-@typing.final
-class FeeCommand(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class FeeCommand(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    COMMAND_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    CUSTOM_NAME_FIELD_NUMBER: builtins.int
-    PHASE_FIELD_NUMBER: builtins.int
-    SUB_PHASE_FIELD_NUMBER: builtins.int
-    command: global___Command.ValueType
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def custom_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def phase(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def sub_phase(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    COMMAND_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    CUSTOM_NAME_FIELD_NUMBER: _builtins.int
+    PHASE_FIELD_NUMBER: _builtins.int
+    SUB_PHASE_FIELD_NUMBER: _builtins.int
+    command: Global___Command.ValueType
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def custom_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def phase(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def sub_phase(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        command: global___Command.ValueType = ...,
-        period: common.common_pb2.Period | None = ...,
-        custom_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        phase: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        sub_phase: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        command: Global___Command.ValueType = ...,
+        period: _common_pb2.Period | None = ...,
+        custom_name: _wrappers_pb2.StringValue | None = ...,
+        phase: _wrappers_pb2.StringValue | None = ...,
+        sub_phase: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["custom_name", b"custom_name", "period", b"period", "phase", b"phase", "sub_phase", b"sub_phase"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["command", b"command", "custom_name", b"custom_name", "period", b"period", "phase", b"phase", "sub_phase", b"sub_phase"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["custom_name", b"custom_name", "period", b"period", "phase", b"phase", "sub_phase", b"sub_phase"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["command", b"command", "custom_name", b"custom_name", "period", b"period", "phase", b"phase", "sub_phase", b"sub_phase"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___FeeCommand = FeeCommand
+Global___FeeCommand: _TypeAlias = FeeCommand  # noqa: Y015
 
-@typing.final
-class FeeCheckData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class FeeCheckData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class FeeCommand(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class FeeCommand(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        COMMAND_FIELD_NUMBER: builtins.int
-        STANDARD_FIELD_NUMBER: builtins.int
-        PERIOD_FIELD_NUMBER: builtins.int
-        CURRENCY_FIELD_NUMBER: builtins.int
-        FEES_FIELD_NUMBER: builtins.int
-        CREDITS_FIELD_NUMBER: builtins.int
-        CLASS_FIELD_NUMBER: builtins.int
-        REASON_FIELD_NUMBER: builtins.int
-        command: global___Command.ValueType
-        currency: builtins.str
-        @property
-        def standard(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-        @property
-        def period(self) -> common.common_pb2.Period: ...
-        @property
-        def fees(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Fee]: ...
-        @property
-        def credits(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Credit]: ...
-        @property
-        def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        COMMAND_FIELD_NUMBER: _builtins.int
+        STANDARD_FIELD_NUMBER: _builtins.int
+        PERIOD_FIELD_NUMBER: _builtins.int
+        CURRENCY_FIELD_NUMBER: _builtins.int
+        FEES_FIELD_NUMBER: _builtins.int
+        CREDITS_FIELD_NUMBER: _builtins.int
+        CLASS_FIELD_NUMBER: _builtins.int
+        REASON_FIELD_NUMBER: _builtins.int
+        command: Global___Command.ValueType
+        currency: _builtins.str
+        @_builtins.property
+        def standard(self) -> _wrappers_pb2.BoolValue: ...
+        @_builtins.property
+        def period(self) -> _common_pb2.Period: ...
+        @_builtins.property
+        def fees(self) -> _containers.RepeatedCompositeFieldContainer[Global___Fee]: ...
+        @_builtins.property
+        def credits(self) -> _containers.RepeatedCompositeFieldContainer[Global___Credit]: ...
+        @_builtins.property
+        def reason(self) -> _wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            command: global___Command.ValueType = ...,
-            standard: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-            period: common.common_pb2.Period | None = ...,
-            currency: builtins.str = ...,
-            fees: collections.abc.Iterable[global___Fee] | None = ...,
-            credits: collections.abc.Iterable[global___Credit] | None = ...,
-            reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
+            command: Global___Command.ValueType = ...,
+            standard: _wrappers_pb2.BoolValue | None = ...,
+            period: _common_pb2.Period | None = ...,
+            currency: _builtins.str = ...,
+            fees: _abc.Iterable[Global___Fee] | None = ...,
+            credits: _abc.Iterable[Global___Credit] | None = ...,
+            reason: _wrappers_pb2.StringValue | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["class", b"class", "period", b"period", "reason", b"reason", "standard", b"standard"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["class", b"class", "command", b"command", "credits", b"credits", "currency", b"currency", "fees", b"fees", "period", b"period", "reason", b"reason", "standard", b"standard"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["class", b"class", "period", b"period", "reason", b"reason", "standard", b"standard"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["class", b"class", "command", b"command", "credits", b"credits", "currency", b"currency", "fees", b"fees", "period", b"period", "reason", b"reason", "standard", b"standard"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    AVAILABLE_FIELD_NUMBER: builtins.int
-    COMMANDS_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    available: builtins.bool
-    @property
-    def commands(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___FeeCheckData.FeeCommand]: ...
-    @property
-    def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    AVAILABLE_FIELD_NUMBER: _builtins.int
+    COMMANDS_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    available: _builtins.bool
+    @_builtins.property
+    def commands(self) -> _containers.RepeatedCompositeFieldContainer[Global___FeeCheckData.FeeCommand]: ...
+    @_builtins.property
+    def reason(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        available: builtins.bool = ...,
-        commands: collections.abc.Iterable[global___FeeCheckData.FeeCommand] | None = ...,
-        reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        available: _builtins.bool = ...,
+        commands: _abc.Iterable[Global___FeeCheckData.FeeCommand] | None = ...,
+        reason: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["reason", b"reason"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["available", b"available", "commands", b"commands", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["reason", b"reason"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["available", b"available", "commands", b"commands", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___FeeCheckData = FeeCheckData
+Global___FeeCheckData: _TypeAlias = FeeCheckData  # noqa: Y015
 
-@typing.final
-class FeeData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class FeeData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CURRENCY_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    FEES_FIELD_NUMBER: builtins.int
-    CREDITS_FIELD_NUMBER: builtins.int
-    BALANCE_FIELD_NUMBER: builtins.int
-    CREDIT_LIMIT_FIELD_NUMBER: builtins.int
-    currency: builtins.str
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def fees(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Fee]: ...
-    @property
-    def credits(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Credit]: ...
-    @property
-    def balance(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def credit_limit(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    CURRENCY_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    FEES_FIELD_NUMBER: _builtins.int
+    CREDITS_FIELD_NUMBER: _builtins.int
+    BALANCE_FIELD_NUMBER: _builtins.int
+    CREDIT_LIMIT_FIELD_NUMBER: _builtins.int
+    currency: _builtins.str
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def fees(self) -> _containers.RepeatedCompositeFieldContainer[Global___Fee]: ...
+    @_builtins.property
+    def credits(self) -> _containers.RepeatedCompositeFieldContainer[Global___Credit]: ...
+    @_builtins.property
+    def balance(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def credit_limit(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        currency: builtins.str = ...,
-        period: common.common_pb2.Period | None = ...,
-        fees: collections.abc.Iterable[global___Fee] | None = ...,
-        credits: collections.abc.Iterable[global___Credit] | None = ...,
-        balance: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        credit_limit: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        currency: _builtins.str = ...,
+        period: _common_pb2.Period | None = ...,
+        fees: _abc.Iterable[Global___Fee] | None = ...,
+        credits: _abc.Iterable[Global___Credit] | None = ...,
+        balance: _wrappers_pb2.StringValue | None = ...,
+        credit_limit: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["balance", b"balance", "credit_limit", b"credit_limit", "period", b"period"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["balance", b"balance", "credit_limit", b"credit_limit", "credits", b"credits", "currency", b"currency", "fees", b"fees", "period", b"period"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "credit_limit", b"credit_limit", "period", b"period"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "credit_limit", b"credit_limit", "credits", b"credits", "currency", b"currency", "fees", b"fees", "period", b"period"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___FeeData = FeeData
+Global___FeeData: _TypeAlias = FeeData  # noqa: Y015
 
-@typing.final
-class DonutsCategory(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DonutsCategory(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    VALUE_FIELD_NUMBER: builtins.int
-    NAME_FIELD_NUMBER: builtins.int
-    value: builtins.str
-    @property
-    def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    VALUE_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    value: _builtins.str
+    @_builtins.property
+    def name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        value: builtins.str = ...,
-        name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        value: _builtins.str = ...,
+        name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["name", b"name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["name", b"name", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["name", b"name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DonutsCategory = DonutsCategory
+Global___DonutsCategory: _TypeAlias = DonutsCategory  # noqa: Y015
 
-@typing.final
-class DonutsAmount(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DonutsAmount(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    VALUE_FIELD_NUMBER: builtins.int
-    NAME_FIELD_NUMBER: builtins.int
-    COMMAND_FIELD_NUMBER: builtins.int
-    value: builtins.str
-    command: global___Command.ValueType
-    @property
-    def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    VALUE_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    COMMAND_FIELD_NUMBER: _builtins.int
+    value: _builtins.str
+    command: Global___Command.ValueType
+    @_builtins.property
+    def name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        value: builtins.str = ...,
-        name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        command: global___Command.ValueType = ...,
+        value: _builtins.str = ...,
+        name: _wrappers_pb2.StringValue | None = ...,
+        command: Global___Command.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["name", b"name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["command", b"command", "name", b"name", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["name", b"name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["command", b"command", "name", b"name", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DonutsAmount = DonutsAmount
+Global___DonutsAmount: _TypeAlias = DonutsAmount  # noqa: Y015
 
-@typing.final
-class DonutsFeeType(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DonutsFeeType(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _FeeTypes:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _FeeTypesEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[DonutsFeeType._FeeTypes.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _FeeTypesEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[DonutsFeeType._FeeTypes.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         Custom: DonutsFeeType._FeeTypes.ValueType  # 0
         Fee: DonutsFeeType._FeeTypes.ValueType  # 1
         Price: DonutsFeeType._FeeTypes.ValueType  # 2
@@ -352,59 +382,69 @@ class DonutsFeeType(google.protobuf.message.Message):
     Fee: DonutsFeeType.FeeTypes.ValueType  # 1
     Price: DonutsFeeType.FeeTypes.ValueType  # 2
 
-    FEE_TYPE_FIELD_NUMBER: builtins.int
-    NAME_FIELD_NUMBER: builtins.int
-    fee_type: global___DonutsFeeType.FeeTypes.ValueType
-    @property
-    def name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    FEE_TYPE_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    fee_type: Global___DonutsFeeType.FeeTypes.ValueType
+    @_builtins.property
+    def name(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        fee_type: global___DonutsFeeType.FeeTypes.ValueType = ...,
-        name: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        fee_type: Global___DonutsFeeType.FeeTypes.ValueType = ...,
+        name: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["name", b"name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["fee_type", b"fee_type", "name", b"name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["name", b"name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["fee_type", b"fee_type", "name", b"name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DonutsFeeType = DonutsFeeType
+Global___DonutsFeeType: _TypeAlias = DonutsFeeType  # noqa: Y015
 
-@typing.final
-class DonutsFeeSet(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DonutsFeeSet(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    FEES_FIELD_NUMBER: builtins.int
-    FEE_TYPE_FIELD_NUMBER: builtins.int
-    CATEGORY_FIELD_NUMBER: builtins.int
-    @property
-    def fees(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___DonutsAmount]: ...
-    @property
-    def fee_type(self) -> global___DonutsFeeType: ...
-    @property
-    def category(self) -> global___DonutsCategory: ...
+    FEES_FIELD_NUMBER: _builtins.int
+    FEE_TYPE_FIELD_NUMBER: _builtins.int
+    CATEGORY_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def fees(self) -> _containers.RepeatedCompositeFieldContainer[Global___DonutsAmount]: ...
+    @_builtins.property
+    def fee_type(self) -> Global___DonutsFeeType: ...
+    @_builtins.property
+    def category(self) -> Global___DonutsCategory: ...
     def __init__(
         self,
         *,
-        fees: collections.abc.Iterable[global___DonutsAmount] | None = ...,
-        fee_type: global___DonutsFeeType | None = ...,
-        category: global___DonutsCategory | None = ...,
+        fees: _abc.Iterable[Global___DonutsAmount] | None = ...,
+        fee_type: Global___DonutsFeeType | None = ...,
+        category: Global___DonutsCategory | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["category", b"category", "fee_type", b"fee_type"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["category", b"category", "fee_type", b"fee_type", "fees", b"fees"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["category", b"category", "fee_type", b"fee_type"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["category", b"category", "fee_type", b"fee_type", "fees", b"fees"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DonutsFeeSet = DonutsFeeSet
+Global___DonutsFeeSet: _TypeAlias = DonutsFeeSet  # noqa: Y015
 
-@typing.final
-class DonutsFeeData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DonutsFeeData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    FEES_FIELD_NUMBER: builtins.int
-    @property
-    def fees(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___DonutsFeeSet]: ...
+    FEES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def fees(self) -> _containers.RepeatedCompositeFieldContainer[Global___DonutsFeeSet]: ...
     def __init__(
         self,
         *,
-        fees: collections.abc.Iterable[global___DonutsFeeSet] | None = ...,
+        fees: _abc.Iterable[Global___DonutsFeeSet] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["fees", b"fees"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["fees", b"fees"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DonutsFeeData = DonutsFeeData
+Global___DonutsFeeData: _TypeAlias = DonutsFeeData  # noqa: Y015

@@ -3,32 +3,32 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import fee.fee_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from fee import fee_pb2 as _fee_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _RGPState:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _RGPStateEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_RGPState.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _RGPStateEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_RGPState.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Unknown: _RGPState.ValueType  # 0
     AddPeriod: _RGPState.ValueType  # 1
     AutoRenewPeriod: _RGPState.ValueType  # 2
@@ -48,136 +48,148 @@ TransferPeriod: RGPState.ValueType  # 4
 RedemptionPeriod: RGPState.ValueType  # 5
 PendingRestore: RGPState.ValueType  # 6
 PendingDelete: RGPState.ValueType  # 7
-global___RGPState = RGPState
+Global___RGPState: _TypeAlias = RGPState  # noqa: Y015
 
-@typing.final
-class RequestRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class RequestRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
+        name: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "registry_name", b"registry_name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "name", b"name", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "registry_name", b"registry_name"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["donuts_fee_agreement", b"donuts_fee_agreement", "name", b"name", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___RequestRequest = RequestRequest
+Global___RequestRequest: _TypeAlias = RequestRequest  # noqa: Y015
 
-@typing.final
-class RestoreReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class RestoreReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    STATE_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def state(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[global___RGPState.ValueType]: ...
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    STATE_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def state(self) -> _containers.RepeatedScalarFieldContainer[Global___RGPState.ValueType]: ...
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        state: collections.abc.Iterable[global___RGPState.ValueType] | None = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        pending: _builtins.bool = ...,
+        state: _abc.Iterable[Global___RGPState.ValueType] | None = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name", "state", b"state"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name", "state", b"state"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___RestoreReply = RestoreReply
+Global___RestoreReply: _TypeAlias = RestoreReply  # noqa: Y015
 
-@typing.final
-class ReportRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ReportRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    PRE_DATA_FIELD_NUMBER: builtins.int
-    POST_DATA_FIELD_NUMBER: builtins.int
-    DELETE_TIME_FIELD_NUMBER: builtins.int
-    RESTORE_TIME_FIELD_NUMBER: builtins.int
-    RESTORE_REASON_FIELD_NUMBER: builtins.int
-    STATEMENT_1_FIELD_NUMBER: builtins.int
-    STATEMENT_2_FIELD_NUMBER: builtins.int
-    OTHER_INFORMATION_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    pre_data: builtins.str
-    post_data: builtins.str
-    restore_reason: builtins.str
-    statement_1: builtins.str
-    statement_2: builtins.str
-    other_information: builtins.str
-    @property
-    def delete_time(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def restore_time(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def registry_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def donuts_fee_agreement(self) -> fee.fee_pb2.DonutsFeeData: ...
+    NAME_FIELD_NUMBER: _builtins.int
+    PRE_DATA_FIELD_NUMBER: _builtins.int
+    POST_DATA_FIELD_NUMBER: _builtins.int
+    DELETE_TIME_FIELD_NUMBER: _builtins.int
+    RESTORE_TIME_FIELD_NUMBER: _builtins.int
+    RESTORE_REASON_FIELD_NUMBER: _builtins.int
+    STATEMENT_1_FIELD_NUMBER: _builtins.int
+    STATEMENT_2_FIELD_NUMBER: _builtins.int
+    OTHER_INFORMATION_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    DONUTS_FEE_AGREEMENT_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    pre_data: _builtins.str
+    post_data: _builtins.str
+    restore_reason: _builtins.str
+    statement_1: _builtins.str
+    statement_2: _builtins.str
+    other_information: _builtins.str
+    @_builtins.property
+    def delete_time(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def restore_time(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def registry_name(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def donuts_fee_agreement(self) -> _fee_pb2.DonutsFeeData: ...
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        pre_data: builtins.str = ...,
-        post_data: builtins.str = ...,
-        delete_time: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        restore_time: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        restore_reason: builtins.str = ...,
-        statement_1: builtins.str = ...,
-        statement_2: builtins.str = ...,
-        other_information: builtins.str = ...,
-        registry_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        donuts_fee_agreement: fee.fee_pb2.DonutsFeeData | None = ...,
+        name: _builtins.str = ...,
+        pre_data: _builtins.str = ...,
+        post_data: _builtins.str = ...,
+        delete_time: _timestamp_pb2.Timestamp | None = ...,
+        restore_time: _timestamp_pb2.Timestamp | None = ...,
+        restore_reason: _builtins.str = ...,
+        statement_1: _builtins.str = ...,
+        statement_2: _builtins.str = ...,
+        other_information: _builtins.str = ...,
+        registry_name: _wrappers_pb2.StringValue | None = ...,
+        donuts_fee_agreement: _fee_pb2.DonutsFeeData | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["delete_time", b"delete_time", "donuts_fee_agreement", b"donuts_fee_agreement", "registry_name", b"registry_name", "restore_time", b"restore_time"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["delete_time", b"delete_time", "donuts_fee_agreement", b"donuts_fee_agreement", "name", b"name", "other_information", b"other_information", "post_data", b"post_data", "pre_data", b"pre_data", "registry_name", b"registry_name", "restore_reason", b"restore_reason", "restore_time", b"restore_time", "statement_1", b"statement_1", "statement_2", b"statement_2"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["delete_time", b"delete_time", "donuts_fee_agreement", b"donuts_fee_agreement", "registry_name", b"registry_name", "restore_time", b"restore_time"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["delete_time", b"delete_time", "donuts_fee_agreement", b"donuts_fee_agreement", "name", b"name", "other_information", b"other_information", "post_data", b"post_data", "pre_data", b"pre_data", "registry_name", b"registry_name", "restore_reason", b"restore_reason", "restore_time", b"restore_time", "statement_1", b"statement_1", "statement_2", b"statement_2"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ReportRequest = ReportRequest
+Global___ReportRequest: _TypeAlias = ReportRequest  # noqa: Y015
 
-@typing.final
-class ReportReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ReportReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    FEE_DATA_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    registry_name: builtins.str
-    @property
-    def fee_data(self) -> fee.fee_pb2.FeeData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    FEE_DATA_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    registry_name: _builtins.str
+    @_builtins.property
+    def fee_data(self) -> _fee_pb2.FeeData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        fee_data: fee.fee_pb2.FeeData | None = ...,
-        registry_name: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        pending: _builtins.bool = ...,
+        fee_data: _fee_pb2.FeeData | None = ...,
+        registry_name: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "fee_data", b"fee_data", "pending", b"pending", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ReportReply = ReportReply
+Global___ReportReply: _TypeAlias = ReportReply  # noqa: Y015

@@ -3,32 +3,32 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
-import marks.marks_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from marks import marks_pb2 as _marks_pb2
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _DocumentClass:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DocumentClassEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DocumentClass.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DocumentClassEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DocumentClass.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Other: _DocumentClass.ValueType  # 0
     LicenseeDeclaration: _DocumentClass.ValueType  # 1
     AssigneeDeclaration: _DocumentClass.ValueType  # 2
@@ -44,14 +44,14 @@ AssigneeDeclaration: DocumentClass.ValueType  # 2
 DeclarationProofOfUseOneSample: DocumentClass.ValueType  # 3
 OtherProofOfUse: DocumentClass.ValueType  # 4
 CopyOfCourtOrder: DocumentClass.ValueType  # 5
-global___DocumentClass = DocumentClass
+Global___DocumentClass: _TypeAlias = DocumentClass  # noqa: Y015
 
 class _FileType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _FileTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_FileType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _FileTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_FileType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     PDF: _FileType.ValueType  # 0
     JPG: _FileType.ValueType  # 1
 
@@ -59,14 +59,14 @@ class FileType(_FileType, metaclass=_FileTypeEnumTypeWrapper): ...
 
 PDF: FileType.ValueType  # 0
 JPG: FileType.ValueType  # 1
-global___FileType = FileType
+Global___FileType: _TypeAlias = FileType  # noqa: Y015
 
 class _MarkStatusType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _MarkStatusTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_MarkStatusType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _MarkStatusTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_MarkStatusType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Unknown: _MarkStatusType.ValueType  # 0
     New: _MarkStatusType.ValueType  # 1
     Verified: _MarkStatusType.ValueType  # 2
@@ -86,14 +86,14 @@ Corrected: MarkStatusType.ValueType  # 4
 Invalid: MarkStatusType.ValueType  # 5
 Expired: MarkStatusType.ValueType  # 6
 Deactivated: MarkStatusType.ValueType  # 7
-global___MarkStatusType = MarkStatusType
+Global___MarkStatusType: _TypeAlias = MarkStatusType  # noqa: Y015
 
 class _MarkPOUStatusType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _MarkPOUStatusTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_MarkPOUStatusType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _MarkPOUStatusTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_MarkPOUStatusType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     POUNotSet: _MarkPOUStatusType.ValueType  # 0
     POUValid: _MarkPOUStatusType.ValueType  # 1
     POUInvalid: _MarkPOUStatusType.ValueType  # 2
@@ -113,14 +113,14 @@ POUNA: MarkPOUStatusType.ValueType  # 4
 POUNew: MarkPOUStatusType.ValueType  # 5
 POUIncorrect: MarkPOUStatusType.ValueType  # 6
 POUCorrected: MarkPOUStatusType.ValueType  # 7
-global___MarkPOUStatusType = MarkPOUStatusType
+Global___MarkPOUStatusType: _TypeAlias = MarkPOUStatusType  # noqa: Y015
 
 class _TrexStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _TrexStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_TrexStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _TrexStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_TrexStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     NoInfo: _TrexStatus.ValueType  # 0
     NotProtectedOverride: _TrexStatus.ValueType  # 1
     NotProtectedRegistered: _TrexStatus.ValueType  # 2
@@ -140,14 +140,14 @@ NotProtectedOther: TrexStatus.ValueType  # 4
 Protected: TrexStatus.ValueType  # 5
 Unavailable: TrexStatus.ValueType  # 6
 Eligible: TrexStatus.ValueType  # 7
-global___TrexStatus = TrexStatus
+Global___TrexStatus: _TypeAlias = TrexStatus  # noqa: Y015
 
 class _CourtDocumentClass:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _CourtDocumentClassEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_CourtDocumentClass.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _CourtDocumentClassEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_CourtDocumentClass.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     CourtOther: _CourtDocumentClass.ValueType  # 0
     CourtDecision: _CourtDocumentClass.ValueType  # 1
 
@@ -155,964 +155,1101 @@ class CourtDocumentClass(_CourtDocumentClass, metaclass=_CourtDocumentClassEnumT
 
 CourtOther: CourtDocumentClass.ValueType  # 0
 CourtDecision: CourtDocumentClass.ValueType  # 1
-global___CourtDocumentClass = CourtDocumentClass
+Global___CourtDocumentClass: _TypeAlias = CourtDocumentClass  # noqa: Y015
 
-@typing.final
-class MarkCheckRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkCheckRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkCheckRequest = MarkCheckRequest
+Global___MarkCheckRequest: _TypeAlias = MarkCheckRequest  # noqa: Y015
 
-@typing.final
-class MarkCheckResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkCheckResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    AVAILABLE_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    available: builtins.bool
-    @property
-    def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    AVAILABLE_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    available: _builtins.bool
+    @_builtins.property
+    def reason(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        available: builtins.bool = ...,
-        reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        available: _builtins.bool = ...,
+        reason: _wrappers_pb2.StringValue | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "reason", b"reason"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["available", b"available", "cmd_resp", b"cmd_resp", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "reason", b"reason"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["available", b"available", "cmd_resp", b"cmd_resp", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkCheckResponse = MarkCheckResponse
+Global___MarkCheckResponse: _TypeAlias = MarkCheckResponse  # noqa: Y015
 
-@typing.final
-class BalanceData(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class BalanceData(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    VALUE_FIELD_NUMBER: builtins.int
-    CURRENCY_FIELD_NUMBER: builtins.int
-    STATUS_POINTS_FIELD_NUMBER: builtins.int
-    value: builtins.str
-    currency: builtins.str
-    status_points: builtins.int
+    VALUE_FIELD_NUMBER: _builtins.int
+    CURRENCY_FIELD_NUMBER: _builtins.int
+    STATUS_POINTS_FIELD_NUMBER: _builtins.int
+    value: _builtins.str
+    currency: _builtins.str
+    status_points: _builtins.int
     def __init__(
         self,
         *,
-        value: builtins.str = ...,
-        currency: builtins.str = ...,
-        status_points: builtins.int = ...,
+        value: _builtins.str = ...,
+        currency: _builtins.str = ...,
+        status_points: _builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["currency", b"currency", "status_points", b"status_points", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["currency", b"currency", "status_points", b"status_points", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___BalanceData = BalanceData
+Global___BalanceData: _TypeAlias = BalanceData  # noqa: Y015
 
-@typing.final
-class MarkCreateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkCreateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    MARK_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    DOCUMENTS_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    VARIATIONS_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    @property
-    def mark(self) -> marks.marks_pb2.Mark: ...
-    @property
-    def period(self) -> common.common_pb2.Period: ...
-    @property
-    def documents(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___Document]: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CreateLabel]: ...
-    @property
-    def variations(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    MARK_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    DOCUMENTS_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    VARIATIONS_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    @_builtins.property
+    def mark(self) -> _marks_pb2.Mark: ...
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def documents(self) -> _containers.RepeatedCompositeFieldContainer[Global___Document]: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedCompositeFieldContainer[Global___CreateLabel]: ...
+    @_builtins.property
+    def variations(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        mark: marks.marks_pb2.Mark | None = ...,
-        period: common.common_pb2.Period | None = ...,
-        documents: collections.abc.Iterable[global___Document] | None = ...,
-        labels: collections.abc.Iterable[global___CreateLabel] | None = ...,
-        variations: collections.abc.Iterable[builtins.str] | None = ...,
-        registry_name: builtins.str = ...,
+        mark: _marks_pb2.Mark | None = ...,
+        period: _common_pb2.Period | None = ...,
+        documents: _abc.Iterable[Global___Document] | None = ...,
+        labels: _abc.Iterable[Global___CreateLabel] | None = ...,
+        variations: _abc.Iterable[_builtins.str] | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["mark", b"mark", "period", b"period"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["documents", b"documents", "labels", b"labels", "mark", b"mark", "period", b"period", "registry_name", b"registry_name", "variations", b"variations"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["mark", b"mark", "period", b"period"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["documents", b"documents", "labels", b"labels", "mark", b"mark", "period", b"period", "registry_name", b"registry_name", "variations", b"variations"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkCreateRequest = MarkCreateRequest
+Global___MarkCreateRequest: _TypeAlias = MarkCreateRequest  # noqa: Y015
 
-@typing.final
-class Document(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Document(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOCUMENT_CLASS_FIELD_NUMBER: builtins.int
-    FILE_NAME_FIELD_NUMBER: builtins.int
-    FILE_TYPE_FIELD_NUMBER: builtins.int
-    CONTENTS_FIELD_NUMBER: builtins.int
-    document_class: global___DocumentClass.ValueType
-    file_name: builtins.str
-    file_type: global___FileType.ValueType
-    contents: builtins.bytes
+    DOCUMENT_CLASS_FIELD_NUMBER: _builtins.int
+    FILE_NAME_FIELD_NUMBER: _builtins.int
+    FILE_TYPE_FIELD_NUMBER: _builtins.int
+    CONTENTS_FIELD_NUMBER: _builtins.int
+    document_class: Global___DocumentClass.ValueType
+    file_name: _builtins.str
+    file_type: Global___FileType.ValueType
+    contents: _builtins.bytes
     def __init__(
         self,
         *,
-        document_class: global___DocumentClass.ValueType = ...,
-        file_name: builtins.str = ...,
-        file_type: global___FileType.ValueType = ...,
-        contents: builtins.bytes = ...,
+        document_class: Global___DocumentClass.ValueType = ...,
+        file_name: _builtins.str = ...,
+        file_type: Global___FileType.ValueType = ...,
+        contents: _builtins.bytes = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["contents", b"contents", "document_class", b"document_class", "file_name", b"file_name", "file_type", b"file_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["contents", b"contents", "document_class", b"document_class", "file_name", b"file_name", "file_type", b"file_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Document = Document
+Global___Document: _TypeAlias = Document  # noqa: Y015
 
-@typing.final
-class CreateLabel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CreateLabel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    LABEL_FIELD_NUMBER: builtins.int
-    SMD_INCLUSION_FIELD_NUMBER: builtins.int
-    CLAIMS_NOTIFY_FIELD_NUMBER: builtins.int
-    label: builtins.str
-    smd_inclusion: builtins.bool
-    claims_notify: builtins.bool
+    LABEL_FIELD_NUMBER: _builtins.int
+    SMD_INCLUSION_FIELD_NUMBER: _builtins.int
+    CLAIMS_NOTIFY_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
+    smd_inclusion: _builtins.bool
+    claims_notify: _builtins.bool
     def __init__(
         self,
         *,
-        label: builtins.str = ...,
-        smd_inclusion: builtins.bool = ...,
-        claims_notify: builtins.bool = ...,
+        label: _builtins.str = ...,
+        smd_inclusion: _builtins.bool = ...,
+        claims_notify: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["claims_notify", b"claims_notify", "label", b"label", "smd_inclusion", b"smd_inclusion"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["claims_notify", b"claims_notify", "label", b"label", "smd_inclusion", b"smd_inclusion"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CreateLabel = CreateLabel
+Global___CreateLabel: _TypeAlias = CreateLabel  # noqa: Y015
 
-@typing.final
-class MarkCreateResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkCreateResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    CREATED_DATE_FIELD_NUMBER: builtins.int
-    BALANCE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def created_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def balance(self) -> global___BalanceData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    CREATED_DATE_FIELD_NUMBER: _builtins.int
+    BALANCE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def created_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def balance(self) -> Global___BalanceData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        created_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        balance: global___BalanceData | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        created_date: _timestamp_pb2.Timestamp | None = ...,
+        balance: Global___BalanceData | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "created_date", b"created_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "created_date", b"created_date", "id", b"id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "created_date", b"created_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "created_date", b"created_date", "id", b"id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkCreateResponse = MarkCreateResponse
+Global___MarkCreateResponse: _TypeAlias = MarkCreateResponse  # noqa: Y015
 
-@typing.final
-class MarkInfoRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkInfoRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkInfoRequest = MarkInfoRequest
+Global___MarkInfoRequest: _TypeAlias = MarkInfoRequest  # noqa: Y015
 
-@typing.final
-class MarkStatus(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkStatus(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUS_TYPE_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    status_type: global___MarkStatusType.ValueType
-    @property
-    def message(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    STATUS_TYPE_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    status_type: Global___MarkStatusType.ValueType
+    @_builtins.property
+    def message(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        status_type: global___MarkStatusType.ValueType = ...,
-        message: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        status_type: Global___MarkStatusType.ValueType = ...,
+        message: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["message", b"message"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["message", b"message", "status_type", b"status_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["message", b"message"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status_type", b"status_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkStatus = MarkStatus
+Global___MarkStatus: _TypeAlias = MarkStatus  # noqa: Y015
 
-@typing.final
-class MarkPOUStatus(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkPOUStatus(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUS_TYPE_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    status_type: global___MarkPOUStatusType.ValueType
-    @property
-    def message(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    STATUS_TYPE_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    status_type: Global___MarkPOUStatusType.ValueType
+    @_builtins.property
+    def message(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        status_type: global___MarkPOUStatusType.ValueType = ...,
-        message: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        status_type: Global___MarkPOUStatusType.ValueType = ...,
+        message: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["message", b"message"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["message", b"message", "status_type", b"status_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["message", b"message"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status_type", b"status_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkPOUStatus = MarkPOUStatus
+Global___MarkPOUStatus: _TypeAlias = MarkPOUStatus  # noqa: Y015
 
-@typing.final
-class MarkInfoResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkInfoResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    POU_STATUS_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    VARIATIONS_FIELD_NUMBER: builtins.int
-    CREATION_DATE_FIELD_NUMBER: builtins.int
-    UPDATE_DATE_FIELD_NUMBER: builtins.int
-    EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    POU_EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    CORRECT_BEFORE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def status(self) -> global___MarkStatus: ...
-    @property
-    def pou_status(self) -> global___MarkPOUStatus: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MarkLabel]: ...
-    @property
-    def variations(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MarkVariation]: ...
-    @property
-    def creation_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def update_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def pou_expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def correct_before(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    POU_STATUS_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    VARIATIONS_FIELD_NUMBER: _builtins.int
+    CREATION_DATE_FIELD_NUMBER: _builtins.int
+    UPDATE_DATE_FIELD_NUMBER: _builtins.int
+    EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    POU_EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    CORRECT_BEFORE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def status(self) -> Global___MarkStatus: ...
+    @_builtins.property
+    def pou_status(self) -> Global___MarkPOUStatus: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedCompositeFieldContainer[Global___MarkLabel]: ...
+    @_builtins.property
+    def variations(self) -> _containers.RepeatedCompositeFieldContainer[Global___MarkVariation]: ...
+    @_builtins.property
+    def creation_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def update_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def pou_expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def correct_before(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        status: global___MarkStatus | None = ...,
-        pou_status: global___MarkPOUStatus | None = ...,
-        labels: collections.abc.Iterable[global___MarkLabel] | None = ...,
-        variations: collections.abc.Iterable[global___MarkVariation] | None = ...,
-        creation_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        update_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        pou_expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        correct_before: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        status: Global___MarkStatus | None = ...,
+        pou_status: Global___MarkPOUStatus | None = ...,
+        labels: _abc.Iterable[Global___MarkLabel] | None = ...,
+        variations: _abc.Iterable[Global___MarkVariation] | None = ...,
+        creation_date: _timestamp_pb2.Timestamp | None = ...,
+        update_date: _timestamp_pb2.Timestamp | None = ...,
+        expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        pou_expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        correct_before: _timestamp_pb2.Timestamp | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "correct_before", b"correct_before", "creation_date", b"creation_date", "expiry_date", b"expiry_date", "pou_expiry_date", b"pou_expiry_date", "pou_status", b"pou_status", "status", b"status", "update_date", b"update_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "correct_before", b"correct_before", "creation_date", b"creation_date", "expiry_date", b"expiry_date", "id", b"id", "labels", b"labels", "pou_expiry_date", b"pou_expiry_date", "pou_status", b"pou_status", "status", b"status", "update_date", b"update_date", "variations", b"variations"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "correct_before", b"correct_before", "creation_date", b"creation_date", "expiry_date", b"expiry_date", "pou_expiry_date", b"pou_expiry_date", "pou_status", b"pou_status", "status", b"status", "update_date", b"update_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "correct_before", b"correct_before", "creation_date", b"creation_date", "expiry_date", b"expiry_date", "id", b"id", "labels", b"labels", "pou_expiry_date", b"pou_expiry_date", "pou_status", b"pou_status", "status", b"status", "update_date", b"update_date", "variations", b"variations"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkInfoResponse = MarkInfoResponse
+Global___MarkInfoResponse: _TypeAlias = MarkInfoResponse  # noqa: Y015
 
-@typing.final
-class MarkLabel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkLabel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    A_LABEL_FIELD_NUMBER: builtins.int
-    U_LABEL_FIELD_NUMBER: builtins.int
-    SMD_INCLUSION_FIELD_NUMBER: builtins.int
-    CLAIM_NOTIFY_FIELD_NUMBER: builtins.int
-    a_label: builtins.str
-    u_label: builtins.str
-    smd_inclusion: builtins.bool
-    claim_notify: builtins.bool
+    A_LABEL_FIELD_NUMBER: _builtins.int
+    U_LABEL_FIELD_NUMBER: _builtins.int
+    SMD_INCLUSION_FIELD_NUMBER: _builtins.int
+    CLAIM_NOTIFY_FIELD_NUMBER: _builtins.int
+    a_label: _builtins.str
+    u_label: _builtins.str
+    smd_inclusion: _builtins.bool
+    claim_notify: _builtins.bool
     def __init__(
         self,
         *,
-        a_label: builtins.str = ...,
-        u_label: builtins.str = ...,
-        smd_inclusion: builtins.bool = ...,
-        claim_notify: builtins.bool = ...,
+        a_label: _builtins.str = ...,
+        u_label: _builtins.str = ...,
+        smd_inclusion: _builtins.bool = ...,
+        claim_notify: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["a_label", b"a_label", "claim_notify", b"claim_notify", "smd_inclusion", b"smd_inclusion", "u_label", b"u_label"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["a_label", b"a_label", "claim_notify", b"claim_notify", "smd_inclusion", b"smd_inclusion", "u_label", b"u_label"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkLabel = MarkLabel
+Global___MarkLabel: _TypeAlias = MarkLabel  # noqa: Y015
 
-@typing.final
-class MarkLabelTrex(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkLabelTrex(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ENABLED_FIELD_NUMBER: builtins.int
-    UNTIL_FIELD_NUMBER: builtins.int
-    TLDS_FIELD_NUMBER: builtins.int
-    enabled: builtins.bool
-    @property
-    def until(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def tlds(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MarkLabelTrexTLD]: ...
+    ENABLED_FIELD_NUMBER: _builtins.int
+    UNTIL_FIELD_NUMBER: _builtins.int
+    TLDS_FIELD_NUMBER: _builtins.int
+    enabled: _builtins.bool
+    @_builtins.property
+    def until(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def tlds(self) -> _containers.RepeatedCompositeFieldContainer[Global___MarkLabelTrexTLD]: ...
     def __init__(
         self,
         *,
-        enabled: builtins.bool = ...,
-        until: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        tlds: collections.abc.Iterable[global___MarkLabelTrexTLD] | None = ...,
+        enabled: _builtins.bool = ...,
+        until: _timestamp_pb2.Timestamp | None = ...,
+        tlds: _abc.Iterable[Global___MarkLabelTrexTLD] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["until", b"until"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["enabled", b"enabled", "tlds", b"tlds", "until", b"until"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["until", b"until"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["enabled", b"enabled", "tlds", b"tlds", "until", b"until"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkLabelTrex = MarkLabelTrex
+Global___MarkLabelTrex: _TypeAlias = MarkLabelTrex  # noqa: Y015
 
-@typing.final
-class MarkLabelTrexTLD(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkLabelTrexTLD(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TLD_FIELD_NUMBER: builtins.int
-    COMMENT_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    tld: builtins.str
-    status: global___TrexStatus.ValueType
-    @property
-    def comment(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    TLD_FIELD_NUMBER: _builtins.int
+    COMMENT_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    tld: _builtins.str
+    status: Global___TrexStatus.ValueType
+    @_builtins.property
+    def comment(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        tld: builtins.str = ...,
-        comment: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        status: global___TrexStatus.ValueType = ...,
+        tld: _builtins.str = ...,
+        comment: _wrappers_pb2.StringValue | None = ...,
+        status: Global___TrexStatus.ValueType = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["comment", b"comment"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["comment", b"comment", "status", b"status", "tld", b"tld"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["comment", b"comment"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["comment", b"comment", "status", b"status", "tld", b"tld"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkLabelTrexTLD = MarkLabelTrexTLD
+Global___MarkLabelTrexTLD: _TypeAlias = MarkLabelTrexTLD  # noqa: Y015
 
-@typing.final
-class MarkVariation(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkVariation(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    A_LABEL_FIELD_NUMBER: builtins.int
-    U_LABEL_FIELD_NUMBER: builtins.int
-    VARIATION_TYPE_FIELD_NUMBER: builtins.int
-    ACTIVE_FIELD_NUMBER: builtins.int
-    a_label: builtins.str
-    u_label: builtins.str
-    variation_type: builtins.str
-    active: builtins.bool
+    A_LABEL_FIELD_NUMBER: _builtins.int
+    U_LABEL_FIELD_NUMBER: _builtins.int
+    VARIATION_TYPE_FIELD_NUMBER: _builtins.int
+    ACTIVE_FIELD_NUMBER: _builtins.int
+    a_label: _builtins.str
+    u_label: _builtins.str
+    variation_type: _builtins.str
+    active: _builtins.bool
     def __init__(
         self,
         *,
-        a_label: builtins.str = ...,
-        u_label: builtins.str = ...,
-        variation_type: builtins.str = ...,
-        active: builtins.bool = ...,
+        a_label: _builtins.str = ...,
+        u_label: _builtins.str = ...,
+        variation_type: _builtins.str = ...,
+        active: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["a_label", b"a_label", "active", b"active", "u_label", b"u_label", "variation_type", b"variation_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["a_label", b"a_label", "active", b"active", "u_label", b"u_label", "variation_type", b"variation_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkVariation = MarkVariation
+Global___MarkVariation: _TypeAlias = MarkVariation  # noqa: Y015
 
-@typing.final
-class MarkSMDInfoResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkSMDInfoResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    STATUS_FIELD_NUMBER: builtins.int
-    SMD_ID_FIELD_NUMBER: builtins.int
-    SMD_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    smd_id: builtins.str
-    smd: builtins.str
-    @property
-    def status(self) -> global___MarkStatus: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    SMD_ID_FIELD_NUMBER: _builtins.int
+    SMD_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    smd_id: _builtins.str
+    smd: _builtins.str
+    @_builtins.property
+    def status(self) -> Global___MarkStatus: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        status: global___MarkStatus | None = ...,
-        smd_id: builtins.str = ...,
-        smd: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        status: Global___MarkStatus | None = ...,
+        smd_id: _builtins.str = ...,
+        smd: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "status", b"status"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "id", b"id", "smd", b"smd", "smd_id", b"smd_id", "status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "status", b"status"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "id", b"id", "smd", b"smd", "smd_id", b"smd_id", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkSMDInfoResponse = MarkSMDInfoResponse
+Global___MarkSMDInfoResponse: _TypeAlias = MarkSMDInfoResponse  # noqa: Y015
 
-@typing.final
-class MarkUpdateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkUpdateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    ADD_FIELD_NUMBER: builtins.int
-    REMOVE_FIELD_NUMBER: builtins.int
-    NEW_MARK_FIELD_NUMBER: builtins.int
-    UPDATE_LABELS_FIELD_NUMBER: builtins.int
-    UPDATE_CASES_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
-    @property
-    def add(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MarkUpdateAdd]: ...
-    @property
-    def remove(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___MarkUpdateRemove]: ...
-    @property
-    def new_mark(self) -> marks.marks_pb2.Mark: ...
-    @property
-    def update_labels(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CreateLabel]: ...
-    @property
-    def update_cases(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CaseUpdate]: ...
+    ID_FIELD_NUMBER: _builtins.int
+    ADD_FIELD_NUMBER: _builtins.int
+    REMOVE_FIELD_NUMBER: _builtins.int
+    NEW_MARK_FIELD_NUMBER: _builtins.int
+    UPDATE_LABELS_FIELD_NUMBER: _builtins.int
+    UPDATE_CASES_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def add(self) -> _containers.RepeatedCompositeFieldContainer[Global___MarkUpdateAdd]: ...
+    @_builtins.property
+    def remove(self) -> _containers.RepeatedCompositeFieldContainer[Global___MarkUpdateRemove]: ...
+    @_builtins.property
+    def new_mark(self) -> _marks_pb2.Mark: ...
+    @_builtins.property
+    def update_labels(self) -> _containers.RepeatedCompositeFieldContainer[Global___CreateLabel]: ...
+    @_builtins.property
+    def update_cases(self) -> _containers.RepeatedCompositeFieldContainer[Global___CaseUpdate]: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        add: collections.abc.Iterable[global___MarkUpdateAdd] | None = ...,
-        remove: collections.abc.Iterable[global___MarkUpdateRemove] | None = ...,
-        new_mark: marks.marks_pb2.Mark | None = ...,
-        update_labels: collections.abc.Iterable[global___CreateLabel] | None = ...,
-        update_cases: collections.abc.Iterable[global___CaseUpdate] | None = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        add: _abc.Iterable[Global___MarkUpdateAdd] | None = ...,
+        remove: _abc.Iterable[Global___MarkUpdateRemove] | None = ...,
+        new_mark: _marks_pb2.Mark | None = ...,
+        update_labels: _abc.Iterable[Global___CreateLabel] | None = ...,
+        update_cases: _abc.Iterable[Global___CaseUpdate] | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["new_mark", b"new_mark"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "id", b"id", "new_mark", b"new_mark", "registry_name", b"registry_name", "remove", b"remove", "update_cases", b"update_cases", "update_labels", b"update_labels"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["new_mark", b"new_mark"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add", b"add", "id", b"id", "new_mark", b"new_mark", "registry_name", b"registry_name", "remove", b"remove", "update_cases", b"update_cases", "update_labels", b"update_labels"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkUpdateRequest = MarkUpdateRequest
+Global___MarkUpdateRequest: _TypeAlias = MarkUpdateRequest  # noqa: Y015
 
-@typing.final
-class MarkUpdateResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkUpdateResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkUpdateResponse = MarkUpdateResponse
+Global___MarkUpdateResponse: _TypeAlias = MarkUpdateResponse  # noqa: Y015
 
-@typing.final
-class MarkUpdateAdd(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkUpdateAdd(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOCUMENT_FIELD_NUMBER: builtins.int
-    LABEL_FIELD_NUMBER: builtins.int
-    VARIATION_FIELD_NUMBER: builtins.int
-    CASE_FIELD_NUMBER: builtins.int
-    variation: builtins.str
-    @property
-    def document(self) -> global___Document: ...
-    @property
-    def label(self) -> global___CreateLabel: ...
-    @property
-    def case(self) -> global___AddCase: ...
+    DOCUMENT_FIELD_NUMBER: _builtins.int
+    LABEL_FIELD_NUMBER: _builtins.int
+    VARIATION_FIELD_NUMBER: _builtins.int
+    CASE_FIELD_NUMBER: _builtins.int
+    variation: _builtins.str
+    @_builtins.property
+    def document(self) -> Global___Document: ...
+    @_builtins.property
+    def label(self) -> Global___CreateLabel: ...
+    @_builtins.property
+    def case(self) -> Global___AddCase: ...
     def __init__(
         self,
         *,
-        document: global___Document | None = ...,
-        label: global___CreateLabel | None = ...,
-        variation: builtins.str = ...,
-        case: global___AddCase | None = ...,
+        document: Global___Document | None = ...,
+        label: Global___CreateLabel | None = ...,
+        variation: _builtins.str = ...,
+        case: Global___AddCase | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["case", b"case", "document", b"document", "label", b"label", "update", b"update", "variation", b"variation"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case", b"case", "document", b"document", "label", b"label", "update", b"update", "variation", b"variation"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["update", b"update"]) -> typing.Literal["document", "label", "variation", "case"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["case", b"case", "document", b"document", "label", b"label", "update", b"update", "variation", b"variation"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case", b"case", "document", b"document", "label", b"label", "update", b"update", "variation", b"variation"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_update: _TypeAlias = _typing.Literal["document", "label", "variation", "case"]  # noqa: Y015
+    _WhichOneofArgType_update: _TypeAlias = _typing.Literal["update", b"update"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_update) -> _WhichOneofReturnType_update | None: ...
 
-global___MarkUpdateAdd = MarkUpdateAdd
+Global___MarkUpdateAdd: _TypeAlias = MarkUpdateAdd  # noqa: Y015
 
-@typing.final
-class MarkUpdateRemove(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkUpdateRemove(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    LABEL_FIELD_NUMBER: builtins.int
-    VARIATION_FIELD_NUMBER: builtins.int
-    label: builtins.str
-    variation: builtins.str
+    LABEL_FIELD_NUMBER: _builtins.int
+    VARIATION_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
+    variation: _builtins.str
     def __init__(
         self,
         *,
-        label: builtins.str = ...,
-        variation: builtins.str = ...,
+        label: _builtins.str = ...,
+        variation: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["label", b"label", "update", b"update", "variation", b"variation"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["label", b"label", "update", b"update", "variation", b"variation"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["update", b"update"]) -> typing.Literal["label", "variation"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["label", b"label", "update", b"update", "variation", b"variation"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["label", b"label", "update", b"update", "variation", b"variation"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_update: _TypeAlias = _typing.Literal["label", "variation"]  # noqa: Y015
+    _WhichOneofArgType_update: _TypeAlias = _typing.Literal["update", b"update"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_update) -> _WhichOneofReturnType_update | None: ...
 
-global___MarkUpdateRemove = MarkUpdateRemove
+Global___MarkUpdateRemove: _TypeAlias = MarkUpdateRemove  # noqa: Y015
 
-@typing.final
-class AddCase(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class AddCase(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    UDRP_FIELD_NUMBER: builtins.int
-    COURT_FIELD_NUMBER: builtins.int
-    DOCUMENTS_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def udrp(self) -> global___UDRPCase: ...
-    @property
-    def court(self) -> global___CourtCase: ...
-    @property
-    def documents(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CaseDocument]: ...
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    ID_FIELD_NUMBER: _builtins.int
+    UDRP_FIELD_NUMBER: _builtins.int
+    COURT_FIELD_NUMBER: _builtins.int
+    DOCUMENTS_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def udrp(self) -> Global___UDRPCase: ...
+    @_builtins.property
+    def court(self) -> Global___CourtCase: ...
+    @_builtins.property
+    def documents(self) -> _containers.RepeatedCompositeFieldContainer[Global___CaseDocument]: ...
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        udrp: global___UDRPCase | None = ...,
-        court: global___CourtCase | None = ...,
-        documents: collections.abc.Iterable[global___CaseDocument] | None = ...,
-        labels: collections.abc.Iterable[builtins.str] | None = ...,
+        id: _builtins.str = ...,
+        udrp: Global___UDRPCase | None = ...,
+        court: Global___CourtCase | None = ...,
+        documents: _abc.Iterable[Global___CaseDocument] | None = ...,
+        labels: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["case", b"case", "court", b"court", "udrp", b"udrp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case", b"case", "court", b"court", "documents", b"documents", "id", b"id", "labels", b"labels", "udrp", b"udrp"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["case", b"case"]) -> typing.Literal["udrp", "court"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["case", b"case", "court", b"court", "udrp", b"udrp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case", b"case", "court", b"court", "documents", b"documents", "id", b"id", "labels", b"labels", "udrp", b"udrp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_case: _TypeAlias = _typing.Literal["udrp", "court"]  # noqa: Y015
+    _WhichOneofArgType_case: _TypeAlias = _typing.Literal["case", b"case"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_case) -> _WhichOneofReturnType_case | None: ...
 
-global___AddCase = AddCase
+Global___AddCase: _TypeAlias = AddCase  # noqa: Y015
 
-@typing.final
-class CaseUpdate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CaseUpdate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    ADD_FIELD_NUMBER: builtins.int
-    REMOVE_FIELD_NUMBER: builtins.int
-    NEW_UDRP_FIELD_NUMBER: builtins.int
-    NEW_COURT_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def add(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CaseAdd]: ...
-    @property
-    def remove(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___CaseRemove]: ...
-    @property
-    def new_udrp(self) -> global___UDRPCase: ...
-    @property
-    def new_court(self) -> global___CourtCase: ...
+    ID_FIELD_NUMBER: _builtins.int
+    ADD_FIELD_NUMBER: _builtins.int
+    REMOVE_FIELD_NUMBER: _builtins.int
+    NEW_UDRP_FIELD_NUMBER: _builtins.int
+    NEW_COURT_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def add(self) -> _containers.RepeatedCompositeFieldContainer[Global___CaseAdd]: ...
+    @_builtins.property
+    def remove(self) -> _containers.RepeatedCompositeFieldContainer[Global___CaseRemove]: ...
+    @_builtins.property
+    def new_udrp(self) -> Global___UDRPCase: ...
+    @_builtins.property
+    def new_court(self) -> Global___CourtCase: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        add: collections.abc.Iterable[global___CaseAdd] | None = ...,
-        remove: collections.abc.Iterable[global___CaseRemove] | None = ...,
-        new_udrp: global___UDRPCase | None = ...,
-        new_court: global___CourtCase | None = ...,
+        id: _builtins.str = ...,
+        add: _abc.Iterable[Global___CaseAdd] | None = ...,
+        remove: _abc.Iterable[Global___CaseRemove] | None = ...,
+        new_udrp: Global___UDRPCase | None = ...,
+        new_court: Global___CourtCase | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["new_case", b"new_case", "new_court", b"new_court", "new_udrp", b"new_udrp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add", b"add", "id", b"id", "new_case", b"new_case", "new_court", b"new_court", "new_udrp", b"new_udrp", "remove", b"remove"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["new_case", b"new_case"]) -> typing.Literal["new_udrp", "new_court"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["new_case", b"new_case", "new_court", b"new_court", "new_udrp", b"new_udrp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add", b"add", "id", b"id", "new_case", b"new_case", "new_court", b"new_court", "new_udrp", b"new_udrp", "remove", b"remove"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_new_case: _TypeAlias = _typing.Literal["new_udrp", "new_court"]  # noqa: Y015
+    _WhichOneofArgType_new_case: _TypeAlias = _typing.Literal["new_case", b"new_case"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_new_case) -> _WhichOneofReturnType_new_case | None: ...
 
-global___CaseUpdate = CaseUpdate
+Global___CaseUpdate: _TypeAlias = CaseUpdate  # noqa: Y015
 
-@typing.final
-class CaseAdd(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CaseAdd(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOCUMENT_FIELD_NUMBER: builtins.int
-    LABEL_FIELD_NUMBER: builtins.int
-    label: builtins.str
-    @property
-    def document(self) -> global___CaseDocument: ...
+    DOCUMENT_FIELD_NUMBER: _builtins.int
+    LABEL_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
+    @_builtins.property
+    def document(self) -> Global___CaseDocument: ...
     def __init__(
         self,
         *,
-        document: global___CaseDocument | None = ...,
-        label: builtins.str = ...,
+        document: Global___CaseDocument | None = ...,
+        label: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["document", b"document", "label", b"label", "update", b"update"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["document", b"document", "label", b"label", "update", b"update"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["update", b"update"]) -> typing.Literal["document", "label"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["document", b"document", "label", b"label", "update", b"update"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["document", b"document", "label", b"label", "update", b"update"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_update: _TypeAlias = _typing.Literal["document", "label"]  # noqa: Y015
+    _WhichOneofArgType_update: _TypeAlias = _typing.Literal["update", b"update"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_update) -> _WhichOneofReturnType_update | None: ...
 
-global___CaseAdd = CaseAdd
+Global___CaseAdd: _TypeAlias = CaseAdd  # noqa: Y015
 
-@typing.final
-class CaseRemove(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CaseRemove(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    LABEL_FIELD_NUMBER: builtins.int
-    label: builtins.str
+    LABEL_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
     def __init__(
         self,
         *,
-        label: builtins.str = ...,
+        label: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["label", b"label", "update", b"update"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["label", b"label", "update", b"update"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["update", b"update"]) -> typing.Literal["label"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["label", b"label", "update", b"update"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["label", b"label", "update", b"update"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_update: _TypeAlias = _typing.Literal["label"]  # noqa: Y015
+    _WhichOneofArgType_update: _TypeAlias = _typing.Literal["update", b"update"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_update) -> _WhichOneofReturnType_update | None: ...
 
-global___CaseRemove = CaseRemove
+Global___CaseRemove: _TypeAlias = CaseRemove  # noqa: Y015
 
-@typing.final
-class UDRPCase(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class UDRPCase(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CASE_ID_FIELD_NUMBER: builtins.int
-    PROVIDER_FIELD_NUMBER: builtins.int
-    CASE_LANGUAGE_FIELD_NUMBER: builtins.int
-    case_id: builtins.str
-    provider: builtins.str
-    case_language: builtins.str
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    PROVIDER_FIELD_NUMBER: _builtins.int
+    CASE_LANGUAGE_FIELD_NUMBER: _builtins.int
+    case_id: _builtins.str
+    provider: _builtins.str
+    case_language: _builtins.str
     def __init__(
         self,
         *,
-        case_id: builtins.str = ...,
-        provider: builtins.str = ...,
-        case_language: builtins.str = ...,
+        case_id: _builtins.str = ...,
+        provider: _builtins.str = ...,
+        case_language: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "case_language", b"case_language", "provider", b"provider"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "case_language", b"case_language", "provider", b"provider"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___UDRPCase = UDRPCase
+Global___UDRPCase: _TypeAlias = UDRPCase  # noqa: Y015
 
-@typing.final
-class CourtCase(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CourtCase(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DECISION_ID_FIELD_NUMBER: builtins.int
-    COURT_NAME_FIELD_NUMBER: builtins.int
-    COUNTRY_CODE_FIELD_NUMBER: builtins.int
-    CASE_LANGUAGE_FIELD_NUMBER: builtins.int
-    REGIONS_FIELD_NUMBER: builtins.int
-    decision_id: builtins.str
-    court_name: builtins.str
-    country_code: builtins.str
-    case_language: builtins.str
-    @property
-    def regions(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    DECISION_ID_FIELD_NUMBER: _builtins.int
+    COURT_NAME_FIELD_NUMBER: _builtins.int
+    COUNTRY_CODE_FIELD_NUMBER: _builtins.int
+    CASE_LANGUAGE_FIELD_NUMBER: _builtins.int
+    REGIONS_FIELD_NUMBER: _builtins.int
+    decision_id: _builtins.str
+    court_name: _builtins.str
+    country_code: _builtins.str
+    case_language: _builtins.str
+    @_builtins.property
+    def regions(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        decision_id: builtins.str = ...,
-        court_name: builtins.str = ...,
-        country_code: builtins.str = ...,
-        case_language: builtins.str = ...,
-        regions: collections.abc.Iterable[builtins.str] | None = ...,
+        decision_id: _builtins.str = ...,
+        court_name: _builtins.str = ...,
+        country_code: _builtins.str = ...,
+        case_language: _builtins.str = ...,
+        regions: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["case_language", b"case_language", "country_code", b"country_code", "court_name", b"court_name", "decision_id", b"decision_id", "regions", b"regions"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_language", b"case_language", "country_code", b"country_code", "court_name", b"court_name", "decision_id", b"decision_id", "regions", b"regions"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CourtCase = CourtCase
+Global___CourtCase: _TypeAlias = CourtCase  # noqa: Y015
 
-@typing.final
-class CaseDocument(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class CaseDocument(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOCUMENT_CLASS_FIELD_NUMBER: builtins.int
-    FILE_NAME_FIELD_NUMBER: builtins.int
-    FILE_TYPE_FIELD_NUMBER: builtins.int
-    CONTENTS_FIELD_NUMBER: builtins.int
-    document_class: global___CourtDocumentClass.ValueType
-    file_name: builtins.str
-    file_type: global___FileType.ValueType
-    contents: builtins.bytes
+    DOCUMENT_CLASS_FIELD_NUMBER: _builtins.int
+    FILE_NAME_FIELD_NUMBER: _builtins.int
+    FILE_TYPE_FIELD_NUMBER: _builtins.int
+    CONTENTS_FIELD_NUMBER: _builtins.int
+    document_class: Global___CourtDocumentClass.ValueType
+    file_name: _builtins.str
+    file_type: Global___FileType.ValueType
+    contents: _builtins.bytes
     def __init__(
         self,
         *,
-        document_class: global___CourtDocumentClass.ValueType = ...,
-        file_name: builtins.str = ...,
-        file_type: global___FileType.ValueType = ...,
-        contents: builtins.bytes = ...,
+        document_class: Global___CourtDocumentClass.ValueType = ...,
+        file_name: _builtins.str = ...,
+        file_type: Global___FileType.ValueType = ...,
+        contents: _builtins.bytes = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["contents", b"contents", "document_class", b"document_class", "file_name", b"file_name", "file_type", b"file_type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["contents", b"contents", "document_class", b"document_class", "file_name", b"file_name", "file_type", b"file_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CaseDocument = CaseDocument
+Global___CaseDocument: _TypeAlias = CaseDocument  # noqa: Y015
 
-@typing.final
-class MarkRenewRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkRenewRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    ADD_PERIOD_FIELD_NUMBER: builtins.int
-    CURRENT_EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
-    @property
-    def add_period(self) -> common.common_pb2.Period: ...
-    @property
-    def current_expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    ID_FIELD_NUMBER: _builtins.int
+    ADD_PERIOD_FIELD_NUMBER: _builtins.int
+    CURRENT_EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def add_period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def current_expiry_date(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        add_period: common.common_pb2.Period | None = ...,
-        current_expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        add_period: _common_pb2.Period | None = ...,
+        current_expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date", "id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date", "id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkRenewRequest = MarkRenewRequest
+Global___MarkRenewRequest: _TypeAlias = MarkRenewRequest  # noqa: Y015
 
-@typing.final
-class MarkRenewResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkRenewResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    NEW_EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    BALANCE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def new_expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def balance(self) -> global___BalanceData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    NEW_EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    BALANCE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def new_expiry_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def balance(self) -> Global___BalanceData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        new_expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        balance: global___BalanceData | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        new_expiry_date: _timestamp_pb2.Timestamp | None = ...,
+        balance: Global___BalanceData | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "new_expiry_date", b"new_expiry_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "id", b"id", "new_expiry_date", b"new_expiry_date"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "new_expiry_date", b"new_expiry_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "id", b"id", "new_expiry_date", b"new_expiry_date"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkRenewResponse = MarkRenewResponse
+Global___MarkRenewResponse: _TypeAlias = MarkRenewResponse  # noqa: Y015
 
-@typing.final
-class MarkTransferRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTransferRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    auth_info: builtins.str
-    registry_name: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    auth_info: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        auth_info: builtins.str = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        auth_info: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTransferRequest = MarkTransferRequest
+Global___MarkTransferRequest: _TypeAlias = MarkTransferRequest  # noqa: Y015
 
-@typing.final
-class MarkTransferResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTransferResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    TRANSFER_DATE_FIELD_NUMBER: builtins.int
-    BALANCE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    @property
-    def transfer_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def balance(self) -> global___BalanceData: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    TRANSFER_DATE_FIELD_NUMBER: _builtins.int
+    BALANCE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    @_builtins.property
+    def transfer_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def balance(self) -> Global___BalanceData: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        transfer_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        balance: global___BalanceData | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        transfer_date: _timestamp_pb2.Timestamp | None = ...,
+        balance: Global___BalanceData | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "transfer_date", b"transfer_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "id", b"id", "transfer_date", b"transfer_date"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "transfer_date", b"transfer_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["balance", b"balance", "cmd_resp", b"cmd_resp", "id", b"id", "transfer_date", b"transfer_date"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTransferResponse = MarkTransferResponse
+Global___MarkTransferResponse: _TypeAlias = MarkTransferResponse  # noqa: Y015
 
-@typing.final
-class MarkTransferInitiateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTransferInitiateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTransferInitiateRequest = MarkTransferInitiateRequest
+Global___MarkTransferInitiateRequest: _TypeAlias = MarkTransferInitiateRequest  # noqa: Y015
 
-@typing.final
-class MarkTransferInitiateResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTransferInitiateResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    AUTH_INFO_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    auth_info: builtins.str
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    ID_FIELD_NUMBER: _builtins.int
+    AUTH_INFO_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    auth_info: _builtins.str
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        auth_info: builtins.str = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        id: _builtins.str = ...,
+        auth_info: _builtins.str = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auth_info", b"auth_info", "cmd_resp", b"cmd_resp", "id", b"id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auth_info", b"auth_info", "cmd_resp", b"cmd_resp", "id", b"id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTransferInitiateResponse = MarkTransferInitiateResponse
+Global___MarkTransferInitiateResponse: _TypeAlias = MarkTransferInitiateResponse  # noqa: Y015
 
-@typing.final
-class MarkTrexActivateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTrexActivateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___TrexActivateLabel]: ...
+    ID_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedCompositeFieldContainer[Global___TrexActivateLabel]: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        labels: collections.abc.Iterable[global___TrexActivateLabel] | None = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        labels: _abc.Iterable[Global___TrexActivateLabel] | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "labels", b"labels", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "labels", b"labels", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTrexActivateRequest = MarkTrexActivateRequest
+Global___MarkTrexActivateRequest: _TypeAlias = MarkTrexActivateRequest  # noqa: Y015
 
-@typing.final
-class TrexActivateLabel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TrexActivateLabel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    LABEL_FIELD_NUMBER: builtins.int
-    PERIOD_FIELD_NUMBER: builtins.int
-    label: builtins.str
-    @property
-    def period(self) -> common.common_pb2.Period: ...
+    LABEL_FIELD_NUMBER: _builtins.int
+    PERIOD_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
+    @_builtins.property
+    def period(self) -> _common_pb2.Period: ...
     def __init__(
         self,
         *,
-        label: builtins.str = ...,
-        period: common.common_pb2.Period | None = ...,
+        label: _builtins.str = ...,
+        period: _common_pb2.Period | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["period", b"period"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["label", b"label", "period", b"period"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["period", b"period"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["label", b"label", "period", b"period"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TrexActivateLabel = TrexActivateLabel
+Global___TrexActivateLabel: _TypeAlias = TrexActivateLabel  # noqa: Y015
 
-@typing.final
-class MarkTrexActivateResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTrexActivateResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTrexActivateResponse = MarkTrexActivateResponse
+Global___MarkTrexActivateResponse: _TypeAlias = MarkTrexActivateResponse  # noqa: Y015
 
-@typing.final
-class MarkTrexRenewRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTrexRenewRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    LABELS_FIELD_NUMBER: builtins.int
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    id: builtins.str
-    registry_name: builtins.str
-    @property
-    def labels(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___TrexRenewLabel]: ...
+    ID_FIELD_NUMBER: _builtins.int
+    LABELS_FIELD_NUMBER: _builtins.int
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
+    registry_name: _builtins.str
+    @_builtins.property
+    def labels(self) -> _containers.RepeatedCompositeFieldContainer[Global___TrexRenewLabel]: ...
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        labels: collections.abc.Iterable[global___TrexRenewLabel] | None = ...,
-        registry_name: builtins.str = ...,
+        id: _builtins.str = ...,
+        labels: _abc.Iterable[Global___TrexRenewLabel] | None = ...,
+        registry_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "labels", b"labels", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "labels", b"labels", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTrexRenewRequest = MarkTrexRenewRequest
+Global___MarkTrexRenewRequest: _TypeAlias = MarkTrexRenewRequest  # noqa: Y015
 
-@typing.final
-class TrexRenewLabel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class TrexRenewLabel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    LABEL_FIELD_NUMBER: builtins.int
-    ADD_PERIOD_FIELD_NUMBER: builtins.int
-    CURRENT_EXPIRY_DATE_FIELD_NUMBER: builtins.int
-    label: builtins.str
-    @property
-    def add_period(self) -> common.common_pb2.Period: ...
-    @property
-    def current_expiry_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
+    LABEL_FIELD_NUMBER: _builtins.int
+    ADD_PERIOD_FIELD_NUMBER: _builtins.int
+    CURRENT_EXPIRY_DATE_FIELD_NUMBER: _builtins.int
+    label: _builtins.str
+    @_builtins.property
+    def add_period(self) -> _common_pb2.Period: ...
+    @_builtins.property
+    def current_expiry_date(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
-        label: builtins.str = ...,
-        add_period: common.common_pb2.Period | None = ...,
-        current_expiry_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
+        label: _builtins.str = ...,
+        add_period: _common_pb2.Period | None = ...,
+        current_expiry_date: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date", "label", b"label"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["add_period", b"add_period", "current_expiry_date", b"current_expiry_date", "label", b"label"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___TrexRenewLabel = TrexRenewLabel
+Global___TrexRenewLabel: _TypeAlias = TrexRenewLabel  # noqa: Y015
 
-@typing.final
-class MarkTrexRenewResponse(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class MarkTrexRenewResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___MarkTrexRenewResponse = MarkTrexRenewResponse
+Global___MarkTrexRenewResponse: _TypeAlias = MarkTrexRenewResponse  # noqa: Y015

@@ -3,30 +3,30 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _BillType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _BillTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_BillType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _BillTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_BillType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Unspecified: _BillType.ValueType  # 0
     BillRegistrar: _BillType.ValueType  # 1
     BillCustomer: _BillType.ValueType  # 2
@@ -36,14 +36,14 @@ class BillType(_BillType, metaclass=_BillTypeEnumTypeWrapper): ...
 Unspecified: BillType.ValueType  # 0
 BillRegistrar: BillType.ValueType  # 1
 BillCustomer: BillType.ValueType  # 2
-global___BillType = BillType
+Global___BillType: _TypeAlias = BillType  # noqa: Y015
 
 class _RegistrationStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _RegistrationStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_RegistrationStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _RegistrationStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_RegistrationStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     RegisteredUntilExpiry: _RegistrationStatus.ValueType  # 0
     RenewalRequired: _RegistrationStatus.ValueType  # 1
     NoLongerRequired: _RegistrationStatus.ValueType  # 2
@@ -53,14 +53,14 @@ class RegistrationStatus(_RegistrationStatus, metaclass=_RegistrationStatusEnumT
 RegisteredUntilExpiry: RegistrationStatus.ValueType  # 0
 RenewalRequired: RegistrationStatus.ValueType  # 1
 NoLongerRequired: RegistrationStatus.ValueType  # 2
-global___RegistrationStatus = RegistrationStatus
+Global___RegistrationStatus: _TypeAlias = RegistrationStatus  # noqa: Y015
 
 class _DataQualityStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _DataQualityStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_DataQualityStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _DataQualityStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_DataQualityStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     Invalid: _DataQualityStatus.ValueType  # 0
     Valid: _DataQualityStatus.ValueType  # 1
 
@@ -68,194 +68,210 @@ class DataQualityStatus(_DataQualityStatus, metaclass=_DataQualityStatusEnumType
 
 Invalid: DataQualityStatus.ValueType  # 0
 Valid: DataQualityStatus.ValueType  # 1
-global___DataQualityStatus = DataQualityStatus
+Global___DataQualityStatus: _TypeAlias = DataQualityStatus  # noqa: Y015
 
-@typing.final
-class DomainCreate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCreate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    FIRST_BILL_FIELD_NUMBER: builtins.int
-    RECUR_BILL_FIELD_NUMBER: builtins.int
-    AUTO_BILL_FIELD_NUMBER: builtins.int
-    NEXT_BILL_FIELD_NUMBER: builtins.int
-    AUTO_PERIOD_FIELD_NUMBER: builtins.int
-    NEXT_PERIOD_FIELD_NUMBER: builtins.int
-    NOTES_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    first_bill: global___BillType.ValueType
-    recur_bill: global___BillType.ValueType
-    @property
-    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def notes(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    FIRST_BILL_FIELD_NUMBER: _builtins.int
+    RECUR_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_BILL_FIELD_NUMBER: _builtins.int
+    NEXT_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: _builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: _builtins.int
+    NOTES_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    first_bill: Global___BillType.ValueType
+    recur_bill: Global___BillType.ValueType
+    @_builtins.property
+    def auto_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def auto_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def notes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        first_bill: global___BillType.ValueType = ...,
-        recur_bill: global___BillType.ValueType = ...,
-        auto_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        auto_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        notes: collections.abc.Iterable[builtins.str] | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        first_bill: Global___BillType.ValueType = ...,
+        recur_bill: Global___BillType.ValueType = ...,
+        auto_bill: _wrappers_pb2.UInt32Value | None = ...,
+        next_bill: _wrappers_pb2.UInt32Value | None = ...,
+        auto_period: _wrappers_pb2.UInt32Value | None = ...,
+        next_period: _wrappers_pb2.UInt32Value | None = ...,
+        notes: _abc.Iterable[_builtins.str] | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "reseller", b"reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "reseller", b"reseller"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "reseller", b"reseller"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "reseller", b"reseller"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCreate = DomainCreate
+Global___DomainCreate: _TypeAlias = DomainCreate  # noqa: Y015
 
-@typing.final
-class DomainUpdate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainUpdate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    FIRST_BILL_FIELD_NUMBER: builtins.int
-    RECUR_BILL_FIELD_NUMBER: builtins.int
-    AUTO_BILL_FIELD_NUMBER: builtins.int
-    NEXT_BILL_FIELD_NUMBER: builtins.int
-    AUTO_PERIOD_FIELD_NUMBER: builtins.int
-    NEXT_PERIOD_FIELD_NUMBER: builtins.int
-    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: builtins.int
-    NOTES_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    first_bill: global___BillType.ValueType
-    recur_bill: global___BillType.ValueType
-    @property
-    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def renewal_not_required(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def notes(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    FIRST_BILL_FIELD_NUMBER: _builtins.int
+    RECUR_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_BILL_FIELD_NUMBER: _builtins.int
+    NEXT_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: _builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: _builtins.int
+    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: _builtins.int
+    NOTES_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    first_bill: Global___BillType.ValueType
+    recur_bill: Global___BillType.ValueType
+    @_builtins.property
+    def auto_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def auto_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def renewal_not_required(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def notes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        first_bill: global___BillType.ValueType = ...,
-        recur_bill: global___BillType.ValueType = ...,
-        auto_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        auto_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        renewal_not_required: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        notes: collections.abc.Iterable[builtins.str] | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        first_bill: Global___BillType.ValueType = ...,
+        recur_bill: Global___BillType.ValueType = ...,
+        auto_bill: _wrappers_pb2.UInt32Value | None = ...,
+        next_bill: _wrappers_pb2.UInt32Value | None = ...,
+        auto_period: _wrappers_pb2.UInt32Value | None = ...,
+        next_period: _wrappers_pb2.UInt32Value | None = ...,
+        renewal_not_required: _wrappers_pb2.BoolValue | None = ...,
+        notes: _abc.Iterable[_builtins.str] | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainUpdate = DomainUpdate
+Global___DomainUpdate: _TypeAlias = DomainUpdate  # noqa: Y015
 
-@typing.final
-class DomainCheckInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCheckInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ABUSE_LIMIT_FIELD_NUMBER: builtins.int
-    abuse_limit: builtins.int
+    ABUSE_LIMIT_FIELD_NUMBER: _builtins.int
+    abuse_limit: _builtins.int
     def __init__(
         self,
         *,
-        abuse_limit: builtins.int = ...,
+        abuse_limit: _builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["abuse_limit", b"abuse_limit"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["abuse_limit", b"abuse_limit"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCheckInfo = DomainCheckInfo
+Global___DomainCheckInfo: _TypeAlias = DomainCheckInfo  # noqa: Y015
 
-@typing.final
-class DomainInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRATION_STATUS_FIELD_NUMBER: builtins.int
-    FIRST_BILL_FIELD_NUMBER: builtins.int
-    RECUR_BILL_FIELD_NUMBER: builtins.int
-    AUTO_BILL_FIELD_NUMBER: builtins.int
-    NEXT_BILL_FIELD_NUMBER: builtins.int
-    AUTO_PERIOD_FIELD_NUMBER: builtins.int
-    NEXT_PERIOD_FIELD_NUMBER: builtins.int
-    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: builtins.int
-    NOTES_FIELD_NUMBER: builtins.int
-    RESELLER_FIELD_NUMBER: builtins.int
-    registration_status: global___RegistrationStatus.ValueType
-    first_bill: global___BillType.ValueType
-    recur_bill: global___BillType.ValueType
-    renewal_not_required: builtins.bool
-    @property
-    def auto_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_bill(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def auto_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def next_period(self) -> google.protobuf.wrappers_pb2.UInt32Value: ...
-    @property
-    def notes(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def reseller(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    REGISTRATION_STATUS_FIELD_NUMBER: _builtins.int
+    FIRST_BILL_FIELD_NUMBER: _builtins.int
+    RECUR_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_BILL_FIELD_NUMBER: _builtins.int
+    NEXT_BILL_FIELD_NUMBER: _builtins.int
+    AUTO_PERIOD_FIELD_NUMBER: _builtins.int
+    NEXT_PERIOD_FIELD_NUMBER: _builtins.int
+    RENEWAL_NOT_REQUIRED_FIELD_NUMBER: _builtins.int
+    NOTES_FIELD_NUMBER: _builtins.int
+    RESELLER_FIELD_NUMBER: _builtins.int
+    registration_status: Global___RegistrationStatus.ValueType
+    first_bill: Global___BillType.ValueType
+    recur_bill: Global___BillType.ValueType
+    renewal_not_required: _builtins.bool
+    @_builtins.property
+    def auto_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_bill(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def auto_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def next_period(self) -> _wrappers_pb2.UInt32Value: ...
+    @_builtins.property
+    def notes(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def reseller(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        registration_status: global___RegistrationStatus.ValueType = ...,
-        first_bill: global___BillType.ValueType = ...,
-        recur_bill: global___BillType.ValueType = ...,
-        auto_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_bill: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        auto_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        next_period: google.protobuf.wrappers_pb2.UInt32Value | None = ...,
-        renewal_not_required: builtins.bool = ...,
-        notes: collections.abc.Iterable[builtins.str] | None = ...,
-        reseller: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        registration_status: Global___RegistrationStatus.ValueType = ...,
+        first_bill: Global___BillType.ValueType = ...,
+        recur_bill: Global___BillType.ValueType = ...,
+        auto_bill: _wrappers_pb2.UInt32Value | None = ...,
+        next_bill: _wrappers_pb2.UInt32Value | None = ...,
+        auto_period: _wrappers_pb2.UInt32Value | None = ...,
+        next_period: _wrappers_pb2.UInt32Value | None = ...,
+        renewal_not_required: _builtins.bool = ...,
+        notes: _abc.Iterable[_builtins.str] | None = ...,
+        reseller: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "reseller", b"reseller"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "registration_status", b"registration_status", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "next_bill", b"next_bill", "next_period", b"next_period", "reseller", b"reseller"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["auto_bill", b"auto_bill", "auto_period", b"auto_period", "first_bill", b"first_bill", "next_bill", b"next_bill", "next_period", b"next_period", "notes", b"notes", "recur_bill", b"recur_bill", "registration_status", b"registration_status", "renewal_not_required", b"renewal_not_required", "reseller", b"reseller"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainInfo = DomainInfo
+Global___DomainInfo: _TypeAlias = DomainInfo  # noqa: Y015
 
-@typing.final
-class DataQuality(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DataQuality(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUS_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    DATE_COMMENCED_FIELD_NUMBER: builtins.int
-    DATE_TO_SUSPEND_FIELD_NUMBER: builtins.int
-    LOCK_APPLIED_FIELD_NUMBER: builtins.int
-    DOMAINS_FIELD_NUMBER: builtins.int
-    status: global___DataQualityStatus.ValueType
-    @property
-    def reason(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def date_commenced(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def date_to_suspend(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def lock_applied(self) -> google.protobuf.wrappers_pb2.BoolValue: ...
-    @property
-    def domains(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    STATUS_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    DATE_COMMENCED_FIELD_NUMBER: _builtins.int
+    DATE_TO_SUSPEND_FIELD_NUMBER: _builtins.int
+    LOCK_APPLIED_FIELD_NUMBER: _builtins.int
+    DOMAINS_FIELD_NUMBER: _builtins.int
+    status: Global___DataQualityStatus.ValueType
+    @_builtins.property
+    def reason(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def date_commenced(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def date_to_suspend(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def lock_applied(self) -> _wrappers_pb2.BoolValue: ...
+    @_builtins.property
+    def domains(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        status: global___DataQualityStatus.ValueType = ...,
-        reason: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        date_commenced: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        date_to_suspend: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        lock_applied: google.protobuf.wrappers_pb2.BoolValue | None = ...,
-        domains: collections.abc.Iterable[builtins.str] | None = ...,
+        status: Global___DataQualityStatus.ValueType = ...,
+        reason: _wrappers_pb2.StringValue | None = ...,
+        date_commenced: _timestamp_pb2.Timestamp | None = ...,
+        date_to_suspend: _timestamp_pb2.Timestamp | None = ...,
+        lock_applied: _wrappers_pb2.BoolValue | None = ...,
+        domains: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["date_commenced", b"date_commenced", "date_to_suspend", b"date_to_suspend", "lock_applied", b"lock_applied", "reason", b"reason"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["date_commenced", b"date_commenced", "date_to_suspend", b"date_to_suspend", "domains", b"domains", "lock_applied", b"lock_applied", "reason", b"reason", "status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["date_commenced", b"date_commenced", "date_to_suspend", b"date_to_suspend", "lock_applied", b"lock_applied", "reason", b"reason"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["date_commenced", b"date_commenced", "date_to_suspend", b"date_to_suspend", "domains", b"domains", "lock_applied", b"lock_applied", "reason", b"reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DataQuality = DataQuality
+Global___DataQuality: _TypeAlias = DataQuality  # noqa: Y015

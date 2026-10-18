@@ -3,309 +3,350 @@
 isort:skip_file
 """
 
-import builtins
-import collections.abc
-import common.common_pb2
-import contact.contact_pb2
-import domain.domain_pb2
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.timestamp_pb2
-import google.protobuf.wrappers_pb2
+from collections import abc as _abc
+from common import common_pb2 as _common_pb2
+from contact import contact_pb2 as _contact_pb2
+from domain import domain_pb2 as _domain_pb2
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf import wrappers_pb2 as _wrappers_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
-@typing.final
-class HandshakeAcceptRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HandshakeAcceptRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CASE_ID_FIELD_NUMBER: builtins.int
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    case_id: builtins.str
-    @property
-    def registrant(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    case_id: _builtins.str
+    @_builtins.property
+    def registrant(self) -> _wrappers_pb2.StringValue: ...
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
-        case_id: builtins.str = ...,
-        registrant: google.protobuf.wrappers_pb2.StringValue | None = ...,
+        registry_name: _builtins.str = ...,
+        case_id: _builtins.str = ...,
+        registrant: _wrappers_pb2.StringValue | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["registrant", b"registrant"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "registrant", b"registrant", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["registrant", b"registrant"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "registrant", b"registrant", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HandshakeAcceptRequest = HandshakeAcceptRequest
+Global___HandshakeAcceptRequest: _TypeAlias = HandshakeAcceptRequest  # noqa: Y015
 
-@typing.final
-class HandshakeRejectRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HandshakeRejectRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CASE_ID_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    case_id: builtins.str
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    case_id: _builtins.str
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
-        case_id: builtins.str = ...,
+        registry_name: _builtins.str = ...,
+        case_id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HandshakeRejectRequest = HandshakeRejectRequest
+Global___HandshakeRejectRequest: _TypeAlias = HandshakeRejectRequest  # noqa: Y015
 
-@typing.final
-class HandshakeReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HandshakeReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CASE_ID_FIELD_NUMBER: builtins.int
-    DOMAINS_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    case_id: builtins.str
-    @property
-    def domains(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    DOMAINS_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    case_id: _builtins.str
+    @_builtins.property
+    def domains(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        case_id: builtins.str = ...,
-        domains: collections.abc.Iterable[builtins.str] | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        case_id: _builtins.str = ...,
+        domains: _abc.Iterable[_builtins.str] | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "cmd_resp", b"cmd_resp", "domains", b"domains"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "cmd_resp", b"cmd_resp", "domains", b"domains"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HandshakeReply = HandshakeReply
+Global___HandshakeReply: _TypeAlias = HandshakeReply  # noqa: Y015
 
-@typing.final
-class ReleaseRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ReleaseRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    REGISTRAR_TAG_FIELD_NUMBER: builtins.int
-    OBJECT_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    registrar_tag: builtins.str
-    @property
-    def object(self) -> global___Object: ...
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    REGISTRAR_TAG_FIELD_NUMBER: _builtins.int
+    OBJECT_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    registrar_tag: _builtins.str
+    @_builtins.property
+    def object(self) -> Global___Object: ...
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
-        registrar_tag: builtins.str = ...,
-        object: global___Object | None = ...,
+        registry_name: _builtins.str = ...,
+        registrar_tag: _builtins.str = ...,
+        object: Global___Object | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["object", b"object"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["object", b"object", "registrar_tag", b"registrar_tag", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["object", b"object"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["object", b"object", "registrar_tag", b"registrar_tag", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ReleaseRequest = ReleaseRequest
+Global___ReleaseRequest: _TypeAlias = ReleaseRequest  # noqa: Y015
 
-@typing.final
-class Object(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Object(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOMAIN_FIELD_NUMBER: builtins.int
-    REGISTRANT_FIELD_NUMBER: builtins.int
-    domain: builtins.str
-    registrant: builtins.str
+    DOMAIN_FIELD_NUMBER: _builtins.int
+    REGISTRANT_FIELD_NUMBER: _builtins.int
+    domain: _builtins.str
+    registrant: _builtins.str
     def __init__(
         self,
         *,
-        domain: builtins.str = ...,
-        registrant: builtins.str = ...,
+        domain: _builtins.str = ...,
+        registrant: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["domain", b"domain", "object", b"object", "registrant", b"registrant"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["domain", b"domain", "object", b"object", "registrant", b"registrant"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["object", b"object"]) -> typing.Literal["domain", "registrant"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["domain", b"domain", "object", b"object", "registrant", b"registrant"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["domain", b"domain", "object", b"object", "registrant", b"registrant"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_object: _TypeAlias = _typing.Literal["domain", "registrant"]  # noqa: Y015
+    _WhichOneofArgType_object: _TypeAlias = _typing.Literal["object", b"object"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_object) -> _WhichOneofReturnType_object | None: ...
 
-global___Object = Object
+Global___Object: _TypeAlias = Object  # noqa: Y015
 
-@typing.final
-class ReleaseReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ReleaseReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PENDING_FIELD_NUMBER: builtins.int
-    MESSAGE_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    pending: builtins.bool
-    @property
-    def message(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    PENDING_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    pending: _builtins.bool
+    @_builtins.property
+    def message(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        pending: builtins.bool = ...,
-        message: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        pending: _builtins.bool = ...,
+        message: _wrappers_pb2.StringValue | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "message", b"message"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "message", b"message", "pending", b"pending"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "message", b"message"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "message", b"message", "pending", b"pending"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ReleaseReply = ReleaseReply
+Global___ReleaseReply: _TypeAlias = ReleaseReply  # noqa: Y015
 
-@typing.final
-class NominetTagListReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class NominetTagListReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    @typing.final
-    class Tag(google.protobuf.message.Message):
-        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    @_typing.final
+    class Tag(_message.Message):
+        DESCRIPTOR: _descriptor.Descriptor
 
-        TAG_FIELD_NUMBER: builtins.int
-        NAME_FIELD_NUMBER: builtins.int
-        TRADING_NAME_FIELD_NUMBER: builtins.int
-        HANDSHAKE_FIELD_NUMBER: builtins.int
-        tag: builtins.str
-        name: builtins.str
-        handshake: builtins.bool
-        @property
-        def trading_name(self) -> google.protobuf.wrappers_pb2.StringValue: ...
+        TAG_FIELD_NUMBER: _builtins.int
+        NAME_FIELD_NUMBER: _builtins.int
+        TRADING_NAME_FIELD_NUMBER: _builtins.int
+        HANDSHAKE_FIELD_NUMBER: _builtins.int
+        tag: _builtins.str
+        name: _builtins.str
+        handshake: _builtins.bool
+        @_builtins.property
+        def trading_name(self) -> _wrappers_pb2.StringValue: ...
         def __init__(
             self,
             *,
-            tag: builtins.str = ...,
-            name: builtins.str = ...,
-            trading_name: google.protobuf.wrappers_pb2.StringValue | None = ...,
-            handshake: builtins.bool = ...,
+            tag: _builtins.str = ...,
+            name: _builtins.str = ...,
+            trading_name: _wrappers_pb2.StringValue | None = ...,
+            handshake: _builtins.bool = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["trading_name", b"trading_name"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["handshake", b"handshake", "name", b"name", "tag", b"tag", "trading_name", b"trading_name"]) -> None: ...
+        _HasFieldArgType: _TypeAlias = _typing.Literal["trading_name", b"trading_name"]  # noqa: Y015
+        def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+        _ClearFieldArgType: _TypeAlias = _typing.Literal["handshake", b"handshake", "name", b"name", "tag", b"tag", "trading_name", b"trading_name"]  # noqa: Y015
+        def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+        def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-    TAGS_FIELD_NUMBER: builtins.int
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def tags(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___NominetTagListReply.Tag]: ...
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    TAGS_FIELD_NUMBER: _builtins.int
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def tags(self) -> _containers.RepeatedCompositeFieldContainer[Global___NominetTagListReply.Tag]: ...
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        tags: collections.abc.Iterable[global___NominetTagListReply.Tag] | None = ...,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        tags: _abc.Iterable[Global___NominetTagListReply.Tag] | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp", "tags", b"tags"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp", "tags", b"tags"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___NominetTagListReply = NominetTagListReply
+Global___NominetTagListReply: _TypeAlias = NominetTagListReply  # noqa: Y015
 
-@typing.final
-class DomainCancel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainCancel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    NAME_FIELD_NUMBER: builtins.int
-    ORIGINATOR_FIELD_NUMBER: builtins.int
-    name: builtins.str
-    originator: builtins.str
+    NAME_FIELD_NUMBER: _builtins.int
+    ORIGINATOR_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    originator: _builtins.str
     def __init__(
         self,
         *,
-        name: builtins.str = ...,
-        originator: builtins.str = ...,
+        name: _builtins.str = ...,
+        originator: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["name", b"name", "originator", b"originator"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["name", b"name", "originator", b"originator"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainCancel = DomainCancel
+Global___DomainCancel: _TypeAlias = DomainCancel  # noqa: Y015
 
-@typing.final
-class DomainRelease(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRelease(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ACCOUNT_ID_FIELD_NUMBER: builtins.int
-    ACCOUNT_MOVED_FIELD_NUMBER: builtins.int
-    FROM_FIELD_NUMBER: builtins.int
-    REGISTRAR_TAG_FIELD_NUMBER: builtins.int
-    DOMAINS_FIELD_NUMBER: builtins.int
-    account_id: builtins.str
-    account_moved: builtins.bool
-    registrar_tag: builtins.str
-    @property
-    def domains(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    ACCOUNT_ID_FIELD_NUMBER: _builtins.int
+    ACCOUNT_MOVED_FIELD_NUMBER: _builtins.int
+    FROM_FIELD_NUMBER: _builtins.int
+    REGISTRAR_TAG_FIELD_NUMBER: _builtins.int
+    DOMAINS_FIELD_NUMBER: _builtins.int
+    account_id: _builtins.str
+    account_moved: _builtins.bool
+    registrar_tag: _builtins.str
+    @_builtins.property
+    def domains(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        account_id: builtins.str = ...,
-        account_moved: builtins.bool = ...,
-        registrar_tag: builtins.str = ...,
-        domains: collections.abc.Iterable[builtins.str] | None = ...,
+        account_id: _builtins.str = ...,
+        account_moved: _builtins.bool = ...,
+        registrar_tag: _builtins.str = ...,
+        domains: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["account_id", b"account_id", "account_moved", b"account_moved", "domains", b"domains", "from", b"from", "registrar_tag", b"registrar_tag"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["account_id", b"account_id", "account_moved", b"account_moved", "domains", b"domains", "from", b"from", "registrar_tag", b"registrar_tag"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRelease = DomainRelease
+Global___DomainRelease: _TypeAlias = DomainRelease  # noqa: Y015
 
-@typing.final
-class DomainRegistrarChange(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainRegistrarChange(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ORIGINATOR_FIELD_NUMBER: builtins.int
-    REGISTRAR_TAG_FIELD_NUMBER: builtins.int
-    CASE_ID_FIELD_NUMBER: builtins.int
-    DOMAINS_FIELD_NUMBER: builtins.int
-    CONTACT_FIELD_NUMBER: builtins.int
-    originator: builtins.str
-    registrar_tag: builtins.str
-    @property
-    def case_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def domains(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[domain.domain_pb2.DomainInfoReply]: ...
-    @property
-    def contact(self) -> contact.contact_pb2.ContactInfoReply: ...
+    ORIGINATOR_FIELD_NUMBER: _builtins.int
+    REGISTRAR_TAG_FIELD_NUMBER: _builtins.int
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    DOMAINS_FIELD_NUMBER: _builtins.int
+    CONTACT_FIELD_NUMBER: _builtins.int
+    originator: _builtins.str
+    registrar_tag: _builtins.str
+    @_builtins.property
+    def case_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def domains(self) -> _containers.RepeatedCompositeFieldContainer[_domain_pb2.DomainInfoReply]: ...
+    @_builtins.property
+    def contact(self) -> _contact_pb2.ContactInfoReply: ...
     def __init__(
         self,
         *,
-        originator: builtins.str = ...,
-        registrar_tag: builtins.str = ...,
-        case_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        domains: collections.abc.Iterable[domain.domain_pb2.DomainInfoReply] | None = ...,
-        contact: contact.contact_pb2.ContactInfoReply | None = ...,
+        originator: _builtins.str = ...,
+        registrar_tag: _builtins.str = ...,
+        case_id: _wrappers_pb2.StringValue | None = ...,
+        domains: _abc.Iterable[_domain_pb2.DomainInfoReply] | None = ...,
+        contact: _contact_pb2.ContactInfoReply | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["case_id", b"case_id", "contact", b"contact"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["case_id", b"case_id", "contact", b"contact", "domains", b"domains", "originator", b"originator", "registrar_tag", b"registrar_tag"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "contact", b"contact"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "contact", b"contact", "domains", b"domains", "originator", b"originator", "registrar_tag", b"registrar_tag"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainRegistrarChange = DomainRegistrarChange
+Global___DomainRegistrarChange: _TypeAlias = DomainRegistrarChange  # noqa: Y015
 
-@typing.final
-class HostCancel(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class HostCancel(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    HOST_OBJECTS_FIELD_NUMBER: builtins.int
-    DOMAIN_NAMES_FIELD_NUMBER: builtins.int
-    @property
-    def host_objects(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def domain_names(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    HOST_OBJECTS_FIELD_NUMBER: _builtins.int
+    DOMAIN_NAMES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def host_objects(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def domain_names(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        host_objects: collections.abc.Iterable[builtins.str] | None = ...,
-        domain_names: collections.abc.Iterable[builtins.str] | None = ...,
+        host_objects: _abc.Iterable[_builtins.str] | None = ...,
+        domain_names: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["domain_names", b"domain_names", "host_objects", b"host_objects"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["domain_names", b"domain_names", "host_objects", b"host_objects"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___HostCancel = HostCancel
+Global___HostCancel: _TypeAlias = HostCancel  # noqa: Y015
 
-@typing.final
-class Process(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Process(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _ProcessStage:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _ProcessStageEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Process._ProcessStage.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _ProcessStageEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[Process._ProcessStage.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         Initial: Process._ProcessStage.ValueType  # 0
         Updated: Process._ProcessStage.ValueType  # 1
 
@@ -313,184 +354,210 @@ class Process(google.protobuf.message.Message):
     Initial: Process.ProcessStage.ValueType  # 0
     Updated: Process.ProcessStage.ValueType  # 1
 
-    STAGE_FIELD_NUMBER: builtins.int
-    CONTACT_FIELD_NUMBER: builtins.int
-    PROCESS_TYPE_FIELD_NUMBER: builtins.int
-    SUSPEND_DATE_FIELD_NUMBER: builtins.int
-    CANCEL_DATE_FIELD_NUMBER: builtins.int
-    DOMAIN_NAMES_FIELD_NUMBER: builtins.int
-    stage: global___Process.ProcessStage.ValueType
-    process_type: builtins.str
-    @property
-    def contact(self) -> contact.contact_pb2.ContactInfoReply: ...
-    @property
-    def suspend_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def cancel_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def domain_names(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    STAGE_FIELD_NUMBER: _builtins.int
+    CONTACT_FIELD_NUMBER: _builtins.int
+    PROCESS_TYPE_FIELD_NUMBER: _builtins.int
+    SUSPEND_DATE_FIELD_NUMBER: _builtins.int
+    CANCEL_DATE_FIELD_NUMBER: _builtins.int
+    DOMAIN_NAMES_FIELD_NUMBER: _builtins.int
+    stage: Global___Process.ProcessStage.ValueType
+    process_type: _builtins.str
+    @_builtins.property
+    def contact(self) -> _contact_pb2.ContactInfoReply: ...
+    @_builtins.property
+    def suspend_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def cancel_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def domain_names(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        stage: global___Process.ProcessStage.ValueType = ...,
-        contact: contact.contact_pb2.ContactInfoReply | None = ...,
-        process_type: builtins.str = ...,
-        suspend_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        cancel_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        domain_names: collections.abc.Iterable[builtins.str] | None = ...,
+        stage: Global___Process.ProcessStage.ValueType = ...,
+        contact: _contact_pb2.ContactInfoReply | None = ...,
+        process_type: _builtins.str = ...,
+        suspend_date: _timestamp_pb2.Timestamp | None = ...,
+        cancel_date: _timestamp_pb2.Timestamp | None = ...,
+        domain_names: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cancel_date", b"cancel_date", "contact", b"contact", "suspend_date", b"suspend_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cancel_date", b"cancel_date", "contact", b"contact", "domain_names", b"domain_names", "process_type", b"process_type", "stage", b"stage", "suspend_date", b"suspend_date"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cancel_date", b"cancel_date", "contact", b"contact", "suspend_date", b"suspend_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cancel_date", b"cancel_date", "contact", b"contact", "domain_names", b"domain_names", "process_type", b"process_type", "stage", b"stage", "suspend_date", b"suspend_date"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Process = Process
+Global___Process: _TypeAlias = Process  # noqa: Y015
 
-@typing.final
-class Suspend(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class Suspend(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REASON_FIELD_NUMBER: builtins.int
-    CANCEL_DATE_FIELD_NUMBER: builtins.int
-    DOMAIN_NAMES_FIELD_NUMBER: builtins.int
-    reason: builtins.str
-    @property
-    def cancel_date(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    @property
-    def domain_names(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
+    REASON_FIELD_NUMBER: _builtins.int
+    CANCEL_DATE_FIELD_NUMBER: _builtins.int
+    DOMAIN_NAMES_FIELD_NUMBER: _builtins.int
+    reason: _builtins.str
+    @_builtins.property
+    def cancel_date(self) -> _timestamp_pb2.Timestamp: ...
+    @_builtins.property
+    def domain_names(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
     def __init__(
         self,
         *,
-        reason: builtins.str = ...,
-        cancel_date: google.protobuf.timestamp_pb2.Timestamp | None = ...,
-        domain_names: collections.abc.Iterable[builtins.str] | None = ...,
+        reason: _builtins.str = ...,
+        cancel_date: _timestamp_pb2.Timestamp | None = ...,
+        domain_names: _abc.Iterable[_builtins.str] | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cancel_date", b"cancel_date"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cancel_date", b"cancel_date", "domain_names", b"domain_names", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cancel_date", b"cancel_date"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cancel_date", b"cancel_date", "domain_names", b"domain_names", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Suspend = Suspend
+Global___Suspend: _TypeAlias = Suspend  # noqa: Y015
 
-@typing.final
-class DomainFail(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class DomainFail(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DOMAIN_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    domain: builtins.str
-    reason: builtins.str
+    DOMAIN_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    domain: _builtins.str
+    reason: _builtins.str
     def __init__(
         self,
         *,
-        domain: builtins.str = ...,
-        reason: builtins.str = ...,
+        domain: _builtins.str = ...,
+        reason: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["domain", b"domain", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["domain", b"domain", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___DomainFail = DomainFail
+Global___DomainFail: _TypeAlias = DomainFail  # noqa: Y015
 
-@typing.final
-class RegistrantTransfer(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class RegistrantTransfer(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ORIGINATOR_FIELD_NUMBER: builtins.int
-    ACCOUNT_ID_FIELD_NUMBER: builtins.int
-    OLD_ACCOUNT_ID_FIELD_NUMBER: builtins.int
-    CASE_ID_FIELD_NUMBER: builtins.int
-    DOMAIN_NAMES_FIELD_NUMBER: builtins.int
-    CONTACT_FIELD_NUMBER: builtins.int
-    originator: builtins.str
-    account_id: builtins.str
-    old_account_id: builtins.str
-    @property
-    def case_id(self) -> google.protobuf.wrappers_pb2.StringValue: ...
-    @property
-    def domain_names(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.str]: ...
-    @property
-    def contact(self) -> contact.contact_pb2.ContactInfoReply: ...
+    ORIGINATOR_FIELD_NUMBER: _builtins.int
+    ACCOUNT_ID_FIELD_NUMBER: _builtins.int
+    OLD_ACCOUNT_ID_FIELD_NUMBER: _builtins.int
+    CASE_ID_FIELD_NUMBER: _builtins.int
+    DOMAIN_NAMES_FIELD_NUMBER: _builtins.int
+    CONTACT_FIELD_NUMBER: _builtins.int
+    originator: _builtins.str
+    account_id: _builtins.str
+    old_account_id: _builtins.str
+    @_builtins.property
+    def case_id(self) -> _wrappers_pb2.StringValue: ...
+    @_builtins.property
+    def domain_names(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def contact(self) -> _contact_pb2.ContactInfoReply: ...
     def __init__(
         self,
         *,
-        originator: builtins.str = ...,
-        account_id: builtins.str = ...,
-        old_account_id: builtins.str = ...,
-        case_id: google.protobuf.wrappers_pb2.StringValue | None = ...,
-        domain_names: collections.abc.Iterable[builtins.str] | None = ...,
-        contact: contact.contact_pb2.ContactInfoReply | None = ...,
+        originator: _builtins.str = ...,
+        account_id: _builtins.str = ...,
+        old_account_id: _builtins.str = ...,
+        case_id: _wrappers_pb2.StringValue | None = ...,
+        domain_names: _abc.Iterable[_builtins.str] | None = ...,
+        contact: _contact_pb2.ContactInfoReply | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["case_id", b"case_id", "contact", b"contact"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["account_id", b"account_id", "case_id", b"case_id", "contact", b"contact", "domain_names", b"domain_names", "old_account_id", b"old_account_id", "originator", b"originator"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["case_id", b"case_id", "contact", b"contact"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["account_id", b"account_id", "case_id", b"case_id", "contact", b"contact", "domain_names", b"domain_names", "old_account_id", b"old_account_id", "originator", b"originator"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___RegistrantTransfer = RegistrantTransfer
+Global___RegistrantTransfer: _TypeAlias = RegistrantTransfer  # noqa: Y015
 
-@typing.final
-class ContactValidateRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactValidateRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    CONTACT_ID_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    contact_id: builtins.str
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    CONTACT_ID_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    contact_id: _builtins.str
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
-        contact_id: builtins.str = ...,
+        registry_name: _builtins.str = ...,
+        contact_id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["contact_id", b"contact_id", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["contact_id", b"contact_id", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactValidateRequest = ContactValidateRequest
+Global___ContactValidateRequest: _TypeAlias = ContactValidateRequest  # noqa: Y015
 
-@typing.final
-class ContactValidateReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class ContactValidateReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ContactValidateReply = ContactValidateReply
+Global___ContactValidateReply: _TypeAlias = ContactValidateReply  # noqa: Y015
 
-@typing.final
-class LockRequest(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LockRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REGISTRY_NAME_FIELD_NUMBER: builtins.int
-    LOCK_TYPE_FIELD_NUMBER: builtins.int
-    OBJECT_FIELD_NUMBER: builtins.int
-    registry_name: builtins.str
-    lock_type: builtins.str
-    @property
-    def object(self) -> global___Object: ...
+    REGISTRY_NAME_FIELD_NUMBER: _builtins.int
+    LOCK_TYPE_FIELD_NUMBER: _builtins.int
+    OBJECT_FIELD_NUMBER: _builtins.int
+    registry_name: _builtins.str
+    lock_type: _builtins.str
+    @_builtins.property
+    def object(self) -> Global___Object: ...
     def __init__(
         self,
         *,
-        registry_name: builtins.str = ...,
-        lock_type: builtins.str = ...,
-        object: global___Object | None = ...,
+        registry_name: _builtins.str = ...,
+        lock_type: _builtins.str = ...,
+        object: Global___Object | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["object", b"object"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["lock_type", b"lock_type", "object", b"object", "registry_name", b"registry_name"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["object", b"object"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["lock_type", b"lock_type", "object", b"object", "registry_name", b"registry_name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LockRequest = LockRequest
+Global___LockRequest: _TypeAlias = LockRequest  # noqa: Y015
 
-@typing.final
-class LockReply(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class LockReply(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CMD_RESP_FIELD_NUMBER: builtins.int
-    @property
-    def cmd_resp(self) -> common.common_pb2.CommandResponse: ...
+    CMD_RESP_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def cmd_resp(self) -> _common_pb2.CommandResponse: ...
     def __init__(
         self,
         *,
-        cmd_resp: common.common_pb2.CommandResponse | None = ...,
+        cmd_resp: _common_pb2.CommandResponse | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["cmd_resp", b"cmd_resp"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["cmd_resp", b"cmd_resp"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___LockReply = LockReply
+Global___LockReply: _TypeAlias = LockReply  # noqa: Y015

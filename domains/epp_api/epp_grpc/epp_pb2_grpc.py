@@ -14,7 +14,7 @@ from .nominet import nominet_pb2 as nominet_dot_nominet__pb2
 from .rgp import rgp_pb2 as rgp_dot_rgp__pb2
 from .tmch import tmch_pb2 as tmch_dot_tmch__pb2
 
-GRPC_GENERATED_VERSION = '1.71.0'
+GRPC_GENERATED_VERSION = '1.84.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -27,14 +27,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in epp_pb2_grpc.py depends on'
+        + ' but the generated code in epp_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class EPPProxyStub(object):
+class EPPProxyStub:
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -208,6 +208,16 @@ class EPPProxyStub(object):
                 request_serializer=epp__pb2.PollAck.SerializeToString,
                 response_deserializer=epp__pb2.PollReply.FromString,
                 _registered_method=True)
+        self.PollSingle = channel.unary_unary(
+                '/epp.EPPProxy/PollSingle',
+                request_serializer=epp__pb2.RegistryInfo.SerializeToString,
+                response_deserializer=epp__pb2.PollReply.FromString,
+                _registered_method=True)
+        self.AckPoll = channel.unary_unary(
+                '/epp.EPPProxy/AckPoll',
+                request_serializer=epp__pb2.PollAckSingle.SerializeToString,
+                response_deserializer=epp__pb2.PollAckReply.FromString,
+                _registered_method=True)
         self.NominetTagList = channel.unary_unary(
                 '/epp.EPPProxy/NominetTagList',
                 request_serializer=epp__pb2.RegistryInfo.SerializeToString,
@@ -335,7 +345,7 @@ class EPPProxyStub(object):
                 _registered_method=True)
 
 
-class EPPProxyServicer(object):
+class EPPProxyServicer:
     """Missing associated documentation comment in .proto file."""
 
     def DomainCheck(self, request, context):
@@ -531,6 +541,18 @@ class EPPProxyServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Poll(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PollSingle(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AckPoll(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -854,6 +876,16 @@ def add_EPPProxyServicer_to_server(servicer, server):
                     request_deserializer=epp__pb2.PollAck.FromString,
                     response_serializer=epp__pb2.PollReply.SerializeToString,
             ),
+            'PollSingle': grpc.unary_unary_rpc_method_handler(
+                    servicer.PollSingle,
+                    request_deserializer=epp__pb2.RegistryInfo.FromString,
+                    response_serializer=epp__pb2.PollReply.SerializeToString,
+            ),
+            'AckPoll': grpc.unary_unary_rpc_method_handler(
+                    servicer.AckPoll,
+                    request_deserializer=epp__pb2.PollAckSingle.FromString,
+                    response_serializer=epp__pb2.PollAckReply.SerializeToString,
+            ),
             'NominetTagList': grpc.unary_unary_rpc_method_handler(
                     servicer.NominetTagList,
                     request_deserializer=epp__pb2.RegistryInfo.FromString,
@@ -987,7 +1019,7 @@ def add_EPPProxyServicer_to_server(servicer, server):
 
 
  # This class is part of an EXPERIMENTAL API.
-class EPPProxy(object):
+class EPPProxy:
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -1871,6 +1903,60 @@ class EPPProxy(object):
             '/epp.EPPProxy/Poll',
             epp__pb2.PollAck.SerializeToString,
             epp__pb2.PollReply.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PollSingle(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/epp.EPPProxy/PollSingle',
+            epp__pb2.RegistryInfo.SerializeToString,
+            epp__pb2.PollReply.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AckPoll(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/epp.EPPProxy/AckPoll',
+            epp__pb2.PollAckSingle.SerializeToString,
+            epp__pb2.PollAckReply.FromString,
             options,
             channel_credentials,
             insecure,

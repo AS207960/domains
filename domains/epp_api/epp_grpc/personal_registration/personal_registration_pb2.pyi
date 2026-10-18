@@ -3,39 +3,53 @@
 isort:skip_file
 """
 
-import builtins
-import google.protobuf.descriptor
-import google.protobuf.message
-import typing
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+import builtins as _builtins
+import sys
+import typing as _typing
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
+else:
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-@typing.final
-class PersonalRegistrationCreate(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
-    BUNDLED_RATE_FIELD_NUMBER: builtins.int
-    bundled_rate: builtins.bool
+@_typing.final
+class PersonalRegistrationCreate(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    BUNDLED_RATE_FIELD_NUMBER: _builtins.int
+    bundled_rate: _builtins.bool
     def __init__(
         self,
         *,
-        bundled_rate: builtins.bool = ...,
+        bundled_rate: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["bundled_rate", b"bundled_rate"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["bundled_rate", b"bundled_rate"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PersonalRegistrationCreate = PersonalRegistrationCreate
+Global___PersonalRegistrationCreate: _TypeAlias = PersonalRegistrationCreate  # noqa: Y015
 
-@typing.final
-class PersonalRegistrationInfo(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+@_typing.final
+class PersonalRegistrationInfo(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONSENT_ID_FIELD_NUMBER: builtins.int
-    consent_id: builtins.str
+    CONSENT_ID_FIELD_NUMBER: _builtins.int
+    consent_id: _builtins.str
     def __init__(
         self,
         *,
-        consent_id: builtins.str = ...,
+        consent_id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["consent_id", b"consent_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["consent_id", b"consent_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PersonalRegistrationInfo = PersonalRegistrationInfo
+Global___PersonalRegistrationInfo: _TypeAlias = PersonalRegistrationInfo  # noqa: Y015
