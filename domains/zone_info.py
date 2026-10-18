@@ -588,6 +588,7 @@ class DomainInfo:
     REGISTRY_RUHR = "ruhr"
     REGISTRY_ARUBA = "aruba"
     REGISTRY_SX = "sx"
+    REGISTRY_SITA = "sita"
 
     def __init__(self, registry, pricing, notice=None, transfer_instructions=None, hsts_preload=False):
         self.registry = registry
@@ -729,6 +730,7 @@ class DomainInfo:
             self.REGISTRY_RUHR,
             self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
+            self.REGISTRY_SITA,
         )
 
     @property
@@ -899,6 +901,7 @@ class DomainInfo:
             self.REGISTRY_RUHR,
             self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
+            self.REGISTRY_SITA,
         )
 
     @property
@@ -1125,6 +1128,7 @@ class DomainInfo:
             self.REGISTRY_RUHR,
             self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
+            self.REGISTRY_SITA,
         )
 
     @property
@@ -1204,6 +1208,7 @@ class DomainInfo:
             self.REGISTRY_RUHR,
             self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
+            self.REGISTRY_SITA,
         )
 
     @property
@@ -1284,6 +1289,7 @@ class DomainInfo:
             self.REGISTRY_RUHR,
             self.REGISTRY_ARUBA,
             self.REGISTRY_SX,
+            self.REGISTRY_SITA,
         )
 
     @property
@@ -3938,6 +3944,11 @@ else:
         ('nrw', DomainInfo(
             DomainInfo.REGISTRY_ARUBA,
             MarkupPrice(7194, transfer=7194, restore=13184, currency=None, display_currency='EUR', tld='nrw',
+                        markup=decimal.Decimal("1.2"))
+        )),
+        ('aero', DomainInfo(
+            DomainInfo.REGISTRY_SITA,
+            MarkupPrice(11075, transfer=11075, restore=11866, currency=None, display_currency='USD', tld='aero',
                         markup=decimal.Decimal("1.2"))
         )),
     )
