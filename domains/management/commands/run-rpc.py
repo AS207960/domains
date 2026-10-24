@@ -68,6 +68,7 @@ class Command(BaseCommand):
             if order.state in (order.STATE_FAILED, order.STATE_COMPLETED):
                 return
 
+            awaiting_payment = order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT)
             order.redirect_uri = msg.redirect_url
             if msg.state == domains.proto.billing_pb2.FAILED:
                 order.state = order.STATE_FAILED
@@ -77,7 +78,7 @@ class Command(BaseCommand):
                     failed_task.delay(order.id)
                     return
             elif msg.state == domains.proto.billing_pb2.COMPLETED:
-                if order.state in (order.STATE_PENDING, order.STATE_STARTED, order.STATE_NEEDS_PAYMENT):
+                if awaiting_payment:
                     order.state = order.STATE_PROCESSING
                     order.save()
                     task.delay(order.id)
@@ -86,7 +87,7 @@ class Command(BaseCommand):
                     domains.proto.billing_pb2.PENDING,
                     domains.proto.billing_pb2.PROCESSING
             ):
-                if msg.state != order.STATE_PROCESSING:
+                if awaiting_payment:
                     order.state = order.STATE_NEEDS_PAYMENT
 
             order.save()
