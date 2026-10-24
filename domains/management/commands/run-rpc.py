@@ -60,7 +60,7 @@ class Command(BaseCommand):
         msg.ParseFromString(body)
 
         with transaction.atomic():
-            order = model.objects.filter(charge_state_id=msg.charge_id).first()
+            order = model.objects.select_for_update().filter(charge_state_id=msg.charge_id).first()
             if not order:
                 return
             last_error = msg.last_error.value if msg.HasField("last_error") else None

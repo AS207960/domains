@@ -174,7 +174,6 @@ def charge_order(
             notif_queue=notif_queue
         )
         order.charge_state_id = charge_state.charge_state_id
-        order.save()
         if charge_state.immediate_completion:
             order.state = order.STATE_PROCESSING
             order.save()
