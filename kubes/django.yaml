@@ -17,7 +17,7 @@ data:
   BILLING_URL: "http://billing-nginx"
   HEXDNS_URL: "https://dns.glauca.digital"
   FEEDBACK_URL: "http://feedback-nginx"
-  PAT_URL: "http://oauth-nginx"
+  PAT_URL: "https://oauth.as207960.net"
   EPP_PROXY_ADDR: "epp-proxy:50051"
   EPP_PROXY_CA: "/ca-cert/ca.pem"
   EMAIL_FROM: "Glauca Domains <domains@glauca.digital>"
@@ -127,6 +127,9 @@ spec:
             - secretRef:
                 name: domains-cloudflare
               prefix: "CLOUDFLARE_"
+            - secretRef:
+                name: domains-listmonk
+              prefix: "LISTMONK_"
       containers:
         - name: gunicorn
           image: as207960/domains-django:(version)
@@ -236,6 +239,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -306,6 +312,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -376,6 +385,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -446,6 +458,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -516,6 +531,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -586,6 +604,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
           restartPolicy: OnFailure
 ---
 apiVersion: networking.k8s.io/v1
@@ -674,6 +695,9 @@ spec:
             - secretRef:
                 name: domains-cloudflare
               prefix: "CLOUDFLARE_"
+            - secretRef:
+                name: domains-listmonk
+              prefix: "LISTMONK_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -761,6 +785,9 @@ spec:
             - secretRef:
                 name: domains-cloudflare
               prefix: "CLOUDFLARE_"
+            - secretRef:
+                name: domains-listmonk
+              prefix: "LISTMONK_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -859,6 +886,9 @@ spec:
             - secretRef:
                 name: domains-cloudflare
               prefix: "CLOUDFLARE_"
+            - secretRef:
+                name: domains-listmonk
+              prefix: "LISTMONK_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -943,6 +973,9 @@ spec:
                 - secretRef:
                     name: domains-cloudflare
                   prefix: "CLOUDFLARE_"
+                - secretRef:
+                    name: domains-listmonk
+                  prefix: "LISTMONK_"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

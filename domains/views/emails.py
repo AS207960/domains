@@ -50,14 +50,13 @@ def send_email(user, data: dict, extra_headers: typing.Optional[dict] = None):
     except django_keycloak_auth.clients.TokensExpired:
         request["subscriber_email"] = user.email
 
-    access_token = django_keycloak_auth.clients.get_access_token()
     r = requests.post(
         f"{settings.LISTMONK_URL}/api/tx",
         json=request,
         headers={
-            "Authorization": f"Bearer {access_token}",
             "Accept": "application/json",
-        }
+        },
+        auth=(settings.LISTMONK_USERNAME, settings.LISTMOK_API_KEY)
     )
     r.raise_for_status()
 
