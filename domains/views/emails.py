@@ -56,7 +56,7 @@ def send_email(user, data: dict, extra_headers: typing.Optional[dict] = None):
         headers={
             "Accept": "application/json",
         },
-        auth=(settings.LISTMONK_USERNAME, settings.LISTMOK_API_KEY)
+        auth=(settings.LISTMONK_USERNAME, settings.LISTMONK_API_KEY)
     )
     r.raise_for_status()
 
