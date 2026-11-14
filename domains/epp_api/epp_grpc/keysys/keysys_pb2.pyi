@@ -555,6 +555,10 @@ class DomainTransfer(_message.Message):
     AT_REQUEST_AUTHCODE_FIELD_NUMBER: _builtins.int
     BE_REQUEST_AUTHCODE_FIELD_NUMBER: _builtins.int
     PROMOTION_CODE_FIELD_NUMBER: _builtins.int
+    OWNER_CONTACT_FIELD_NUMBER: _builtins.int
+    ADMIN_CONTACT_FIELD_NUMBER: _builtins.int
+    TECH_CONTACT_FIELD_NUMBER: _builtins.int
+    BILLING_CONTACT_FIELD_NUMBER: _builtins.int
     accept_premium_price: _builtins.bool
     accept_quarantine: _builtins.bool
     accept_trade: _builtins.bool
@@ -562,6 +566,10 @@ class DomainTransfer(_message.Message):
     at_request_authcode: _builtins.bool
     be_request_authcode: _builtins.bool
     promotion_code: _builtins.str
+    owner_contact: _builtins.str
+    admin_contact: _builtins.str
+    tech_contact: _builtins.str
+    billing_contact: _builtins.str
     def __init__(
         self,
         *,
@@ -572,10 +580,14 @@ class DomainTransfer(_message.Message):
         at_request_authcode: _builtins.bool = ...,
         be_request_authcode: _builtins.bool = ...,
         promotion_code: _builtins.str = ...,
+        owner_contact: _builtins.str = ...,
+        admin_contact: _builtins.str = ...,
+        tech_contact: _builtins.str = ...,
+        billing_contact: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["accept_premium_price", b"accept_premium_price", "accept_quarantine", b"accept_quarantine", "accept_trade", b"accept_trade", "allocation_token", b"allocation_token", "at_request_authcode", b"at_request_authcode", "be_request_authcode", b"be_request_authcode", "promotion_code", b"promotion_code"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accept_premium_price", b"accept_premium_price", "accept_quarantine", b"accept_quarantine", "accept_trade", b"accept_trade", "admin_contact", b"admin_contact", "allocation_token", b"allocation_token", "at_request_authcode", b"at_request_authcode", "be_request_authcode", b"be_request_authcode", "billing_contact", b"billing_contact", "owner_contact", b"owner_contact", "promotion_code", b"promotion_code", "tech_contact", b"tech_contact"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     def WhichOneof(self, oneof_group: _Never) -> None: ...
 

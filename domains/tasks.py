@@ -743,12 +743,23 @@ def process_domain_transfer_paid(transfer_order_id):
             else:
                 eurid_data = None
 
+            if zone.keysys_owner_on_transfer:
+                _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
+                keysys_data = apps.epp_api.keysys_pb2.DomainTransfer(
+                    owner_contact=domain_transfer_order.registrant_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.Registrant
+                    ).registry_contact_id
+                )
+            else:
+                keysys_data = None
+
             transfer_data = apps.epp_client.transfer_request_domain(
                 domain_transfer_order.domain,
                 domain_transfer_order.auth_code,
                 period=period,
                 registry_id=domain_transfer_order.registry_id,
                 eurid=eurid_data,
+                keysys=keysys_data,
             )
         except grpc.RpcError as rpc_error:
             error_code = utils.epp_grpc_error_code(rpc_error)

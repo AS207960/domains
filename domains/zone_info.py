@@ -803,6 +803,12 @@ class DomainInfo:
         )
 
     @property
+    def keysys_owner_on_transfer(self):
+        return self.registry in (
+            self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
+        )
+
+    @property
     def eurid_request_auth_code(self):
         return self.registry in (
             self.REGISTRY_EURID,
