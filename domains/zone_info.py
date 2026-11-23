@@ -2522,7 +2522,7 @@ else:
             MarkupPrice(5352, transfer=5352, restore=12960, currency=None, display_currency='USD', tld='industries',
                         markup=decimal.Decimal("1.2"))
         )),
-        ('insitute', DomainInfo(
+        ('institute', DomainInfo(
             DomainInfo.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
             MarkupPrice(3794, transfer=3794, restore=14040, currency=None, display_currency='USD', tld='institute',
                         markup=decimal.Decimal("1.3"))
