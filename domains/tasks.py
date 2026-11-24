@@ -1176,14 +1176,12 @@ def set_dns(domain: models.DomainRegistration, hosts: typing.List[str]):
             name=domain_data.name,
             remove=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
                 nameserver=apps.epp_api.domain_pb2.NameServer(
-                    host_obj=h if domain_info.host_object_supported else "",
-                    host_name=h if not domain_info.host_object_supported else "",
+                    **({"host_obj": h} if domain_info.host_object_supported else {"host_name": h})
                 )
             ), rem_hosts)),
             add=list(map(lambda h: apps.epp_api.domain_pb2.DomainUpdateRequest.Param(
                 nameserver=apps.epp_api.domain_pb2.NameServer(
-                    host_obj=h if domain_info.host_object_supported else "",
-                    host_name=h if not domain_info.host_object_supported else "",
+                    **({"host_obj": h} if domain_info.host_object_supported else {"host_name": h})
                 )
             ), add_hosts))
         ))
