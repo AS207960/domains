@@ -16,7 +16,8 @@ from domains import tasks
 
 REGISTRY_CLIENT_IDS = {
     "rrpproxy": "as207960",
-    "id": "ascy-802642"
+    "id": "ascy-802642",
+    "verisign-cc": "cydig"
 }
 
 class Command(BaseCommand):
