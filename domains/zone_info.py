@@ -807,6 +807,13 @@ class DomainInfo:
         return self.registry in (
             self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
+            self.REGISTRY_AFNIC,
+        )
+
+    @property
+    def keysys_tech_on_transfer(self):
+        return self.registry in (
+            self.REGISTRY_AFNIC,
         )
 
     @property

@@ -743,13 +743,17 @@ def process_domain_transfer_paid(transfer_order_id):
             else:
                 eurid_data = None
 
-            if zone.keysys_owner_on_transfer:
+            if zone.keysys_owner_on_transfer or zone.keysys_tech_on_transfer:
                 _, _, registry_id = apps.epp_client.check_domain(domain_transfer_order.domain)
-                keysys_data = apps.epp_api.keysys_pb2.DomainTransfer(
-                    owner_contact=domain_transfer_order.registrant_contact.get_registry_id(
+                keysys_data = apps.epp_api.keysys_pb2.DomainTransfer()
+                if zone.keysys_owner_on_transfer:
+                    keysys_data.owner_contact = domain_transfer_order.registrant_contact.get_registry_id(
                         registry_id, zone, role=apps.epp_api.ContactRole.Registrant
                     ).registry_contact_id
-                )
+                if zone.keysys_tech_on_transfer and domain_transfer_order.tech_contact:
+                    keysys_data.tech_contact = domain_transfer_order.tech_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                    ).registry_contact_id
             else:
                 keysys_data = None
 
