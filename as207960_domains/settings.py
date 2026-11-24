@@ -21,7 +21,6 @@ import botocore.config
 sentry_sdk.init(
     dsn="https://da23a217b5584ccaa296aea526e3fc2c@o222429.ingest.sentry.io/5247893",
     integrations=[DjangoIntegration()],
-    send_default_pii=True
 )
 
 
