@@ -805,6 +805,7 @@ class DomainInfo:
     @property
     def keysys_owner_on_transfer(self):
         return self.registry in (
+            self.REGISTRY_VERISIGN_COMNET,
             self.REGISTRY_IDENTITY_DIGITAL_RRPPROXY,
         )
 
