@@ -811,7 +811,19 @@ class DomainInfo:
         )
 
     @property
+    def keysys_admin_on_transfer(self):
+        return self.registry in (
+            self.REGISTRY_AFNIC,
+        )
+
+    @property
     def keysys_tech_on_transfer(self):
+        return self.registry in (
+            self.REGISTRY_AFNIC,
+        )
+
+    @property
+    def keysys_billing_on_transfer(self):
         return self.registry in (
             self.REGISTRY_AFNIC,
         )

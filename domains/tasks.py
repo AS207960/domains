@@ -750,9 +750,17 @@ def process_domain_transfer_paid(transfer_order_id):
                     keysys_data.owner_contact = domain_transfer_order.registrant_contact.get_registry_id(
                         registry_id, zone, role=apps.epp_api.ContactRole.Registrant
                     ).registry_contact_id
+                if zone.keysys_admin_on_transfer and domain_transfer_order.admin_contact:
+                    keysys_data.admin_contact = domain_transfer_order.admin_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.Admin
+                    ).registry_contact_id
                 if zone.keysys_tech_on_transfer and domain_transfer_order.tech_contact:
                     keysys_data.tech_contact = domain_transfer_order.tech_contact.get_registry_id(
                         registry_id, zone, role=apps.epp_api.ContactRole.OnSite
+                    ).registry_contact_id
+                if zone.keysys_billing_on_transfer and domain_transfer_order.billing_contact:
+                    keysys_data.billing_contact = domain_transfer_order.billing_contact.get_registry_id(
+                        registry_id, zone, role=apps.epp_api.ContactRole.Billing
                     ).registry_contact_id
             else:
                 keysys_data = None
